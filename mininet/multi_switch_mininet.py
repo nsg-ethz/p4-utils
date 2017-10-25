@@ -139,7 +139,6 @@ def main():
     topo = AppTopo(links, latencies, manifest=manifest, target=args.target,
                   log_dir=args.log_dir, bws=bws)
 
-
     switchClass = configureP4Switch(
             sw_path=args.behavioral_exe,
             json_path=args.json,
@@ -240,15 +239,10 @@ def main():
 
     net.stop()
 
-#    if bmv2_log:
-#        os.system('bash -c "cp /tmp/p4s.s*.log \'%s\'"' % args.log_dir)
-#    if pcap_dump:
-#        os.system('bash -c "cp *.pcap \'%s\'"' % args.log_dir)
-
     bad_codes = [rc for rc in return_codes if rc != 0]
     if len(bad_codes): sys.exit(1)
 
 if __name__ == '__main__':
     setLogLevel( 'info' )
-    #os.chdir("../../heavy_hitter/build")
+    os.chdir("../../heavy_hitter/build")
     main()

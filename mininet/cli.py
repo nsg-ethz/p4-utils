@@ -4,9 +4,7 @@ from mininet.log import info, output, error
 class P4CLI(CLI):
 
     def __init__(self,*args,**kwargs):
-
         CLI.__init__(self,*args,**kwargs)
-
 
     def do_p4switch_stop(self,line=""):
 
