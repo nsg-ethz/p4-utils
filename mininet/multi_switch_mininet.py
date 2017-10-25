@@ -31,9 +31,13 @@ from mininet.link import TCLink
 from mininet.log import setLogLevel, info
 from mininet.cli import CLI
 
+from topology import TopologyDB
+
 from p4_mininet import P4Switch, P4Host
 import apptopo
 import appcontroller
+
+
 
 parser = argparse.ArgumentParser(description='Mininet demo')
 parser.add_argument('--behavioral-exe', help='Path to behavioral executable',
@@ -135,9 +139,6 @@ def main():
     topo = AppTopo(links, latencies, manifest=manifest, target=args.target,
                   log_dir=args.log_dir, bws=bws)
 
-    print(topo._sw_links)
-    print
-    print(topo._host_links)
 
     switchClass = configureP4Switch(
             sw_path=args.behavioral_exe,
@@ -167,6 +168,10 @@ def main():
         with open(args.cli_message, 'r') as message_file:
             print message_file.read()
 
+
+    TopologyDB(net=net).save("./topology.db")
+
+    #Safe topology
     if args.cli or ('cli' in conf and conf['cli']):
         CLI(net)
 
@@ -245,4 +250,5 @@ def main():
 
 if __name__ == '__main__':
     setLogLevel( 'info' )
+    os.chdir("../../heavy_hitter/build")
     main()
