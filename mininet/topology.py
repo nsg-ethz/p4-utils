@@ -139,6 +139,10 @@ class TopologyDB(object):
                 return
 
         interfaces_to_nodes = {}
+        interfaces_to_port  = {}
+
+        for port, port_id in n.ports.iteritems():
+            interfaces_to_port[port.name] = port_id
 
         for itf in n.intfList():
             nh = TopologyDB.otherIntf(itf)
@@ -162,6 +166,7 @@ class TopologyDB(object):
             interfaces_to_nodes[itf.name] = nh.node.name
         #add an interface to node mapping that can be useful
         props['interfaces_to_node'] = interfaces_to_nodes
+        props['interfaces_to_port'] = interfaces_to_port
         self._network[n.name] = props
 
     def add_host(self, n):

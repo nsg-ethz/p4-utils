@@ -250,5 +250,5 @@ def main():
 
 if __name__ == '__main__':
     setLogLevel( 'info' )
-    os.chdir("../../heavy_hitter/build")
+    #os.chdir("../../heavy_hitter/build")
     main()
