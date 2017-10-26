@@ -5,6 +5,7 @@ import subprocess
 
 
 #TODO; lunch a new switch in a namespace.... so i need the network but the CLI has it.
+#i think i could write that inside the switch..
 
 def log_error(*items):
     print(*items, file=sys.stderr)

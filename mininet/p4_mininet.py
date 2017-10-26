@@ -108,6 +108,54 @@ class P4Switch(Switch):
             if result == 0:
                 return  True
 
+    def start_switch(self):
+        """
+        Just starts again simple switch with the same interfaces.
+        :return:
+        """
+
+        info("Starting P4 switch {}.\n".format(self.name))
+        args = [self.sw_path]
+        for port, intf in self.intfs.items():
+            #ports can not have ip addres??
+            if not intf.IP():
+                args.extend(['-i', str(port) + "@" + intf.name])
+        if self.pcap_dump:
+            args.append("--pcap")
+            # args.append("--useFiles")
+        if self.thrift_port:
+            args.extend(['--thrift-port', str(self.thrift_port)])
+        if self.nanomsg:
+            args.extend(['--nanolog', self.nanomsg])
+        args.extend(['--device-id', str(self.device_id)])
+        args.append(self.json_path)
+        if self.enable_debugger:
+            args.append("--debugger")
+        if self.log_console:
+            args.append("--log-console")
+        info(' '.join(args) + "\n")
+
+        pid = None
+        with tempfile.NamedTemporaryFile() as f:
+            self.cmd(' '.join(args) + ' >' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
+            pid = int(f.read())
+        debug("P4 switch {} PID is {}.\n".format(self.name, pid))
+        sleep(1)
+        if not self.check_switch_started(pid):
+            error("P4 switch {} did not start correctly."
+                  "Check the switch log file.\n".format(self.name))
+            exit(1)
+        info("P4 switch {} has been started.\n".format(self.name))
+
+    def stop_switch(self):
+        """
+        Just stops simple switch
+        :return:
+        """
+        info("Stopping P4 switch {}.\n".format(self.name))
+        self.cmd('kill %' + self.sw_path)
+        self.cmd('wait')
+
     def start(self, controllers):
         "Start up a new P4 switch"
         info("Starting P4 switch {}.\n".format(self.name))
