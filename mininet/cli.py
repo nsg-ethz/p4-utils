@@ -1,5 +1,12 @@
 from mininet.cli import CLI
 from mininet.log import info, output, error
+from utils import *
+
+
+#TODO: Add function to compile a new p4 program
+#TODO: implement start/stop functions -> add an optional new path to p4 prgram in the start function.
+#TODO: for rebooted switches load their control plane, or a new one, or partial one.
+
 
 class P4CLI(CLI):
 

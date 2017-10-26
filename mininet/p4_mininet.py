@@ -108,7 +108,7 @@ class P4Switch(Switch):
             if result == 0:
                 return  True
 
-    def start_switch(self):
+    def start_p4switch(self):
         """
         Just starts again simple switch with the same interfaces.
         :return:
@@ -147,7 +147,7 @@ class P4Switch(Switch):
             exit(1)
         info("P4 switch {} has been started.\n".format(self.name))
 
-    def stop_switch(self):
+    def stop_p4switch(self):
         """
         Just stops simple switch
         :return:
