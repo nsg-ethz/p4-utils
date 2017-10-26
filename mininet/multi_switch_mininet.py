@@ -36,7 +36,7 @@ from topology import TopologyDB
 from p4_mininet import P4Switch, P4Host
 import apptopo
 import appcontroller
-
+from cli import P4CLI
 
 
 parser = argparse.ArgumentParser(description='Mininet demo')
@@ -167,12 +167,11 @@ def main():
         with open(args.cli_message, 'r') as message_file:
             print message_file.read()
 
-
     TopologyDB(net=net).save("./topology.db")
 
     #Safe topology
     if args.cli or ('cli' in conf and conf['cli']):
-        CLI(net)
+        P4CLI(net, config= manifest)
 
     stdout_files = dict()
     return_codes = []

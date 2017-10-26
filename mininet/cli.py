@@ -11,6 +11,13 @@ from utils import *
 class P4CLI(CLI):
 
     def __init__(self,*args,**kwargs):
+
+        self.config = kwargs.get("config", None)
+        if not self.config:
+            log("Any configuration was given to the CLI and therefore p4 functionalities are disabled")
+        else:
+            #normal CLI is not  any config parameter
+            kwargs.__delitem__("config")
         CLI.__init__(self,*args,**kwargs)
 
     def do_p4switch_stop(self,line=""):

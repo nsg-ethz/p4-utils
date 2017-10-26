@@ -171,7 +171,10 @@ class P4Switch(Switch):
         if self.nanomsg:
             args.extend(['--nanolog', self.nanomsg])
         args.extend(['--device-id', str(self.device_id)])
-        P4Switch.device_id += 1
+
+        #not needed
+        # P4Switch.device_id += 1
+
         args.append(self.json_path)
         if self.enable_debugger:
             args.append("--debugger")
