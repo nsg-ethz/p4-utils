@@ -149,6 +149,7 @@ def main():
                   host = P4Host,
                   switch = switchClass,
                   controller = None)
+
     net.start()
 
     sleep(1)
@@ -158,7 +159,6 @@ def main():
         controller = AppController(manifest=manifest, target=args.target,
                                      topo=topo, net=net, links=links)
         controller.start()
-
 
     for h in net.hosts:
         h.describe()

@@ -3,6 +3,22 @@ from mininet import log
 import sys, os
 import subprocess
 
+def last_modified(input_file, output_file):
+    """
+
+    :param input_file:
+    :param output_file:
+    :return: true if input_file is newer than output_file or if output file does not exist.
+    """
+
+    if (not os.path.exists(input_file)):
+        log.error("input file does not exist")
+
+    if (not os.path.exists(output_file)):
+        return True
+
+    return os.path.getmtime(input_file) >  os.path.getmtime(output_file)
+
 def log_error(*items):
     print(*items, file=sys.stderr)
 
@@ -40,6 +56,10 @@ def compile_p4_to_bmv2(config):
 
 def add_entries(thrift_port=9090, entries=None):
     assert entries
+
+    if type(entries) == str:
+        entries = entries.split("\n")
+
     print('\n'.join(entries))
     p = subprocess.Popen(['simple_switch_CLI', '--thrift-port', str(thrift_port)], stdin=subprocess.PIPE)
     p.communicate(input='\n'.join(entries))
