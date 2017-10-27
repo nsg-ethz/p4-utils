@@ -26,6 +26,11 @@ def run_command(command):
     log('>', command)
     return os.WEXITSTATUS(os.system(command))
 
+def read_entries(filename):
+    with open(filename,"r") as f:
+        entries = [x.strip() for x in f.readlines() if x.strip() != ""]
+    return entries
+
 def compile_p4_to_bmv2(config):
 
     compiler_args = []
@@ -44,7 +49,9 @@ def compile_p4_to_bmv2(config):
     if program_file:
         output_file = program_file.replace(".p4","") + '.json'
         compiler_args.append('"%s"' % program_file)
-    compiler_args.append('-o "%s"' % output_file)
+        compiler_args.append('-o "%s"' % output_file)
+    else:
+        log_error("Unknown P4 file %s" % program_file)
 
     rv = run_command('p4c-bm2-ss %s' % ' '.join(compiler_args))
 
@@ -57,12 +64,13 @@ def compile_p4_to_bmv2(config):
 def add_entries(thrift_port=9090, entries=None):
     assert entries
 
-    if type(entries) == str:
-        entries = entries.split("\n")
+    if type(entries) == list:
+        entries = '\n'.join(entries)
 
-    print('\n'.join(entries))
+    print(entries)
+
     p = subprocess.Popen(['simple_switch_CLI', '--thrift-port', str(thrift_port)], stdin=subprocess.PIPE)
-    p.communicate(input='\n'.join(entries))
+    p.communicate(input=entries)
 
 def read_register(register, idx, thrift_port=9090):
     p = subprocess.Popen(['simple_switch_CLI', '--thrift-port', str(thrift_port)], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

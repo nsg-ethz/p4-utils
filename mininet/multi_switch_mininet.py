@@ -30,6 +30,7 @@ from mininet.topo import Topo
 from mininet.link import TCLink
 from mininet.log import setLogLevel, info
 from mininet.cli import CLI
+from mininet.clean import cleanup, sh
 
 from topology import TopologyDB
 
@@ -243,5 +244,10 @@ def main():
 
 if __name__ == '__main__':
     setLogLevel( 'info' )
-    os.chdir("../../heavy_hitter/build")
+    #os.chdir("../../heavy_hitter/build")
+
+    #cleanup
+    cleanup()
+    sh("killall simple_switch")
+
     main()

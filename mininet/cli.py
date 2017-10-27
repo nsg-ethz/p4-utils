@@ -37,6 +37,9 @@ class P4CLI(CLI):
 
     def do_p4switch_start(self,line=""):
 
+        #import ipdb
+        #ipdb.set_trace()
+
         """start again simple switch from namespace"""
         args = line.split()
 
@@ -50,6 +53,11 @@ class P4CLI(CLI):
 
         p4switch = self.mn[switch_name]
 
+        #check if switch is running
+        if p4switch.check_switch_started():
+            log.warn('P4 Switch already running, stop first: p4switch_stop %s \n' % switch_name)
+            return
+
         try:
             p4source_path = args[args.index("--p4source")+1]
             #check if file exists
@@ -57,7 +65,7 @@ class P4CLI(CLI):
                 error('File Error: p4source does not exist %s\n' % p4source_path)
 
         except ValueError:
-            p4source = self.config["program"]
+            p4source_path = self.config["program"]
 
         #compile if needed
         output_file = p4source_path.replace(".p4", "") + ".json"
@@ -66,7 +74,7 @@ class P4CLI(CLI):
             language = self.config.get("language",None)
             if not language:
                 language = "p4-16"
-            compile_config = {"language": language, "propgram_file": p4source}
+            compile_config = {"language": language, "program_file": p4source_path}
             #compile program
             compile_p4_to_bmv2(compile_config)
             #update output program
@@ -83,10 +91,9 @@ class P4CLI(CLI):
                 error('File Error: commands does not exist %s\n' % commands_path)
         except ValueError:
             #TODO: support different configuration files
-            commands_path= self.config["targets"]["switches"][switch_name]["entries"]
+            commands_path= self.config["targets"]["multiswitch"]["switches"][switch_name]["entries"]
 
-        with open(commands_path, "r") as f:
-            entries = f.readlines()
+        entries = read_entries(commands_path)
 
         #add entries
         add_entries(p4switch.thrift_port, entries)

@@ -125,9 +125,6 @@ def main():
         with open(args.cli_message, 'r') as message_file:
             print message_file.read()
 
-
-
-
     CLI( net )
     net.stop()
 

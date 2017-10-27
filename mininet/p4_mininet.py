@@ -90,17 +90,19 @@ class P4Switch(Switch):
             P4Switch.device_id += 1
         self.nanomsg = "ipc:///tmp/bm-{}-log.ipc".format(self.device_id)
 
+        self.simple_switch_pid = None
+
     @classmethod
     def setup(cls):
         pass
 
-    def check_switch_started(self, pid):
+    def check_switch_started(self):
         """While the process is running (pid exists), we check if the Thrift
         server has been started. If the Thrift server is ready, we assume that
         the switch was started successfully. This is only reliable if the Thrift
         server is started at the end of the init process"""
         while True:
-            if not os.path.exists(os.path.join("/proc", str(pid))):
+            if not os.path.exists(os.path.join("/proc", str(self.simple_switch_pid))):
                 return False
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(0.5)
@@ -135,13 +137,13 @@ class P4Switch(Switch):
             args.append("--log-console")
         info(' '.join(args) + "\n")
 
-        pid = None
+        self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
             self.cmd(' '.join(args) + ' >' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
-            pid = int(f.read())
-        debug("P4 switch {} PID is {}.\n".format(self.name, pid))
+            self.simple_switch_pid = int(f.read())
+        debug("P4 switch {} PID is {}.\n".format(self.name, self.simple_switch_pid))
         sleep(1)
-        if not self.check_switch_started(pid):
+        if not self.check_switch_started():
             error("P4 switch {} did not start correctly."
                   "Check the switch log file.\n".format(self.name))
             exit(1)
@@ -182,14 +184,14 @@ class P4Switch(Switch):
             args.append("--log-console")
         info(' '.join(args) + "\n")
 
-        pid = None
+        self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
             # self.cmd(' '.join(args) + ' > /dev/null 2>&1 &')
             self.cmd(' '.join(args) + ' >' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
-            pid = int(f.read())
-        debug("P4 switch {} PID is {}.\n".format(self.name, pid))
+            self.simple_switch_pid = int(f.read())
+        debug("P4 switch {} PID is {}.\n".format(self.name, self.simple_switch_pid))
         sleep(1)
-        if not self.check_switch_started(pid):
+        if not self.check_switch_started():
             error("P4 switch {} did not start correctly."
                   "Check the switch log file.\n".format(self.name))
             exit(1)

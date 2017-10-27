@@ -114,7 +114,7 @@ def run_compile_bmv2(manifest):
         compiler_args.extend(flags)
 
     # Compile the program.
-    output_file = manifest.program_file + '.json'
+    output_file = manifest.program_file.replace(".p4","") + '.json'
     compiler_args.append('"%s"' % manifest.program_file)
     compiler_args.append('-o "%s"' % output_file)
     rv = run_command('p4c-bm2-ss %s' % ' '.join(compiler_args))
