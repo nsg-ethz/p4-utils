@@ -15,7 +15,7 @@ class AppTopo(Topo):
         self._sw_links = dict([(sw, {}) for sw in sw_names])
 
         for sw_name in sw_names:
-            self.addSwitch(sw_name, log_file="%s/%s.log" %(log_dir, sw_name))
+            self.addP4Switch(sw_name, log_file="%s/%s.log" %(log_dir, sw_name))
 
         for host_name in host_names:
             host_num = int(host_name[1:])
@@ -71,4 +71,24 @@ class AppTopo(Topo):
 
             self._sw_links[sw1][sw2] = [sw1_port, sw2_port]
             self._sw_links[sw2][sw1] = [sw2_port, sw1_port]
+
+
+    def addP4Switch(self, name, **opts):
+        """Convenience method: Add P4 switch to graph.
+           name: switch name
+           opts: switch options
+           returns: switch name"""
+        if not opts and self.sopts:
+            opts = self.sopts
+        result = self.addNode( name, isSwitch=True, isP4Switch=True, **opts )
+        return result
+
+
+    def isP4Switch(self, n):
+        """
+        Return true if the n is a p4 switch
+        :param n:
+        :return:
+        """
+        return self.g.node[n].get('isP4Switch', False)
 

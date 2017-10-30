@@ -2,12 +2,6 @@ from mininet.cli import CLI
 from mininet.log import info, output, error
 from utils import *
 
-
-#TODO: Add function to compile a new p4 program
-#TODO: implement start/stop functions -> add an optional new path to p4 prgram in the start function.
-#TODO: for rebooted switches load their control plane, or a new one, or partial one.
-
-
 class P4CLI(CLI):
 
     def __init__(self,*args,**kwargs):
@@ -98,11 +92,16 @@ class P4CLI(CLI):
         #add entries
         add_entries(p4switch.thrift_port, entries)
 
+    def do_printSwitches(self, line=""):
+        for sw in self.mn.p4switches:
+            print sw.name
+
 
     def do_p4switches_reboot(self, line=""):
-        """reboot all p4 switches with new program """
-        #TODO: only p4 switches, to do that i would have to modify topology class and do like we do with routers
-        for sw in self.mn.switches:
+        """reboot all p4 switches with new program: if you provide a p4 source code or cmd all switches
+        will have the same code.
+        """
+        for sw in self.mn.p4switches:
             switch_name = sw.name
             self.do_p4switch_stop(line=switch_name)
 

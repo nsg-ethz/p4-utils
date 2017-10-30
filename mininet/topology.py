@@ -195,7 +195,7 @@ class TopologyDB(object):
         self._network[n.name]["routerid"] = self.setRouterId(n.name)
 
 
-#TODO: update this classes...
+#TODO: Check what can be reused.
 class NetworkGraph(object):
     def __init__(self, topologyDB):
 
@@ -324,8 +324,6 @@ class NetworkGraph(object):
         paths = [tuple(x) for x in paths]
 
         return paths
-
-
 class Topology(TopologyDB):
     def __init__(self, loadNetworkGraph=True,hostsMappings=True, *args, **kwargs):
 
@@ -421,12 +419,11 @@ class Topology(TopologyDB):
 
 if __name__  == "__main__":
 
-    #TODO: change path
     import sys
     if len(sys.argv) > 1:
         db = sys.argv[1]
 
     else:
-        db = "/tmp/minigenerator_topology"
+        db = "./topology.db"
 
     topo = Topology(db=db)

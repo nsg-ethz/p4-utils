@@ -16,6 +16,7 @@
 #
 
 from mininet.net import Mininet
+from p4net import P4Mininet
 from mininet.topo import Topo
 from mininet.log import setLogLevel, info
 from mininet.cli import CLI
@@ -81,7 +82,7 @@ def main():
                             args.thrift_port,
                             args.pcap_dump,
                             num_hosts)
-    net = Mininet(topo = topo,
+    net = P4Mininet(topo = topo,
                   host = P4Host,
                   switch = P4Switch,
                   controller = None)

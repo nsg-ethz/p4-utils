@@ -26,10 +26,8 @@ import re
 from time import sleep
 
 from mininet.net import Mininet
-from mininet.topo import Topo
 from mininet.link import TCLink
 from mininet.log import setLogLevel, info
-from mininet.cli import CLI
 from mininet.clean import cleanup, sh
 
 from topology import TopologyDB
@@ -38,6 +36,8 @@ from p4_mininet import P4Switch, P4Host
 import apptopo
 import appcontroller
 from cli import P4CLI
+
+from p4net import P4Mininet
 
 
 parser = argparse.ArgumentParser(description='Mininet demo')
@@ -145,7 +145,7 @@ def main():
             json_path=args.json,
             log_console=bmv2_log,
             pcap_dump=pcap_dump)
-    net = Mininet(topo = topo,
+    net = P4Mininet(topo = topo,
                   link = TCLink,
                   host = P4Host,
                   switch = switchClass,

@@ -64,7 +64,7 @@ class AppController:
                 h.cmd('ip route add %s dev %s' % (link['sw_ip'], iface))
             h.setDefaultRoute("via %s" % link['sw_ip'])
 
-        #TODO: some day
+        #TODO: Investigate this.
         #NO clue of what is going on here...
         #I think it tries to guess the gateway switch for multihomed hosts.
         #i should probably re-implement this

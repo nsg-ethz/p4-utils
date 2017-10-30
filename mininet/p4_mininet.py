@@ -62,6 +62,7 @@ class P4Switch(Switch):
                  device_id = None,
                  enable_debugger = False,
                  **kwargs):
+
         Switch.__init__(self, name, **kwargs)
         assert(sw_path)
         assert(json_path)
