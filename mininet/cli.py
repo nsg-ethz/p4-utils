@@ -15,6 +15,10 @@ class P4CLI(CLI):
 
         CLI.__init__(self,*args,**kwargs)
 
+
+    def do_reload_conf(self, line=""):
+        pass
+
     def do_p4switch_stop(self,line=""):
 
         """stop simple switch from switch namespace"""
@@ -59,7 +63,10 @@ class P4CLI(CLI):
                 error('File Error: p4source does not exist %s\n' % p4source_path)
 
         except ValueError:
-            p4source_path = self.config["program"]
+            p4source_path = self.config["targets"]["multiswitch"]["switches"][switch_name].get("program", False)
+            if not p4source_path:
+                p4source_path = self.config["program"]
+
 
         #compile if needed
         output_file = p4source_path.replace(".p4", "") + ".json"
@@ -84,7 +91,6 @@ class P4CLI(CLI):
             if not os.path.exists(commands_path):
                 error('File Error: commands does not exist %s\n' % commands_path)
         except ValueError:
-            #TODO: support different configuration files
             commands_path= self.config["targets"]["multiswitch"]["switches"][switch_name]["entries"]
 
         entries = read_entries(commands_path)

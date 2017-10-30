@@ -1,7 +1,7 @@
 from __future__ import print_function
-from mininet import log
 import sys, os
 import subprocess
+from mininet import log
 
 def last_modified(input_file, output_file):
     """
@@ -23,7 +23,7 @@ def log_error(*items):
     print(*items, file=sys.stderr)
 
 def run_command(command):
-    log('>', command)
+    log.debug(command)
     return os.WEXITSTATUS(os.system(command))
 
 def read_entries(filename):
