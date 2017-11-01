@@ -1,5 +1,5 @@
 from mininet.cli import CLI
-from mininet.log import info, output, error
+from mininet.log import info, output, error, warn, debug
 from utils import *
 
 class P4CLI(CLI):
@@ -44,23 +44,25 @@ class P4CLI(CLI):
         #check args validity
         if len(args) > 5:
             error('usage: p4switch_start <p4switch name> [--p4source <path>] [--cmd path]\n')
+            return
 
         switch_name = args[0]
         if switch_name not in self.mn:
             error('usage: p4switch_start <p4switch name> [--p4source <path>] [--cmd path]\n')
+            return
 
         p4switch = self.mn[switch_name]
 
         #check if switch is running
         if p4switch.check_switch_started():
-            log.warn('P4 Switch already running, stop first: p4switch_stop %s \n' % switch_name)
-            return
+            error('P4 Switch already running, stop first: p4switch_stop %s \n' % switch_name)
 
         try:
             p4source_path = args[args.index("--p4source")+1]
             #check if file exists
             if not os.path.exists(p4source_path):
-                error('File Error: p4source does not exist %s\n' % p4source_path)
+                warn('File Error: p4source does not exist %s\n' % p4source_path)
+                return
 
         except ValueError:
             p4source_path = self.config["targets"]["multiswitch"]["switches"][switch_name].get("program", False)
@@ -90,6 +92,8 @@ class P4CLI(CLI):
             #check if file exists
             if not os.path.exists(commands_path):
                 error('File Error: commands does not exist %s\n' % commands_path)
+                return
+
         except ValueError:
             commands_path= self.config["targets"]["multiswitch"]["switches"][switch_name]["entries"]
 
@@ -118,7 +122,9 @@ class P4CLI(CLI):
     def do_p4switch_reboot(self,line=""):
 
         """reboot a p4 switch with new program"""
-        switch_name = line.split()[0]
-
-        self.do_p4switch_stop(line=switch_name)
-        self.do_p4switch_start(line=line)
+        if not line or len(line.split()) > 1:
+            error('usage: p4switch_stop <p4switch name>\n')
+        else:
+            switch_name = line.split[0]
+            self.do_p4switch_stop(line=switch_name)
+            self.do_p4switch_start(line=line)
