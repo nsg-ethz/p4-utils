@@ -19,8 +19,43 @@ def last_modified(input_file, output_file):
 
     return os.path.getmtime(input_file) >  os.path.getmtime(output_file)
 
-def check_imports_last_modified():
-    pass
+def get_imported_files(input_file):
+
+    includes = []
+
+    with open(input_file, "r") as f:
+        lines = f.readlines()
+
+    for line in lines:
+        tmp = line.strip()
+        if tmp.startswith("#include"):
+            file_name = tmp.split(" ")[1]
+
+            #find if it is surrounded by <>
+            if  not (file_name.startswith("<") and file_name.endswith(">")):
+                includes.append(file_name.strip('"'))
+
+    return includes
+
+def check_imports_last_modified(input_file, import_last_modifications):
+
+    compile_flag = False
+    for import_file in get_imported_files(input_file):
+
+        if (not os.path.exists(import_file)):
+            log.error("File %s does not exist \n" % import_file)
+            #maybe i should rise an error
+            return False
+
+        #add if they are bigger or not.
+        last_time = os.path.getmtime(import_file)
+        if last_time > import_last_modifications.get(import_file, 0):
+            import_last_modifications[import_file] = last_time
+            compile_flag = True
+
+    return compile_flag
+
+
 
 def log_error(*items):
     print(*items, file=sys.stderr)

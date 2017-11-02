@@ -8,6 +8,8 @@ class P4CLI(CLI):
     def __init__(self,*args,**kwargs):
 
         self.config = kwargs.get("config", None)
+        self.import_last_modifications = {}
+
         if not self.config:
             log("Any configuration was given to the CLI and therefore p4 functionalities are disabled")
         else:
@@ -81,6 +83,7 @@ class P4CLI(CLI):
             return
 
         compile_flag = last_modified(p4source_path_source, output_file)
+        compile_flag = compile_flag | check_imports_last_modified(p4source_path_source, self.import_last_modifications)
 
         print p4source_path_source, output_file, compile_flag
 
