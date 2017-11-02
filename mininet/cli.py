@@ -1,6 +1,7 @@
 from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
 from utils import *
+import shutil
 
 class P4CLI(CLI):
 
@@ -43,12 +44,12 @@ class P4CLI(CLI):
 
         #check args validity
         if len(args) > 5:
-            error('usage: p4switch_start <p4switch name> [--p4source <path>] [--cmd path]\n')
+            error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmd path]\n')
             return
 
         switch_name = args[0]
         if switch_name not in self.mn:
-            error('usage: p4switch_start <p4switch name> [--p4source <path>] [--cmd path]\n')
+            error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmd path]\n')
             return
 
         p4switch = self.mn[switch_name]
@@ -58,7 +59,7 @@ class P4CLI(CLI):
             error('P4 Switch already running, stop first: p4switch_stop %s \n' % switch_name)
 
         try:
-            p4source_path = args[args.index("--p4source")+1]
+            p4source_path = args[args.index("--p4src")+1]
             #check if file exists
             if not os.path.exists(p4source_path):
                 warn('File Error: p4source does not exist %s\n' % p4source_path)
@@ -69,11 +70,25 @@ class P4CLI(CLI):
             if not p4source_path:
                 p4source_path = self.config["program"]
 
-
         #compile if needed
         output_file = p4source_path.replace(".p4", "") + ".json"
-        compile_flag = last_modified(p4source_path, output_file)
+
+        #if path is relative we have to modify it since we are at build/
+        if not os.path.isabs(p4source_path):
+            p4source_path_source = "../" + p4source_path
+        else:
+            log.error("Path has to be relative to the project: p4src/program.p4")
+            return
+
+        compile_flag = last_modified(p4source_path_source, output_file)
+
+        print p4source_path_source, output_file, compile_flag
+
         if compile_flag:
+
+            #move source code from real path to build path
+            shutil.copy(p4source_path_source, p4source_path)
+
             language = self.config.get("language",None)
             if not language:
                 language = "p4-16"
@@ -122,9 +137,9 @@ class P4CLI(CLI):
     def do_p4switch_reboot(self,line=""):
 
         """reboot a p4 switch with new program"""
-        if not line or len(line.split()) > 1:
-            error('usage: p4switch_stop <p4switch name>\n')
+        if not line or len(line.split()) > 5:
+            error('usage: p4switch_reboot <p4switch name> [--p4src <path>] [--cmd path]\n')
         else:
-            switch_name = line.split[0]
+            switch_name = line.split()[0]
             self.do_p4switch_stop(line=switch_name)
             self.do_p4switch_start(line=line)

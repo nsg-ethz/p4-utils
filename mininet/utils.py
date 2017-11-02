@@ -19,6 +19,9 @@ def last_modified(input_file, output_file):
 
     return os.path.getmtime(input_file) >  os.path.getmtime(output_file)
 
+def check_imports_last_modified():
+    pass
+
 def log_error(*items):
     print(*items, file=sys.stderr)
 
