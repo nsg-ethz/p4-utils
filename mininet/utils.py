@@ -3,6 +3,9 @@ import sys, os
 import subprocess
 from mininet import log
 
+class CompilationError(Exception):
+    pass
+
 def last_modified(input_file, output_file):
     """
 
@@ -42,12 +45,20 @@ def check_imports_last_modified(input_file, import_last_modifications):
     compile_flag = False
     for import_file in get_imported_files(input_file):
 
+        #processing assuming that we are in the build directory
+        if import_file.startswith("../"):
+            import_file = import_file[3:]
+
+        elif import_file.startswith("include/"):
+            import_file = "../p4src/" + import_file
+
         if (not os.path.exists(import_file)):
             log.error("File %s does not exist \n" % import_file)
             #maybe i should rise an error
             return False
 
         #add if they are bigger or not.
+        print(import_file)
         last_time = os.path.getmtime(import_file)
         if last_time > import_last_modifications.get(import_file, 0):
             import_last_modifications[import_file] = last_time
@@ -94,8 +105,7 @@ def compile_p4_to_bmv2(config):
     rv = run_command('p4c-bm2-ss %s' % ' '.join(compiler_args))
 
     if rv != 0:
-        log_error('Compile failed.')
-        sys.exit(1)
+        raise CompilationError
 
     return output_file
 

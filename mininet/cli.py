@@ -82,22 +82,32 @@ class P4CLI(CLI):
             log.error("Path has to be relative to the project: p4src/program.p4")
             return
 
-        compile_flag = last_modified(p4source_path_source, output_file)
-        compile_flag = compile_flag | check_imports_last_modified(p4source_path_source, self.import_last_modifications)
+        program_flag = last_modified(p4source_path_source, output_file)
+        includes_flag = check_imports_last_modified(p4source_path_source, self.import_last_modifications)
 
-        print p4source_path_source, output_file, compile_flag
+        print p4source_path_source, output_file, program_flag, includes_flag
 
-        if compile_flag:
+        if program_flag or includes_flag:
 
             #move source code from real path to build path
-            shutil.copy(p4source_path_source, p4source_path)
+            if program_flag:
+                shutil.copy(p4source_path_source, p4source_path)
+            if includes_flag:
+                #remove source code name
+
+                os.system("cp -r %s %s " % (os.path.dirname(p4source_path_source)+"/include",
+                                            os.path.dirname(p4source_path)))
 
             language = self.config.get("language",None)
             if not language:
                 language = "p4-16"
             compile_config = {"language": language, "program_file": p4source_path}
             #compile program
-            compile_p4_to_bmv2(compile_config)
+            try:
+                compile_p4_to_bmv2(compile_config)
+            except CompilationError:
+                log.error('Compilation Failed\n')
+                return
             #update output program
             p4switch.json_path = output_file
 
