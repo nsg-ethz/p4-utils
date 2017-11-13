@@ -1,0 +1,14 @@
+#Git Ignore P4 examples
+
+# Python byte code
+*.pyc
+
+# Emacs
+*~
+ls
+# Compiled JSON
+*.json
+!*p4app.json
+
+*.pcap
+
