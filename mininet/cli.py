@@ -6,7 +6,6 @@ import shutil
 class P4CLI(CLI):
 
     def __init__(self,*args,**kwargs):
-
         self.config = kwargs.get("config", None)
         self.import_last_modifications = {}
 
@@ -15,9 +14,7 @@ class P4CLI(CLI):
         else:
             #normal CLI is not  any config parameter
             kwargs.__delitem__("config")
-
         CLI.__init__(self,*args,**kwargs)
-
 
     def do_reload_conf(self, line=""):
         pass
