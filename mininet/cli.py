@@ -56,6 +56,7 @@ class P4CLI(CLI):
         #check if switch is running
         if p4switch.check_switch_started():
             error('P4 Switch already running, stop first: p4switch_stop %s \n' % switch_name)
+            return
 
         try:
             p4source_path = args[args.index("--p4src")+1]
