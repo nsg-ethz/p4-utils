@@ -37,6 +37,14 @@ class AppController:
         reg_val = filter(lambda l: ' %s[%d]' % (register, idx) in l, stdout.split('\n'))[0].split('= ', 1)[1]
         return long(reg_val)
 
+    def read_tables(self, thrift_port=9090):
+
+        p = subprocess.Popen(['simple_switch_CLI', '--thrift-port', str(thrift_port)], stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        stdout, stderr = p.communicate(input="show_tables")
+        return stdout
+
     def start(self):
 
         shortestpath = ShortestPath(self.links)
