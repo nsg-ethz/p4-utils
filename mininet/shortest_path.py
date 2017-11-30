@@ -1,48 +1,57 @@
-class ShortestPath:
+class ShortestPath(object):
 
-    def __init__(self, edges=[]):
+    def __init__(self, edges=None):
+        if edges is None:
+            edges = []
         self.neighbors = {}
         for edge in edges:
             self.addEdge(*edge)
 
     def addEdge(self, a, b):
-        if a not in self.neighbors: self.neighbors[a] = []
-        if b not in self.neighbors[a]: self.neighbors[a].append(b)
+        if a not in self.neighbors:
+            self.neighbors[a] = []
+        if b not in self.neighbors[a]:
+            self.neighbors[a].append(b)
 
-        if b not in self.neighbors: self.neighbors[b] = []
-        if a not in self.neighbors[b]: self.neighbors[b].append(a)
+        if b not in self.neighbors:
+            self.neighbors[b] = []
+        if a not in self.neighbors[b]:
+            self.neighbors[b].append(a)
 
     def get(self, a, b, exclude=lambda node: False):
-        # Shortest path from a to b
+        """Get shortest path from a to b."""
         return self._recPath(a, b, [], exclude)
 
     def _recPath(self, a, b, visited, exclude):
-        if a == b: return [a]
+        if a == b:
+            return [a]
         new_visited = visited + [a]
         paths = []
         for neighbor in self.neighbors[a]:
-            if neighbor in new_visited: continue
-            if exclude(neighbor) and neighbor != b: continue
+            if neighbor in new_visited:
+                continue
+            if exclude(neighbor) and neighbor != b:
+                continue
             path = self._recPath(neighbor, b, new_visited, exclude)
-            if path: paths.append(path)
+            if path:
+                paths.append(path)
 
         paths.sort(key=len)
         return [a] + paths[0] if len(paths) else None
 
-if __name__ == '__main__':
 
+def main():
     edges = [
-            (1, 2),
-            (1, 3),
-            (1, 5),
-            (2, 4),
-            (3, 4),
-            (3, 5),
-            (3, 6),
-            (4, 6),
-            (5, 6),
-            (7, 8)
-
+        (1, 2),
+        (1, 3),
+        (1, 5),
+        (2, 4),
+        (3, 4),
+        (3, 5),
+        (3, 6),
+        (4, 6),
+        (5, 6),
+        (7, 8)
     ]
     sp = ShortestPath(edges)
 
@@ -76,3 +85,6 @@ if __name__ == '__main__':
     assert sp.get(1, 7) == None
     assert sp.get(7, 2) == None
 
+
+if __name__ == '__main__':
+    main()
