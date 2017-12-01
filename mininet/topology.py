@@ -1,10 +1,10 @@
 import json
-from ipaddress import ip_interface
-from minigenerator.logger import log
-from . import InvalidIP, HostDoesNotExist
-import networkx as nx
 import copy
 import pprint
+from ipaddress import ip_interface
+import networkx as nx
+from minigenerator.logger import log
+from . import InvalidIP, HostDoesNotExist
 
 class TopologyDB(object):
     """A convenience storage for auto-allocated mininet properties.
