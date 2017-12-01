@@ -1,7 +1,7 @@
 import json
 from ipaddress import ip_interface
 from minigenerator.logger import log
-from minigenerator.misc import InvalidIP, HostDoesNotExist
+from . import InvalidIP, HostDoesNotExist
 import networkx as nx
 import copy
 import pprint
