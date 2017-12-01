@@ -369,3 +369,7 @@ def main():
         db = "./topology.db"
 
     topo = Topology(db=db)
+
+
+if __name__ == '__main__':
+    main()
