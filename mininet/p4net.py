@@ -11,7 +11,7 @@ class P4Mininet(Mininet):
         self.p4switches = []
         super(P4Mininet, self).__init__(*args, **kwargs)
 
-    def build( self ):
+    def build(self):
         """
         Build mininet
         :return:
@@ -22,4 +22,4 @@ class P4Mininet(Mininet):
         for switch in self.switches:
             name = switch.name
             if self.topo.isP4Switch(name):
-                self.p4switches.append( switch )
+                self.p4switches.append(switch)

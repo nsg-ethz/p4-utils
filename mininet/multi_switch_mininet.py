@@ -82,14 +82,13 @@ def configureP4Switch(**switch_args):
 
 
 def main():
-
     with open(args.manifest, 'r') as f:
         manifest = json.load(f)
 
     conf = manifest['targets'][args.target]
     params = conf['parameters'] if 'parameters' in conf else {}
 
-    os.environ.update(dict(map(lambda (k,v): (k, str(v)), params.iteritems())))
+    os.environ.update(dict(map(lambda (k, v): (k, str(v)), params.iteritems())))
 
     def formatParams(s):
         for param in params:
@@ -111,14 +110,14 @@ def main():
         AppController = controller_module.CustomAppController
 
     if not os.path.isdir(args.log_dir):
-        if os.path.exists(args.log_dir): raise Exception('Log dir exists and is not a dir')
+        if os.path.exists(args.log_dir):
+            raise Exception('Log dir exists and is not a dir')
         os.mkdir(args.log_dir)
     os.environ['P4APP_LOGDIR'] = args.log_dir
 
-
     links = [l[:2] for l in conf['links']]
-    latencies = dict([(''.join(sorted(l[:2])), l[2]) for l in conf['links'] if len(l)>=3])
-    bws = dict([(''.join(sorted(l[:2])), l[3]) for l in conf['links'] if len(l)>=4])
+    latencies = dict([(''.join(sorted(l[:2])), l[2]) for l in conf['links'] if len(l) >= 3])
+    bws = dict([(''.join(sorted(l[:2])), l[3]) for l in conf['links'] if len(l) >= 4])
 
     for host_name in sorted(conf['hosts'].keys()):
         host = conf['hosts'][host_name]
@@ -138,18 +137,19 @@ def main():
     pcap_dump = args.pcap_dump or ('pcap_dump' in conf and conf['pcap_dump'])
 
     topo = AppTopo(links, latencies, manifest=manifest, target=args.target,
-                  log_dir=args.log_dir, bws=bws)
+                   log_dir=args.log_dir, bws=bws)
 
     switchClass = configureP4Switch(
-            sw_path=args.behavioral_exe,
-            json_path=args.json,
-            log_console=bmv2_log,
-            pcap_dump=pcap_dump)
-    net = P4Mininet(topo = topo,
-                  link = TCLink,
-                  host = P4Host,
-                  switch = switchClass,
-                  controller = None)
+        sw_path=args.behavioral_exe,
+        json_path=args.json,
+        log_console=bmv2_log,
+        pcap_dump=pcap_dump)
+    net = P4Mininet(
+        topo=topo,
+        link=TCLink,
+        host=P4Host,
+        switch=switchClass,
+        controller=None)
 
     net.start()
 
@@ -158,7 +158,7 @@ def main():
     controller = None
     if args.auto_control_plane or 'controller_module' in conf:
         controller = AppController(manifest=manifest, target=args.target,
-                                     topo=topo, net=net, links=links)
+                                   topo=topo, net=net, links=links)
         controller.start()
 
     for h in net.hosts:
@@ -170,9 +170,9 @@ def main():
 
     TopologyDB(net=net).save("./topology.db")
 
-    #Safe topology
+    # Save topology
     if args.cli or ('cli' in conf and conf['cli']):
-        P4CLI(net, config= manifest)
+        P4CLI(net, config=manifest)
 
     stdout_files = dict()
     return_codes = []
@@ -194,7 +194,7 @@ def main():
             stdout_files[host_name].flush()
             stdout_files[host_name].close()
 
-    print '\n'.join(map(lambda (k,v): "%s: %s"%(k,v), params.iteritems())) + '\n'
+    print '\n'.join(map(lambda (k, v): "%s: %s"%(k, v), params.iteritems())) + '\n'
 
     for host_name in sorted(conf['hosts'].keys()):
         host = conf['hosts'][host_name]
@@ -216,7 +216,6 @@ def main():
     for p, host_name in host_procs:
         if 'wait' in conf['hosts'][host_name] and conf['hosts'][host_name]['wait']:
             _wait_for_exit(p, host_name)
-
 
     for p, host_name in host_procs:
         if 'wait' in conf['hosts'][host_name] and conf['hosts'][host_name]['wait']:
@@ -243,10 +242,8 @@ def main():
     if len(bad_codes): sys.exit(1)
 
 if __name__ == '__main__':
-    setLogLevel( 'info' )
-    #os.chdir("../../heavy_hitter/build")
+    setLogLevel('info')
 
-    #cleanup
     cleanup()
     sh("killall simple_switch")
 

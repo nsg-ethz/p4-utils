@@ -13,16 +13,17 @@
 # limitations under the License.
 #
 
-from mininet.node import Switch, Host
-from mininet.log import setLogLevel, info, error, debug
-from mininet.moduledeps import pathCheck
 from sys import exit
 from time import sleep
 import os
 import tempfile
 import socket
+from mininet.node import Switch, Host
+from mininet.log import setLogLevel, info, error, debug
+from mininet.moduledeps import pathCheck
 
 class P4Host(Host):
+
     def config(self, **params):
         r = super(P4Host, self).config(**params)
 
@@ -49,23 +50,26 @@ class P4Host(Host):
             print "Default route to switch: %s (%s)" % (sw_addr, sw_mac)
         print "**********"
 
+
 class P4Switch(Switch):
     """P4 virtual switch"""
     device_id = 0
 
-    def __init__(self, name, sw_path = None, json_path = None,
-                 log_file = None,
-                 thrift_port = None,
-                 pcap_dump = False,
-                 log_console = False,
-                 verbose = False,
-                 device_id = None,
-                 enable_debugger = False,
+    def __init__(self, name,
+                 sw_path=None,
+                 json_path=None,
+                 log_file=None,
+                 thrift_port=None,
+                 pcap_dump=False,
+                 log_console=False,
+                 verbose=False,
+                 device_id=None,
+                 enable_debugger=False,
                  **kwargs):
 
         Switch.__init__(self, name, **kwargs)
-        assert(sw_path)
-        assert(json_path)
+        assert sw_path
+        assert json_path
         # make sure that the provided sw_path is valid
         pathCheck(sw_path)
         # make sure that the provided JSON file exists
@@ -98,10 +102,13 @@ class P4Switch(Switch):
         pass
 
     def check_switch_started(self):
-        """While the process is running (pid exists), we check if the Thrift
+        """Check if switch has started properly.
+
+        While the process is running (pid exists), we check if the Thrift
         server has been started. If the Thrift server is ready, we assume that
         the switch was started successfully. This is only reliable if the Thrift
-        server is started at the end of the init process"""
+        server is started at the end of the init process.
+        """
         while True:
             if not os.path.exists(os.path.join("/proc", str(self.simple_switch_pid))):
                 return False
@@ -112,11 +119,7 @@ class P4Switch(Switch):
                 return  True
 
     def start_p4switch(self):
-        """
-        Just starts again simple switch with the same interfaces.
-        :return:
-        """
-
+        """Just starts again simple switch with the same interfaces."""
         info("Starting P4 switch {}.\n".format(self.name))
         args = [self.sw_path]
         for port, intf in self.intfs.items():
@@ -151,16 +154,13 @@ class P4Switch(Switch):
         info("P4 switch {} has been started.\n".format(self.name))
 
     def stop_p4switch(self):
-        """
-        Just stops simple switch
-        :return:
-        """
+        """Just stops simple switch."""
         info("Stopping P4 switch {}.\n".format(self.name))
         self.cmd('kill %' + self.sw_path)
         self.cmd('wait')
 
     def start(self, controllers):
-        "Start up a new P4 switch"
+        """Start up a new P4 switch."""
         info("Starting P4 switch {}.\n".format(self.name))
         args = [self.sw_path]
         for port, intf in self.intfs.items():
@@ -199,16 +199,16 @@ class P4Switch(Switch):
         info("P4 switch {} has been started.\n".format(self.name))
 
     def stop(self):
-        "Terminate P4 switch."
+        """Terminate P4 switch."""
         self.output.flush()
         self.cmd('kill %' + self.sw_path)
         self.cmd('wait')
         self.deleteIntfs()
 
     def attach(self, intf):
-        "Connect a data port"
-        assert(0)
+        """Connect a data port."""
+        assert 0
 
     def detach(self, intf):
-        "Disconnect a data port"
-        assert(0)
+        """"Disconnect a data port."""
+        assert 0
