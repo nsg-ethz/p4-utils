@@ -12,3 +12,4 @@ ls
 
 *.pcap
 
+*.egg-info/
