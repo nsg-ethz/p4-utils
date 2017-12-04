@@ -5,6 +5,7 @@ import pprint
 import networkx as nx
 from ipaddress import ip_interface
 from p4utils.logger import log
+from p4utils import HostDoesNotExist, InvalidIP
 
 class TopologyDB(object):
     """A convenience storage for auto-allocated mininet properties.
@@ -360,25 +361,6 @@ class Topology(TopologyDB):
     def getSwitches(self):
         return {node: self._network[node] for node in self._network if self._network[node]["type"] == "switch"}
 
-
-class HostDoesNotExist(Exception):
-
-    def __init__(self, message):
-        super(HostDoesNotExist, self).__init__('HostDoesNotExist: {0}'.format(message))
-        self.message = message
-
-    def __str__(self):
-        return self.message
-
-
-class InvalidIP(Exception):
-
-    def __init__(self, message):
-        super(InvalidIP, self).__init__('InvalidIP: {0}'.format(message))
-        self.message = message
-
-    def __str__(self):
-        return self.message
 
 
 def main():
