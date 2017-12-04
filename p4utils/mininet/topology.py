@@ -4,8 +4,7 @@ import pprint
 
 import networkx as nx
 from ipaddress import ip_interface
-from utils.logger import log
-
+from p4utils.logger import log
 
 class TopologyDB(object):
     """A convenience storage for auto-allocated mininet properties.
