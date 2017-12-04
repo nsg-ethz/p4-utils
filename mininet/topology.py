@@ -1,9 +1,10 @@
-import json
 import copy
+import json
 import pprint
-from ipaddress import ip_interface
+
 import networkx as nx
-from minigenerator.logger import log
+from ipaddress import ip_interface
+from utils.logger import log
 
 
 class TopologyDB(object):
