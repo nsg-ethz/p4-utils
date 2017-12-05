@@ -144,6 +144,7 @@ def main():
         json_path=args.json,
         log_console=bmv2_log,
         pcap_dump=pcap_dump)
+
     net = P4Mininet(
         topo=topo,
         link=TCLink,
