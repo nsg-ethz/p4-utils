@@ -94,7 +94,7 @@ def compile_p4_to_bmv2(config):
         sys.exit(1)
 
     # Compile the program.
-    program_file = config.get("program_file", None)
+    program_file = config.get("program", None)
     if program_file:
         output_file = program_file.replace(".p4","") + '.json'
         compiler_args.append('"%s"' % program_file)

@@ -244,7 +244,7 @@ def run_multiswitch(manifest):
 
     script_args.append('--cli-message "%s"' % message_file)
 
-    program = '"%s/mininet/multi_switch_mininet.py"' % sys.path[0]
+    program = '"%s/mininetlib/multi_switch_mininet.py"' % sys.path[0]
     return run_command('python2 %s %s' % (program, ' '.join(script_args)))
 
 def run_stf(manifest):
