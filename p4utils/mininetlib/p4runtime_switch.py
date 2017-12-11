@@ -22,7 +22,7 @@ from mininet.moduledeps import pathCheck
 from mininet.log import info, error, debug
 
 from p4_mininet import P4Switch, SWITCH_START_TIMEOUT
-from p4_utils_custom.utils.utils import check_listening_on_port
+from p4utils.utils.utils import check_listening_on_port
 
 class P4RuntimeSwitch(P4Switch):
     "BMv2 switch with gRPC support"

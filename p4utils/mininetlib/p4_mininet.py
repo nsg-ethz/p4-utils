@@ -22,7 +22,7 @@ from mininet.node import Switch, Host
 from mininet.log import setLogLevel, info, error, debug
 from mininet.moduledeps import pathCheck
 
-from p4_utils_custom.utils.utils import check_listening_on_port
+from p4utils.utils.utils import check_listening_on_port
 
 SWITCH_START_TIMEOUT = 10
 

@@ -27,18 +27,14 @@ from time import sleep
 import importlib
 from ipaddress import ip_interface
 
-#workarround
-#TODO removeonce this is a package
-sys.path.insert(0,"/home/edgar/p4/p4-state/")
-
-from p4_utils_custom.mininetlib.p4net import P4Mininet
-from p4_utils_custom.mininetlib.p4_mininet import P4Switch, P4Host
-from p4_utils_custom.utils.topology import TopologyDB
-from p4_utils_custom.mininetlib.cli import P4CLI
-from p4_utils_custom.mininetlib.apptopo import AppTopo as DefaultTopo
-from p4_utils_custom.mininetlib.appcontroller import AppController as DefaultController
-from p4_utils_custom.mininetlib.p4runtime_switch import P4RuntimeSwitch
-from p4_utils_custom.utils.utils import run_command,compile_all_p4, load_conf
+from p4utils.mininetlib.p4net import P4Mininet
+from p4utils.mininetlib.p4_mininet import P4Switch, P4Host
+from p4utils.utils.topology import TopologyDB
+from p4utils.mininetlib.cli import P4CLI
+from p4utils.mininetlib.apptopo import AppTopo as DefaultTopo
+from p4utils.mininetlib.appcontroller import AppController as DefaultController
+from p4utils.mininetlib.p4runtime_switch import P4RuntimeSwitch
+from p4utils.utils.utils import run_command,compile_all_p4, load_conf
 
 from mininet.link import TCLink
 from mininet.clean import cleanup, sh

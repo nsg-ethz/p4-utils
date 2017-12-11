@@ -4,29 +4,8 @@ import pprint
 from ipaddress import ip_interface
 import networkx as nx
 
-#TODO removeonce this is a package
-import sys
-sys.path.insert(0,"/home/edgar/p4/p4-state/")
+from p4utils.logger import log
 
-from p4_utils_custom.logger import log
-
-class HostDoesNotExist(Exception):
-
-    def __init__(self, message):
-        super(HostDoesNotExist, self).__init__('HostDoesNotExist: {0}'.format(message))
-        self.message = message
-
-    def __str__(self):
-        return self.message
-
-class InvalidIP(Exception):
-
-    def __init__(self, message):
-        super(InvalidIP, self).__init__('InvalidIP: {0}'.format(message))
-        self.message = message
-
-    def __str__(self):
-        return self.message
 
 class TopologyDB(object):
     """A convenience storage for auto-allocated mininet properties.

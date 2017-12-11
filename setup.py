@@ -35,8 +35,8 @@ setup(
         'setuptools',
         'networkx',
         'ipaddress',
-        'scapy',
-        'psutil'
+        'scapy'
+        #'psutil'
     ],
     extras_require={}
     #tests_require=['pytest'],

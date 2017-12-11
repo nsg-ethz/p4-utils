@@ -1,6 +1,6 @@
 from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
-from p4_utils_custom.utils.utils import *
+from p4utils.utils.utils import *
 #import shutil
 
 class P4CLI(CLI):
