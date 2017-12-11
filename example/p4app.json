@@ -1,0 +1,40 @@
+{
+  "program": "p4src/heavy_hitter.p4",
+  "compiler": "p4c-bm2-ss",
+  "language": "p4-16",
+  "cli": true,
+  "pcap_dump": true,
+  "enable_log": true,
+  "topo_module": null,
+  "controller_module:": null,
+  "topology": {
+    "links": [["h1", "s1"], ["s1", "s2"], ["s1", "s3"], ["s2", "s4"], ["s3", "s4"], ["s4", "h2"], ["s4", "h3"]],
+    "hosts": {
+      "h1": {
+      },
+      "h2": {
+      },
+      "h3": {
+      }
+    },
+    "switches": {
+      "s1": {
+        "cli_input": "s1-commands.txt",
+        "program": "p4src/heavy_hitter.p4"
+      },
+      "s2": {
+        "cli_input": "s2-commands.txt",
+        "program": "p4src/heavy_hitter.p4"
+      },
+      "s3": {
+        "cli_input": "s3-commands.txt",
+        "program": "p4src/heavy_hitter.p4"
+      },
+      "s4": {
+        "cli_input": "s4-commands.txt",
+        "program": "p4src/heavy_hitter.p4"
+      }
+    }
+  }
+}
+

@@ -1,11 +1,32 @@
-import copy
 import json
+import copy
 import pprint
-
-import networkx as nx
 from ipaddress import ip_interface
-from p4utils.logger import log
-from p4utils import HostDoesNotExist, InvalidIP
+import networkx as nx
+
+#TODO removeonce this is a package
+import sys
+sys.path.insert(0,"/home/edgar/p4/p4-state/")
+
+from p4_utils_custom.logger import log
+
+class HostDoesNotExist(Exception):
+
+    def __init__(self, message):
+        super(HostDoesNotExist, self).__init__('HostDoesNotExist: {0}'.format(message))
+        self.message = message
+
+    def __str__(self):
+        return self.message
+
+class InvalidIP(Exception):
+
+    def __init__(self, message):
+        super(InvalidIP, self).__init__('InvalidIP: {0}'.format(message))
+        self.message = message
+
+    def __str__(self):
+        return self.message
 
 class TopologyDB(object):
     """A convenience storage for auto-allocated mininet properties.
@@ -56,45 +77,25 @@ class TopologyDB(object):
     def __getitem__(self, item):
         return self._node(item)
 
-    def _interface(self, x, y):
-        return self._network[x][y]
+    def _interface(self, node1, node2):
+        return self._network[node1][node2]
 
-    def interface(self, x, y):
-        """Return the ip_interface for node x facing node y."""
-        return ip_interface(self._interface(x, y)['ip'])
+    def interface(self, node1, node2):
+        """Return the ip_interface for node1 facing node2."""
+        return ip_interface(self._interface(node1, node2)['ip'])
 
-    def interface_bandwidth(self, x, y):
-        """Return the bandwidth capacity of the interface on node x facing node y.
+    def interface_bandwidth(self, node1, node2):
+        """Return the bandwidth capacity of the interface on node1 facing node2.
         If it is unlimited, return -1."""
-        connected_to = self._network[x]["interfaces_to_node"][y]
-        return self._interface(x, connected_to)['bw']
+        connected_to = self._network[node1]["interfaces_to_node"][node2]
+        return self._interface(node1, connected_to)['bw']
 
-    def subnet(self, x, y):
-        """Return the subnet linking node x and y."""
-        return self.interface(x, y).network.with_prefixlen
-
-    def set_router_id(self, x):
-        """Return the OSPF router id for node named x."""
-        router = self._network[x]
-        if router['type'] != 'router':
-            raise TypeError('%s is not a router' % x)
-
-        return router.get('routerid')
-
-    def get_router_id(self, x):
-        router = self._network[x]
-        if router['type'] != 'router':
-            raise TypeError('%s is not a router' % x)
-
-        return router['routerid']
+    def subnet(self, node1, node2):
+        """Return the subnet linking node1 and node2."""
+        return self.interface(node1, node2).network.with_prefixlen
 
     def interface_ip(self, node, interface):
-        """Returns the IP address of a given interface and node.
-
-        :param node:
-        :param interface:
-        :return:
-        """
+        """Returns the IP address of a given interface and node."""
         connected_to = self._network[node]["interfaces_to_node"][interface]
         return self._interface(node, connected_to)['ip'].split("/")[0]
 
@@ -104,7 +105,7 @@ class TopologyDB(object):
     def get_neighbors(self, node):
         return self._network[node]["interfaces_to_node"].itervalues()
 
-    def interfaces(self, node):
+    def get_interfaces(self, node):
         return self._network[node]["interfaces_to_node"].iterkeys()
 
     @staticmethod
@@ -131,28 +132,32 @@ class TopologyDB(object):
         for controller in net.controllers:
             self.add_controller(controller)
 
-    def _add_node(self, n, props):
-        """Register a network node."""
+    def _add_node(self, node, props):
+        """Register a network node.
+
+        Args:
+            node: mininet.node.Node object
+            props: properties (dictionary)
+        """
         # does not add nodes that have inTopology set to false
-        if 'inTopology' in n.params:
-            if not n.params['inTopology']:
+        if 'inTopology' in node.params:
+            if not node.params['inTopology']:
                 return
 
         interfaces_to_nodes = {}
         interfaces_to_port = {}
 
-        for port, port_id in n.ports.iteritems():
+        for port, port_id in node.ports.iteritems():
             interfaces_to_port[port.name] = port_id
 
-        for itf in n.intfList():
+        for itf in node.intfList():
             nh = TopologyDB.other_intf(itf)
             if not nh:
                 continue  # Skip loopback and the likes
 
             # do not create connection
+            #TODO: check who adds in topology
             if 'inTopology' in nh.node.params:
-                # import ipdb
-                # ipdb.set_trace()
                 if not nh.node.params['inTopology']:
                     continue
 
@@ -160,57 +165,51 @@ class TopologyDB(object):
                 'ip': '%s/%s' % (itf.ip, itf.prefixLen),
                 'mac' : '%s' % (itf.mac),
                 'intf': itf.name,
-                'bw': itf.params.get('bw', -1)
+                'bw': itf.params.get('bw', -1),
+                'weight': itf.params.get('weight', 1)
             }
             interfaces_to_nodes[itf.name] = nh.node.name
-        # add an interface to node mapping that can be useful
+
+        # add an interface to node mapping
         props['interfaces_to_node'] = interfaces_to_nodes
         props['interfaces_to_port'] = interfaces_to_port
-        self._network[n.name] = props
+        self._network[node.name] = props
 
-    def add_host(self, n):
+    def add_host(self, node):
         """Register a host."""
         attributes = {'type': 'host'}
-        # n.gateway attribute only exists in my custom mininet
-        if hasattr(n, "gateway"):
-            attributes.update({'gateway': n.gateway})
-        elif 'defaultRoute' in n.params:
-            attributes.update({'gateway': n.params['defaultRoute']})
-        self._add_node(n, attributes)
+        # node.gateway attribute only exists in my custom mininet
+        if hasattr(node, "gateway"):
+            attributes.update({'gateway': node.gateway})
+        elif 'defaultRoute' in node.params:
+            attributes.update({'gateway': node.params['defaultRoute']})
+        self._add_node(node, attributes)
 
-    def add_controller(self, n):
+    def add_controller(self, node):
         """Register a controller."""
-        self._add_node(n, {'type': 'controller'})
+        self._add_node(node, {'type': 'controller'})
 
-    def add_switch(self, n):
+    def add_switch(self, node):
         """Register a switch."""
-        self._add_node(n, {'type': 'switch'})
+        self._add_node(node, {'type': 'switch'})
 
-    def add_router(self, n):
-        """Register a router."""
-        self._add_node(n, {'type': 'router',
-                           'routerid': n.id})
-        # We overwrite the router id using our own function.
-        self._network[n.name]["routerid"] = self.set_router_id(n.name)
-
-
-# TODO: Check what can be reused.
 class NetworkGraph(object):
-    def __init__(self, topologyDB):
-        self.topologyDB = topologyDB
-        self.graph = self.load_graph_from_db(self.topologyDB)
+    def __init__(self, topology_db):
+        self.topology_db = topology_db
+        self.graph = self.load_graph_from_db(self.topology_db)
 
-    def load_graph_from_db(self, topologyDB):
+    def load_graph_from_db(self, topology_db):
         g = nx.Graph()
 
-        for node, attributes in topologyDB._original_network.iteritems():
+        for node, attributes in topology_db._original_network.iteritems():
             if node not in g.nodes():
                 g.add_node(node)
-                g.node[node]['type'] = topologyDB.type(node)
+                g.node[node]['type'] = topology_db.type(node)
 
-                for neighbor in topologyDB.get_neighbors(node):
+                for neighbor in topology_db.get_neighbors(node):
                     if neighbor in g.nodes():
-                        g.add_edge(node, neighbor)
+                        weight = attributes[neighbor].get("weight",1)
+                        g.add_edge(node, neighbor,weight= weight)
         return g
 
     def add_edge(self, node1, node2):
@@ -219,10 +218,9 @@ class NetworkGraph(object):
 
     def add_node(self, node):
         self.graph.add_node(node)
-        self.graph.node[node]['type'] = self.topologyDB.type(["type"])
+        self.graph.node[node]['type'] = self.topology_db.type(["type"])
 
-        for neighbor_node in self.topologyDB.get_neighbors(node):
-
+        for neighbor_node in self.topology_db.get_neighbors(node):
             if neighbor_node in self.graph.node:
                 self.graph.add_edge(node, neighbor_node)
 
@@ -232,8 +230,8 @@ class NetworkGraph(object):
     def remove_edge(self, node1, node2):
         self.graph.remove_edge(node1, node2)
 
-    def keep_only_routers(self):
-        to_keep = [x for x in self.graph.node if self.graph.node[x]['type'] == 'router']
+    def keep_only_switches(self):
+        to_keep = [x for x in self.graph.node if self.graph.node[x]['type'] == 'switch']
         return self.graph.subgraph(to_keep)
 
     def setNodeShape(self, node, shape):
@@ -252,33 +250,28 @@ class NetworkGraph(object):
             if self.graph.node[node]['type'] == type:
                 self.setNodeColor(node, color)
 
-    def setEdgeWeights(self, link_loads={}):
+    # TODO: implement functionality
+    def set_edge_weights(self, link_loads={}):
         pass
 
-    def getHosts(self):
+    def get_hosts(self):
         return [x for x in self.graph.node if self.graph.node[x]['type'] == 'host']
 
-    def getRouters(self):
-        return [x for x in self.graph.node if self.graph.node[x]["type"] == "router"]
+    def get_switches(self):
+        return [x for x in self.graph.node if self.graph.node[x]["type"] == "switch"]
 
-    def areNeighbors(self, n1, n2):
-        return n1 in self.graph.adj[n2]
+    def are_neighbors(self, node1, node2):
+        """Returns True if node1 and node2 are neighbors, False otherwise."""
+        return node1 in self.graph.adj[node2]
 
     def get_neighbors(self, node):
+        """Return all neighbors for a given node."""
         return self.graph.adj[node].keys()
 
     def total_number_of_paths(self):
-        """This function is very useful if the topology is unknown, however if we are using a fat tree, the number of paths is more or less
-        (k/2**2) = number of paths from one node to another node that its not in the same pod
-        number of nodes its k**3 / 4
-        so number of paths is : (k/2**2) * (k**3)/4 - k**2/4)(this is number of nodes outside the pod) * total number of nodes
-        here we should add the number of paths inside the pod
-        + number of paths between hosts connected by the same router.
-        :return:
-        """
         total_paths = 0
-        for host in self.getHosts():
-            for host_pair in self.getHosts():
+        for host in self.get_hosts():
+            for host_pair in self.get_hosts():
                 if host == host_pair:
                     continue
 
@@ -288,82 +281,87 @@ class NetworkGraph(object):
 
         return total_paths
 
-    def getPathsBetweenNodes(self, nodeA, nodeB):
+    def get_paths_between_nodes(self, node1, node2):
         """Compute the paths between two nodes."""
-        paths = nx.all_shortest_paths(self.graph, nodeA, nodeB)
+        paths = nx.all_shortest_paths(self.graph, node1, node2)
         paths = [tuple(x) for x in paths]
-
         return paths
 
 
 class Topology(TopologyDB):
-    def __init__(self, loadNetworkGraph=True,hostsMappings=True, *args, **kwargs):
+    """
+    Structure:
+        self._network: topology database
+        self._original_network: original topology database
+        self.hosts_ip_mapping: dictionary with mapping from host name to IP address and vice versa
+        self.network_graph: NetworkGraph object
+    """
+    def __init__(self, loadNetworkGraph=True, hostsMappings=True, *args, **kwargs):
         super(Topology, self).__init__(*args, **kwargs)
 
-        # save network startup state
-        # in case of link removal we use this objects to remember the state of links and nodes before removal
-        # this assumes that the topology will not be enhanced, meaning that links and nodes can be removed and added, but
-        # new links or devices can not be added.
-
+        # Save network startup state:
+        # In case of link removal, we use this objects to remember the state of links and nodes
+        # before the removal. This assumes that the topology will not be enhanced, i.e., links and
+        # nodes can be removed and added, but new links or devices cannot be added.
         self._original_network = copy.deepcopy(self._network)
 
         try:
             if loadNetworkGraph:
-                self.networkGraph = NetworkGraph(self)
+                self.network_graph = NetworkGraph(self)
         except:
             import traceback
             traceback.print_exc()
 
-        # loads hosts to ip and ip to hosts mappings
-        self.hostsIpMapping = {}
+        # Creates hosts to IP and IP to hosts mappings
+        self.hosts_ip_mapping = {}
         if hostsMappings:
-            self.hostsIpMappings()
+            self.create_hosts_ip_mapping()
 
-    def hostsIpMappings(self):
-        """Creates a mapping between host names and ip and vice versa."""
-        self.hostsIpMapping = {}
-        hosts = self.getHosts()
-        self.hostsIpMapping["ipToName"] = {}
-        self.hostsIpMapping["nameToIp"] = {}
+    def create_hosts_ip_mapping(self):
+        """Creates a mapping between host names and IP addresses, and vice versa."""
+        self.hosts_ip_mapping = {}
+        hosts = self.get_hosts()
+        self.hosts_ip_mapping["ipToName"] = {}
+        self.hosts_ip_mapping["nameToIp"] = {}
         for host in hosts:
-            ip = self.interface_ip(host, self.getHostFirstInterface(host).format(host))
-            self.hostsIpMapping["ipToName"][ip] = host
-            self.hostsIpMapping["nameToIp"][host] = ip
+            ip = self.interface_ip(host, self.get_host_first_interface(host).format(host))
+            self.hosts_ip_mapping["ipToName"][ip] = host
+            self.hosts_ip_mapping["nameToIp"][host] = ip
 
-    def getHostFirstInterface(self, name):
+    def get_host_first_interface(self, name):
         return self._network[name]["interfaces_to_node"].keys()[0]
 
-    def getHostName(self, ip):
-        """Returns the host name of the host that has the ip address."""
-        name = self.hostsIpMapping.get("ipToName").get(ip)
+    def get_host_name(self, ip):
+        """Returns the host name to an IP address."""
+        name = self.hosts_ip_mapping.get("ipToName").get(ip)
         if name:
             return name
-        raise InvalidIP("Any host of the network has the ip {0}".format(ip))
+        raise InvalidIP("No host in the network has the IP {0}".format(ip))
 
-    def getHostIp(self, name):
-        """Returns the ip of host name."""
-        ip = self.hostsIpMapping.get("nameToIp").get(name)
+    def get_host_ip(self, name):
+        """Returns the IP to a host name."""
+        ip = self.hosts_ip_mapping.get("nameToIp").get(name)
         if ip:
             return ip
-        raise HostDoesNotExist("Any host of the network has the name {0}".format(name))
+        raise HostDoesNotExist("No host in the network has the name {0}".format(name))
 
-    def areNeighbors(self, n1, n2):
-        return self.networkGraph.areNeighbors(n1, n2)
+    def are_neighbors(self, node1, node2):
+        return self.network_graph.are_neighbors(node1, node2)
 
-    def getRouters(self):
+    def get_routers(self):
         "Gets the routers from the topologyDB"
         return {node: self._network[node] for node in self._network if self._network[node]["type"] == "router"}
 
-    def getHosts(self):
+    def get_hosts(self):
         "Gets the routers from the topologyDB"
         return {node: self._network[node] for node in self._network if self._network[node]["type"] == "host"}
 
-    def getSwitches(self):
+    def get_switches(self):
         return {node: self._network[node] for node in self._network if self._network[node]["type"] == "switch"}
 
 
 
-def main():
+if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
         db = sys.argv[1]
@@ -371,7 +369,3 @@ def main():
         db = "./topology.db"
 
     topo = Topology(db=db)
-
-
-if __name__ == '__main__':
-    main()

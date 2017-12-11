@@ -1,7 +1,5 @@
 import subprocess
 
-from shortest_path import ShortestPath
-
 class AppController:
 
     def __init__(self, manifest=None, target=None, topo=None, net=None, links=None):
@@ -46,8 +44,7 @@ class AppController:
         return stdout
 
     def start(self):
-
-        shortestpath = ShortestPath(self.links)
+        #TODO: check which things found here are done in other parts in the new version
         entries = {}
         for sw in self.topo.switches():
             entries[sw] = []
@@ -71,27 +68,6 @@ class AppController:
                 h.cmd('ethtool --offload %s rx off tx off' % iface)
                 h.cmd('ip route add %s dev %s' % (link['sw_ip'], iface))
             h.setDefaultRoute("via %s" % link['sw_ip'])
-
-        #TODO: Investigate this.
-        #NO clue of what is going on here...
-        #I think it tries to guess the gateway switch for multihomed hosts.
-        #i should probably re-implement this
-        for h in self.net.hosts:
-            h_link = self.topo._host_links[h.name].values()[0]
-            for sw in self.net.switches:
-                path = shortestpath.get(sw.name, h.name, exclude=lambda n: n[0]=='h')
-                if not path: continue
-                if not path[1][0] == 's': continue # next hop is a switch
-                sw_link = self.topo._sw_links[sw.name][path[1]]
-
-            for h2 in self.net.hosts:
-                if h == h2: continue
-                path = shortestpath.get(h.name, h2.name, exclude=lambda n: n[0]=='h')
-                if not path: continue
-                h_link = self.topo._host_links[h.name][path[1]]
-                h2_link = self.topo._host_links[h2.name].values()[0]
-                h.cmd('ip route add %s via %s' % (h2_link['host_ip'], h_link['sw_ip']))
-
 
         print "**********"
         print "Configuring entries in p4 tables"
