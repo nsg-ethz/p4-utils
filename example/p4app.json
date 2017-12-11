@@ -8,7 +8,7 @@
   "topo_module": null,
   "controller_module:": null,
   "topology": {
-    "links": [["h1", "s1"], ["s1", "s2"], ["s1", "s3"], ["s2", "s4"], ["s3", "s4"], ["s4", "h2"], ["s4", "h3"]],
+    "links": [["h1", "s1", "", "", 10], ["s1", "s2"], ["s1", "s3"], ["s2", "s4"], ["s3", "s4"], ["s4", "h2"], ["s4", "h3"]],
     "hosts": {
       "h1": {
       },
