@@ -73,12 +73,18 @@ class TopologyDB(object):
         """Return the subnet linking node1 and node2."""
         return self.interface(node1, node2).network.with_prefixlen
 
+    def get_router_id(self, node):
+        """Return the OSPF router id for router node."""
+        if self._network[node]['type'] != 'router':
+            raise TypeError('%s is not a router' % node)
+        return self._network[node].get('routerid')
+
     def interface_ip(self, node, interface):
         """Returns the IP address of a given interface and node."""
         connected_to = self._network[node]["interfaces_to_node"][interface]
         return self._interface(node, connected_to)['ip'].split("/")[0]
 
-    def type(self, node):
+    def get_node_type(self, node):
         return self._network[node]['type']
 
     def get_neighbors(self, node):
@@ -135,7 +141,7 @@ class TopologyDB(object):
                 continue  # Skip loopback and the likes
 
             # do not create connection
-            #TODO: check who adds in topology
+            # TODO: check who adds inTopology -> can this be removed?
             if 'inTopology' in nh.node.params:
                 if not nh.node.params['inTopology']:
                     continue
@@ -172,80 +178,85 @@ class TopologyDB(object):
         """Register a switch."""
         self._add_node(node, {'type': 'switch'})
 
-class NetworkGraph(object):
-    def __init__(self, topology_db):
+    def add_router(self, node):
+        """Register a router."""
+        self._add_node(node, {'type': 'router', 'routerid': node.id})
+        # We overwrite the router id using our own function.
+        self._network[node.name]["routerid"] = self.get_router_id(node.name)
+
+
+class NetworkGraph(nx.Graph):
+    def __init__(self, topology_db, *args, **kwargs):
+        """Initialize the NetworkGraph object.
+
+        Args:
+            topology_db: TopologyDB object
+        """
+        super(NetworkGraph, self).__init__(*args, **kwargs)
+
         self.topology_db = topology_db
-        self.graph = self.load_graph_from_db(self.topology_db)
+        self = self.load_graph_from_db()
 
-    def load_graph_from_db(self, topology_db):
-        g = nx.Graph()
+    def load_graph_from_db(self):
+        for node, attributes in self.topology_db._original_network.iteritems():
+            if node not in self.nodes():
+                super(NetworkGraph, self).add_node(node)
+                self.node[node]['type'] = self.topology_db.get_node_type(node)
 
-        for node, attributes in topology_db._original_network.iteritems():
-            if node not in g.nodes():
-                g.add_node(node)
-                g.node[node]['type'] = topology_db.type(node)
-
-                for neighbor in topology_db.get_neighbors(node):
-                    if neighbor in g.nodes():
-                        weight = attributes[neighbor].get("weight",1)
-                        g.add_edge(node, neighbor,weight= weight)
-        return g
+                for neighbor in self.topology_db.get_neighbors(node):
+                    if neighbor in self.nodes():
+                        super(NetworkGraph, self).add_edge(node, neighbor)
+        return self
 
     def add_edge(self, node1, node2):
-        if node1 in self.graph.node and node2 in self.graph.node:
-            self.graph.add_edge(node1, node2)
+        if node1 in self.node and node2 in self.node:
+            super(NetworkGraph, self).add_edge(node1, node2)
 
     def add_node(self, node):
-        self.graph.add_node(node)
-        self.graph.node[node]['type'] = self.topology_db.type(["type"])
+        super(NetworkGraph, self).add_node(node)
+        self.node[node]['type'] = self.topology_db.get_node_type(node)
 
         for neighbor_node in self.topology_db.get_neighbors(node):
-            if neighbor_node in self.graph.node:
-                self.graph.add_edge(node, neighbor_node)
-
-    def remove_node(self, node):
-        self.graph.remove_node(node)
-
-    def remove_edge(self, node1, node2):
-        self.graph.remove_edge(node1, node2)
+            if neighbor_node in self.node:
+                super(NetworkGraph, self).add_edge(node, neighbor_node)
 
     def keep_only_switches(self):
-        to_keep = [x for x in self.graph.node if self.graph.node[x]['type'] == 'switch']
-        return self.graph.subgraph(to_keep)
+        to_keep = [x for x in self.node if self.node[x]['type'] == 'switch']
+        return self.subgraph(to_keep)
 
-    def setNodeShape(self, node, shape):
-        self.graph.node[node]['node_shape'] = shape
+    def set_node_shape(self, node, shape):
+        self.node[node]['node_shape'] = shape
 
-    def setNodeColor(self, node, color):
-        self.graph.node[node]['node_color'] = color
+    def set_node_color(self, node, color):
+        self.node[node]['node_color'] = color
 
-    def setNodeTypeShape(self, type, shape):
-        for node in self.graph.node:
-            if self.graph.node[node]['type'] == type:
-                self.setNodeShape(node, shape)
+    def set_node_type_shape(self, type, shape):
+        for node in self.node:
+            if self.node[node]['type'] == type:
+                self.set_node_shape(node, shape)
 
-    def setNodeTypeColor(self, type, color):
-        for node in self.graph.node:
-            if self.graph.node[node]['type'] == type:
-                self.setNodeColor(node, color)
+    def set_node_type_color(self, type, color):
+        for node in self.node:
+            if self.node[node]['type'] == type:
+                self.set_node_color(node, color)
 
     # TODO: implement functionality
     def set_edge_weights(self, link_loads={}):
         pass
 
     def get_hosts(self):
-        return [x for x in self.graph.node if self.graph.node[x]['type'] == 'host']
+        return [x for x in self.node if self.node[x]['type'] == 'host']
 
     def get_switches(self):
-        return [x for x in self.graph.node if self.graph.node[x]["type"] == "switch"]
+        return [x for x in self.node if self.node[x]["type"] == "switch"]
 
     def are_neighbors(self, node1, node2):
         """Returns True if node1 and node2 are neighbors, False otherwise."""
-        return node1 in self.graph.adj[node2]
+        return node1 in self.adj[node2]
 
     def get_neighbors(self, node):
         """Return all neighbors for a given node."""
-        return self.graph.adj[node].keys()
+        return self.adj[node].keys()
 
     def total_number_of_paths(self):
         total_paths = 0
