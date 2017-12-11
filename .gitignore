@@ -12,4 +12,8 @@ ls
 
 *.pcap
 
+*.db
+
+log*/
+
 *.egg-info/

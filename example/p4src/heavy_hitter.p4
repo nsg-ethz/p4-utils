@@ -17,8 +17,8 @@ struct metadata {
 }
 
 #include "include/headers.p4"
-#include "include/p4includes/parsers.p4"
-#include "include/p4includes/checksums.p4"
+#include "include/parsers.p4"
+#include "include/checksums.p4"
 
 /* CONSTANTS */
 
