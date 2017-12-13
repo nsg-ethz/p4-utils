@@ -11,7 +11,6 @@ logging.addLevelName(logging.DEBUG_MEDIUM, "DEBUG_MEDIUM")
 logging.addLevelName(logging.DEBUG_HIGH, "DEBUG_HIGH")
 logging.addLevelName(logging.DEBUG_TEMPORAL, "DEBUG_TEMPORAL")
 
-
 def debug_medium(self, message, *args, **kws):
     # Yes, logger takes its '*args' as 'args'.
      if self.isEnabledFor(logging.DEBUG_MEDIUM):
