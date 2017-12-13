@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = '0.1'
+VERSION = '0.2'
 
 modname = distname = 'p4utils'
 
@@ -36,6 +36,7 @@ setup(
         'networkx',
         'ipaddress',
         'scapy'
+        #'psutil'
     ],
     extras_require={}
     #tests_require=['pytest'],

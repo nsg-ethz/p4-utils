@@ -22,6 +22,10 @@ from mininet.node import Switch, Host
 from mininet.log import setLogLevel, info, error, debug
 from mininet.moduledeps import pathCheck
 
+from p4utils.utils.utils import check_listening_on_port
+
+SWITCH_START_TIMEOUT = 10
+
 class P4Host(Host):
 
     def config(self, **params):
@@ -61,6 +65,7 @@ class P4Switch(Switch):
                  log_file=None,
                  thrift_port=None,
                  pcap_dump=False,
+                 pcap_dir = "",
                  log_console=False,
                  verbose=False,
                  device_id=None,
@@ -70,6 +75,7 @@ class P4Switch(Switch):
         Switch.__init__(self, name, **kwargs)
         assert sw_path
         assert json_path
+
         # make sure that the provided sw_path is valid
         pathCheck(sw_path)
         # make sure that the provided JSON file exists
@@ -78,12 +84,16 @@ class P4Switch(Switch):
             exit(1)
         self.sw_path = sw_path
         self.json_path = json_path
+        self.pcap_dir = pcap_dir
         self.verbose = verbose
         self.log_file = log_file
         if self.log_file is None:
             self.log_file = "/tmp/p4s.{}.log".format(self.name)
         self.output = open(self.log_file, 'w')
         self.thrift_port = thrift_port
+        if check_listening_on_port(self.thrift_port):
+            error('%s cannot bind port %d because it is bound by another process\n' % (self.name, self.thrift_port))
+            exit(1)
         self.pcap_dump = pcap_dump
         self.enable_debugger = enable_debugger
         self.log_console = log_console
@@ -118,22 +128,25 @@ class P4Switch(Switch):
             if result == 0:
                 return  True
 
-    def start_p4switch(self):
-        """Just starts again simple switch with the same interfaces."""
+    def start(self, controllers = None):
+        """Start up a new P4 switch."""
         info("Starting P4 switch {}.\n".format(self.name))
         args = [self.sw_path]
         for port, intf in self.intfs.items():
-            #ports can not have ip addres??
             if not intf.IP():
                 args.extend(['-i', str(port) + "@" + intf.name])
         if self.pcap_dump:
-            args.append("--pcap")
-            # args.append("--useFiles")
+            if self.pcap_dir:
+                args.append("--pcap="+self.pcap_dir)
+            else:
+                args.append("--pcap")
+
         if self.thrift_port:
             args.extend(['--thrift-port', str(self.thrift_port)])
         if self.nanomsg:
             args.extend(['--nanolog', self.nanomsg])
         args.extend(['--device-id', str(self.device_id)])
+
         args.append(self.json_path)
         if self.enable_debugger:
             args.append("--debugger")
@@ -155,48 +168,10 @@ class P4Switch(Switch):
 
     def stop_p4switch(self):
         """Just stops simple switch."""
+        #kills simple_switch started in this shell with kill %
         info("Stopping P4 switch {}.\n".format(self.name))
         self.cmd('kill %' + self.sw_path)
         self.cmd('wait')
-
-    def start(self, controllers):
-        """Start up a new P4 switch."""
-        info("Starting P4 switch {}.\n".format(self.name))
-        args = [self.sw_path]
-        for port, intf in self.intfs.items():
-            if not intf.IP():
-                args.extend(['-i', str(port) + "@" + intf.name])
-        if self.pcap_dump:
-            args.append("--pcap")
-            # args.append("--useFiles")
-        if self.thrift_port:
-            args.extend(['--thrift-port', str(self.thrift_port)])
-        if self.nanomsg:
-            args.extend(['--nanolog', self.nanomsg])
-        args.extend(['--device-id', str(self.device_id)])
-
-        #not needed
-        # P4Switch.device_id += 1
-
-        args.append(self.json_path)
-        if self.enable_debugger:
-            args.append("--debugger")
-        if self.log_console:
-            args.append("--log-console")
-        info(' '.join(args) + "\n")
-
-        self.simple_switch_pid = None
-        with tempfile.NamedTemporaryFile() as f:
-            # self.cmd(' '.join(args) + ' > /dev/null 2>&1 &')
-            self.cmd(' '.join(args) + ' >' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
-            self.simple_switch_pid = int(f.read())
-        debug("P4 switch {} PID is {}.\n".format(self.name, self.simple_switch_pid))
-        sleep(1)
-        if not self.check_switch_started():
-            error("P4 switch {} did not start correctly."
-                  "Check the switch log file.\n".format(self.name))
-            exit(1)
-        info("P4 switch {} has been started.\n".format(self.name))
 
     def stop(self):
         """Terminate P4 switch."""
