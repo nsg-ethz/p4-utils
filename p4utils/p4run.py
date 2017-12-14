@@ -151,18 +151,19 @@ class AppRunner(object):
         # TODO So far not used
         AppController = DefaultController
 
-        if self.conf.get('topo_module',None):
+        if self.conf.get('topo_module', None):
             sys.path.insert(0, os.path.dirname(conf_file))
             topo_module = importlib.import_module(self.conf['topo_module'])
             AppTopo = topo_module.CustomAppTopo
 
         if self.conf.get('controller_module', None):
-            sys.path.insert(0, os.path.dirname(args.manifest))
+            sys.path.insert(0, os.path.dirname(conf_file))
             controller_module = importlib.import_module(self.conf['controller_module'])
             AppController = controller_module.CustomAppController
 
         # mininet topology builder
         self.app_topo = AppTopo
+
         # switch controllers
         self.app_controller = AppController
 
