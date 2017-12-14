@@ -56,22 +56,29 @@ class AppTopo(Topo):
         self.printPortMapping()
 
     def addP4Switch(self, name, **opts):
-        """Convenience method: Add P4 switch to graph.
-           name: switch name
-           opts: switch options
-           returns: switch name"""
+        """Add P4 switch to Mininet topology.
+
+        Params:
+            name: switch name
+            opts: switch options
+
+        Returns:
+            switch name
+        """
         if not opts and self.sopts:
             opts = self.sopts
-        result = self.addNode(name, isSwitch=True, isP4Switch=True, **opts)
-        return result
+        return self.addNode(name, isSwitch=True, isP4Switch=True, **opts)
 
-    def isP4Switch(self, n):
+    def isP4Switch(self, node):
+        """Check if node is a P4 switch.
+
+        Params:
+            node: Mininet node
+
+        Returns:
+            True if node is a P4 switch
         """
-        Return true if the n is a p4 switch
-        :param n:
-        :return:
-        """
-        return self.g.node[n].get('isP4Switch', False)
+        return self.g.node[node].get('isP4Switch', False)
 
 
     def addSwitchPort(self, sw, node2):
