@@ -70,7 +70,7 @@ def check_imports_last_modified(input_file, import_last_modifications):
         elif import_file.startswith("include/"):
             import_file = "p4src/" + import_file
 
-        if (not os.path.exists(import_file)):
+        if not os.path.exists(import_file):
             log.error("File %s does not exist \n" % import_file)
             # TODO maybe I should rise an error?
             return False
@@ -104,16 +104,16 @@ def read_entries(filename):
 
 def compile_p4_to_bmv2(config):
     """Compile P4 program to JSON file that can be loaded by bmv2.
-    
+
     Args:
         config: dictionary with info about P4 version and P4 file to compile
                 {'language': <language>, 'program': <program.p4>}
-    
+
     Returns:
         Compiled P4 program as a JSON file
 
     Raises:
-        CompilationError: if compilation is not successful 
+        CompilationError: if compilation is not successful
     """
     compiler_args = []
     language = config.get("language", None)

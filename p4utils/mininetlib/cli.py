@@ -10,17 +10,16 @@ class P4CLI(CLI):
         self.import_last_modifications = {}
 
         if not self.conf_file:
-            log("No configuration given to the CLI. P4 functionalities are disabled.")
+            log.warn("No configuration given to the CLI. P4 functionalities are disabled.")
         else:
             self.config = load_conf(self.conf_file)
             # class CLI from mininet.cli does not have config parameter, thus remove it
             kwargs.__delitem__("conf_file")
         CLI.__init__(self, *args, **kwargs)
 
-    def do_set_p4conf(self, line = ""):
-        """Updates configuration file location, and reloads it"""
-
-        args= line.split()
+    def do_set_p4conf(self, line=""):
+        """Updates configuration file location, and reloads it."""
+        args = line.split()
         conf = args[0]
         if not os.path.exists(conf):
             warn('Configuratuion file %s does not exist' % conf)
@@ -28,8 +27,8 @@ class P4CLI(CLI):
         self.conf_file = conf
         self.config = load_conf(conf)
 
-    def do_test_p4(self, line = ""):
-        """Tests start stop functionalities"""
+    def do_test_p4(self, line=""):
+        """Tests start stop functionalities."""
         self.do_p4switch_stop("s1")
         self.do_p4switch_start("s1")
         self.do_p4switch_reboot("s1")
@@ -83,14 +82,12 @@ class P4CLI(CLI):
         # generate output file name
         output_file = p4source_path_source.replace(".p4", "") + ".json"
 
-
         program_flag = last_modified(p4source_path_source, output_file)
         includes_flag = check_imports_last_modified(p4source_path_source,
                                                     self.import_last_modifications)
         print p4source_path_source, output_file, program_flag, includes_flag
 
         if program_flag or includes_flag:
-
             language = self.config.get("language", None)
             if not language:
                 language = "p4-16"
@@ -123,12 +120,15 @@ class P4CLI(CLI):
         add_entries(p4switch.thrift_port, entries)
 
     def do_printSwitches(self, line=""):
+        """Print names of all switches."""
         for sw in self.mn.p4switches:
             print sw.name
 
     def do_p4switches_reboot(self, line=""):
-        """Reboot all P4 switches with new program:
-        Important note: if you provide a P4 source code or cmd all switches will have the same.
+        """Reboot all P4 switches with new program.
+
+        Note:
+            If you provide a P4 source code or cmd, all switches will have the same.
         """
         self.config = load_conf(self.conf_file)
 
@@ -141,7 +141,6 @@ class P4CLI(CLI):
 
     def do_p4switch_reboot(self, line=""):
         """Reboot a P4 switch with a new program."""
-
         self.config = load_conf(self.conf_file)
 
         if not line or len(line.split()) > 5:
