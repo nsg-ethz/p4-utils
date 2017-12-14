@@ -80,12 +80,19 @@ class TopologyDB(object):
         return self._network[node].get('routerid')
 
     def interface_ip(self, node, interface):
-        """Returns the IP address of a given interface and node."""
+        """Return the IP address of a given interface and node."""
         connected_to = self._network[node]["interfaces_to_node"][interface]
         return self._interface(node, connected_to)['ip'].split("/")[0]
 
     def get_node_type(self, node):
+        """Return the node type, e.g. 'switch' or 'host'."""
         return self._network[node]['type']
+
+    def get_thrift_port(self, switch):
+        """Return the Thrift port used to communicate with the P4 switch."""
+        if self._network[switch]['type'] != 'switch':
+            raise TypeError('%s is not a P4 switch' % switch)
+        return self._network[switch]['thrift_port']
 
     def get_neighbors(self, node):
         return self._network[node]["interfaces_to_node"].itervalues()
@@ -176,7 +183,7 @@ class TopologyDB(object):
 
     def add_switch(self, node):
         """Register a switch."""
-        self._add_node(node, {'type': 'switch'})
+        self._add_node(node, {'type': 'switch', 'thrift_port': node.thrift_port})
 
     def add_router(self, node):
         """Register a router."""
