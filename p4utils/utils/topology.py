@@ -6,7 +6,6 @@ import networkx as nx
 
 from p4utils.logger import log
 
-
 class TopologyDB(object):
     """A convenience storage for auto-allocated mininet properties.
 
@@ -212,7 +211,8 @@ class NetworkGraph(nx.Graph):
 
                 for neighbor in self.topology_db.get_neighbors(node):
                     if neighbor in self.nodes():
-                        super(NetworkGraph, self).add_edge(node, neighbor)
+                        weight = attributes[neighbor].get("weight", 1)
+                        super(NetworkGraph, self).add_edge(node, neighbor, weight=weight)
         return self
 
     def add_edge(self, node1, node2):

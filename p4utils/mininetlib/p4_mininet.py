@@ -136,9 +136,11 @@ class P4Switch(Switch):
             if not intf.IP():
                 args.extend(['-i', str(port) + "@" + intf.name])
         if self.pcap_dump:
-            args.append("--pcap")
             if self.pcap_dir:
-                args.append(self.pcap_dir)
+                args.append("--pcap="+self.pcap_dir)
+            else:
+                args.append("--pcap")
+
         if self.thrift_port:
             args.extend(['--thrift-port', str(self.thrift_port)])
         if self.nanomsg:
