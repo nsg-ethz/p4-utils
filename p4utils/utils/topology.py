@@ -79,25 +79,25 @@ class TopologyDB(object):
         return self._network[node].get('routerid')
 
     def interface_ip(self, node, interface):
-        """Return the IP address of a given interface and node."""
+        """Returns the IP address of a given interface and node."""
         connected_to = self._network[node]["interfaces_to_node"][interface]
         return self._interface(node, connected_to)['ip'].split("/")[0]
 
     def get_node_type(self, node):
-        """Return the node type, e.g. 'switch' or 'host'."""
         return self._network[node]['type']
-
-    def get_thrift_port(self, switch):
-        """Return the Thrift port used to communicate with the P4 switch."""
-        if self._network[switch]['type'] != 'switch':
-            raise TypeError('%s is not a P4 switch' % switch)
-        return self._network[switch]['thrift_port']
 
     def get_neighbors(self, node):
         return self._network[node]["interfaces_to_node"].itervalues()
 
     def get_interfaces(self, node):
         return self._network[node]["interfaces_to_node"].iterkeys()
+
+    #TODO fix this.
+    def get_thrift_port(self, switch):
+        """Return the Thrift port used to communicate with the P4 switch."""
+        if self._network[switch].get('subtype', None) != 'p4switch':
+            raise TypeError('%s is not a P4 switch' % switch)
+        return self._network[switch]['thrift_port']
 
     @staticmethod
     def other_intf(intf):
@@ -115,13 +115,18 @@ class TopologyDB(object):
         """Stores the content of the given network in the TopologyDB object."""
         for host in net.hosts:
             self.add_host(host)
+        for controller in net.controllers:
+            self.add_controller(controller)
         for switch in net.switches:
-            self.add_switch(switch)
+            if net.topo.isP4Switch(switch.name):
+                self.add_p4_switch(switch)
+            else:
+                self.add_switch(switch)
+
+        #if routers exits.
         if hasattr(net, "routers"):
             for router in net.routers:
                 self.add_router(router)
-        for controller in net.controllers:
-            self.add_controller(controller)
 
     def _add_node(self, node, props):
         """Register a network node.
@@ -182,7 +187,10 @@ class TopologyDB(object):
 
     def add_switch(self, node):
         """Register a switch."""
-        self._add_node(node, {'type': 'switch', 'thrift_port': node.thrift_port})
+        self._add_node(node, {'type': 'switch'})
+
+    def add_p4_switch(self,node):
+        self._add_node(node, {'type': 'switch', 'subtype': 'p4switch', 'thrift_port': node.thrift_port})
 
     def add_router(self, node):
         """Register a router."""

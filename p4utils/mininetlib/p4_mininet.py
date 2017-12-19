@@ -86,17 +86,18 @@ class P4Switch(Switch):
         self.json_path = json_path
         self.pcap_dir = pcap_dir
         self.verbose = verbose
+        self.pcap_dump = pcap_dump
+        self.enable_debugger = enable_debugger
+        self.log_console = log_console
         self.log_file = log_file
         if self.log_file is None:
             self.log_file = "/tmp/p4s.{}.log".format(self.name)
-        self.output = open(self.log_file, 'w')
+        if self.log_console:
+            self.output = open(self.log_file, 'w')
         self.thrift_port = thrift_port
         if check_listening_on_port(self.thrift_port):
             error('%s cannot bind port %d because it is bound by another process\n' % (self.name, self.thrift_port))
             exit(1)
-        self.pcap_dump = pcap_dump
-        self.enable_debugger = enable_debugger
-        self.log_console = log_console
         if device_id is not None:
             self.device_id = device_id
             P4Switch.device_id = max(P4Switch.device_id, device_id)
@@ -152,17 +153,18 @@ class P4Switch(Switch):
             args.append("--debugger")
         if self.log_console:
             args.append("--log-console")
+            args.append('>' + self.log_file)
         info(' '.join(args) + "\n")
 
         self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd(' '.join(args) + ' >' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
+            self.cmd(' '.join(args) + ' 2>&1 & echo $! >> ' + f.name, verbose=True)
             self.simple_switch_pid = int(f.read())
         debug("P4 switch {} PID is {}.\n".format(self.name, self.simple_switch_pid))
         sleep(1)
         if not self.check_switch_started():
             error("P4 switch {} did not start correctly."
-                  "Check the switch log file.\n".format(self.name))
+                  " Check the switch log file.\n".format(self.name))
             exit(1)
         info("P4 switch {} has been started.\n".format(self.name))
 
@@ -175,7 +177,8 @@ class P4Switch(Switch):
 
     def stop(self):
         """Terminate P4 switch."""
-        self.output.flush()
+        if self.log_console:
+            self.output.flush()
         self.cmd('kill %' + self.sw_path)
         self.cmd('wait')
         self.deleteIntfs()

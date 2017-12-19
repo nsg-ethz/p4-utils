@@ -294,10 +294,12 @@ class AppRunner(object):
             cli_input_commands = sw_dict['cli_input']
             self.logger('Configuring switch %s with file %s' % (sw_name, cli_input_commands))
             with open(cli_input_commands, 'r') as fin:
-                cli_outfile = '%s/%s_cli_output.log' % (self.log_dir, sw_name)
-                with open(cli_outfile, 'w') as fout:
-                    subprocess.Popen([cli, '--thrift-port', str(thrift_port)],
-                                     stdin=fin, stdout=fout)
+                if self.log_enabled:
+                    cli_outfile = '%s/%s_cli_output.log' % (self.log_dir, sw_name)
+                    with open(cli_outfile, 'w') as fout:
+                        subprocess.Popen([cli, '--thrift-port', str(thrift_port)], stdin=fin, stdout=fout)
+                else:
+                    subprocess.Popen([cli, '--thrift-port', str(thrift_port)], stdin=fin)
 
     def program_hosts(self):
         """Adds static ARP entries and default routes to each mininet host.
