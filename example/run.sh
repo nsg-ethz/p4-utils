@@ -3,5 +3,5 @@
 sudo rm -rf *pcap *log topology.db
 
 #run
-P4APPRUNNER=../p4utils/p4run.py
-sudo python $P4APPRUNNER
+P4APPRUNNER=p4run
+sudo $P4APPRUNNER --conf p4app.json
