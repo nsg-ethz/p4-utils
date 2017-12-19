@@ -151,19 +151,18 @@ class AppRunner(object):
         # TODO So far not used
         AppController = DefaultController
 
-        if self.conf.get('topo_module', None):
+        if self.conf.get('topo_module',None):
             sys.path.insert(0, os.path.dirname(conf_file))
             topo_module = importlib.import_module(self.conf['topo_module'])
             AppTopo = topo_module.CustomAppTopo
 
         if self.conf.get('controller_module', None):
-            sys.path.insert(0, os.path.dirname(conf_file))
+            sys.path.insert(0, os.path.dirname(args.manifest))
             controller_module = importlib.import_module(self.conf['controller_module'])
             AppController = controller_module.CustomAppController
 
         # mininet topology builder
         self.app_topo = AppTopo
-
         # switch controllers
         self.app_controller = AppController
 
@@ -478,7 +477,7 @@ def get_args():
     return parser.parse_args()
 
 
-if __name__ == '__main__':
+def main():
     args = get_args()
 
     #set logging level
@@ -492,3 +491,7 @@ if __name__ == '__main__':
                     args.behavioral_exe, args.cli, args.quiet)
 
     app.run_app()
+
+
+if __name__ == '__main__':
+    main()

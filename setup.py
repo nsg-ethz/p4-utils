@@ -21,6 +21,7 @@ setup(
     author_email='cedgar@ethz.ch',
     packages=find_packages(),
     long_description=readme(),
+    entry_points={'console_scripts': ['p4run = p4utils.p4run:main']},
     include_package_data = True,
     classifiers=[
         "License :: OSI Approved :: BSD License",
