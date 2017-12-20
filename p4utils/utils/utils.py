@@ -49,30 +49,28 @@ def get_imported_files(input_file):
 
     return includes
 
-#TODO: can be improved. Main problem is that it assumes project structure. it should be able to locate those files without assumtions
 def check_imports_last_modified(input_file, import_last_modifications):
 
+    previous_path = os.getcwd()
+    imported_files = get_imported_files(input_file)
+    os.chdir(os.path.dirname(input_file))
+
     compile_flag = False
-    for import_file in get_imported_files(input_file):
-
-        #processing assuming that we are in root directory
-        if import_file.startswith("../"):
-            import_file = import_file[3:]
-
-        elif import_file.startswith("include/"):
-            import_file = "p4src/" + import_file
+    for import_file in imported_files:
 
         if (not os.path.exists(import_file)):
             log.error("File %s does not exist \n" % import_file)
-            #maybe i should rise an error
-            return False
+
+            os.chdir(previous_path)
+            raise IOError
 
         #add if they are bigger or not.
-        print(import_file)
         last_time = os.path.getmtime(import_file)
         if last_time > import_last_modifications.get(import_file, 0):
             import_last_modifications[import_file] = last_time
             compile_flag = True
+
+    os.chdir(previous_path)
 
     return compile_flag
 

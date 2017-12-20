@@ -161,6 +161,10 @@ class AppRunner(object):
             controller_module = importlib.import_module(self.conf['controller_module'])
             AppController = controller_module.CustomAppController
 
+        #TODO add custom topology
+
+        #TODO P4 mininet
+
         # mininet topology builder
         self.app_topo = AppTopo
         # switch controllers
@@ -260,7 +264,6 @@ class AppRunner(object):
         self.logger("Building mininet topology.")
         #compile all p4 programs and give them to every different switch
         self.switch_to_json = compile_all_p4(self.conf)
-
 
         self.topo = self.app_topo(self.hosts, self.switch_to_json, self.links, self.log_dir)
 
@@ -484,6 +487,9 @@ def get_args():
 
 
 def main():
+
+    #TODO as for sudo
+
     args = get_args()
 
     #set logging level
