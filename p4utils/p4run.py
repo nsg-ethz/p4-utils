@@ -476,6 +476,10 @@ def get_args():
                         type=str, required=False, default='simple_switch')
     parser.add_argument('--quiet', help='Disable script debug messages.',
                         action='store_true', required=False, default=False)
+
+    parser.add_argument('--clean', help='Cleans previous log files',
+                        action='store_true', required=False, default=False)
+
     return parser.parse_args()
 
 
@@ -485,9 +489,14 @@ def main():
     #set logging level
     setLogLevel('info')
 
-    #first clean
+    #clean
     cleanup()
     sh("killall simple_switch")
+
+    if args.clean:
+        sh("rm -rf %s" % args.pcap_dir)
+        sh("rm -rf %s" % args.log_dir)
+        sh("rm -f %s" % "topology.db")
 
     app = AppRunner(args.config, args.p4_program, args.log_dir, args.pcap_dir,
                     args.behavioral_exe, args.cli, args.quiet)

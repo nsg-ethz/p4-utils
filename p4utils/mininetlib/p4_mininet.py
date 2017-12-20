@@ -158,7 +158,7 @@ class P4Switch(Switch):
 
         self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd(' '.join(args) + ' 2>&1 & echo $! >> ' + f.name, verbose=True)
+            self.cmd(' '.join(args) + ' 2>&1 & echo $! >> ' + f.name)
             self.simple_switch_pid = int(f.read())
         debug("P4 switch {} PID is {}.\n".format(self.name, self.simple_switch_pid))
         sleep(1)
