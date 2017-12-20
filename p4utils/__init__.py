@@ -17,3 +17,4 @@ class InvalidIP(Exception):
     def __str__(self):
         return self.message
 
+FAILED_STATUS = 100

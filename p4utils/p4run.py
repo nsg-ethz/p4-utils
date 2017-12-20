@@ -34,7 +34,7 @@ from p4utils.mininetlib.cli import P4CLI
 from p4utils.mininetlib.apptopo import AppTopo as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
 from p4utils.mininetlib.p4runtime_switch import P4RuntimeSwitch
-from p4utils.utils.utils import run_command,compile_all_p4, load_conf
+from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError
 
 from mininet.link import TCLink
 from mininet.clean import cleanup, sh
@@ -263,7 +263,11 @@ class AppRunner(object):
         """
         self.logger("Building mininet topology.")
         #compile all p4 programs and give them to every different switch
-        self.switch_to_json = compile_all_p4(self.conf)
+        try:
+            self.switch_to_json = compile_all_p4(self.conf)
+        except CompilationError:
+            self.logger("Compilation Error")
+            sys.exit(0)
 
         self.topo = self.app_topo(self.hosts, self.switch_to_json, self.links, self.log_dir)
 

@@ -1,13 +1,16 @@
+import os
 from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
 from p4utils.utils.utils import *
-#import shutil
+from p4utils import FAILED_STATUS
 
 class P4CLI(CLI):
 
     def __init__(self, *args, **kwargs):
         self.conf_file = kwargs.get("conf_file", None)
         self.import_last_modifications = {}
+
+        self.last_compilation_state = False
 
         if not self.conf_file:
             log.warn("No configuration given to the CLI. P4 functionalities are disabled.")
@@ -16,6 +19,10 @@ class P4CLI(CLI):
             # class CLI from mininet.cli does not have config parameter, thus remove it
             kwargs.__delitem__("conf_file")
         CLI.__init__(self, *args, **kwargs)
+
+    def return_failed_status(self):
+        self.last_compilation_state = False
+        return FAILED_STATUS
 
     def do_set_p4conf(self, line=""):
         """Updates configuration file location, and reloads it."""
@@ -54,26 +61,26 @@ class P4CLI(CLI):
         # check args validity
         if len(args) > 5:
             error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds path]\n')
-            return
+            return FAILED_STATUS
 
         switch_name = args[0]
         if switch_name not in self.mn:
             error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds path]\n')
-            return
+            return FAILED_STATUS
 
         p4switch = self.mn[switch_name]
 
         # check if switch is running
         if p4switch.check_switch_started():
             error('P4 Switch already running, stop it first: p4switch_stop %s \n' % switch_name)
-            return
+            return FAILED_STATUS
 
         if "--p4src" in args:
             p4source_path = args[args.index("--p4src")+1]
             # check if file exists
             if not os.path.exists(p4source_path):
                 warn('File Error: p4source does not exist %s\n' % p4source_path)
-                return
+                return FAILED_STATUS
         else:
             p4source_path_source = self.config["topology"]["switches"][switch_name].get("program", False)
             if not p4source_path_source:
@@ -85,9 +92,10 @@ class P4CLI(CLI):
         program_flag = last_modified(p4source_path_source, output_file)
         includes_flag = check_imports_last_modified(p4source_path_source,
                                                     self.import_last_modifications)
-        print p4source_path_source, output_file, program_flag, includes_flag
 
-        if program_flag or includes_flag:
+        log.debug("%s %s %s %s\n" % (p4source_path_source, output_file, program_flag, includes_flag))
+
+        if program_flag or includes_flag or (not self.last_compilation_state):
             language = self.config.get("language", None)
             if not language:
                 language = "p4-16"
@@ -96,9 +104,10 @@ class P4CLI(CLI):
             # compile program
             try:
                 compile_p4_to_bmv2(compile_config)
+                self.last_compilation_state = True
             except CompilationError:
                 log.error('Compilation failed\n')
-                return
+                return FAILED_STATUS
 
             # update output program
             p4switch.json_path = output_file
@@ -112,7 +121,7 @@ class P4CLI(CLI):
             # check if file exists
             if not os.path.exists(commands_path):
                 error('File Error: commands does not exist %s\n' % commands_path)
-                return
+                return FAILED_STATUS
         else:
             commands_path = self.config["topology"]["switches"][switch_name]["cli_input"]
 
