@@ -2,7 +2,7 @@ import os
 from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
 from p4utils.utils.utils import *
-from p4utils import FAILED_STATUS
+from p4utils import FAILED_STATUS, SUCCESS_STATUS
 
 class P4CLI(CLI):
 
@@ -20,7 +20,7 @@ class P4CLI(CLI):
             kwargs.__delitem__("conf_file")
         CLI.__init__(self, *args, **kwargs)
 
-    def return_failed_status(self):
+    def failed_status(self):
         self.last_compilation_state = False
         return FAILED_STATUS
 
@@ -61,26 +61,26 @@ class P4CLI(CLI):
         # check args validity
         if len(args) > 5:
             error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds path]\n')
-            return FAILED_STATUS
+            return self.failed_status()
 
         switch_name = args[0]
         if switch_name not in self.mn:
             error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds path]\n')
-            return FAILED_STATUS
+            return self.failed_status()
 
         p4switch = self.mn[switch_name]
 
         # check if switch is running
         if p4switch.check_switch_started():
             error('P4 Switch already running, stop it first: p4switch_stop %s \n' % switch_name)
-            return FAILED_STATUS
+            return self.failed_status()
 
         if "--p4src" in args:
             p4source_path = args[args.index("--p4src")+1]
             # check if file exists
             if not os.path.exists(p4source_path):
                 warn('File Error: p4source does not exist %s\n' % p4source_path)
-                return FAILED_STATUS
+                return self.failed_status()
         else:
             p4source_path_source = self.config["topology"]["switches"][switch_name].get("program", False)
             if not p4source_path_source:
@@ -107,7 +107,7 @@ class P4CLI(CLI):
                 self.last_compilation_state = True
             except CompilationError:
                 log.error('Compilation failed\n')
-                return FAILED_STATUS
+                return self.failed_status()
 
             # update output program
             p4switch.json_path = output_file
@@ -121,12 +121,14 @@ class P4CLI(CLI):
             # check if file exists
             if not os.path.exists(commands_path):
                 error('File Error: commands does not exist %s\n' % commands_path)
-                return FAILED_STATUS
+                return self.failed_status()
         else:
             commands_path = self.config["topology"]["switches"][switch_name]["cli_input"]
 
         entries = read_entries(commands_path)
         add_entries(p4switch.thrift_port, entries)
+
+        return SUCCESS_STATUS
 
     def do_printSwitches(self, line=""):
         """Print names of all switches."""

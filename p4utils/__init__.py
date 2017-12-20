@@ -18,3 +18,4 @@ class InvalidIP(Exception):
         return self.message
 
 FAILED_STATUS = 100
+SUCCESS_STATUS = 200

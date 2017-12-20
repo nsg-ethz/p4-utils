@@ -147,28 +147,37 @@ class AppRunner(object):
 
         os.environ['P4APP_LOGDIR'] = log_dir
 
-        AppTopo = DefaultTopo
         # TODO So far not used
-        AppController = DefaultController
+        self.app_topo = DefaultTopo
+        self.app_controller = DefaultController
+
+        print self.conf.get('topo_module')
 
         if self.conf.get('topo_module',None):
-            sys.path.insert(0, os.path.dirname(conf_file))
-            topo_module = importlib.import_module(self.conf['topo_module'])
-            AppTopo = topo_module.CustomAppTopo
+            self.app_topo = self.load_custom_object('topo_module')
 
         if self.conf.get('controller_module', None):
-            sys.path.insert(0, os.path.dirname(args.manifest))
-            controller_module = importlib.import_module(self.conf['controller_module'])
-            AppController = controller_module.CustomAppController
+            self.app_controller = self.load_custom_object('controller_module')
 
         #TODO add custom topology
+        if self.conf.get('topologydb_module', None):
+            pass
 
         #TODO P4 mininet
+        if self.conf.get('mininet_module', None):
+            pass
 
-        # mininet topology builder
-        self.app_topo = AppTopo
-        # switch controllers
-        self.app_controller = AppController
+    def load_custom_object(self, object_type):
+
+        file_path = self.conf[object_type].get("file_path", ".")
+        sys.path.insert(0, file_path)
+
+        module_name = self.conf[object_type]["module_name"]
+        object_name = self.conf[object_type]["object_name"]
+
+        module = importlib.import_module(module_name)
+        return getattr(module, object_name)
+
 
     def logger(self, *items):
         if not self.quiet:
@@ -248,7 +257,7 @@ class AppRunner(object):
             self.do_net_cli()
 
         # Run command on hosts (if specified)
-        # TODO: make this work later
+        # TODO: HAVE A LOOK
         # self.run_cmd_hosts()
 
         # Stop right after the CLI is exited
