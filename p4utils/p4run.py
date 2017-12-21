@@ -29,7 +29,7 @@ from ipaddress import ip_interface
 
 from p4utils.mininetlib.p4net import P4Mininet
 from p4utils.mininetlib.p4_mininet import P4Switch, P4Host
-from p4utils.utils.topology import TopologyDB
+from p4utils.utils.topology import Topology as DefaultTopoDB
 from p4utils.mininetlib.cli import P4CLI
 from p4utils.mininetlib.apptopo import AppTopo as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
@@ -147,11 +147,11 @@ class AppRunner(object):
 
         os.environ['P4APP_LOGDIR'] = log_dir
 
-        # TODO So far not used
+        # Setting default builders
         self.app_topo = DefaultTopo
         self.app_controller = DefaultController
-
-        print self.conf.get('topo_module')
+        self.app_topodb = DefaultTopoDB
+        self.app_mininet = P4Mininet
 
         if self.conf.get('topo_module',None):
             self.app_topo = self.load_custom_object('topo_module')
@@ -159,13 +159,11 @@ class AppRunner(object):
         if self.conf.get('controller_module', None):
             self.app_controller = self.load_custom_object('controller_module')
 
-        #TODO add custom topology
-        if self.conf.get('topologydb_module', None):
-            pass
+        if self.conf.get('topodb_module', None):
+            self.app_topodb = self.load_custom_object('topodb_module')
 
-        #TODO P4 mininet
         if self.conf.get('mininet_module', None):
-            pass
+            self.app_mininet = self.load_custom_object('mininet_module')
 
     def load_custom_object(self, object_type):
 
@@ -285,7 +283,7 @@ class AppRunner(object):
                                         pcap_dump=self.pcap_dump, pcap_dir= self.pcap_dir)
 
         # start P4 Mininet
-        self.net = P4Mininet(topo=self.topo,
+        self.net = self.app_mininet(topo=self.topo,
                              link=TCLink,
                              host=P4Host,
                              switch=switchClass,
@@ -364,7 +362,7 @@ class AppRunner(object):
     def save_topology(self):
         """Saves mininet topology to database."""
         self.logger("Saving mininet topology to database.")
-        TopologyDB(net=self.net).save("./topology.db")
+        self.app_topodb(net=self.net).save("./topology.db")
 
     def do_net_cli(self):
         """Starts up the mininet CLI and prints some helpful output.
