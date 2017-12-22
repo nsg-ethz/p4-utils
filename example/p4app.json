@@ -1,14 +1,29 @@
 {
   "program": "p4src/heavy_hitter.p4",
   "compiler": "p4c-bm2-ss",
+  "switch_cli": "simple_switch_CLI",
   "language": "p4-16",
   "cli": true,
   "pcap_dump": true,
   "enable_log": true,
-  "topo_module": null,
-  "controller_module:": null,
+  "topo_module": {
+    "file_path": "/home/edgar/p4/p4-state/utils/p4utils/mininetlib",
+    "module_name": "apptopo",
+    "object_name": "AppTopo"
+  },
+  "controller_module": null,
+  "topodb_module": {
+    "file_path": "/home/edgar/p4/p4-state/utils/p4utils/utils",
+    "module_name": "topology",
+    "object_name": "Topology"
+  },
+  "mininet_module": {
+    "file_path": "/home/edgar/p4/p4-state/utils/p4utils/mininetlib",
+    "module_name": "p4net",
+    "object_name": "P4Mininet"
+  },
   "topology": {
-    "links": [["h1", "s1", "", "", 10], ["s1", "s2"], ["s1", "s3"], ["s2", "s4"], ["s3", "s4"], ["s4", "h2"], ["s4", "h3"]],
+    "links": [["h1", "s1"], ["s1", "s2"], ["s1", "s3"], ["s2", "s4"], ["s3", "s4"], ["s4", "h2"], ["s4", "h3"]],
     "hosts": {
       "h1": {
       },
@@ -37,4 +52,3 @@
     }
   }
 }
-

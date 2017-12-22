@@ -256,7 +256,7 @@ class AppRunner(object):
 
         # Run command on hosts (if specified)
         # TODO: HAVE A LOOK
-        # self.run_cmd_hosts()
+        #self.run_cmd_hosts()
 
         # Stop right after the CLI is exited
         self.net.stop()
@@ -296,8 +296,7 @@ class AppRunner(object):
         Assumes:
             A mininet instance is stored as self.net and self.net.start() has been called.
         """
-        #TODO: replace this with the controller app and combine them
-        cli = 'simple_switch_CLI'
+        cli = self.conf['switch_cli']
         for sw_name, sw_dict in self.switches.iteritems():
             if 'cli_input' not in sw_dict:
                 continue
