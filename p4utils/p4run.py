@@ -34,7 +34,7 @@ from p4utils.mininetlib.cli import P4CLI
 from p4utils.mininetlib.apptopo import AppTopo as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
 from p4utils.mininetlib.p4runtime_switch import P4RuntimeSwitch
-from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError
+from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError, read_entries, add_entries
 
 from mininet.link import TCLink
 from mininet.clean import cleanup, sh
@@ -306,13 +306,11 @@ class AppRunner(object):
 
             cli_input_commands = sw_dict['cli_input']
             self.logger('Configuring switch %s with file %s' % (sw_name, cli_input_commands))
-            with open(cli_input_commands, 'r') as fin:
-                if self.log_enabled:
-                    cli_outfile = '%s/%s_cli_output.log' % (self.log_dir, sw_name)
-                    with open(cli_outfile, 'w') as fout:
-                        subprocess.Popen([cli, '--thrift-port', str(thrift_port)], stdin=fin, stdout=fout)
-                else:
-                    subprocess.Popen([cli, '--thrift-port', str(thrift_port)], stdin=fin)
+
+            cli_outfile = '%s/%s_cli_output.log' % (self.log_dir, sw_name) if self.log_enabled else None
+
+            entries = read_entries(cli_input_commands)
+            add_entries(thrift_port, entries, cli_outfile, cli)
 
     def program_hosts(self):
         """Adds static ARP entries and default routes to each mininet host.

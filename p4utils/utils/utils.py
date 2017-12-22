@@ -180,62 +180,32 @@ def compile_all_p4(config):
 
     raise Exception('No topology or switches in configuration file.')
 
+def open_cli_process(thrift_port, cli='simple_switch_CLI'):
+    return subprocess.Popen([cli, '--thrift-port', str(thrift_port)],
+                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-def program_switches(self):
-    """If any command files were provided for the switches, this method will start up the
-    CLI on each switch and use the contents of the command files as input.
 
-    Assumes:
-        A mininet instance is stored as self.net and self.net.start() has been called.
-    """
-    cli = 'simple_switch_CLI'
-    for sw_name, sw_dict in self.switches.iteritems():
-        if 'cli_input' not in sw_dict:
-            continue
-        # get the port for this particular switch's thrift server
-        sw_obj = self.net.get(sw_name)
-        thrift_port = sw_obj.thrift_port
-
-        cli_input_commands = sw_dict['cli_input']
-        self.logger('Configuring switch %s with file %s' % (sw_name, cli_input_commands))
-        with open(cli_input_commands, 'r') as fin:
-            if self.log_enabled:
-                cli_outfile = '%s/%s_cli_output.log' % (self.log_dir, sw_name)
-                with open(cli_outfile, 'w') as fout:
-                    subprocess.Popen([cli, '--thrift-port', str(thrift_port)], stdin=fin, stdout=fout)
-            else:
-                subprocess.Popen([cli, '--thrift-port', str(thrift_port)], stdin=fin)
-
-def populate_with_file(file_name, thrift_port=9090):
-    """Populates a bmv2 based switch with entries from file_name
-
-    Args:
-        file_name: path where entries to add are
-        thrift_port: port the switch is listening
-
-    Returns:
-
-    """
-
-    entries = read_entries(file_name)
-    add_entries(thrift_port, entries)
-
-def add_entries(thrift_port=9090, entries=None):
+def add_entries(thrift_port, entries, log_output = None, cli= 'simple_switch_CLI'):
     """Add entries to P4 switch using the simple_switch_CLI.
 
     Args:
+        cli: cli executable
         thrift_port: Thrift port number used to communicate with the P4 switch
         entries: list of entries to add to the switch
+        log_output: file where to log cli outputs
     """
-    assert entries
 
     if isinstance(entries, list):
         entries = '\n'.join(entries)
-    print(entries)
 
-    p = subprocess.Popen(['simple_switch_CLI', '--thrift-port', str(thrift_port)],
-                         stdin=subprocess.PIPE)
-    p.communicate(input=entries)
+    p = open_cli_process(thrift_port, cli)
+    stdout, stderr = p.communicate(input=entries)
+
+    if log_output:
+        with open(log_output, "a") as log_file:
+            log_file.write(stdout)
+
+    return stdout
 
 
 def read_register(register, idx, thrift_port=9090):
@@ -249,16 +219,14 @@ def read_register(register, idx, thrift_port=9090):
     Returns:
         Register value at index
     """
-    p = subprocess.Popen(['simple_switch_CLI', '--thrift-port', str(thrift_port)],
-                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = open_cli_process(thrift_port, 'simple_switch_CLI')
     stdout, stderr = p.communicate(input="register_read %s %d" % (register, idx))
     reg_val = filter(lambda l: ' %s[%d]' % (register, idx) in l, stdout.split('\n'))[0].split('= ', 1)[1]
     return long(reg_val)
 
-def read_tables(self, thrift_port = 9090):
+def read_tables(thrift_port, cli = 'simple_switch_cli'):
 
-    p = subprocess.Popen(['simple_switch_CLI', '--thrift-port', str(thrift_port)],
-                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = open_cli_process(thrift_port, cli)
 
     stdout, stderr = p.communicate(input="show_tables")
     return stdout
