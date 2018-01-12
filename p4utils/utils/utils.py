@@ -34,7 +34,6 @@ def last_modified(input_file, output_file):
     return os.path.getmtime(input_file) > os.path.getmtime(output_file)
 
 def get_imported_files(input_file):
-
     includes = []
 
     with open(input_file, "r") as f:
@@ -100,16 +99,16 @@ def read_entries(filename):
 
 def compile_p4_to_bmv2(config):
     """Compile P4 program to JSON file that can be loaded by bmv2.
-    
+
     Args:
         config: dictionary with info about P4 version and P4 file to compile
                 {'language': <language>, 'program': <program.p4>}
-    
+
     Returns:
         Compiled P4 program as a JSON file
 
     Raises:
-        CompilationError: if compilation is not successful 
+        CompilationError: if compilation is not successful
     """
     compiler_args = []
     language = config.get("language", None)
@@ -185,16 +184,15 @@ def open_cli_process(thrift_port, cli='simple_switch_CLI'):
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-def add_entries(thrift_port, entries, log_output = None, cli= 'simple_switch_CLI'):
+def add_entries(thrift_port, entries, log_output = None, cli='simple_switch_CLI'):
     """Add entries to P4 switch using the simple_switch_CLI.
 
     Args:
-        cli: cli executable
         thrift_port: Thrift port number used to communicate with the P4 switch
         entries: list of entries to add to the switch
         log_output: file where to log cli outputs
+        cli: CLI executable
     """
-
     if isinstance(entries, list):
         entries = '\n'.join(entries)
 
@@ -206,7 +204,6 @@ def add_entries(thrift_port, entries, log_output = None, cli= 'simple_switch_CLI
             log_file.write(stdout)
 
     return stdout
-
 
 def read_register(register, idx, thrift_port=9090):
     """Read register value from P4 switch using the simple_switch_CLI.
@@ -224,8 +221,13 @@ def read_register(register, idx, thrift_port=9090):
     reg_val = filter(lambda l: ' %s[%d]' % (register, idx) in l, stdout.split('\n'))[0].split('= ', 1)[1]
     return long(reg_val)
 
-def read_tables(thrift_port, cli = 'simple_switch_cli'):
+def read_tables(thrift_port=9090, cli='simple_switch_CLI'):
+    """List tables available on the P4 switch using the simple_switch_CLI.
 
+    Args:
+        thrift_port: Thrift port number used to communicate with the P4 switch
+        cli: CLI executable
+    """
     p = open_cli_process(thrift_port, cli)
 
     stdout, stderr = p.communicate(input="show_tables")
