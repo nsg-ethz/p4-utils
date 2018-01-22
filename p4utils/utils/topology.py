@@ -358,7 +358,7 @@ class Topology(TopologyDB):
         return {node: self._network[node] for node in self._network if self._network[node]["type"] == "router"}
 
     def get_hosts(self):
-        "Gets the routers from the topologyDB"
+        "Gets the hosts from the topologyDB"
         return {node: self._network[node] for node in self._network if self._network[node]["type"] == "host"}
 
     def get_switches(self):
