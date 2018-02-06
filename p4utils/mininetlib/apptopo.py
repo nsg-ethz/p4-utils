@@ -1,4 +1,5 @@
 from mininet.topo import Topo
+import re
 
 class AppTopo(Topo):
     """The mininet topology class.
@@ -26,8 +27,13 @@ class AppTopo(Topo):
         switch_links.sort(key=link_sort_key)
 
         #TODO: add jsons for each switch
-        for sw, json_file in switches.items():
-            self.addP4Switch(sw, log_file="%s/%s.log" % (log_dir, sw), json_path = json_file)
+        sw_id = 1
+        for sw, json_file in sorted(switches.items(), key=lambda x:int(re.findall(r'\d+', x[0])[-1])):
+            upper_bytex = (sw_id & 0xff00) >> 8
+            lower_bytex = (sw_id & 0x00ff)
+            sw_ip = "10.%d.%d.254" % (upper_bytex, lower_bytex)
+            self.addP4Switch(sw, log_file="%s/%s.log" % (log_dir, sw), json_path = json_file, sw_ip = sw_ip)
+            sw_id +=1
 
         for link in host_links:
             host_name = link['node1']

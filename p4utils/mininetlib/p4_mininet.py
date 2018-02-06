@@ -70,6 +70,7 @@ class P4Switch(Switch):
                  verbose=False,
                  device_id=None,
                  enable_debugger=False,
+                 sw_ip = "10.0.1.254",
                  **kwargs):
 
         Switch.__init__(self, name, **kwargs)
@@ -107,6 +108,7 @@ class P4Switch(Switch):
         self.nanomsg = "ipc:///tmp/bm-{}-log.ipc".format(self.device_id)
 
         self.simple_switch_pid = None
+        self.sw_ip =sw_ip
 
     @classmethod
     def setup(cls):

@@ -92,7 +92,6 @@ class TopologyDB(object):
     def get_interfaces(self, node):
         return self._network[node]["interfaces_to_node"].iterkeys()
 
-    #TODO fix this.
     def get_thrift_port(self, switch):
         """Return the Thrift port used to communicate with the P4 switch."""
         if self._network[switch].get('subtype', None) != 'p4switch':
@@ -190,7 +189,8 @@ class TopologyDB(object):
         self._add_node(node, {'type': 'switch'})
 
     def add_p4_switch(self,node):
-        self._add_node(node, {'type': 'switch', 'subtype': 'p4switch', 'thrift_port': node.thrift_port})
+        self._add_node(node, {'type': 'switch', 'subtype': 'p4switch',
+                              'thrift_port': node.thrift_port, 'sw_id': node.sw_ip})
 
     def add_router(self, node):
         """Register a router."""

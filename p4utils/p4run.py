@@ -327,6 +327,7 @@ class AppRunner(object):
             sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
             # phony IP to lie to the host about
             host_id = int(host_name[1:])
+
             sw_ip = '10.0.%d.254' % host_id
 
             # Ensure each host's interface name is unique, or else
