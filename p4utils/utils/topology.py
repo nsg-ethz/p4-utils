@@ -4,6 +4,7 @@ import pprint
 from ipaddress import ip_interface
 import networkx as nx
 
+from p4utils import HostDoesNotExist, InvalidIP
 from p4utils.logger import log
 
 class TopologyDB(object):

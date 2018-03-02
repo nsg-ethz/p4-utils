@@ -19,3 +19,7 @@ class InvalidIP(Exception):
 
 FAILED_STATUS = 100
 SUCCESS_STATUS = 200
+
+DEFAULT_COMPILER = "p4c-bm2-ss -I /usr/local/share/p4c/p4include/"
+DEFAULT_CLI = "simple_switch_CLI"
+DEFAULT_SWITCH = "simple_switch"

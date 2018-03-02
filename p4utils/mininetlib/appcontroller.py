@@ -1,6 +1,6 @@
 import subprocess
 
-class AppController:
+class AppController(object):
 
     def __init__(self, manifest=None, target=None, topo=None, net=None, links=None):
         self.manifest = manifest

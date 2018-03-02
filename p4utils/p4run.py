@@ -20,13 +20,12 @@
 #
 import os
 import sys
-import json
-import subprocess
 import argparse
 from time import sleep
 import importlib
 from ipaddress import ip_interface
 
+from p4utils import *
 from p4utils.mininetlib.p4net import P4Mininet
 from p4utils.mininetlib.p4_mininet import P4Switch, P4Host
 from p4utils.utils.topology import Topology as DefaultTopoDB
@@ -93,8 +92,8 @@ class AppRunner(object):
         net (Mininet object): the mininet instance
     """
 
-    def __init__(self, conf_file, p4_program, log_dir, pcap_dir,
-                 bmv2_exe='simple_switch', cli_enabled=True, quiet=False):
+    def __init__(self, conf_file, log_dir, pcap_dir,
+                 cli_enabled=True, quiet=False):
         """Initializes some attributes and reads the topology json.
 
         Args:
@@ -108,17 +107,20 @@ class AppRunner(object):
         """
 
         self.quiet = quiet
-        self.cli_enabled = cli_enabled
-        self.pcap_dir = pcap_dir
-        self.log_dir = log_dir
-        self.p4_program = p4_program
-        self.bmv2_exe = bmv2_exe
-
         self.logger('Reading configuration file.')
         self.conf_file = conf_file
         if not os.path.isfile(conf_file):
             raise Exception("Configuration %s is not in the directory!" % conf_file)
         self.conf = load_conf(conf_file)
+
+        self.cli_enabled = cli_enabled
+        self.pcap_dir = pcap_dir
+        self.log_dir = log_dir
+        self.bmv2_exe = str(self.conf.get('switch', DEFAULT_SWITCH))
+
+
+        # Clean switches
+        sh("killall %s" % self.bmv2_exe)
 
         # get configurations
         self.log_enabled = self.conf.get("enable_log", False)
@@ -282,6 +284,7 @@ class AppRunner(object):
                                         log_console=self.log_enabled,
                                         pcap_dump=self.pcap_dump, pcap_dir= self.pcap_dir)
 
+
         # start P4 Mininet
         self.net = self.app_mininet(topo=self.topo,
                              link=TCLink,
@@ -385,7 +388,7 @@ class AppRunner(object):
         print ''
         print 'To inspect or change the switch configuration, connect to'
         print 'its CLI from your host operating system using this command:'
-        print '  simple_switch_CLI --thrift-port <switch thrift port>'
+        print '  %s --thrift-port <switch thrift port>' % DEFAULT_CLI
         print ''
         print 'To view a switch log, run this command from your host OS:'
         print '  tail -f %s/<switchname>.log' % self.log_dir
@@ -477,18 +480,13 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', help='Path to configuration',
                         type=str, required=False, default='./p4app.json')
-
     parser.add_argument('--log-dir', type=str, required=False, default=default_log)
     parser.add_argument('--pcap-dir', help='Generate pcap files for interfaces.',
                         action='store_true', required=False, default=default_pcap)
     parser.add_argument('--cli', help='Run mininet CLI.',
                         action='store_true', required=False, default=True)
-    parser.add_argument('--p4_program', type=str, required=False)
-    parser.add_argument('--behavioral-exe', help='Path to behavioral executable',
-                        type=str, required=False, default='simple_switch')
     parser.add_argument('--quiet', help='Disable script debug messages.',
                         action='store_true', required=False, default=False)
-
     parser.add_argument('--clean', help='Cleans previous log files',
                         action='store_true', required=False, default=False)
 
@@ -497,8 +495,6 @@ def get_args():
 
 def main():
 
-    #TODO as for sudo
-
     args = get_args()
 
     #set logging level
@@ -506,15 +502,14 @@ def main():
 
     #clean
     cleanup()
-    sh("killall simple_switch")
 
     if args.clean:
         sh("rm -rf %s" % args.pcap_dir)
         sh("rm -rf %s" % args.log_dir)
         sh("rm -f %s" % "topology.db")
 
-    app = AppRunner(args.config, args.p4_program, args.log_dir, args.pcap_dir,
-                    args.behavioral_exe, args.cli, args.quiet)
+    app = AppRunner(args.config, args.log_dir,
+                    args.pcap_dir, args.cli, args.quiet)
 
     app.run_app()
 
