@@ -88,10 +88,14 @@ class TopologyDB(object):
         return self._network[node]['type']
 
     def get_neighbors(self, node):
-        return self._network[node]["interfaces_to_node"].itervalues()
+
+        if not(self._network.get(node, None)):
+            raise HostDoesNotExist
+
+        return self._network[node]["interfaces_to_node"].values()
 
     def get_interfaces(self, node):
-        return self._network[node]["interfaces_to_node"].iterkeys()
+        return self._network[node]["interfaces_to_node"].keys()
 
     def get_thrift_port(self, switch):
         """Return the Thrift port used to communicate with the P4 switch."""
@@ -189,7 +193,7 @@ class TopologyDB(object):
         """Register a switch."""
         self._add_node(node, {'type': 'switch'})
 
-    def add_p4_switch(self, node):
+    def add_p4_switch(self,node):
         self._add_node(node, {'type': 'switch', 'subtype': 'p4switch',
                               'thrift_port': node.thrift_port, 'sw_id': node.sw_ip})
 
@@ -255,10 +259,6 @@ class NetworkGraph(nx.Graph):
         for node in self.node:
             if self.node[node]['type'] == type:
                 self.set_node_color(node, color)
-
-    # TODO: implement functionality
-    def set_edge_weights(self, link_loads={}):
-        pass
 
     def get_hosts(self):
         return [x for x in self.node if self.node[x]['type'] == 'host']
@@ -334,41 +334,20 @@ class Topology(TopologyDB):
             self.hosts_ip_mapping["ipToName"][ip] = host
             self.hosts_ip_mapping["nameToIp"][host] = ip
 
-    def get_host_first_interface(self, name):
-        return self._network[name]["interfaces_to_node"].keys()[0]
 
     def get_host_name(self, ip):
         """Returns the host name to an IP address."""
-        name = self.hosts_ip_mapping.get("ipToName").get(ip)
+        name = self.hosts_ip_mapping.get("ipToName",{}).get(ip, None)
         if name:
             return name
         raise InvalidIP("No host in the network has the IP {0}".format(ip))
 
     def get_host_ip(self, name):
         """Returns the IP to a host name."""
-        ip = self.hosts_ip_mapping.get("nameToIp").get(name)
+        ip = self.hosts_ip_mapping.get("nameToIp", {}).get(name, None)
         if ip:
             return ip
-        raise HostDoesNotExist("No host in the network has the name {0}".format(name))
-
-    def get_p4switch_id(self, sw_name):
-        """Returns the ID (pseudo-IP) of a P4 switch.
-
-        Args:
-            sw_name: P4 switch name in the topology
-
-        Returns:
-            ID of P4 switch as a string
-
-        Throws:
-            TypeError if sw_name is not a P4 switch
-        """
-        if self._network[sw_name].get('subtype', None) != 'p4switch':
-            raise TypeError('%s is not a P4 switch' % sw_name)
-        return self._network[sw_name]['sw_id']
-
-    def are_neighbors(self, node1, node2):
-        return self.network_graph.are_neighbors(node1, node2)
+        raise HostDoesNotExist(name)
 
     def get_routers(self):
         "Gets the routers from the topologyDB"
@@ -381,7 +360,51 @@ class Topology(TopologyDB):
     def get_switches(self):
         return {node: self._network[node] for node in self._network if self._network[node]["type"] == "switch"}
 
+    def get_host_first_interface(self, name):
+        """
+        Returns the first interface from a host. Assume its mono-homed
+        Args:
+            name:
 
+        Returns: interface name (str)
+
+        """
+        return self._network[name]["interfaces_to_node"].keys()[0]
+
+    def are_neighbors(self, node1, node2):
+        return self.network_graph.are_neighbors(node1, node2)
+
+    def get_hosts_connected_to(self, node):
+        """
+        Returns the hosts directly connected to the node
+        Args:
+            node:
+
+        Returns: list of hosts
+
+        """
+
+        nodes = self.get_neighbors(node)
+        return [host for host in nodes if self.get_node_type(host) == 'host']
+
+    def get_direct_host_networks_from_switch(self, switch):
+        """
+        Returns all the subnetworks a switch can reach directly
+        Args:
+            switch:
+
+        Returns: set of networks
+
+        """
+
+        networks = []
+        hosts = self.get_hosts_connected_to(switch)
+        for host in hosts:
+            sub_nets = [self.subnet(host, neighbor) for neighbor in self[host]['interfaces_to_node'].values()]
+
+            networks += sub_nets
+
+        return set(networks)
 
 if __name__ == '__main__':
     import sys

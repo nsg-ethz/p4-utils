@@ -1,8 +1,8 @@
 class HostDoesNotExist(Exception):
 
-    def __init__(self, message):
-        super(HostDoesNotExist, self).__init__('HostDoesNotExist: {0}'.format(message))
-        self.message = message
+    def __init__(self, node):
+        self.message = "No host in the network has the name {0}" % node
+        super(HostDoesNotExist, self).__init__('HostDoesNotExist: {0}'.format(self.message))
 
     def __str__(self):
         return self.message
@@ -10,7 +10,7 @@ class HostDoesNotExist(Exception):
 
 class InvalidIP(Exception):
 
-    def __init__(self, message):
+    def __init__(self, ip):
         super(InvalidIP, self).__init__('InvalidIP: {0}'.format(message))
         self.message = message
 
