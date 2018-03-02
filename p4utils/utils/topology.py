@@ -4,7 +4,7 @@ import pprint
 from ipaddress import ip_interface
 import networkx as nx
 
-from p4utils import HostDoesNotExist, InvalidIP
+from p4utils import NodeDoesNotExist, InvalidHostIP
 from p4utils.logger import log
 
 class TopologyDB(object):
@@ -51,13 +51,29 @@ class TopologyDB(object):
         try:
             return self._network[node]
         except KeyError:
-            raise ValueError('No node named %s in the network' % node)
+            raise NodeDoesNotExist(node)
+
+    def node(self, node):
+        """
+        Public version of _node
+        Args:
+            node:
+
+        Returns: Node if exists
+
+        """
+        return self._node(node)
 
     def __getitem__(self, item):
+
         return self._node(item)
 
     def _interface(self, node1, node2):
-        return self._network[node1][node2]
+
+        #checks if they exist
+        self._node(node2)
+
+        return self._node(node1)[node2]
 
     def interface(self, node1, node2):
         """Return the ip_interface for node1 facing node2."""
@@ -66,7 +82,11 @@ class TopologyDB(object):
     def interface_bandwidth(self, node1, node2):
         """Return the bandwidth capacity of the interface on node1 facing node2.
         If it is unlimited, return -1."""
-        connected_to = self._network[node1]["interfaces_to_node"][node2]
+
+        #checks if they exist
+        self._node(node2)
+
+        connected_to = self._node(node1)["interfaces_to_node"][node2]
         return self._interface(node1, connected_to)['bw']
 
     def subnet(self, node1, node2):
@@ -75,33 +95,33 @@ class TopologyDB(object):
 
     def get_router_id(self, node):
         """Return the OSPF router id for router node."""
-        if self._network[node]['type'] != 'router':
+
+        if self._node(node)['type'] != 'router':
             raise TypeError('%s is not a router' % node)
-        return self._network[node].get('routerid')
+        return self._node(node).get('routerid')
 
     def interface_ip(self, node, interface):
         """Returns the IP address of a given interface and node."""
-        connected_to = self._network[node]["interfaces_to_node"][interface]
+
+        connected_to = self._node(node)["interfaces_to_node"][interface]
         return self._interface(node, connected_to)['ip'].split("/")[0]
 
     def get_node_type(self, node):
-        return self._network[node]['type']
+
+        return self._node(node)['type']
 
     def get_neighbors(self, node):
 
-        if not(self._network.get(node, None)):
-            raise HostDoesNotExist
-
-        return self._network[node]["interfaces_to_node"].values()
+        return self._node(node)["interfaces_to_node"].values()
 
     def get_interfaces(self, node):
-        return self._network[node]["interfaces_to_node"].keys()
+        return self._node(node)["interfaces_to_node"].keys()
 
     def get_thrift_port(self, switch):
         """Return the Thrift port used to communicate with the P4 switch."""
-        if self._network[switch].get('subtype', None) != 'p4switch':
+        if self._node(switch).get('subtype', None) != 'p4switch':
             raise TypeError('%s is not a P4 switch' % switch)
-        return self._network[switch]['thrift_port']
+        return self._node(switch)['thrift_port']
 
     @staticmethod
     def other_intf(intf):
@@ -340,14 +360,14 @@ class Topology(TopologyDB):
         name = self.hosts_ip_mapping.get("ipToName",{}).get(ip, None)
         if name:
             return name
-        raise InvalidIP("No host in the network has the IP {0}".format(ip))
+        raise InvalidHostIP(ip)
 
     def get_host_ip(self, name):
         """Returns the IP to a host name."""
         ip = self.hosts_ip_mapping.get("nameToIp", {}).get(name, None)
         if ip:
             return ip
-        raise HostDoesNotExist(name)
+        raise NodeDoesNotExist(name)
 
     def get_routers(self):
         "Gets the routers from the topologyDB"
@@ -369,7 +389,7 @@ class Topology(TopologyDB):
         Returns: interface name (str)
 
         """
-        return self._network[name]["interfaces_to_node"].keys()[0]
+        return self[name]["interfaces_to_node"].keys()[0]
 
     def are_neighbors(self, node1, node2):
         return self.network_graph.are_neighbors(node1, node2)
