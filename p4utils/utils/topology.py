@@ -213,7 +213,7 @@ class TopologyDB(object):
         """Register a switch."""
         self._add_node(node, {'type': 'switch'})
 
-    def add_p4_switch(self,node):
+    def add_p4_switch(self, node):
         self._add_node(node, {'type': 'switch', 'subtype': 'p4switch',
                               'thrift_port': node.thrift_port, 'sw_id': node.sw_ip})
 
@@ -390,6 +390,19 @@ class Topology(TopologyDB):
 
         """
         return self[name]["interfaces_to_node"].keys()[0]
+
+    def get_p4switch_id(self, sw_name):
+        """Returns the ID (pseudo-IP) of a P4 switch.
+        Args:
+            sw_name: P4 switch name in the topology
+        Returns:
+            ID of P4 switch as a string
+        Throws:
+            TypeError if sw_name is not a P4 switch
+        """
+        if self[sw_name].get('subtype', None) != 'p4switch':
+            raise TypeError('%s is not a P4 switch' % sw_name)
+        return self._network[sw_name]['sw_id']
 
     def are_neighbors(self, node1, node2):
         return self.network_graph.are_neighbors(node1, node2)
