@@ -49,6 +49,7 @@
       "s4": {
         "cli_input": "s4-commands.txt",
         "program": "p4src/heavy_hitter.p4"
+
       }
     }
   }
