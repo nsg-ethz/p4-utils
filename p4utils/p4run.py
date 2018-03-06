@@ -27,7 +27,7 @@ from ipaddress import ip_interface
 
 from p4utils import *
 from p4utils.mininetlib.p4net import P4Mininet
-from p4utils.mininetlib.p4_mininet import P4Switch, P4Host, P4RuntimeSwitch
+from p4utils.mininetlib.p4_mininet import P4Switch, P4Host, P4RuntimeSwitch, configureP4Switch
 from p4utils.utils.topology import Topology as DefaultTopoDB
 from p4utils.mininetlib.cli import P4CLI
 from p4utils.mininetlib.apptopo import AppTopo as DefaultTopo
@@ -39,37 +39,7 @@ from mininet.clean import cleanup, sh
 from mininet.log import setLogLevel, info
 
 
-def configureP4Switch(**switch_args):
-    """ Helper class that is called by mininet to initialize the virtual P4 switches.
-    The purpose is to ensure each switch's thrift server is using a unique port number.
-    """
 
-    if "sw_path" in switch_args and 'grpc' in switch_args['sw_path']:
-        # If grpc appears in the BMv2 switch target, we assume will start P4 Runtime
-        class ConfiguredP4RuntimeSwitch(P4RuntimeSwitch):
-            def __init__(self, *opts, **kwargs):
-                kwargs.update(switch_args)
-                P4RuntimeSwitch.__init__(self, *opts, **kwargs)
-
-            def describe(self):
-                print "%s -> gRPC port: %d" % (self.name, self.grpc_port)
-
-        return ConfiguredP4RuntimeSwitch
-    else:
-        class ConfiguredP4Switch(P4Switch):
-            next_thrift_port = 9090
-
-            def __init__(self, *opts, **kwargs):
-                global next_thrift_port
-                kwargs.update(switch_args)
-                kwargs['thrift_port'] = ConfiguredP4Switch.next_thrift_port
-                ConfiguredP4Switch.next_thrift_port += 1
-                P4Switch.__init__(self, *opts, **kwargs)
-
-            def describe(self):
-                print "%s -> Thrift port: %d" % (self.name, self.thrift_port)
-
-        return ConfiguredP4Switch
 
 class AppRunner(object):
     """Class for running P4 applications.

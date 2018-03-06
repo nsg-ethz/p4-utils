@@ -26,6 +26,38 @@ from p4utils.utils.utils import check_listening_on_port
 
 SWITCH_START_TIMEOUT = 10
 
+def configureP4Switch(**switch_args):
+    """ Helper class that is called by mininet to initialize the virtual P4 switches.
+    The purpose is to ensure each switch's thrift server is using a unique port number.
+    """
+
+    if "sw_path" in switch_args and 'grpc' in switch_args['sw_path']:
+        # If grpc appears in the BMv2 switch target, we assume will start P4 Runtime
+        class ConfiguredP4RuntimeSwitch(P4RuntimeSwitch):
+            def __init__(self, *opts, **kwargs):
+                kwargs.update(switch_args)
+                P4RuntimeSwitch.__init__(self, *opts, **kwargs)
+
+            def describe(self):
+                print "%s -> gRPC port: %d" % (self.name, self.grpc_port)
+
+        return ConfiguredP4RuntimeSwitch
+    else:
+        class ConfiguredP4Switch(P4Switch):
+            next_thrift_port = 9090
+
+            def __init__(self, *opts, **kwargs):
+                global next_thrift_port
+                kwargs.update(switch_args)
+                kwargs['thrift_port'] = ConfiguredP4Switch.next_thrift_port
+                ConfiguredP4Switch.next_thrift_port += 1
+                P4Switch.__init__(self, *opts, **kwargs)
+
+            def describe(self):
+                print "%s -> Thrift port: %d" % (self.name, self.thrift_port)
+
+        return ConfiguredP4Switch
+
 class P4Host(Host):
 
     def config(self, **params):

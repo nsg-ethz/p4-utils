@@ -125,7 +125,10 @@ def compile_p4_to_bmv2(config):
         sys.exit(1)
 
     #read compiler to use
-    compiler = config.get("compiler", DEFAULT_COMPILER)
+    compiler = config.get("compiler", None)
+    if not compiler:
+        log_error("Compiler was not set")
+        sys.exit(1)
 
     program_file = config.get("program", None)
     if program_file:
@@ -134,7 +137,9 @@ def compile_p4_to_bmv2(config):
         compiler_args.append('-o "%s"' % output_file)
     else:
         log_error("Unknown P4 file %s" % program_file)
+        sys.exit(1)
 
+    print (compiler + ' %s' % ' '.join(compiler_args))
     return_value = run_command(compiler + ' %s' % ' '.join(compiler_args))
 
     if return_value != 0:
@@ -152,10 +157,18 @@ def compile_all_p4(config):
     Returns:
         dictionary of JSON file names, keyed by switch names
     """
-    default_p4 = config.get("program", None)
     switch_to_json = {}
     p4programs_already_compiled = {}
     topo = config.get("topology", None)
+
+    #mandatory defaults if not defined we should complain
+    default_p4 = config.get("program", None)
+    default_language = config.get("language", None)
+
+    #non mandatory defaults.
+    default_compiler = config.get("compiler", DEFAULT_COMPILER)
+
+    default_config = {"program": default_p4, "language": default_language, "compiler": default_compiler}
 
     if default_p4:
         json_name = compile_p4_to_bmv2({"language": config.get("language", ""),
