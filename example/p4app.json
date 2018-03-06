@@ -8,19 +8,19 @@
   "pcap_dump": true,
   "enable_log": true,
   "topo_module": {
-    "file_path": "/home/edgar/p4/p4-state/utils/p4utils/mininetlib",
-    "module_name": "apptopo",
+    "file_path": "",
+    "module_name": "p4utils.mininetlib.apptopo",
     "object_name": "AppTopo"
   },
   "controller_module": null,
   "topodb_module": {
-    "file_path": "/home/edgar/p4/p4-state/utils/p4utils/utils",
-    "module_name": "topology",
+    "file_path": "",
+    "module_name": "p4utils.utils.topology",
     "object_name": "Topology"
   },
   "mininet_module": {
-    "file_path": "/home/edgar/p4/p4-state/utils/p4utils/mininetlib",
-    "module_name": "p4net",
+    "file_path": "",
+    "module_name": "p4utils.mininetlib.p4net",
     "object_name": "P4Mininet"
   },
   "topology": {
