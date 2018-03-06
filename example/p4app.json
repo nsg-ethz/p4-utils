@@ -1,7 +1,7 @@
 {
   "program": "p4src/heavy_hitter.p4",
   "switch": "simple_switch",
-  "compiler": "p4c-bm2-ss",
+  "compiler": "p4c-bm2-ss -I /usr/local/share/p4c/p4include/",
   "switch_cli": "simple_switch_CLI",
   "language": "p4-16",
   "cli": true,

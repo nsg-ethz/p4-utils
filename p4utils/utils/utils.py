@@ -170,28 +170,34 @@ def compile_all_p4(config):
 
     default_config = {"program": default_p4, "language": default_language, "compiler": default_compiler}
 
-    if default_p4:
-        json_name = compile_p4_to_bmv2({"language": config.get("language", ""),
-                                        "program": default_p4})
+    if default_p4 and default_language:
+        json_name = compile_p4_to_bmv2(default_config)
         p4programs_already_compiled[default_p4] = json_name
+    else:
+        log.debug('Default program was not compiled')
 
     if topo:
         switches = topo.get("switches", None)
         if switches:
             # make a set with all the P4 programs to compile
-            for switch_name, attributes in switches.iteritems():
-                program_name = attributes.get("program", None)
+            for switch_name, sw_attributes in switches.iteritems():
+
+                #merge defaults with switch attributes
+                switch_conf = default_config.copy()
+                switch_conf.update(sw_attributes)
+                #TODO: if we have the same name with different language/compiler this can be problematic.
+                #TODO: Don't think its needed for the moment
+
+                program_name = switch_conf.get("program", None)
+
                 if program_name:
                     json_name = p4programs_already_compiled.get(program_name, None)
                     if json_name:
                         switch_to_json[switch_name] = json_name
                     else:
-                        json_name = compile_p4_to_bmv2({"language": config.get("language", ""),
-                                                        "program": program_name})
+                        json_name = compile_p4_to_bmv2(switch_conf)
                         switch_to_json[switch_name] = json_name
                         p4programs_already_compiled[program_name] = json_name
-                elif default_p4:
-                    switch_to_json[switch_name] = p4programs_already_compiled[default_p4]
                 else:
                     raise Exception('Did not find a P4 program for switch %s' % switch_name)
         return switch_to_json
