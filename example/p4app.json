@@ -36,19 +36,24 @@
     "switches": {
       "s1": {
         "cli_input": "s1-commands.txt",
-        "program": "p4src/heavy_hitter.p4"
+        "program": "p4src/heavy_hitter.p4",
+        "cpu_port": true
       },
       "s2": {
         "cli_input": "s2-commands.txt",
-        "program": "p4src/heavy_hitter.p4"
+        "program": "p4src/heavy_hitter.p4",
+        "cpu_port": true
       },
       "s3": {
         "cli_input": "s3-commands.txt",
-        "program": "p4src/heavy_hitter.p4"
+        "program": "p4src/heavy_hitter.p4",
+        "cpu_port": true
+
       },
       "s4": {
         "cli_input": "s4-commands.txt",
-        "program": "p4src/heavy_hitter.p4"
+        "program": "p4src/heavy_hitter.p4",
+        "cpu_port": true
       }
     }
   }
