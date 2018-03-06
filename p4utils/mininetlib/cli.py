@@ -24,6 +24,24 @@ class P4CLI(CLI):
         self.last_compilation_state = False
         return FAILED_STATUS
 
+    def do_load_topo_conf(self, line= ""):
+
+        """
+        Updates the topo config
+        Args:
+            line:
+
+        Returns:
+
+        """
+        args = line.split()
+        if args:
+            conf_file = args[0]
+            self.conf_file = conf_file
+
+        #re-load conf file
+        self.config = load_conf(self.conf_file)
+
     def do_set_p4conf(self, line=""):
         """Updates configuration file location, and reloads it."""
         args = line.split()
@@ -75,16 +93,28 @@ class P4CLI(CLI):
             error('P4 Switch already running, stop it first: p4switch_stop %s \n' % switch_name)
             return self.failed_status()
 
+        #load default configuration
+        # mandatory defaults if not defined we should complain
+        default_p4 = self.config.get("program", None)
+        default_language = self.config.get("language", None)
+
+        # non mandatory defaults.
+        default_compiler = self.config.get("compiler", DEFAULT_COMPILER)
+
+        default_config = {"program": default_p4, "language": default_language, "compiler": default_compiler}
+        #merge with switch conf
+        switch_conf = default_config.copy()
+        switch_conf.update(self.config['topology']['switches'][switch_name])
+
         if "--p4src" in args:
             p4source_path = args[args.index("--p4src")+1]
+            switch_conf['program'] = p4source_path
             # check if file exists
             if not os.path.exists(p4source_path):
                 warn('File Error: p4source does not exist %s\n' % p4source_path)
                 return self.failed_status()
-        else:
-            p4source_path_source = self.config["topology"]["switches"][switch_name].get("program", False)
-            if not p4source_path_source:
-                p4source_path_source = self.config["program"]
+
+        p4source_path_source = switch_conf['program']
 
         # generate output file name
         output_file = p4source_path_source.replace(".p4", "") + ".json"
@@ -96,14 +126,9 @@ class P4CLI(CLI):
         log.debug("%s %s %s %s\n" % (p4source_path_source, output_file, program_flag, includes_flag))
 
         if program_flag or includes_flag or (not self.last_compilation_state):
-            language = self.config.get("language", None)
-            if not language:
-                language = "p4-16"
-            compile_config = {"language": language, "program": p4source_path_source}
-
             # compile program
             try:
-                compile_p4_to_bmv2(compile_config)
+                compile_p4_to_bmv2(switch_conf)
                 self.last_compilation_state = True
             except CompilationError:
                 log.error('Compilation failed\n')
@@ -123,7 +148,7 @@ class P4CLI(CLI):
                 error('File Error: commands does not exist %s\n' % commands_path)
                 return self.failed_status()
         else:
-            commands_path = self.config["topology"]["switches"][switch_name]["cli_input"]
+            commands_path = switch_conf['cli_input']
 
         entries = read_entries(commands_path)
         add_entries(p4switch.thrift_port, entries)
