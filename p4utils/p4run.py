@@ -27,12 +27,11 @@ from ipaddress import ip_interface
 
 from p4utils import *
 from p4utils.mininetlib.p4net import P4Mininet
-from p4utils.mininetlib.p4_mininet import P4Switch, P4Host
+from p4utils.mininetlib.p4_mininet import P4Switch, P4Host, P4RuntimeSwitch
 from p4utils.utils.topology import Topology as DefaultTopoDB
 from p4utils.mininetlib.cli import P4CLI
 from p4utils.mininetlib.apptopo import AppTopo as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
-from p4utils.mininetlib.p4runtime_switch import P4RuntimeSwitch
 from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError, read_entries, add_entries
 
 from mininet.link import TCLink
