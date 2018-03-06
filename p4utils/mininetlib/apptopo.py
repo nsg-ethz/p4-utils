@@ -1,4 +1,5 @@
 from mininet.topo import Topo
+from mininet.nodelib import LinuxBridge
 import re
 
 class AppTopo(Topo):
@@ -8,7 +9,7 @@ class AppTopo(Topo):
     mostly about the IP and MAC addresses.
     """
 
-    def __init__(self, hosts, switches, links, log_dir, **opts):
+    def __init__(self, hosts, switches, links, log_dir, cpu_port, **opts):
         Topo.__init__(self, **opts)
         host_links = []
         switch_links = []
@@ -58,6 +59,14 @@ class AppTopo(Topo):
                          delay=link['latency'], bw=link['bandwidth'], weight=link["weight"])
             self.addSwitchPort(link['node1'], link['node2'])
             self.addSwitchPort(link['node2'], link['node1'])
+
+
+        #add cpu port
+        if cpu_port:
+            sw = self.addSwitch("sw-cpu", cls=LinuxBridge, dpid= '1000000000000000')
+            for switch in self.switches():
+                if self.g.node.get(switch).get('isP4Switch', False):
+                    self.addLink(switch, sw, intfName1='%s-cpu-0' % switch, intfName2= '%s-cpu-1' % switch)
 
         self.printPortMapping()
 

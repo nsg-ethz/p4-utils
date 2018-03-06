@@ -247,8 +247,9 @@ class AppRunner(object):
             self.logger("Compilation Error")
             sys.exit(0)
 
-        self.topo = self.app_topo(self.hosts, self.switch_to_json, self.links, self.log_dir)
+        self.topo = self.app_topo(self.hosts, self.switch_to_json, self.links, self.log_dir, self.conf.get('cpu_port', False))
 
+        #TODO: this should not be for the entire net, we should support non p4 switches
         switchClass = configureP4Switch(sw_path=self.bmv2_exe,
                                         log_console=self.log_enabled,
                                         pcap_dump=self.pcap_dump, pcap_dir= self.pcap_dir)
@@ -341,7 +342,8 @@ class AppRunner(object):
             A mininet instance is stored as self.net and self.net.start() has been called.
         """
         for switch in self.net.switches:
-            switch.describe()
+            if self.topo.isP4Switch(switch.name):
+                switch.describe()
         for host in self.net.hosts:
             host.describe()
         self.logger("Starting mininet CLI")
