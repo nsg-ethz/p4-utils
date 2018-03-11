@@ -32,12 +32,11 @@ from p4utils.utils.topology import Topology as DefaultTopoDB
 from p4utils.mininetlib.cli import P4CLI
 from p4utils.mininetlib.apptopo import AppTopo as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
-from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError, read_entries, add_entries
+from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError, read_entries, add_entries, cleanup
 
 from mininet.link import TCLink
-from mininet.clean import cleanup, sh
 from mininet.log import setLogLevel, info
-
+from mininet.clean import sh
 
 
 
@@ -247,7 +246,7 @@ class AppRunner(object):
             self.logger("Compilation Error")
             sys.exit(0)
 
-        self.topo = self.app_topo(self.hosts, self.switch_to_json, self.links, self.log_dir, self.conf.get('cpu_port', False))
+        self.topo = self.app_topo(self.hosts, self.switch_to_json, self.links, self.log_dir, self.conf)
 
         #TODO: this should not be for the entire net, we should support non p4 switches
         switchClass = configureP4Switch(sw_path=self.bmv2_exe,
@@ -460,6 +459,8 @@ def get_args():
                         action='store_true', required=False, default=False)
     parser.add_argument('--clean', help='Cleans previous log files',
                         action='store_true', required=False, default=False)
+    parser.add_argument('--only_clean', help='Cleans previous log files and closes',
+                        action='store_true', required=False, default=False)
 
     return parser.parse_args()
 
@@ -474,10 +475,13 @@ def main():
     #clean
     cleanup()
 
-    if args.clean:
+    if args.clean or args.only_clean:
         sh("rm -rf %s" % args.pcap_dir)
         sh("rm -rf %s" % args.log_dir)
         sh("rm -f %s" % "topology.db")
+
+        if args.only_clean:
+            return
 
     app = AppRunner(args.config, args.log_dir,
                     args.pcap_dir, args.cli, args.quiet)
