@@ -234,34 +234,37 @@ class NetworkGraph(nx.Graph):
         super(NetworkGraph, self).__init__(*args, **kwargs)
 
         self.topology_db = topology_db
-        self = self.load_graph_from_db()
+        self.load_graph_from_db()
 
     def load_graph_from_db(self):
         for node, attributes in self.topology_db._original_network.iteritems():
             if node not in self.nodes():
-                super(NetworkGraph, self).add_node(node)
-                self.node[node]['type'] = self.topology_db.get_node_type(node)
-
-                for neighbor in self.topology_db.get_neighbors(node):
-                    if neighbor in self.nodes():
-                        weight = attributes[neighbor].get("weight", 1)
-                        super(NetworkGraph, self).add_edge(node, neighbor, weight=weight)
+                self.add_node(node, attributes)
         return self
 
     def add_edge(self, node1, node2):
         if node1 in self.node and node2 in self.node:
             super(NetworkGraph, self).add_edge(node1, node2)
 
-    def add_node(self, node):
+    def add_node(self, node, attributes):
         super(NetworkGraph, self).add_node(node)
         self.node[node]['type'] = self.topology_db.get_node_type(node)
+        #check if the node has a subtype
+        subtype = attributes.get('subtype', None)
+        if subtype:
+            self.node[node]['subtype'] = subtype
 
         for neighbor_node in self.topology_db.get_neighbors(node):
             if neighbor_node in self.node:
-                super(NetworkGraph, self).add_edge(node, neighbor_node)
+                weight = attributes[neighbor_node].get("weight", 1)
+                super(NetworkGraph, self).add_edge(node, neighbor_node, weight=weight)
 
     def keep_only_switches(self):
         to_keep = [x for x in self.node if self.node[x]['type'] == 'switch']
+        return self.subgraph(to_keep)
+
+    def keep_only_p4_switches(self):
+        to_keep = [x for x in self.node if self.node[x]['type'] == 'switch' and self.node[x].get('subtype', False)]
         return self.subgraph(to_keep)
 
     def set_node_shape(self, node, shape):
