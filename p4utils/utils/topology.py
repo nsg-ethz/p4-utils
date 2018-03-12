@@ -143,7 +143,7 @@ class TopologyDB(object):
             self.add_controller(controller)
         for switch in net.switches:
             if net.topo.isP4Switch(switch.name):
-                self.add_p4_switch(switch)
+                self.add_p4switch(switch)
             else:
                 self.add_switch(switch)
 
@@ -213,7 +213,7 @@ class TopologyDB(object):
         """Register a switch."""
         self._add_node(node, {'type': 'switch'})
 
-    def add_p4_switch(self, node):
+    def add_p4switch(self, node):
         self._add_node(node, {'type': 'switch', 'subtype': 'p4switch',
                               'thrift_port': node.thrift_port, 'sw_id': node.sw_ip})
 
@@ -240,7 +240,6 @@ class NetworkGraph(nx.Graph):
         for node, attributes in self.topology_db._original_network.iteritems():
             if node not in self.nodes():
                 self.add_node(node, attributes)
-        return self
 
     def add_edge(self, node1, node2):
         if node1 in self.node and node2 in self.node:
@@ -255,7 +254,7 @@ class NetworkGraph(nx.Graph):
             self.node[node]['subtype'] = subtype
 
         for neighbor_node in self.topology_db.get_neighbors(node):
-            if neighbor_node in self.node:
+            if neighbor_node in self.nodes():
                 weight = attributes[neighbor_node].get("weight", 1)
                 super(NetworkGraph, self).add_edge(node, neighbor_node, weight=weight)
 
@@ -263,7 +262,7 @@ class NetworkGraph(nx.Graph):
         to_keep = [x for x in self.node if self.node[x]['type'] == 'switch']
         return self.subgraph(to_keep)
 
-    def keep_only_p4_switches(self):
+    def keep_only_p4switches(self):
         to_keep = [x for x in self.node if self.node[x]['type'] == 'switch' and self.node[x].get('subtype', False)]
         return self.subgraph(to_keep)
 
