@@ -258,14 +258,6 @@ class NetworkGraph(nx.Graph):
                 weight = attributes[neighbor_node].get("weight", 1)
                 super(NetworkGraph, self).add_edge(node, neighbor_node, weight=weight)
 
-    def keep_only_switches(self):
-        to_keep = [x for x in self.node if self.node[x]['type'] == 'switch']
-        return self.subgraph(to_keep)
-
-    def keep_only_p4switches(self):
-        to_keep = [x for x in self.node if self.node[x]['type'] == 'switch' and self.node[x].get('subtype', "") == 'p4switch']
-        return self.subgraph(to_keep)
-
     def set_node_shape(self, node, shape):
         self.node[node]['node_shape'] = shape
 
@@ -290,6 +282,12 @@ class NetworkGraph(nx.Graph):
 
     def get_p4switches(self):
         return [x for x in self.node if self.node[x]['type'] == "switch" and self.node[x].get('subtype', "") == 'p4switch']
+
+    def keep_only_switches(self):
+        return self.subgraph(self.get_switches())
+
+    def keep_only_p4switches(self):
+        return self.subgraph(self.get_p4switches())
 
     def are_neighbors(self, node1, node2):
         """Returns True if node1 and node2 are neighbors, False otherwise."""
