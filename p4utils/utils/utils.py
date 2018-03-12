@@ -3,10 +3,18 @@ import sys, os
 import subprocess
 import json
 from mininet import log
+import mininet.clean
 
 from p4utils import DEFAULT_COMPILER, DEFAULT_CLI
 
 import psutil
+
+def cleanup():
+    mininet.clean.cleanup()
+    bridges = mininet.clean.sh("brctl show | awk 'FNR > 1 {print $1}'").splitlines()
+    for bridge in bridges:
+        mininet.clean.sh("ifconfig %s down" %bridge)
+        mininet.clean.sh("brctl delbr %s" % bridge)
 
 def check_listening_on_port(port):
     for c in psutil.net_connections(kind='inet'):

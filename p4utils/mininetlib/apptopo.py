@@ -9,7 +9,7 @@ class AppTopo(Topo):
     mostly about the IP and MAC addresses.
     """
 
-    def __init__(self, hosts, switches, links, log_dir, cpu_port, **opts):
+    def __init__(self, hosts, switches, links, log_dir, global_conf, **opts):
         Topo.__init__(self, **opts)
         host_links = []
         switch_links = []
@@ -62,11 +62,21 @@ class AppTopo(Topo):
 
 
         #add cpu port
-        if cpu_port:
-            sw = self.addSwitch("sw-cpu", cls=LinuxBridge, dpid= '1000000000000000')
-            for switch in self.switches():
-                if self.g.node.get(switch).get('isP4Switch', False):
-                    self.addLink(switch, sw, intfName1='%s-cpu-0' % switch, intfName2= '%s-cpu-1' % switch)
+
+        default_cpu_port = {'cpu_port':global_conf.get('cpu_port', False)}
+
+        add_bridge = True
+        for switch in self.switches():
+            if self.g.node.get(switch).get('isP4Switch', False):
+                switch_cpu_port = global_conf.get('topology', {}).get('switches', {})
+                default_cpu_port_tmp = default_cpu_port.copy()
+                default_cpu_port_tmp.update(switch_cpu_port.get(switch, {}))
+
+                if default_cpu_port_tmp.get('cpu_port', False):
+                    if add_bridge:
+                        sw = self.addSwitch("sw-cpu", cls=LinuxBridge, dpid='1000000000000000')
+                        add_bridge = False
+                    self.addLink(switch, sw, intfName1='%s-cpu-eth0' % switch, intfName2= '%s-cpu-eth1' % switch, deleteIntfs=True)
 
         self.printPortMapping()
 
