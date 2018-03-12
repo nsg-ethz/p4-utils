@@ -289,7 +289,7 @@ class NetworkGraph(nx.Graph):
         return [x for x in self.node if self.node[x]["type"] == "switch"]
 
     def get_p4switches(self):
-        return [x for x in self.node if self.node[x]['type'] == "switch" and self.node.get('subtype', "") == 'p4switch']
+        return [x for x in self.node if self.node[x]['type'] == "switch" and self.node[x].get('subtype', "") == 'p4switch']
 
     def are_neighbors(self, node1, node2):
         """Returns True if node1 and node2 are neighbors, False otherwise."""
