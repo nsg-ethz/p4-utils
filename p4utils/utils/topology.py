@@ -370,24 +370,31 @@ class Topology(TopologyDB):
         raise NodeDoesNotExist(name)
 
     def get_routers(self):
-        "Gets the routers from the topologyDB"
+        """Returns the routers from the topologyDB."""
         return {node: self._network[node] for node in self._network if self._network[node]["type"] == "router"}
 
     def get_hosts(self):
-        "Gets the hosts from the topologyDB"
+        """Returns the hosts from the topologyDB."""
         return {node: self._network[node] for node in self._network if self._network[node]["type"] == "host"}
 
     def get_switches(self):
+        """Returns the switches from the topologyDB."""
         return {node: self._network[node] for node in self._network if self._network[node]["type"] == "switch"}
 
+    def get_p4switches(self):
+        """Returns the P4 switches from the topologyDB."""
+        return {node: self._network[node] for node in self._network 
+            if self._network[node]["type"] == "switch" and
+            self._network[node].get('subtype', None) == 'p4switch'}
+
     def get_host_first_interface(self, name):
-        """
-        Returns the first interface from a host. Assume its mono-homed
+        """Returns the first interface from a host. Assume it's single-homed.
+
         Args:
-            name:
+            name: host name
 
-        Returns: interface name (str)
-
+        Returns:
+            interface name (str)
         """
         return self[name]["interfaces_to_node"].keys()[0]
 
