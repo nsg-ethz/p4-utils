@@ -372,23 +372,65 @@ class Topology(TopologyDB):
             return ip
         raise NodeDoesNotExist(name)
 
+    def is_router(self, node):
+        """Checks if node is a router.
+
+        Args:
+            node: name of Mininet node
+
+        Returns:
+            True if node is a router, False otherwise
+        """
+        return self._network[node]["type"] == "router"
+
+    def is_host(self, node):
+        """Checks if node is a host.
+
+        Args:
+            node: name of Mininet node
+
+        Returns:
+            True if node is a host, False otherwise
+        """
+        return self._network[node]["type"] == "host"
+
+    def is_switch(self, node):
+        """Checks if node is a switch.
+
+        Args:
+            node: name of Mininet node
+
+        Returns:
+            True if node is a switch, False otherwise
+        """
+        return self._network[node]["type"] == "switch"
+
+    def is_p4switch(self, node):
+        """Checks if node is a P4 switch.
+
+        Args:
+            node: name of Mininet node
+
+        Returns:
+            True if node is a P4 switch, False otherwise
+        """
+        return self._network[node]["type"] == "switch" and self._network[node].get('subtype', None) == 'p4switch'
+
     def get_routers(self):
         """Returns the routers from the topologyDB."""
-        return {node: self._network[node] for node in self._network if self._network[node]["type"] == "router"}
+        return {node: self._network[node] for node in self._network if self.is_router(node)}
 
     def get_hosts(self):
         """Returns the hosts from the topologyDB."""
-        return {node: self._network[node] for node in self._network if self._network[node]["type"] == "host"}
+        return {node: self._network[node] for node in self._network if self.is_host(node)}
 
     def get_switches(self):
         """Returns the switches from the topologyDB."""
-        return {node: self._network[node] for node in self._network if self._network[node]["type"] == "switch"}
+        return {node: self._network[node] for node in self._network if self.is_switch(node)}
 
     def get_p4switches(self):
         """Returns the P4 switches from the topologyDB."""
-        return {node: self._network[node] for node in self._network 
-            if self._network[node]["type"] == "switch" and
-            self._network[node].get('subtype', None) == 'p4switch'}
+        return {node: self._network[node] for node in self._network if self.is_p4switch(node)}
 
     def get_host_first_interface(self, name):
         """Returns the first interface from a host. Assume it's single-homed.
