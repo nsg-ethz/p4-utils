@@ -289,6 +289,9 @@ class NetworkGraph(nx.Graph):
     def keep_only_p4switches(self):
         return self.subgraph(self.get_p4switches())
 
+    def keep_only_p4switches_and_hosts(self):
+        return self.subgraph(self.get_p4switches() + self.get_hosts())
+
     def are_neighbors(self, node1, node2):
         """Returns True if node1 and node2 are neighbors, False otherwise."""
         return node1 in self.adj[node2]
