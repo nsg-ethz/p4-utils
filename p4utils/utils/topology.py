@@ -32,7 +32,7 @@ class TopologyDB(object):
             log.warning('Topology instantiated without any data')
 
     def __iter__(self):
-        return self._network.iteritems()
+        return self._network
 
     def __repr__(self):
         return pprint.pformat(self._network)
@@ -67,6 +67,9 @@ class TopologyDB(object):
     def __getitem__(self, item):
 
         return self._node(item)
+
+    def __contains__(self, item):
+        return item in self._network
 
     def _interface(self, node1, node2):
 
@@ -421,19 +424,19 @@ class Topology(TopologyDB):
 
     def get_routers(self):
         """Returns the routers from the topologyDB."""
-        return {node: self[node] for node in self._network if self.is_router(node)}
+        return {node: self[node] for node in self if self.is_router(node)}
 
     def get_hosts(self):
         """Returns the hosts from the topologyDB."""
-        return {node: self[node] for node in self._network if self.is_host(node)}
+        return {node: self[node] for node in self if self.is_host(node)}
 
     def get_switches(self):
         """Returns the switches from the topologyDB."""
-        return {node: self[node] for node in self._network if self.is_switch(node)}
+        return {node: self[node] for node in self if self.is_switch(node)}
 
     def get_p4switches(self):
         """Returns the P4 switches from the topologyDB."""
-        return {node: self[node] for node in self._network if self.is_p4switch(node)}
+        return {node: self[node] for node in self if self.is_p4switch(node)}
 
     def get_host_first_interface(self, name):
         """Returns the first interface from a host. Assume it's single-homed.
