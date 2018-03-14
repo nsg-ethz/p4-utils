@@ -124,16 +124,6 @@ def compile_p4_to_bmv2(config):
     """
     compiler_args = []
 
-    #read p4 version to be used
-    language = config.get("language", None)
-    if language == 'p4-14':
-        compiler_args.append('--p4v 14')
-    elif language == 'p4-16':
-        compiler_args.append('--p4v 16')
-    else:
-        log_error('Unknown language:', language)
-        sys.exit(1)
-
     #read compiler to use
     compiler = config.get("compiler", None)
     if not compiler:
@@ -144,7 +134,10 @@ def compile_p4_to_bmv2(config):
     if program_file:
         output_file = program_file.replace(".p4", "") + '.json'
         compiler_args.append('"%s"' % program_file)
-        compiler_args.append('-o "%s"' % output_file)
+        if compiler != 'p4c':
+            # The p4c compiler accepts only a directory for output files
+            # with the -o option, the output file name is set automatically
+            compiler_args.append('-o "%s"' % output_file)
     else:
         log_error("Unknown P4 file %s" % program_file)
         sys.exit(1)
