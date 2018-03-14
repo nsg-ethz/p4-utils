@@ -497,7 +497,7 @@ class Topology(TopologyDB):
         return set(networks)
 
 
-    def get_cpu_port_ibdex(self, p4switch, cpu_node = 'sw-cpu'):
+    def get_cpu_port_index(self, p4switch, cpu_node = 'sw-cpu'):
         """
         Returns the port index of p4switch's cpu port
         Args:
