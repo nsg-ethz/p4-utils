@@ -32,7 +32,7 @@ class TopologyDB(object):
             log.warning('Topology instantiated without any data')
 
     def __iter__(self):
-        return self._network
+        return iter(self._network)
 
     def __repr__(self):
         return pprint.pformat(self._network)
@@ -492,7 +492,6 @@ class Topology(TopologyDB):
         hosts = self.get_hosts_connected_to(switch)
         for host in hosts:
             sub_nets = [self.subnet(host, neighbor) for neighbor in self[host]['interfaces_to_node'].values()]
-
             networks += sub_nets
 
         return set(networks)

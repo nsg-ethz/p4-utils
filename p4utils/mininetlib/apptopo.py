@@ -77,6 +77,7 @@ class AppTopo(Topo):
                         sw = self.addSwitch("sw-cpu", cls=LinuxBridge, dpid='1000000000000000')
                         add_bridge = False
                     self.addLink(switch, sw, intfName1='%s-cpu-eth0' % switch, intfName2= '%s-cpu-eth1' % switch, deleteIntfs=True)
+                    self.addSwitchPort(switch, sw)
 
         self.printPortMapping()
 
