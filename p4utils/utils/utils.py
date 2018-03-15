@@ -130,6 +130,11 @@ def compile_p4_to_bmv2(config):
         log_error("Compiler was not set")
         sys.exit(1)
 
+    # read compiler options (optional)
+    options = config.get("options", None)
+    if options:
+        compiler_args.append(options)
+
     program_file = config.get("program", None)
     if program_file:
         output_file = program_file.replace(".p4", "") + '.json'
