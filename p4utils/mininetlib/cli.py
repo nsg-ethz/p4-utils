@@ -96,12 +96,12 @@ class P4CLI(CLI):
         #load default configuration
         # mandatory defaults if not defined we should complain
         default_p4 = self.config.get("program", None)
-        default_language = self.config.get("language", None)
+        default_options = self.config.get("options", None)
 
         # non mandatory defaults.
         default_compiler = self.config.get("compiler", DEFAULT_COMPILER)
 
-        default_config = {"program": default_p4, "language": default_language, "compiler": default_compiler}
+        default_config = {"program": default_p4, "options": default_options, "compiler": default_compiler}
         #merge with switch conf
         switch_conf = default_config.copy()
         switch_conf.update(self.config['topology']['switches'][switch_name])

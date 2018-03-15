@@ -10,6 +10,9 @@ ls
 *.json
 !*p4app.json
 
+*p4i
+*p4rt
+
 *.pcap
 
 *.db

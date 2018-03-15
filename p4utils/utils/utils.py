@@ -114,7 +114,6 @@ def compile_p4_to_bmv2(config):
 
     Args:
         config: dictionary with info about P4 version and P4 file to compile
-                {'language': <language>, 'program': <program.p4>}
 
     Returns:
         Compiled P4 program as a JSON file
@@ -131,7 +130,7 @@ def compile_p4_to_bmv2(config):
         sys.exit(1)
 
     # read compiler options (optional)
-    options = config.get("compiler_options", None)
+    options = config.get("options", None)
     if options:
         compiler_args.append(options)
 
@@ -179,14 +178,14 @@ def compile_all_p4(config):
 
     #mandatory defaults if not defined we should complain
     default_p4 = config.get("program", None)
-    default_language = config.get("language", None)
+    default_options = config.get("options", None)
 
     #non mandatory defaults.
     default_compiler = config.get("compiler", DEFAULT_COMPILER)
 
-    default_config = {"program": default_p4, "language": default_language, "compiler": default_compiler}
+    default_config = {"program": default_p4, "options": default_options, "compiler": default_compiler}
 
-    if default_p4 and default_language:
+    if default_p4 and default_options:
         json_name = compile_p4_to_bmv2(default_config)
         p4programs_already_compiled[default_p4] = json_name
     else:
@@ -201,8 +200,6 @@ def compile_all_p4(config):
                 #merge defaults with switch attributes
                 switch_conf = default_config.copy()
                 switch_conf.update(sw_attributes)
-                #TODO: if we have the same name with different language/compiler this can be problematic.
-                #TODO: Don't think its needed for the moment
 
                 program_name = switch_conf.get("program", None)
 
