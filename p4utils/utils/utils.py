@@ -131,20 +131,23 @@ def compile_p4_to_bmv2(config):
         sys.exit(1)
 
     # read compiler options (optional)
-    options = config.get("options", None)
+    options = config.get("compiler_options", None)
     if options:
         compiler_args.append(options)
 
     program_file = config.get("program", None)
     if program_file:
         output_file = program_file.replace(".p4", "") + '.json'
-        if compiler.startswith('p4c'):
+        if compiler == 'p4c':
             # The p4c compiler accepts only a directory for output files
             # Instead of a file name since it creates not only the .json,
             # but also auxiliary files
             output = os.path.dirname(os.path.realpath(output_file))
-        else:
+        elif compiler.startswith('p4c-'):
             output = output_file
+        else:
+            log_error('Unknown Compiler %s' % compiler)
+            sys.exit()
 
         compiler_args.append('"%s"' % program_file)
         compiler_args.append('-o "%s"' % output)

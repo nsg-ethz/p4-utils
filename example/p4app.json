@@ -1,9 +1,9 @@
 {
   "program": "p4src/heavy_hitter.p4",
   "switch": "simple_switch",
-  "compiler": "p4c-bm2-ss -I /usr/local/share/p4c/p4include/",
+  "compiler": "p4c",
+  "compiler_options": "--target bmv2-ss-p4-org --std p4-16",
   "switch_cli": "simple_switch_CLI",
-  "language": "p4-16",
   "cli": true,
   "pcap_dump": true,
   "enable_log": true,
