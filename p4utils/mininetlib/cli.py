@@ -180,7 +180,6 @@ class P4CLI(CLI):
     def do_p4switch_reboot(self, line=""):
         """Reboot a P4 switch with a new program."""
         self.config = load_conf(self.conf_file)
-
         if not line or len(line.split()) > 5:
             error('usage: p4switch_reboot <p4switch name> [--p4src <path>] [--cmds path]\n')
         else:
