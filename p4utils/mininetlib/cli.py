@@ -144,14 +144,16 @@ class P4CLI(CLI):
         if "--cmds" in args:
             commands_path = args[args.index("--cmds")+1]
             # check if file exists
+
+        else:
+            commands_path = switch_conf.get('cli_input', None)
+
+        if commands_path:
             if not os.path.exists(commands_path):
                 error('File Error: commands does not exist %s\n' % commands_path)
                 return self.failed_status()
-        else:
-            commands_path = switch_conf['cli_input']
-
-        entries = read_entries(commands_path)
-        add_entries(p4switch.thrift_port, entries)
+            entries = read_entries(commands_path)
+            add_entries(p4switch.thrift_port, entries)
 
         return SUCCESS_STATUS
 
