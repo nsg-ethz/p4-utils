@@ -82,6 +82,7 @@ class P4CLI(CLI):
             return self.failed_status()
 
         switch_name = args[0]
+
         if switch_name not in self.mn:
             error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds path]\n')
             return self.failed_status()
@@ -174,8 +175,8 @@ class P4CLI(CLI):
             switch_name = sw.name
             self.do_p4switch_stop(line=switch_name)
 
-            line = switch_name + " " +line
-            self.do_p4switch_start(line=line)
+            tmp_line = switch_name + " " +line
+            self.do_p4switch_start(line=tmp_line)
 
     def do_p4switch_reboot(self, line=""):
         """Reboot a P4 switch with a new program."""
