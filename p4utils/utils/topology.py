@@ -489,7 +489,6 @@ class Topology(TopologyDB):
         """
 
         networks = []
-        import ipdb; ipdb.set_trace()
         hosts = self.get_hosts_connected_to(switch)
         for host in hosts:
             sub_nets = [self.subnet(host, neighbor) for neighbor in self[host]['interfaces_to_node'].values()]
