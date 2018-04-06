@@ -46,7 +46,10 @@ class AppTopo(Topo):
             # Each host IP should be /24, so all exercise traffic will use the
             # default gateway (the switch) without sending ARP requests.
             # When hosts connected to the same switch its a problem
-            self.addHost(host_name, ip=host_ip + '/24', mac=host_mac)
+            if host_name == 'h2':
+                self.addHost(host_name, ip=host_ip + '/24', mac=host_mac, isHiddenNode=True)
+            else:
+                self.addHost(host_name, ip=host_ip + '/24', mac=host_mac)
             self.addLink(host_name, host_sw,
                          delay=link['latency'], bw=link['bandwidth'],
                          addr1=host_mac, addr2=host_mac, weight=link["weight"])
@@ -94,6 +97,18 @@ class AppTopo(Topo):
         if not opts and self.sopts:
             opts = self.sopts
         return self.addNode(name, isSwitch=True, isP4Switch=True, **opts)
+
+    def isHiddenNode(self, node):
+        """Check if node is a Hidden Node
+
+        Params:
+            node: Mininet node
+
+        Returns:
+            True if its a hidden node
+        """
+        return self.g.node[node].get('isHiddenNode', False)
+
 
     def isP4Switch(self, node):
         """Check if node is a P4 switch.

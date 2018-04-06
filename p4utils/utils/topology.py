@@ -140,6 +140,7 @@ class TopologyDB(object):
 
     def parse_net(self, net):
         """Stores the content of the given network in the TopologyDB object."""
+
         for host in net.hosts:
             self.add_host(host)
         for controller in net.controllers:
@@ -162,10 +163,10 @@ class TopologyDB(object):
             node: mininet.node.Node object
             props: properties (dictionary)
         """
-        # does not add nodes that have inTopology set to false
-        if 'inTopology' in node.params:
-            if not node.params['inTopology']:
-                return
+        # if isHiddenNode=True the node will not be considered in the topology
+        #TODO: The other side of the connection still considers the removed node. What should we do???
+        if node.params.get('isHiddenNode', False):
+            return
 
         interfaces_to_nodes = {}
         interfaces_to_port = {}
@@ -474,7 +475,6 @@ class Topology(TopologyDB):
         Returns: list of hosts
 
         """
-
         nodes = self.get_neighbors(node)
         return [host for host in nodes if self.get_node_type(host) == 'host']
 
@@ -489,11 +489,11 @@ class Topology(TopologyDB):
         """
 
         networks = []
+        import ipdb; ipdb.set_trace()
         hosts = self.get_hosts_connected_to(switch)
         for host in hosts:
             sub_nets = [self.subnet(host, neighbor) for neighbor in self[host]['interfaces_to_node'].values()]
             networks += sub_nets
-
         return set(networks)
 
 
