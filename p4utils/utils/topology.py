@@ -163,8 +163,7 @@ class TopologyDB(object):
             node: mininet.node.Node object
             props: properties (dictionary)
         """
-        # if isHiddenNode=True the node will not be considered in the topology
-        #TODO: The other side of the connection still considers the removed node. What should we do???
+        # if the node attribute isHiddenNode=True, the node is not added to the topology
         if node.params.get('isHiddenNode', False):
             return
 
@@ -179,11 +178,9 @@ class TopologyDB(object):
             if not nh:
                 continue  # Skip loopback and the likes
 
-            # do not create connection
-            # TODO: check who adds inTopology -> can this be removed?
-            if 'inTopology' in nh.node.params:
-                if not nh.node.params['inTopology']:
-                    continue
+            # do not create connection to hidden node in topology
+            if nh.node.params.get('isHiddenNode', False):
+                continue
 
             props[nh.node.name] = {
                 'ip': '%s/%s' % (itf.ip, itf.prefixLen),
