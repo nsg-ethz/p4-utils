@@ -151,7 +151,7 @@ class P4CLI(CLI):
 
         if commands_path:
             if not os.path.exists(commands_path):
-                error('File Error: commands does not exist %s\n' % commands_path)
+                error('File Error: commands file %s does not exist\n' % commands_path)
                 return self.failed_status()
             entries = read_entries(commands_path)
             add_entries(p4switch.thrift_port, entries)

@@ -276,13 +276,16 @@ class AppRunner(object):
             sw_obj = self.net.get(sw_name)
             thrift_port = sw_obj.thrift_port
 
+            cli_outfile = '%s/%s_cli_output.log' % (self.log_dir, sw_name) if self.log_enabled else None
+
             cli_input_commands = sw_dict['cli_input']
             self.logger('Configuring switch %s with file %s' % (sw_name, cli_input_commands))
 
-            cli_outfile = '%s/%s_cli_output.log' % (self.log_dir, sw_name) if self.log_enabled else None
-
-            entries = read_entries(cli_input_commands)
-            add_entries(thrift_port, entries, cli_outfile, cli)
+            if os.path.exists(cli_input_commands):
+                entries = read_entries(cli_input_commands)
+                add_entries(thrift_port, entries, cli_outfile, cli)
+            else:
+                self.logger('Could not find file %s for switch %s' % (cli_input_commands, sw_name))
 
     def program_hosts(self):
         """Adds static ARP entries and default routes to each mininet host.
