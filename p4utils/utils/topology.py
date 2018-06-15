@@ -163,7 +163,7 @@ class TopologyDB(object):
             node: mininet.node.Node object
             props: properties (dictionary)
         """
-        # if the node attribute isHiddenNode=True, the node is not added to the topology
+
         if node.params.get('isHiddenNode', False):
             return
 
