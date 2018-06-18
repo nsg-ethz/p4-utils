@@ -220,6 +220,8 @@ class AppRunner(object):
         self.save_topology()
         sleep(1)
 
+        self.exec_scripts()
+
         # Start up the mininet CLI
         if self.cli_enabled or (self.conf.get('cli', False)):
             self.do_net_cli()
@@ -260,6 +262,13 @@ class AppRunner(object):
                              host=P4Host,
                              switch=switchClass,
                              controller=None)
+
+    def exec_scripts(self):
+
+        if isinstance(self.conf.get('exec_scripts', None), list):
+            for script in self.conf.get('exec_scripts'):
+                self.logger("Exec Script: {}".format(script["cmd"]))
+                run_command(script["cmd"])
 
     def program_switches(self):
         """If any command files were provided for the switches, this method will start up the
@@ -477,6 +486,9 @@ def main():
 
     #clean
     cleanup()
+
+    #remove cli logs
+    sh('find -type f -regex ".*cli_output.*" | xargs rm')
 
     if args.clean or args.only_clean:
         sh("rm -rf %s" % args.pcap_dir)

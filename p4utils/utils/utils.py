@@ -218,6 +218,7 @@ def compile_all_p4(config):
     raise Exception('No topology or switches in configuration file.')
 
 def open_cli_process(thrift_port, cli=DEFAULT_CLI):
+
     return subprocess.Popen([cli, '--thrift-port', str(thrift_port)],
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 

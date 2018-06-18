@@ -178,6 +178,13 @@ class P4CLI(CLI):
             tmp_line = switch_name + " " +line
             self.do_p4switch_start(line=tmp_line)
 
+        #run scripts
+        if isinstance(self.config.get('exec_scripts', None), list):
+            for script in self.config.get('exec_scripts'):
+                if script["reboot_run"]:
+                    info("Exec Script: {}/n".format(script["cmd"]))
+                    run_command(script["cmd"])
+
     def do_p4switch_reboot(self, line=""):
         """Reboot a P4 switch with a new program."""
         self.config = load_conf(self.conf_file)
