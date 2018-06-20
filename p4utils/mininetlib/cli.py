@@ -182,7 +182,7 @@ class P4CLI(CLI):
         if isinstance(self.config.get('exec_scripts', None), list):
             for script in self.config.get('exec_scripts'):
                 if script["reboot_run"]:
-                    info("Exec Script: {}/n".format(script["cmd"]))
+                    info("Exec Script: {}\n".format(script["cmd"]))
                     run_command(script["cmd"])
 
     def do_p4switch_reboot(self, line=""):
