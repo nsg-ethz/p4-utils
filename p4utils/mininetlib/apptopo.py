@@ -49,15 +49,15 @@ class AppTopo(Topo):
             self.addHost(host_name, ip=host_ip + '/24', mac=host_mac)
 
             self.addLink(host_name, host_sw,
-                         delay=link['latency'], bw=link['bandwidth'],
-                         addr1=host_mac, addr2=host_mac, weight=link["weight"])
+                         delay=link['delay'], bw=link['bw'],
+                         addr1=host_mac, addr2=host_mac, weight=link["weight"], max_queue_length=link["queue_length"])
             self.addSwitchPort(host_sw, host_name)
 
             self.hosts_info[host_name] = {"sw" : host_sw, "ip" : host_ip, "mac": host_mac, "mask" : 24}
 
         for link in switch_links:
             self.addLink(link['node1'], link['node2'],
-                         delay=link['latency'], bw=link['bandwidth'], weight=link["weight"])
+                         delay=link['delay'], bw=link['bw'], weight=link["weight"], max_queue_length=link["queue_length"])
             self.addSwitchPort(link['node1'], link['node2'])
             self.addSwitchPort(link['node2'], link['node1'])
 

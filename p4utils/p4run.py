@@ -178,21 +178,16 @@ class AppRunner(object):
 
             link_dict = {'node1': node_a,
                          'node2': node_b,
-                         'latency': '0ms',
-                         'bandwidth': None,
+                         'delay': '0ms',
+                         'bw': None,
+                         'queue_length': 1000,
                          'weight': 1
                          }
             # parse extra parameters, check if they are not an empty element for
             # example when wanting to set weight but not latency
+
             if len(link) > 2:
-                if link[2]:
-                    link_dict['latency'] = self.formatLatency(link[2])
-            if len(link) > 3:
-                if link[3]:
-                    link_dict['bandwidth'] = link[3]
-            if len(link) > 4:
-                if link[4]:
-                    link_dict["weight"] = link[4]
+                link_dict.update(link[2])
 
             # Hosts are not allowed to connect to another host.
             if link_dict['node1'][0] == 'h':
