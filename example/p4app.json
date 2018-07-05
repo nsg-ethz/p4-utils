@@ -24,7 +24,7 @@
     "object_name": "P4Mininet"
   },
   "topology": {
-    "links": [["h1", "s1"], ["s1", "s2"], ["s1", "s3"], ["s2", "s4"], ["s3", "s4"], ["s4", "h2"], ["s4", "h3"]],
+    "links": [["h1", "s1", {"delay":"20ms", "bw": 50, "queue_length": 100, "weight":5}], ["s1", "s2"], ["s1", "s3"], ["s2", "s4"], ["s3", "s4"], ["s4", "h2"], ["s4", "h3"]],
     "hosts": {
       "h1": {
       },
