@@ -271,3 +271,16 @@ def read_tables(thrift_port=9090, cli=DEFAULT_CLI):
 
     stdout, stderr = p.communicate(input="show_tables")
     return stdout
+
+
+
+
+
+
+
+
+
+
+
+
+
