@@ -250,7 +250,6 @@ class AppRunner(object):
                                         log_console=self.log_enabled,
                                         pcap_dump=self.pcap_dump, pcap_dir= self.pcap_dir)
 
-
         # start P4 Mininet
         self.net = self.app_mininet(topo=self.topo,
                              link=TCLink,

@@ -29,11 +29,13 @@ class AppTopo(Topo):
 
         #TODO: add jsons for each switch
         sw_id = 1
-        for sw, json_file in sorted(switches.items(), key=lambda x:int(re.findall(r'\d+', x[0])[-1])):
+
+        for sw, sw_attributes in sorted(switches.items(), key=lambda x:int(re.findall(r'\d+', x[0])[-1])):
+            json_file = sw_attributes["json"]
             upper_bytex = (sw_id & 0xff00) >> 8
             lower_bytex = (sw_id & 0x00ff)
             sw_ip = "10.%d.%d.254" % (upper_bytex, lower_bytex)
-            self.addP4Switch(sw, log_file="%s/%s.log" % (log_dir, sw), json_path = json_file, sw_ip = sw_ip)
+            self.addP4Switch(sw, log_file="%s/%s.log" % (log_dir, sw), json_path = json_file, sw_ip = sw_ip, **sw_attributes)
             sw_id +=1
 
         for link in host_links:

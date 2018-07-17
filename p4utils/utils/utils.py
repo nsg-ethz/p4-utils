@@ -196,7 +196,6 @@ def compile_all_p4(config):
         if switches:
             # make a set with all the P4 programs to compile
             for switch_name, sw_attributes in switches.iteritems():
-
                 #merge defaults with switch attributes
                 switch_conf = default_config.copy()
                 switch_conf.update(sw_attributes)
@@ -206,10 +205,12 @@ def compile_all_p4(config):
                 if program_name:
                     json_name = p4programs_already_compiled.get(program_name, None)
                     if json_name:
-                        switch_to_json[switch_name] = json_name
+                        sw_attributes.update({"json":json_name})
+                        switch_to_json[switch_name] = sw_attributes
                     else:
                         json_name = compile_p4_to_bmv2(switch_conf)
-                        switch_to_json[switch_name] = json_name
+                        sw_attributes.update({"json": json_name})
+                        switch_to_json[switch_name] = sw_attributes
                         p4programs_already_compiled[program_name] = json_name
                 else:
                     raise Exception('Did not find a P4 program for switch %s' % switch_name)
