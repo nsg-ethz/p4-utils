@@ -194,3 +194,8 @@ class P4CLI(CLI):
             switch_name = line.split()[0]
             self.do_p4switch_stop(line=switch_name)
             self.do_p4switch_start(line=line)
+
+    def do_pingset(self ,line=""):
+        hosts_names = line.strip().split()
+        hosts = [x for x in self.mn.hosts if x.name in hosts_names]
+        self.mn.ping(hosts=hosts, timeout=1)
