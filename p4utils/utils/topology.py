@@ -23,6 +23,7 @@ class TopologyDB(object):
         self._network = {}
 
         if net:
+            self.topo = net.topo
             self.parse_net(net)
 
         elif db:
@@ -484,7 +485,6 @@ class Topology(TopologyDB):
         Returns: set of networks
 
         """
-
         networks = []
         hosts = self.get_hosts_connected_to(switch)
         for host in hosts:

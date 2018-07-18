@@ -48,7 +48,9 @@ class AppTopo(Topo):
             # Each host IP should be /24, so all exercise traffic will use the
             # default gateway (the switch) without sending ARP requests.
             # When hosts connected to the same switch its a problem
-            self.addHost(host_name, ip=host_ip + '/24', mac=host_mac)
+            #import ipdb; ipdb.set_trace()
+            ops = hosts[host_name]
+            self.addHost(host_name, ip=host_ip + '/24', mac=host_mac, **ops)
 
             self.addLink(host_name, host_sw,
                          delay=link['delay'], bw=link['bw'],
