@@ -9,9 +9,9 @@ remove_mx() {
     BINDIR=/usr/bin
     MANDIR=/usr/share/man/man1
 
-    rm -f $(BINDIR)/"mxexec"
-    rm -f $(BINDIR)/"mx"
-    rm -rf $(MANDIR)/"mxexec.1"
+    rm -f ${BINDIR}/"mxexec"
+    rm -f ${BINDIR}/"mx"
+    rm -rf ${MANDIR}/"mxexec.1"
 
 }
 
