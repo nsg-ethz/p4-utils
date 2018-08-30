@@ -20,3 +20,6 @@ ls
 log*/
 
 *.egg-info/
+
+*mxexec.1
+*mxexec
