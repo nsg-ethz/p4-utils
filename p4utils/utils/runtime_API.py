@@ -756,7 +756,6 @@ class RuntimeAPI(object):
         self.mc_client = mc_client
         self.pre_type = pre_type
 
-
     def shell(self, line):
         "Run a shell command"
         output = os.popen(line).read()
@@ -778,100 +777,34 @@ class RuntimeAPI(object):
                 "Wrong number of args, expected %d but got %d" % (n, len(args))
             )
 
-    def _complete_res(self, array, text):
-        res = sorted(array.keys())
-        if not text:
-            return res
-        return [r for r in res if r.startswith(text)]
-
     @handle_bad_input
-    def show_tables(self, line):
+    def show_tables(self):
         "List tables defined in the P4 program: show_tables"
-        self.exactly_n_args(line.split(), 0)
         for table_name in sorted(TABLES):
             print TABLES[table_name].table_str()
 
     @handle_bad_input
-    def show_actions(self, line):
+    def show_actions(self):
         "List actions defined in the P4 program: show_actions"
-        self.exactly_n_args(line.split(), 0)
         for action_name in sorted(ACTIONS):
             print ACTIONS[action_name].action_str()
 
-    def _complete_tables(self, text):
-        return self._complete_res(TABLES, text)
-
-    def _complete_act_profs(self, text):
-        return self._complete_res(ACTION_PROFS, text)
-
     @handle_bad_input
-    def table_show_actions(self, line):
+    def table_show_actions(self, table_name):
         "List one table's actions as per the P4 program: table_show_actions <table_name>"
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        table_name = args[0]
+
         table = self.get_res("table", table_name, ResType.table)
         for action_name in sorted(table.actions):
             print ACTIONS[action_name].action_str()
 
-    def complete_table_show_actions(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
-
     @handle_bad_input
-    def table_info(self, line):
+    def table_info(self, table_name):
         "Show info about a table: table_info <table_name>"
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        table_name = args[0]
         table = self.get_res("table", table_name, ResType.table)
         print table.table_str()
         print "*" * 80
         for action_name in sorted(table.actions):
             print ACTIONS[action_name].action_str()
-
-    def complete_table_info(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
-
-    # used for tables but also for action profiles
-    def _complete_actions(self, text, table_name = None, res = TABLES):
-        if not table_name:
-            actions = sorted(ACTIONS.keys())
-        elif table_name not in res:
-            return []
-        actions = sorted(res[table_name].actions.keys())
-        if not text:
-            return actions
-        return [a for a in actions if a.startswith(text)]
-
-    def _complete_table_and_action(self, text, line):
-        tables = sorted(TABLES.keys())
-        args = line.split()
-        args_cnt = len(args)
-        if args_cnt == 1 and not text:
-            return self._complete_tables(text)
-        if args_cnt == 2 and text:
-            return self._complete_tables(text)
-        table_name = args[1]
-        if args_cnt == 2 and not text:
-            return self._complete_actions(text, table_name)
-        if args_cnt == 3 and text:
-            return self._complete_actions(text, table_name)
-        return []
-
-    def _complete_act_prof_and_action(self, text, line):
-        act_profs = sorted(ACTION_PROFS.keys())
-        args = line.split()
-        args_cnt = len(args)
-        if args_cnt == 1 and not text:
-            return self._complete_act_profs(text)
-        if args_cnt == 2 and text:
-            return self._complete_act_profs(text)
-        act_prof_name = args[1]
-        if args_cnt == 2 and not text:
-            return self._complete_actions(text, act_prof_name, ACTION_PROFS)
-        if args_cnt == 3 and text:
-            return self._complete_actions(text, act_prof_name, ACTION_PROFS)
-        return []
 
     # for debugging
     def print_set_default(self, table_name, action_name, runtime_data):
@@ -908,9 +841,6 @@ class RuntimeAPI(object):
 
         self.client.bm_mt_set_default_action(0, table.name, action.name, runtime_data)
 
-    def complete_table_set_default(self, text, line, start_index, end_index):
-        return self._complete_table_and_action(text, line)
-
     @handle_bad_input
     def table_reset_default(self, line):
         "Reset default entry for a match table: table_reset_default <table name>"
@@ -923,9 +853,6 @@ class RuntimeAPI(object):
         table = self.get_res("table", table_name, ResType.table)
 
         self.client.bm_mt_reset_default_entry(0, table.name)
-
-    def complete_table_reset_default(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     def parse_runtime_data(self, action, action_params):
         if len(action_params) != action.num_params():
@@ -959,9 +886,6 @@ class RuntimeAPI(object):
 
         print self.client.bm_mt_get_num_entries(0, table.name)
 
-    def complete_table_num_entries(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
-
     @handle_bad_input
     def table_clear(self, line):
         "Clear all entries in a match table (direct or indirect), but not the default entry: table_clear <table name>"
@@ -973,9 +897,6 @@ class RuntimeAPI(object):
         table = self.get_res("table", table_name, ResType.table)
 
         self.client.bm_mt_clear_entries(0, table.name, False)
-
-    def complete_table_clear(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     @handle_bad_input
     def table_add(self, line):
@@ -1028,9 +949,6 @@ class RuntimeAPI(object):
 
         print "Entry has been added with handle", entry_handle
 
-    def complete_table_add(self, text, line, start_index, end_index):
-        return self._complete_table_and_action(text, line)
-
     @handle_bad_input
     def table_set_timeout(self, line):
         "Set a timeout in ms for a given entry; the table has to support timeouts: table_set_timeout <table_name> <entry handle> <timeout (ms)>"
@@ -1056,9 +974,6 @@ class RuntimeAPI(object):
         print "Setting a", timeout_ms, "ms timeout for entry", entry_handle
 
         self.client.bm_mt_set_entry_ttl(0, table.name, entry_handle, timeout_ms)
-
-    def complete_table_set_timeout(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     @handle_bad_input
     def table_modify(self, line):
@@ -1092,9 +1007,6 @@ class RuntimeAPI(object):
             0, table.name, entry_handle, action.name, runtime_data
         )
 
-    def complete_table_modify(self, text, line, start_index, end_index):
-        return self._complete_table_and_action(text, line)
-
     @handle_bad_input
     def table_delete(self, line):
         "Delete entry from a match table: table_delete <table name> <entry handle>"
@@ -1113,9 +1025,6 @@ class RuntimeAPI(object):
         print "Deleting entry", entry_handle, "from", table_name
 
         self.client.bm_mt_delete_entry(0, table.name, entry_handle)
-
-    def complete_table_delete(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     def check_indirect(self, table):
         if table.type_ not in {TableType.indirect, TableType.indirect_ws}:
@@ -1156,12 +1065,6 @@ class RuntimeAPI(object):
 
         print "Member has been created with handle", mbr_handle
 
-    def complete_act_prof_create_member(self, text, line, start_index, end_index):
-        return self._complete_act_prof_and_action(text, line)
-
-    def complete_table_indirect_create_member(self, text, line, start_index, end_index):
-        return self._complete_table_and_action(text, line)
-
     @handle_bad_input
     def act_prof_delete_member(self, line):
         "Delete a member in an action profile: act_prof_delete_member <action profile name> <member handle>"
@@ -1179,13 +1082,6 @@ class RuntimeAPI(object):
             raise UIn_Error("Bad format for member handle")
 
         self.client.bm_mt_act_prof_delete_member(0, act_prof.name, mbr_handle)
-
-    def complete_act_prof_delete_member(self, text, line, start_index, end_index):
-        return self._complete_act_profs(text)
-
-
-    def complete_table_indirect_delete_member(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     @handle_bad_input
     def act_prof_modify_member(self, line):
@@ -1217,12 +1113,6 @@ class RuntimeAPI(object):
         mbr_handle = self.client.bm_mt_act_prof_modify_member(
             0, act_prof.name, mbr_handle, action.name, runtime_data)
 
-    def complete_act_prof_modify_member(self, text, line, start_index, end_index):
-        return self._complete_act_prof_and_action(text, line)
-
-
-    def complete_table_indirect_modify_member(self, text, line, start_index, end_index):
-        return self._complete_table_and_action(text, line)
 
     def indirect_add_common(self, line, ws=False):
         args = line.split()
@@ -1278,9 +1168,6 @@ class RuntimeAPI(object):
 
         print "Entry has been added with handle", entry_handle
 
-    def complete_table_indirect_add(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
-
     @handle_bad_input
     def table_indirect_add_with_group(self, line):
         "Add entry to an indirect match table: table_indirect_add <table name> <match fields> => <group handle> [priority]"
@@ -1292,9 +1179,6 @@ class RuntimeAPI(object):
         )
 
         print "Entry has been added with handle", entry_handle
-
-    def complete_table_indirect_add_with_group(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     @handle_bad_input
     def table_indirect_delete(self, line):
@@ -1315,9 +1199,6 @@ class RuntimeAPI(object):
         print "Deleting entry", entry_handle, "from", table_name
 
         self.client.bm_mt_indirect_delete_entry(0, table.name, entry_handle)
-
-    def complete_table_indirect_delete(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     def indirect_set_default_common(self, line, ws=False):
         args = line.split()
@@ -1347,8 +1228,6 @@ class RuntimeAPI(object):
 
         self.client.bm_mt_indirect_set_default_member(0, table_name, handle)
 
-    def complete_table_indirect_set_default(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     @handle_bad_input
     def table_indirect_set_default_with_group(self, line):
@@ -1357,9 +1236,6 @@ class RuntimeAPI(object):
         table_name, handle = self.indirect_set_default_common(line, ws=True)
 
         self.client.bm_mt_indirect_ws_set_default_group(0, table_name, handle)
-
-    def complete_table_indirect_set_default_with_group(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     @handle_bad_input
     def table_indirect_reset_default(self, line):
@@ -1373,9 +1249,6 @@ class RuntimeAPI(object):
         table = self.get_res("table", table_name, ResType.table)
 
         self.client.bm_mt_indirect_reset_default_entry(0, table.name)
-
-    def complete_table_indirect_reset_default(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     @handle_bad_input
     def act_prof_create_group(self, line):
@@ -1394,11 +1267,6 @@ class RuntimeAPI(object):
 
         print "Group has been created with handle", grp_handle
 
-    def complete_act_prof_create_group(self, text, line, start_index, end_index):
-        return self._complete_act_profs(text)
-
-    def complete_table_indirect_create_group(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     @handle_bad_input
     def act_prof_delete_group(self, line):
@@ -1419,13 +1287,6 @@ class RuntimeAPI(object):
             raise UIn_Error("Bad format for group handle")
 
         self.client.bm_mt_act_prof_delete_group(0, act_prof.name, grp_handle)
-
-    def complete_act_prof_delete_group(self, text, line, start_index, end_index):
-        return self._complete_act_profs(text)
-
-
-    def complete_table_indirect_delete_group(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     @handle_bad_input
     def act_prof_add_member_to_group(self, line):
@@ -1453,12 +1314,6 @@ class RuntimeAPI(object):
         self.client.bm_mt_act_prof_add_member_to_group(
             0, act_prof.name, mbr_handle, grp_handle)
 
-    def complete_act_prof_add_member_to_group(self, text, line, start_index, end_index):
-        return self._complete_act_profs(text)
-
-    def complete_table_indirect_add_member_to_group(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
-
     @handle_bad_input
     def act_prof_remove_member_from_group(self, line):
         "Remove member from group in action profile: act_prof_remove_member_from_group <action profile name> <member handle> <group handle>"
@@ -1484,13 +1339,6 @@ class RuntimeAPI(object):
 
         self.client.bm_mt_act_prof_remove_member_from_group(
             0, act_prof.name, mbr_handle, grp_handle)
-
-    def complete_act_prof_remove_member_from_group(self, text, line, start_index, end_index):
-        return self._complete_act_profs(text)
-
-    def complete_table_indirect_remove_member_from_group(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
-
 
     def check_has_pre(self):
         if self.pre_type == PreType.None:
@@ -1744,9 +1592,6 @@ class RuntimeAPI(object):
                 raise UIn_Error("Error while parsing rates")
         self.client.bm_meter_array_set_rates(0, meter.name, new_rates)
 
-    def complete_meter_array_set_rates(self, text, line, start_index, end_index):
-        return self._complete_meters(text)
-
     @handle_bad_input
     def meter_set_rates(self, line):
         "Configure rates for a meter: meter_set_rates <name> <index> <rate_1>:<burst_1> <rate_2>:<burst_2> ..."
@@ -1779,9 +1624,6 @@ class RuntimeAPI(object):
         else:
             self.client.bm_meter_set_rates(0, meter.name, index, new_rates)
 
-    def complete_meter_set_rates(self, text, line, start_index, end_index):
-        return self._complete_meters(text)
-
     @handle_bad_input
     def meter_get_rates(self, line):
         "Retrieve rates for a meter: meter_get_rates <name> <index>"
@@ -1806,12 +1648,6 @@ class RuntimeAPI(object):
             print "{}: info rate = {}, burst size = {}".format(
                 idx, rate.units_per_micros, rate.burst_size)
 
-    def complete_meter_get_rates(self, text, line, start_index, end_index):
-        return self._complete_meters(text)
-
-    def _complete_meters(self, text):
-        return self._complete_res(METER_ARRAYS, text)
-
     @handle_bad_input
     def counter_read(self, line):
         "Read counter value: counter_read <name> <index>"
@@ -1833,8 +1669,6 @@ class RuntimeAPI(object):
             value = self.client.bm_counter_read(0, counter.name, index)
         print "%s[%d]= " % (counter_name, index), value
 
-    def complete_counter_read(self, text, line, start_index, end_index):
-        return self._complete_counters(text)
 
     @handle_bad_input
     def counter_reset(self, line):
@@ -1850,11 +1684,6 @@ class RuntimeAPI(object):
         else:
             value = self.client.bm_counter_reset_all(0, counter.name)
 
-    def complete_counter_reset(self, text, line, start_index, end_index):
-        return self._complete_counters(text)
-
-    def _complete_counters(self, text):
-        return self._complete_res(COUNTER_ARRAYS, text)
 
     @handle_bad_input
     def register_read(self, line):
@@ -1879,9 +1708,6 @@ class RuntimeAPI(object):
             print "{}=".format(register_name), ", ".join(
                 [str(e) for e in entries])
 
-    def complete_register_read(self, text, line, start_index, end_index):
-        return self._complete_registers(text)
-
     @handle_bad_input
     def register_write(self, line):
         "Write register value: register_write <name> <index> <value>"
@@ -1902,9 +1728,6 @@ class RuntimeAPI(object):
             raise UIn_Error("Bad format for value, must be an integer")
         self.client.bm_register_write(0, register.name, index, value)
 
-    def complete_register_write(self, text, line, start_index, end_index):
-        return self._complete_registers(text)
-
     @handle_bad_input
     def register_reset(self, line):
         "Reset all the cells in the register array to 0: register_reset <name>"
@@ -1914,12 +1737,6 @@ class RuntimeAPI(object):
         register = self.get_res("register", register_name,
                                 ResType.register_array)
         self.client.bm_register_reset(0, register.name)
-
-    def complete_register_reset(self, text, line, start_index, end_index):
-        return self._complete_registers(text)
-
-    def _complete_registers(self, text):
-        return self._complete_res(REGISTER_ARRAYS, text)
 
     def dump_action_and_data(self, action_name, action_data):
         def hexstr(v):
@@ -2011,9 +1828,6 @@ class RuntimeAPI(object):
         entry = self.client.bm_mt_get_entry(0, table.name, entry_handle)
         self.dump_one_entry(table, entry)
 
-    def complete_table_dump_entry(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
-
     @handle_bad_input
     def act_prof_dump_member(self, line):
         "Display some information about a member: act_prof_dump_member <action profile name> <member handle>"
@@ -2033,13 +1847,6 @@ class RuntimeAPI(object):
             0, act_prof.name, mbr_handle)
         self.dump_one_member(member)
 
-    def complete_act_prof_dump_member(self, text, line, start_index, end_index):
-        return self._complete_act_profs(text)
-
-
-    def complete_table_dump_member(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
-
     @handle_bad_input
     def act_prof_dump_group(self, line):
         "Display some information about a group: table_dump_group <action profile name> <group handle>"
@@ -2058,12 +1865,6 @@ class RuntimeAPI(object):
         group = self.client.bm_mt_act_prof_get_group(
             0, act_prof.name, grp_handle)
         self.dump_one_group(group)
-
-    def complete_act_prof_dump_group(self, text, line, start_index, end_index):
-        return self._complete_act_profs(text)
-
-    def complete_table_dump_group(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     def _dump_act_prof(self, act_prof):
         act_prof_name = act_prof.name
@@ -2086,9 +1887,6 @@ class RuntimeAPI(object):
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
         self._dump_act_prof(act_prof)
-
-    def complete_act_prof_dump(self, text, line, start_index, end_index):
-        return self._complete_act_profs(text)
 
     @handle_bad_input
     def table_dump(self, line):
@@ -2119,9 +1917,6 @@ class RuntimeAPI(object):
 
         print "=========="
 
-    def complete_table_dump(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
-
     @handle_bad_input
     def table_dump_entry_from_key(self, line):
         "Display some information about a table entry: table_dump_entry_from_key <table name> <match fields> [priority]"
@@ -2151,9 +1946,6 @@ class RuntimeAPI(object):
         entry = self.client.bm_mt_get_entry_from_key(
             0, table.name, match_key, BmAddEntryOptions(priority = priority))
         self.dump_one_entry(table, entry)
-
-    def complete_table_dump_entry_from_key(self, text, line, start_index, end_index):
-        return self._complete_tables(text)
 
     @handle_bad_input
     def port_add(self, line):
@@ -2247,29 +2039,15 @@ class RuntimeAPI(object):
         crc_config = config_type(*config_args)
         thrift_fn(0, name, crc_config)
 
-    def _complete_crc(self, text, crc_width=16):
-        crcs = sorted(
-            [c for c, w in CUSTOM_CRC_CALCS.items() if w == crc_width])
-        if not text:
-            return crcs
-        return [c for c in crcs if c.startswith(text)]
-
     @handle_bad_input
     def set_crc16_parameters(self, line):
         "Change the parameters for a custom crc16 hash: set_crc16_parameters <name> <polynomial> <initial remainder> <final xor value> <reflect data?> <reflect remainder?>"
         self.set_crc_parameters_common(line, 16)
 
-    def complete_set_crc16_parameters(self, text, line, start_index, end_index):
-        return self._complete_crc(text, 16)
-
     @handle_bad_input
     def set_crc32_parameters(self, line):
         "Change the parameters for a custom crc32 hash: set_crc32_parameters <name> <polynomial> <initial remainder> <final xor value> <reflect data?> <reflect remainder?>"
         self.set_crc_parameters_common(line, 32)
-
-    def complete_set_crc32_parameters(self, text, line, start_index, end_index):
-        return self._complete_crc(text, 32)
-
 
     #Global Variable Getters
 
