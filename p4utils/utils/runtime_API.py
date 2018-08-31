@@ -708,6 +708,8 @@ def parse_bool(s):
         pass
     raise UIn_Error("Invalid bool parameter")
 
+
+
 class RuntimeAPI(object):
 
     @staticmethod
@@ -739,6 +741,38 @@ class RuntimeAPI(object):
         self.client = standard_client
         self.mc_client = mc_client
         self.pre_type = pre_type
+
+    @staticmethod
+    def get_tables():
+        return TABLES
+
+    @staticmethod
+    def get_action_profs():
+        return ACTION_PROFS
+
+    @staticmethod
+    def get_actions():
+        return ACTIONS
+
+    @staticmethod
+    def get_meter_arrays():
+        return METER_ARRAYS
+
+    @staticmethod
+    def get_counter_arrays():
+        return COUNTER_ARRAYS
+
+    @staticmethod
+    def get_register_arrays():
+        return REGISTER_ARRAYS
+
+    @staticmethod
+    def get_custom_crc_calcs():
+        return CUSTOM_CRC_CALCS
+
+    @staticmethod
+    def get_suffix_lookup_map():
+        return SUFFIX_LOOKUP_MAP
 
     def shell(self, line):
         "Run a shell command"
