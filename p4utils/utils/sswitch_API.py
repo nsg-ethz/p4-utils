@@ -20,25 +20,24 @@
 #
 #
 
-import runtime_CLI
+import p4utils.utils.runtime_API as runtime_API
 from sswitch_runtime import SimpleSwitch
 
-class SimpleSwitchAPI(runtime_CLI.RuntimeAPI):
+class SimpleSwitchAPI(runtime_API.RuntimeAPI):
     @staticmethod
     def get_thrift_services():
         return [("simple_switch", SimpleSwitch.Client)]
 
     def __init__(self, thrift_port, thrift_ip = 'localhost', json_path=None):
 
-        pre_type = runtime_CLI.PreType.SimplePreLAG
+        pre_type = runtime_API.PreType.SimplePreLAG
 
-        runtime_CLI.RuntimeAPI.__init__(self, thrift_port,
-                                        thrift_ip, pre_type)
+        runtime_API.RuntimeAPI.__init__(self, thrift_port,
+                                        thrift_ip, pre_type, json_path)
 
-        self.sswitch_client = sswitch_client = runtime_CLI.thrift_connect(
+        self.sswitch_client = runtime_API.thrift_connect(
             thrift_ip, thrift_port, SimpleSwitchAPI.get_thrift_services()
         )
-        self.sswitch_client = sswitch_client
 
     def set_queue_depth(self, line):
         "Set depth of one / all egress queue(s): set_queue_depth <nb_pkts> [<egress_port>]"

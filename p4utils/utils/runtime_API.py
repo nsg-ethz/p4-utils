@@ -726,7 +726,8 @@ class RuntimeAPI(object):
 
     def __init__(self, thrift_port, thrift_ip, pre_type, json_path=None):
 
-        pre_type = PreType.from_str(pre_type)
+        if isinstance(pre_type, str):
+            pre_type = PreType.from_str(pre_type)
 
         standard_client, mc_client = thrift_connect(
             thrift_ip, thrift_port,
