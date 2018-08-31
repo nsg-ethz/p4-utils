@@ -79,3 +79,6 @@ class SimpleSwitchAPI(runtime_API.RuntimeAPI):
         print self.sswitch_client.get_time_since_epoch_us()
 
 
+if __name__ == "__main__":
+
+    controller = SimpleSwitchAPI(9090)

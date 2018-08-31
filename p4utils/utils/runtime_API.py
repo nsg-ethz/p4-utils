@@ -222,7 +222,21 @@ def reset_config():
     SUFFIX_LOOKUP_MAP.clear()
 
 def load_json_config(standard_client=None, json_path=None):
-    load_json_str(utils.get_json_config(standard_client, json_path))
+    def read_conf():
+        if json_path:
+            if standard_client is not None:
+                utils.check_JSON_md5(standard_client, json_path)
+            with open(json_path, 'r') as f:
+                return f.read()
+        else:
+            assert(standard_client is not None)
+            try:
+                json_cfg = standard_client.bm_get_config()
+            except:
+                sys.exit(1)
+            return json_cfg
+
+    load_json_str(read_conf())
 
 def load_json_str(json_str):
     def get_header_type(header_name, j_headers):
@@ -742,37 +756,6 @@ class RuntimeAPI(object):
         self.mc_client = mc_client
         self.pre_type = pre_type
 
-    @staticmethod
-    def get_tables():
-        return TABLES
-
-    @staticmethod
-    def get_action_profs():
-        return ACTION_PROFS
-
-    @staticmethod
-    def get_actions():
-        return ACTIONS
-
-    @staticmethod
-    def get_meter_arrays():
-        return METER_ARRAYS
-
-    @staticmethod
-    def get_counter_arrays():
-        return COUNTER_ARRAYS
-
-    @staticmethod
-    def get_register_arrays():
-        return REGISTER_ARRAYS
-
-    @staticmethod
-    def get_custom_crc_calcs():
-        return CUSTOM_CRC_CALCS
-
-    @staticmethod
-    def get_suffix_lookup_map():
-        return SUFFIX_LOOKUP_MAP
 
     def shell(self, line):
         "Run a shell command"
@@ -2288,4 +2271,36 @@ class RuntimeAPI(object):
         return self._complete_crc(text, 32)
 
 
+    #Global Variable Getters
 
+    @staticmethod
+    def get_tables():
+        return TABLES
+
+    @staticmethod
+    def get_action_profs():
+        return ACTION_PROFS
+
+    @staticmethod
+    def get_actions():
+        return ACTIONS
+
+    @staticmethod
+    def get_meter_arrays():
+        return METER_ARRAYS
+
+    @staticmethod
+    def get_counter_arrays():
+        return COUNTER_ARRAYS
+
+    @staticmethod
+    def get_register_arrays():
+        return REGISTER_ARRAYS
+
+    @staticmethod
+    def get_custom_crc_calcs():
+        return CUSTOM_CRC_CALCS
+
+    @staticmethod
+    def get_suffix_lookup_map():
+        return SUFFIX_LOOKUP_MAP
