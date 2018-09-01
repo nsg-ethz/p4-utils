@@ -816,13 +816,8 @@ class RuntimeAPI(object):
         )
 
     @handle_bad_input
-    def table_set_default(self, line):
+    def table_set_default(self, table_name, action_name, action_params):
         "Set default action for a match table: table_set_default <table name> <action name> <action parameters>"
-        args = line.split()
-
-        self.at_least_n_args(args, 2)
-
-        table_name, action_name = args[0], args[1]
 
         table = self.get_res("table", table_name, ResType.table)
         action = table.get_action(action_name)
@@ -830,12 +825,8 @@ class RuntimeAPI(object):
             raise UIn_Error(
                 "Table %s has no action %s" % (table_name, action_name)
             )
-        if len(args[2:]) != action.num_params():
-            raise UIn_Error(
-                "Action %s needs %d parameters" % (action_name, action.num_params())
-            )
 
-        runtime_data = parse_runtime_data(action, args[2:])
+        runtime_data = self.parse_runtime_data(action, action_params)
 
         self.print_set_default(table_name, action_name, runtime_data)
 
