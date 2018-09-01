@@ -767,6 +767,7 @@ class RuntimeAPI(object):
             raise UIn_ResourceError(type_name, name)
         return SUFFIX_LOOKUP_MAP[key]
 
+    """
     def at_least_n_args(self, args, n):
         if len(args) < n:
             raise UIn_Error("Insufficient number of args")
@@ -776,6 +777,15 @@ class RuntimeAPI(object):
             raise UIn_Error(
                 "Wrong number of args, expected %d but got %d" % (n, len(args))
             )
+    """
+
+    def parse_runtime_data(self, action, action_params):
+        if len(action_params) != action.num_params():
+            raise UIn_Error(
+                "Action %s needs %d parameters" % (action.name, action.num_params())
+            )
+
+        return parse_runtime_data(action, action_params)
 
     @handle_bad_input
     def show_tables(self):
@@ -833,25 +843,11 @@ class RuntimeAPI(object):
         self.client.bm_mt_set_default_action(0, table.name, action.name, runtime_data)
 
     @handle_bad_input
-    def table_reset_default(self, line):
+    def table_reset_default(self, table_name):
         "Reset default entry for a match table: table_reset_default <table name>"
-        args = line.split()
-
-        self.exactly_n_args(args, 1)
-
-        table_name = args[0]
 
         table = self.get_res("table", table_name, ResType.table)
-
         self.client.bm_mt_reset_default_entry(0, table.name)
-
-    def parse_runtime_data(self, action, action_params):
-        if len(action_params) != action.num_params():
-            raise UIn_Error(
-                "Action %s needs %d parameters" % (action.name, action.num_params())
-            )
-
-        return parse_runtime_data(action, action_params)
 
     # for debugging
     def print_table_add(self, match_key, action_name, runtime_data):
@@ -866,37 +862,23 @@ class RuntimeAPI(object):
         )
 
     @handle_bad_input
-    def table_num_entries(self, line):
+    def table_num_entries(self, table_name):
         "Return the number of entries in a match table (direct or indirect): table_num_entries <table name>"
-        args = line.split()
 
-        self.exactly_n_args(args, 1)
-
-        table_name = args[0]
         table = self.get_res("table", table_name, ResType.table)
-
         print self.client.bm_mt_get_num_entries(0, table.name)
 
     @handle_bad_input
-    def table_clear(self, line):
+    def table_clear(self, table_name):
         "Clear all entries in a match table (direct or indirect), but not the default entry: table_clear <table name>"
-        args = line.split()
 
-        self.exactly_n_args(args, 1)
-
-        table_name = args[0]
         table = self.get_res("table", table_name, ResType.table)
-
         self.client.bm_mt_clear_entries(0, table.name, False)
 
     @handle_bad_input
-    def table_add(self, line):
+    def table_add(self, table_name, action_name, match_keys, action_params=[], prio=0):
         "Add entry to a match table: table_add <table name> <action name> <match fields> => <action parameters> [priority]"
-        args = line.split()
 
-        self.at_least_n_args(args, 3)
-
-        table_name, action_name = args[0], args[1]
         table = self.get_res("table", table_name, ResType.table)
         action = table.get_action(action_name)
         if action is None:
@@ -906,7 +888,7 @@ class RuntimeAPI(object):
 
         if table.match_type in {MatchType.TERNARY, MatchType.RANGE}:
             try:
-                priority = int(args.pop(-1))
+                priority = int(prio)
             except:
                 raise UIn_Error(
                     "Table is ternary, but could not extract a valid priority from args"
@@ -914,27 +896,21 @@ class RuntimeAPI(object):
         else:
             priority = 0
 
-        for idx, input_ in enumerate(args[2:]):
-            if input_ == "=>": break
-        idx += 2
-        match_key = args[2:idx]
-        action_params = args[idx+1:]
-        if len(match_key) != table.num_key_fields():
+        if len(match_keys) != table.num_key_fields():
             raise UIn_Error(
                 "Table %s needs %d key fields" % (table_name, table.num_key_fields())
             )
 
         runtime_data = self.parse_runtime_data(action, action_params)
-
-        match_key = parse_match_key(table, match_key)
+        match_keys = parse_match_key(table, match_keys)
 
         print "Adding entry to", MatchType.to_str(table.match_type), "match table", table_name
 
         # disable, maybe a verbose CLI option?
-        self.print_table_add(match_key, action_name, runtime_data)
+        self.print_table_add(match_keys, action_name, runtime_data)
 
         entry_handle = self.client.bm_mt_add_entry(
-            0, table.name, match_key, action.name, runtime_data,
+            0, table.name, match_keys, action.name, runtime_data,
             BmAddEntryOptions(priority = priority)
         )
 
