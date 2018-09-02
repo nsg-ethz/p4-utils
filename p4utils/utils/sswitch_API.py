@@ -39,42 +39,39 @@ class SimpleSwitchAPI(runtime_API.RuntimeAPI):
             thrift_ip, thrift_port, SimpleSwitchAPI.get_thrift_services()
         )
 
-    def set_queue_depth(self, line):
+    def set_queue_depth(self, queue_depth, egress_port=None):
         "Set depth of one / all egress queue(s): set_queue_depth <nb_pkts> [<egress_port>]"
-        args = line.split()
-        depth = int(args[0])
-        if len(args) > 1:
-            port = int(args[1])
-            self.sswitch_client.set_egress_queue_depth(port, depth)
+
+        depth = queue_depth
+        if egress_port:
+            self.sswitch_client.set_egress_queue_depth(egress_port, depth)
         else:
             self.sswitch_client.set_all_egress_queue_depths(depth)
 
-    def set_queue_rate(self, line):
+    def set_queue_rate(self, rate, egress_port=None):
         "Set rate of one / all egress queue(s): set_queue_rate <rate_pps> [<egress_port>]"
-        args = line.split()
-        rate = int(args[0])
-        if len(args) > 1:
-            port = int(args[1])
-            self.sswitch_client.set_egress_queue_rate(port, rate)
+
+        rate = int(rate)
+        if egress_port:
+            self.sswitch_client.set_egress_queue_rate(egress_port, rate)
         else:
             self.sswitch_client.set_all_egress_queue_rates(rate)
 
-    def mirroring_add(self, line):
+    def mirroring_add(self, mirror_id, egress_port):
         "Add mirroring mapping: mirroring_add <mirror_id> <egress_port>"
-        args = line.split()
-        mirror_id, egress_port = int(args[0]), int(args[1])
+        mirror_id, egress_port = int(mirror_id), int(egress_port)
         self.sswitch_client.mirroring_mapping_add(mirror_id, egress_port)
 
-    def mirroring_delete(self, line):
+    def mirroring_delete(self, mirror_id):
         "Delete mirroring mapping: mirroring_delete <mirror_id>"
-        mirror_id = int(line)
+        mirror_id = int(mirror_id)
         self.sswitch_client.mirroring_mapping_delete(mirror_id)
 
-    def get_time_elapsed(self, line):
+    def get_time_elapsed(self):
         "Get time elapsed (in microseconds) since the switch started: get_time_elapsed"
         print self.sswitch_client.get_time_elapsed_us()
 
-    def get_time_since_epoch(self, line):
+    def get_time_since_epoch(self):
         "Get time elapsed (in microseconds) since the switch clock's epoch: get_time_since_epoch"
         print self.sswitch_client.get_time_since_epoch_us()
 
