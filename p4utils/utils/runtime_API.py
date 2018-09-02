@@ -876,7 +876,7 @@ class RuntimeAPI(object):
         self.client.bm_mt_clear_entries(0, table.name, False)
 
     @handle_bad_input
-    def table_add(self, table_name, action_name, match_keys, action_params=[], prio=0):
+    def table_add(self, table_name, action_name, match_keys, action_params=[], prio=None):
         "Add entry to a match table: table_add <table name> <action name> <match fields> => <action parameters> [priority]"
 
         table = self.get_res("table", table_name, ResType.table)
@@ -915,26 +915,25 @@ class RuntimeAPI(object):
         )
 
         print "Entry has been added with handle", entry_handle
+        return entry_handle
+
 
     @handle_bad_input
-    def table_set_timeout(self, line):
+    def table_set_timeout(self, table_name, entry_handle, timeout_ms):
         "Set a timeout in ms for a given entry; the table has to support timeouts: table_set_timeout <table_name> <entry handle> <timeout (ms)>"
-        args = line.split()
-        self.exactly_n_args(args, 3)
 
-        table_name = args[0]
         table = self.get_res("table", table_name, ResType.table)
         if not table.support_timeout:
             raise UIn_Error(
                 "Table {} does not support entry timeouts".format(table_name))
 
         try:
-            entry_handle = int(args[1])
+            entry_handle = int(entry_handle)
         except:
             raise UIn_Error("Bad format for entry handle")
 
         try:
-            timeout_ms = int(args[2])
+            timeout_ms = int(timeout_ms)
         except:
             raise UIn_Error("Bad format for timeout")
 
@@ -943,13 +942,9 @@ class RuntimeAPI(object):
         self.client.bm_mt_set_entry_ttl(0, table.name, entry_handle, timeout_ms)
 
     @handle_bad_input
-    def table_modify(self, line):
+    def table_modify(self, table_name, action_name, entry_handle, action_parameters):
         "Add entry to a match table: table_modify <table name> <action name> <entry handle> [action parameters]"
-        args = line.split()
 
-        self.at_least_n_args(args, 3)
-
-        table_name, action_name = args[0], args[1]
         table = self.get_res("table", table_name, ResType.table)
         action = table.get_action(action_name)
         if action is None:
@@ -958,39 +953,31 @@ class RuntimeAPI(object):
             )
 
         try:
-            entry_handle = int(args[2])
+            entry_handle = int(entry_handle)
         except:
             raise UIn_Error("Bad format for entry handle")
 
-        action_params = args[3:]
-        if args[3] == "=>":
-            # be more tolerant
-            action_params = args[4:]
+        action_params = action_parameters
         runtime_data = self.parse_runtime_data(action, action_params)
 
         print "Modifying entry", entry_handle, "for", MatchType.to_str(table.match_type), "match table", table_name
 
-        entry_handle = self.client.bm_mt_modify_entry(
+        #does not return anything
+        self.client.bm_mt_modify_entry(
             0, table.name, entry_handle, action.name, runtime_data
         )
 
     @handle_bad_input
-    def table_delete(self, line):
+    def table_delete(self, table_name, entry_handle):
         "Delete entry from a match table: table_delete <table name> <entry handle>"
-        args = line.split()
 
-        self.exactly_n_args(args, 2)
-
-        table_name = args[0]
         table = self.get_res("table", table_name, ResType.table)
-
         try:
-            entry_handle = int(args[1])
+            entry_handle = int(entry_handle)
         except:
             raise UIn_Error("Bad format for entry handle")
 
         print "Deleting entry", entry_handle, "from", table_name
-
         self.client.bm_mt_delete_entry(0, table.name, entry_handle)
 
     def check_indirect(self, table):
@@ -1009,13 +996,9 @@ class RuntimeAPI(object):
                 "Cannot run this command on an action profile without selector")
 
     @handle_bad_input
-    def act_prof_create_member(self, line):
+    def act_prof_create_member(self, act_prof_name, action_name, action_params):
         "Add a member to an action profile: act_prof_create_member <action profile name> <action_name> [action parameters]"
-        args = line.split()
 
-        self.at_least_n_args(args, 2)
-
-        act_prof_name, action_name = args[0], args[1]
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
 
@@ -1024,40 +1007,32 @@ class RuntimeAPI(object):
             raise UIn_Error("Action profile '{}' has no action '{}'".format(
                 act_prof_name, action_name))
 
-        action_params = args[2:]
-        runtime_data = self.parse_runtime_data(action, action_params)
 
+        runtime_data = self.parse_runtime_data(action, action_params)
         mbr_handle = self.client.bm_mt_act_prof_add_member(
             0, act_prof.name, action.name, runtime_data)
-
         print "Member has been created with handle", mbr_handle
 
+        return mbr_handle
+
     @handle_bad_input
-    def act_prof_delete_member(self, line):
+    def act_prof_delete_member(self, act_prof_name, mbr_handle):
         "Delete a member in an action profile: act_prof_delete_member <action profile name> <member handle>"
-        args = line.split()
 
-        self.exactly_n_args(args, 2)
 
-        act_prof_name, action_name = args[0], args[1]
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
-
         try:
-            mbr_handle = int(args[1])
+            mbr_handle = int(mbr_handle)
         except:
             raise UIn_Error("Bad format for member handle")
 
         self.client.bm_mt_act_prof_delete_member(0, act_prof.name, mbr_handle)
 
     @handle_bad_input
-    def act_prof_modify_member(self, line):
+    def act_prof_modify_member(self, act_prof_name, action_name, mbr_handle, action_params):
         "Modify member in an action profile: act_prof_modify_member <action profile name> <action_name> <member_handle> [action parameters]"
-        args = line.split()
 
-        self.at_least_n_args(args, 3)
-
-        act_prof_name, action_name = args[0], args[1]
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
 
@@ -1067,155 +1042,150 @@ class RuntimeAPI(object):
                 act_prof_name, action_name))
 
         try:
-            mbr_handle = int(args[2])
+            mbr_handle = int(mbr_handle)
         except:
             raise UIn_Error("Bad format for member handle")
 
-        action_params = args[3:]
-        if args[3] == "=>":
-            # be more tolerant
-            action_params = args[4:]
         runtime_data = self.parse_runtime_data(action, action_params)
-
-        mbr_handle = self.client.bm_mt_act_prof_modify_member(
+        self.client.bm_mt_act_prof_modify_member(
             0, act_prof.name, mbr_handle, action.name, runtime_data)
 
-
-    def indirect_add_common(self, line, ws=False):
-        args = line.split()
-
-        self.at_least_n_args(args, 2)
-
-        table_name = args[0]
-        table = self.get_res("table", table_name, ResType.table)
-
-        if ws:
-            self.check_indirect_ws(table)
-        else:
-            self.check_indirect(table)
-
-        if table.match_type in {MatchType.TERNARY, MatchType.RANGE}:
-            try:
-                priority = int(args.pop(-1))
-            except:
-                raise UIn_Error(
-                    "Table is ternary, but could not extract a valid priority from args"
-                )
-        else:
-            priority = 0
-
-        for idx, input_ in enumerate(args[1:]):
-            if input_ == "=>": break
-        idx += 1
-        match_key = args[1:idx]
-        if len(args) != (idx + 2):
-            raise UIn_Error("Invalid arguments, could not find handle")
-        handle = args[idx+1]
-
-        try:
-            handle = int(handle)
-        except:
-            raise UIn_Error("Bad format for handle")
-
-        match_key = parse_match_key(table, match_key)
-
-        print "Adding entry to indirect match table", table.name
-
-        return table.name, match_key, handle, BmAddEntryOptions(priority = priority)
-
-    @handle_bad_input
-    def table_indirect_add(self, line):
-        "Add entry to an indirect match table: table_indirect_add <table name> <match fields> => <member handle> [priority]"
-
-        table_name, match_key, handle, options = self.indirect_add_common(line)
-
-        entry_handle = self.client.bm_mt_indirect_add_entry(
-            0, table_name, match_key, handle, options
-        )
-
-        print "Entry has been added with handle", entry_handle
-
-    @handle_bad_input
-    def table_indirect_add_with_group(self, line):
-        "Add entry to an indirect match table: table_indirect_add <table name> <match fields> => <group handle> [priority]"
-
-        table_name, match_key, handle, options = self.indirect_add_common(line, ws=True)
-
-        entry_handle = self.client.bm_mt_indirect_ws_add_entry(
-            0, table_name, match_key, handle, options
-        )
-
-        print "Entry has been added with handle", entry_handle
-
-    @handle_bad_input
-    def table_indirect_delete(self, line):
-        "Delete entry from an indirect match table: table_indirect_delete <table name> <entry handle>"
-        args = line.split()
-
-        self.exactly_n_args(args, 2)
-
-        table_name = args[0]
-        table = self.get_res("table", table_name, ResType.table)
-        self.check_indirect(table)
-
-        try:
-            entry_handle = int(args[1])
-        except:
-            raise UIn_Error("Bad format for entry handle")
-
-        print "Deleting entry", entry_handle, "from", table_name
-
-        self.client.bm_mt_indirect_delete_entry(0, table.name, entry_handle)
-
-    def indirect_set_default_common(self, line, ws=False):
-        args = line.split()
-
-        self.exactly_n_args(args, 2)
-
-        table_name = args[0]
-        table = self.get_res("table", table_name, ResType.table)
-
-        if ws:
-            self.check_indirect_ws(table)
-        else:
-            self.check_indirect(table)
-
-        try:
-            handle = int(args[1])
-        except:
-            raise UIn_Error("Bad format for handle")
-
-        return table.name, handle
-
-    @handle_bad_input
-    def table_indirect_set_default(self, line):
-        "Set default member for indirect match table: table_indirect_set_default <table name> <member handle>"
-
-        table_name, handle = self.indirect_set_default_common(line)
-
-        self.client.bm_mt_indirect_set_default_member(0, table_name, handle)
-
-
-    @handle_bad_input
-    def table_indirect_set_default_with_group(self, line):
-        "Set default group for indirect match table: table_indirect_set_default <table name> <group handle>"
-
-        table_name, handle = self.indirect_set_default_common(line, ws=True)
-
-        self.client.bm_mt_indirect_ws_set_default_group(0, table_name, handle)
-
-    @handle_bad_input
-    def table_indirect_reset_default(self, line):
-        "Reset default entry for indirect match table: table_indirect_reset_default <table name>"
-        args = line.split()
-
-        self.exactly_n_args(args, 1)
-
-        table_name = args[0]
-
-        table = self.get_res("table", table_name, ResType.table)
-
-        self.client.bm_mt_indirect_reset_default_entry(0, table.name)
+    #NOT NEEDED WITH CURRENT SPEC
+    # def indirect_add_common(self, line, ws=False):
+    #     args = line.split()
+    #
+    #     self.at_least_n_args(args, 2)
+    #
+    #     table_name = args[0]
+    #     table = self.get_res("table", table_name, ResType.table)
+    #
+    #     if ws:
+    #         self.check_indirect_ws(table)
+    #     else:
+    #         self.check_indirect(table)
+    #
+    #     if table.match_type in {MatchType.TERNARY, MatchType.RANGE}:
+    #         try:
+    #             priority = int(args.pop(-1))
+    #         except:
+    #             raise UIn_Error(
+    #                 "Table is ternary, but could not extract a valid priority from args"
+    #             )
+    #     else:
+    #         priority = 0
+    #
+    #     for idx, input_ in enumerate(args[1:]):
+    #         if input_ == "=>": break
+    #     idx += 1
+    #     match_key = args[1:idx]
+    #     if len(args) != (idx + 2):
+    #         raise UIn_Error("Invalid arguments, could not find handle")
+    #     handle = args[idx+1]
+    #
+    #     try:
+    #         handle = int(handle)
+    #     except:
+    #         raise UIn_Error("Bad format for handle")
+    #
+    #     match_key = parse_match_key(table, match_key)
+    #
+    #     print "Adding entry to indirect match table", table.name
+    #
+    #     return table.name, match_key, handle, BmAddEntryOptions(priority = priority)
+    #
+    # @handle_bad_input
+    # def table_indirect_add(self, line):
+    #     "Add entry to an indirect match table: table_indirect_add <table name> <match fields> => <member handle> [priority]"
+    #
+    #     table_name, match_key, handle, options = self.indirect_add_common(line)
+    #
+    #     entry_handle = self.client.bm_mt_indirect_add_entry(
+    #         0, table_name, match_key, handle, options
+    #     )
+    #
+    #     print "Entry has been added with handle", entry_handle
+    #
+    # @handle_bad_input
+    # def table_indirect_add_with_group(self, line):
+    #     "Add entry to an indirect match table: table_indirect_add <table name> <match fields> => <group handle> [priority]"
+    #
+    #     table_name, match_key, handle, options = self.indirect_add_common(line, ws=True)
+    #
+    #     entry_handle = self.client.bm_mt_indirect_ws_add_entry(
+    #         0, table_name, match_key, handle, options
+    #     )
+    #
+    #     print "Entry has been added with handle", entry_handle
+    #
+    # @handle_bad_input
+    # def table_indirect_delete(self, line):
+    #     "Delete entry from an indirect match table: table_indirect_delete <table name> <entry handle>"
+    #     args = line.split()
+    #
+    #     self.exactly_n_args(args, 2)
+    #
+    #     table_name = args[0]
+    #     table = self.get_res("table", table_name, ResType.table)
+    #     self.check_indirect(table)
+    #
+    #     try:
+    #         entry_handle = int(args[1])
+    #     except:
+    #         raise UIn_Error("Bad format for entry handle")
+    #
+    #     print "Deleting entry", entry_handle, "from", table_name
+    #
+    #     self.client.bm_mt_indirect_delete_entry(0, table.name, entry_handle)
+    #
+    # def indirect_set_default_common(self, line, ws=False):
+    #     args = line.split()
+    #
+    #     self.exactly_n_args(args, 2)
+    #
+    #     table_name = args[0]
+    #     table = self.get_res("table", table_name, ResType.table)
+    #
+    #     if ws:
+    #         self.check_indirect_ws(table)
+    #     else:
+    #         self.check_indirect(table)
+    #
+    #     try:
+    #         handle = int(args[1])
+    #     except:
+    #         raise UIn_Error("Bad format for handle")
+    #
+    #     return table.name, handle
+    #
+    # @handle_bad_input
+    # def table_indirect_set_default(self, line):
+    #     "Set default member for indirect match table: table_indirect_set_default <table name> <member handle>"
+    #
+    #     table_name, handle = self.indirect_set_default_common(line)
+    #
+    #     self.client.bm_mt_indirect_set_default_member(0, table_name, handle)
+    #
+    #
+    # @handle_bad_input
+    # def table_indirect_set_default_with_group(self, line):
+    #     "Set default group for indirect match table: table_indirect_set_default <table name> <group handle>"
+    #
+    #     table_name, handle = self.indirect_set_default_common(line, ws=True)
+    #
+    #     self.client.bm_mt_indirect_ws_set_default_group(0, table_name, handle)
+    #
+    # @handle_bad_input
+    # def table_indirect_reset_default(self, line):
+    #     "Reset default entry for indirect match table: table_indirect_reset_default <table name>"
+    #     args = line.split()
+    #
+    #     self.exactly_n_args(args, 1)
+    #
+    #     table_name = args[0]
+    #
+    #     table = self.get_res("table", table_name, ResType.table)
+    #
+    #     self.client.bm_mt_indirect_reset_default_entry(0, table.name)
 
     @handle_bad_input
     def act_prof_create_group(self, line):
