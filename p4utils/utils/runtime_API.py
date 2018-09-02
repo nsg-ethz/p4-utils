@@ -1600,33 +1600,38 @@ class RuntimeAPI(object):
             entries = self.client.bm_register_read_all(0, register.name)
             print "{}=".format(register_name), ", ".join(
                 [str(e) for e in entries])
+            return entries
 
     @handle_bad_input
-    def register_write(self, line):
-        "Write register value: register_write <name> <index> <value>"
-        args = line.split()
-        self.exactly_n_args(args, 3)
-        register_name = args[0]
+    def register_write(self, register_name, index, value):
+        "Write register value: register_write <name> <index>|[start_index, end_index] <value>"
+
         register = self.get_res("register", register_name,
                                 ResType.register_array)
-        index = args[1]
+
+
         try:
-            index = int(index)
+            if isinstance(index, list):
+                index = map(int, index)
+            else:
+                index = int(index)
         except:
             raise UIn_Error("Bad format for index")
-        value = args[2]
+
         try:
             value = int(value)
         except:
             raise UIn_Error("Bad format for value, must be an integer")
-        self.client.bm_register_write(0, register.name, index, value)
+
+        if isinstance(index, list):
+            self.client.bm_register_write(0, register.name, index[0], index[1], value)
+        else:
+            self.client.bm_register_write(0, register.name, index, value)
 
     @handle_bad_input
-    def register_reset(self, line):
+    def register_reset(self, register_name):
         "Reset all the cells in the register array to 0: register_reset <name>"
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        register_name = args[0]
+
         register = self.get_res("register", register_name,
                                 ResType.register_array)
         self.client.bm_register_reset(0, register.name)
@@ -1705,16 +1710,13 @@ class RuntimeAPI(object):
                 entry.life.time_since_hit_ms, entry.life.timeout_ms)
 
     @handle_bad_input
-    def table_dump_entry(self, line):
+    def table_dump_entry(self, table_name, entry_handle):
         "Display some information about a table entry: table_dump_entry <table name> <entry handle>"
-        args = line.split()
-        self.exactly_n_args(args, 2)
-        table_name = args[0]
 
         table = self.get_res("table", table_name, ResType.table)
 
         try:
-            entry_handle = int(args[1])
+            entry_handle = int(entry_handle)
         except:
             raise UIn_Error("Bad format for entry handle")
 
@@ -1722,17 +1724,14 @@ class RuntimeAPI(object):
         self.dump_one_entry(table, entry)
 
     @handle_bad_input
-    def act_prof_dump_member(self, line):
+    def act_prof_dump_member(self, act_prof_name, mbr_handle):
         "Display some information about a member: act_prof_dump_member <action profile name> <member handle>"
-        args = line.split()
-        self.exactly_n_args(args, 2)
 
-        act_prof_name = args[0]
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
 
         try:
-            mbr_handle = int(args[1])
+            mbr_handle = int(mbr_handle)
         except:
             raise UIn_Error("Bad format for member handle")
 
@@ -1741,17 +1740,13 @@ class RuntimeAPI(object):
         self.dump_one_member(member)
 
     @handle_bad_input
-    def act_prof_dump_group(self, line):
+    def act_prof_dump_group(self, act_prof_name, grp_handle):
         "Display some information about a group: table_dump_group <action profile name> <group handle>"
-        args = line.split()
-        self.exactly_n_args(args, 2)
 
-        act_prof_name = args[0]
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
-
         try:
-            grp_handle = int(args[1])
+            grp_handle = int(grp_handle)
         except:
             raise UIn_Error("Bad format for group handle")
 
@@ -1772,21 +1767,17 @@ class RuntimeAPI(object):
             self.dump_groups(groups)
 
     @handle_bad_input
-    def act_prof_dump(self, line):
+    def act_prof_dump(self, act_prof_name):
         "Display entries in an action profile: act_prof_dump <action profile name>"
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        act_prof_name = args[0]
+
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
         self._dump_act_prof(act_prof)
 
     @handle_bad_input
-    def table_dump(self, line):
+    def table_dump(self, table_name):
         "Display entries in a match-table: table_dump <table name>"
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        table_name = args[0]
+
         table = self.get_res("table", table_name, ResType.table)
         entries = self.client.bm_mt_get_entries(0, table.name)
 
@@ -1811,17 +1802,14 @@ class RuntimeAPI(object):
         print "=========="
 
     @handle_bad_input
-    def table_dump_entry_from_key(self, line):
+    def table_dump_entry_from_key(self, table_name, match_keys, priority):
         "Display some information about a table entry: table_dump_entry_from_key <table name> <match fields> [priority]"
-        args = line.split()
-        self.at_least_n_args(args, 1)
-        table_name = args[0]
 
         table = self.get_res("table", table_name, ResType.table)
 
         if table.match_type in {MatchType.TERNARY, MatchType.RANGE}:
             try:
-                priority = int(args.pop(-1))
+                priority = int(priority)
             except:
                 raise UIn_Error(
                     "Table is ternary, but could not extract a valid priority from args"
@@ -1829,47 +1817,40 @@ class RuntimeAPI(object):
         else:
             priority = 0
 
-        match_key = args[1:]
-        if len(match_key) != table.num_key_fields():
+        if len(match_keys) != table.num_key_fields():
             raise UIn_Error(
                 "Table %s needs %d key fields" % (table_name, table.num_key_fields())
             )
-        match_key = parse_match_key(table, match_key)
+        match_key = parse_match_key(table, match_keys)
 
         entry = self.client.bm_mt_get_entry_from_key(
             0, table.name, match_key, BmAddEntryOptions(priority = priority))
         self.dump_one_entry(table, entry)
 
     @handle_bad_input
-    def port_add(self, line):
+    def port_add(self, iface_name, port_num, pcap_path=""):
         "Add a port to the switch (behavior depends on device manager used): port_add <iface_name> <port_num> [pcap_path]"
-        args = line.split()
-        self.at_least_n_args(args, 2)
-        iface_name = args[0]
+
         try:
-            port_num = int(args[1])
+            port_num = int(port_num)
         except:
             raise UIn_Error("Bad format for port_num, must be an integer")
-        pcap_path = ""
-        if len(args) > 2:
-            pcap_path = args[2]
+
         self.client.bm_dev_mgr_add_port(iface_name, port_num, pcap_path)
 
     @handle_bad_input
-    def port_remove(self, line):
+    def port_remove(self, port_num):
         "Removes a port from the switch (behavior depends on device manager used): port_remove <port_num>"
-        args = line.split()
-        self.exactly_n_args(args, 1)
+
         try:
-            port_num = int(args[0])
+            port_num = int(port_num)
         except:
             raise UIn_Error("Bad format for port_num, must be an integer")
         self.client.bm_dev_mgr_remove_port(port_num)
 
     @handle_bad_input
-    def show_ports(self, line):
+    def show_ports(self):
         "Shows the ports connected to the switch: show_ports"
-        self.exactly_n_args(line.split(), 0)
         ports = self.client.bm_dev_mgr_show_ports()
         print "{:^10}{:^20}{:^10}{}".format(
             "port #", "iface name", "status", "extra info")
@@ -1882,9 +1863,9 @@ class RuntimeAPI(object):
                 port_info.port_num, port_info.iface_name, status, extra_info)
 
     @handle_bad_input
-    def switch_info(self, line):
+    def switch_info(self):
         "Show some basic info about the switch: switch_info"
-        self.exactly_n_args(line.split(), 0)
+
         info = self.client.bm_mgmt_get_info()
         attributes = [t[2] for t in info.thrift_spec[1:]]
         out_attr_w = 5 + max(len(a) for a in attributes)
@@ -1892,55 +1873,48 @@ class RuntimeAPI(object):
             print "{:{w}}: {}".format(a, getattr(info, a), w=out_attr_w)
 
     @handle_bad_input
-    def reset_state(self, line):
+    def reset_state(self):
         "Reset all state in the switch (table entries, registers, ...), but P4 config is preserved: reset_state"
-        self.exactly_n_args(line.split(), 0)
         self.client.bm_reset_state()
 
     @handle_bad_input
-    def write_config_to_file(self, line):
+    def write_config_to_file(self, filename):
         "Retrieves the JSON config currently used by the switch and dumps it to user-specified file"
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        filename = args[0]
+
         json_cfg = self.client.bm_get_config()
         with open(filename, 'w') as f:
             f.write(json_cfg)
 
     @handle_bad_input
-    def serialize_state(self, line):
+    def serialize_state(self, filename):
         "Serialize the switch state and dumps it to user-specified file"
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        filename = args[0]
+
         state = self.client.bm_serialize_state()
         with open(filename, 'w') as f:
             f.write(state)
 
-    def set_crc_parameters_common(self, line, crc_width=16):
+    def set_crc_parameters_common(self, name, polynomial, initial_remainder, final_xor_value, reflect_data, reflect_remainder, crc_width=16):
         conversion_fn = {16: hex_to_i16, 32: hex_to_i32}[crc_width]
         config_type = {16: BmCrc16Config, 32: BmCrc32Config}[crc_width]
         thrift_fn = {16: self.client.bm_set_crc16_custom_parameters,
                      32: self.client.bm_set_crc32_custom_parameters}[crc_width]
-        args = line.split()
-        self.exactly_n_args(args, 6)
-        name = args[0]
+
         if name not in CUSTOM_CRC_CALCS or CUSTOM_CRC_CALCS[name] != crc_width:
             raise UIn_ResourceError("crc{}_custom".format(crc_width), name)
-        config_args = [conversion_fn(a) for a in args[1:4]]
-        config_args += [parse_bool(a) for a in args[4:6]]
+        config_args = [conversion_fn(a) for a in [polynomial, initial_remainder, final_xor_value]]
+        config_args += [parse_bool(a) for a in [reflect_data, reflect_remainder]]
         crc_config = config_type(*config_args)
         thrift_fn(0, name, crc_config)
 
     @handle_bad_input
-    def set_crc16_parameters(self, line):
+    def set_crc16_parameters(self, name, polynomial, initial_remainder, final_xor_value, reflect_data, reflect_remainder):
         "Change the parameters for a custom crc16 hash: set_crc16_parameters <name> <polynomial> <initial remainder> <final xor value> <reflect data?> <reflect remainder?>"
-        self.set_crc_parameters_common(line, 16)
+        self.set_crc_parameters_common(name, polynomial, initial_remainder, final_xor_value, reflect_data, reflect_remainder, 16)
 
     @handle_bad_input
-    def set_crc32_parameters(self, line):
+    def set_crc32_parameters(self, name, polynomial, initial_remainder, final_xor_value, reflect_data, reflect_remainder):
         "Change the parameters for a custom crc32 hash: set_crc32_parameters <name> <polynomial> <initial remainder> <final xor value> <reflect data?> <reflect remainder?>"
-        self.set_crc_parameters_common(line, 32)
+        self.set_crc_parameters_common(name, polynomial, initial_remainder, final_xor_value, reflect_data, reflect_remainder, 32)
 
     #Global Variable Getters
 
