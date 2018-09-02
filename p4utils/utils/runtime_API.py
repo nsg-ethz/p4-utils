@@ -1188,63 +1188,48 @@ class RuntimeAPI(object):
     #     self.client.bm_mt_indirect_reset_default_entry(0, table.name)
 
     @handle_bad_input
-    def act_prof_create_group(self, line):
+    def act_prof_create_group(self, act_prof_name):
         "Add a group to an action pofile: act_prof_create_group <action profile name>"
-        args = line.split()
 
-        self.exactly_n_args(args, 1)
-
-        act_prof_name = args[0]
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
 
         self.check_act_prof_ws(act_prof)
-
         grp_handle = self.client.bm_mt_act_prof_create_group(0, act_prof.name)
-
         print "Group has been created with handle", grp_handle
 
 
     @handle_bad_input
-    def act_prof_delete_group(self, line):
+    def act_prof_delete_group(self, act_prof_name, grp_handle):
         "Delete a group from an action profile: act_prof_delete_group <action profile name> <group handle>"
-        args = line.split()
 
-        self.exactly_n_args(args, 2)
-
-        act_prof_name = args[0]
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
-
         self.check_act_prof_ws(act_prof)
 
         try:
-            grp_handle = int(args[1])
+            grp_handle = int(grp_handle)
         except:
             raise UIn_Error("Bad format for group handle")
 
         self.client.bm_mt_act_prof_delete_group(0, act_prof.name, grp_handle)
 
     @handle_bad_input
-    def act_prof_add_member_to_group(self, line):
+    def act_prof_add_member_to_group(self, act_prof_name, mbr_handle, grp_handle):
         "Add member to group in an action profile: act_prof_add_member_to_group <action profile name> <member handle> <group handle>"
-        args = line.split()
 
-        self.exactly_n_args(args, 3)
-
-        act_prof_name = args[0]
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
 
         self.check_act_prof_ws(act_prof)
 
         try:
-            mbr_handle = int(args[1])
+            mbr_handle = int(mbr_handle)
         except:
             raise UIn_Error("Bad format for member handle")
 
         try:
-            grp_handle = int(args[2])
+            grp_handle = int(grp_handle)
         except:
             raise UIn_Error("Bad format for group handle")
 
@@ -1252,25 +1237,21 @@ class RuntimeAPI(object):
             0, act_prof.name, mbr_handle, grp_handle)
 
     @handle_bad_input
-    def act_prof_remove_member_from_group(self, line):
+    def act_prof_remove_member_from_group(self, act_prof_name, mbr_handle, grp_handle):
         "Remove member from group in action profile: act_prof_remove_member_from_group <action profile name> <member handle> <group handle>"
-        args = line.split()
 
-        self.exactly_n_args(args, 3)
-
-        act_prof_name = args[0]
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
 
         self.check_act_prof_ws(act_prof)
 
         try:
-            mbr_handle = int(args[1])
+            mbr_handle = int(mbr_handle)
         except:
             raise UIn_Error("Bad format for member handle")
 
         try:
-            grp_handle = int(args[2])
+            grp_handle = int(grp_handle)
         except:
             raise UIn_Error("Bad format for group handle")
 
@@ -1290,23 +1271,21 @@ class RuntimeAPI(object):
             raise UIn_Error("Bad format for multicast group id")
 
     @handle_bad_input_mc
-    def mc_mgrp_create(self, line):
+    def mc_mgrp_create(self, mgrp):
         "Create multicast group: mc_mgrp_create <group id>"
-        self.check_has_pre()
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        mgrp = self.get_mgrp(args[0])
+
+        mgrp = self.get_mgrp(mgrp)
         print "Creating multicast group", mgrp
         mgrp_hdl = self.mc_client.bm_mc_mgrp_create(0, mgrp)
         assert(mgrp == mgrp_hdl)
 
+        return mgrp_hdl
+
     @handle_bad_input_mc
-    def mc_mgrp_destroy(self, line):
+    def mc_mgrp_destroy(self, mgrp):
         "Destroy multicast group: mc_mgrp_destroy <group id>"
-        self.check_has_pre()
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        mgrp = self.get_mgrp(args[0])
+
+        mgrp = self.get_mgrp(mgrp)
         print "Destroying multicast group", mgrp
         self.mc_client.bm_mc_mgrp_destroy(0, mgrp)
 
@@ -1333,32 +1312,15 @@ class RuntimeAPI(object):
             last_port_num = port_num + 1
         return port_map_str[::-1]
 
-    def parse_ports_and_lags(self, args):
-        ports = []
-        i = 1
-        while (i < len(args) and args[i] != '|'):
-            ports.append(args[i])
-            i += 1
-        port_map_str = self.ports_to_port_map_str(ports)
-        if self.pre_type == PreType.SimplePreLAG:
-            i += 1
-            lags = [] if i == len(args) else args[i:]
-            lag_map_str = self.ports_to_port_map_str(lags, description="lag")
-        else:
-            lag_map_str = None
-        return port_map_str, lag_map_str
-
     @handle_bad_input_mc
-    def mc_node_create(self, line):
+    def mc_node_create(self, rid, ports, lags=[]):
         "Create multicast node: mc_node_create <rid> <space-separated port list> [ | <space-separated lag list> ]"
-        self.check_has_pre()
-        args = line.split()
-        self.at_least_n_args(args, 1)
         try:
-            rid = int(args[0])
+            rid = int(rid)
         except:
             raise UIn_Error("Bad format for rid")
-        port_map_str, lag_map_str = self.parse_ports_and_lags(args)
+        port_map_str = self.ports_to_port_map_str(ports)
+        lag_map_str = self.ports_to_port_map_str(lags, description="lag")
         if self.pre_type == PreType.SimplePre:
             print "Creating node with rid", rid, "and with port map", port_map_str
             l1_hdl = self.mc_client.bm_mc_node_create(0, rid, port_map_str)
@@ -1367,6 +1329,8 @@ class RuntimeAPI(object):
             l1_hdl = self.mc_client.bm_mc_node_create(0, rid, port_map_str, lag_map_str)
         print "node was created with handle", l1_hdl
 
+        return l1_hdl
+
     def get_node_handle(self, s):
         try:
             return int(s)
@@ -1374,13 +1338,12 @@ class RuntimeAPI(object):
             raise UIn_Error("Bad format for node handle")
 
     @handle_bad_input_mc
-    def mc_node_update(self, line):
+    def mc_node_update(self, l1_hdl, ports, lags=[]):
         "Update multicast node: mc_node_update <node handle> <space-separated port list> [ | <space-separated lag list> ]"
-        self.check_has_pre()
-        args = line.split()
-        self.at_least_n_args(args, 2)
-        l1_hdl = self.get_node_handle(args[0])
-        port_map_str, lag_map_str = self.parse_ports_and_lags(args)
+
+        l1_hdl = self.get_node_handle(l1_hdl)
+        port_map_str = self.ports_to_port_map_str(ports)
+        lag_map_str = self.ports_to_port_map_str(lags, description="lag")
         if self.pre_type == PreType.SimplePre:
             print "Updating node", l1_hdl, "with port map", port_map_str
             self.mc_client.bm_mc_node_update(0, l1_hdl, port_map_str)
@@ -1389,39 +1352,33 @@ class RuntimeAPI(object):
             self.mc_client.bm_mc_node_update(0, l1_hdl, port_map_str, lag_map_str)
 
     @handle_bad_input_mc
-    def mc_node_associate(self, line):
+    def mc_node_associate(self, mgrp, l1_hdl):
         "Associate node to multicast group: mc_node_associate <group handle> <node handle>"
-        self.check_has_pre()
-        args = line.split()
-        self.exactly_n_args(args, 2)
-        mgrp = self.get_mgrp(args[0])
-        l1_hdl = self.get_node_handle(args[1])
+
+        mgrp = self.get_mgrp(mgrp)
+        l1_hdl = self.get_node_handle(l1_hdl)
         print "Associating node", l1_hdl, "to multicast group", mgrp
         self.mc_client.bm_mc_node_associate(0, mgrp, l1_hdl)
 
     @handle_bad_input_mc
-    def mc_node_dissociate(self, line):
+    def mc_node_dissociate(self, mgrp, l1_hdl):
         "Dissociate node from multicast group: mc_node_associate <group handle> <node handle>"
-        self.check_has_pre()
-        args = line.split()
-        self.exactly_n_args(args, 2)
-        mgrp = self.get_mgrp(args[0])
-        l1_hdl = self.get_node_handle(args[1])
+
+        mgrp = self.get_mgrp(mgrp)
+        l1_hdl = self.get_node_handle(l1_hdl)
         print "Dissociating node", l1_hdl, "from multicast group", mgrp
         self.mc_client.bm_mc_node_dissociate(0, mgrp, l1_hdl)
 
     @handle_bad_input_mc
-    def mc_node_destroy(self, line):
+    def mc_node_destroy(self, l1_hdl):
         "Destroy multicast node: mc_node_destroy <node handle>"
-        self.check_has_pre()
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        l1_hdl = int(line.split()[0])
+
+        l1_hdl = self.get_node_handle(l1_hdl)
         print "Destroying node", l1_hdl
         self.mc_client.bm_mc_node_destroy(0, l1_hdl)
 
     @handle_bad_input_mc
-    def mc_set_lag_membership(self, line):
+    def mc_set_lag_membership(self, lag_index, ports):
         "Set lag membership of port list: mc_set_lag_membership <lag index> <space-separated port list>"
         self.check_has_pre()
         if self.pre_type != PreType.SimplePreLAG:
@@ -1429,18 +1386,17 @@ class RuntimeAPI(object):
                 "Cannot execute this command with this type of PRE,"\
                 " SimplePreLAG is required"
             )
-        args = line.split()
-        self.at_least_n_args(args, 2)
+
         try:
-            lag_index = int(args[0])
+            lag_index = int(lag_index)
         except:
             raise UIn_Error("Bad format for lag index")
-        port_map_str = self.ports_to_port_map_str(args[1:], description="lag")
+        port_map_str = self.ports_to_port_map_str(ports, description="lag")
         print "Setting lag membership:", lag_index, "<-", port_map_str
         self.mc_client.bm_mc_set_lag_membership(0, lag_index, port_map_str)
 
     @handle_bad_input_mc
-    def mc_dump(self, line):
+    def mc_dump(self):
         "Dump entries in multicast engine"
         self.check_has_pre()
         json_dump = self.mc_client.bm_mc_get_entries(0)
@@ -1482,11 +1438,9 @@ class RuntimeAPI(object):
         print "=========="
 
     @handle_bad_input
-    def load_new_config_file(self, line):
+    def load_new_config_file(self, filename):
         "Load new json config: load_new_config_file <path to .json file>"
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        filename = args[0]
+
         if not os.path.isfile(filename):
             raise UIn_Error("Not a valid filename")
         print "Loading new Json config"
@@ -1500,19 +1454,16 @@ class RuntimeAPI(object):
             load_json_str(json_str)
 
     @handle_bad_input
-    def swap_configs(self, line):
+    def swap_configs(self):
         "Swap the 2 existing configs, need to have called load_new_config_file before"
         print "Swapping configs"
         self.client.bm_swap_configs()
 
     @handle_bad_input
-    def meter_array_set_rates(self, line):
+    def meter_array_set_rates(self, meter_name, rates):
         "Configure rates for an entire meter array: meter_array_set_rates <name> <rate_1>:<burst_1> <rate_2>:<burst_2> ..."
-        args = line.split()
-        self.at_least_n_args(args, 1)
-        meter_name = args[0]
+
         meter = self.get_res("meter", meter_name, ResType.meter_array)
-        rates = args[1:]
         if len(rates) != meter.rate_count:
             raise UIn_Error(
                 "Invalid number of rates, expected %d but got %d"\
@@ -1530,17 +1481,14 @@ class RuntimeAPI(object):
         self.client.bm_meter_array_set_rates(0, meter.name, new_rates)
 
     @handle_bad_input
-    def meter_set_rates(self, line):
+    def meter_set_rates(self, meter_name, index, rates):
         "Configure rates for a meter: meter_set_rates <name> <index> <rate_1>:<burst_1> <rate_2>:<burst_2> ..."
-        args = line.split()
-        self.at_least_n_args(args, 2)
-        meter_name = args[0]
+
         meter = self.get_res("meter", meter_name, ResType.meter_array)
         try:
-            index = int(args[1])
+            index = int(index)
         except:
             raise UIn_Error("Bad format for index")
-        rates = args[2:]
         if len(rates) != meter.rate_count:
             raise UIn_Error(
                 "Invalid number of rates, expected %d but got %d"\
@@ -1562,14 +1510,12 @@ class RuntimeAPI(object):
             self.client.bm_meter_set_rates(0, meter.name, index, new_rates)
 
     @handle_bad_input
-    def meter_get_rates(self, line):
+    def meter_get_rates(self, meter_name, index):
         "Retrieve rates for a meter: meter_get_rates <name> <index>"
-        args = line.split()
-        self.exactly_n_args(args, 2)
-        meter_name = args[0]
+
         meter = self.get_res("meter", meter_name, ResType.meter_array)
         try:
-            index = int(args[1])
+            index = int(index)
         except:
             raise UIn_Error("Bad format for index")
         # meter.rate_count
@@ -1586,13 +1532,10 @@ class RuntimeAPI(object):
                 idx, rate.units_per_micros, rate.burst_size)
 
     @handle_bad_input
-    def counter_read(self, line):
+    def counter_read(self, counter_name, index):
         "Read counter value: counter_read <name> <index>"
-        args = line.split()
-        self.exactly_n_args(args, 2)
-        counter_name = args[0]
+
         counter = self.get_res("counter", counter_name, ResType.counter_array)
-        index = args[1]
         try:
             index = int(index)
         except:
@@ -1604,41 +1547,54 @@ class RuntimeAPI(object):
             value = self.client.bm_mt_read_counter(0, table_name, index)
         else:
             value = self.client.bm_counter_read(0, counter.name, index)
+
         print "%s[%d]= " % (counter_name, index), value
+        return value
 
 
     @handle_bad_input
-    def counter_reset(self, line):
+    def counter_reset(self, counter_name):
         "Reset counter: counter_reset <name>"
-        args = line.split()
-        self.exactly_n_args(args, 1)
-        counter_name = args[0]
+
         counter = self.get_res("counter", counter_name, ResType.counter_array)
         if counter.is_direct:
             table_name = counter.binding
             print "this is the direct counter for table", table_name
-            value = self.client.bm_mt_reset_counters(0, table_name)
+            self.client.bm_mt_reset_counters(0, table_name)
         else:
-            value = self.client.bm_counter_reset_all(0, counter.name)
-
+            self.client.bm_counter_reset_all(0, counter.name)
 
     @handle_bad_input
-    def register_read(self, line):
+    def counter_write(self, counter_name, index, value):
+        "Write a value to a counter index: counter_read <name> <index> <value>"
+
+        counter = self.get_res("counter", counter_name, ResType.counter_array)
+        try:
+            index = int(index)
+        except:
+            raise UIn_Error("Bad format for index")
+        if counter.is_direct:
+            table_name = counter.binding
+            print "this is the direct counter for table", table_name
+            # index = index & 0xffffffff
+            self.client.bm_mt_write_counter(0, table_name, index, value)
+        else:
+            self.client.bm_counter_read(0, counter.name, index, value)
+
+    @handle_bad_input
+    def register_read(self, register_name, index=None):
         "Read register value: register_read <name> [index]"
-        args = line.split()
-        self.at_least_n_args(args, 1)
-        register_name = args[0]
+
         register = self.get_res("register", register_name,
                                 ResType.register_array)
-        if len(args) > 1:
-            self.exactly_n_args(args, 2)
-            index = args[1]
+        if index:
             try:
                 index = int(index)
             except:
                 raise UIn_Error("Bad format for index")
             value = self.client.bm_register_read(0, register.name, index)
             print "{}[{}]=".format(register_name, index), value
+            return value
         else:
             sys.stderr.write("register index omitted, reading entire array\n")
             entries = self.client.bm_register_read_all(0, register.name)
