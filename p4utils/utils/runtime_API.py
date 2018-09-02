@@ -359,8 +359,10 @@ def load_json_str(json_str):
                 key = (res_type, suffix)
                 SUFFIX_LOOKUP_MAP[key] = res
                 suffix_count[key] += 1
+    #checks if a table is repeated, in that case it removes the only suffix entries
     for key, c in suffix_count.items():
         if c > 1:
+            print key
             del SUFFIX_LOOKUP_MAP[key]
 
 class UIn_Error(Exception):
@@ -756,6 +758,17 @@ class RuntimeAPI(object):
         self.mc_client = mc_client
         self.pre_type = pre_type
 
+        self.talbe_entries_match_to_handle = self.create_match_to_handle_dict()
+
+    def create_match_to_handle_dict(self):
+
+        d = {}
+        for res_type, table_name in self.get_suffix_lookup_map().items():
+            if res_type == ResType.table:
+                d[table_name] = {}
+
+        return d
+
     def shell(self, line):
         "Run a shell command"
         output = os.popen(line).read()
@@ -914,6 +927,8 @@ class RuntimeAPI(object):
             BmAddEntryOptions(priority = priority)
         )
 
+        #save handle
+
         print "Entry has been added with handle", entry_handle
         return entry_handle
 
@@ -942,7 +957,7 @@ class RuntimeAPI(object):
         self.client.bm_mt_set_entry_ttl(0, table.name, entry_handle, timeout_ms)
 
     @handle_bad_input
-    def table_modify(self, table_name, action_name, entry_handle, action_parameters):
+    def table_modify(self, table_name, action_name, entry_handle, action_parameters = []):
         "Add entry to a match table: table_modify <table name> <action name> <entry handle> [action parameters]"
 
         table = self.get_res("table", table_name, ResType.table)

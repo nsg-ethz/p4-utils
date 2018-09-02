@@ -77,5 +77,4 @@ class SimpleSwitchAPI(runtime_API.RuntimeAPI):
 
 
 if __name__ == "__main__":
-    from runtime_API import *
     controller = SimpleSwitchAPI(9090)
