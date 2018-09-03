@@ -203,6 +203,7 @@ class AppRunner(object):
         This is the main method to run after initializing the object.
         """
         # Initialize mininet with the topology specified by the configuration
+
         self.create_network()
         self.net.start()
         sleep(1)
@@ -220,10 +221,6 @@ class AppRunner(object):
         # Start up the mininet CLI
         if self.cli_enabled or (self.conf.get('cli', False)):
             self.do_net_cli()
-
-        # Run command on hosts (if specified)
-        # TODO: HAVE A LOOK
-        #self.run_cmd_hosts()
 
         # Stop right after the CLI is exited
         self.net.stop()
@@ -375,78 +372,6 @@ class AppRunner(object):
 
         # Start CLI
         P4CLI(self.net, conf_file=self.conf_file)
-
-    def run_cmd_hosts(self):
-        """Runs commands on the hosts, if specified."""
-        stdout_files = dict()
-        return_codes = []
-        host_procs = []
-
-        def format_cmd(cmd):
-            for host in self.net.hosts:
-                cmd = cmd.replace(host.name, host.defaultIntf().updateIP())
-            return cmd
-
-        def _wait_for_exit(process, host_name):
-            print process.communicate()
-            if process.returncode is None:
-                process.wait()
-                print process.communicate()
-            return_codes.append(process.returncode)
-            if host_name in stdout_files:
-                stdout_files[host_name].flush()
-                stdout_files[host_name].close()
-
-        # print '\n'.join(map(lambda (k, v): "%s: %s"%(k, v), params.iteritems())) + '\n'
-
-        for host_name in sorted(self.conf['hosts'].keys()):
-            host_conf = self.conf['hosts'][host_name]
-
-            if 'cmd' not in host_conf: continue
-
-            h = self.net.get(host_name)
-            stdout_filename = os.path.join(self.log_dir, h.name + '.stdout')
-            stdout_files[h.name] = open(stdout_filename, 'w')
-            cmd = format_cmd(host_conf['cmd'])
-            print h.name, cmd
-            p = h.popen(cmd, stdout=stdout_files[h.name], shell=True, preexec_fn=os.setpgrp)
-
-            if 'startup_sleep' in host_conf: sleep(host_conf['startup_sleep'])
-
-            if 'wait' in host_conf and host_conf['wait']:
-                _wait_for_exit(p, host_name)
-            else:
-                host_procs.append((p, host_name))
-
-        for p, host_name in host_procs:
-            if 'wait' in self.conf['hosts'][host_name] and self.conf['hosts'][host_name]['wait']:
-                _wait_for_exit(p, host_name)
-
-        for p, host_name in host_procs:
-            if 'wait' in self.conf['hosts'][host_name] and self.conf['hosts'][host_name]['wait']:
-                continue
-            if p.returncode is None:
-                run_command('pkill -INT -P %d' % p.pid)
-                sleep(0.2)
-                rc = run_command('pkill -0 -P %d' % p.pid)  # check if process is still running
-                if rc == 0:  # the process group is still running, send TERM
-                    sleep(1)  # give it a little more time to exit gracefully
-                    run_command('pkill -TERM -P %d' % p.pid)
-            _wait_for_exit(p, host_name)
-
-        if 'after' in self.conf and 'cmd' in self.conf['after']:
-            if type(self.conf['after']['cmd']) == list:
-                cmds = self.conf['after']['cmd']
-            else:
-                cmds = [self.conf['after']['cmd']]
-
-            for cmd in cmds:
-                os.system(cmd)
-
-        bad_codes = [rc for rc in return_codes if rc != 0]
-        if len(bad_codes):
-            sys.exit(1)
-
 
 def get_args():
     cwd = os.getcwd()

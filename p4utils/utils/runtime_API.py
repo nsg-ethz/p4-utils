@@ -24,7 +24,6 @@
 # Modified version of the runtime_CLI.py from behavioural model
 # Edgar Costa (cedgar@ethz.ch)
 
-import argparse
 from collections import Counter
 import os
 import sys
@@ -758,6 +757,7 @@ class RuntimeAPI(object):
         self.pre_type = pre_type
 
         self.table_entries_match_to_handle = self.create_match_to_handle_dict()
+        self.load_table_entries_match_to_handle()
         #self.table_multiple_names = self.load_table_to_all_names()
 
     def create_match_to_handle_dict(self):
