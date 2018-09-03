@@ -78,3 +78,5 @@ class SimpleSwitchAPI(runtime_API.RuntimeAPI):
 
 if __name__ == "__main__":
     controller = SimpleSwitchAPI(9090)
+    controller.table_clear("smac")
+    [controller.table_add("MyIngress.smac", "NoAction", ["00:00:00:00:00:0%d" % x], []) for x in range(10)]

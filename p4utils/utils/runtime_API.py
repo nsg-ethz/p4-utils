@@ -1837,6 +1837,17 @@ class RuntimeAPI(object):
                                 ResType.action_prof)
         self._dump_act_prof(act_prof)
 
+
+    def load_table_entries_match_to_handle(self):
+
+        for table_name, table in self.get_tables().items():
+            #remove the entries if any
+            self.table_entries_match_to_handle[table_name].clear()
+            switch_entries = self.client.bm_mt_get_entries(0, table.name)
+            for entry in switch_entries:
+                self.table_entries_match_to_handle[table_name][tuple(entry.match_key)] = \
+                    entry.entry_handle
+
     @handle_bad_input
     def table_dump(self, table_name):
         "Display entries in a match-table: table_dump <table name>"
