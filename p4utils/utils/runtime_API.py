@@ -362,7 +362,6 @@ def load_json_str(json_str):
     #checks if a table is repeated, in that case it removes the only suffix entries
     for key, c in suffix_count.items():
         if c > 1:
-            print key
             del SUFFIX_LOOKUP_MAP[key]
 
 class UIn_Error(Exception):
@@ -758,15 +757,14 @@ class RuntimeAPI(object):
         self.mc_client = mc_client
         self.pre_type = pre_type
 
-        self.talbe_entries_match_to_handle = self.create_match_to_handle_dict()
+        self.table_entries_match_to_handle = self.create_match_to_handle_dict()
+        #self.table_multiple_names = self.load_table_to_all_names()
 
     def create_match_to_handle_dict(self):
 
         d = {}
-        for res_type, table_name in self.get_suffix_lookup_map().items():
-            if res_type == ResType.table:
-                d[table_name] = {}
-
+        for table_name in self.get_tables():
+            d[table_name] = {}
         return d
 
     def shell(self, line):
@@ -888,6 +886,21 @@ class RuntimeAPI(object):
         table = self.get_res("table", table_name, ResType.table)
         self.client.bm_mt_clear_entries(0, table.name, False)
 
+    def load_table_to_all_names(self):
+
+        d = {}
+        for table_name in self.get_tables():
+            #check if short name exists
+            short_table_name = table_name.split(".")[-1]
+            key = ResType.table, short_table_name
+            if key in SUFFIX_LOOKUP_MAP:
+                d[table_name] = [table_name, short_table_name]
+
+            else:
+                d[table_name] = [table_name]
+
+        return d
+
     @handle_bad_input
     def table_add(self, table_name, action_name, match_keys, action_params=[], prio=None):
         "Add entry to a match table: table_add <table name> <action name> <match fields> => <action parameters> [priority]"
@@ -928,10 +941,11 @@ class RuntimeAPI(object):
         )
 
         #save handle
+        #for sub_table_name in self.table_multiple_names[table.name]:
+        self.table_entries_match_to_handle[table.name][tuple(match_keys)] = entry_handle
 
         print "Entry has been added with handle", entry_handle
         return entry_handle
-
 
     @handle_bad_input
     def table_set_timeout(self, table_name, entry_handle, timeout_ms):
@@ -955,6 +969,18 @@ class RuntimeAPI(object):
         print "Setting a", timeout_ms, "ms timeout for entry", entry_handle
 
         self.client.bm_mt_set_entry_ttl(0, table.name, entry_handle, timeout_ms)
+
+    def get_handle_from_match(self, table_name, match_keys, pop=False):
+
+        table = self.get_res("table", table_name, ResType.table)
+        match_keys = map(str, match_keys)
+        key = tuple(parse_match_key(table, match_keys))
+
+        entry_handle = self.table_entries_match_to_handle[table.name].get(key, None)
+        if entry_handle and pop:
+            del self.table_entries_match_to_handle[table.name][key]
+
+        return entry_handle
 
     @handle_bad_input
     def table_modify(self, table_name, action_name, entry_handle, action_parameters = []):
@@ -982,9 +1008,21 @@ class RuntimeAPI(object):
             0, table.name, entry_handle, action.name, runtime_data
         )
 
+    def table_modify_match(self, table_name, action_name, match_keys, action_parameters = []):
+
+        entry_handle = self.get_handle_from_match(table_name, match_keys)
+        if entry_handle:
+            self.table_modify(table_name, action_name, entry_handle, action_parameters)
+        else:
+            raise UIn_Error(
+                "Table %s has no match %s" % (table_name, match_keys)
+            )
+
     @handle_bad_input
     def table_delete(self, table_name, entry_handle):
         "Delete entry from a match table: table_delete <table name> <entry handle>"
+
+        #TODO: delete handle
 
         table = self.get_res("table", table_name, ResType.table)
         try:
@@ -994,6 +1032,16 @@ class RuntimeAPI(object):
 
         print "Deleting entry", entry_handle, "from", table_name
         self.client.bm_mt_delete_entry(0, table.name, entry_handle)
+
+    def table_delete_match(self, table_name, match_keys):
+
+        entry_handle = self.get_handle_from_match(table_name, match_keys, pop=True)
+        if entry_handle:
+            self.table_delete(table_name, entry_handle)
+        else:
+            raise UIn_Error(
+                "Table %s has no match %s" % (table_name, match_keys)
+            )
 
     def check_indirect(self, table):
         if table.type_ not in {TableType.indirect, TableType.indirect_ws}:
