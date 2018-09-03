@@ -10,6 +10,7 @@ class AppTopo(Topo):
     """
 
     def __init__(self, hosts, switches, links, log_dir, global_conf, **opts):
+
         Topo.__init__(self, **opts)
         host_links = []
         switch_links = []

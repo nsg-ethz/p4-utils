@@ -280,7 +280,6 @@ class AppRunner(object):
         Assumes:
             A mininet instance is stored as self.net and self.net.start() has been called.
         """
-        #TODO: this is a mixt of previous topo and AppTopo
         for host_name in self.topo.hosts():
             h = self.net.get(host_name)
             h_iface = h.intfs.values()[0]
@@ -297,24 +296,24 @@ class AppRunner(object):
             h.defaultIntf().rename('%s-eth0' % host_name)
 
             # static arp entries and default routes
-            h.cmd('arp -i %s -s %s %s' % (h_iface.name, sw_ip, sw_iface.mac))
+
             h.cmd('ethtool --offload %s rx off tx off' % h_iface.name)
             h.cmd('ip route add %s dev %s' % (sw_ip, h_iface.name))
             h.setDefaultRoute("via %s" % sw_ip)
 
+            h.cmd('arp -i %s -s %s %s' % (h_iface.name, sw_ip, sw_iface.mac))
             #set arp rules for all the hosts connected to the same switch
             sw = self.topo.hosts_info[host_name]["sw"]
             host_address = ip_interface(u"%s/%d" % (h.IP(), self.topo.hosts_info[host_name]["mask"]))
             for hosts_same_subnet in self.topo.hosts():
                 if hosts_same_subnet == host_name:
                     continue
-                #if connected to the same switch
-                if self.topo.hosts_info[hosts_same_subnet]["sw"] == sw:
-                    #check if same subnet
-                    other_host_address = ip_interface(unicode("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
+
+                #check if same subnet
+                other_host_address = ip_interface(unicode("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
                                                     self.topo.hosts_info[hosts_same_subnet]["mask"])))
 
-                    if host_address.network.compressed == other_host_address.network.compressed:
+                if host_address.network.compressed == other_host_address.network.compressed:
                         h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
                                                       self.topo.hosts_info[hosts_same_subnet]['mac']))
 
