@@ -297,8 +297,6 @@ class AppRunner(object):
             h.defaultIntf().rename('%s-eth0' % host_name)
 
             # static arp entries and default routes
-
-            h.cmd('ethtool --offload %s rx off tx off' % h_iface.name)
             h.cmd('ip route add %s dev %s' % (sw_ip, h_iface.name))
             h.setDefaultRoute("via %s" % sw_ip)
 

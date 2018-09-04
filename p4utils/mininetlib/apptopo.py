@@ -165,36 +165,59 @@ class NewAppTopo(Topo):
 
         self.run()
 
-
     def run(self):
 
         topology = self.conf.get('topology')
-        assignament_strategy =  topology.get('assignament_strategy', None)
+        assignment_strategy =  topology.get('assignment_strategy', None)
 
-        if assignament_strategy == "l2":
-            self.l2_assignament_strategy()
-        elif assignament_strategy == "l3":
-            self.l3_assignament_strategy()
-        elif assignament_strategy == "manual":
-            self.manual_assignament_strategy()
+        if assignment_strategy == "l2":
+            self.l2_assignment_strategy()
+
+        elif assignment_strategy == "l3":
+            self.l3_assignment_strategy()
+
+        elif assignment_strategy == "manual":
+            self.manual_assignment_strategy()
+
         else:
-            self.l3_assignament_strategy()
+            self.l3_assignment_strategy()
 
-    def l2_assignament_strategy(self):
-        pass
+    def add_switches(self):
 
-    def main(self):
-
-        #TODO: add jsons for each switch
         sw_id = 1
-
-        for sw, sw_attributes in sorted(switches.items(), key=lambda x:int(re.findall(r'\d+', x[0])[-1])):
+        for sw, sw_attributes in sorted(self.switches.items(), key=lambda x:int(re.findall(r'\d+', x[0])[-1])):
             json_file = sw_attributes["json"]
             upper_bytex = (sw_id & 0xff00) >> 8
             lower_bytex = (sw_id & 0x00ff)
             sw_ip = "10.%d.%d.254" % (upper_bytex, lower_bytex)
-            self.addP4Switch(sw, log_file="%s/%s.log" % (log_dir, sw), json_path = json_file, sw_ip = sw_ip, **sw_attributes)
+            self.addP4Switch(sw, log_file="%s/%s.log" % (self.log_dir, sw),
+                             json_path = json_file, sw_ip = sw_ip, **sw_attributes)
             sw_id +=1
+
+    def is_host_link(self, link):
+
+        return link['node1'] in self.hosts or link['node2'] in self.hosts
+
+    def l2_assignment_strategy(self):
+
+        self.add_switches()
+
+        #add links and configure them: ips, macs, etc
+        for link in self.links:
+
+            if self.is_host_link(link):
+                pass
+            else:
+                pass
+
+    def l3_assignment_strategy(self):
+        pass
+
+    def manual_assignment_strategy(self):
+        pass
+
+    def main(self):
+
 
         for link in host_links:
             host_name = link['node1']
@@ -246,11 +269,6 @@ class NewAppTopo(Topo):
 
 
 
-    def l3_assignament_strategy(self):
-        pass
-
-    def manual_assignament_strategy(self):
-        pass
 
     def addP4Switch(self, name, **opts):
         """Add P4 switch to Mininet topology.
