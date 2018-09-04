@@ -1,6 +1,7 @@
 from mininet.topo import Topo
 from mininet.nodelib import LinuxBridge
 import re
+from ipaddress import IPv4Network
 
 class AppTopo(Topo):
     """The mininet topology class.
@@ -194,67 +195,42 @@ class NewAppTopo(Topo):
                              json_path = json_file, sw_ip = sw_ip, **sw_attributes)
             sw_id +=1
 
-    def is_host_link(self, link):
+    def get_host_position(self, link):
 
-        return link['node1'] in self.hosts or link['node2'] in self.hosts
+        return 'node1' if link['node1'] in self.hosts else 'node2'
 
-    def l2_assignment_strategy(self):
+    def get_sw_position(self, link):
 
-        self.add_switches()
+        return 'node1' if link['node1'] in self.switches else 'node2'
 
-        #add links and configure them: ips, macs, etc
-        for link in self.links:
+    def ip_addres_to_mac(self, ip):
 
-            if self.is_host_link(link):
-                pass
+        split_ip = map(int, ip.split("."))
+        mac_address = '00:00:%02x:%02x:%02x:%02x' % tuple(split_ip)
+        return mac_address
+
+    def check_host_valid_ip_from_name(self, hosts):
+
+        valid = True
+        for host in hosts:
+            if host[0] == 'h':
+                try:
+                    int(host[1:])
+                except:
+                    valid = False
             else:
-                pass
+                valid = False
 
-    def l3_assignment_strategy(self):
-        pass
+        return valid
 
-    def manual_assignment_strategy(self):
-        pass
+    def add_cpu_port(self):
 
-    def main(self):
-
-
-        for link in host_links:
-            host_name = link['node1']
-            host_sw = link['node2']
-            host_num = int(host_name[1:])
-            sw_num = int(host_sw[1:])
-            host_ip = "10.0.%d.%d" % (sw_num, host_num)
-            host_mac = '00:00:00:00:%02x:%02x' % (sw_num, host_num)
-            # Each host IP should be /24, so all exercise traffic will use the
-            # default gateway (the switch) without sending ARP requests.
-            # When hosts connected to the same switch its a problem
-            #import ipdb; ipdb.set_trace()
-            ops = hosts[host_name]
-            self.addHost(host_name, ip=host_ip + '/24', mac=host_mac, **ops)
-
-            self.addLink(host_name, host_sw,
-                         delay=link['delay'], bw=link['bw'],
-                         addr1=host_mac, addr2=host_mac, weight=link["weight"], max_queue_size=link["queue_length"])
-            self.addSwitchPort(host_sw, host_name)
-
-            self.hosts_info[host_name] = {"sw" : host_sw, "ip" : host_ip, "mac": host_mac, "mask" : 24}
-
-        for link in switch_links:
-            self.addLink(link['node1'], link['node2'],
-                         delay=link['delay'], bw=link['bw'], weight=link["weight"], max_queue_size=link["queue_length"])
-            self.addSwitchPort(link['node1'], link['node2'])
-            self.addSwitchPort(link['node2'], link['node1'])
-
-
-        #add cpu port
-
-        default_cpu_port = {'cpu_port':global_conf.get('cpu_port', False)}
-
+        default_cpu_port = {'cpu_port':self.global_conf.get('cpu_port', False)}
         add_bridge = True
+
         for switch in self.switches():
             if self.g.node.get(switch).get('isP4Switch', False):
-                switch_cpu_port = global_conf.get('topology', {}).get('switches', {})
+                switch_cpu_port = self.global_conf.get('topology', {}).get('switches', {})
                 default_cpu_port_tmp = default_cpu_port.copy()
                 default_cpu_port_tmp.update(switch_cpu_port.get(switch, {}))
 
@@ -265,10 +241,55 @@ class NewAppTopo(Topo):
                     self.addLink(switch, sw, intfName1='%s-cpu-eth0' % switch, intfName2= '%s-cpu-eth1' % switch, deleteIntfs=True)
                     self.addSwitchPort(switch, sw)
 
-        self.printPortMapping()
 
+    def l2_assignment_strategy(self):
 
+        self.add_switches()
 
+        ip_generator = IPv4Network("10.0.0.0/16")
+
+        #add links and configure them: ips, macs, etc
+        for link in self.links:
+
+            if self.is_host_link(link):
+                host_name = link[self.get_host_position()]
+                direct_sw = link[self.get_sw_position()]
+
+                #
+                if self.check_host_valid_ip_from_name(self.hosts):
+                    host_num = int(host_name[1:])
+                    upper_byte = (host_num & 0xff00) >> 8
+                    lower_byte = (host_num & 0x00ff)
+                    host_ip = "10.0.%d.%d" % (upper_byte, lower_byte)
+                else:
+                    host_ip = next(ip_generator)
+
+                host_mac = self.ip_addres_to_mac(host_ip)
+
+                ops = self.hosts[host_name]
+                self.addHost(host_name, ip=host_ip+"/16", mac=host_mac, **ops)
+                self.addLink(host_name, direct_sw,
+                             delay=link['delay'], bw=link['bw'],
+                             addr1=host_mac, addr2=host_mac, weight=link["weight"], max_queue_size=link["queue_length"])
+                self.addSwitchPort(direct_sw, host_name)
+                self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip, "mac": host_mac, "mask": 24}
+
+            #switch to switch link
+            else:
+                self.addLink(link['node1'], link['node2'],
+                             delay=link['delay'], bw=link['bw'], weight=link["weight"],
+                             max_queue_size=link["queue_length"])
+                self.addSwitchPort(link['node1'], link['node2'])
+                self.addSwitchPort(link['node2'], link['node1'])
+
+            self.add_cpu_port()
+            self.printPortMapping()
+
+    def l3_assignment_strategy(self):
+        pass
+
+    def manual_assignment_strategy(self):
+        pass
 
     def addP4Switch(self, name, **opts):
         """Add P4 switch to Mininet topology.
