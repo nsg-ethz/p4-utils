@@ -163,6 +163,22 @@ class NewAppTopo(Topo):
         self.sw_port_mapping = {}
         self.hosts_info = {}
 
+        self.run()
+
+
+    def run(self):
+
+        topology = self.conf.get('topology')
+        assignament_strategy =  topology.get('assignament_strategy', None)
+
+        if assignament_strategy == "l2":
+            self.l2_assignament_strategy()
+        elif assignament_strategy == "l3":
+            self.l3_assignament_strategy()
+        elif assignament_strategy == "manual":
+            self.manual_assignament_strategy()
+        else:
+            self.l3_assignament_strategy()
 
     def l2_assignament_strategy(self):
         pass
