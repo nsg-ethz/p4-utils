@@ -10,7 +10,7 @@ class AppTopo(Topo):
     mostly about the IP and MAC addresses.
     """
 
-    def __init__(self, hosts, switches, links, log_dir, global_conf, **opts):
+    def __init__(self, hosts, switches, links, log_dir, conf, **opts):
 
         Topo.__init__(self, **opts)
         host_links = []
@@ -24,14 +24,12 @@ class AppTopo(Topo):
             else:
                 switch_links.append(link)
 
-        import ipdb; ipdb.set_trace()
-
         link_sort_key = lambda x: x['node1'] + x['node2']
         # Links must be added in a sorted order so bmv2 port numbers are predictable
         host_links.sort(key=link_sort_key)
         switch_links.sort(key=link_sort_key)
 
-        ipdb.set_trace()
+
 
         #TODO: add jsons for each switch
         sw_id = 1
@@ -74,12 +72,12 @@ class AppTopo(Topo):
 
         #add cpu port
 
-        default_cpu_port = {'cpu_port':global_conf.get('cpu_port', False)}
+        default_cpu_port = {'cpu_port':conf.get('cpu_port', False)}
 
         add_bridge = True
         for switch in self.switches():
             if self.g.node.get(switch).get('isP4Switch', False):
-                switch_cpu_port = global_conf.get('topology', {}).get('switches', {})
+                switch_cpu_port = conf.get('topology', {}).get('switches', {})
                 default_cpu_port_tmp = default_cpu_port.copy()
                 default_cpu_port_tmp.update(switch_cpu_port.get(switch, {}))
 
@@ -151,22 +149,22 @@ class NewAppTopo(Topo):
     mostly about the IP and MAC addresses.
     """
 
-    def __init__(self, hosts, switches, links, log_dir, global_conf, **opts):
+    def __init__(self, hosts, switches, links, log_dir, conf, **opts):
 
         Topo.__init__(self, **opts)
 
-        self.hosts = hosts
-        self.switches = switches
-        self.links = links
+        self._hosts = hosts
+        self._switches = switches
+        self._links = links
         self.log_dir = log_dir
-        self.conf =  global_conf
+        self.conf =  conf
 
         self.sw_port_mapping = {}
         self.hosts_info = {}
 
-        self.run()
+        self.make_topo()
 
-    def run(self):
+    def make_topo(self):
 
         topology = self.conf.get('topology')
         assignment_strategy =  topology.get('assignment_strategy', None)
@@ -186,7 +184,7 @@ class NewAppTopo(Topo):
     def add_switches(self):
 
         sw_id = 1
-        for sw, sw_attributes in sorted(self.switches.items(), key=lambda x:int(re.findall(r'\d+', x[0])[-1])):
+        for sw, sw_attributes in sorted(self._switches.items(), key=lambda x:int(re.findall(r'\d+', x[0])[-1])):
             json_file = sw_attributes["json"]
             upper_bytex = (sw_id & 0xff00) >> 8
             lower_bytex = (sw_id & 0x00ff)
@@ -195,13 +193,17 @@ class NewAppTopo(Topo):
                              json_path = json_file, sw_ip = sw_ip, **sw_attributes)
             sw_id +=1
 
+    def is_host_link(self, link):
+
+        return link['node1'] in self._hosts or link['node2'] in self._hosts
+
     def get_host_position(self, link):
 
-        return 'node1' if link['node1'] in self.hosts else 'node2'
+        return 'node1' if link['node1'] in self._hosts else 'node2'
 
     def get_sw_position(self, link):
 
-        return 'node1' if link['node1'] in self.switches else 'node2'
+        return 'node1' if link['node1'] in self._switches else 'node2'
 
     def ip_addres_to_mac(self, ip):
 
@@ -225,12 +227,12 @@ class NewAppTopo(Topo):
 
     def add_cpu_port(self):
 
-        default_cpu_port = {'cpu_port':self.global_conf.get('cpu_port', False)}
+        default_cpu_port = {'cpu_port':self.conf.get('cpu_port', False)}
         add_bridge = True
 
-        for switch in self.switches():
+        for switch in self._switches:
             if self.g.node.get(switch).get('isP4Switch', False):
-                switch_cpu_port = self.global_conf.get('topology', {}).get('switches', {})
+                switch_cpu_port = self.conf.get('topology', {}).get('switches', {})
                 default_cpu_port_tmp = default_cpu_port.copy()
                 default_cpu_port_tmp.update(switch_cpu_port.get(switch, {}))
 
@@ -246,17 +248,17 @@ class NewAppTopo(Topo):
 
         self.add_switches()
 
-        ip_generator = IPv4Network("10.0.0.0/16")
+        ip_generator = IPv4Network(unicode("10.0.0.0/16"))
 
         #add links and configure them: ips, macs, etc
-        for link in self.links:
+        for link in self._links:
 
             if self.is_host_link(link):
-                host_name = link[self.get_host_position()]
-                direct_sw = link[self.get_sw_position()]
+                host_name = link[self.get_host_position(link)]
+                direct_sw = link[self.get_sw_position(link)]
 
                 #
-                if self.check_host_valid_ip_from_name(self.hosts):
+                if self.check_host_valid_ip_from_name(self._hosts):
                     host_num = int(host_name[1:])
                     upper_byte = (host_num & 0xff00) >> 8
                     lower_byte = (host_num & 0x00ff)
@@ -266,7 +268,7 @@ class NewAppTopo(Topo):
 
                 host_mac = self.ip_addres_to_mac(host_ip)
 
-                ops = self.hosts[host_name]
+                ops = self._hosts[host_name]
                 self.addHost(host_name, ip=host_ip+"/16", mac=host_mac, **ops)
                 self.addLink(host_name, direct_sw,
                              delay=link['delay'], bw=link['bw'],
@@ -282,8 +284,8 @@ class NewAppTopo(Topo):
                 self.addSwitchPort(link['node1'], link['node2'])
                 self.addSwitchPort(link['node2'], link['node1'])
 
-            self.add_cpu_port()
-            self.printPortMapping()
+        self.add_cpu_port()
+        self.printPortMapping()
 
     def l3_assignment_strategy(self):
         pass
