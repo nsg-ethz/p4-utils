@@ -173,8 +173,8 @@ class AppRunner(object):
         for link in unparsed_links:
             # make sure that the endpoints of each link are ordered alphabetically
             node_a, node_b, = link[0], link[1]
-            if node_a > node_b:
-                node_a, node_b = node_b, node_a
+            #if node_a > node_b:
+            #    node_a, node_b = node_b, node_a
 
             link_dict = {'node1': node_a,
                          'node2': node_b,
@@ -190,9 +190,9 @@ class AppRunner(object):
                 link_dict.update(link[2])
 
             # Hosts are not allowed to connect to another host.
-            if link_dict['node1'][0] == 'h':
-                assert link_dict['node2'][0] == 's', \
-                    'Hosts should be connected to switches, not ' + str(link_dict['node2'])
+            if node_a in self.hosts:
+                assert node_b not in self.hosts, 'Hosts should be connected to switches: %s <-> %s link not possible' % (node_a, node_b)
+
             links.append(link_dict)
         return links
 
@@ -280,6 +280,7 @@ class AppRunner(object):
         Assumes:
             A mininet instance is stored as self.net and self.net.start() has been called.
         """
+
         for host_name in self.topo.hosts():
             h = self.net.get(host_name)
             h_iface = h.intfs.values()[0]

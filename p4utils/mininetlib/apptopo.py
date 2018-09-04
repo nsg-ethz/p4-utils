@@ -17,6 +17,8 @@ class AppTopo(Topo):
         self.sw_port_mapping = {}
         self.hosts_info = {}
 
+        import ipdb; ipdb.set_trace()
+
         for link in links:
             if link['node1'][0] == 'h':
                 host_links.append(link)
@@ -86,6 +88,16 @@ class AppTopo(Topo):
                     self.addSwitchPort(switch, sw)
 
         self.printPortMapping()
+
+
+    def l2_assignament_strategy(self):
+        pass
+
+    def l3_assignament_strategy(self):
+        pass
+
+    def manual_assignament_strategy(self):
+        pass
 
     def addP4Switch(self, name, **opts):
         """Add P4 switch to Mininet topology.
