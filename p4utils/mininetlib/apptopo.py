@@ -18,6 +18,16 @@ class AppTopo(Topo):
         self.sw_port_mapping = {}
         self.hosts_info = {}
 
+        #put host as first link element
+        for link in links:
+            if link['node1'][0] == 'h' or link['node2'][0] == 'h':
+                if link['node2'][0] == 'h':
+                    #swap
+                    a = link['node1']
+                    b = link['node2']
+                    link['node1'] = b
+                    link['node2'] = a
+
         for link in links:
             if link['node1'][0] == 'h':
                 host_links.append(link)
