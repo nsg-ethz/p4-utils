@@ -11,7 +11,6 @@ class AppTopo(Topo):
     """
 
     def __init__(self, hosts, switches, links, log_dir, conf, **opts):
-
         Topo.__init__(self, **opts)
         host_links = []
         switch_links = []
@@ -150,7 +149,7 @@ class AppTopo(Topo):
                 print "%d:%s\t" % (portno, node2),
             print
 
-class NewAppTopo(Topo):
+class AppTopoStrategies(Topo):
     """The mininet topology class.
 
     A custom class is used because the exercises make a few topology assumptions,

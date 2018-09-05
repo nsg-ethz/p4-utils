@@ -290,10 +290,11 @@ class AppRunner(object):
             # Ensure each host's interface name is unique, or else
             # mininet cannot shutdown gracefully
             h.defaultIntf().rename('%s-eth0' % host_name)
+            h_iface = h.intfs.values()[0]
 
             if assignment_strategy != "l2":
                 #Configure Default Gateway and fill ARP table
-                h_iface = h.intfs.values()[0]
+
                 link = h_iface.link
                 sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
                 # phony IP to lie to the host about
@@ -307,19 +308,20 @@ class AppRunner(object):
                 h.cmd('arp -i %s -s %s %s' % (h_iface.name, sw_ip, sw_iface.mac))
 
 
-            #set arp rules for all the hosts in the same subnet
-            host_address = ip_interface(u"%s/%d" % (h.IP(), self.topo.hosts_info[host_name]["mask"]))
-            for hosts_same_subnet in self.topo.hosts():
-                if hosts_same_subnet == host_name:
-                    continue
+            if auto_arp_tables:
+                #set arp rules for all the hosts in the same subnet
+                host_address = ip_interface(u"%s/%d" % (h.IP(), self.topo.hosts_info[host_name]["mask"]))
+                for hosts_same_subnet in self.topo.hosts():
+                    if hosts_same_subnet == host_name:
+                        continue
 
-                #check if same subnet
-                other_host_address = ip_interface(unicode("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
-                                                    self.topo.hosts_info[hosts_same_subnet]["mask"])))
+                    #check if same subnet
+                    other_host_address = ip_interface(unicode("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
+                                                        self.topo.hosts_info[hosts_same_subnet]["mask"])))
 
-                if host_address.network.compressed == other_host_address.network.compressed:
-                        h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
-                                                      self.topo.hosts_info[hosts_same_subnet]['mac']))
+                    if host_address.network.compressed == other_host_address.network.compressed:
+                            h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
+                                                          self.topo.hosts_info[hosts_same_subnet]['mac']))
 
 
     def save_topology(self):
