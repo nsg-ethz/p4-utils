@@ -29,8 +29,6 @@ class AppTopo(Topo):
         host_links.sort(key=link_sort_key)
         switch_links.sort(key=link_sort_key)
 
-
-
         #TODO: add jsons for each switch
         sw_id = 1
 
@@ -247,7 +245,6 @@ class NewAppTopo(Topo):
     def l2_assignment_strategy(self):
 
         self.add_switches()
-
         ip_generator = IPv4Network(unicode("10.0.0.0/16"))
 
         #add links and configure them: ips, macs, etc
