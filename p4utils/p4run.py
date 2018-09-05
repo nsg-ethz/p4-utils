@@ -280,29 +280,34 @@ class AppRunner(object):
         Assumes:
             A mininet instance is stored as self.net and self.net.start() has been called.
         """
+        topology = self.conf.get('topology')
+        assignment_strategy = topology.get('assignment_strategy', None)
+        auto_arp_tables = topology.get('auto_arp_tables', True)
 
         for host_name in self.topo.hosts():
             h = self.net.get(host_name)
-            h_iface = h.intfs.values()[0]
-            link = h_iface.link
-
-            sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
-            # phony IP to lie to the host about
-            host_id = int(host_name[1:])
-
-            sw_ip = '10.0.%d.254' % host_id
 
             # Ensure each host's interface name is unique, or else
             # mininet cannot shutdown gracefully
             h.defaultIntf().rename('%s-eth0' % host_name)
 
-            # static arp entries and default routes
-            h.cmd('ip route add %s dev %s' % (sw_ip, h_iface.name))
-            h.setDefaultRoute("via %s" % sw_ip)
+            if assignment_strategy != "l2":
+                #Configure Default Gateway and fill ARP table
+                h_iface = h.intfs.values()[0]
+                link = h_iface.link
+                sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
+                # phony IP to lie to the host about
+                host_id = int(host_name[1:])
+                #TODO: this will be different in real l3
+                sw_ip = '10.0.%d.254' % host_id
 
-            h.cmd('arp -i %s -s %s %s' % (h_iface.name, sw_ip, sw_iface.mac))
-            #set arp rules for all the hosts connected to the same switch
-            sw = self.topo.hosts_info[host_name]["sw"]
+                # static arp entries and default routes
+                h.cmd('ip route add %s dev %s' % (sw_ip, h_iface.name))
+                h.setDefaultRoute("via %s" % sw_ip)
+                h.cmd('arp -i %s -s %s %s' % (h_iface.name, sw_ip, sw_iface.mac))
+
+
+            #set arp rules for all the hosts in the same subnet
             host_address = ip_interface(u"%s/%d" % (h.IP(), self.topo.hosts_info[host_name]["mask"]))
             for hosts_same_subnet in self.topo.hosts():
                 if hosts_same_subnet == host_name:
