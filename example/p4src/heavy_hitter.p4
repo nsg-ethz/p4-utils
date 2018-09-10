@@ -148,12 +148,6 @@ control egress(inout headers hdr,
                  inout standard_metadata_t standard_metadata) {
     apply {
 
-        /*if (hdr.tcp.isValid() && (standard_metadata.instance_type == 0)){
-            clone(CloneType.E2E, 100);
-        }
-        else{
-            hdr.ipv4.dscp = 45;
-        }*/
     }
 }
 

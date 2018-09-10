@@ -492,6 +492,23 @@ class Topology(TopologyDB):
             networks += sub_nets
         return set(networks)
 
+    def get_cpu_port_intf(self, p4switch, cpu_node = 'sw-cpu'):
+        """
+        Returns the port index of p4switch's cpu port
+        Args:
+            p4switch: name of the p4 switch
+            cpu_node: name of the cpu-node (usually a bridge)
+
+        Returns: index
+
+        """
+
+        if self.is_p4switch(p4switch) and self[p4switch].get(cpu_node, None):
+            return self[p4switch][cpu_node].get('intf')
+        else:
+            print "Switch %s has no cpu port" % p4switch
+            return None
+
 
     def get_cpu_port_index(self, p4switch, cpu_node = 'sw-cpu'):
         """
@@ -508,7 +525,7 @@ class Topology(TopologyDB):
             return self[p4switch]['interfaces_to_port'][self[p4switch][cpu_node].get('intf')]
         else:
             print "Switch %s has no cpu port" % p4switch
-            return -1
+            return None
 
 if __name__ == '__main__':
     import sys

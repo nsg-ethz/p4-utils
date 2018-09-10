@@ -39,7 +39,8 @@ class SimpleSwitchAPI(runtime_API.RuntimeAPI):
 
         self.sswitch_client = runtime_API.thrift_connect(
             thrift_ip, thrift_port, SimpleSwitchAPI.get_thrift_services()
-        )
+        )[0]
+
 
     def set_queue_depth(self, queue_depth, egress_port=None):
         "Set depth of one / all egress queue(s): set_queue_depth <nb_pkts> [<egress_port>]"
