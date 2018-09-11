@@ -235,7 +235,7 @@ class AppTopoStrategies(Topo):
     def add_cpu_port(self):
 
         default_cpu_port = {'cpu_port':self.conf.get('cpu_port', False)}
-        add_bridge = True
+        add_bridge = False #we do not add the bridge anymore until we find a better way of doing this
 
         for switch in self._switches:
             if self.g.node.get(switch).get('isP4Switch', False):
@@ -246,9 +246,10 @@ class AppTopoStrategies(Topo):
                 if default_cpu_port_tmp.get('cpu_port', False):
                     if add_bridge:
                         sw = self.addSwitch("sw-cpu", cls=LinuxBridge, dpid='1000000000000000')
+                        self.addSwitchPort(switch, sw)
                         add_bridge = False
                     self.addLink(switch, sw, intfName1='%s-cpu-eth0' % switch, intfName2= '%s-cpu-eth1' % switch, deleteIntfs=True)
-                    self.addSwitchPort(switch, sw)
+
 
 
     def l2_assignment_strategy(self):
