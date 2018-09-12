@@ -235,7 +235,7 @@ class AppTopoStrategies(Topo):
     def add_cpu_port(self):
 
         default_cpu_port = {'cpu_port':self.conf.get('cpu_port', False)}
-        add_bridge = False #we do not add the bridge anymore until we find a better way of doing this
+        add_bridge = True #We use the bridge but at the same time we use the bug it has so the interfaces are not added to it, but at least we can clean easily thanks to that
 
         for switch in self._switches:
             if self.g.node.get(switch).get('isP4Switch', False):
