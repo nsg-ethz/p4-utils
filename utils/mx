@@ -23,10 +23,11 @@ if [ "$pid" == "" ]; then
 fi
 
 if [ -z $2 ]; then
-  cmd='bash'
+    cmd="bash -c 'cd `pwd`; bash'"
 else
   shift
   cmd=$*
+  cmd="bash -c 'cd `pwd`; $cmd'"
 fi
 
 cgroup=/sys/fs/cgroup/cpu/$host
