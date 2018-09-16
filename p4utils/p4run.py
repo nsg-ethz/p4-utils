@@ -347,7 +347,7 @@ class AppRunner(object):
         # interacting with the simple switch a little easier.
         print ''
         print '======================================================================'
-        print 'Welcome to the BMV2 Mininet CLI!'
+        print 'Welcome to the P4 Utils Mininet CLI!'
         print '======================================================================'
         print 'Your P4 program is installed into the BMV2 software switch'
         print 'and your initial configuration is loaded. You can interact'
@@ -358,9 +358,9 @@ class AppRunner(object):
         print '  %s --thrift-port <switch thrift port>' % DEFAULT_CLI
         print ''
         print 'To view a switch log, run this command from your host OS:'
-        print '  tail -f %s/<switchname>.log' % self.log_dir
+        print '  tail -f %s/<switchname>.log' % self.log_dir.replace("edgar", "p4")
         print ''
-        print 'To view the switch output pcap, check the pcap files in %s:' % self.pcap_dir
+        print 'To view the switch output pcap, check the pcap files in \n %s:' % self.pcap_dir.replace("edgar", "p4")
         print ' for example run:  sudo tcpdump -xxx -r s1-eth1.pcap'
         print ''
 
@@ -384,7 +384,7 @@ def get_args():
                         action='store_true', required=False, default=False)
     parser.add_argument('--clean', help='Cleans previous log files',
                         action='store_true', required=False, default=False)
-    parser.add_argument('--only_clean', help='Cleans previous log files and closes',
+    parser.add_argument('--clean-dir', help='Cleans previous log files and closes',
                         action='store_true', required=False, default=False)
 
     return parser.parse_args()
@@ -403,12 +403,21 @@ def main():
     #remove cli logs
     sh('find -type f -regex ".*cli_output.*" | xargs rm')
 
-    if args.clean or args.only_clean:
+    if args.clean or args.clean_dir:
         sh("rm -rf %s" % args.pcap_dir)
         sh("rm -rf %s" % args.log_dir)
-        sh("rm -f %s" % "topology.db")
+        sh('find -type f -regex ".*db" | xargs rm')
+        sh('find -type f -regex ".*\(p4i\|p4rt\)" | xargs rm')
 
-        if args.only_clean:
+        #remove all the jsons that come from a p4
+        out  = sh('find -type f -regex ".*p4"')
+        p4_files = [x.split("/")[-1].strip() for x in out.split("\n") if x]
+        for p4_file in p4_files:
+            tmp = p4_file.replace("p4", "json")
+            reg_str = ".*{}".format(tmp)
+            sh('find -type f -regex {} | xargs rm -f'.format(reg_str))
+
+        if args.clean_dir:
             return
 
     app = AppRunner(args.config, args.log_dir,
