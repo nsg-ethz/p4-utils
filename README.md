@@ -47,15 +47,105 @@ For more information see:
 
 ### Features
 
+P4-utils adds on top of minininet:
 
+ * A command-line launcher (`p4run`) to instantiate networks.
+ * A helper script (`mx`) to run processes in namespaces
+ * Custom `P4Host` and `P4Switch` nodes (based on the ones provided in the [`p4lang`](https://github.com/p4lang) repo)
+ * A very simple way of defining networks using json files (`p4app.json`).
+ * Enhances mininet command-line interface: adding the ability of rebooting switches with updated p4 programs and configurations, without the need
+ of restarting the entire network.
+ * Saves the topology and features in an object that can be loded and queried to extract meaningful information (also build a `networkx` object out of the
+ topology)
+ * Re-implementation of the `runtime_CLI` and `simple_switch_CLI` as python objects to use in controller code.
 
+### Usage
 
-## Usage
+P4-utils can be executed by running the `p4run` command in a terminal. By default `p4run` will try to find a
+topology description called `p4app.json` in your current path. However you can change that by using the `--config` option:
 
-Topologies have to be specified in a file called `p4app.json`. An example can be found in `example/p4app.json`.
+```bash
+p4run --config <path_to_json_configuration>
+```
 
+You can see the complete list of options with the `-h` or `--help` options.
 
-##
+## Documentation
 
+### Topology Description
 
-#### TODO: revise topology object so nothing weird is left.
+To run any topology p4-utils needs a configuration file (`*.json`) that is used by `p4run` to know how to build and configure a
+virtual network. All the possible options are listed below:
+
+#### Global Configuration
+
+##### `program:`
+
+   * Type: String
+   * Value: Path to p4 program
+   * Default: None (required if not all switches have a p4 program defined).
+
+   > Program that will be loaded onto all the switches unless a switch has another program specified.
+
+##### `switch:`
+
+   * Type: String
+   * Value: path to bmv2 switch executable
+   * Default: "simple_switch"
+
+##### `compiler:`
+
+   * Type: String
+   * Value: P4 compiler to be used
+   * Default: "p4c"
+
+##### `options:`
+
+   * Type: String
+   * Value: Compiler options
+   * Default: "--target bmv2 --arch v1model --std p4-16"
+
+##### `switch_cli:`
+
+   * Type: String
+   * Value: Path to the switch CLI executable
+   * Default: 'simple_switch_CLI'
+
+##### `cli:`
+
+   * Type: bool
+   * Value: Enables the enhanced mininet CLI. If disabled, the topology will be destroyed right after being created.
+   * Default: false
+
+##### `pcap_dump:`
+
+   * Type: bool
+   * Value: if enabled a pcap file for each interfaced is saved at `./pcap`
+   * Default: false
+
+##### `enable_log:`
+
+   * Type: bool
+   * Value: if enabled a directory with CLI and switch logs is created at `.log`
+   * Default: false
+
+##### `topo_module`
+##### `controller_module`
+##### `topodb_module`
+##### `mininnet_module`
+
+#### Topology
+
+##### `assignment_strategy`
+
+##### `auto_arp_tables`
+
+##### `links`
+
+##### `hosts`
+
+##### `switches`
+
+### Control Plane API
+
+### Topology Object
