@@ -170,22 +170,82 @@ implementation you can indicate that in the `json` file using the following synt
   }
 ```
 
-> For modules that are already included in the PYTHONPATH you don't have to specify the "file_path".
+> For modules that are already included in the PYTHONPATH you don't have
+to specify the "file_path".
 
 #### Topology
 
 The topology subsection of the configuration describes how the addresses are assigned,
 the number of hosts and switches and how are they connected.
 
-##### `assignment_strategy`
+##### `assignment_strategy:`
 
-##### `auto_arp_tables`
+When you use the default `topo_module` you can use different assignment strategies.
+Assignment strategies are needed due to the fact that p4-switches can work
+at any network layer (L2, L3, ...), and thus there is no way to automatically
+configure the hosts, and switches without knowing what will switches do.
 
-##### `links`
+ * `l2`: all switches in the network are assumed to work at layer 2, thus
+ all hosts get assigned to the same subnetwork.
 
-##### `hosts`
+ * `l3`: all switches in the network are assumed to work at layer 3, thus
+ all links in the network form a different subnetwork. Hosts can only
+ be connected to one switch device which is used to configure the host's gateway.
 
-##### `switches`
+ * `manual`: can be used when your topology will be formed by heterogeneous
+ devices, you have to manually set the IP to each interface and host gateways.
+
+ > By default l2 strategy is used
+
+##### `auto_arp_tables:`
+
+   * Type: bool
+   * Value: if set, hosts get their ARP table automatically filled when the network is started. Note: hosts only
+   learn the Mac addresses of other hosts within the same subnet.
+   * Default: true
+
+##### `links:`
+
+   * Type: list
+   * Value: list of links that connect nodes in the topology.
+   * Default: None
+
+   Each link is of the form:
+   ```python
+   ["node1", "node2", {"delay": <in_ms>, "bw": <in_mbps>, "queue_length": <num_packets>, "weight": <link_cost>}]
+   ```
+
+   Link characteristics are not mandatory. Also, not all the characteristics have to be defined, you can pick a subset. For the
+   characteristics that are not set, the default values are:
+
+   ```python
+   link_dict = {'delay': '0ms',
+                       'bw': Inf,
+                       'queue_length': 1000,
+                       'weight': 1
+                       }
+   ```
+
+##### `hosts:`
+
+   * Type: dict
+   * Value: dictionary where the keys are the hosts that have to be created.
+   * Default: None
+
+   > TODO: add a way to start commands at hosts: this feature will be added soon.
+
+##### `switches:`
+
+
+   * Type: dict
+   * Value: dictionary where the keys are switch names, and the values are switch confs.
+   * Default: None
+   * Switch Conf Attributes:
+      * `cli_input:` path to the CLI-formatted text file that will be used to configure and populate the switch.
+      * `program`: path to the p4 program that will be loaded onto the switch. If not specified, the global `program` path is used.
+
+You can find a configuration example, that uses all the fields [here](./p4app_example.json)
+
 
 ### Control Plane API
 

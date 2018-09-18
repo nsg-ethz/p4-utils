@@ -1,0 +1,54 @@
+{
+  "program": "<path_to_gobal_p4_program",
+  "switch": "<path_to_bmv2_switch_executable>",
+  "compiler": "<compiler>",
+  "options": "<compiler_options>",
+  "switch_cli": "<bmv2_switch_CLI",
+  "exec_scripts": [
+    {
+      "cmd": "<path_to_script>",
+      "reboot_run": "<true|false>"
+    },
+    {
+      "cmd": "<path_to_another_script>",
+      "reboot_run": "<true|false>"
+    }
+  ],
+  "cli": "<true|false>",
+  "pcap_dump": "<true|false>",
+  "enable_log": "<true|false>",
+  "topo_module": {
+    "file_path": "<path_to_module>",
+    "module_name": "<module_file_name>",
+    "object_name": "<module_object>"
+  },
+  "controller_module": {
+    "file_path": "<path_to_module>",
+    "module_name": "<module_file_name>",
+    "object_name": "<module_object>"
+  },
+  "topodb_module": {
+    "file_path": "<path_to_module>",
+    "module_name": "<module_file_name>",
+    "object_name": "<module_object>"
+  },
+  "mininet_module": {
+    "file_path": "<path_to_module>",
+    "module_name": "<module_file_name>",
+    "object_name": "<module_object>"
+  },
+  "topology": {
+    "links": [
+      [ ]
+    ],
+    "hosts": {
+      "h1":{}
+    },
+    "switches": {
+      "s1": {
+        "program": "<path_to_specific_switch_p4_program>",
+        "cli_input": "<path_to_switch_CLI_file>"
+      }
+    }
+  }
+}

@@ -185,8 +185,9 @@ class AppTopoStrategies(Topo):
         elif assignment_strategy == "manual":
             self.manual_assignment_strategy()
 
+        #default
         else:
-            self.l3_assignment_strategy()
+            self.l2_assignment_strategy()
 
     def add_switches(self):
 
@@ -295,10 +296,12 @@ class AppTopoStrategies(Topo):
         self.printPortMapping()
 
     def l3_assignment_strategy(self):
-        pass
+        print "Assignment Strategy L3 not implemented yet"
+        exit(1)
 
     def manual_assignment_strategy(self):
-        pass
+        print "Assignment Strategy Manual not implemented yet"
+        exit(1)
 
     def addP4Switch(self, name, **opts):
         """Add P4 switch to Mininet topology.

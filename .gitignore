@@ -8,7 +8,7 @@
 ls
 # Compiled JSON
 *.json
-!*p4app.json
+!*p4app*.json
 
 *p4i
 *p4rt
