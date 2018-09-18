@@ -79,13 +79,16 @@ virtual network. All the possible options are listed below:
 
 #### Global Configuration
 
+Set of global settings defined in the first layer of the json object that describe the basic
+configuration of our topology. For instance the switch type and compiler options can be set here.
+
 ##### `program:`
 
    * Type: String
    * Value: Path to p4 program
    * Default: None (required if not all switches have a p4 program defined).
 
-   > Program that will be loaded onto all the switches unless a switch has another program specified.
+   > Program that will be loaded onto all the switches unless a switch you specify a program in the switch conf.
 
 ##### `switch:`
 
@@ -129,12 +132,50 @@ virtual network. All the possible options are listed below:
    * Value: if enabled a directory with CLI and switch logs is created at `.log`
    * Default: false
 
-##### `topo_module`
+### Special Modules
+
+During the creation of the network 4 main blocks are used. To make p4utils more modular adding your
+own block is allowed.
+
+##### `topo_module`:
+
+Module in charge of building the topology, amongs others it reads the topology object described in
+the json configuration file and decides how to configure hosts and switches (i.e Mac and IP address assignment strategy).
+
 ##### `controller_module`
+
+The controller module is in charge of configuring switches and populating its tables during
+network creation.
+
 ##### `topodb_module`
+
+The topologydb module is the object in charge of storing information about the topology and providing and API to extract
+useful data.
+
 ##### `mininnet_module`
 
+Modified version of the Mininet object. It simply adds a new attribute that contains `p4switches`.
+
+**Setting your own module:**
+
+By default each module will use the already defined objects in p4utils. If you want to add your own
+implementation you can indicate that in the `json` file using the following syntax:
+
+```javascript
+  "topo_module | controller_module | topodb_module | minininet_module>"
+  {
+    "file_path": "<path to python object>",
+    "module_name": "<name of python file>",
+    "object_name": "<name of module object>"
+  }
+```
+
+> For modules that are already included in the PYTHONPATH you don't have to specify the "file_path".
+
 #### Topology
+
+The topology subsection of the configuration describes how the addresses are assigned,
+the number of hosts and switches and how are they connected.
 
 ##### `assignment_strategy`
 
