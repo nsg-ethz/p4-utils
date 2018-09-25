@@ -216,7 +216,7 @@ class AppTopoStrategies(Topo):
     def ip_addres_to_mac(self, ip):
 
         split_ip = map(int, ip.split("."))
-        mac_address = '00:00:%02x:%02x:%02x:%02x' % tuple(split_ip)
+        mac_address = '00:%02x' + ':%02x:%02x:%02x:%02x' % tuple(split_ip)
         return mac_address
 
     def check_host_valid_ip_from_name(self, hosts):
@@ -274,13 +274,14 @@ class AppTopoStrategies(Topo):
                 else:
                     host_ip = next(ip_generator)
 
-                host_mac = self.ip_addres_to_mac(host_ip)
+                host_mac = self.ip_addres_to_mac(host_ip) % (0)
+                direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
 
                 ops = self._hosts[host_name]
                 self.addHost(host_name, ip=host_ip+"/16", mac=host_mac, **ops)
                 self.addLink(host_name, direct_sw,
                              delay=link['delay'], bw=link['bw'],
-                             addr1=host_mac, addr2=host_mac, weight=link["weight"], max_queue_size=link["queue_length"])
+                             addr1=host_mac, addr2=direct_sw_mac, weight=link["weight"], max_queue_size=link["queue_length"])
                 self.addSwitchPort(direct_sw, host_name)
                 self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip, "mac": host_mac, "mask": 24}
 
