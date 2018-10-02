@@ -179,6 +179,9 @@ class AppTopoStrategies(Topo):
         if assignment_strategy == "l2":
             self.l2_assignment_strategy()
 
+        elif assignment_strategy == "mixed":
+            self.mixed_assignment_strategy()
+
         elif assignment_strategy == "l3":
             self.l3_assignment_strategy()
 
@@ -191,6 +194,7 @@ class AppTopoStrategies(Topo):
 
     def add_switches(self):
 
+        sw_to_id = {}
         sw_id = 1
         for sw, sw_attributes in sorted(self._switches.items(), key=lambda x:int(re.findall(r'\d+', x[0])[-1])):
             json_file = sw_attributes["json"]
@@ -199,7 +203,11 @@ class AppTopoStrategies(Topo):
             sw_ip = "10.%d.%d.254" % (upper_bytex, lower_bytex)
             self.addP4Switch(sw, log_file="%s/%s.log" % (self.log_dir, sw),
                              json_path = json_file, sw_ip = sw_ip, **sw_attributes)
+
+            sw_to_id[sw] = id
             sw_id +=1
+
+        return sw_to_id
 
     def is_host_link(self, link):
 
@@ -255,10 +263,65 @@ class AppTopoStrategies(Topo):
 
     def l2_assignment_strategy(self):
 
+        self.already_assigned_ips = set()
         self.add_switches()
-        ip_generator = IPv4Network(unicode("10.0.0.0/16"))
+        ip_generator = IPv4Network(unicode("10.0.0.0/16")).hosts()
 
         #add links and configure them: ips, macs, etc
+        #assumes hosts are connected to one switch only
+        for link in self._links:
+
+            if self.is_host_link(link):
+                host_name = link[self.get_host_position(link)]
+                direct_sw = link[self.get_sw_position(link)]
+
+                if self.check_host_valid_ip_from_name(self._hosts):
+                    host_num = int(host_name[1:])
+                    upper_byte = (host_num & 0xff00) >> 8
+                    lower_byte = (host_num & 0x00ff)
+                    host_ip = "10.0.%d.%d" % (upper_byte, lower_byte)
+
+                    #we check if for some reason the ip was already given by the ip_generator. This
+                    #can only happen if the host naming is not <h_x>
+                    while host_ip in self.already_assigned_ips:
+                        host_ip = str(next(ip_generator).compressed)
+                    self.add(host_ip)
+                else:
+                    host_ip = next(ip_generator)
+                    #we check if for some reason the ip was already given by the ip_generator. This
+                    #can only happen if the host naming is not <h_x>
+                    while host_ip in self.already_assigned_ips:
+                        host_ip = str(next(ip_generator).compressed)
+                    self.add(host_ip)
+
+                host_mac = self.ip_addres_to_mac(host_ip) % (0)
+                direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
+
+                ops = self._hosts[host_name]
+                self.addHost(host_name, ip=host_ip+"/16", mac=host_mac, **ops)
+                self.addLink(host_name, direct_sw,
+                             delay=link['delay'], bw=link['bw'],
+                             addr1=host_mac, addr2=direct_sw_mac, weight=link["weight"], max_queue_size=link["queue_length"])
+                self.addSwitchPort(direct_sw, host_name)
+                self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip, "mac": host_mac, "mask": 24}
+
+            #switch to switch link
+            else:
+                self.addLink(link['node1'], link['node2'],
+                             delay=link['delay'], bw=link['bw'], weight=link["weight"],
+                             max_queue_size=link["queue_length"])
+                self.addSwitchPort(link['node1'], link['node2'])
+                self.addSwitchPort(link['node2'], link['node1'])
+
+        self.add_cpu_port()
+        self.printPortMapping()
+
+    def mixed_assignment_strategy(self):
+
+        sw_to_id = self.add_switches()
+
+        #add links and configure them: ips, macs, etc
+        #assumes hosts are connected to one switch only
         for link in self._links:
 
             if self.is_host_link(link):
