@@ -285,14 +285,16 @@ class AppTopoStrategies(Topo):
                     #can only happen if the host naming is not <h_x>
                     while host_ip in self.already_assigned_ips:
                         host_ip = str(next(ip_generator).compressed)
-                    self.add(host_ip)
+                    self.already_assigned_ips.add(host_ip)
                 else:
-                    host_ip = next(ip_generator)
+                    host_ip = next(ip_generator).compressed
                     #we check if for some reason the ip was already given by the ip_generator. This
                     #can only happen if the host naming is not <h_x>
                     while host_ip in self.already_assigned_ips:
                         host_ip = str(next(ip_generator).compressed)
-                    self.add(host_ip)
+                    self.already_assigned_ips.add(host_ip)
+
+                print host_ip
 
                 host_mac = self.ip_addres_to_mac(host_ip) % (0)
                 direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
