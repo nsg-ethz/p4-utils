@@ -335,7 +335,8 @@ class AppTopoStrategies(Topo):
                     lower_byte = (host_num & 0x00ff)
                     host_ip = "10.0.%d.%d" % (upper_byte, lower_byte)
                 else:
-                    host_ip = next(ip_generator)
+                    pass
+                    #host_ip = next(ip_generator)
 
                 host_mac = self.ip_addres_to_mac(host_ip) % (0)
                 direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
