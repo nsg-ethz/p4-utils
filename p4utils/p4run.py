@@ -293,7 +293,7 @@ class AppRunner(object):
             h_iface = h.intfs.values()[0]
             h.cmd('ethtool --offload %s rx off tx off' % h_iface.name)
 
-            if assignment_strategy != "l2":
+            if assignment_strategy == "mixed" or assignment_strategy == "l3":
                 #Configure Default Gateway and fill ARP table
 
                 link = h_iface.link
