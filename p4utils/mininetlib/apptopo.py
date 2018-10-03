@@ -204,7 +204,7 @@ class AppTopoStrategies(Topo):
             self.addP4Switch(sw, log_file="%s/%s.log" % (self.log_dir, sw),
                              json_path = json_file, sw_ip = sw_ip, **sw_attributes)
 
-            sw_to_id[sw] = id
+            sw_to_id[sw] = sw_id
             sw_id +=1
 
         return sw_to_id
@@ -320,7 +320,15 @@ class AppTopoStrategies(Topo):
 
     def mixed_assignment_strategy(self):
 
+        self.already_assigned_ips = set()
         sw_to_id = self.add_switches()
+        sw_to_generator = {}
+        #change the id to a generator for that subnet
+        for sw, sw_id in sw_to_id.items():
+            upper_bytex = (sw_id & 0xff00) >> 8
+            lower_bytex = (sw_id & 0x00ff)
+            net = "10.%d.%d.0/24" % (upper_bytex, lower_bytex)
+            sw_to_generator[sw] = IPv4Network(unicode(net)).hosts()
 
         #add links and configure them: ips, macs, etc
         #assumes hosts are connected to one switch only
@@ -330,15 +338,30 @@ class AppTopoStrategies(Topo):
                 host_name = link[self.get_host_position(link)]
                 direct_sw = link[self.get_sw_position(link)]
 
-                #
+                sw_id = sw_to_id[direct_sw]
+                ip_generator = sw_to_generator[direct_sw]
+
                 if self.check_host_valid_ip_from_name(self._hosts):
                     host_num = int(host_name[1:])
-                    upper_byte = (host_num & 0xff00) >> 8
-                    lower_byte = (host_num & 0x00ff)
-                    host_ip = "10.0.%d.%d" % (upper_byte, lower_byte)
+                    assert host_num < 254
+                    upper_byte = (sw_id & 0xff00) >> 8
+                    lower_byte = (sw_id & 0x00ff)
+                    host_ip = "10.%d.%d.%d" % (upper_byte, lower_byte, host_num)
+
+                    #we check if for some reason the ip was already given by the ip_generator. This
+                    #can only happen if the host naming is not <h_x>
+                    while host_ip in self.already_assigned_ips:
+                        host_ip = str(next(ip_generator).compressed)
+                    self.already_assigned_ips.add(host_ip)
                 else:
-                    pass
-                    #host_ip = next(ip_generator)
+                    host_ip = next(ip_generator).compressed
+                    #we check if for some reason the ip was already given by the ip_generator. This
+                    #can only happen if the host naming is not <h_x>
+                    while host_ip in self.already_assigned_ips:
+                        host_ip = str(next(ip_generator).compressed)
+                    self.already_assigned_ips.add(host_ip)
+
+                print host_ip
 
                 host_mac = self.ip_addres_to_mac(host_ip) % (0)
                 direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
