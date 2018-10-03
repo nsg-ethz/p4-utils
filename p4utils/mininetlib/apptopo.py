@@ -16,6 +16,7 @@ class AppTopo(Topo):
         switch_links = []
         self.sw_port_mapping = {}
         self.hosts_info = {}
+        self.host_to_gw = {}
 
         #put host as first link element
         for link in links:
@@ -55,6 +56,7 @@ class AppTopo(Topo):
             host_num = int(host_name[1:])
             sw_num = int(host_sw[1:])
             host_ip = "10.0.%d.%d" % (sw_num, host_num)
+            self.host_to_gw[host_name] = "10.0.%d.254" % (sw_num)
             host_mac = '00:00:00:00:%02x:%02x' % (sw_num, host_num)
             # Each host IP should be /24, so all exercise traffic will use the
             # default gateway (the switch) without sending ARP requests.
