@@ -293,21 +293,19 @@ class AppRunner(object):
             h_iface = h.intfs.values()[0]
             h.cmd('ethtool --offload %s rx off tx off' % h_iface.name)
 
-
             if assignment_strategy != "l2":
                 #Configure Default Gateway and fill ARP table
 
                 link = h_iface.link
                 sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
                 # phony IP to lie to the host about
-                host_id = int(host_name[1:])
                 #TODO: this will be different in real l3
-                sw_ip = '10.0.%d.254' % host_id
+                gw_ip = self.topo.host_to_gw[host_name]
 
                 # static arp entries and default routes
-                h.cmd('ip route add %s dev %s' % (sw_ip, h_iface.name))
-                h.setDefaultRoute("via %s" % sw_ip)
-                h.cmd('arp -i %s -s %s %s' % (h_iface.name, sw_ip, sw_iface.mac))
+                h.cmd('ip route add %s dev %s' % (gw_ip, h_iface.name))
+                h.setDefaultRoute("via %s" % gw_ip)
+                h.cmd('arp -i %s -s %s %s' % (h_iface.name, gw_ip, sw_iface.mac))
 
 
             if auto_arp_tables:

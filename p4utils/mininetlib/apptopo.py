@@ -169,6 +169,9 @@ class AppTopoStrategies(Topo):
         self.sw_port_mapping = {}
         self.hosts_info = {}
 
+        self.already_assigned_ips = set()
+        self.host_to_gw = {}
+
         self.make_topo()
 
     def make_topo(self):
@@ -263,7 +266,6 @@ class AppTopoStrategies(Topo):
 
     def l2_assignment_strategy(self):
 
-        self.already_assigned_ips = set()
         self.add_switches()
         ip_generator = IPv4Network(unicode("10.0.0.0/16")).hosts()
 
@@ -275,7 +277,7 @@ class AppTopoStrategies(Topo):
                 host_name = link[self.get_host_position(link)]
                 direct_sw = link[self.get_sw_position(link)]
 
-                if self.check_host_valid_ip_from_name(self._hosts):
+                if self.check_host_valid_ip_from_name([host_name]):
                     host_num = int(host_name[1:])
                     upper_byte = (host_num & 0xff00) >> 8
                     lower_byte = (host_num & 0x00ff)
@@ -293,8 +295,6 @@ class AppTopoStrategies(Topo):
                     while host_ip in self.already_assigned_ips:
                         host_ip = str(next(ip_generator).compressed)
                     self.already_assigned_ips.add(host_ip)
-
-                print host_ip
 
                 host_mac = self.ip_addres_to_mac(host_ip) % (0)
                 direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
@@ -320,7 +320,6 @@ class AppTopoStrategies(Topo):
 
     def mixed_assignment_strategy(self):
 
-        self.already_assigned_ips = set()
         sw_to_id = self.add_switches()
         sw_to_generator = {}
         #change the id to a generator for that subnet
@@ -339,15 +338,14 @@ class AppTopoStrategies(Topo):
                 direct_sw = link[self.get_sw_position(link)]
 
                 sw_id = sw_to_id[direct_sw]
+                upper_byte = (sw_id & 0xff00) >> 8
+                lower_byte = (sw_id & 0x00ff)
                 ip_generator = sw_to_generator[direct_sw]
 
-                if self.check_host_valid_ip_from_name(self._hosts):
+                if self.check_host_valid_ip_from_name([host_name]):
                     host_num = int(host_name[1:])
                     assert host_num < 254
-                    upper_byte = (sw_id & 0xff00) >> 8
-                    lower_byte = (sw_id & 0x00ff)
                     host_ip = "10.%d.%d.%d" % (upper_byte, lower_byte, host_num)
-
                     #we check if for some reason the ip was already given by the ip_generator. This
                     #can only happen if the host naming is not <h_x>
                     while host_ip in self.already_assigned_ips:
@@ -361,7 +359,8 @@ class AppTopoStrategies(Topo):
                         host_ip = str(next(ip_generator).compressed)
                     self.already_assigned_ips.add(host_ip)
 
-                print host_ip
+                host_gw = "10.%d.%d.254" % (upper_byte, lower_byte)
+                self.host_to_gw[host_name] =  host_gw
 
                 host_mac = self.ip_addres_to_mac(host_ip) % (0)
                 direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
