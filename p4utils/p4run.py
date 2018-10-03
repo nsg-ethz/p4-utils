@@ -292,21 +292,23 @@ class AppRunner(object):
             h.defaultIntf().rename('%s-eth0' % host_name)
             h_iface = h.intfs.values()[0]
             h.cmd('ethtool --offload %s rx off tx off' % h_iface.name)
-
-            if assignment_strategy == "mixed" or assignment_strategy == "l3":
+            
+            if assignment_strategy != "l2":
                 #Configure Default Gateway and fill ARP table
 
-                link = h_iface.link
-                sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
-                # phony IP to lie to the host about
-                #TODO: this will be different in real l3
-                gw_ip = self.topo.host_to_gw[host_name]
+                try:
+                    link = h_iface.link
+                    sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
+                    # phony IP to lie to the host about
+                    #TODO: this will be different in real l3
+                    gw_ip = self.topo.host_to_gw[host_name]
 
-                # static arp entries and default routes
-                h.cmd('ip route add %s dev %s' % (gw_ip, h_iface.name))
-                h.setDefaultRoute("via %s" % gw_ip)
-                h.cmd('arp -i %s -s %s %s' % (h_iface.name, gw_ip, sw_iface.mac))
-
+                    # static arp entries and default routes
+                    h.cmd('ip route add %s dev %s' % (gw_ip, h_iface.name))
+                    h.setDefaultRoute("via %s" % gw_ip)
+                    h.cmd('arp -i %s -s %s %s' % (h_iface.name, gw_ip, sw_iface.mac))
+                except:
+                    print "Problem with assigment strategy {}".format(assignment_strategy)
 
             if auto_arp_tables:
                 #set arp rules for all the hosts in the same subnet
