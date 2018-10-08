@@ -69,10 +69,11 @@ def check_imports_last_modified(input_file, import_last_modifications):
     """
     previous_path = os.getcwd()
     imported_files = get_imported_files(input_file)
-
-    #move to the mail file path so we check input files relative to that
-    os.chdir("./" + os.path.dirname(input_file))
-
+    #move to the main file path so we check input files relative to that
+    dst_dir = os.path.dirname(input_file)
+    if not dst_dir:
+        dst_dir = "./"
+    os.chdir(dst_dir)
     compile_flag = False
     for import_file in imported_files:
 
