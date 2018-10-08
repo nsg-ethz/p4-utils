@@ -291,8 +291,8 @@ class AppRunner(object):
             # mininet cannot shutdown gracefully
             h.defaultIntf().rename('%s-eth0' % host_name)
             h_iface = h.intfs.values()[0]
-            h.cmd('ethtool --offload %s rx off tx off' % h_iface.name)
-            
+            h.cmd('ethtool --offload %s rx off tx off sg off' % h_iface.name)
+
             if assignment_strategy != "l2":
                 #Configure Default Gateway and fill ARP table
 
