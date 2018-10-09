@@ -1650,7 +1650,7 @@ class RuntimeAPI(object):
 
         register = self.get_res("register", register_name,
                                 ResType.register_array)
-        if index:
+        if index or index == 0:
             try:
                 index = int(index)
             except:

@@ -112,7 +112,11 @@ class P4CLI(CLI):
             switch_conf['program'] = p4source_path
             # check if file exists
             if not os.path.exists(p4source_path):
-                warn('File Error: p4source does not exist %s\n' % p4source_path)
+                warn('File Error: p4source %s does not exist\n' % p4source_path)
+                return self.failed_status()
+            #check if its not a file
+            if not os.path.isfile(p4source_path):
+                warn('File Error: p4source %s is not a file\n' % p4source_path)
                 return self.failed_status()
 
         p4source_path_source = switch_conf['program']
