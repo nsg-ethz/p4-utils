@@ -690,30 +690,34 @@ def handle_bad_input_mc(f):
 
 # thrift does not support unsigned integers
 def hex_to_i16(h):
-    x = int(h, 0)
+    if type(h) != int:
+        x = int(h, 0)
     if (x > 0xFFFF):
         raise UIn_Error("Integer cannot fit within 16 bits")
     if (x > 0x7FFF): x-= 0x10000
     return x
 def i16_to_hex(h):
-    x = int(h)
+    if type(h) != int:
+        x = int(h)
     if (x & 0x8000): x+= 0x10000
     return x
 def hex_to_i32(h):
-    x = int(h, 0)
+    if type(h) != int:
+        x = int(h, 0)
     if (x > 0xFFFFFFFF):
         raise UIn_Error("Integer cannot fit within 32 bits")
     if (x > 0x7FFFFFFF): x-= 0x100000000
     return x
 def i32_to_hex(h):
-    x = int(h)
+    if type(h) != int:
+        x = int(h)
     if (x & 0x80000000): x+= 0x100000000
     return x
 
 def parse_bool(s):
-    if s == "true" or s == "True":
+    if s == "true" or s == "True" or s == True:
         return True
-    if s == "false" or s  == "False":
+    if s == "false" or s  == "False" or s == False:
         return False
     try:
         s = int(s, 0)
@@ -721,7 +725,6 @@ def parse_bool(s):
     except:
         pass
     raise UIn_Error("Invalid bool parameter")
-
 
 
 class RuntimeAPI(object):
