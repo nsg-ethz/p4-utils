@@ -1645,7 +1645,7 @@ class RuntimeAPI(object):
             self.client.bm_counter_read(0, counter.name, index, value)
 
     @handle_bad_input
-    def register_read(self, register_name, index=None):
+    def register_read(self, register_name, index=None, show=False):
         "Read register value: register_read <name> [index]"
 
         register = self.get_res("register", register_name,
@@ -1656,13 +1656,14 @@ class RuntimeAPI(object):
             except:
                 raise UIn_Error("Bad format for index")
             value = self.client.bm_register_read(0, register.name, index)
-            print "{}[{}]=".format(register_name, index), value
+            if show:
+                print "{}[{}]=".format(register_name, index), value
             return value
         else:
-            sys.stderr.write("register index omitted, reading entire array\n")
             entries = self.client.bm_register_read_all(0, register.name)
-            print "{}=".format(register_name), ", ".join(
-                [str(e) for e in entries])
+            if show:
+                sys.stderr.write("register index omitted, reading entire array\n")
+                print "{}=".format(register_name), ", ".join([str(e) for e in entries])
             return entries
 
     @handle_bad_input
