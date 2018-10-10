@@ -690,30 +690,34 @@ def handle_bad_input_mc(f):
 
 # thrift does not support unsigned integers
 def hex_to_i16(h):
-    x = int(h, 0)
-    if (x > 0xFFFF):
+    if type(h) != int:
+        h = int(h, 0)
+    if (h > 0xFFFF):
         raise UIn_Error("Integer cannot fit within 16 bits")
-    if (x > 0x7FFF): x-= 0x10000
-    return x
+    if (h > 0x7FFF): h-= 0x10000
+    return h
 def i16_to_hex(h):
-    x = int(h)
-    if (x & 0x8000): x+= 0x10000
-    return x
+    if type(h) != int:
+        h = int(h)
+    if (h & 0x8000): h+= 0x10000
+    return h
 def hex_to_i32(h):
-    x = int(h, 0)
-    if (x > 0xFFFFFFFF):
+    if type(h) != int:
+        h = int(h, 0)
+    if (h > 0xFFFFFFFF):
         raise UIn_Error("Integer cannot fit within 32 bits")
-    if (x > 0x7FFFFFFF): x-= 0x100000000
-    return x
+    if (h > 0x7FFFFFFF): h-= 0x100000000
+    return h
 def i32_to_hex(h):
-    x = int(h)
-    if (x & 0x80000000): x+= 0x100000000
-    return x
+    if type(h) != int:
+        h = int(h)
+    if (h & 0x80000000): h+= 0x100000000
+    return h
 
 def parse_bool(s):
-    if s == "true" or s == "True":
+    if s == "true" or s == "True" or s == True:
         return True
-    if s == "false" or s  == "False":
+    if s == "false" or s  == "False" or s == False:
         return False
     try:
         s = int(s, 0)
@@ -721,7 +725,6 @@ def parse_bool(s):
     except:
         pass
     raise UIn_Error("Invalid bool parameter")
-
 
 
 class RuntimeAPI(object):
@@ -1645,7 +1648,7 @@ class RuntimeAPI(object):
             self.client.bm_counter_read(0, counter.name, index, value)
 
     @handle_bad_input
-    def register_read(self, register_name, index=None):
+    def register_read(self, register_name, index=None, show=False):
         "Read register value: register_read <name> [index]"
 
         register = self.get_res("register", register_name,
@@ -1656,13 +1659,14 @@ class RuntimeAPI(object):
             except:
                 raise UIn_Error("Bad format for index")
             value = self.client.bm_register_read(0, register.name, index)
-            print "{}[{}]=".format(register_name, index), value
+            if show:
+                print "{}[{}]=".format(register_name, index), value
             return value
         else:
-            sys.stderr.write("register index omitted, reading entire array\n")
             entries = self.client.bm_register_read_all(0, register.name)
-            print "{}=".format(register_name), ", ".join(
-                [str(e) for e in entries])
+            if show:
+                sys.stderr.write("register index omitted, reading entire array\n")
+                print "{}=".format(register_name), ", ".join([str(e) for e in entries])
             return entries
 
     @handle_bad_input
