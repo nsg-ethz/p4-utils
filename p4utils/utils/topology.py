@@ -191,7 +191,7 @@ class TopologyDB(object):
         """Register a host."""
         attributes = {'type': 'host'}
         # node.gateway attribute only exists in my custom mininet
-        import ipdb; ipdb.set_trace()
+
         if hasattr(node, "gateway"):
             attributes.update({'gateway': node.gateway})
         elif 'defaultRoute' in node.params:
@@ -208,12 +208,13 @@ class TopologyDB(object):
 
 class TopologyDBP4(TopologyDB):
 
+
     def __init__(self, *args, **kwargs):
         super(TopologyDBP4, self).__init__(*args, **kwargs)
 
     def add_p4switch(self, node):
         self._add_node(node, {'type': 'switch', 'subtype': 'p4switch',
-                              'thrift_port': node.thrift_port, 'sw_id': node.sw_ip})
+                              'thrift_port': node.thrift_port, 'sw_id': node.device_id})
 
     def get_thrift_port(self, switch):
         """Return the Thrift port used to communicate with the P4 switch."""
@@ -222,6 +223,7 @@ class TopologyDBP4(TopologyDB):
         return self._node(switch)['thrift_port']
 
 class NetworkGraph(nx.Graph):
+
 
     def __init__(self, topology_db, *args, **kwargs):
         """Initialize the NetworkGraph object.
@@ -255,7 +257,6 @@ class NetworkGraph(nx.Graph):
             if neighbor_node in self.nodes():
                 weight = attributes[neighbor_node].get("weight", 1)
                 super(NetworkGraph, self).add_edge(node, neighbor_node, weight=weight)
-
 
     """Methods for polting"""
 
@@ -338,12 +339,8 @@ class Topology(TopologyDBP4):
         # nodes can be removed and added, but new links or devices cannot be added.
         self._original_network = copy.deepcopy(self._network)
 
-        try:
-            if loadNetworkGraph:
-                self.network_graph = NetworkGraph(self)
-        except:
-            import traceback
-            traceback.print_exc()
+        if loadNetworkGraph:
+            self.network_graph = NetworkGraph(self)
 
         # Creates hosts to IP and IP to hosts mappings
         self.hosts_ip_mapping = {}
@@ -374,17 +371,6 @@ class Topology(TopologyDBP4):
         if ip:
             return ip
         raise NodeDoesNotExist(name)
-
-    def is_router(self, node):
-        """Checks if node is a router.
-
-        Args:
-            node: name of Mininet node
-
-        Returns:
-            True if node is a router, False otherwise
-        """
-        return self[node]["type"] == "router"
 
     def is_host(self, node):
         """Checks if node is a host.
@@ -419,10 +405,6 @@ class Topology(TopologyDBP4):
         """
         return self[node]["type"] == "switch" and self[node].get('subtype', None) == 'p4switch'
 
-    def get_routers(self):
-        """Returns the routers from the topologyDB."""
-        return {node: self[node] for node in self if self.is_router(node)}
-
     def get_hosts(self):
         """Returns the hosts from the topologyDB."""
         return {node: self[node] for node in self if self.is_host(node)}
@@ -447,7 +429,7 @@ class Topology(TopologyDBP4):
         return self[name]["interfaces_to_node"].keys()[0]
 
     def get_p4switch_id(self, sw_name):
-        """Returns the ID (pseudo-IP) of a P4 switch.
+        """Returns the ID of a P4 switch.
         Args:
             sw_name: P4 switch name in the topology
         Returns:

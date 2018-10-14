@@ -89,7 +89,7 @@ class P4Host(Host):
 
 class P4Switch(Switch):
     """P4 virtual switch"""
-    device_id = 0
+    device_id = 1
 
     def __init__(self, name,
                  sw_path=None,
@@ -102,7 +102,6 @@ class P4Switch(Switch):
                  verbose=False,
                  device_id=None,
                  enable_debugger=False,
-                 sw_ip = "10.0.1.254",
                  **kwargs):
 
         Switch.__init__(self, name, **kwargs)
@@ -140,7 +139,6 @@ class P4Switch(Switch):
         self.nanomsg = "ipc:///tmp/bm-{}-log.ipc".format(self.device_id)
 
         self.simple_switch_pid = None
-        self.sw_ip =sw_ip
 
     @classmethod
     def setup(cls):
