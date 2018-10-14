@@ -227,6 +227,72 @@ class AppTopoStrategies(Topo):
 
             #switch to switch link
             else:
+                print link
+                self.addLink(link['node1'], link['node2'],
+                             delay=link['delay'], bw=link['bw'], weight=link["weight"],
+                             max_queue_size=link["queue_length"], params2 = {'ip': "11.11.11.1/24"})
+                self.addSwitchPort(link['node1'], link['node2'])
+                self.addSwitchPort(link['node2'], link['node1'])
+
+        self.add_cpu_port()
+        self.printPortMapping()
+
+    def l3_assignment_strategy(self):
+        sw_to_id = self.add_switches()
+        sw_to_generator = {}
+        # change the id to a generator for that subnet
+        for sw, sw_id in sw_to_id.items():
+            upper_bytex = (sw_id & 0xff00) >> 8
+            lower_bytex = (sw_id & 0x00ff)
+            net = "10.%d.%d.0/24" % (upper_bytex, lower_bytex)
+            sw_to_generator[sw] = IPv4Network(unicode(net)).hosts()
+
+        # add links and configure them: ips, macs, etc
+        # assumes hosts are connected to one switch only
+        for link in self._links:
+
+            if self.is_host_link(link):
+                host_name = link[self.get_host_position(link)]
+                direct_sw = link[self.get_sw_position(link)]
+
+                sw_id = sw_to_id[direct_sw]
+                upper_byte = (sw_id & 0xff00) >> 8
+                lower_byte = (sw_id & 0x00ff)
+                ip_generator = sw_to_generator[direct_sw]
+
+                if self.check_host_valid_ip_from_name([host_name]):
+                    host_num = int(host_name[1:])
+                    assert host_num < 254
+                    host_ip = "10.%d.%d.%d" % (upper_byte, lower_byte, host_num)
+                    # we check if for some reason the ip was already given by the ip_generator. This
+                    # can only happen if the host naming is not <h_x>
+                    while host_ip in self.already_assigned_ips:
+                        host_ip = str(next(ip_generator).compressed)
+                    self.already_assigned_ips.add(host_ip)
+                else:
+                    host_ip = next(ip_generator).compressed
+                    # we check if for some reason the ip was already given by the ip_generator. This
+                    # can only happen if the host naming is not <h_x>
+                    while host_ip in self.already_assigned_ips:
+                        host_ip = str(next(ip_generator).compressed)
+                    self.already_assigned_ips.add(host_ip)
+
+                host_gw = "10.%d.%d.254" % (upper_byte, lower_byte)
+
+                host_mac = self.ip_addres_to_mac(host_ip) % (0)
+                direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
+
+                ops = self._hosts[host_name]
+                self.addHost(host_name, ip=host_ip + "/24", mac=host_mac, defaultRoute='via %s' % host_gw, **ops)
+                self.addLink(host_name, direct_sw,
+                             delay=link['delay'], bw=link['bw'],
+                             addr1=host_mac, addr2=direct_sw_mac, weight=link["weight"],
+                             max_queue_size=link["queue_length"])
+                self.addSwitchPort(direct_sw, host_name)
+                self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip, "mac": host_mac, "mask": 24}
+
+            # switch to switch link
+            else:
                 self.addLink(link['node1'], link['node2'],
                              delay=link['delay'], bw=link['bw'], weight=link["weight"],
                              max_queue_size=link["queue_length"])
@@ -235,10 +301,6 @@ class AppTopoStrategies(Topo):
 
         self.add_cpu_port()
         self.printPortMapping()
-
-    def l3_assignment_strategy(self):
-        print "Assignment Strategy L3 not implemented yet"
-        exit(1)
 
     def manual_assignment_strategy(self):
         print "Assignment Strategy Manual not implemented yet"

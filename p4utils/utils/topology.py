@@ -195,7 +195,7 @@ class TopologyDB(object):
         if hasattr(node, "gateway"):
             attributes.update({'gateway': node.gateway})
         elif 'defaultRoute' in node.params:
-            attributes.update({'gateway': node.params['defaultRoute']})
+            attributes.update({'gateway': node.params['defaultRoute'].replace("via ", "")})
         self._add_node(node, attributes)
 
     def add_controller(self, node):

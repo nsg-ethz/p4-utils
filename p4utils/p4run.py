@@ -34,7 +34,8 @@ from p4utils.mininetlib.apptopo import AppTopoStrategies as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
 from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError, read_entries, add_entries, cleanup
 
-from mininet.link import TCLink
+#from mininet.link import TCLink
+from p4utils.mininetlib.link import TCLink
 from mininet.log import setLogLevel, info
 from mininet.clean import sh
 
