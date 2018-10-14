@@ -30,7 +30,7 @@ from p4utils.mininetlib.p4net import P4Mininet
 from p4utils.mininetlib.p4_mininet import P4Switch, P4Host, P4RuntimeSwitch, configureP4Switch
 from p4utils.utils.topology import Topology as DefaultTopoDB
 from p4utils.mininetlib.cli import P4CLI
-from p4utils.mininetlib.apptopo import AppTopo as DefaultTopo
+from p4utils.mininetlib.apptopo import AppTopoStrategies as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
 from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError, read_entries, add_entries, cleanup
 
@@ -281,7 +281,6 @@ class AppRunner(object):
             A mininet instance is stored as self.net and self.net.start() has been called.
         """
         topology = self.conf.get('topology')
-        assignment_strategy = topology.get('assignment_strategy', None)
         auto_arp_tables = topology.get('auto_arp_tables', True)
 
         for host_name in self.topo.hosts():
@@ -291,24 +290,14 @@ class AppRunner(object):
             # mininet cannot shutdown gracefully
             h.defaultIntf().rename('%s-eth0' % host_name)
             h_iface = h.intfs.values()[0]
-            h.cmd('ethtool --offload %s rx off tx off' % h_iface.name)
+            h.cmd('ethtool --offload %s rx off tx off sg off' % h_iface.name)
 
-
-            if assignment_strategy != "l2":
-                #Configure Default Gateway and fill ARP table
-
+            #if there is gateway assigned
+            if 'defaultRoute' in h.params:
                 link = h_iface.link
                 sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
-                # phony IP to lie to the host about
-                host_id = int(host_name[1:])
-                #TODO: this will be different in real l3
-                sw_ip = '10.0.%d.254' % host_id
-
-                # static arp entries and default routes
-                #h.cmd('ip route add %s dev %s' % (sw_ip, h_iface.name))
-                h.setDefaultRoute("via %s" % sw_ip)
-                h.cmd('arp -i %s -s %s %s' % (h_iface.name, sw_ip, sw_iface.mac))
-
+                gw_ip = h.params['defaultRoute'].split()[-1]
+                h.cmd('arp -i %s -s %s %s' % (h_iface.name, gw_ip, sw_iface.mac))
 
             if auto_arp_tables:
                 #set arp rules for all the hosts in the same subnet
