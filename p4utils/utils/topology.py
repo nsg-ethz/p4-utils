@@ -9,7 +9,6 @@ from p4utils.logger import log
 
 class TopologyDB(object):
     """A convenience storage for auto-allocated mininet properties.
-
     Based on Olivie Tilmans TopologyDB from fibbing project:
     https://github.com/Fibbing/FibbingNode/blob/master/fibbingnode/misc/mininetlib/ipnet.py
     """
@@ -73,42 +72,43 @@ class TopologyDB(object):
         return item in self._network
 
     def _interface(self, node1, node2):
+        """Returns interface information of node1 facing node2"""
 
-        #checks if they exist
+        #this functions checks if node 2 exists, if not raises exeption.
         self._node(node2)
-
         return self._node(node1)[node2]
 
-    def interface(self, node1, node2):
+    def _node_interface(self, node, intf):
+        """Returns interface information of node1's interface intf"""
+
+        connected_to = self._node(node)["interfaces_to_node"][intf]
+        return self._interface(node, connected_to)
+
+    def node_to_node_interface_ip(self, node1, node2):
         """Return the ip_interface for node1 facing node2."""
+
         return ip_interface(self._interface(node1, node2)['ip'])
 
-    def interface_bandwidth(self, node1, node2):
+    def node_to_node_interface_bw(self, node1, node2):
         """Return the bandwidth capacity of the interface on node1 facing node2.
         If it is unlimited, return -1."""
 
         #checks if they exist
         self._node(node2)
+        return self._interface(node1, node2)['bw']
 
-        connected_to = self._node(node1)["interfaces_to_node"][node2]
-        return self._interface(node1, connected_to)['bw']
+    def node_interface_ip(self, node, intf):
+        """Returns the IP address of a given interface and node."""
+
+        return self._node_interface(node, intf)['ip'].split("/")[0]
+
+    def node_interface_bw(self, node, intf):
+        return self._node_interface(node, intf)['bw']
+
 
     def subnet(self, node1, node2):
         """Return the subnet linking node1 and node2."""
         return self.interface(node1, node2).network.with_prefixlen
-
-    def get_router_id(self, node):
-        """Return the OSPF router id for router node."""
-
-        if self._node(node)['type'] != 'router':
-            raise TypeError('%s is not a router' % node)
-        return self._node(node).get('routerid')
-
-    def interface_ip(self, node, interface):
-        """Returns the IP address of a given interface and node."""
-
-        connected_to = self._node(node)["interfaces_to_node"][interface]
-        return self._interface(node, connected_to)['ip'].split("/")[0]
 
     def get_node_type(self, node):
 
@@ -151,11 +151,6 @@ class TopologyDB(object):
                 self.add_p4switch(switch)
             else:
                 self.add_switch(switch)
-
-        #if routers exits.
-        if hasattr(net, "routers"):
-            for router in net.routers:
-                self.add_router(router)
 
     def _add_node(self, node, props):
         """Register a network node.
@@ -215,16 +210,15 @@ class TopologyDB(object):
         """Register a switch."""
         self._add_node(node, {'type': 'switch'})
 
+
+class TopologyDBP4(TopologyDB):
+
+    def __init__(self, *args, **kwargs):
+        super(TopologyDBP4, self).__init__(*args, **kwargs)
+
     def add_p4switch(self, node):
         self._add_node(node, {'type': 'switch', 'subtype': 'p4switch',
                               'thrift_port': node.thrift_port, 'sw_id': node.sw_ip})
-
-    def add_router(self, node):
-        """Register a router."""
-        self._add_node(node, {'type': 'router', 'routerid': node.id})
-        # We overwrite the router id using our own function.
-        self._network[node.name]["routerid"] = self.get_router_id(node.name)
-
 
 class NetworkGraph(nx.Graph):
     def __init__(self, topology_db, *args, **kwargs):
@@ -322,7 +316,7 @@ class NetworkGraph(nx.Graph):
         return paths
 
 
-class Topology(TopologyDB):
+class Topology(TopologyDBP4):
     """
     Structure:
         self._network: topology database
@@ -330,8 +324,8 @@ class Topology(TopologyDB):
         self.hosts_ip_mapping: dictionary with mapping from host name to IP address and vice versa
         self.network_graph: NetworkGraph object
     """
-    def __init__(self, loadNetworkGraph=True, hostsMappings=True, *args, **kwargs):
-        super(Topology, self).__init__(*args, **kwargs)
+    def __init__(self, db="topology.db",loadNetworkGraph=True, hostsMappings=True, *args, **kwargs):
+        super(Topology, self).__init__(db,*args, **kwargs)
 
         # Save network startup state:
         # In case of link removal, we use this objects to remember the state of links and nodes
