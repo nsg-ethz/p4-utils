@@ -191,6 +191,7 @@ class TopologyDB(object):
         """Register a host."""
         attributes = {'type': 'host'}
         # node.gateway attribute only exists in my custom mininet
+        import ipdb; ipdb.set_trace()
         if hasattr(node, "gateway"):
             attributes.update({'gateway': node.gateway})
         elif 'defaultRoute' in node.params:
@@ -204,7 +205,6 @@ class TopologyDB(object):
     def add_switch(self, node):
         """Register a switch."""
         self._add_node(node, {'type': 'switch'})
-
 
 class TopologyDBP4(TopologyDB):
 
@@ -222,6 +222,7 @@ class TopologyDBP4(TopologyDB):
         return self._node(switch)['thrift_port']
 
 class NetworkGraph(nx.Graph):
+
     def __init__(self, topology_db, *args, **kwargs):
         """Initialize the NetworkGraph object.
 
@@ -254,6 +255,9 @@ class NetworkGraph(nx.Graph):
             if neighbor_node in self.nodes():
                 weight = attributes[neighbor_node].get("weight", 1)
                 super(NetworkGraph, self).add_edge(node, neighbor_node, weight=weight)
+
+
+    """Methods for polting"""
 
     def set_node_shape(self, node, shape):
         self.node[node]['node_shape'] = shape
@@ -305,14 +309,14 @@ class NetworkGraph(nx.Graph):
                     continue
 
                 # compute the number of paths
-                npaths = sum(1 for _ in nx.all_shortest_paths(self.graph, host, host_pair))
+                npaths = sum(1 for _ in nx.all_shortest_paths(self, host, host_pair))
                 total_paths += npaths
 
         return total_paths
 
     def get_paths_between_nodes(self, node1, node2):
         """Compute the paths between two nodes."""
-        paths = nx.all_shortest_paths(self.graph, node1, node2)
+        paths = nx.all_shortest_paths(self, node1, node2)
         paths = [tuple(x) for x in paths]
         return paths
 
