@@ -87,7 +87,7 @@ class TopologyDB(object):
     def node_to_node_interface_ip(self, node1, node2):
         """Return the ip_interface for node1 facing node2."""
 
-        return ip_interface(self._interface(node1, node2)['ip'])
+        return self._interface(node1, node2)['ip']
 
     def node_to_node_interface_bw(self, node1, node2):
         """Return the bandwidth capacity of the interface on node1 facing node2.
@@ -105,10 +105,9 @@ class TopologyDB(object):
     def node_interface_bw(self, node, intf):
         return self._node_interface(node, intf)['bw']
 
-
     def subnet(self, node1, node2):
         """Return the subnet linking node1 and node2."""
-        return self.interface(node1, node2).network.with_prefixlen
+        return ip_interface(self.node_to_node_interface_ip(node1, node2)).network.with_prefixlen
 
     def get_node_type(self, node):
 
@@ -120,12 +119,6 @@ class TopologyDB(object):
 
     def get_interfaces(self, node):
         return self._node(node)["interfaces_to_node"].keys()
-
-    def get_thrift_port(self, switch):
-        """Return the Thrift port used to communicate with the P4 switch."""
-        if self._node(switch).get('subtype', None) != 'p4switch':
-            raise TypeError('%s is not a P4 switch' % switch)
-        return self._node(switch)['thrift_port']
 
     @staticmethod
     def other_intf(intf):
@@ -183,7 +176,9 @@ class TopologyDB(object):
                 'mac' : '%s' % (itf.mac),
                 'intf': itf.name,
                 'bw': itf.params.get('bw', -1),
-                'weight': itf.params.get('weight', 1)
+                'weight': itf.params.get('weight', 1),
+                'delay' : itf.params.get('delay', 0),
+                'queue_length' : itf.params.get('max_queue_size', -1)
             }
             interfaces_to_nodes[itf.name] = nh.node.name
 
@@ -219,6 +214,12 @@ class TopologyDBP4(TopologyDB):
     def add_p4switch(self, node):
         self._add_node(node, {'type': 'switch', 'subtype': 'p4switch',
                               'thrift_port': node.thrift_port, 'sw_id': node.sw_ip})
+
+    def get_thrift_port(self, switch):
+        """Return the Thrift port used to communicate with the P4 switch."""
+        if self._node(switch).get('subtype', None) != 'p4switch':
+            raise TypeError('%s is not a P4 switch' % switch)
+        return self._node(switch)['thrift_port']
 
 class NetworkGraph(nx.Graph):
     def __init__(self, topology_db, *args, **kwargs):
@@ -352,10 +353,9 @@ class Topology(TopologyDBP4):
         self.hosts_ip_mapping["ipToName"] = {}
         self.hosts_ip_mapping["nameToIp"] = {}
         for host in hosts:
-            ip = self.interface_ip(host, self.get_host_first_interface(host).format(host))
+            ip = self.node_interface_ip(host, self.get_host_first_interface(host).format(host))
             self.hosts_ip_mapping["ipToName"][ip] = host
             self.hosts_ip_mapping["nameToIp"][host] = ip
-
 
     def get_host_name(self, ip):
         """Returns the host name to an IP address."""
