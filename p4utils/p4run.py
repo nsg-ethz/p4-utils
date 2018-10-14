@@ -288,9 +288,7 @@ class AppRunner(object):
 
             # Ensure each host's interface name is unique, or else
             # mininet cannot shutdown gracefully
-            h.defaultIntf().rename('%s-eth0' % host_name)
             h_iface = h.intfs.values()[0]
-            h.cmd('ethtool --offload %s rx off tx off sg off' % h_iface.name)
 
             #if there is gateway assigned
             if 'defaultRoute' in h.params:

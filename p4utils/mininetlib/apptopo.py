@@ -218,7 +218,7 @@ class AppTopoStrategies(Topo):
                 direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
 
                 ops = self._hosts[host_name]
-                self.addHost(host_name, ip=host_ip+"/24", mac=host_mac, defaultRoute="via %s" % host_gw, **ops)
+                self.addHost(host_name, ip=host_ip+"/24", mac=host_mac, defaultRoute='via %s' % host_gw, **ops)
                 self.addLink(host_name, direct_sw,
                              delay=link['delay'], bw=link['bw'],
                              addr1=host_mac, addr2=direct_sw_mac, weight=link["weight"], max_queue_size=link["queue_length"])

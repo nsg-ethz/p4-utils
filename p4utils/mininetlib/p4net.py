@@ -23,6 +23,7 @@ class P4Mininet(Mininet):
 
         #remove Ipv6 for all the interfaces
         for link in self.links:
+
             cmd1 = "/sbin/ethtool --offload {0} rx off tx off sg off"
             cmd2 = "sysctl net.ipv6.conf.{0}.disable_ipv6=1"
             cmd3 = "ip link set {0} mtu 9500"
