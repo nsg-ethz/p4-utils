@@ -223,6 +223,17 @@ class TopologyDBP4(TopologyDB):
         self._add_node(node, {'type': 'switch', 'subtype': 'p4switch',
                               'thrift_port': node.thrift_port, 'sw_id': node.device_id})
 
+
+        #clean the IPs, this seems to make no sense, but when the p4switch is
+        #started again, if the interface has an IP, the interface is not added
+        #There are two options, remove that check, or clear the IP after creating
+        #the object.
+
+        for intf in node.intfList():
+            if intf.name == "lo":
+                continue
+            intf.ip, intf.prefixLen = None, None
+
     def get_thrift_port(self, switch):
         """Return the Thrift port used to communicate with the P4 switch."""
         if self._node(switch).get('subtype', None) != 'p4switch':
