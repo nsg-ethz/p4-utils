@@ -490,6 +490,9 @@ class Topology(TopologyDBP4):
         intf = self[node1][node2]['intf']
         return self.interface_to_port(node1, intf)
 
+    def get_shortests_paths_between_nodes(self, node1, node2):
+        return self.network_graph.get_paths_between_nodes(node1, node2)
+
     def get_cpu_port_intf(self, p4switch, cpu_node = 'sw-cpu'):
         """
         Returns the port index of p4switch's cpu port
