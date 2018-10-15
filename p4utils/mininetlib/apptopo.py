@@ -32,6 +32,8 @@ class AppTopoStrategies(Topo):
         topology = self.conf.get('topology')
         assignment_strategy =  topology.get('assignment_strategy', None)
 
+
+
         if assignment_strategy == "l2":
             self.l2_assignment_strategy()
 
@@ -54,11 +56,8 @@ class AppTopoStrategies(Topo):
         sw_id = 1
         for sw, sw_attributes in sorted(self._switches.items(), key=lambda x:int(re.findall(r'\d+', x[0])[-1])):
             json_file = sw_attributes["json"]
-            upper_bytex = (sw_id & 0xff00) >> 8
-            lower_bytex = (sw_id & 0x00ff)
-            sw_ip = "10.%d.%d.254" % (upper_bytex, lower_bytex)
             self.addP4Switch(sw, log_file="%s/%s.log" % (self.log_dir, sw),
-                             json_path = json_file, sw_ip = sw_ip, **sw_attributes)
+                             json_path = json_file, **sw_attributes)
 
             sw_to_id[sw] = sw_id
             sw_id +=1
@@ -230,7 +229,7 @@ class AppTopoStrategies(Topo):
                 print link
                 self.addLink(link['node1'], link['node2'],
                              delay=link['delay'], bw=link['bw'], weight=link["weight"],
-                             max_queue_size=link["queue_length"], params2 = {'ip': "11.11.11.1/24"})
+                             max_queue_size=link["queue_length"])
                 self.addSwitchPort(link['node1'], link['node2'])
                 self.addSwitchPort(link['node2'], link['node1'])
 
@@ -238,14 +237,8 @@ class AppTopoStrategies(Topo):
         self.printPortMapping()
 
     def l3_assignment_strategy(self):
+
         sw_to_id = self.add_switches()
-        sw_to_generator = {}
-        # change the id to a generator for that subnet
-        for sw, sw_id in sw_to_id.items():
-            upper_bytex = (sw_id & 0xff00) >> 8
-            lower_bytex = (sw_id & 0x00ff)
-            net = "10.%d.%d.0/24" % (upper_bytex, lower_bytex)
-            sw_to_generator[sw] = IPv4Network(unicode(net)).hosts()
 
         # add links and configure them: ips, macs, etc
         # assumes hosts are connected to one switch only
@@ -256,28 +249,12 @@ class AppTopoStrategies(Topo):
                 direct_sw = link[self.get_sw_position(link)]
 
                 sw_id = sw_to_id[direct_sw]
-                upper_byte = (sw_id & 0xff00) >> 8
-                lower_byte = (sw_id & 0x00ff)
-                ip_generator = sw_to_generator[direct_sw]
+                assert sw_id < 254
 
-                if self.check_host_valid_ip_from_name([host_name]):
-                    host_num = int(host_name[1:])
-                    assert host_num < 254
-                    host_ip = "10.%d.%d.%d" % (upper_byte, lower_byte, host_num)
-                    # we check if for some reason the ip was already given by the ip_generator. This
-                    # can only happen if the host naming is not <h_x>
-                    while host_ip in self.already_assigned_ips:
-                        host_ip = str(next(ip_generator).compressed)
-                    self.already_assigned_ips.add(host_ip)
-                else:
-                    host_ip = next(ip_generator).compressed
-                    # we check if for some reason the ip was already given by the ip_generator. This
-                    # can only happen if the host naming is not <h_x>
-                    while host_ip in self.already_assigned_ips:
-                        host_ip = str(next(ip_generator).compressed)
-                    self.already_assigned_ips.add(host_ip)
-
-                host_gw = "10.%d.%d.254" % (upper_byte, lower_byte)
+                host_num = int(host_name[1:])
+                assert host_num < 254
+                host_ip = "10.%d.%d.2" % (sw_id, host_num)
+                host_gw = "10.%d.%d.1" % (sw_id, host_num)
 
                 host_mac = self.ip_addres_to_mac(host_ip) % (0)
                 direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
@@ -287,15 +264,22 @@ class AppTopoStrategies(Topo):
                 self.addLink(host_name, direct_sw,
                              delay=link['delay'], bw=link['bw'],
                              addr1=host_mac, addr2=direct_sw_mac, weight=link["weight"],
-                             max_queue_size=link["queue_length"])
+                             max_queue_size=link["queue_length"], params2= {'ip': host_gw+"/24"})
                 self.addSwitchPort(direct_sw, host_name)
                 self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip, "mac": host_mac, "mask": 24}
 
             # switch to switch link
             else:
+
+                sw1_name = link['node1']
+                sw2_name = link['node2']
+
+                sw1_ip = "20.%d.%d.1" % (sw_to_id[sw1_name], sw_to_id[sw2_name])
+                sw2_ip = "20.%d.%d.2" % (sw_to_id[sw1_name], sw_to_id[sw2_name])
+
                 self.addLink(link['node1'], link['node2'],
                              delay=link['delay'], bw=link['bw'], weight=link["weight"],
-                             max_queue_size=link["queue_length"])
+                             max_queue_size=link["queue_length"], params1= {'ip': sw1_ip+"/24"}, params2= {'ip': sw2_ip+"/24"})
                 self.addSwitchPort(link['node1'], link['node2'])
                 self.addSwitchPort(link['node2'], link['node1'])
 

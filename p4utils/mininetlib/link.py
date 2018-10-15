@@ -16,8 +16,6 @@ class TCLink( Link ):
         if _params2:
             params2.update(_params2)
 
-        import ipdb; ipdb.set_trace()
-
         Link.__init__( self, node1, node2, port1=port1, port2=port2,
                        intfName1=intfName1, intfName2=intfName2,
                        cls1=TCIntf,

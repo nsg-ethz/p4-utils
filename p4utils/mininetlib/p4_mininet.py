@@ -200,6 +200,10 @@ class P4Switch(Switch):
             exit(1)
         info("P4 switch {} has been started.\n".format(self.name))
 
+        # only do this for l3..
+        self.cmd('sysctl', '-w', 'net.ipv4.ip_forward=1')
+
+
     def stop_p4switch(self):
         """Just stops simple switch."""
         #kills simple_switch started in this shell with kill %
