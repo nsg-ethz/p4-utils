@@ -264,7 +264,7 @@ class AppTopoStrategies(Topo):
                 self.addLink(host_name, direct_sw,
                              delay=link['delay'], bw=link['bw'],
                              addr1=host_mac, addr2=direct_sw_mac, weight=link["weight"],
-                             max_queue_size=link["queue_length"], params2= {'ip': host_gw+"/24"})
+                             max_queue_size=link["queue_length"], params2= {'sw_ip': host_gw+"/24"})
                 self.addSwitchPort(direct_sw, host_name)
                 self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip, "mac": host_mac, "mask": 24}
 
@@ -279,7 +279,7 @@ class AppTopoStrategies(Topo):
 
                 self.addLink(link['node1'], link['node2'],
                              delay=link['delay'], bw=link['bw'], weight=link["weight"],
-                             max_queue_size=link["queue_length"], params1= {'ip': sw1_ip+"/24"}, params2= {'ip': sw2_ip+"/24"})
+                             max_queue_size=link["queue_length"], params1= {'sw_ip': sw1_ip+"/24"}, params2= {'sw_ip': sw2_ip+"/24"})
                 self.addSwitchPort(link['node1'], link['node2'])
                 self.addSwitchPort(link['node2'], link['node1'])
 

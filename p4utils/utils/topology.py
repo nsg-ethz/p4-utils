@@ -208,11 +208,18 @@ class TopologyDB(object):
 
 class TopologyDBP4(TopologyDB):
 
-
     def __init__(self, *args, **kwargs):
         super(TopologyDBP4, self).__init__(*args, **kwargs)
 
     def add_p4switch(self, node):
+
+        #set fake ips so they can be queried with the topo
+        for intf in node.intfList():
+            if intf.name == "lo":
+                continue
+            if intf.params.get('sw_ip', None):
+                intf.ip, intf.prefixLen = intf.params['sw_ip'].split("/")
+
         self._add_node(node, {'type': 'switch', 'subtype': 'p4switch',
                               'thrift_port': node.thrift_port, 'sw_id': node.device_id})
 
