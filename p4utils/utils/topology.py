@@ -317,14 +317,14 @@ class NetworkGraph(nx.Graph):
                     continue
 
                 # compute the number of paths
-                npaths = sum(1 for _ in nx.all_shortest_paths(self, host, host_pair))
+                npaths = sum(1 for _ in nx.all_shortest_paths(self, host, host_pair, 'weight'))
                 total_paths += npaths
 
         return total_paths
 
     def get_paths_between_nodes(self, node1, node2):
         """Compute the paths between two nodes."""
-        paths = nx.all_shortest_paths(self, node1, node2)
+        paths = nx.all_shortest_paths(self, node1, node2, 'weight')
         paths = [tuple(x) for x in paths]
         return paths
 
@@ -478,6 +478,17 @@ class Topology(TopologyDBP4):
             sub_nets = [self.subnet(host, neighbor) for neighbor in self[host]['interfaces_to_node'].values()]
             networks += sub_nets
         return set(networks)
+
+
+    def interface_to_node(self, node, intf):
+        return self[node]['interfaces_to_node'][intf]
+
+    def interface_to_port(self, node, intf):
+        return self[node]['interfaces_to_port'][intf]
+
+    def node_to_node_port_num(self, node1, node2):
+        intf = self[node1][node2]['intf']
+        return self.interface_to_port(node1, intf)
 
     def get_cpu_port_intf(self, p4switch, cpu_node = 'sw-cpu'):
         """
