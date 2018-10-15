@@ -948,6 +948,7 @@ class RuntimeAPI(object):
         self.table_entries_match_to_handle[table.name][tuple(match_keys)] = entry_handle
 
         print "Entry has been added with handle", entry_handle
+        print
         return entry_handle
 
     @handle_bad_input
