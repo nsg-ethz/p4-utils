@@ -253,10 +253,28 @@ configure the hosts, and switches without knowing what will switches do.
 
 You can find a configuration example, that uses all the fields [here](./p4app_example.json)
 
+### Topology Object
+
+#### Methods Documentation
+
+
+You can load the topology object by:
+
+```python
+from p4utils.utils.topology import Topology
+topo = Topology(db="path_to_topology_db")
+```
+
+
+* `get_p4switches()`:
+* `get_thrift_port(sw_name)`:
+* `get_hosts_connected_to(sw_name)`:
+* `get_host_mac(host_name)`:
+* `get_shortests_paths_between_nodes(sw_src, sw_dst)`:
+* `node_to_node_port_num(node1, node2)`:
+* `node_to_node_mac(node1, node2`:
+
 ### Control Plane API
 
 (TODO)
 
-### Topology Object
-
-(TODO)
