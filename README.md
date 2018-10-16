@@ -129,7 +129,9 @@ configuration of our topology. For instance the switch type and compiler options
 ##### `enable_log:`
 
    * Type: bool
-   * Value: if enabled a directory with CLI and switch logs is created at `.log`
+   * Value: if enabled a directory with CLI and switch logs is created at `.log`. For each switch two files are created, one includes the
+   output of the CLI for the entries you populated using the p4-utils library. The second file `<sw_name>.log` includes packet traces that
+   show how was the packet processed by the switch pipeline (i.e which branches were executed, table hit/miss, etc).
    * Default: false
 
 ### Special Modules
@@ -191,6 +193,11 @@ configure the hosts, and switches without knowing what will switches do.
  * `l3`: all switches in the network are assumed to work at layer 3, thus
  all links in the network form a different subnetwork. Hosts can only
  be connected to one switch device which is used to configure the host's gateway.
+
+ * `mixed`: this is not a real l2 or l3 assignment strategy, but since p4 switches can work at any layer,
+ it can be useful for easy prototyping. Hosts connected to the same switch will be assigned an ip within the same subnet. Hosts
+ connected to another switch will belong to another subnet. Each hosts can only be connected to a single switch, which at the same time
+ is assigned to be the L3 gatway.
 
  * `manual`: can be used when your topology will be formed by heterogeneous
  devices, you have to manually set the IP to each interface and host gateways.

@@ -10,7 +10,7 @@
   "topo_module": {
     "file_path": "",
     "module_name": "p4utils.mininetlib.apptopo",
-    "object_name": "AppTopo"
+    "object_name": "AppTopoStrategies"
   },
   "controller_module": null,
   "topodb_module": {
@@ -24,7 +24,7 @@
     "object_name": "P4Mininet"
   },
   "topology": {
-    "links": [["h1", "s1", {"delay":"20ms", "bw": 20, "queue_length": 100, "weight":5}], ["h2", "s2"], ["s1", "s2"], ["s1", "s3"], ["h3", "s3"], ["h4", "s3"]],
+    "links": [["h1", "s1", {"delay":"20ms", "bw": 20, "queue_length": 100, "weight":5}], ["h2", "s2"], ["s1", "s2"], ["h3", "s3"], ["h4", "s3"], ["s1", "s3"]],
     "hosts": {
       "h1": {
       },

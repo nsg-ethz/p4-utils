@@ -30,11 +30,12 @@ from p4utils.mininetlib.p4net import P4Mininet
 from p4utils.mininetlib.p4_mininet import P4Switch, P4Host, P4RuntimeSwitch, configureP4Switch
 from p4utils.utils.topology import Topology as DefaultTopoDB
 from p4utils.mininetlib.cli import P4CLI
-from p4utils.mininetlib.apptopo import AppTopo as DefaultTopo
+from p4utils.mininetlib.apptopo import AppTopoStrategies as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
 from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError, read_entries, add_entries, cleanup
 
-from mininet.link import TCLink
+#from mininet.link import TCLink
+from p4utils.mininetlib.link import TCLink
 from mininet.log import setLogLevel, info
 from mininet.clean import sh
 
@@ -281,7 +282,6 @@ class AppRunner(object):
             A mininet instance is stored as self.net and self.net.start() has been called.
         """
         topology = self.conf.get('topology')
-        assignment_strategy = topology.get('assignment_strategy', None)
         auto_arp_tables = topology.get('auto_arp_tables', True)
 
         for host_name in self.topo.hosts():
@@ -289,26 +289,14 @@ class AppRunner(object):
 
             # Ensure each host's interface name is unique, or else
             # mininet cannot shutdown gracefully
-            h.defaultIntf().rename('%s-eth0' % host_name)
             h_iface = h.intfs.values()[0]
-            h.cmd('ethtool --offload %s rx off tx off sg off' % h_iface.name)
 
-            if assignment_strategy != "l2":
-                #Configure Default Gateway and fill ARP table
-
-                try:
-                    link = h_iface.link
-                    sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
-                    # phony IP to lie to the host about
-                    #TODO: this will be different in real l3
-                    gw_ip = self.topo.host_to_gw[host_name]
-
-                    # static arp entries and default routes
-                    h.cmd('ip route add %s dev %s' % (gw_ip, h_iface.name))
-                    h.setDefaultRoute("via %s" % gw_ip)
-                    h.cmd('arp -i %s -s %s %s' % (h_iface.name, gw_ip, sw_iface.mac))
-                except:
-                    print "Problem with assigment strategy {}".format(assignment_strategy)
+            #if there is gateway assigned
+            if 'defaultRoute' in h.params:
+                link = h_iface.link
+                sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
+                gw_ip = h.params['defaultRoute'].split()[-1]
+                h.cmd('arp -i %s -s %s %s' % (h_iface.name, gw_ip, sw_iface.mac))
 
             if auto_arp_tables:
                 #set arp rules for all the hosts in the same subnet
