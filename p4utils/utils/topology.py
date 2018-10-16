@@ -490,6 +490,11 @@ class Topology(TopologyDBP4):
             networks += sub_nets
         return set(networks)
 
+    def get_interfaces_to_node(self, node):
+        return self[node]['interfaces_to_node']
+
+    def get_interfaces_to_port(self, node):
+        return self[node]['interfaces_to_port']
 
     def interface_to_node(self, node, intf):
         return self[node]['interfaces_to_node'][intf]
