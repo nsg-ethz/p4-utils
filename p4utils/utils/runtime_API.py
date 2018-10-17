@@ -908,6 +908,9 @@ class RuntimeAPI(object):
     def table_add(self, table_name, action_name, match_keys, action_params=[], prio=None):
         "Add entry to a match table: table_add <table name> <action name> <match fields> => <action parameters> [priority]"
 
+        #print table_name, action_name, match_keys, action_params
+        #import ipdb; ipdb.set_trace()
+
         table = self.get_res("table", table_name, ResType.table)
         action = table.get_action(action_name)
         if action is None:

@@ -390,6 +390,12 @@ class Topology(TopologyDBP4):
             return ip
         raise NodeDoesNotExist(name)
 
+    def get_host_mac(self, name):
+        """Returns the mac to a host name"""
+        intf = self.get_host_first_interface(name)
+        nhop = self.get_interfaces_to_node(name)[intf]
+        return self[name][nhop]['mac']
+
     def is_host(self, node):
         """Checks if node is a host.
 
@@ -506,7 +512,10 @@ class Topology(TopologyDBP4):
         intf = self[node1][node2]['intf']
         return self.interface_to_port(node1, intf)
 
-    def get_shortests_paths_between_nodes(self, node1, node2):
+    def node_to_node_mac(self, node1, node2):
+        return self[node1][node2]['mac']
+
+    def get_shortest_paths_between_nodes(self, node1, node2):
         return self.network_graph.get_paths_between_nodes(node1, node2)
 
     def get_cpu_port_intf(self, p4switch, cpu_node = 'sw-cpu'):
