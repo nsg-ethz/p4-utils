@@ -255,9 +255,7 @@ You can find a configuration example, that uses all the fields [here](./p4app_ex
 
 ### Topology Object
 
-#### Methods Documentation
-
-You can load the topology object by:
+You can use the topology object by simply:
 
 ```python
 from p4utils.utils.topology import Topology
@@ -282,6 +280,8 @@ topo.node('h1') #this also works topo['h1']
  u'type': u'host'}
 ```
 
+#### Methods Documentation
+
 * `get_p4switches()`: returns a dictionary where the keys are p4 switches names and values are information about the switch. You can use `get_p4switches().keys()` to
 just get the switches names.
 * `get_thrift_port(sw_name)`: returns the thrift port at which a `sw_name` is listening to. This can be used to establish a connection using the `SimpleSwitchAPI` object.
@@ -293,7 +293,7 @@ just get the switches names.
 * `get_shortest_paths_between_nodes(node1, node2)`: returns a list of the shortest paths between two nodes. The list includes the src and the destination and multiple equal cost paths
 if found. For example, `get_shortest_paths_between_nodes('s1', 's2')` would return `[('s1', 's4', 's2'), ('s1', 's5', 's2')]` if two equal cost paths are found using `s4` and `s5` as next hops.
 
-* `node_to_node_interface_ip(node1, node2)`: returns the IP address of the interface from `node1` connecting with `node2`. Note that the ip address includes the prefix len at the end `/X`.
+* `node_to_node_interface_ip(node1, node2)`: returns the IP address of the interface from `node1` connecting with `node2`. Note that the ip address includes the prefix len at the end `/x`.
 * `get_interfaces_to_node(sw_name)`: returns a dictionary of all the interfaces as keys and the node they connect to as value. For example `{'s1-eth1': 'h1', 's1-eth2': 's2'}`.
 * `interface_to_port(node, intf_name)`: returns the interface index of `intf_name` for `node`.
 
