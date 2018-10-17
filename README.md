@@ -257,22 +257,45 @@ You can find a configuration example, that uses all the fields [here](./p4app_ex
 
 #### Methods Documentation
 
-
 You can load the topology object by:
 
 ```python
 from p4utils.utils.topology import Topology
 topo = Topology(db="path_to_topology_db")
+
+# Get all the switches
+topo.get_p4switches().keys()
+[u's3', u's2', u's1', u's4']
+
+# One node information
+topo.node('h1') #this also works topo['h1']
+{u'gateway': u'10.1.1.1',
+ u'interfaces_to_node': {u'h1-eth0': u's1'},
+ u'interfaces_to_port': {u'h1-eth0': 0},
+ u's1': {u'bw': None,
+ u'delay': u'0ms',
+ u'intf': u'h1-eth0',
+ u'ip': u'10.1.1.2/24',
+ u'mac': u'00:00:0a:01:01:02',
+ u'queue_length': 1000,
+ u'weight': 1},
+ u'type': u'host'}
 ```
 
+* `get_p4switches()`: returns a dictionary where the keys are p4 switches names and values are information about the switch. You can use `get_p4switches().keys()` to
+just get the switches names.
+* `get_thrift_port(sw_name)`: returns the thrift port at which a `sw_name` is listening to. This can be used to establish a connection using the `SimpleSwitchAPI` object.
+* `get_hosts_connected_to(sw_name)`: returns a list of all the host names connected to the switch `sw_name`.
+* `get_host_ip(host_name)`: returns the ip address and subnet mask of host `host_name`. For example `10.0.1.2/24`.
+* `get_host_mac(host_name)`: returns the mac address of host `host_name`.
+* `node_to_node_port_num(node1, node2)`: returns the port index of `node1` facing `node2`. This index can be used to populate your forwarding table entries.
+* `node_to_node_mac(node1, node2)`: returns the `mac` address of the interface from `node1` that connects with `node2`. This can be used to get next hop destination mac addresses.
+* `get_shortest_paths_between_nodes(node1, node2)`: returns a list of the shortest paths between two nodes. The list includes the src and the destination and multiple equal cost paths
+if found. For example, `get_shortest_paths_between_nodes('s1', 's2')` would return `[('s1', 's4', 's2'), ('s1', 's5', 's2')]` if two equal cost paths are found using `s4` and `s5` as next hops.
 
-* `get_p4switches()`:
-* `get_thrift_port(sw_name)`:
-* `get_hosts_connected_to(sw_name)`:
-* `get_host_mac(host_name)`:
-* `get_shortests_paths_between_nodes(sw_src, sw_dst)`:
-* `node_to_node_port_num(node1, node2)`:
-* `node_to_node_mac(node1, node2`:
+* `node_to_node_interface_ip(node1, node2)`: returns the IP address of the interface from `node1` connecting with `node2`. Note that the ip address includes the prefix len at the end `/X`.
+* `get_interfaces_to_node(sw_name)`: returns a dictionary of all the interfaces as keys and the node they connect to as value. For example `{'s1-eth1': 'h1', 's1-eth2': 's2'}`.
+* `interface_to_port(node, intf_name)`: returns the interface index of `intf_name` for `node`.
 
 ### Control Plane API
 

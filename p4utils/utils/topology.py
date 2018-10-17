@@ -515,7 +515,7 @@ class Topology(TopologyDBP4):
     def node_to_node_mac(self, node1, node2):
         return self[node1][node2]['mac']
 
-    def get_shortests_paths_between_nodes(self, node1, node2):
+    def get_shortest_paths_between_nodes(self, node1, node2):
         return self.network_graph.get_paths_between_nodes(node1, node2)
 
     def get_cpu_port_intf(self, p4switch, cpu_node = 'sw-cpu'):
