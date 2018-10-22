@@ -104,7 +104,9 @@ class P4Switch(Switch):
                  enable_debugger=False,
                  **kwargs):
 
-        Switch.__init__(self, name, **kwargs)
+        id = device_id if device_id else P4Switch.device_id
+
+        Switch.__init__(self, name, dpid =self.dpidToStr(id), **kwargs)
         assert sw_path
         assert json_path
 
@@ -143,6 +145,13 @@ class P4Switch(Switch):
     @classmethod
     def setup(cls):
         pass
+
+    def dpidToStr(self, id):
+
+        strDpid = str(id)
+        if len(strDpid) < 16:
+            return "0"*(16-len(strDpid)) + strDpid
+        return strDpid
 
     def check_switch_started(self):
         """Check if switch has started properly.

@@ -2,6 +2,7 @@ from mininet.topo import Topo
 from mininet.nodelib import LinuxBridge
 import re
 from ipaddress import IPv4Network
+from mininet import node
 
 class AppTopoStrategies(Topo):
     """The mininet topology class.
@@ -24,6 +25,7 @@ class AppTopoStrategies(Topo):
         self.hosts_info = {}
 
         self.already_assigned_ips = set()
+        self.reserved_ips = {}
 
         self.make_topo()
 
@@ -50,17 +52,42 @@ class AppTopoStrategies(Topo):
         else:
             self.mixed_assignment_strategy()
 
+    def node_sorting(self, node):
+
+        index = re.findall(r'\d+', node)
+        if index:
+            index = int(index[0])
+        else:
+            index = 0
+            for i, c in enumerate(node):
+                index += ord(c) * (255*(len(node)-i))
+        return index
+
     def add_switches(self):
 
         sw_to_id = {}
         sw_id = 1
-        for sw, sw_attributes in sorted(self._switches.items(), key=lambda x:int(re.findall(r'\d+', x[0])[-1])):
-            json_file = sw_attributes["json"]
-            self.addP4Switch(sw, log_file="%s/%s.log" % (self.log_dir, sw),
-                             json_path = json_file, **sw_attributes)
 
-            sw_to_id[sw] = sw_id
-            sw_id +=1
+        for sw in self._switches.keys():
+            id = re.findall(r'\d+', sw)
+            if id and sw[0] == 's':
+                id = int(id[0])
+                sw_to_id[sw] = id
+
+        #the sorting does not matter anymore
+        for sw in sorted(self._switches.keys(), key=self.node_sorting):
+            sw_attributes = self._switches.get(sw)
+            json_file = sw_attributes["json"]
+
+            id = sw_to_id.get(sw, None)
+            if not id:
+                while sw_id in sw_to_id.values():
+                    sw_id +=1
+                id = sw_id
+            self.addP4Switch(sw, log_file="%s/%s.log" % (self.log_dir, sw),
+                             json_path = json_file, device_id=id, **sw_attributes)
+
+            sw_to_id[sw] = id
 
         return sw_to_id
 
@@ -82,18 +109,17 @@ class AppTopoStrategies(Topo):
         mac_address = '00:%02x' + ':%02x:%02x:%02x:%02x' % tuple(split_ip)
         return mac_address
 
-    def check_host_valid_ip_from_name(self, hosts):
+    def check_host_valid_ip_from_name(self, host):
 
         valid = True
-        for host in hosts:
-            if host[0] == 'h':
-                try:
-                    int(host[1:])
-                except:
-                    valid = False
-            else:
+        if host[0] == 'h':
+            try:
+                int(host[1:])
+            except:
                 valid = False
+        else:
 
+            valid = False
         return valid
 
     def add_cpu_port(self):
@@ -114,8 +140,6 @@ class AppTopoStrategies(Topo):
                         add_bridge = False
                     self.addLink(switch, sw, intfName1='%s-cpu-eth0' % switch, intfName2= '%s-cpu-eth1' % switch, deleteIntfs=True)
 
-
-
     def l2_assignment_strategy(self):
 
         self.add_switches()
@@ -123,20 +147,28 @@ class AppTopoStrategies(Topo):
 
         #add links and configure them: ips, macs, etc
         #assumes hosts are connected to one switch only
+
+        #reserve ips for normal hosts
+        for host_name in self._hosts:
+            if self.check_host_valid_ip_from_name(host_name):
+                host_num = int(host_name[1:])
+                upper_byte = (host_num & 0xff00) >> 8
+                lower_byte = (host_num & 0x00ff)
+                host_ip = "10.0.%d.%d" % (upper_byte, lower_byte)
+                self.reserved_ips[host_name] = host_ip
+
         for link in self._links:
 
             if self.is_host_link(link):
                 host_name = link[self.get_host_position(link)]
                 direct_sw = link[self.get_sw_position(link)]
 
-                if self.check_host_valid_ip_from_name([host_name]):
-                    host_num = int(host_name[1:])
-                    upper_byte = (host_num & 0xff00) >> 8
-                    lower_byte = (host_num & 0x00ff)
-                    host_ip = "10.0.%d.%d" % (upper_byte, lower_byte)
+                if self.check_host_valid_ip_from_name(host_name):
+                    host_ip = self.reserved_ips[host_name]
 
                     #we check if for some reason the ip was already given by the ip_generator. This
                     #can only happen if the host naming is not <h_x>
+                    #this should not be possible anymore since we reserve ips for h_x hosts
                     while host_ip in self.already_assigned_ips:
                         host_ip = str(next(ip_generator).compressed)
                     self.already_assigned_ips.add(host_ip)
@@ -144,7 +176,7 @@ class AppTopoStrategies(Topo):
                     host_ip = next(ip_generator).compressed
                     #we check if for some reason the ip was already given by the ip_generator. This
                     #can only happen if the host naming is not <h_x>
-                    while host_ip in self.already_assigned_ips:
+                    while host_ip in self.already_assigned_ips or host_ip in self.reserved_ips.values():
                         host_ip = str(next(ip_generator).compressed)
                     self.already_assigned_ips.add(host_ip)
 
@@ -181,6 +213,21 @@ class AppTopoStrategies(Topo):
             net = "10.%d.%d.0/24" % (upper_bytex, lower_bytex)
             sw_to_generator[sw] = IPv4Network(unicode(net)).hosts()
 
+        #reserve ips
+        for link in self._links:
+            if self.is_host_link(link):
+                host_name = link[self.get_host_position(link)]
+                direct_sw = link[self.get_sw_position(link)]
+
+                sw_id = sw_to_id[direct_sw]
+                upper_byte = (sw_id & 0xff00) >> 8
+                lower_byte = (sw_id & 0x00ff)
+                if self.check_host_valid_ip_from_name(host_name):
+                    host_num = int(host_name[1:])
+                    assert host_num < 254
+                    host_ip = "10.%d.%d.%d" % (upper_byte, lower_byte, host_num)
+                    self.reserved_ips[host_name] = host_ip
+
         #add links and configure them: ips, macs, etc
         #assumes hosts are connected to one switch only
         for link in self._links:
@@ -194,10 +241,8 @@ class AppTopoStrategies(Topo):
                 lower_byte = (sw_id & 0x00ff)
                 ip_generator = sw_to_generator[direct_sw]
 
-                if self.check_host_valid_ip_from_name([host_name]):
-                    host_num = int(host_name[1:])
-                    assert host_num < 254
-                    host_ip = "10.%d.%d.%d" % (upper_byte, lower_byte, host_num)
+                if self.check_host_valid_ip_from_name(host_name):
+                    host_ip = self.reserved_ips[host_name]
                     #we check if for some reason the ip was already given by the ip_generator. This
                     #can only happen if the host naming is not <h_x>
                     while host_ip in self.already_assigned_ips:
@@ -207,7 +252,7 @@ class AppTopoStrategies(Topo):
                     host_ip = next(ip_generator).compressed
                     #we check if for some reason the ip was already given by the ip_generator. This
                     #can only happen if the host naming is not <h_x>
-                    while host_ip in self.already_assigned_ips:
+                    while host_ip in self.already_assigned_ips or host_ip in self.reserved_ips.values():
                         host_ip = str(next(ip_generator).compressed)
                     self.already_assigned_ips.add(host_ip)
 
@@ -226,7 +271,6 @@ class AppTopoStrategies(Topo):
 
             #switch to switch link
             else:
-                print link
                 self.addLink(link['node1'], link['node2'],
                              delay=link['delay'], bw=link['bw'], weight=link["weight"],
                              max_queue_size=link["queue_length"])
@@ -240,6 +284,23 @@ class AppTopoStrategies(Topo):
 
         sw_to_id = self.add_switches()
 
+        sw_to_next_available_host_id = {}
+        for sw in sw_to_id.keys():
+            sw_to_next_available_host_id[sw] = 1
+
+        #reserve ips for normal named hosts and switches
+        for link in self._links:
+            if self.is_host_link(link):
+                host_name = link[self.get_host_position(link)]
+                if self.check_host_valid_ip_from_name(host_name):
+
+                    direct_sw = link[self.get_sw_position(link)]
+                    sw_id = sw_to_id[direct_sw]
+                    host_num = int(host_name[1:])
+                    assert host_num < 254
+                    host_ip = "10.%d.%d.2" % (sw_id, host_num)
+                    self.reserved_ips[host_name] = host_ip
+
         # add links and configure them: ips, macs, etc
         # assumes hosts are connected to one switch only
         for link in self._links:
@@ -251,10 +312,19 @@ class AppTopoStrategies(Topo):
                 sw_id = sw_to_id[direct_sw]
                 assert sw_id < 254
 
-                host_num = int(host_name[1:])
-                assert host_num < 254
-                host_ip = "10.%d.%d.2" % (sw_id, host_num)
-                host_gw = "10.%d.%d.1" % (sw_id, host_num)
+                if self.check_host_valid_ip_from_name(host_name):
+                    host_num = int(host_name[1:])
+                    assert host_num < 254
+                    host_ip = "10.%d.%d.2" % (sw_id, host_num)
+                    host_gw = "10.%d.%d.1" % (sw_id, host_num)
+
+                else:
+                    host_num = sw_to_next_available_host_id[direct_sw]
+                    while ("10.%d.%d.2" % (sw_id, host_num)) in self.reserved_ips.values():
+                        host_num +=1
+                    assert host_num < 254
+                    host_ip = "10.%d.%d.2" % (sw_id, host_num)
+                    host_gw = "10.%d.%d.1" % (sw_id, host_num)
 
                 host_mac = self.ip_addres_to_mac(host_ip) % (0)
                 direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
