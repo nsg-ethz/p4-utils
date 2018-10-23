@@ -171,6 +171,24 @@ class AppRunner(object):
             array of parsed link dictionaries
         """
         links = []
+
+        default_delay = "0ms"
+        default_bw = None
+        default_queue_length = 1000
+        default_link_weight = 1
+
+        if self.conf['topology'].get('default_delay', None):
+            default_delay = self.conf['topology'].get('default_delay', None)
+
+        if self.conf['topology'].get('default_bw', None):
+            default_bw = self.conf['topology'].get('default_bw', None)
+
+        if self.conf['topology'].get('default_queue_length', None):
+            default_queue_length = self.conf['topology'].get('default_queue_length', None)
+
+        if self.conf['topology'].get('default_link_weight', None):
+            default_link_weight = self.conf['topology'].get('default_link_weight', None)
+
         for link in unparsed_links:
             # make sure that the endpoints of each link are ordered alphabetically
             node_a, node_b, = link[0], link[1]
@@ -179,10 +197,10 @@ class AppRunner(object):
 
             link_dict = {'node1': node_a,
                          'node2': node_b,
-                         'delay': '0ms',
-                         'bw': None,
-                         'queue_length': 1000,
-                         'weight': 1
+                         'delay': default_delay,
+                         'bw': default_bw,
+                         'queue_length': default_queue_length,
+                         'weight': default_link_weight
                          }
             # parse extra parameters, check if they are not an empty element for
             # example when wanting to set weight but not latency

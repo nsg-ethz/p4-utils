@@ -34,8 +34,6 @@ class AppTopoStrategies(Topo):
         topology = self.conf.get('topology')
         assignment_strategy =  topology.get('assignment_strategy', None)
 
-
-
         if assignment_strategy == "l2":
             self.l2_assignment_strategy()
 
