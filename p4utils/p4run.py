@@ -371,7 +371,7 @@ class AppRunner(object):
         print ''
 
         # Start CLI
-        P4CLI(self.net, conf_file=self.conf_file)
+        P4CLI(self.net, conf_file=self.conf_file, script=self.conf.get("cli_script", None))
 
 def get_args():
     cwd = os.getcwd()
