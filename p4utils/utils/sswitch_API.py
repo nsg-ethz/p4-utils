@@ -36,7 +36,7 @@ def handle_bad_input(f):
             return f(*args, **kwargs)
         except InvalidMirroringOperation as e:
             error = MirroringOperationErrorCode._VALUES_TO_NAMES[e.code]
-            print "Invalid mirroring operation (%s)" % error
+            print("Invalid mirroring operation ({})".format(error))
     return handle
 
 class SimpleSwitchAPI(runtime_API.RuntimeAPI):
@@ -117,17 +117,17 @@ class SimpleSwitchAPI(runtime_API.RuntimeAPI):
         "Display mirroring session: mirroring_get <mirror_id>"
         mirror_id = self.parse_int(mirror_id, "mirror_id")
         config = self.sswitch_client.mirroring_session_get(mirror_id)
-        print config
+        print(config)
 
     @handle_bad_input
     def get_time_elapsed(self):
         "Get time elapsed (in microseconds) since the switch started: get_time_elapsed"
-        print self.sswitch_client.get_time_elapsed_us()
+        print(self.sswitch_client.get_time_elapsed_us())
 
     @handle_bad_input
     def get_time_since_epoch(self):
         "Get time elapsed (in microseconds) since the switch clock's epoch: get_time_since_epoch"
-        print self.sswitch_client.get_time_since_epoch_us()
+        print(self.sswitch_client.get_time_since_epoch_us())
 
 
 if __name__ == "__main__":

@@ -532,7 +532,7 @@ class Topology(TopologyDBP4):
         if self.is_p4switch(p4switch) and self[p4switch].get(cpu_node, None):
             return self[p4switch][cpu_node].get('intf')
         else:
-            print "Switch %s has no cpu port" % p4switch
+            print("Switch %s has no cpu port" % p4switch)
             return None
 
 
@@ -550,7 +550,7 @@ class Topology(TopologyDBP4):
         if self.is_p4switch(p4switch) and self[p4switch].get(cpu_node, None):
             return self[p4switch]['interfaces_to_port'][self[p4switch][cpu_node].get('intf')]
         else:
-            print "Switch %s has no cpu port" % p4switch
+            print("Switch %s has no cpu port" % p4switch)
             return None
 
 if __name__ == '__main__':

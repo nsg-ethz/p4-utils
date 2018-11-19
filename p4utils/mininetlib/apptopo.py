@@ -355,7 +355,7 @@ class AppTopoStrategies(Topo):
         self.printPortMapping()
 
     def manual_assignment_strategy(self):
-        print "Assignment Strategy Manual not implemented yet"
+        print("Assignment Strategy Manual not implemented yet")
         exit(1)
 
     def addP4Switch(self, name, **opts):
@@ -403,10 +403,11 @@ class AppTopoStrategies(Topo):
         self.sw_port_mapping[sw].append((portno, node2))
 
     def printPortMapping(self):
-        print "Switch port mapping:"
+        print("Switch port mapping:")
         for sw in sorted(self.sw_port_mapping.keys()):
-            print "%s: " % sw,
+            port_out=[]
             for portno, node2 in self.sw_port_mapping[sw]:
-                print "%d:%s\t" % (portno, node2),
-            print
+                port_out.append("%d:%s" % (portno, node2))
 
+            out="%s: %s" % (sw, "\t".join(port_out))
+            print(out)

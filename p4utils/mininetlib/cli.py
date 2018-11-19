@@ -165,7 +165,7 @@ class P4CLI(CLI):
     def do_printSwitches(self, line=""):
         """Print names of all switches."""
         for sw in self.mn.p4switches:
-            print sw.name
+            print(sw.name)
 
     def do_p4switches_reboot(self, line=""):
         """Reboot all P4 switches with new program.

@@ -12,7 +12,7 @@ class AppController(object):
 
     def logger(self, *items):
         if not self.quiet:
-            print ' '.join(items)
+            print(' '.join(items))
 
     def start(self):
 

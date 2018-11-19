@@ -155,7 +155,7 @@ def compile_p4_to_bmv2(config):
         log_error("Unknown P4 file %s" % program_file)
         sys.exit(1)
 
-    print (compiler + ' %s' % ' '.join(compiler_args))
+    print(compiler + ' %s' % ' '.join(compiler_args))
     return_value = run_command(compiler + ' %s' % ' '.join(compiler_args))
 
     if return_value != 0:

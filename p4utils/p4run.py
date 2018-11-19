@@ -32,7 +32,7 @@ from p4utils.utils.topology import Topology as DefaultTopoDB
 from p4utils.mininetlib.cli import P4CLI
 from p4utils.mininetlib.apptopo import AppTopoStrategies as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
-from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError, read_entries, add_entries, cleanup
+from p4utils.utils.utils import run_command, compile_all_p4, load_conf, CompilationError, read_entries, add_entries, cleanup
 
 #from mininet.link import TCLink
 from p4utils.mininetlib.link import TCLink
@@ -124,7 +124,7 @@ class AppRunner(object):
         self.app_topodb = DefaultTopoDB
         self.app_mininet = P4Mininet
 
-        if self.conf.get('topo_module',None):
+        if self.conf.get('topo_module', None):
             self.app_topo = self.load_custom_object('topo_module')
 
         if self.conf.get('controller_module', None):
@@ -150,7 +150,7 @@ class AppRunner(object):
 
     def logger(self, *items):
         if not self.quiet:
-            print ' '.join(items)
+            print(' '.join(items))
 
     def formatLatency(self, latency):
         """Helper method for formatting link latencies."""
@@ -264,7 +264,7 @@ class AppRunner(object):
         #TODO: this should not be for the entire net, we should support non p4 switches
         switchClass = configureP4Switch(sw_path=self.bmv2_exe,
                                         log_console=self.log_enabled,
-                                        pcap_dump=self.pcap_dump, pcap_dir= self.pcap_dir)
+                                        pcap_dump=self.pcap_dump, pcap_dir=self.pcap_dir)
 
         # start P4 Mininet
         self.net = self.app_mininet(topo=self.topo,
@@ -328,8 +328,8 @@ class AppRunner(object):
                                                         self.topo.hosts_info[hosts_same_subnet]["mask"])))
 
                     if host_address.network.compressed == other_host_address.network.compressed:
-                            h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
-                                                          self.topo.hosts_info[hosts_same_subnet]['mac']))
+                        h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
+                                                      self.topo.hosts_info[hosts_same_subnet]['mac']))
 
 
     def save_topology(self):
@@ -351,24 +351,24 @@ class AppRunner(object):
         self.logger("Starting mininet CLI")
         # Generate a message that will be printed by the Mininet CLI to make
         # interacting with the simple switch a little easier.
-        print ''
-        print '======================================================================'
-        print 'Welcome to the P4 Utils Mininet CLI!'
-        print '======================================================================'
-        print 'Your P4 program is installed into the BMV2 software switch'
-        print 'and your initial configuration is loaded. You can interact'
-        print 'with the network using the mininet CLI below.'
-        print ''
-        print 'To inspect or change the switch configuration, connect to'
-        print 'its CLI from your host operating system using this command:'
-        print '  %s --thrift-port <switch thrift port>' % DEFAULT_CLI
-        print ''
-        print 'To view a switch log, run this command from your host OS:'
-        print '  tail -f %s/<switchname>.log' % self.log_dir.replace("edgar", "p4")
-        print ''
-        print 'To view the switch output pcap, check the pcap files in \n %s:' % self.pcap_dir.replace("edgar", "p4")
-        print ' for example run:  sudo tcpdump -xxx -r s1-eth1.pcap'
-        print ''
+        print('')
+        print('======================================================================')
+        print('Welcome to the P4 Utils Mininet CLI!')
+        print('======================================================================')
+        print('Your P4 program is installed into the BMV2 software switch')
+        print('and your initial configuration is loaded. You can interact')
+        print('with the network using the mininet CLI below.')
+        print('')
+        print('To inspect or change the switch configuration, connect to')
+        print('its CLI from your host operating system using this command:')
+        print('  %s --thrift-port <switch thrift port>' % DEFAULT_CLI)
+        print('')
+        print('To view a switch log, run this command from your host OS:')
+        print('  tail -f %s/<switchname>.log' % self.log_dir.replace("edgar", "p4"))
+        print('')
+        print('To view the switch output pcap, check the pcap files in \n %s:' % self.pcap_dir.replace("edgar", "p4"))
+        print(' for example run:  sudo tcpdump -xxx -r s1-eth1.pcap')
+        print('')
 
         # Start CLI
         P4CLI(self.net, conf_file=self.conf_file, script=self.conf.get("cli_script", None))
@@ -416,7 +416,7 @@ def main():
         sh('find -type f -regex ".*\(p4i\|p4rt\)" | xargs rm')
 
         #remove all the jsons that come from a p4
-        out  = sh('find -type f -regex ".*p4"')
+        out = sh('find -type f -regex ".*p4"')
         p4_files = [x.split("/")[-1].strip() for x in out.split("\n") if x]
         for p4_file in p4_files:
             tmp = p4_file.replace("p4", "json")

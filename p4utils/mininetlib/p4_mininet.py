@@ -39,7 +39,7 @@ def configureP4Switch(**switch_args):
                 P4RuntimeSwitch.__init__(self, *opts, **kwargs)
 
             def describe(self):
-                print "%s -> gRPC port: %d" % (self.name, self.grpc_port)
+                print("%s -> gRPC port: %d" % (self.name, self.grpc_port))
 
         return ConfiguredP4RuntimeSwitch
     else:
@@ -54,7 +54,7 @@ def configureP4Switch(**switch_args):
                 P4Switch.__init__(self, *opts, **kwargs)
 
             def describe(self):
-                print "%s -> Thrift port: %d" % (self.name, self.thrift_port)
+                print("%s -> Thrift port: %d" % (self.name, self.thrift_port))
 
         return ConfiguredP4Switch
 
@@ -75,16 +75,16 @@ class P4Host(Host):
         return r
 
     def describe(self, sw_addr=None, sw_mac=None):
-        print "**********"
-        print "Network configuration for: %s" % self.name
-        print "Default interface: %s\t%s\t%s" %(
+        print("**********")
+        print("Network configuration for: %s" % self.name)
+        print("Default interface: %s\t%s\t%s" %(
             self.defaultIntf().name,
             self.defaultIntf().IP(),
             self.defaultIntf().MAC()
-        )
+        ))
         if sw_addr is not None or sw_mac is not None:
-            print "Default route to switch: %s (%s)" % (sw_addr, sw_mac)
-        print "**********"
+            print("Default route to switch: %s (%s)" % (sw_addr, sw_mac))
+        print("**********")
 
 
 class P4Switch(Switch):
@@ -331,4 +331,3 @@ class P4RuntimeSwitch(P4Switch):
             error("P4 switch {} did not start correctly.\n".format(self.name))
             exit(1)
         info("P4 switch {} has been started.\n".format(self.name))
-

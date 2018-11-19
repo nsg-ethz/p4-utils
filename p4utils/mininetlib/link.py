@@ -1,10 +1,10 @@
 from mininet.link import Link, TCIntf
 
-class TCLink( Link ):
+class TCLink(Link):
     "Link with symmetric TC interfaces configured via opts"
-    def __init__( self, node1, node2, port1=None, port2=None,
-                  intfName1=None, intfName2=None,
-                  addr1=None, addr2=None, **params ):
+    def __init__(self, node1, node2, port1=None, port2=None,
+                 intfName1=None, intfName2=None,
+                 addr1=None, addr2=None, **params):
 
         _params1 = params.pop("params1", None)
         _params2 = params.pop("params2", None)
@@ -16,7 +16,7 @@ class TCLink( Link ):
         if _params2:
             params2.update(_params2)
 
-        Link.__init__( self, node1, node2, port1=port1, port2=port2,
+        Link.__init__(self, node1, node2, port1=port1, port2=port2,
                        intfName1=intfName1, intfName2=intfName2,
                        cls1=TCIntf,
                        cls2=TCIntf,
