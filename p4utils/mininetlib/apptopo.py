@@ -333,7 +333,7 @@ class AppTopoStrategies(Topo):
                              delay=link['delay'], bw=link['bw'],
                              addr1=host_mac, addr2=direct_sw_mac, weight=link["weight"],
                              max_queue_size=link["queue_length"], params2= {'sw_ip': host_gw+"/24"})
-                self.addSwitchPort(direct_sw, host_name)
+                self.addSwitchPort(direct_sw, host_name)l
                 self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip, "mac": host_mac, "mask": 24}
 
             # switch to switch link
