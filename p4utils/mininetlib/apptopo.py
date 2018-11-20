@@ -355,7 +355,7 @@ class AppTopoStrategies(Topo):
         self.printPortMapping()
 
     def manual_assignment_strategy(self):
-        print "Assignment Strategy Manual not implemented yet"
+        print "Manual assignment not implemented yet"
         exit(1)
 
     def addP4Switch(self, name, **opts):
