@@ -450,7 +450,7 @@ class Topology(TopologyDBP4):
         Returns:
             interface name (str)
         """
-        return self[name]["interfaces_to_node"].keys()[0]
+        return list(self[name]["interfaces_to_node"].keys())[0]
 
     def get_p4switch_id(self, sw_name):
         """Returns the ID of a P4 switch.
