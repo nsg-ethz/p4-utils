@@ -324,7 +324,7 @@ class AppRunner(object):
                         continue
 
                     #check if same subnet
-                    other_host_address = ip_interface("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
+                    other_host_address = ip_interface(u"%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
                                                         self.topo.hosts_info[hosts_same_subnet]["mask"]))
 
                     if host_address.network.compressed == other_host_address.network.compressed:
