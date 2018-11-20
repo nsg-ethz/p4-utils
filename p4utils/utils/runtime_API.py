@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 # Copyright 2013-present Barefoot Networks, Inc.
 #
@@ -59,7 +59,7 @@ def enum(type_name, *sequential, **named):
     enums['from_str'] = from_str
     return type(type_name, (), enums)
 
-PreType = enum('PreType', 'None', 'SimplePre', 'SimplePreLAG')
+PreType = enum('PreType', 'PreNone', 'SimplePre', 'SimplePreLAG')
 MeterType = enum('MeterType', 'packets', 'bytes')
 TableType = enum('TableType', 'simple', 'indirect', 'indirect_ws')
 ResType = enum('ResType', 'table', 'action_prof', 'action', 'meter_array',
@@ -671,7 +671,7 @@ def handle_bad_input_mc(f):
     @wraps(f)
     def handle(*args, **kwargs):
         pre_type = args[0].pre_type
-        if pre_type == PreType.None:
+        if pre_type == PreType.PreNone:
             return handle_bad_input(f)(*args, **kwargs)
         EType = {
             PreType.SimplePre : SimplePre.InvalidMcOperation,
@@ -1330,7 +1330,7 @@ class RuntimeAPI(object):
             0, act_prof.name, mbr_handle, grp_handle)
 
     def check_has_pre(self):
-        if self.pre_type == PreType.None:
+        if self.pre_type == PreType.PreNone:
             raise UIn_Error(
                 "Cannot execute this command without packet replication engine"
             )
