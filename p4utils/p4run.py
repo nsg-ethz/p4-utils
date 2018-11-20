@@ -307,7 +307,7 @@ class AppRunner(object):
 
             # Ensure each host's interface name is unique, or else
             # mininet cannot shutdown gracefully
-            h_iface = h.intfs.values()[0]
+            h_iface = list(h.intfs.values())[0]
 
             #if there is gateway assigned
             if 'defaultRoute' in h.params:
