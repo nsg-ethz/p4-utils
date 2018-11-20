@@ -45,7 +45,7 @@ except:
 
 def enum(type_name, *sequential, **named):
     enums = dict(zip(sequential, range(len(sequential))), **named)
-    reverse = dict((value, key) for key, value in enums.iteritems())
+    reverse = dict((value, key) for key, value in enums.items())
 
     @staticmethod
     def to_str(x):

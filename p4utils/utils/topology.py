@@ -159,7 +159,7 @@ class TopologyDB(object):
         interfaces_to_nodes = {}
         interfaces_to_port = {}
 
-        for port, port_id in node.ports.iteritems():
+        for port, port_id in node.ports.items():
             interfaces_to_port[port.name] = port_id
 
         for itf in node.intfList():
@@ -255,7 +255,7 @@ class NetworkGraph(nx.Graph):
         self.load_graph_from_db()
 
     def load_graph_from_db(self):
-        for node, attributes in self.topology_db._original_network.iteritems():
+        for node, attributes in self.topology_db._original_network.items():
             if node not in self.nodes():
                 self.add_node(node, attributes)
 
