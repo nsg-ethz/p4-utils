@@ -984,7 +984,7 @@ class RuntimeAPI(object):
         key = tuple(parse_match_key(table, match_keys))
 
         entry_handle = self.table_entries_match_to_handle[table.name].get(key, None)
-        if entry_handle and pop:
+        if entry_handle is not None and pop:
             del self.table_entries_match_to_handle[table.name][key]
 
         return entry_handle
@@ -1018,7 +1018,7 @@ class RuntimeAPI(object):
     def table_modify_match(self, table_name, action_name, match_keys, action_parameters = []):
 
         entry_handle = self.get_handle_from_match(table_name, match_keys)
-        if entry_handle:
+        if entry_handle is not None:
             self.table_modify(table_name, action_name, entry_handle, action_parameters)
         else:
             raise UIn_Error(
@@ -1043,7 +1043,7 @@ class RuntimeAPI(object):
     def table_delete_match(self, table_name, match_keys):
 
         entry_handle = self.get_handle_from_match(table_name, match_keys, pop=True)
-        if entry_handle:
+        if entry_handle is not None:
             self.table_delete(table_name, entry_handle)
         else:
             raise UIn_Error(
