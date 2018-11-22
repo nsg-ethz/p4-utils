@@ -174,6 +174,7 @@ class AppRunner(object):
 
         default_delay = "0ms"
         default_bw = None
+        default_loss = 0
         default_queue_length = 1000
         default_link_weight = 1
 
@@ -183,11 +184,15 @@ class AppRunner(object):
         if self.conf['topology'].get('default_bw', None):
             default_bw = self.conf['topology'].get('default_bw', None)
 
+        if self.conf['topology'].get('default_loss', None):
+            default_loss = self.conf['topology'].get('default_loss', None)
+
         if self.conf['topology'].get('default_queue_length', None):
             default_queue_length = self.conf['topology'].get('default_queue_length', None)
 
         if self.conf['topology'].get('default_link_weight', None):
             default_link_weight = self.conf['topology'].get('default_link_weight', None)
+
 
         for link in unparsed_links:
             # make sure that the endpoints of each link are ordered alphabetically
@@ -199,6 +204,7 @@ class AppRunner(object):
                          'node2': node_b,
                          'delay': default_delay,
                          'bw': default_bw,
+                         'loss': default_loss,
                          'queue_length': default_queue_length,
                          'weight': default_link_weight
                          }
