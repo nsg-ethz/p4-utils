@@ -219,7 +219,7 @@ configure the hosts, and switches without knowing what will switches do.
 
    Each link is of the form:
    ```python
-   ["node1", "node2", {"delay": <in_ms>, "bw": <in_mbps>, "queue_length": <num_packets>, "weight": <link_cost>}]
+   ["node1", "node2", {"delay": <in_ms>, "bw": <in_mbps>, "loss": <in_percent>, "queue_length": <num_packets>, "weight": <link_cost>}]
    ```
 
    Link characteristics are not mandatory. Also, not all the characteristics have to be defined, you can pick a subset. For the
@@ -228,6 +228,7 @@ configure the hosts, and switches without knowing what will switches do.
    ```python
    link_dict = {'delay': '0ms',
                 'bw': Inf,
+                'loss': 0,
                 'queue_length': 1000,
                 'weight': 1
                }

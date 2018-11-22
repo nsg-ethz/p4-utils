@@ -176,6 +176,7 @@ class TopologyDB(object):
                 'mac' : '%s' % (itf.mac),
                 'intf': itf.name,
                 'bw': itf.params.get('bw', -1),
+                'loss' : itf.params.get('loss', 0),
                 'weight': itf.params.get('weight', 1),
                 'delay' : itf.params.get('delay', 0),
                 'queue_length' : itf.params.get('max_queue_size', -1)
