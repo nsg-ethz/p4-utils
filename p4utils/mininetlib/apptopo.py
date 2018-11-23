@@ -103,6 +103,9 @@ class AppTopoStrategies(Topo):
 
     def ip_addres_to_mac(self, ip):
 
+        if "/" in ip:
+            ip = ip.split("/")[0]
+
         split_ip = map(int, ip.split("."))
         mac_address = '00:%02x' + ':%02x:%02x:%02x:%02x' % tuple(split_ip)
         return mac_address
@@ -371,14 +374,14 @@ class AppTopoStrategies(Topo):
                 sw_id = sw_to_id[direct_sw]
                 assert sw_id < 254
 
-                host_ip = self._hosts[host_name].get('ip', None)
+                host_ip = self._hosts[host_name].pop('ip', None)
                 assert host_ip, "Host does not have an IP assigned"
 
                 if not "/" in host_ip:
                     host_ip += "/24"
 
                 host_mac = self.ip_addres_to_mac(host_ip) % (0)
-                host_gw = self._hosts[host_name].get('gw', None)
+                host_gw = self._hosts[host_name].pop('gw', None)
 
                 #adding host
                 ops = self._hosts[host_name]
@@ -387,7 +390,8 @@ class AppTopoStrategies(Topo):
                 else:
                     self.addHost(host_name, ip=host_ip, mac=host_mac, **ops)
 
-                sw_ip = self._switches[direct_sw].get(host_name, None)
+                sw_ip = self._switches[direct_sw].pop(host_name, None)
+                assert sw_ip != host_ip
                 if sw_ip and not "/" in sw_ip:
                     sw_ip += "/24"
 
@@ -397,12 +401,13 @@ class AppTopoStrategies(Topo):
                     sw_mac = self.ip_addres_to_mac(host_ip) % (1)
                     sw_ip  = None
 
+
                 self.addLink(host_name, direct_sw,
                              delay=link['delay'], bw=link['bw'], loss=link['loss'],
                              addr1=host_mac, addr2=sw_mac, weight=link["weight"],
                              max_queue_size=link["queue_length"], params2= {'sw_ip': sw_ip})
                 self.addSwitchPort(direct_sw, host_name)
-                self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip, "mac": host_mac, "mask": 24}
+                self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip.split("/")[0], "mac": host_mac, "mask": 24}
 
             # switch to switch link
             else:
@@ -410,7 +415,7 @@ class AppTopoStrategies(Topo):
                 sw1_name = link['node1']
                 sw2_name = link['node2']
 
-                sw1_ip = self._switches[sw1_name].get(sw2_name, None)
+                sw1_ip = self._switches[sw1_name].pop(sw2_name, None)
                 if sw1_ip and not "/" in sw1_ip:
                     sw1_ip += "/24"
 
@@ -420,7 +425,7 @@ class AppTopoStrategies(Topo):
                     sw1_mac = None
                     sw1_ip = None
 
-                sw2_ip = self._switches[sw1_name].get(sw1_name, None)
+                sw2_ip = self._switches[sw1_name].pop(sw1_name, None)
                 if sw2_ip and not "/" in sw2_ip:
                     sw2_ip += "/24"
 

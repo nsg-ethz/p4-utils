@@ -172,10 +172,10 @@ class AppRunner(object):
         """
         links = []
 
-        default_delay = "0ms"
+        default_delay = None
         default_bw = None
-        default_loss = 0
-        default_queue_length = 1000
+        default_loss = None
+        default_queue_length = None
         default_link_weight = 1
 
         if self.conf['topology'].get('default_delay', None):
