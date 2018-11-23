@@ -211,6 +211,13 @@ configure the hosts, and switches without knowing what will switches do.
    learn the Mac addresses of other hosts within the same subnet.
    * Default: true
 
+##### `auto_gw_arp:`
+
+   * Type: bool
+   * Value: if set, hosts get the ARP entry for the gate way route automatically configured. You need to enable this when your gw
+   does not reply to ARP requests.
+   * Default: true
+
 ##### `links:`
 
    * Type: list
