@@ -355,8 +355,91 @@ class AppTopoStrategies(Topo):
         self.printPortMapping()
 
     def manual_assignment_strategy(self):
-        print "Manual assignment not implemented yet"
-        exit(1)
+
+        #adds switches to the topology and sets an ID
+        sw_to_id = self.add_switches()
+
+        # add links and configure them: ips, macs, etc
+        # assumes hosts are connected to one switch only
+        for link in self._links:
+
+            if self.is_host_link(link):
+
+                host_name = link[self.get_host_position(link)]
+                direct_sw = link[self.get_sw_position(link)]
+
+                sw_id = sw_to_id[direct_sw]
+                assert sw_id < 254
+
+                host_ip = self._hosts[host_name].get('ip', None)
+                assert host_ip, "Host does not have an IP assigned"
+
+                if not "/" in host_ip:
+                    host_ip += "/24"
+
+                host_mac = self.ip_addres_to_mac(host_ip) % (0)
+                host_gw = self._hosts[host_name].get('gw', None)
+
+                #adding host
+                ops = self._hosts[host_name]
+                if host_gw:
+                    self.addHost(host_name, ip=host_ip, mac=host_mac, defaultRoute='via %s' % host_gw, **ops)
+                else:
+                    self.addHost(host_name, ip=host_ip, mac=host_mac, **ops)
+
+                sw_ip = self._switches[direct_sw].get(host_name, None)
+                if sw_ip and not "/" in sw_ip:
+                    sw_ip += "/24"
+
+                if sw_ip:
+                    sw_mac = self.ip_addres_to_mac(sw_ip) % (0)
+                else:
+                    sw_mac = self.ip_addres_to_mac(host_ip) % (1)
+                    sw_ip  = None
+
+                self.addLink(host_name, direct_sw,
+                             delay=link['delay'], bw=link['bw'], loss=link['loss'],
+                             addr1=host_mac, addr2=sw_mac, weight=link["weight"],
+                             max_queue_size=link["queue_length"], params2= {'sw_ip': sw_ip})
+                self.addSwitchPort(direct_sw, host_name)
+                self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip, "mac": host_mac, "mask": 24}
+
+            # switch to switch link
+            else:
+
+                sw1_name = link['node1']
+                sw2_name = link['node2']
+
+                sw1_ip = self._switches[sw1_name].get(sw2_name, None)
+                if sw1_ip and not "/" in sw1_ip:
+                    sw1_ip += "/24"
+
+                if sw1_ip:
+                    sw1_mac = self.ip_addres_to_mac(sw1_ip) % (0)
+                else:
+                    sw1_mac = None
+                    sw1_ip = None
+
+                sw2_ip = self._switches[sw1_name].get(sw1_name, None)
+                if sw2_ip and not "/" in sw2_ip:
+                    sw2_ip += "/24"
+
+                if sw2_ip:
+                    sw2_mac = self.ip_addres_to_mac(sw2_ip) % (0)
+                else:
+                    sw2_mac = None
+                    sw2_ip = None
+
+                self.addLink(link['node1'], link['node2'],
+                             delay=link['delay'], bw=link['bw'], loss=link['loss'], addr1=sw1_mac, addr2=sw2_mac,
+                             weight=link["weight"], max_queue_size=link["queue_length"], params1= {'sw_ip': sw1_ip},
+                             params2= {'sw_ip': sw2_ip})
+                self.addSwitchPort(link['node1'], link['node2'])
+                self.addSwitchPort(link['node2'], link['node1'])
+
+        self.add_cpu_port()
+        self.printPortMapping()
+
 
     def addP4Switch(self, name, **opts):
         """Add P4 switch to Mininet topology.

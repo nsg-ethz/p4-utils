@@ -307,6 +307,7 @@ class AppRunner(object):
         """
         topology = self.conf.get('topology')
         auto_arp_tables = topology.get('auto_arp_tables', True)
+        auto_gw_arp = topology.get('auto_gw_arp', True)
 
         for host_name in self.topo.hosts():
             h = self.net.get(host_name)
@@ -316,11 +317,12 @@ class AppRunner(object):
             h_iface = h.intfs.values()[0]
 
             #if there is gateway assigned
-            if 'defaultRoute' in h.params:
-                link = h_iface.link
-                sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
-                gw_ip = h.params['defaultRoute'].split()[-1]
-                h.cmd('arp -i %s -s %s %s' % (h_iface.name, gw_ip, sw_iface.mac))
+            if auto_gw_arp:
+                if 'defaultRoute' in h.params:
+                    link = h_iface.link
+                    sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
+                    gw_ip = h.params['defaultRoute'].split()[-1]
+                    h.cmd('arp -i %s -s %s %s' % (h_iface.name, gw_ip, sw_iface.mac))
 
             if auto_arp_tables:
                 #set arp rules for all the hosts in the same subnet
