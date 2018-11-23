@@ -425,7 +425,7 @@ class AppTopoStrategies(Topo):
                     sw1_mac = None
                     sw1_ip = None
 
-                sw2_ip = self._switches[sw1_name].pop(sw1_name, None)
+                sw2_ip = self._switches[sw2_name].pop(sw1_name, None)
                 if sw2_ip and not "/" in sw2_ip:
                     sw2_ip += "/24"
 
@@ -441,6 +441,7 @@ class AppTopoStrategies(Topo):
                              params2= {'sw_ip': sw2_ip})
                 self.addSwitchPort(link['node1'], link['node2'])
                 self.addSwitchPort(link['node2'], link['node1'])
+
 
         self.add_cpu_port()
         self.printPortMapping()
