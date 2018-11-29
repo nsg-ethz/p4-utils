@@ -1597,9 +1597,15 @@ class RuntimeAPI(object):
         if len(rates) != meter.rate_count:
             print "WARNING: expected", meter.rate_count, "rates",
             print "but only received", len(rates)
+
+        values = []
         for idx, rate in enumerate(rates):
             print "{}: info rate = {}, burst size = {}".format(
                 idx, rate.units_per_micros, rate.burst_size)
+            values.append(rate.units_per_micros)
+            values.append(rate.burst_size)
+
+        return values
 
     @handle_bad_input
     def counter_read(self, counter_name, index):
