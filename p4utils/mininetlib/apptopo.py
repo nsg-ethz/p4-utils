@@ -435,6 +435,14 @@ class AppTopoStrategies(Topo):
                     sw2_mac = None
                     sw2_ip = None
 
+                #temporal fix when adding interfaces that do not have the two mac addresses.
+                if not sw2_mac and sw1_mac:
+                    sw2_mac = self.ip_addres_to_mac(sw1_ip) % 1
+
+                if not sw1_mac and sw2_mac:
+                    sw1_mac = self.ip_addres_to_mac(sw2_ip) % 1
+
+
                 self.addLink(link['node1'], link['node2'],
                              delay=link['delay'], bw=link['bw'], loss=link['loss'], addr1=sw1_mac, addr2=sw2_mac,
                              weight=link["weight"], max_queue_size=link["queue_length"], params1= {'sw_ip': sw1_ip},
