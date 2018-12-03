@@ -25,6 +25,16 @@ def check_listening_on_port(port):
 class CompilationError(Exception):
     pass
 
+
+def ip_address_to_mac(ip):
+
+    if "/" in ip:
+        ip = ip.split("/")[0]
+
+    split_ip = map(int, ip.split("."))
+    mac_address = '00:%02x' + ':%02x:%02x:%02x:%02x' % tuple(split_ip)
+    return mac_address
+
 def last_modified(input_file, output_file):
     """Check if a file is newer than another file.
 

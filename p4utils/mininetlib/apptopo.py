@@ -3,6 +3,7 @@ from mininet.nodelib import LinuxBridge
 import re
 from ipaddress import IPv4Network
 from mininet import node
+from p4utils.utils.utils import ip_address_to_mac
 
 class AppTopoStrategies(Topo):
     """The mininet topology class.
@@ -101,14 +102,6 @@ class AppTopoStrategies(Topo):
 
         return 'node1' if link['node1'] in self._switches else 'node2'
 
-    def ip_addres_to_mac(self, ip):
-
-        if "/" in ip:
-            ip = ip.split("/")[0]
-
-        split_ip = map(int, ip.split("."))
-        mac_address = '00:%02x' + ':%02x:%02x:%02x:%02x' % tuple(split_ip)
-        return mac_address
 
     def check_host_valid_ip_from_name(self, host):
 
@@ -181,8 +174,8 @@ class AppTopoStrategies(Topo):
                         host_ip = str(next(ip_generator).compressed)
                     self.already_assigned_ips.add(host_ip)
 
-                host_mac = self.ip_addres_to_mac(host_ip) % (0)
-                direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
+                host_mac = ip_address_to_mac(host_ip) % (0)
+                direct_sw_mac = ip_address_to_mac(host_ip) % (1)
 
                 ops = self._hosts[host_name]
                 self.addHost(host_name, ip=host_ip+"/16", mac=host_mac, **ops)
@@ -259,8 +252,8 @@ class AppTopoStrategies(Topo):
 
                 host_gw = "10.%d.%d.254" % (upper_byte, lower_byte)
 
-                host_mac = self.ip_addres_to_mac(host_ip) % (0)
-                direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
+                host_mac = ip_address_to_mac(host_ip) % (0)
+                direct_sw_mac = ip_address_to_mac(host_ip) % (1)
 
                 ops = self._hosts[host_name]
                 self.addHost(host_name, ip=host_ip+"/24", mac=host_mac, defaultRoute='via %s' % host_gw, **ops)
@@ -327,8 +320,8 @@ class AppTopoStrategies(Topo):
                     host_ip = "10.%d.%d.2" % (sw_id, host_num)
                     host_gw = "10.%d.%d.1" % (sw_id, host_num)
 
-                host_mac = self.ip_addres_to_mac(host_ip) % (0)
-                direct_sw_mac = self.ip_addres_to_mac(host_ip) % (1)
+                host_mac = ip_address_to_mac(host_ip) % (0)
+                direct_sw_mac = ip_address_to_mac(host_ip) % (1)
 
                 ops = self._hosts[host_name]
                 self.addHost(host_name, ip=host_ip + "/24", mac=host_mac, defaultRoute='via %s' % host_gw, **ops)
@@ -380,7 +373,7 @@ class AppTopoStrategies(Topo):
                 if not "/" in host_ip:
                     host_ip += "/24"
 
-                host_mac = self.ip_addres_to_mac(host_ip) % (0)
+                host_mac = ip_address_to_mac(host_ip) % (0)
                 host_gw = self._hosts[host_name].pop('gw', None)
 
                 #adding host
@@ -396,9 +389,9 @@ class AppTopoStrategies(Topo):
                     sw_ip += "/24"
 
                 if sw_ip:
-                    sw_mac = self.ip_addres_to_mac(sw_ip) % (0)
+                    sw_mac = ip_address_to_mac(sw_ip) % (0)
                 else:
-                    sw_mac = self.ip_addres_to_mac(host_ip) % (1)
+                    sw_mac = ip_address_to_mac(host_ip) % (1)
                     sw_ip  = None
 
 
@@ -420,7 +413,7 @@ class AppTopoStrategies(Topo):
                     sw1_ip += "/24"
 
                 if sw1_ip:
-                    sw1_mac = self.ip_addres_to_mac(sw1_ip) % (0)
+                    sw1_mac = ip_address_to_mac(sw1_ip) % (0)
                 else:
                     sw1_mac = None
                     sw1_ip = None
@@ -430,17 +423,17 @@ class AppTopoStrategies(Topo):
                     sw2_ip += "/24"
 
                 if sw2_ip:
-                    sw2_mac = self.ip_addres_to_mac(sw2_ip) % (0)
+                    sw2_mac = ip_address_to_mac(sw2_ip) % (0)
                 else:
                     sw2_mac = None
                     sw2_ip = None
 
                 #temporal fix when adding interfaces that do not have the two mac addresses.
                 if not sw2_mac and sw1_mac:
-                    sw2_mac = self.ip_addres_to_mac(sw1_ip) % 1
+                    sw2_mac = ip_address_to_mac(sw1_ip) % 1
 
                 if not sw1_mac and sw2_mac:
-                    sw1_mac = self.ip_addres_to_mac(sw2_ip) % 1
+                    sw1_mac = ip_address_to_mac(sw2_ip) % 1
 
 
                 self.addLink(link['node1'], link['node2'],
