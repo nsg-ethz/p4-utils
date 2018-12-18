@@ -339,6 +339,12 @@ class AppRunner(object):
                             h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
                                                           self.topo.hosts_info[hosts_same_subnet]['mac']))
 
+            #if the host is configured to use dhcp
+            auto_ip = topology["hosts"][host_name]
+            if auto_ip:
+                h.cmd('dhclient -r %s' % h_iface.name)
+                h.cmd('dhclient %s' % h_iface.name)
+
 
     def save_topology(self):
         """Saves mininet topology to database."""

@@ -5,7 +5,7 @@ from ipaddress import IPv4Network
 from mininet import node
 from p4utils.utils.utils import ip_address_to_mac
 
-class AppTopoStrategies(Topo):
+class AppTopo(Topo):
     """The mininet topology class.
 
     A custom class is used because the exercises make a few topology assumptions,
@@ -367,14 +367,23 @@ class AppTopoStrategies(Topo):
                 sw_id = sw_to_id[direct_sw]
                 assert sw_id < 254
 
-                host_ip = self._hosts[host_name].pop('ip', None)
-                assert host_ip, "Host does not have an IP assigned"
+                host_gw = None
+                host_mac = None
 
-                if not "/" in host_ip:
+                host_ip = self._hosts[host_name].pop('ip', None)
+                assert host_ip, "Host does not have an IP assigned or 'auto' assignment"
+
+                if host_ip == "auto":
+                    host_ip = None
+                    automatic_ip = True
+                    self._hosts[host_name]["auto"] = True
+
+                if host_ip and not "/" in host_ip:
                     host_ip += "/24"
 
-                host_mac = ip_address_to_mac(host_ip) % (0)
-                host_gw = self._hosts[host_name].pop('gw', None)
+                if host_ip:
+                    host_mac = ip_address_to_mac(host_ip) % (0)
+                    host_gw = self._hosts[host_name].pop('gw', None)
 
                 #adding host
                 ops = self._hosts[host_name]
@@ -400,7 +409,9 @@ class AppTopoStrategies(Topo):
                              addr1=host_mac, addr2=sw_mac, weight=link["weight"],
                              max_queue_size=link["queue_length"], params2= {'sw_ip': sw_ip})
                 self.addSwitchPort(direct_sw, host_name)
-                self.hosts_info[host_name] = {"sw": direct_sw, "ip": host_ip.split("/")[0], "mac": host_mac, "mask": 24}
+
+                plane_ip = host_ip.split("/")[0] if host_ip else None
+                self.hosts_info[host_name] = {"sw": direct_sw, "ip":  plane_ip, "mac": host_mac, "mask": 24}
 
             # switch to switch link
             else:
@@ -500,3 +511,5 @@ class AppTopoStrategies(Topo):
                 print "%d:%s\t" % (portno, node2),
             print
 
+#AppTopo Alias
+AppTopoStrategies = AppTopo
