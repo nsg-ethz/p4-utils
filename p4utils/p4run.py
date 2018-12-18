@@ -343,7 +343,7 @@ class AppRunner(object):
             auto_ip = topology["hosts"][host_name]
             if auto_ip:
                 h.cmd('dhclient -r %s' % h_iface.name)
-                h.cmd('dhclient %s' % h_iface.name)
+                h.cmd('dhclient %s &' % h_iface.name)
 
 
     def save_topology(self):
