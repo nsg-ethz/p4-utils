@@ -340,7 +340,7 @@ class AppRunner(object):
                                                           self.topo.hosts_info[hosts_same_subnet]['mac']))
 
             #if the host is configured to use dhcp
-            auto_ip = topology["hosts"][host_name]
+            auto_ip = topology["hosts"][host_name].pop("auto", None)
             if auto_ip:
                 h.cmd('dhclient -r %s' % h_iface.name)
                 h.cmd('dhclient %s &' % h_iface.name)

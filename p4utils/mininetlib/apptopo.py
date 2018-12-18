@@ -375,7 +375,6 @@ class AppTopo(Topo):
 
                 if host_ip == "auto":
                     host_ip = None
-                    automatic_ip = True
                     self._hosts[host_name]["auto"] = True
 
                 if host_ip and not "/" in host_ip:
