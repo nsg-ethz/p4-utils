@@ -317,6 +317,9 @@ The control plane API is a wrapper (with some additions) over the original Runti
 programmers to interface with the bmv2 thrift sever through a python object and by calling methods instead of using text throguh the CLI. Thus, this API allows programmers to write
 more automated control plane functions.
 
+While we write a more complete documentation you can check which functions are available to use directly at the source code:
+[SimpleSwitchAPI](p4utils/utils/sswitch_API.py) and [RuntimeAPI](p4utils/utils/runtime_API.py)
+
 **Note:** Some of the least used functions from the CLI have not been included in this API. However, some extra functions that do not exist in the CLI have
 been added here.
 
