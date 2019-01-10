@@ -948,7 +948,12 @@ class RuntimeAPI(object):
 
         #save handle
         #for sub_table_name in self.table_multiple_names[table.name]:
-        self.table_entries_match_to_handle[table.name][tuple(match_keys)] = entry_handle
+        try:
+            entry_handle = int(entry_handle)
+            self.table_entries_match_to_handle[table.name][tuple(match_keys)] = entry_handle
+        except:
+            print "Could not add entry with handle %s" % entry_handle
+            return entry_handle
 
         print "Entry has been added with handle", entry_handle
         print
@@ -1035,7 +1040,7 @@ class RuntimeAPI(object):
         try:
             entry_handle = int(entry_handle)
         except:
-            raise UIn_Error("Bad format for entry handle")
+            raise UIn_Error("Bad format for entry handle " + str(entry_handle))
 
         print "Deleting entry", entry_handle, "from", table_name
         self.client.bm_mt_delete_entry(0, table.name, entry_handle)
@@ -1043,6 +1048,7 @@ class RuntimeAPI(object):
     def table_delete_match(self, table_name, match_keys):
 
         entry_handle = self.get_handle_from_match(table_name, match_keys, pop=True)
+        print "trying to delete entry with handle ", entry_handle
         if entry_handle is not None:
             self.table_delete(table_name, entry_handle)
         else:
