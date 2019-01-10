@@ -246,6 +246,9 @@ configure the hosts, and switches without knowing what will switches do.
    * Type: dict
    * Value: dictionary where the keys are the hosts that have to be created.
    * Default: None
+   * Host Conf Attributes:
+       * `ip:` if using manual assignament strategy you can assign an ip to a host or use the keyword `auto` if hosts should be able to get IPs through a DHCP server.
+       * `gw:` indicates the IP address of the gateway
 
    > TODO: add a way to start commands at hosts: this feature will be added soon.
 
@@ -258,6 +261,7 @@ configure the hosts, and switches without knowing what will switches do.
    * Switch Conf Attributes:
       * `cli_input:` path to the CLI-formatted text file that will be used to configure and populate the switch.
       * `program`: path to the p4 program that will be loaded onto the switch. If not specified, the global `program` path is used.
+      * `<direct_neighbor>:` when using the manual IP assignment you can indicate the IP of the interface facing a neighboring node.
 
 You can find a configuration example, that uses all the fields [here](./p4app_example.json)
 
@@ -290,6 +294,8 @@ topo.node('h1') #this also works topo['h1']
 
 #### Methods Documentation
 
+Some methods documented
+
 * `get_p4switches()`: returns a dictionary where the keys are p4 switches names and values are information about the switch. You can use `get_p4switches().keys()` to
 just get the switches names.
 * `get_thrift_port(sw_name)`: returns the thrift port at which a `sw_name` is listening to. This can be used to establish a connection using the `SimpleSwitchAPI` object.
@@ -307,5 +313,13 @@ if found. For example, `get_shortest_paths_between_nodes('s1', 's2')` would retu
 
 ### Control Plane API
 
-(TODO)
+The control plane API is a wrapper (with some additions) over the original RuntimeCLI from [p4lang/bmv2](https://github.com/p4lang/behavioral-model/tree/master/tools). It allows
+programmers to interface with the bmv2 thrift sever through a python object and by calling methods instead of using text throguh the CLI. Thus, this API allows programmers to write
+more automated control plane functions.
+
+**Note:** Some of the least used functions from the CLI have not been included in this API. However, some extra functions that do not exist in the CLI have
+been added here.
+
+**Important:** In the near future, this API should be replaced by the P4Runtime API, however do to lack of implementation for some functions at the time of
+implementing this we chose to use the old thrift API.
 

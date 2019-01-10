@@ -2,7 +2,6 @@ from mininet.topo import Topo
 from mininet.nodelib import LinuxBridge
 import re
 from ipaddress import IPv4Network
-from mininet import node
 from p4utils.utils.utils import ip_address_to_mac
 
 class AppTopo(Topo):
