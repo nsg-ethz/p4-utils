@@ -880,7 +880,7 @@ class RuntimeAPI(object):
         "Return the number of entries in a match table (direct or indirect): table_num_entries <table name>"
 
         table = self.get_res("table", table_name, ResType.table)
-        print self.client.bm_mt_get_num_entries(0, table.name)
+        return self.client.bm_mt_get_num_entries(0, table.name)
 
     @handle_bad_input
     def table_clear(self, table_name):
@@ -1615,7 +1615,7 @@ class RuntimeAPI(object):
 
     @handle_bad_input
     def counter_read(self, counter_name, index):
-        "Read counter value: counter_read <name> <index>"
+        "Read counter value: counter_read <name> <entry handle>"
 
         counter = self.get_res("counter", counter_name, ResType.counter_array)
         try:
@@ -1648,7 +1648,7 @@ class RuntimeAPI(object):
 
     @handle_bad_input
     def counter_write(self, counter_name, index, value):
-        "Write a value to a counter index: counter_read <name> <index> <value>"
+        "Write a value to a counter index: counter_read <name> <entry handle> <value>"
 
         counter = self.get_res("counter", counter_name, ResType.counter_array)
         try:

@@ -674,7 +674,6 @@ class NetworkGraph(nx.Graph):
         paths = [tuple(x) for x in paths]
         return paths
 
-
 if __name__ == '__main__':
     import sys
 
@@ -684,6 +683,3 @@ if __name__ == '__main__':
         db = "./topology.db"
 
     topo = Topology(db=db)
-
-
-
