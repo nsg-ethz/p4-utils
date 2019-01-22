@@ -15,9 +15,10 @@
 #
 # Adapted by Robert MacDavid (macdavid@cs.princeton.edu) from scripts found in
 # the p4app repository (https://github.com/p4lang/p4app)
-# Further work: Fabian Schleiss (fabian.schleiss@alumni.ethz.ch)
 # Further work: Edgar Costa Molero (cedgar@ethz.ch)
+# Further work: Fabian Schleiss (fabian.schleiss@alumni.ethz.ch)
 #
+
 import os
 import sys
 import argparse
@@ -34,7 +35,6 @@ from p4utils.mininetlib.apptopo import AppTopoStrategies as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
 from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError, read_entries, add_entries, cleanup
 
-#from mininet.link import TCLink
 from p4utils.mininetlib.link import TCLink
 from mininet.log import setLogLevel, info
 from mininet.clean import sh
@@ -258,7 +258,7 @@ class AppRunner(object):
             - Mininet instance stored as self.net
         """
         self.logger("Building mininet topology.")
-        #compile all p4 programs and give them to every different switch
+        # compile all p4 programs and give them to every different switch
         try:
             self.switch_to_json = compile_all_p4(self.conf)
         except CompilationError:
@@ -267,7 +267,7 @@ class AppRunner(object):
 
         self.topo = self.app_topo(self.hosts, self.switch_to_json, self.links, self.log_dir, self.conf)
 
-        #TODO: this should not be for the entire net, we should support non p4 switches
+        # TODO: this should not be for the entire net, we should support non p4 switches
         switchClass = configureP4Switch(sw_path=self.bmv2_exe,
                                         log_console=self.log_enabled,
                                         pcap_dump=self.pcap_dump, pcap_dir= self.pcap_dir)
@@ -294,7 +294,7 @@ class AppRunner(object):
             A mininet instance is stored as self.net and self.net.start() has been called.
         """
 
-        #run controller
+        # run controller
         controller = self.app_controller(self.conf, self.net, self.log_dir, self.log_enabled)
         controller.start()
         return controller
@@ -316,7 +316,7 @@ class AppRunner(object):
             # mininet cannot shutdown gracefully
             h_iface = h.intfs.values()[0]
 
-            #if there is gateway assigned
+            # if there is gateway assigned
             if auto_gw_arp:
                 if 'defaultRoute' in h.params:
                     link = h_iface.link
@@ -325,7 +325,7 @@ class AppRunner(object):
                     h.cmd('arp -i %s -s %s %s' % (h_iface.name, gw_ip, sw_iface.mac))
 
             if auto_arp_tables:
-                #set arp rules for all the hosts in the same subnet
+                # set arp rules for all the hosts in the same subnet
                 host_address = ip_interface(u"%s/%d" % (h.IP(), self.topo.hosts_info[host_name]["mask"]))
                 for hosts_same_subnet in self.topo.hosts():
                     if hosts_same_subnet == host_name:
@@ -339,7 +339,7 @@ class AppRunner(object):
                             h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
                                                           self.topo.hosts_info[hosts_same_subnet]['mac']))
 
-            #if the host is configured to use dhcp
+            # if the host is configured to use dhcp
             auto_ip = topology["hosts"][host_name].pop("auto", None)
             if auto_ip:
                 h.cmd('dhclient -r %s' % h_iface.name)
@@ -414,22 +414,28 @@ def main():
 
     args = get_args()
 
-    #set logging level
+    # set logging level
     setLogLevel('info')
 
-    #clean
+    # clean
     cleanup()
 
-    #remove cli logs
+    # remove cli logs
     sh('find -type f -regex ".*cli_output.*" | xargs rm')
 
     if args.clean or args.clean_dir:
+        # removes first level pcap and log dirs
         sh("rm -rf %s" % args.pcap_dir)
         sh("rm -rf %s" % args.log_dir)
+        # tries to recursively remove all pcap and log dirs if they are named 'log' and 'pcap'
+        sh('find -type d -regex ".*pcap" | xargs rm -rf')
+        sh('find -type d -regex ".*log" | xargs rm -rf')
+        # removes topologies files
         sh('find -type f -regex ".*db" | xargs rm')
+        # remove compiler outputs
         sh('find -type f -regex ".*\(p4i\|p4rt\)" | xargs rm')
 
-        #remove all the jsons that come from a p4
+        # remove all the jsons that come from a p4
         out  = sh('find -type f -regex ".*p4"')
         p4_files = [x.split("/")[-1].strip() for x in out.split("\n") if x]
         for p4_file in p4_files:
