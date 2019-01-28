@@ -17,7 +17,7 @@ setup(
     name=distname,
     version=VERSION,
     description='P4 language and bmv2 model utilities',
-    author='Edgar Costa',
+    author='Edgar Costa Molero',
     author_email='cedgar@ethz.ch',
     packages=find_packages(),
     long_description=readme(),

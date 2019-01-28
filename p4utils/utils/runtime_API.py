@@ -19,8 +19,6 @@
 # Antonin Bas (antonin@barefootnetworks.com)
 #
 #
-#
-#
 # Modified version of the runtime_CLI.py from behavioural model
 # Edgar Costa (cedgar@ethz.ch)
 

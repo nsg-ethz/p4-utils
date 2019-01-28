@@ -2,6 +2,7 @@
 
 # Attach to a MiniNExT host and run a command
 # (Extends existing script to provide support for PID namespaces)
+# Credit to MiniNext: https://github.com/USC-NSL/miniNExT
 
 if [ -z $1 ]; then
   echo "usage: $0 host cmd [args...]"

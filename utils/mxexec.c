@@ -9,6 +9,8 @@
  *
  * Partially based on public domain setsid(1)
  * Also based on public domain util-linux unshare.c & nsenter.c
+
+ # Credit to MiniNext: https://github.com/USC-NSL/miniNExT
  */
 
 #define _GNU_SOURCE

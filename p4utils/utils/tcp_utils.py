@@ -4,12 +4,10 @@ import socket
 class Socket(object):
 
     def __init__(self):
-
         self._s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def send(self,msg):
+    def send(self, msg):
         self._s.send(msg)
-
 
     def close(self):
         self._s.close()
@@ -23,8 +21,9 @@ class Sender(Socket):
     def __init__(self):
         super(Sender, self).__init__()
 
-    def connect(self,ip, port):
+    def connect(self, ip, port):
         self._s.connect((ip, port))
+
 
 class Receiver(Socket):
 
@@ -35,20 +34,16 @@ class Receiver(Socket):
         self.bind(port)
         self.conn = ""
 
-
-    def bind(self,port):
-
+    def bind(self, port):
         self._s.bind(('', port))
-
 
     def listen(self):
         self._s.listen(1)
-        conn, addr =  self._s.accept()
+        conn, addr = self._s.accept()
         self.conn = conn
-        
+
     def recv(self):
         return super(Receiver, self).recv(self.conn)
-
 
     def close(self):
         if self.conn:
