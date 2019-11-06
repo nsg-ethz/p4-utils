@@ -1705,7 +1705,7 @@ class RuntimeAPI(object):
             raise UIn_Error("Bad format for value, must be an integer")
 
         if isinstance(index, list):
-            self.client.bm_register_write(0, register.name, index[0], index[1], value)
+            self.client.bm_register_write_range(0, register.name, index[0], index[1], value)
         else:
             self.client.bm_register_write(0, register.name, index, value)
 
