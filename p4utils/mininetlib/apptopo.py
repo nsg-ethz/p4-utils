@@ -276,7 +276,6 @@ class AppTopo(Topo):
     def l3_assignment_strategy(self):
 
         sw_to_id = self.add_switches()
-
         sw_to_next_available_host_id = {}
         for sw in sw_to_id.keys():
             sw_to_next_available_host_id[sw] = 1

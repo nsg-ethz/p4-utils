@@ -249,6 +249,8 @@ configure the hosts, and switches without knowing what will switches do.
    * Host Conf Attributes:
        * `ip:` if using manual assignament strategy you can assign an ip to a host or use the keyword `auto` if hosts should be able to get IPs through a DHCP server.
        * `gw:` indicates the IP address of the gateway
+       * `commands:` list of commands that will be executed at starting time. As now, only non blocking commands
+        that terminate are allowed here. Example: "commands": ["echo 1 > /etc/config_file"]
 
    > TODO: add a way to start commands at hosts: this feature will be added soon.
 
@@ -300,7 +302,7 @@ Some methods documented
 just get the switches names.
 * `get_thrift_port(sw_name)`: returns the thrift port at which a `sw_name` is listening to. This can be used to establish a connection using the `SimpleSwitchAPI` object.
 * `get_hosts_connected_to(sw_name)`: returns a list of all the host names connected to the switch `sw_name`.
-* `get_host_ip(host_name)`: returns the ip address. For example `10.0.1.2`.
+* `get_host_ip(host_name)`: returns the ip address and subnet mask of host `host_name`. For example `10.0.1.2/24`.
 * `get_host_mac(host_name)`: returns the mac address of host `host_name`.
 * `node_to_node_port_num(node1, node2)`: returns the port index of `node1` facing `node2`. This index can be used to populate your forwarding table entries.
 * `node_to_node_mac(node1, node2)`: returns the `mac` address of the interface from `node1` that connects with `node2`. This can be used to get next hop destination mac addresses.

@@ -347,6 +347,11 @@ class AppRunner(object):
                 h.cmd('dhclient -r %s' % h_iface.name)
                 h.cmd('dhclient %s &' % h_iface.name)
 
+            # run startup commands (this commands must be non blocking)
+            commands = topology["hosts"][host_name].get("commands", [])
+            for command in commands:
+                h.cmd(command)
+
 
     def save_topology(self):
         """Saves mininet topology to database."""
