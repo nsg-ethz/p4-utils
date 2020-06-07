@@ -179,6 +179,7 @@ class AppTopo(Topo):
                 ops = self._hosts[host_name]
                 ops.pop("ip", None)
                 ops.pop("mac", None)
+                
 
                 self.addHost(host_name, ip=host_ip+"/16", mac=host_mac, **ops)
                 self.addLink(host_name, direct_sw,
