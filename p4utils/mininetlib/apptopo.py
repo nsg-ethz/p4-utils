@@ -177,6 +177,9 @@ class AppTopo(Topo):
                 direct_sw_mac = ip_address_to_mac(host_ip) % (1)
 
                 ops = self._hosts[host_name]
+                ops.pop("ip", None)
+                ops.pop("mac", None)
+
                 self.addHost(host_name, ip=host_ip+"/16", mac=host_mac, **ops)
                 self.addLink(host_name, direct_sw,
                              delay=link['delay'], bw=link['bw'], loss=link['loss'],
@@ -255,6 +258,9 @@ class AppTopo(Topo):
                 direct_sw_mac = ip_address_to_mac(host_ip) % (1)
 
                 ops = self._hosts[host_name]
+                ops.pop("ip", None)
+                ops.pop("mac", None)
+
                 self.addHost(host_name, ip=host_ip+"/24", mac=host_mac, defaultRoute='via %s' % host_gw, **ops)
                 self.addLink(host_name, direct_sw,
                              delay=link['delay'], bw=link['bw'], loss=link['loss'],
@@ -322,6 +328,9 @@ class AppTopo(Topo):
                 direct_sw_mac = ip_address_to_mac(host_ip) % (1)
 
                 ops = self._hosts[host_name]
+                ops.pop("ip", None)
+                ops.pop("mac", None)
+
                 self.addHost(host_name, ip=host_ip + "/24", mac=host_mac, defaultRoute='via %s' % host_gw, **ops)
                 self.addLink(host_name, direct_sw,
                              delay=link['delay'], bw=link['bw'], loss=link['loss'],
@@ -378,9 +387,13 @@ class AppTopo(Topo):
                 if host_ip and not "/" in host_ip:
                     host_ip += "/24"
 
-                if host_ip:
+                host_mac = self._hosts[host_name].pop("mac", None)
+
+                # get mac address from ip address
+                if host_ip and not host_mac:
                     host_mac = ip_address_to_mac(host_ip) % (0)
-                    host_gw = self._hosts[host_name].pop('gw', None)
+
+                host_gw = self._hosts[host_name].pop('gw', None)
 
                 #adding host
                 ops = self._hosts[host_name]
