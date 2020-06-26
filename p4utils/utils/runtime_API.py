@@ -41,6 +41,7 @@ try:
 except:
     pass
 
+
 def enum(type_name, *sequential, **named):
     enums = dict(zip(sequential, range(len(sequential))), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
@@ -71,17 +72,6 @@ def table_error_name(x):
     return TableOperationErrorCode._VALUES_TO_NAMES[x]
 
 
-TABLES = {}
-ACTION_PROFS = {}
-ACTIONS = {}
-METER_ARRAYS = {}
-COUNTER_ARRAYS = {}
-REGISTER_ARRAYS = {}
-CUSTOM_CRC_CALCS = {}
-
-# maps (object type, unique suffix) to object
-SUFFIX_LOOKUP_MAP = {}
-
 class MatchType:
     EXACT = 0
     LPM = 1
@@ -109,8 +99,6 @@ class Table:
         self.support_timeout = False
         self.action_prof = None
 
-        TABLES[name] = self
-
     def num_key_fields(self):
         return len(self.key)
 
@@ -122,9 +110,9 @@ class Table:
             "None" if not self.action_prof else self.action_prof.name)
         return "{0:30} [{1}, mk={2}]".format(self.name, ap_str, self.key_str())
 
-    def get_action(self, action_name):
+    def get_action(self, action_name, suffix_lookup_map):
         key = ResType.action, action_name
-        action = SUFFIX_LOOKUP_MAP.get(key, None)
+        action = suffix_lookup_map.get(key, None)
         if action is None or action.name not in self.actions:
             return None
         return action
@@ -137,14 +125,12 @@ class ActionProf:
         self.actions = {}
         self.ref_cnt = 0
 
-        ACTION_PROFS[name] = self
-
     def action_prof_str(self):
         return "{0:30} [{1}]".format(self.name, self.with_selection)
 
-    def get_action(self, action_name):
+    def get_action(self, action_name, suffix_lookup_map):
         key = ResType.action, action_name
-        action = SUFFIX_LOOKUP_MAP.get(key, None)
+        action = suffix_lookup_map.get(key, None)
         if action is None or action.name not in self.actions:
             return None
         return action
@@ -154,8 +140,6 @@ class Action:
         self.name = name
         self.id_ = id_
         self.runtime_data = []
-
-        ACTIONS[name] = self
 
     def num_params(self):
         return len(self.runtime_data)
@@ -176,7 +160,6 @@ class MeterArray:
         self.binding = None
         self.rate_count = None
 
-        METER_ARRAYS[name] = self
 
     def meter_str(self):
         return "{0:30} [{1}, {2}]".format(self.name, self.size,
@@ -190,7 +173,6 @@ class CounterArray:
         self.size = None
         self.binding = None
 
-        COUNTER_ARRAYS[name] = self
 
     def counter_str(self):
         return "{0:30} [{1}]".format(self.name, self.size)
@@ -202,164 +184,191 @@ class RegisterArray:
         self.width = None
         self.size = None
 
-        REGISTER_ARRAYS[name] = self
 
     def register_str(self):
         return "{0:30} [{1}]".format(self.name, self.size)
 
-def reset_config():
-    TABLES.clear()
-    ACTION_PROFS.clear()
-    ACTIONS.clear()
-    METER_ARRAYS.clear()
-    COUNTER_ARRAYS.clear()
-    REGISTER_ARRAYS.clear()
-    CUSTOM_CRC_CALCS.clear()
+class SwitchInfo(object):
 
-    SUFFIX_LOOKUP_MAP.clear()
+    def __init__(self):
 
-def load_json_config(standard_client=None, json_path=None):
-    def read_conf():
-        if json_path:
-            if standard_client is not None:
-                utils.check_JSON_md5(standard_client, json_path)
-            with open(json_path, 'r') as f:
-                return f.read()
-        else:
-            assert(standard_client is not None)
-            try:
-                json_cfg = standard_client.bm_get_config()
-            except:
-                sys.exit(1)
-            return json_cfg
+        self.tables = {}
+        self.action_profs = {}
+        self.actions = {}
+        self.meter_arrays = {}
+        self.counter_arrays = {}
+        self.register_arrays = {}
+        self.custom_crc_calcs = {}
 
-    load_json_str(read_conf())
+        # maps (object type, unique suffix) to object
+        self.suffix_lookup_map = {}
 
-def load_json_str(json_str):
-    def get_header_type(header_name, j_headers):
-        for h in j_headers:
-            if h["name"] == header_name:
-                return h["header_type"]
-        assert(0)
+    def reset_config(self):
+        self.tables.clear()
+        self.action_profs.clear()
+        self.actions.clear()
+        self.meter_arrays.clear()
+        self.counter_arrays.clear()
+        self.register_arrays.clear()
+        self.custom_crc_calcs.clear()
+        self.suffix_lookup_map.clear()
 
-    def get_field_bitwidth(header_type, field_name, j_header_types):
-        for h in j_header_types:
-            if h["name"] != header_type: continue
-            for t in h["fields"]:
-                # t can have a third element (field signedness)
-                f, bw = t[0], t[1]
-                if f == field_name:
-                    return bw
-        assert(0)
+    def load_json_config(self, standard_client=None, json_path=None):
+        def read_conf():
+            if json_path:
+                if standard_client is not None:
+                    utils.check_JSON_md5(standard_client, json_path)
+                with open(json_path, 'r') as f:
+                    return f.read()
+            else:
+                assert(standard_client is not None)
+                try:
+                    json_cfg = standard_client.bm_get_config()
+                except:
+                    sys.exit(1)
+                return json_cfg
 
-    reset_config()
-    json_ = json.loads(json_str)
+        self.load_json_str(read_conf())
 
-    def get_json_key(key):
-        return json_.get(key, [])
+    def load_json_str(self, json_str):
+        def get_header_type(header_name, j_headers):
+            for h in j_headers:
+                if h["name"] == header_name:
+                    return h["header_type"]
+            assert(0)
 
-    for j_action in get_json_key("actions"):
-        action = Action(j_action["name"], j_action["id"])
-        for j_param in j_action["runtime_data"]:
-            action.runtime_data += [(j_param["name"], j_param["bitwidth"])]
+        def get_field_bitwidth(header_type, field_name, j_header_types):
+            for h in j_header_types:
+                if h["name"] != header_type: continue
+                for t in h["fields"]:
+                    # t can have a third element (field signedness)
+                    f, bw = t[0], t[1]
+                    if f == field_name:
+                        return bw
+            assert(0)
 
-    for j_pipeline in get_json_key("pipelines"):
-        if "action_profiles" in j_pipeline:  # new JSON format
-            for j_aprof in j_pipeline["action_profiles"]:
-                action_prof = ActionProf(j_aprof["name"], j_aprof["id"])
-                action_prof.with_selection = "selector" in j_aprof
+        self.reset_config()
+        json_ = json.loads(json_str)
 
-        for j_table in j_pipeline["tables"]:
-            table = Table(j_table["name"], j_table["id"])
-            table.match_type = MatchType.from_str(j_table["match_type"])
-            table.type_ = TableType.from_str(j_table["type"])
-            table.support_timeout = j_table["support_timeout"]
-            for action in j_table["actions"]:
-                table.actions[action] = ACTIONS[action]
+        def get_json_key(key):
+            return json_.get(key, [])
 
-            if table.type_ in {TableType.indirect, TableType.indirect_ws}:
-                if "action_profile" in j_table:
-                    action_prof = ACTION_PROFS[j_table["action_profile"]]
-                else:  # for backward compatibility
-                    assert("act_prof_name" in j_table)
-                    action_prof = ActionProf(j_table["act_prof_name"],
-                                             table.id_)
-                    action_prof.with_selection = "selector" in j_table
-                action_prof.actions.update(table.actions)
-                action_prof.ref_cnt += 1
-                table.action_prof = action_prof
+        for j_action in get_json_key("actions"):
+            action = Action(j_action["name"], j_action["id"])
+            for j_param in j_action["runtime_data"]:
+                action.runtime_data += [(j_param["name"], j_param["bitwidth"])]
 
-            for j_key in j_table["key"]:
-                target = j_key["target"]
-                match_type = MatchType.from_str(j_key["match_type"])
-                if match_type == MatchType.VALID:
-                    field_name = target + "_valid"
-                    bitwidth = 1
-                elif target[1] == "$valid$":
-                    field_name = target[0] + "_valid"
-                    bitwidth = 1
-                else:
-                    field_name = ".".join(target)
-                    header_type = get_header_type(target[0],
-                                                  json_["headers"])
-                    bitwidth = get_field_bitwidth(header_type, target[1],
-                                                  json_["header_types"])
-                table.key += [(field_name, match_type, bitwidth)]
+            self.actions[j_action["name"]] = action
 
-    for j_meter in get_json_key("meter_arrays"):
-        meter_array = MeterArray(j_meter["name"], j_meter["id"])
-        if "is_direct" in j_meter and j_meter["is_direct"]:
-            meter_array.is_direct = True
-            meter_array.binding = j_meter["binding"]
-        else:
-            meter_array.is_direct = False
-            meter_array.size = j_meter["size"]
-        meter_array.type_ = MeterType.from_str(j_meter["type"])
-        meter_array.rate_count = j_meter["rate_count"]
+        for j_pipeline in get_json_key("pipelines"):
+            if "action_profiles" in j_pipeline:  # new JSON format
+                for j_aprof in j_pipeline["action_profiles"]:
+                    action_prof = ActionProf(j_aprof["name"], j_aprof["id"])
+                    action_prof.with_selection = "selector" in j_aprof
+                    self.action_profs[j_aprof["name"]] = action_prof
 
-    for j_counter in get_json_key("counter_arrays"):
-        counter_array = CounterArray(j_counter["name"], j_counter["id"])
-        counter_array.is_direct = j_counter["is_direct"]
-        if counter_array.is_direct:
-            counter_array.binding = j_counter["binding"]
-        else:
-            counter_array.size = j_counter["size"]
+            for j_table in j_pipeline["tables"]:
+                table = Table(j_table["name"], j_table["id"])
+                table.match_type = MatchType.from_str(j_table["match_type"])
+                table.type_ = TableType.from_str(j_table["type"])
+                table.support_timeout = j_table["support_timeout"]
+                for action in j_table["actions"]:
+                    table.actions[action] = self.actions[action]
 
-    for j_register in get_json_key("register_arrays"):
-        register_array = RegisterArray(j_register["name"], j_register["id"])
-        register_array.size = j_register["size"]
-        register_array.width = j_register["bitwidth"]
+                if table.type_ in {TableType.indirect, TableType.indirect_ws}:
+                    if "action_profile" in j_table:
+                        action_prof = self.action_profs[j_table["action_profile"]]
+                    else:  # for backward compatibility
+                        assert("act_prof_name" in j_table)
+                        action_prof = ActionProf(j_table["act_prof_name"],
+                                                 table.id_)
+                        action_prof.with_selection = "selector" in j_table
 
-    for j_calc in get_json_key("calculations"):
-        calc_name = j_calc["name"]
-        if j_calc["algo"] == "crc16_custom":
-            CUSTOM_CRC_CALCS[calc_name] = 16
-        elif j_calc["algo"] == "crc32_custom":
-            CUSTOM_CRC_CALCS[calc_name] = 32
+                    action_prof.actions.update(table.actions)
+                    action_prof.ref_cnt += 1
+                    self.action_profs[j_table["act_prof_name"]] = action_prof
+                    table.action_prof = action_prof
 
-    # Builds a dictionary mapping (object type, unique suffix) to the object
-    # (Table, Action, etc...). In P4_16 the object name is the fully-qualified
-    # name, which can be quite long, which is why we accept unique suffixes as
-    # valid identifiers.
-    # Auto-complete does not support suffixes, only the fully-qualified names,
-    # but that can be changed in the future if needed.
-    suffix_count = Counter()
-    for res_type, res_dict in [
-            (ResType.table, TABLES), (ResType.action_prof, ACTION_PROFS),
-            (ResType.action, ACTIONS), (ResType.meter_array, METER_ARRAYS),
-            (ResType.counter_array, COUNTER_ARRAYS),
-            (ResType.register_array, REGISTER_ARRAYS)]:
-        for name, res in res_dict.items():
-            suffix = None
-            for s in reversed(name.split('.')):
-                suffix = s if suffix is None else s + '.' + suffix
-                key = (res_type, suffix)
-                SUFFIX_LOOKUP_MAP[key] = res
-                suffix_count[key] += 1
-    #checks if a table is repeated, in that case it removes the only suffix entries
-    for key, c in suffix_count.items():
-        if c > 1:
-            del SUFFIX_LOOKUP_MAP[key]
+                for j_key in j_table["key"]:
+                    target = j_key["target"]
+                    match_type = MatchType.from_str(j_key["match_type"])
+                    if match_type == MatchType.VALID:
+                        field_name = target + "_valid"
+                        bitwidth = 1
+                    elif target[1] == "$valid$":
+                        field_name = target[0] + "_valid"
+                        bitwidth = 1
+                    else:
+                        field_name = ".".join(target)
+                        header_type = get_header_type(target[0],
+                                                      json_["headers"])
+                        bitwidth = get_field_bitwidth(header_type, target[1],
+                                                      json_["header_types"])
+                    table.key += [(field_name, match_type, bitwidth)]
+
+                    self.tables[j_table["name"]] = table
+
+        for j_meter in get_json_key("meter_arrays"):
+            meter_array = MeterArray(j_meter["name"], j_meter["id"])
+            if "is_direct" in j_meter and j_meter["is_direct"]:
+                meter_array.is_direct = True
+                meter_array.binding = j_meter["binding"]
+            else:
+                meter_array.is_direct = False
+                meter_array.size = j_meter["size"]
+            meter_array.type_ = MeterType.from_str(j_meter["type"])
+            meter_array.rate_count = j_meter["rate_count"]
+
+            self.meter_arrays[j_meter["name"]] = meter_array
+
+
+        for j_counter in get_json_key("counter_arrays"):
+            counter_array = CounterArray(j_counter["name"], j_counter["id"])
+            counter_array.is_direct = j_counter["is_direct"]
+            if counter_array.is_direct:
+                counter_array.binding = j_counter["binding"]
+            else:
+                counter_array.size = j_counter["size"]
+
+            self.counter_arrays[j_counter["name"]] = counter_array
+
+        for j_register in get_json_key("register_arrays"):
+            register_array = RegisterArray(j_register["name"], j_register["id"])
+            register_array.size = j_register["size"]
+            register_array.width = j_register["bitwidth"]
+
+            self.register_arrays[j_register["name"]] = register_array
+
+        for j_calc in get_json_key("calculations"):
+            calc_name = j_calc["name"]
+            if j_calc["algo"] == "crc16_custom":
+                self.custom_crc_calcs[calc_name] = 16
+            elif j_calc["algo"] == "crc32_custom":
+                self.custom_crc_calcs[calc_name] = 32
+
+        # Builds a dictionary mapping (object type, unique suffix) to the object
+        # (Table, Action, etc...). In P4_16 the object name is the fully-qualified
+        # name, which can be quite long, which is why we accept unique suffixes as
+        # valid identifiers.
+        # Auto-complete does not support suffixes, only the fully-qualified names,
+        # but that can be changed in the future if needed.
+        suffix_count = Counter()
+        for res_type, res_dict in [
+                (ResType.table, self.tables), (ResType.action_prof, self.action_profs),
+                (ResType.action, self.actions), (ResType.meter_array, self.meter_arrays),
+                (ResType.counter_array, self.counter_arrays),
+                (ResType.register_array, self.register_arrays)]:
+            for name, res in res_dict.items():
+                suffix = None
+                for s in reversed(name.split('.')):
+                    suffix = s if suffix is None else s + '.' + suffix
+                    key = (res_type, suffix)
+                    self.suffix_lookup_map[key] = res
+                    suffix_count[key] += 1
+        #checks if a table is repeated, in that case it removes the only suffix entries
+        for key, c in suffix_count.items():
+            if c > 1:
+                del self.suffix_lookup_map[key]
 
 class UIn_Error(Exception):
     def __init__(self, info=""):
@@ -751,12 +760,17 @@ class RuntimeAPI(object):
             RuntimeAPI.get_thrift_services(pre_type)
         )
 
-        load_json_config(standard_client, json_path)
+        # Controller to Switch Info
+        self.switch_info = SwitchInfo()
+        self.switch_info.load_json_config(standard_client, json_path)
+
+        #    load_json_config(standard_client, json_path)
 
         self.client = standard_client
         self.mc_client = mc_client
         self.pre_type = pre_type
 
+        # TODO: have a look at this
         self.table_entries_match_to_handle = self.create_match_to_handle_dict()
         self.load_table_entries_match_to_handle()
         #self.table_multiple_names = self.load_table_to_all_names()
@@ -775,9 +789,9 @@ class RuntimeAPI(object):
 
     def get_res(self, type_name, name, res_type):
         key = res_type, name
-        if key not in SUFFIX_LOOKUP_MAP:
+        if key not in self.switch_info.suffix_lookup_map:
             raise UIn_ResourceError(type_name, name)
-        return SUFFIX_LOOKUP_MAP[key]
+        return self.switch_info.suffix_lookup_map[key]
 
     """
     def at_least_n_args(self, args, n):
@@ -802,14 +816,14 @@ class RuntimeAPI(object):
     @handle_bad_input
     def show_tables(self):
         "List tables defined in the P4 program: show_tables"
-        for table_name in sorted(TABLES):
-            print TABLES[table_name].table_str()
+        for table_name in sorted(self.switch_info.tables):
+            print self.switch_info.TABLES[table_name].table_str()
 
     @handle_bad_input
     def show_actions(self):
         "List actions defined in the P4 program: show_actions"
-        for action_name in sorted(ACTIONS):
-            print ACTIONS[action_name].action_str()
+        for action_name in sorted(self.switch_info.actions):
+            print self.switch_info.actions[action_name].action_str()
 
     @handle_bad_input
     def table_show_actions(self, table_name):
@@ -817,7 +831,7 @@ class RuntimeAPI(object):
 
         table = self.get_res("table", table_name, ResType.table)
         for action_name in sorted(table.actions):
-            print ACTIONS[action_name].action_str()
+            print self.switch_info.actions[action_name].action_str()
 
     @handle_bad_input
     def table_info(self, table_name):
@@ -826,7 +840,7 @@ class RuntimeAPI(object):
         print table.table_str()
         print "*" * 80
         for action_name in sorted(table.actions):
-            print ACTIONS[action_name].action_str()
+            print self.switch_info.actions[action_name].action_str()
 
     # for debugging
     def print_set_default(self, table_name, action_name, runtime_data):
@@ -842,7 +856,7 @@ class RuntimeAPI(object):
         "Set default action for a match table: table_set_default <table name> <action name> <action parameters>"
 
         table = self.get_res("table", table_name, ResType.table)
-        action = table.get_action(action_name)
+        action = table.get_action(action_name, self.switch_info.suffix_lookup_map)
         if action is None:
             raise UIn_Error(
                 "Table %s has no action %s" % (table_name, action_name)
@@ -894,7 +908,7 @@ class RuntimeAPI(object):
             #check if short name exists
             short_table_name = table_name.split(".")[-1]
             key = ResType.table, short_table_name
-            if key in SUFFIX_LOOKUP_MAP:
+            if key in self.switch_info.suffix_lookup_map:
                 d[table_name] = [table_name, short_table_name]
 
             else:
@@ -910,7 +924,7 @@ class RuntimeAPI(object):
         #import ipdb; ipdb.set_trace()
 
         table = self.get_res("table", table_name, ResType.table)
-        action = table.get_action(action_name)
+        action = table.get_action(action_name, self.switch_info.suffix_lookup_map)
         if action is None:
             raise UIn_Error(
                 "Table %s has no action %s" % (table_name, action_name)
@@ -997,7 +1011,7 @@ class RuntimeAPI(object):
         "Add entry to a match table: table_modify <table name> <action name> <entry handle> [action parameters]"
 
         table = self.get_res("table", table_name, ResType.table)
-        action = table.get_action(action_name)
+        action = table.get_action(action_name, self.switch_info.suffix_lookup_map)
         if action is None:
             raise UIn_Error(
                 "Table %s has no action %s" % (table_name, action_name)
@@ -1076,7 +1090,7 @@ class RuntimeAPI(object):
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
 
-        action = act_prof.get_action(action_name)
+        action = act_prof.get_action(action_name, self.switch_info.suffix_lookup_map)
         if action is None:
             raise UIn_Error("Action profile '{}' has no action '{}'".format(
                 act_prof_name, action_name))
@@ -1110,7 +1124,7 @@ class RuntimeAPI(object):
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
 
-        action = act_prof.get_action(action_name)
+        action = act_prof.get_action(action_name, self.switch_info.suffix_lookup_map)
         if action is None:
             raise UIn_Error("Action profile '{}' has no action '{}'".format(
                 act_prof_name, action_name))
@@ -1525,7 +1539,7 @@ class RuntimeAPI(object):
             except:
                 raise UIn_Error("Not a valid JSON file")
             self.client.bm_load_new_config(json_str)
-            load_json_str(json_str)
+            self.load_json_str(json_str)
 
     @handle_bad_input
     def swap_configs(self):
@@ -1991,7 +2005,7 @@ class RuntimeAPI(object):
         thrift_fn = {16: self.client.bm_set_crc16_custom_parameters,
                      32: self.client.bm_set_crc32_custom_parameters}[crc_width]
 
-        if name not in CUSTOM_CRC_CALCS or CUSTOM_CRC_CALCS[name] != crc_width:
+        if name not in self.switch_info.custom_crc_calcs or self.switch_info.custom_crc_calcs[name] != crc_width:
             raise UIn_ResourceError("crc{}_custom".format(crc_width), name)
         config_args = [conversion_fn(a) for a in [polynomial, initial_remainder, final_xor_value]]
         config_args += [parse_bool(a) for a in [reflect_data, reflect_remainder]]
@@ -2008,36 +2022,28 @@ class RuntimeAPI(object):
         "Change the parameters for a custom crc32 hash: set_crc32_parameters <name> <polynomial> <initial remainder> <final xor value> <reflect data?> <reflect remainder?>"
         self.set_crc_parameters_common(name, polynomial, initial_remainder, final_xor_value, reflect_data, reflect_remainder, 32)
 
+
     #Global Variable Getters
+    def get_tables(self):
+        return self.switch_info.tables
 
-    @staticmethod
-    def get_tables():
-        return TABLES
+    def get_action_profs(self):
+        return self.switch_info.action_profs
 
-    @staticmethod
-    def get_action_profs():
-        return ACTION_PROFS
+    def get_actions(self):
+        return self.switch_info.actions
 
-    @staticmethod
-    def get_actions():
-        return ACTIONS
+    def get_meter_arrays(self):
+        return self.switch_info.meter_arrays
 
-    @staticmethod
-    def get_meter_arrays():
-        return METER_ARRAYS
+    def get_counter_arrays(self):
+        return self.switch_info.counter_arrays
 
-    @staticmethod
-    def get_counter_arrays():
-        return COUNTER_ARRAYS
+    def get_register_arrays(self):
+        return self.switch_info.register_arrays
 
-    @staticmethod
-    def get_register_arrays():
-        return REGISTER_ARRAYS
+    def get_custom_crc_calcs(self):
+        return self.switch_info.custom_crc_calcs
 
-    @staticmethod
-    def get_custom_crc_calcs():
-        return CUSTOM_CRC_CALCS
-
-    @staticmethod
-    def get_suffix_lookup_map():
-        return SUFFIX_LOOKUP_MAP
+    def get_suffix_lookup_map(self):
+        return self.switch_info.suffix_lookup_map
