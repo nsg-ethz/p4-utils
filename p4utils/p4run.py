@@ -249,8 +249,9 @@ class AppRunner(object):
         if self.cli_enabled or (self.conf.get('cli', False)):
             self.do_net_cli()
 
-        # Stop right after the CLI is exited
-        self.net.stop()
+            # Stop right after the CLI is exited
+            self.net.stop()
+
 
     def create_network(self):
         """Create the mininet network object, and store it as self.net.
@@ -455,6 +456,7 @@ def main():
 
     app = AppRunner(args.config, args.log_dir,
                     args.pcap_dir, args.cli, args.quiet)
+    
 
     app.run_app()
 
