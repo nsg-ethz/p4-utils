@@ -241,6 +241,9 @@ configure the hosts, and switches without knowing what will switches do.
                }
    ```
 
+   If you want to set the default value for all links, you can set the `default_<attribute>`. You have to set this parammeter at the topology level. Possible, defaults are: 
+   `default_delay`, `default_bw`, `default_loss`, `default_queue_length`, `default_link_weight`.
+
 ##### `hosts:`
 
    * Type: dict
