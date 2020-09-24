@@ -35,12 +35,11 @@ from p4utils.utils.topology import Topology as DefaultTopoDB
 from p4utils.mininetlib.cli import P4CLI
 from p4utils.mininetlib.apptopo import AppTopoStrategies as DefaultTopo
 from p4utils.mininetlib.appcontroller import AppController as DefaultController
-from p4utils.utils.utils import run_command,compile_all_p4, load_conf, CompilationError, read_entries, add_entries, cleanup
+from p4utils.utils.utils import run_command, compile_all_p4, load_conf, CompilationError, read_entries, add_entries, cleanup
 
 from p4utils.mininetlib.link import TCLink
 from mininet.log import setLogLevel, info
 from mininet.clean import sh
-
 
 
 class AppRunner(object):
@@ -64,7 +63,7 @@ class AppRunner(object):
     """
 
     def __init__(self, conf_file, log_dir, pcap_dir,
-                 cli_enabled=True, quiet=False):
+                 cli_enabled=True, quiet=False, empty_p4=False):
         """Initializes some attributes and reads the topology json.
 
         Args:
@@ -75,6 +74,7 @@ class AppRunner(object):
             cli_enabled (bool): Enable mininet CLI.
             pcap_dump (bool): Enable generation of pcap files for interfaces.
             quiet (bool): Disable script debug messages.
+            empty_p4 (bool): Enables using an empty program for debugging.
         """
 
         self.quiet = quiet
@@ -84,11 +84,22 @@ class AppRunner(object):
             raise Exception("Configuration %s is not in the directory!" % conf_file)
         self.conf = load_conf(conf_file)
 
+        # we can start topologies with no program to test
+        if empty_p4:
+            import p4utils
+            lib_path = os.path.dirname(p4utils.__file__)
+            lib_path += "/../empty_program/empty_program.p4"
+            
+            # modify config
+            self.conf["program"] = lib_path
+            for switch, info in self.conf["topology"]["switches"].items():
+                if info.get("program", False):
+                    info["program"] = lib_path
+
         self.cli_enabled = cli_enabled
         self.pcap_dir = pcap_dir
         self.log_dir = log_dir
         self.bmv2_exe = str(self.conf.get('switch', DEFAULT_SWITCH))
-
 
         # Clean switches
         sh("killall %s" % self.bmv2_exe)
@@ -126,7 +137,7 @@ class AppRunner(object):
         self.app_topodb = DefaultTopoDB
         self.app_mininet = P4Mininet
 
-        if self.conf.get('topo_module',None):
+        if self.conf.get('topo_module', None):
             self.app_topo = self.load_custom_object('topo_module')
 
         if self.conf.get('controller_module', None):
@@ -148,7 +159,6 @@ class AppRunner(object):
 
         module = importlib.import_module(module_name)
         return getattr(module, object_name)
-
 
     def logger(self, *items):
         if not self.quiet:
@@ -195,7 +205,6 @@ class AppRunner(object):
         if self.conf['topology'].get('default_link_weight', None):
             default_link_weight = self.conf['topology'].get('default_link_weight', None)
 
-
         for link in unparsed_links:
             # make sure that the endpoints of each link are ordered alphabetically
             node_a, node_b, = link[0], link[1]
@@ -222,7 +231,6 @@ class AppRunner(object):
 
             links.append(link_dict)
         return links
-
 
     def run_app(self):
         """Sets up the mininet instance, programs the switches, and starts the mininet CLI.
@@ -252,7 +260,6 @@ class AppRunner(object):
             # Stop right after the CLI is exited
             self.net.stop()
 
-
     def create_network(self):
         """Create the mininet network object, and store it as self.net.
 
@@ -277,10 +284,10 @@ class AppRunner(object):
 
         # start P4 Mininet
         self.net = self.app_mininet(topo=self.topo,
-                             link=TCLink,
-                             host=P4Host,
-                             switch=switchClass,
-                             controller=None)
+                                    link=TCLink,
+                                    host=P4Host,
+                                    switch=switchClass,
+                                    controller=None)
 
     def exec_scripts(self):
 
@@ -336,10 +343,10 @@ class AppRunner(object):
 
                     #check if same subnet
                     other_host_address = ip_interface(unicode("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
-                                                        self.topo.hosts_info[hosts_same_subnet]["mask"])))
+                                                                         self.topo.hosts_info[hosts_same_subnet]["mask"])))
 
                     if host_address.network.compressed == other_host_address.network.compressed:
-                            h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
+                        h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
                                                           self.topo.hosts_info[hosts_same_subnet]['mac']))
 
             # if the host is configured to use dhcp
@@ -352,7 +359,6 @@ class AppRunner(object):
             commands = topology["hosts"][host_name].get("commands", [])
             for command in commands:
                 h.cmd(command)
-
 
     def save_topology(self):
         """Saves mininet topology to database."""
@@ -414,6 +420,8 @@ def get_args():
                         action='store_true', required=False, default=False)
     parser.add_argument('--clean-dir', help='Cleans previous log files and closes',
                         action='store_true', required=False, default=False)
+    parser.add_argument('--empty-p4', help='Runs the topology with an empty p4 program that does nothing',
+                    action='store_true', required=False, default=False)              
 
     return parser.parse_args()
 
@@ -444,7 +452,7 @@ def main():
         sh('find -type f -regex ".*\(p4i\|p4rt\)" | xargs rm')
 
         # remove all the jsons that come from a p4
-        out  = sh('find -type f -regex ".*p4"')
+        out = sh('find -type f -regex ".*p4"')
         p4_files = [x.split("/")[-1].strip() for x in out.split("\n") if x]
         for p4_file in p4_files:
             tmp = p4_file.replace("p4", "json")
@@ -455,9 +463,7 @@ def main():
             return
 
     app = AppRunner(args.config, args.log_dir,
-                    args.pcap_dir, args.cli, args.quiet)
-    
-
+                    args.pcap_dir, args.cli, args.quiet, args.empty_p4)                  
     app.run_app()
 
 

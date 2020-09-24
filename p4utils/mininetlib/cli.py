@@ -3,6 +3,7 @@ from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
 from p4utils.utils.utils import *
 from p4utils import FAILED_STATUS, SUCCESS_STATUS
+from p4utils.utils.topology import Topology
 
 class P4CLI(CLI):
 
@@ -165,7 +166,7 @@ class P4CLI(CLI):
     def do_printSwitches(self, line=""):
         """Print names of all switches."""
         for sw in self.mn.p4switches:
-            print sw.name
+            print sw.name   
 
     def do_p4switches_reboot(self, line=""):
         """Reboot all P4 switches with new program.
@@ -203,3 +204,89 @@ class P4CLI(CLI):
         hosts_names = line.strip().split()
         hosts = [x for x in self.mn.hosts if x.name in hosts_names]
         self.mn.ping(hosts=hosts, timeout=1)
+
+
+    def do_printNetInfo(self, line=""):
+        """Prints Topology Info"""
+
+        self.topo = Topology(db="topology.db")
+   
+        print("\n*********************")
+        print("Network Information:")
+        print("*********************\n")
+        
+        switches = self.topo.get_switches()
+
+        for sw in sorted(switches.keys()):
+            
+            # skip linux bridge
+            if sw == "sw-cpu":
+                continue
+
+            thrift_port = self.topo.get_thrift_port(sw)
+            switch_id = self.topo[sw].get("sw_id", "N/A")
+            cpu_index = self.topo.get_cpu_port_index(sw, quiet=True)
+            header = "{}(thirft->{}, cpu_port->{})".format(sw, thrift_port, cpu_index)
+
+            header2 = "{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format("port", "intf", "node", "mac", "ip", "bw", "weight", "delay", "loss","queue")                                                                                     
+
+            print(header)
+            print(len(header2)*"-") 
+            print(header2)
+            
+            for intf,port_number  in sorted(self.topo.get_interfaces_to_port(sw).items(), key=lambda x: x[1]):
+                if intf == "lo":
+                    continue
+                
+                other_node = self.topo.get_interfaces_to_node(sw)[intf]
+                mac = self.topo[sw][other_node]['mac']
+                ip = self.topo[sw][other_node]['ip'].split("/")[0]
+                bw = self.topo[sw][other_node]['bw']
+                weight = self.topo[sw][other_node]['weight']
+                delay = self.topo[sw][other_node]['delay']
+                loss = self.topo[sw][other_node]['loss']
+                queue_length = self.topo[sw][other_node]['queue_length']
+                print("{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(port_number, intf, other_node, mac, ip, bw, weight, delay, loss, queue_length))
+
+            print(len(header2)*"-") 
+            print("")
+
+        # HOST INFO
+        print("Hosts Info")
+
+        header = "{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(
+            "name", "intf", "node", "mac", "ip", "bw", "weight", "delay", "loss","queue")    
+        
+        print(len(header)*"-") 
+        print(header)
+
+        for host in sorted(self.topo.get_hosts()):           
+            for intf,port_number  in sorted(self.topo.get_interfaces_to_port(host).items(), key=lambda x: x[1]):
+                
+                other_node = self.topo.get_interfaces_to_node(host)[intf]
+                mac = self.topo[host][other_node]['mac']
+                ip = self.topo[host][other_node]['ip'].split("/")[0]
+                bw = self.topo[host][other_node]['bw']
+                weight = self.topo[host][other_node]['weight']
+                delay = self.topo[host][other_node]['delay']
+                loss = self.topo[host][other_node]['loss']
+                queue_length = self.topo[host][other_node]['queue_length']
+                print("{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(host, intf, other_node, mac, ip, bw, weight, delay, loss, queue_length))
+
+        print(len(header)*"-") 
+        print("")
+
+#def describe(self, sw_addr=None, sw_mac=None):
+#    print "**********"
+#    print "Network configuration for: %s" % self.name
+#    print "Default interface: %s\t%s\t%s" %(
+#        self.defaultIntf().name,
+#        self.defaultIntf().IP(),
+#        self.defaultIntf().MAC()
+#    )
+#    if sw_addr is not None or sw_mac is not None:
+#        print "Default route to switch: %s (%s)" % (sw_addr, sw_mac)
+#    print "**********"
+#    
+#def describe(self):
+#    print "%s -> Thrift port: %d" % (self.name, self.thrift_port)
