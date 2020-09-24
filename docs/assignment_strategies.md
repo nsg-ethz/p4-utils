@@ -53,6 +53,7 @@ To disable automatic ARP population we added the following line to the topology 
 "auto_arp_tables": false
 ```
 
+
 ### Mixed
 
 This is not a real l2 or l3 assignment strategy, but since p4 switches can work at
