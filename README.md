@@ -203,6 +203,7 @@ configure the hosts, and switches without knowing what will switches do.
  devices, you have to manually set the IP to each interface and host gateways.
 
  > For more information about assignment strategies see its [doc page](.docs/assignment_strategies.md).
+ 
  > By default l2 strategy is used
 
 ##### `auto_arp_tables:`
