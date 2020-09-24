@@ -89,3 +89,25 @@ set the IP to each interface and host gateways. See the main documentation for m
 
 ## How to easily get addressing information
 
+Sometimes you need to know which IPs, mac addresses or how things are connected 
+in order to populate switch tables or decide how the control plane has to do 
+certain things. If your `p4` program is not compilable you wont be able to start
+the topology since `p4run` will fail to load the `p4` switches. For that, we provide 
+you the option to run your `p4app.json` topology on empty p4 switches that do not do anything. 
+That, will give you the chance to check which IPs and MAC addresses were assigned to hosts and
+links. To run empty programs use the `--empty-p4` command flag.
+
+```
+sudo p4run --empty-p4
+```
+
+We furthermore provide a `CLI` command to easily display the most important 
+features of the current network. With the command `printNetInfo` you can get 
+a perfect summary of your switches and hosts. For both hosts and switches you 
+will get very  useful information such as: the thrift-port, cpu-port, 
+port indexes and to where  they connect, addresses and link attributes. 
+
+As an example you can see the info of a layer 3 assignment strategy topology:
+
+<img src="images/net_info_example.png" title="net info example">
+
