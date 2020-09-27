@@ -290,7 +290,10 @@ class Topology(TopologyDBP4):
         # nodes can be removed and added, but new links or devices cannot be added.
 
         self._original_network = copy.deepcopy(self._network)
-        self.network_graph = NetworkGraph(self)
+        self.network_graph = NetworkGraph()
+        # this was separated so the Graph constructors has no parameters. Otherwise it would
+        # fail when creating SubGraphs. This happens since networkx 2.x
+        self.network_graph.load_topology_from_database(self)
 
         # Creates hosts to IP and IP to hosts mappings
         self.hosts_ip_mapping = {}
@@ -317,6 +320,12 @@ class Topology(TopologyDBP4):
         if name:
             return name
         raise InvalidHostIP(ip)
+
+    def get_host_gateway_name(self, host):
+        """Get host gateway name"""
+
+        if self.is_host(host):
+            return self[host]["interfaces_to_node"][self.get_host_first_interface(host)]
 
     def get_host_ip(self, name):
         """Returns the IP to a host name.
@@ -435,6 +444,20 @@ class Topology(TopologyDBP4):
         nodes = self.get_neighbors(node)
         return [host for host in nodes if self.get_node_type(host) == 'host']
 
+    def get_switches_connected_to(self, node):
+        """
+        Returns the switches directly connected to the node
+
+        Args:
+            node:
+
+        Returns: list of switches
+
+        """
+        nodes = self.get_neighbors(node)
+        return [host for host in nodes if self.is_p4switch(host)]
+
+
     def get_direct_host_networks_from_switch(self, switch):
         """
         Returns all the subnetworks a switch can reach directly
@@ -521,6 +544,18 @@ class Topology(TopologyDBP4):
         """
         return self.network_graph.get_paths_between_nodes(node1, node2)
 
+    def get_all_paths_between_nodes(self, node1, node2):
+        """
+        Returns all the paths between node1 and node2
+        Args:
+            node1: src node
+            node2: dst node
+
+        Returns: List of shortests paths
+
+        """        
+        return self.network_graph.get_all_paths_between_nodes(node1, node2)
+
     def get_cpu_port_intf(self, p4switch, cpu_node='sw-cpu', quiet=False):
         """
         Returns the port index of p4switch's cpu port
@@ -562,13 +597,12 @@ class NetworkGraph(nx.Graph):
     using networkx useful graph algorithms. For instance we can easily
     get short paths between two nodes.
 
-    Attributes:
-        topology_db: TopologyDB object. It is used to load the networkx object.
     """
 
-    def __init__(self, topology_db, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(NetworkGraph, self).__init__(*args, **kwargs)
 
+    def load_topology_from_database(self, topology_db):
         self.topology_db = topology_db
         self.load_graph_from_db()
 
@@ -601,7 +635,8 @@ class NetworkGraph(nx.Graph):
         for neighbor_node in self.topology_db.get_neighbors(node):
             if neighbor_node in self.nodes():
                 weight = attributes[neighbor_node].get("weight", 1)
-                super(NetworkGraph, self).add_edge(node, neighbor_node, weight=weight)
+                bw = attributes[neighbor_node].get("bw", 1000)
+                super(NetworkGraph, self).add_edge(node, neighbor_node, weight=weight, bw=bw)
 
     def set_node_shape(self, node, shape):
         """Sets node's shape. Used when plotting the network"""
@@ -673,6 +708,12 @@ class NetworkGraph(nx.Graph):
     def get_paths_between_nodes(self, node1, node2):
         """Compute the paths between two nodes."""
         paths = nx.all_shortest_paths(self, node1, node2, 'weight')
+        paths = [tuple(x) for x in paths]
+        return paths
+
+    def get_all_paths_between_nodes(self, node1, node2):
+        """Compute all the paths between two nodes."""
+        paths = nx.shortest_simple_paths(self, node1, node2, 'weight')
         paths = [tuple(x) for x in paths]
         return paths
 

@@ -1043,7 +1043,7 @@ class RuntimeAPI(object):
             )
 
     @handle_bad_input
-    def table_delete(self, table_name, entry_handle):
+    def table_delete(self, table_name, entry_handle, quiet=False):
         "Delete entry from a match table: table_delete <table name> <entry handle>"
 
         #TODO: delete handle
@@ -1053,8 +1053,10 @@ class RuntimeAPI(object):
             entry_handle = int(entry_handle)
         except:
             raise UIn_Error("Bad format for entry handle " + str(entry_handle))
-
-        print "Deleting entry", entry_handle, "from", table_name
+        
+        if not quiet:
+            print "Deleting entry", entry_handle, "from", table_name
+            
         self.client.bm_mt_delete_entry(0, table.name, entry_handle)
 
     def table_delete_match(self, table_name, match_keys):
