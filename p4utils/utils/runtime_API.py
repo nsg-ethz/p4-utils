@@ -1032,6 +1032,8 @@ class RuntimeAPI(object):
             0, table.name, entry_handle, action.name, runtime_data
         )
 
+        return entry_handle
+
     def table_modify_match(self, table_name, action_name, match_keys, action_parameters = []):
 
         entry_handle = self.get_handle_from_match(table_name, match_keys)
@@ -1041,6 +1043,7 @@ class RuntimeAPI(object):
             raise UIn_Error(
                 "Table %s has no match %s" % (table_name, match_keys)
             )
+        return entry_handle
 
     @handle_bad_input
     def table_delete(self, table_name, entry_handle, quiet=False):
@@ -1551,7 +1554,7 @@ class RuntimeAPI(object):
 
     @handle_bad_input
     def meter_array_set_rates(self, meter_name, rates):
-        "Configure rates for an entire meter array: meter_array_set_rates <name> <rate_1>:<burst_1> <rate_2>:<burst_2> ..."
+        "Configure rates for an entire meter array: meter_array_set_rates <name> [(<rate_1>,<burst_1>), (<rate_2>,<burst_2>)] ..."
 
         meter = self.get_res("meter", meter_name, ResType.meter_array)
         if len(rates) != meter.rate_count:
@@ -1560,11 +1563,10 @@ class RuntimeAPI(object):
                 % (meter.rate_count, len(rates))
             )
         new_rates = []
-        for rate in rates:
+        for rate, burst in rates:
             try:
-                r, b = rate.split(':')
-                r = float(r)
-                b = int(b)
+                r = float(rate)
+                b = int(burst)
                 new_rates.append(BmMeterRateConfig(r, b))
             except:
                 raise UIn_Error("Error while parsing rates")
@@ -1572,7 +1574,7 @@ class RuntimeAPI(object):
 
     @handle_bad_input
     def meter_set_rates(self, meter_name, index, rates):
-        "Configure rates for a meter: meter_set_rates <name> <index> <rate_1>:<burst_1> <rate_2>:<burst_2> ..."
+        "Configure rates for a meter: meter_set_rates <name> <index> [(<rate_1>,<burst_1>), (<rate_2>,<burst_2>)] ..."
 
         meter = self.get_res("meter", meter_name, ResType.meter_array)
         try:
@@ -1585,11 +1587,10 @@ class RuntimeAPI(object):
                 % (meter.rate_count, len(rates))
             )
         new_rates = []
-        for rate in rates:
+        for rate, burst in rates:
             try:
-                r, b = rate.split(':')
-                r = float(r)
-                b = int(b)
+                r = float(rate)
+                b = int(burst)
                 new_rates.append(BmMeterRateConfig(r, b))
             except:
                 raise UIn_Error("Error while parsing rates")
