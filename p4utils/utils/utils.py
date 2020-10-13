@@ -118,6 +118,7 @@ def read_entries(filename):
     #read entries and remove empty lines
     with open(filename, "r") as f:
         entries = [x.strip() for x in f.readlines() if x.strip() != ""]
+        entries = [x for x in entries if ( not x.startswith("//") and not x.startswith("#")) ]
     return entries
 
 def compile_p4_to_bmv2(config):
