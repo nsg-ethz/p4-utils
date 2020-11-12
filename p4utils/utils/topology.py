@@ -348,6 +348,18 @@ class Topology(TopologyDBP4):
         nhop = self.get_interfaces_to_node(name)[intf]
         return self[name][nhop]['mac']
 
+    def is_router(self, node):
+        """Checks if node is a router.
+
+        Args:
+            node: name of router
+
+        Returns:
+            True if node is a router, False otherwise
+        """
+        return self[node]["type"] == "router"
+
+
     def is_host(self, node):
         """Checks if node is a host.
 
@@ -392,6 +404,11 @@ class Topology(TopologyDBP4):
     def get_p4switches(self):
         """Returns the P4 switches from the topologyDB."""
         return {node: self[node] for node in self if self.is_p4switch(node)}
+
+    def get_routers(self):
+        """Returns the routers from the topologyDB."""
+        return {node: self[node] for node in self if self.is_router(node)}
+
 
     def get_host_first_interface(self, name):
         """Returns the first interface from a host. Assume it's single-homed.
@@ -665,6 +682,10 @@ class NetworkGraph(nx.Graph):
     def get_switches(self):
         """Returns all the nodes that are switches"""
         return [x for x in self.node if self.node[x]["type"] == "switch"]
+
+    def get_routers(self):
+        """Returns all the nodes that are routers"""
+        return [x for x in self.node if self.node[x]["type"] == "router"]        
 
     def get_p4switches(self):
         """Returns all the nodes that are P4 switches"""
