@@ -573,7 +573,7 @@ class Topology(TopologyDBP4):
         """        
         return self.network_graph.get_all_paths_between_nodes(node1, node2)
 
-    def get_cpu_port_intf(self, p4switch, cpu_node='sw-cpu', quiet=False):
+    def get_cpu_port_intf(self, p4switch, quiet=False):
         """
         Returns the port index of p4switch's cpu port
 
@@ -583,24 +583,26 @@ class Topology(TopologyDBP4):
 
         Returns: index
         """
-        if self.is_p4switch(p4switch) and self[p4switch].get(cpu_node, None):
-            return self[p4switch][cpu_node].get('intf')
+        has_cpu_port = any('cpu' in x for x in self[p4switch]['interfaces_to_port'].keys())
+        if self.is_p4switch(p4switch) and has_cpu_port:
+            return [x for x in self[p4switch]['interfaces_to_port'].keys() if 'cpu' in x][0]
         else:
             if not quiet:
                 print("Switch %s has no cpu port" % p4switch)
             return None
 
-    def get_cpu_port_index(self, p4switch, cpu_node='sw-cpu', quiet=False):
+    def get_cpu_port_index(self, p4switch, quiet=False):
         """
         Returns the port index of p4switch's cpu port
         Args:
             p4switch: name of the p4 switch
-            cpu_node: name of the cpu-node (usually a bridge)
 
         Returns: index
         """
-        if self.is_p4switch(p4switch) and self[p4switch].get(cpu_node, None):
-            return self[p4switch]['interfaces_to_port'][self[p4switch][cpu_node].get('intf')]
+        has_cpu_port = any('cpu' in x for x in self[p4switch]['interfaces_to_port'].keys())
+        if self.is_p4switch(p4switch) and has_cpu_port:
+            intf = self.get_cpu_port_intf(p4switch)
+            return self[p4switch]['interfaces_to_port'][intf]
         else:
             if not quiet:
                 print("Switch %s has no cpu port" % p4switch)
