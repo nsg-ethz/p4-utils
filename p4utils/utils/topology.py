@@ -487,6 +487,20 @@ class Topology(TopologyDBP4):
         return [host for host in nodes if self.is_p4switch(host)]
 
 
+    def get_routers_connected_to(self, node):
+        """
+        Returns the routers directly connected to the node
+
+        Args:
+            node:
+
+        Returns: list of routers
+
+        """
+        nodes = self.get_neighbors(node)
+        return [host for host in nodes if self.is_router(host)]
+
+
     def get_direct_host_networks_from_switch(self, switch):
         """
         Returns all the subnetworks a switch can reach directly
