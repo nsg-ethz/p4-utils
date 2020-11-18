@@ -231,7 +231,6 @@ def compile_all_p4(config):
     raise Exception('No topology or switches in configuration file.')
 
 def open_cli_process(thrift_port, thrift_ip='localhost', cli=DEFAULT_CLI):
-
     return subprocess.Popen([cli, '--thrift-port', str(thrift_port), "--thrift-ip", str(thrift_ip)],
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -248,11 +247,11 @@ def add_entries(thrift_port, entries, log_output = None, cli=DEFAULT_CLI, thrift
     if isinstance(entries, list):
         entries = '\n'.join(entries)
 
-    p = open_cli_process(thrift_port, cli)
+    p = open_cli_process(thrift_port, thrift_ip, cli)
     stdout, stderr = p.communicate(input=entries)
 
     if log_output:
-        with open(log_output, "a") as log_file:
+        with open(log_output, "w") as log_file:
             log_file.write(stdout)
 
     return stdout
