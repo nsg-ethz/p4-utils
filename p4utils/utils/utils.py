@@ -230,13 +230,13 @@ def compile_all_p4(config):
 
     raise Exception('No topology or switches in configuration file.')
 
-def open_cli_process(thrift_port, cli=DEFAULT_CLI):
+def open_cli_process(thrift_port, thrift_ip='localhost', cli=DEFAULT_CLI):
 
-    return subprocess.Popen([cli, '--thrift-port', str(thrift_port)],
+    return subprocess.Popen([cli, '--thrift-port', str(thrift_port), "--thrift-ip", str(thrift_ip)],
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-def add_entries(thrift_port, entries, log_output = None, cli=DEFAULT_CLI):
+def add_entries(thrift_port, entries, log_output = None, cli=DEFAULT_CLI, thrift_ip='localhost'):
     """Add entries to P4 switch using the DEFAULT_CLI.
 
     Args:

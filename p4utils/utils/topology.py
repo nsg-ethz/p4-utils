@@ -270,6 +270,18 @@ class TopologyDBP4(TopologyDB):
             raise TypeError('%s is not a P4 switch' % switch)
         return self._node(switch)['thrift_port']
 
+    def get_thrift_ip(self, switch):
+        """Return the Thrift ip used to communicate with the P4 switch."""
+        if self._node(switch).get('subtype', None) != 'p4switch':
+            raise TypeError('%s is not a P4 switch' % switch)
+        return self._node(switch)['thrift_ip']
+
+    def get_ctl_cpu_intf(self, switch):
+        """Returns the controller side cpu interface used to listent for cpu packets"""
+        if self._node(switch).get('subtype', None) != 'p4switch':
+            raise TypeError('%s is not a P4 switch' % switch)
+        return self._node(switch)['ctl_cpu_intf']
+
 class Topology(TopologyDBP4):
     """
     Builds or loads a topology object from a mininet or properly json file.
@@ -607,6 +619,7 @@ class Topology(TopologyDBP4):
             if not quiet:
                 print("Switch %s has no cpu port" % p4switch)
             return None
+
 
 class NetworkGraph(nx.Graph):
     """
