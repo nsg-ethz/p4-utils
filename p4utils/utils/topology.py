@@ -264,11 +264,47 @@ class TopologyDBP4(TopologyDB):
                 continue
             intf.ip, intf.prefixLen = None, None
 
+    def get_cpu_port_intf(self, p4switch, quiet=False):
+        """
+        Returns the port index of p4switch's cpu port
+
+        Args:
+            p4switch: name of the p4 switch
+            cpu_node: name of the cpu-node (usually a bridge)
+
+        Returns: index
+        """
+        has_cpu_port = any('cpu' in x for x in self[p4switch]['interfaces_to_port'].keys())
+        if self.is_p4switch(p4switch) and has_cpu_port:
+            return [x for x in self[p4switch]['interfaces_to_port'].keys() if 'cpu' in x][0]
+        else:
+            if not quiet:
+                print("Switch %s has no cpu port" % p4switch)
+            return None
+
+    def get_cpu_port_index(self, p4switch, quiet=False):
+        """
+        Returns the port index of p4switch's cpu port
+        Args:
+            p4switch: name of the p4 switch
+
+        Returns: index
+        """
+        has_cpu_port = any('cpu' in x for x in self[p4switch]['interfaces_to_port'].keys())
+        if self.is_p4switch(p4switch) and has_cpu_port:
+            intf = self.get_cpu_port_intf(p4switch)
+            return self[p4switch]['interfaces_to_port'][intf]
+        else:
+            if not quiet:
+                print("Switch %s has no cpu port" % p4switch)
+            return None
+
     def get_thrift_port(self, switch):
         """Return the Thrift port used to communicate with the P4 switch."""
         if self._node(switch).get('subtype', None) != 'p4switch':
             raise TypeError('%s is not a P4 switch' % switch)
         return self._node(switch)['thrift_port']
+
 
     def get_thrift_ip(self, switch):
         """Return the Thrift ip used to communicate with the P4 switch."""
@@ -280,7 +316,11 @@ class TopologyDBP4(TopologyDB):
         """Returns the controller side cpu interface used to listent for cpu packets"""
         if self._node(switch).get('subtype', None) != 'p4switch':
             raise TypeError('%s is not a P4 switch' % switch)
-        return self._node(switch)['ctl_cpu_intf']
+        
+        if self._node(switch).get('ctl_cpu_intf', None):
+            return self._node(switch)['ctl_cpu_intf']
+        else:
+            return self.get_cpu_port_intf(switch)
 
 class Topology(TopologyDBP4):
     """
@@ -599,40 +639,7 @@ class Topology(TopologyDBP4):
         """        
         return self.network_graph.get_all_paths_between_nodes(node1, node2)
 
-    def get_cpu_port_intf(self, p4switch, quiet=False):
-        """
-        Returns the port index of p4switch's cpu port
 
-        Args:
-            p4switch: name of the p4 switch
-            cpu_node: name of the cpu-node (usually a bridge)
-
-        Returns: index
-        """
-        has_cpu_port = any('cpu' in x for x in self[p4switch]['interfaces_to_port'].keys())
-        if self.is_p4switch(p4switch) and has_cpu_port:
-            return [x for x in self[p4switch]['interfaces_to_port'].keys() if 'cpu' in x][0]
-        else:
-            if not quiet:
-                print("Switch %s has no cpu port" % p4switch)
-            return None
-
-    def get_cpu_port_index(self, p4switch, quiet=False):
-        """
-        Returns the port index of p4switch's cpu port
-        Args:
-            p4switch: name of the p4 switch
-
-        Returns: index
-        """
-        has_cpu_port = any('cpu' in x for x in self[p4switch]['interfaces_to_port'].keys())
-        if self.is_p4switch(p4switch) and has_cpu_port:
-            intf = self.get_cpu_port_intf(p4switch)
-            return self[p4switch]['interfaces_to_port'][intf]
-        else:
-            if not quiet:
-                print("Switch %s has no cpu port" % p4switch)
-            return None
 
 
 class NetworkGraph(nx.Graph):
