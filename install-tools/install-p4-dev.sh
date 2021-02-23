@@ -91,7 +91,7 @@ sudo pip install ipaddress
 sudo pip install ipython ipdb
 
 # make the system passwordless
-sudo bash -c "echo ${USER_NAME} ALL=(ALL) NOPASSWD:ALL > /etc/sudoers.d/99_advnet"
+sudo bash -c 'echo "${USER_NAME} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99_advnet'
 sudo chmod 440 /etc/sudoers.d/99_advnet
 
 sudo locale-gen en_US.UTF-8
