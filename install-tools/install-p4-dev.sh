@@ -68,18 +68,21 @@ sudo apt-get install -y --no-install-recommends \
   traceroute
 
 
-#Install pip from source
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+#Install pip (Python2.7) from source
+curl https://bootstrap.pypa.io/2.7/get-pip.py -o get-pip2.py
 # python 2
-python get-pip.py
-sudo python get-pip.py
+python get-pip2.py
+sudo python get-pip2.py
 
+#Install pip (Python3) from source
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip3.py
 # python 3
-python get-pip.py
-sudo python get-pip.py
+python3 get-pip3.py
+sudo python3 get-pip3.py
 
 # remove
-rm get-pip.py
+rm get-pip2.py
+rm get-pip3.py
 
 #python libraries
 sudo pip install ipaddress
