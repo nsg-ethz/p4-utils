@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USER_NAME=<put your username here>
+USER_NAME=$(whoami)
 
 # Print commands and exit on errors
 set -xe
@@ -84,11 +84,11 @@ sudo python3 get-pip3.py
 rm get-pip2.py
 rm get-pip3.py
 
-#python libraries
-sudo pip install ipaddress
+#Python2 libraries
+sudo pip2.7 install ipaddress
 
 # debugging
-sudo pip install ipython ipdb
+sudo pip2.7 install ipython ipdb
 
 # make the system passwordless
 sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet"
@@ -141,7 +141,7 @@ sudo apt-get install -y --no-install-recommends \
     valgrind \
     bridge-utils
 
-sudo -H pip install setuptools cffi ipaddr ipaddress pypcap
+sudo -H pip2.7 install setuptools cffi ipaddr ipaddress pypcap
 
 # Advanced Topics in Communication networks 2019 Commits
 #BMV2_COMMIT="b447ac4c0cfd83e5e72a3cc6120251c1e91128ab" # Aug 6 2019
@@ -149,9 +149,9 @@ sudo -H pip install setuptools cffi ipaddr ipaddress pypcap
 #PI_COMMIT="41358da0ff32c94fa13179b9cee0ab597c9ccbcc"   # Aug 6 2019
 
 # Advanced Topics in Communication networks 2020 Commits
-BMV2_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713" # Feb 4 2021
-P4C_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # Feb 11 2021
-PI_COMMIT="451b208a5f1a54d9b5ac7975e496ca0a5dee6deb"   # Feb 23 2021
+PI_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713" # Feb 4 2021
+BMV2_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # Feb 11 2021
+P4C_COMMIT="451b208a5f1a54d9b5ac7975e496ca0a5dee6deb"   # Feb 23 2021
 
 PROTOBUF_COMMIT="v3.6.1"
 GRPC_COMMIT="tags/v1.17.2"
@@ -222,10 +222,10 @@ function do_grpc {
     make clean
 
     # Install gRPC Python Package
-    sudo pip install -r requirements.txt
-    sudo pip install grpcio==1.17.1
-    sudo pip install protobuf==3.6.1
-    sudo pip install .
+    sudo pip2.7 install -r requirements.txt
+    sudo pip2.7 install grpcio==1.17.1
+    sudo pip2.7 install protobuf==3.6.1
+    sudo pip2.7 install .
 }
 
 #needed for PI, this is the same than install_deps.sh but without the first apt-gets
@@ -414,7 +414,7 @@ function do_scapy-vxlan {
 
 function do_scapy {
     # Installs normal scapy (installs latest version 2.4.4 right now)
-    sudo pip install scapy
+    sudo pip2.7 install scapy
 }
 
 function do_ptf {
