@@ -1,5 +1,7 @@
 #!/bin/bash
 
+USER_NAME=<put your username here>
+
 # Print commands and exit on errors
 set -xe
 
@@ -8,7 +10,6 @@ set -xe
 sudo apt-get update
 
 # removed
-# lubuntu-desktop \
 KERNEL=$(uname -r)
 DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 sudo apt-get install -y --no-install-recommends \
@@ -87,7 +88,7 @@ sudo pip install ipaddress
 sudo pip install ipython ipdb
 
 # make the system passwordless
-sudo bash -c 'echo "adv-net ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99_advnet'
+sudo bash -c 'echo ${USER_NAME} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99_advnet'
 sudo chmod 440 /etc/sudoers.d/99_advnet
 
 sudo locale-gen en_US.UTF-8
@@ -442,13 +443,6 @@ function do_p4-learning {
     cd ..
 }
 
-function do-adv-net {
-    cd ~/
-    if [ ! -d adv-net-2020 ]; then
-        git clone https://gitlab.ethz.ch/nsg/public/adv-net-2020.git
-    fi
-}
-
 # its needed for p4c
 do_protobuf
 if [ "$ENABLE_P4_RUNTIME" = true ] ; then
@@ -465,5 +459,4 @@ do_ptf
 do_mininet
 do_p4-utils
 do_p4-learning
-do-adv-net
 echo "Done with p4-tools install!"
