@@ -81,8 +81,8 @@ python get-pip3.py
 sudo python get-pip3.py
 
 # remove
-rm get-pip2.py
-#rm get-pip3.py
+#rm get-pip2.py
+rm get-pip3.py
 
 #Python2 libraries
 sudo pip install ipaddress
