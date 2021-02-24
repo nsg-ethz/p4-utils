@@ -432,9 +432,9 @@ function do_p4-utils {
     cd ${BUILD_DIR}
     if [ ! -d p4-utils ]; then
         git clone https://github.com/nsg-ethz/p4-utils.git
-        git checkout junota
     fi
     cd p4-utils
+    git checkout junota
     sudo ./install.sh
     cd ..
 }
