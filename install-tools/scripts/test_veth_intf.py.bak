@@ -1,18 +1,18 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
 # Credit to Andy Fingerhut
 # Original File https://github.com/jafingerhut/p4-guide/blob/master/bin/test-veth-intf.py
 
-
+from __future__ import print_function
 import os
-import queue
+import Queue
 import subprocess
 import sys
 import time
 import threading
 
 from bs4 import BeautifulSoup
-import urllib.request, urllib.error, urllib.parse
+import urllib2
 
 try:
     from scapy.all import sniff, sendp, Ether, IP, UDP
@@ -84,7 +84,7 @@ def send_pkts_and_capture(intf_name, packet_list):
     process, while capturing packets sent to simple_switch, and
     output by simple_switch, by Scapy sniff() call.'''
 
-    q = queue.Queue()
+    q = Queue.Queue()
     thd = threading.Thread(name="sniff_thread",
                            target=lambda: sniff_record(q, intf_name))
     thd.start()
@@ -105,12 +105,12 @@ def send_pkts_and_capture(intf_name, packet_list):
 
 
 def scapy_pkt_to_hex_str(pkt):
-    return ''.join(['%02x' % (ord(x)) for x in str(pkt)])
+    return ''.join(map(lambda x: '%02x' % (ord(x)), str(pkt)))
 
 
 def get_kernel_urls(url, build):
 
-    page = urllib.request.urlopen(url)
+    page = urllib2.urlopen(url)
     html = page.read()
     page.close()
     soup = BeautifulSoup(html)

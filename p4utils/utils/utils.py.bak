@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys, os
 import subprocess
 import json
@@ -30,7 +31,7 @@ def ip_address_to_mac(ip):
     if "/" in ip:
         ip = ip.split("/")[0]
 
-    split_ip = list(map(int, ip.split(".")))
+    split_ip = map(int, ip.split("."))
     mac_address = '00:%02x' + ':%02x:%02x:%02x:%02x' % tuple(split_ip)
     return mac_address
 
@@ -206,7 +207,7 @@ def compile_all_p4(config):
         switches = topo.get("switches", None)
         if switches:
             # make a set with all the P4 programs to compile
-            for switch_name, sw_attributes in switches.items():
+            for switch_name, sw_attributes in switches.iteritems():
                 #merge defaults with switch attributes
                 switch_conf = default_config.copy()
                 switch_conf.update(sw_attributes)
@@ -268,8 +269,8 @@ def read_register(register, idx, thrift_port=9090):
     """
     p = open_cli_process(thrift_port, DEFAULT_CLI)
     stdout, stderr = p.communicate(input="register_read %s %d" % (register, idx))
-    reg_val = [l for l in stdout.split('\n') if ' %s[%d]' % (register, idx) in l][0].split('= ', 1)[1]
-    return int(reg_val)
+    reg_val = filter(lambda l: ' %s[%d]' % (register, idx) in l, stdout.split('\n'))[0].split('= ', 1)[1]
+    return long(reg_val)
 
 def read_tables(thrift_port=9090, cli=DEFAULT_CLI):
     """List tables available on the P4 switch using the simple_switch_CLI.

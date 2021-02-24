@@ -109,7 +109,7 @@ class TopologyDB(object):
         interfaces_to_nodes = {}
         interfaces_to_port = {}
 
-        for port, port_id in node.ports.items():
+        for port, port_id in node.ports.iteritems():
             interfaces_to_port[port.name] = port_id
 
         for itf in node.intfList():
@@ -226,11 +226,11 @@ class TopologyDB(object):
 
     def get_neighbors(self, node):
         """Returns node's neighbors (all of them)"""
-        return list(self._node(node)["interfaces_to_node"].values())
+        return self._node(node)["interfaces_to_node"].values()
 
     def get_interfaces(self, node):
         """Returns node's interfaces names"""
-        return list(self._node(node)["interfaces_to_node"].keys())
+        return self._node(node)["interfaces_to_node"].keys()
 
 class TopologyDBP4(TopologyDB):
     """See base class.
@@ -274,12 +274,12 @@ class TopologyDBP4(TopologyDB):
 
         Returns: index
         """
-        has_cpu_port = any('cpu' in x for x in list(self[p4switch]['interfaces_to_port'].keys()))
+        has_cpu_port = any('cpu' in x for x in self[p4switch]['interfaces_to_port'].keys())
         if self.is_p4switch(p4switch) and has_cpu_port:
-            return [x for x in list(self[p4switch]['interfaces_to_port'].keys()) if 'cpu' in x][0]
+            return [x for x in self[p4switch]['interfaces_to_port'].keys() if 'cpu' in x][0]
         else:
             if not quiet:
-                print(("Switch %s has no cpu port" % p4switch))
+                print("Switch %s has no cpu port" % p4switch)
             return None
 
     def get_cpu_port_index(self, p4switch, quiet=False):
@@ -290,13 +290,13 @@ class TopologyDBP4(TopologyDB):
 
         Returns: index
         """
-        has_cpu_port = any('cpu' in x for x in list(self[p4switch]['interfaces_to_port'].keys()))
+        has_cpu_port = any('cpu' in x for x in self[p4switch]['interfaces_to_port'].keys())
         if self.is_p4switch(p4switch) and has_cpu_port:
             intf = self.get_cpu_port_intf(p4switch)
             return self[p4switch]['interfaces_to_port'][intf]
         else:
             if not quiet:
-                print(("Switch %s has no cpu port" % p4switch))
+                print("Switch %s has no cpu port" % p4switch)
             return None
 
     def get_thrift_port(self, switch):
@@ -471,7 +471,7 @@ class Topology(TopologyDBP4):
         Returns:
             interface name (str)
         """
-        return list(self[name]["interfaces_to_node"].keys())[0]
+        return self[name]["interfaces_to_node"].keys()[0]
 
     def get_p4switch_id(self, sw_name):
         """Returns the ID of a P4 switch.
@@ -554,7 +554,7 @@ class Topology(TopologyDBP4):
         networks = []
         hosts = self.get_hosts_connected_to(switch)
         for host in hosts:
-            sub_nets = [self.subnet(host, neighbor) for neighbor in list(self[host]['interfaces_to_node'].values())]
+            sub_nets = [self.subnet(host, neighbor) for neighbor in self[host]['interfaces_to_node'].values()]
             networks += sub_nets
         return set(networks)
 
@@ -661,7 +661,7 @@ class NetworkGraph(nx.Graph):
 
     def load_graph_from_db(self):
         """Loads networkx object from topologyDB"""
-        for node, attributes in self.topology_db._original_network.items():
+        for node, attributes in self.topology_db._original_network.iteritems():
             if node not in self.nodes():
                 self.add_node(node, attributes)
 
@@ -746,7 +746,7 @@ class NetworkGraph(nx.Graph):
 
     def get_neighbors(self, node):
         """Return all neighbors for a given node."""
-        return list(self.adj[node].keys())
+        return self.adj[node].keys()
 
     def total_number_of_paths(self):
         """Returns the total number of shortests paths between all host pairs in the network"""

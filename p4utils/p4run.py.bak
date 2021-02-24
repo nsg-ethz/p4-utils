@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # Copyright 2013-present Barefoot Networks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,7 +92,7 @@ class AppRunner(object):
             
             # modify config
             self.conf["program"] = lib_path
-            for switch, info in list(self.conf["topology"]["switches"].items()):
+            for switch, info in self.conf["topology"]["switches"].items():
                 if info.get("program", False):
                     info["program"] = lib_path
 
@@ -162,11 +162,11 @@ class AppRunner(object):
 
     def logger(self, *items):
         if not self.quiet:
-            print(' '.join(items))
+            print ' '.join(items)
 
     def formatLatency(self, latency):
         """Helper method for formatting link latencies."""
-        if isinstance(latency, str):
+        if isinstance(latency, (str, unicode)):
             return latency
         else:
             return str(latency) + "ms"
@@ -324,7 +324,7 @@ class AppRunner(object):
 
             # Ensure each host's interface name is unique, or else
             # mininet cannot shutdown gracefully
-            h_iface = list(h.intfs.values())[0]
+            h_iface = h.intfs.values()[0]
 
             # if there is gateway assigned
             if auto_gw_arp:
@@ -336,13 +336,13 @@ class AppRunner(object):
 
             if auto_arp_tables:
                 # set arp rules for all the hosts in the same subnet
-                host_address = ip_interface("%s/%d" % (h.IP(), self.topo.hosts_info[host_name]["mask"]))
+                host_address = ip_interface(u"%s/%d" % (h.IP(), self.topo.hosts_info[host_name]["mask"]))
                 for hosts_same_subnet in self.topo.hosts():
                     if hosts_same_subnet == host_name:
                         continue
 
                     #check if same subnet
-                    other_host_address = ip_interface(str("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
+                    other_host_address = ip_interface(unicode("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
                                                                          self.topo.hosts_info[hosts_same_subnet]["mask"])))
 
                     if host_address.network.compressed == other_host_address.network.compressed:
@@ -379,24 +379,24 @@ class AppRunner(object):
         self.logger("Starting mininet CLI")
         # Generate a message that will be printed by the Mininet CLI to make
         # interacting with the simple switch a little easier.
-        print('')
-        print('======================================================================')
-        print('Welcome to the P4 Utils Mininet CLI!')
-        print('======================================================================')
-        print('Your P4 program is installed into the BMV2 software switch')
-        print('and your initial configuration is loaded. You can interact')
-        print('with the network using the mininet CLI below.')
-        print('')
-        print('To inspect or change the switch configuration, connect to')
-        print('its CLI from your host operating system using this command:')
-        print('  %s --thrift-port <switch thrift port>' % DEFAULT_CLI)
-        print('')
-        print('To view a switch log, run this command from your host OS:')
-        print('  tail -f %s/<switchname>.log' % self.log_dir.replace("edgar", "p4"))
-        print('')
-        print('To view the switch output pcap, check the pcap files in \n %s:' % self.pcap_dir.replace("edgar", "p4"))
-        print(' for example run:  sudo tcpdump -xxx -r s1-eth1.pcap')
-        print('')
+        print ''
+        print '======================================================================'
+        print 'Welcome to the P4 Utils Mininet CLI!'
+        print '======================================================================'
+        print 'Your P4 program is installed into the BMV2 software switch'
+        print 'and your initial configuration is loaded. You can interact'
+        print 'with the network using the mininet CLI below.'
+        print ''
+        print 'To inspect or change the switch configuration, connect to'
+        print 'its CLI from your host operating system using this command:'
+        print '  %s --thrift-port <switch thrift port>' % DEFAULT_CLI
+        print ''
+        print 'To view a switch log, run this command from your host OS:'
+        print '  tail -f %s/<switchname>.log' % self.log_dir.replace("edgar", "p4")
+        print ''
+        print 'To view the switch output pcap, check the pcap files in \n %s:' % self.pcap_dir.replace("edgar", "p4")
+        print ' for example run:  sudo tcpdump -xxx -r s1-eth1.pcap'
+        print ''
 
         # Start CLI
         P4CLI(self.net, conf_file=self.conf_file, script=self.conf.get("cli_script", None))

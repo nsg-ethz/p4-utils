@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 "Setuptools params"
 
@@ -25,7 +25,7 @@ setup(
     include_package_data = True,
     classifiers=[
         "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python 2.7",
+        "Programming Language :: Python 3",
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "Topic :: System :: Networking",

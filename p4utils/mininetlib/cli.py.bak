@@ -166,7 +166,7 @@ class P4CLI(CLI):
     def do_printSwitches(self, line=""):
         """Print names of all switches."""
         for sw in self.mn.p4switches:
-            print(sw.name)   
+            print sw.name   
 
     def do_p4switches_reboot(self, line=""):
         """Reboot all P4 switches with new program.
@@ -231,10 +231,10 @@ class P4CLI(CLI):
             header2 = "{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format("port", "intf", "node", "mac", "ip", "bw", "weight", "delay", "loss","queue")                                                                                     
 
             print(header)
-            print((len(header2)*"-")) 
+            print(len(header2)*"-") 
             print(header2)
             
-            for intf,port_number  in sorted(list(self.topo.get_interfaces_to_port(sw).items()), key=lambda x: x[1]):
+            for intf,port_number  in sorted(self.topo.get_interfaces_to_port(sw).items(), key=lambda x: x[1]):
                 if intf == "lo":
                     continue
                 
@@ -246,9 +246,9 @@ class P4CLI(CLI):
                 delay = self.topo[sw][other_node]['delay']
                 loss = self.topo[sw][other_node]['loss']
                 queue_length = self.topo[sw][other_node]['queue_length']
-                print(("{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(port_number, intf, other_node, mac, ip, bw, weight, delay, loss, queue_length)))
+                print("{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(port_number, intf, other_node, mac, ip, bw, weight, delay, loss, queue_length))
 
-            print((len(header2)*"-")) 
+            print(len(header2)*"-") 
             print("")
 
         # HOST INFO
@@ -257,11 +257,11 @@ class P4CLI(CLI):
         header = "{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(
             "name", "intf", "node", "mac", "ip", "bw", "weight", "delay", "loss","queue")    
         
-        print((len(header)*"-")) 
+        print(len(header)*"-") 
         print(header)
 
         for host in sorted(self.topo.get_hosts()):           
-            for intf,port_number  in sorted(list(self.topo.get_interfaces_to_port(host).items()), key=lambda x: x[1]):
+            for intf,port_number  in sorted(self.topo.get_interfaces_to_port(host).items(), key=lambda x: x[1]):
                 
                 other_node = self.topo.get_interfaces_to_node(host)[intf]
                 mac = self.topo[host][other_node]['mac']
@@ -271,9 +271,9 @@ class P4CLI(CLI):
                 delay = self.topo[host][other_node]['delay']
                 loss = self.topo[host][other_node]['loss']
                 queue_length = self.topo[host][other_node]['queue_length']
-                print(("{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(host, intf, other_node, mac, ip, bw, weight, delay, loss, queue_length)))
+                print("{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(host, intf, other_node, mac, ip, bw, weight, delay, loss, queue_length))
 
-        print((len(header)*"-")) 
+        print(len(header)*"-") 
         print("")
 
 #def describe(self, sw_addr=None, sw_mac=None):

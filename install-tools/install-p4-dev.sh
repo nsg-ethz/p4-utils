@@ -69,26 +69,26 @@ sudo apt-get install -y --no-install-recommends \
 
 
 #Install pip (Python2.7) from source
-curl https://bootstrap.pypa.io/2.7/get-pip.py -o get-pip2.py
+#curl https://bootstrap.pypa.io/2.7/get-pip.py -o get-pip2.py
 # python 2
-python get-pip2.py
-sudo python get-pip2.py
+#python get-pip2.py
+#sudo python get-pip2.py
 
 #Install pip (Python3) from source
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip3.py
 # python 3
-python3 get-pip3.py
-sudo python3 get-pip3.py
+python get-pip3.py
+sudo python get-pip3.py
 
 # remove
 rm get-pip2.py
-rm get-pip3.py
+#rm get-pip3.py
 
 #Python2 libraries
-sudo pip2.7 install ipaddress
+sudo pip install ipaddress
 
 # debugging
-sudo pip2.7 install ipython ipdb
+sudo pip install ipython ipdb
 
 # make the system passwordless
 sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet"
@@ -141,7 +141,7 @@ sudo apt-get install -y --no-install-recommends \
     valgrind \
     bridge-utils
 
-sudo -H pip2.7 install setuptools cffi ipaddr ipaddress pypcap
+sudo -H pip install setuptools cffi ipaddr ipaddress pypcap
 
 # Advanced Topics in Communication networks 2019 Commits
 #BMV2_COMMIT="b447ac4c0cfd83e5e72a3cc6120251c1e91128ab" # Aug 6 2019
@@ -222,10 +222,10 @@ function do_grpc {
     make clean
 
     # Install gRPC Python Package
-    sudo pip2.7 install -r requirements.txt
-    sudo pip2.7 install grpcio==1.17.1
-    sudo pip2.7 install protobuf==3.6.1
-    sudo pip2.7 install .
+    sudo pip install -r requirements.txt
+    sudo pip install grpcio==1.17.1
+    sudo pip install protobuf==3.6.1
+    sudo pip install .
 }
 
 #needed for PI, this is the same than install_deps.sh but without the first apt-gets
@@ -414,7 +414,7 @@ function do_scapy-vxlan {
 
 function do_scapy {
     # Installs normal scapy (installs latest version 2.4.4 right now)
-    sudo pip2.7 install scapy
+    sudo pip install scapy
 }
 
 function do_ptf {
@@ -432,6 +432,7 @@ function do_p4-utils {
     cd ${BUILD_DIR}
     if [ ! -d p4-utils ]; then
         git clone https://github.com/nsg-ethz/p4-utils.git
+        git checkout junota
     fi
     cd p4-utils
     sudo ./install.sh

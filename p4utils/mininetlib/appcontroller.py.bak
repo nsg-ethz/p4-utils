@@ -12,12 +12,12 @@ class AppController(object):
 
     def logger(self, *items):
         if not self.quiet:
-            print(' '.join(items))
+            print ' '.join(items)
 
     def start(self):
 
         cli = self.conf['switch_cli']
-        for sw_name, sw_dict in list(self.conf.get('topology',{}).get('switches', {}).items()):
+        for sw_name, sw_dict in self.conf.get('topology',{}).get('switches', {}).items():
             if 'cli_input' not in sw_dict:
                 continue
             # get the port for this particular switch's thrift server

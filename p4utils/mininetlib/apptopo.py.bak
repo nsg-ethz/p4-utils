@@ -66,20 +66,20 @@ class AppTopo(Topo):
         sw_to_id = {}
         sw_id = 1
 
-        for sw in list(self._switches.keys()):
+        for sw in self._switches.keys():
             id = re.findall(r'\d+', sw)
             if id and sw[0] == 's':
                 id = int(id[0])
                 sw_to_id[sw] = id
 
         #the sorting does not matter anymore
-        for sw in sorted(list(self._switches.keys()), key=self.node_sorting):
+        for sw in sorted(self._switches.keys(), key=self.node_sorting):
             sw_attributes = self._switches.get(sw)
             json_file = sw_attributes["json"]
 
             id = sw_to_id.get(sw, None)
             if not id:
-                while sw_id in list(sw_to_id.values()):
+                while sw_id in sw_to_id.values():
                     sw_id +=1
                 id = sw_id
             self.addP4Switch(sw, log_file="%s/%s.log" % (self.log_dir, sw),
@@ -136,7 +136,7 @@ class AppTopo(Topo):
     def l2_assignment_strategy(self):
 
         self.add_switches()
-        ip_generator = IPv4Network(str("10.0.0.0/16")).hosts()
+        ip_generator = IPv4Network(unicode("10.0.0.0/16")).hosts()
 
         #add links and configure them: ips, macs, etc
         #assumes hosts are connected to one switch only
@@ -169,7 +169,7 @@ class AppTopo(Topo):
                     host_ip = next(ip_generator).compressed
                     #we check if for some reason the ip was already given by the ip_generator. This
                     #can only happen if the host naming is not <h_x>
-                    while host_ip in self.already_assigned_ips or host_ip in list(self.reserved_ips.values()):
+                    while host_ip in self.already_assigned_ips or host_ip in self.reserved_ips.values():
                         host_ip = str(next(ip_generator).compressed)
                     self.already_assigned_ips.add(host_ip)
 
@@ -204,11 +204,11 @@ class AppTopo(Topo):
         sw_to_id = self.add_switches()
         sw_to_generator = {}
         #change the id to a generator for that subnet
-        for sw, sw_id in list(sw_to_id.items()):
+        for sw, sw_id in sw_to_id.items():
             upper_bytex = (sw_id & 0xff00) >> 8
             lower_bytex = (sw_id & 0x00ff)
             net = "10.%d.%d.0/24" % (upper_bytex, lower_bytex)
-            sw_to_generator[sw] = IPv4Network(str(net)).hosts()
+            sw_to_generator[sw] = IPv4Network(unicode(net)).hosts()
 
         #reserve ips
         for link in self._links:
@@ -249,7 +249,7 @@ class AppTopo(Topo):
                     host_ip = next(ip_generator).compressed
                     #we check if for some reason the ip was already given by the ip_generator. This
                     #can only happen if the host naming is not <h_x>
-                    while host_ip in self.already_assigned_ips or host_ip in list(self.reserved_ips.values()):
+                    while host_ip in self.already_assigned_ips or host_ip in self.reserved_ips.values():
                         host_ip = str(next(ip_generator).compressed)
                     self.already_assigned_ips.add(host_ip)
 
@@ -284,7 +284,7 @@ class AppTopo(Topo):
 
         sw_to_id = self.add_switches()
         sw_to_next_available_host_id = {}
-        for sw in list(sw_to_id.keys()):
+        for sw in sw_to_id.keys():
             sw_to_next_available_host_id[sw] = 1
 
         #reserve ips for normal named hosts and switches
@@ -319,7 +319,7 @@ class AppTopo(Topo):
 
                 else:
                     host_num = sw_to_next_available_host_id[direct_sw]
-                    while ("10.%d.%d.2" % (sw_id, host_num)) in list(self.reserved_ips.values()):
+                    while ("10.%d.%d.2" % (sw_id, host_num)) in self.reserved_ips.values():
                         host_num +=1
                     assert host_num < 254
                     host_ip = "10.%d.%d.2" % (sw_id, host_num)
@@ -515,12 +515,12 @@ class AppTopo(Topo):
         self.sw_port_mapping[sw].append((portno, node2))
 
     def printPortMapping(self):
-        print("Switch port mapping:")
+        print "Switch port mapping:"
         for sw in sorted(self.sw_port_mapping.keys()):
-            print("%s: " % sw, end=' ')
+            print "%s: " % sw,
             for portno, node2 in self.sw_port_mapping[sw]:
-                print("%d:%s\t" % (portno, node2), end=' ')
-            print()
+                print "%d:%s\t" % (portno, node2),
+            print
 
 #AppTopo Alias
 AppTopoStrategies = AppTopo
