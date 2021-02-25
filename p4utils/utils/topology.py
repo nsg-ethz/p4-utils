@@ -23,7 +23,7 @@ class TopologyDB(object):
     """
 
     def __init__(self, db=None, net=None, *args, **kwargs):
-        super(TopologyDB, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self._network = {}
         if net:
@@ -239,7 +239,7 @@ class TopologyDBP4(TopologyDB):
     """
 
     def __init__(self, *args, **kwargs):
-        super(TopologyDBP4, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def add_p4switch(self, node):
         """Adds P4 Switch node."""
@@ -334,7 +334,7 @@ class Topology(TopologyDBP4):
     """
 
     def __init__(self, db="topology.db", *args, **kwargs):
-        super(Topology, self).__init__(db, *args, **kwargs)
+        super().__init__(db, *args, **kwargs)
 
         # Save network startup state:
         # In case of link removal, we use this objects to remember the state of links and nodes
@@ -653,7 +653,8 @@ class NetworkGraph(nx.Graph):
     """
 
     def __init__(self, *args, **kwargs):
-        super(NetworkGraph, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self.node = {}
 
     def load_topology_from_database(self, topology_db):
         self.topology_db = topology_db
@@ -679,11 +680,11 @@ class NetworkGraph(nx.Graph):
             attributes: node's attributes
         """
         super(NetworkGraph, self).add_node(node)
-        self.node[node]['type'] = self.topology_db.get_node_type(node)
+        self.node[node] = {'type' : self.topology_db.get_node_type(node)}
         # check if the node has a subtype
         subtype = attributes.get('subtype', None)
         if subtype:
-            self.node[node]['subtype'] = subtype
+            self.node[node] = {'subtype': subtype}
 
         for neighbor_node in self.topology_db.get_neighbors(node):
             if neighbor_node in self.nodes():
@@ -693,11 +694,11 @@ class NetworkGraph(nx.Graph):
 
     def set_node_shape(self, node, shape):
         """Sets node's shape. Used when plotting the network"""
-        self.node[node]['node_shape'] = shape
+        self.node[node] = {'node_shape': shape}
 
     def set_node_color(self, node, color):
         """Sets node's color. Used when plotting the network"""
-        self.node[node]['node_color'] = color
+        self.node[node] = {'node_color': color}
 
     def set_node_type_shape(self, type, shape):
         """Sets all node's with a given type shape. Used when plotting the network"""
