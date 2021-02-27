@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 # Copyright 2013-present Barefoot Networks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,10 +22,12 @@
 #
 
 import p4utils.utils.runtime_API as runtime_API
-from sswitch_runtime import SimpleSwitch
-from sswitch_runtime.ttypes import *
+from p4utils.utils.runtime_API import UIn_Error
 
 from functools import wraps
+
+from sswitch_runtime import SimpleSwitch
+from sswitch_runtime.ttypes import *
 
 def handle_bad_input(f):
     @wraps(f)
@@ -36,7 +37,7 @@ def handle_bad_input(f):
             return f(*args, **kwargs)
         except InvalidMirroringOperation as e:
             error = MirroringOperationErrorCode._VALUES_TO_NAMES[e.code]
-            print("Invalid mirroring operation (%s)" % error)
+            print("Invalid mirroring operation ({})".format(error))
     return handle
 
 class SimpleSwitchAPI(runtime_API.RuntimeAPI):

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 # Copyright 2013-present Barefoot Networks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +29,7 @@ import json
 from functools import wraps
 import bmpy_utils as utils
 
+
 from bm_runtime.standard import Standard
 from bm_runtime.standard.ttypes import *
 try:
@@ -58,11 +58,13 @@ def enum(type_name, *sequential, **named):
     enums['from_str'] = from_str
     return type(type_name, (), enums)
 
+
 PreType = enum('PreType', 'none', 'SimplePre', 'SimplePreLAG')
 MeterType = enum('MeterType', 'packets', 'bytes')
 TableType = enum('TableType', 'simple', 'indirect', 'indirect_ws')
 ResType = enum('ResType', 'table', 'action_prof', 'action', 'meter_array',
-               'counter_array', 'register_array')
+               'counter_array', 'register_array', 'parse_vset')
+
 
 def bytes_to_string(byte_array):
     form = 'B' * len(byte_array)
@@ -86,6 +88,7 @@ class MatchType:
     @staticmethod
     def from_str(x):
         return {"exact": 0, "lpm": 1, "ternary": 2, "valid": 3, "range": 4}[x]
+
 
 class Table:
     def __init__(self, name, id_):
@@ -117,6 +120,7 @@ class Table:
             return None
         return action
 
+
 class ActionProf:
     def __init__(self, name, id_):
         self.name = name
@@ -135,6 +139,7 @@ class ActionProf:
             return None
         return action
 
+
 class Action:
     def __init__(self, name, id_):
         self.name = name
@@ -150,6 +155,7 @@ class Action:
     def action_str(self):
         return "{0:30} [{1}]".format(self.name, self.runtime_data_str())
 
+
 class MeterArray:
     def __init__(self, name, id_):
         self.name = name
@@ -160,10 +166,10 @@ class MeterArray:
         self.binding = None
         self.rate_count = None
 
-
     def meter_str(self):
         return "{0:30} [{1}, {2}]".format(self.name, self.size,
                                           MeterType.to_str(self.type_))
+
 
 class CounterArray:
     def __init__(self, name, id_):
@@ -173,9 +179,9 @@ class CounterArray:
         self.size = None
         self.binding = None
 
-
     def counter_str(self):
         return "{0:30} [{1}]".format(self.name, self.size)
+
 
 class RegisterArray:
     def __init__(self, name, id_):
@@ -184,9 +190,20 @@ class RegisterArray:
         self.width = None
         self.size = None
 
-
     def register_str(self):
         return "{0:30} [{1}]".format(self.name, self.size)
+
+
+class ParseVSet:
+    def __init__(self, name, id_):
+        self.name = name
+        self.id_ = id_
+        self.bitwidth = None
+
+    def parse_vset_str(self):
+        return "{0:30} [compressed bitwidth:{1}]".format(
+            self.name, self.bitwidth)
+
 
 class SwitchInfo(object):
 
@@ -199,6 +216,7 @@ class SwitchInfo(object):
         self.counter_arrays = {}
         self.register_arrays = {}
         self.custom_crc_calcs = {}
+        self.parse_vsets = {}
 
         # maps (object type, unique suffix) to object
         self.suffix_lookup_map = {}
@@ -212,6 +230,7 @@ class SwitchInfo(object):
         self.register_arrays.clear()
         self.custom_crc_calcs.clear()
         self.suffix_lookup_map.clear()
+        self.parse_vsets.clear()
 
     def load_json_config(self, standard_client=None, json_path=None):
         def read_conf():
@@ -230,7 +249,7 @@ class SwitchInfo(object):
 
         self.load_json_str(read_conf())
 
-    def load_json_str(self, json_str):
+    def load_json_str(self, json_str, architecture_spec=None):
         def get_header_type(header_name, j_headers):
             for h in j_headers:
                 if h["name"] == header_name:
@@ -346,6 +365,16 @@ class SwitchInfo(object):
             elif j_calc["algo"] == "crc32_custom":
                 self.custom_crc_calcs[calc_name] = 32
 
+        for j_parse_vset in get_json_key("parse_vsets"):
+            parse_vset = ParseVSet(j_parse_vset["name"], j_parse_vset["id"])
+            parse_vset.bitwidth = j_parse_vset["compressed_bitwidth"]
+
+            self.parse_vsets[j_parse_vset["name"]] = parse_vset
+
+        if architecture_spec is not None:
+            # call architecture specific json parsing code
+            architecture_spec(json_)
+
         # Builds a dictionary mapping (object type, unique suffix) to the object
         # (Table, Action, etc...). In P4_16 the object name is the fully-qualified
         # name, which can be quite long, which is why we accept unique suffixes as
@@ -357,8 +386,9 @@ class SwitchInfo(object):
                 (ResType.table, self.tables), (ResType.action_prof, self.action_profs),
                 (ResType.action, self.actions), (ResType.meter_array, self.meter_arrays),
                 (ResType.counter_array, self.counter_arrays),
-                (ResType.register_array, self.register_arrays)]:
-            for name, res in list(res_dict.items()):
+                (ResType.register_array, self.register_arrays),
+                (ResType.parse_vset, self.parse_vsets)]:
+            for name, res in res_dict.items():
                 suffix = None
                 for s in reversed(name.split('.')):
                     suffix = s if suffix is None else s + '.' + suffix
@@ -366,9 +396,10 @@ class SwitchInfo(object):
                     self.suffix_lookup_map[key] = res
                     suffix_count[key] += 1
         #checks if a table is repeated, in that case it removes the only suffix entries
-        for key, c in list(suffix_count.items()):
+        for key, c in suffix_count.items():
             if c > 1:
                 del self.suffix_lookup_map[key]
+
 
 class UIn_Error(Exception):
     def __init__(self, info=""):
@@ -376,6 +407,7 @@ class UIn_Error(Exception):
 
     def __str__(self):
         return self.info
+
 
 class UIn_ResourceError(UIn_Error):
     def __init__(self, res_type, name):
@@ -385,12 +417,14 @@ class UIn_ResourceError(UIn_Error):
     def __str__(self):
         return "Invalid %s name (%s)" % (self.res_type, self.name)
 
+
 class UIn_MatchKeyError(UIn_Error):
     def __init__(self, info=""):
         self.info = info
 
     def __str__(self):
         return self.info
+
 
 class UIn_RuntimeDataError(UIn_Error):
     def __init__(self, info=""):
@@ -399,9 +433,11 @@ class UIn_RuntimeDataError(UIn_Error):
     def __str__(self):
         return self.info
 
+
 class CLI_FormatExploreError(Exception):
     def __init__(self):
         pass
+
 
 class UIn_BadParamError(UIn_Error):
     def __init__(self, info=""):
@@ -410,17 +446,21 @@ class UIn_BadParamError(UIn_Error):
     def __str__(self):
         return self.info
 
+
 class UIn_BadIPv4Error(UIn_Error):
     def __init__(self):
         pass
+
 
 class UIn_BadIPv6Error(UIn_Error):
     def __init__(self):
         pass
 
+
 class UIn_BadMacError(UIn_Error):
     def __init__(self):
         pass
+
 
 def ipv4Addr_to_bytes(addr):
     if not '.' in addr:
@@ -433,6 +473,7 @@ def ipv4Addr_to_bytes(addr):
     except:
         raise UIn_BadIPv4Error()
 
+
 def macAddr_to_bytes(addr):
     if not ':' in addr:
         raise CLI_FormatExploreError()
@@ -443,6 +484,7 @@ def macAddr_to_bytes(addr):
         return [int(b, 16) for b in s]
     except:
         raise UIn_BadMacError()
+
 
 def ipv6Addr_to_bytes(addr):
     from ipaddr import IPv6Address
@@ -457,11 +499,12 @@ def ipv6Addr_to_bytes(addr):
     except:
         raise UIn_BadIPv6Error()
 
+
 def int_to_bytes(i, num):
     byte_array = []
     while i > 0:
         byte_array.append(i % 256)
-        i = i / 256
+        i = i // 256
         num -= 1
     if num < 0:
         raise UIn_BadParamError("Parameter is too large")
@@ -470,6 +513,7 @@ def int_to_bytes(i, num):
         num -= 1
     byte_array.reverse()
     return byte_array
+
 
 def parse_param(input_str, bitwidth):
     if bitwidth == 32:
@@ -500,9 +544,10 @@ def parse_param(input_str, bitwidth):
             "Invalid input, could not cast to integer, try in hex with 0x prefix"
         )
     try:
-        return int_to_bytes(input_, (bitwidth + 7) / 8)
+        return int_to_bytes(input_, (bitwidth + 7) // 8)
     except UIn_BadParamError:
         raise
+
 
 def parse_runtime_data(action, params):
     def parse_param_(field, bw):
@@ -513,19 +558,21 @@ def parse_runtime_data(action, params):
                 "Error while parsing %s - %s" % (field, e)
             )
 
-    bitwidths = [bw for( _, bw) in action.runtime_data]
+    bitwidths = [bw for(_, bw) in action.runtime_data]
     byte_array = []
     for input_str, bitwidth in zip(params, bitwidths):
         byte_array += [bytes_to_string(parse_param_(input_str, bitwidth))]
     return byte_array
 
+
 _match_types_mapping = {
-    MatchType.EXACT : BmMatchParamType.EXACT,
-    MatchType.LPM : BmMatchParamType.LPM,
-    MatchType.TERNARY : BmMatchParamType.TERNARY,
-    MatchType.VALID : BmMatchParamType.VALID,
-    MatchType.RANGE : BmMatchParamType.RANGE,
+    MatchType.EXACT: BmMatchParamType.EXACT,
+    MatchType.LPM: BmMatchParamType.LPM,
+    MatchType.TERNARY: BmMatchParamType.TERNARY,
+    MatchType.VALID: BmMatchParamType.VALID,
+    MatchType.RANGE: BmMatchParamType.RANGE,
 }
+
 
 def parse_match_key(table, key_fields):
 
@@ -545,8 +592,8 @@ def parse_match_key(table, key_fields):
         bw = bitwidths[idx]
         if param_type == BmMatchParamType.EXACT:
             key = bytes_to_string(parse_param_(field, bw))
-            param = BmMatchParam(type = param_type,
-                                 exact = BmMatchParamExact(key))
+            param = BmMatchParam(type=param_type,
+                                 exact=BmMatchParamExact(key))
         elif param_type == BmMatchParamType.LPM:
             try:
                 prefix, length = field.split("/")
@@ -555,8 +602,8 @@ def parse_match_key(table, key_fields):
                     "Invalid LPM value {}, use '/' to separate prefix "
                     "and length".format(field))
             key = bytes_to_string(parse_param_(prefix, bw))
-            param = BmMatchParam(type = param_type,
-                                 lpm = BmMatchParamLPM(key, int(length)))
+            param = BmMatchParam(type=param_type,
+                                 lpm=BmMatchParamLPM(key, int(length)))
         elif param_type == BmMatchParamType.TERNARY:
             try:
                 key, mask = field.split("&&&")
@@ -570,12 +617,12 @@ def parse_match_key(table, key_fields):
                 raise UIn_MatchKeyError(
                     "Key and mask have different lengths in expression %s" % field
                 )
-            param = BmMatchParam(type = param_type,
-                                 ternary = BmMatchParamTernary(key, mask))
+            param = BmMatchParam(type=param_type,
+                                 ternary=BmMatchParamTernary(key, mask))
         elif param_type == BmMatchParamType.VALID:
             key = bool(int(field))
-            param = BmMatchParam(type = param_type,
-                                 valid = BmMatchParamValid(key))
+            param = BmMatchParam(type=param_type,
+                                 valid=BmMatchParamValid(key))
         elif param_type == BmMatchParamType.RANGE:
             try:
                 start, end = field.split("->")
@@ -593,15 +640,17 @@ def parse_match_key(table, key_fields):
                 raise UIn_MatchKeyError(
                     "start is less than end in expression %s" % field
                 )
-            param = BmMatchParam(type = param_type,
-                                 range = BmMatchParamRange(start, end))
+            param = BmMatchParam(type=param_type,
+                                 range=BmMatchParamRange(start, end))
         else:
             assert(0)
         params.append(param)
     return params
 
+
 def printable_byte_str(s):
-    return ":".join("{:02x}".format(ord(c)) for c in s)
+    return ":".join([format(c, "02x") for c in s])
+
 
 def BmMatchParam_to_str(self):
     return BmMatchParamType._VALUES_TO_NAMES[self.type] + "-" +\
@@ -611,20 +660,26 @@ def BmMatchParam_to_str(self):
         (self.valid.to_str() if self.valid else "") +\
         (self.range.to_str() if self.range else "")
 
+
 def BmMatchParamExact_to_str(self):
     return printable_byte_str(self.key)
+
 
 def BmMatchParamLPM_to_str(self):
     return printable_byte_str(self.key) + "/" + str(self.prefix_length)
 
+
 def BmMatchParamTernary_to_str(self):
     return printable_byte_str(self.key) + " &&& " + printable_byte_str(self.mask)
+
 
 def BmMatchParamValid_to_str(self):
     return ""
 
+
 def BmMatchParamRange_to_str(self):
     return printable_byte_str(self.start) + " -> " + printable_byte_str(self.end_)
+
 
 BmMatchParam.to_str = BmMatchParam_to_str
 BmMatchParamExact.to_str = BmMatchParamExact_to_str
@@ -633,9 +688,34 @@ BmMatchParamTernary.to_str = BmMatchParamTernary_to_str
 BmMatchParamValid.to_str = BmMatchParamValid_to_str
 BmMatchParamRange.to_str = BmMatchParamRange_to_str
 
+
+def parse_pvs_value(input_str, bitwidth):
+    try:
+        input_ = int(input_str, 0)
+    except:
+        raise UIn_BadParamError(
+            "Invalid input, could not cast to integer, try in hex with 0x prefix"
+        )
+    max_v = (1 << bitwidth) - 1
+    # bmv2 does not perform this check when receiving the value (and does not
+    # truncate values which are too large), so we perform this check
+    # client-side.
+    if input_ > max_v:
+        raise UIn_BadParamError(
+            "Input is too large, it should fit within {} bits".format(bitwidth))
+    try:
+        v = int_to_bytes(input_, (bitwidth + 7) / 8)
+    except UIn_BadParamError:
+        # should not happen because of check above
+        raise
+    return bytes_to_string(v)
+
 # services is [(service_name, client_class), ...]
+
+
 def thrift_connect(thrift_ip, thrift_port, services):
     return utils.thrift_connect(thrift_ip, thrift_port, services)
+
 
 def handle_bad_input(f):
     @wraps(f)
@@ -650,29 +730,33 @@ def handle_bad_input(f):
             print("Error:", e)
         except InvalidTableOperation as e:
             error = TableOperationErrorCode._VALUES_TO_NAMES[e.code]
-            print("Invalid table operation (%s)" % error)
+            print("Invalid table operation ({})".format(error))
         except InvalidCounterOperation as e:
             error = CounterOperationErrorCode._VALUES_TO_NAMES[e.code]
-            print("Invalid counter operation (%s)" % error)
+            print("Invalid counter operation ({})".format(error))
         except InvalidMeterOperation as e:
             error = MeterOperationErrorCode._VALUES_TO_NAMES[e.code]
-            print("Invalid meter operation (%s)" % error)
+            print("Invalid meter operation ({})".format(error))
         except InvalidRegisterOperation as e:
             error = RegisterOperationErrorCode._VALUES_TO_NAMES[e.code]
-            print("Invalid register operation (%s)" % error)
+            print("Invalid register operation ({})".format(error))
         except InvalidLearnOperation as e:
             error = LearnOperationErrorCode._VALUES_TO_NAMES[e.code]
-            print("Invalid learn operation (%s)" % error)
+            print("Invalid learn operation ({})".format(error))
         except InvalidSwapOperation as e:
             error = SwapOperationErrorCode._VALUES_TO_NAMES[e.code]
-            print("Invalid swap operation (%s)" % error)
+            print("Invalid swap operation ({})".format(error))
         except InvalidDevMgrOperation as e:
             error = DevMgrErrorCode._VALUES_TO_NAMES[e.code]
-            print("Invalid device manager operation (%s)" % error)
+            print("Invalid device manager operation ({})".format(error))
         except InvalidCrcOperation as e:
             error = CrcErrorCode._VALUES_TO_NAMES[e.code]
-            print("Invalid crc operation (%s)" % error)
+            print("Invalid crc operation ({})".format(error))
+        except InvalidParseVSetOperation as e:
+            error = ParseVSetOperationErrorCode._VALUES_TO_NAMES[e.code]
+            print("Invalid parser value set operation ({})".format(error))
     return handle
+
 
 def handle_bad_input_mc(f):
     @wraps(f)
@@ -681,12 +765,12 @@ def handle_bad_input_mc(f):
         if pre_type == PreType.none:
             return handle_bad_input(f)(*args, **kwargs)
         EType = {
-            PreType.SimplePre : SimplePre.InvalidMcOperation,
-            PreType.SimplePreLAG : SimplePreLAG.InvalidMcOperation
+            PreType.SimplePre: SimplePre.InvalidMcOperation,
+            PreType.SimplePreLAG: SimplePreLAG.InvalidMcOperation
         }[pre_type]
         Codes = {
-            PreType.SimplePre : SimplePre.McOperationErrorCode,
-            PreType.SimplePreLAG : SimplePreLAG.McOperationErrorCode
+            PreType.SimplePre: SimplePre.McOperationErrorCode,
+            PreType.SimplePreLAG: SimplePreLAG.McOperationErrorCode
         }[pre_type]
         try:
             return handle_bad_input(f)(*args, **kwargs)
@@ -695,31 +779,78 @@ def handle_bad_input_mc(f):
             print("Invalid PRE operation (%s)" % error)
     return handle
 
+
+def deprecated_act_prof(substitute, with_selection=False,
+                        strictly_deprecated=True):
+    # need two levels here because our decorator takes arguments
+    def deprecated_act_prof_(f):
+        # not sure if this is the right place for it, if I want it to play nice
+        # with @wraps
+        if strictly_deprecated:
+            f.__doc__ = "[DEPRECATED!] " + f.__doc__
+            f.__doc__ += "\nUse '{}' instead".format(substitute)
+
+        @wraps(f)
+        def wrapper(obj, line):
+            substitute_fn = getattr(obj, "do_" + substitute)
+            args = line.split()
+            obj.at_least_n_args(args, 1)
+            table_name = args[0]
+            table = obj.get_res("table", table_name, ResType.table)
+            if with_selection:
+                obj.check_indirect_ws(table)
+            else:
+                obj.check_indirect(table)
+            assert(table.action_prof is not None)
+            assert(table.action_prof.ref_cnt > 0)
+            if strictly_deprecated and table.action_prof.ref_cnt > 1:
+                raise UIn_Error(
+                    "Legacy command does not work with shared action profiles")
+            args[0] = table.action_prof.name
+            if strictly_deprecated:
+                # writing to stderr in case someone is parsing stdout
+                sys.stderr.write(
+                    "This is a deprecated command, use '{}' instead\n".format(
+                        substitute))
+            return substitute_fn(" ".join(args))
+        # we add the handle_bad_input decorator "programatically"
+        return handle_bad_input(wrapper)
+    return deprecated_act_prof_
+
 # thrift does not support unsigned integers
+
+
 def hex_to_i16(h):
-    if type(h) != int:
-        h = int(h, 0)
-    if (h > 0xFFFF):
+    x = int(h, 0)
+    if (x > 0xFFFF):
         raise UIn_Error("Integer cannot fit within 16 bits")
-    if (h > 0x7FFF): h-= 0x10000
-    return h
+    if (x > 0x7FFF):
+        x -= 0x10000
+    return x
+
+
 def i16_to_hex(h):
-    if type(h) != int:
-        h = int(h)
-    if (h & 0x8000): h+= 0x10000
-    return h
+    x = int(h)
+    if (x & 0x8000):
+        x += 0x10000
+    return x
+
+
 def hex_to_i32(h):
-    if type(h) != int:
-        h = int(h, 0)
-    if (h > 0xFFFFFFFF):
+    x = int(h, 0)
+    if (x > 0xFFFFFFFF):
         raise UIn_Error("Integer cannot fit within 32 bits")
-    if (h > 0x7FFFFFFF): h-= 0x100000000
-    return h
+    if (x > 0x7FFFFFFF):
+        x -= 0x100000000
+    return x
+
+
 def i32_to_hex(h):
-    if type(h) != int:
-        h = int(h)
-    if (h & 0x80000000): h+= 0x100000000
-    return h
+    x = int(h)
+    if (x & 0x80000000):
+        x += 0x100000000
+    return x
+
 
 def parse_bool(s):
     if s == "true" or s == "True" or s == True:
@@ -732,6 +863,10 @@ def parse_bool(s):
     except:
         pass
     raise UIn_Error("Invalid bool parameter")
+
+
+def hexstr(v):
+    return "".join([format(c, "02x") for c in v])
 
 
 class RuntimeAPI(object):
@@ -793,22 +928,10 @@ class RuntimeAPI(object):
             raise UIn_ResourceError(type_name, name)
         return self.switch_info.suffix_lookup_map[key]
 
-    """
-    def at_least_n_args(self, args, n):
-        if len(args) < n:
-            raise UIn_Error("Insufficient number of args")
-
-    def exactly_n_args(self, args, n):
-        if len(args) != n:
-            raise UIn_Error(
-                "Wrong number of args, expected %d but got %d" % (n, len(args))
-            )
-    """
-
     def parse_runtime_data(self, action, action_params):
         if len(action_params) != action.num_params():
             raise UIn_Error(
-                "Action %s needs %d parameters" % (action.name, action.num_params())
+                "Action {} needs {} parameters".format(action.name, action.num_params())
             )
 
         return parse_runtime_data(action, action_params)
@@ -927,7 +1050,7 @@ class RuntimeAPI(object):
         action = table.get_action(action_name, self.switch_info.suffix_lookup_map)
         if action is None:
             raise UIn_Error(
-                "Table %s has no action %s" % (table_name, action_name)
+                "Table {} has no action {}".format(table_name, action_name)
             )
 
         if table.match_type in {MatchType.TERNARY, MatchType.RANGE}:
@@ -942,7 +1065,7 @@ class RuntimeAPI(object):
 
         if len(match_keys) != table.num_key_fields():
             raise UIn_Error(
-                "Table %s needs %d key fields" % (table_name, table.num_key_fields())
+                "Table {} needs {} key fields".format(table_name, table.num_key_fields())
             )
 
         runtime_data = self.parse_runtime_data(action, action_params)
@@ -955,7 +1078,7 @@ class RuntimeAPI(object):
 
         entry_handle = self.client.bm_mt_add_entry(
             0, table.name, match_keys, action.name, runtime_data,
-            BmAddEntryOptions(priority = priority)
+            BmAddEntryOptions(priority=priority)
         )
 
         #save handle
@@ -1014,7 +1137,7 @@ class RuntimeAPI(object):
         action = table.get_action(action_name, self.switch_info.suffix_lookup_map)
         if action is None:
             raise UIn_Error(
-                "Table %s has no action %s" % (table_name, action_name)
+                "Table {} has no action {}".format(table_name, action_name)
             )
 
         try:
@@ -1041,7 +1164,7 @@ class RuntimeAPI(object):
             self.table_modify(table_name, action_name, entry_handle, action_parameters)
         else:
             raise UIn_Error(
-                "Table %s has no match %s" % (table_name, match_keys)
+                "Table {} has no match {}".format(table_name, match_keys)
             )
         return entry_handle
 
@@ -1056,10 +1179,10 @@ class RuntimeAPI(object):
             entry_handle = int(entry_handle)
         except:
             raise UIn_Error("Bad format for entry handle " + str(entry_handle))
-        
+
         if not quiet:
             print("Deleting entry", entry_handle, "from", table_name)
-            
+
         self.client.bm_mt_delete_entry(0, table.name, entry_handle)
 
     def table_delete_match(self, table_name, match_keys):
@@ -1070,7 +1193,7 @@ class RuntimeAPI(object):
             self.table_delete(table_name, entry_handle)
         else:
             raise UIn_Error(
-                "Table %s has no match %s" % (table_name, match_keys)
+                "Table {} has no match {}".format(table_name, match_keys)
             )
 
     def check_indirect(self, table):
@@ -1142,143 +1265,6 @@ class RuntimeAPI(object):
         runtime_data = self.parse_runtime_data(action, action_params)
         self.client.bm_mt_act_prof_modify_member(
             0, act_prof.name, mbr_handle, action.name, runtime_data)
-
-    #NOT NEEDED WITH CURRENT SPEC
-    # def indirect_add_common(self, line, ws=False):
-    #     args = line.split()
-    #
-    #     self.at_least_n_args(args, 2)
-    #
-    #     table_name = args[0]
-    #     table = self.get_res("table", table_name, ResType.table)
-    #
-    #     if ws:
-    #         self.check_indirect_ws(table)
-    #     else:
-    #         self.check_indirect(table)
-    #
-    #     if table.match_type in {MatchType.TERNARY, MatchType.RANGE}:
-    #         try:
-    #             priority = int(args.pop(-1))
-    #         except:
-    #             raise UIn_Error(
-    #                 "Table is ternary, but could not extract a valid priority from args"
-    #             )
-    #     else:
-    #         priority = 0
-    #
-    #     for idx, input_ in enumerate(args[1:]):
-    #         if input_ == "=>": break
-    #     idx += 1
-    #     match_key = args[1:idx]
-    #     if len(args) != (idx + 2):
-    #         raise UIn_Error("Invalid arguments, could not find handle")
-    #     handle = args[idx+1]
-    #
-    #     try:
-    #         handle = int(handle)
-    #     except:
-    #         raise UIn_Error("Bad format for handle")
-    #
-    #     match_key = parse_match_key(table, match_key)
-    #
-    #     print "Adding entry to indirect match table", table.name
-    #
-    #     return table.name, match_key, handle, BmAddEntryOptions(priority = priority)
-    #
-    # @handle_bad_input
-    # def table_indirect_add(self, line):
-    #     "Add entry to an indirect match table: table_indirect_add <table name> <match fields> => <member handle> [priority]"
-    #
-    #     table_name, match_key, handle, options = self.indirect_add_common(line)
-    #
-    #     entry_handle = self.client.bm_mt_indirect_add_entry(
-    #         0, table_name, match_key, handle, options
-    #     )
-    #
-    #     print "Entry has been added with handle", entry_handle
-    #
-    # @handle_bad_input
-    # def table_indirect_add_with_group(self, line):
-    #     "Add entry to an indirect match table: table_indirect_add <table name> <match fields> => <group handle> [priority]"
-    #
-    #     table_name, match_key, handle, options = self.indirect_add_common(line, ws=True)
-    #
-    #     entry_handle = self.client.bm_mt_indirect_ws_add_entry(
-    #         0, table_name, match_key, handle, options
-    #     )
-    #
-    #     print "Entry has been added with handle", entry_handle
-    #
-    # @handle_bad_input
-    # def table_indirect_delete(self, line):
-    #     "Delete entry from an indirect match table: table_indirect_delete <table name> <entry handle>"
-    #     args = line.split()
-    #
-    #     self.exactly_n_args(args, 2)
-    #
-    #     table_name = args[0]
-    #     table = self.get_res("table", table_name, ResType.table)
-    #     self.check_indirect(table)
-    #
-    #     try:
-    #         entry_handle = int(args[1])
-    #     except:
-    #         raise UIn_Error("Bad format for entry handle")
-    #
-    #     print "Deleting entry", entry_handle, "from", table_name
-    #
-    #     self.client.bm_mt_indirect_delete_entry(0, table.name, entry_handle)
-    #
-    # def indirect_set_default_common(self, line, ws=False):
-    #     args = line.split()
-    #
-    #     self.exactly_n_args(args, 2)
-    #
-    #     table_name = args[0]
-    #     table = self.get_res("table", table_name, ResType.table)
-    #
-    #     if ws:
-    #         self.check_indirect_ws(table)
-    #     else:
-    #         self.check_indirect(table)
-    #
-    #     try:
-    #         handle = int(args[1])
-    #     except:
-    #         raise UIn_Error("Bad format for handle")
-    #
-    #     return table.name, handle
-    #
-    # @handle_bad_input
-    # def table_indirect_set_default(self, line):
-    #     "Set default member for indirect match table: table_indirect_set_default <table name> <member handle>"
-    #
-    #     table_name, handle = self.indirect_set_default_common(line)
-    #
-    #     self.client.bm_mt_indirect_set_default_member(0, table_name, handle)
-    #
-    #
-    # @handle_bad_input
-    # def table_indirect_set_default_with_group(self, line):
-    #     "Set default group for indirect match table: table_indirect_set_default <table name> <group handle>"
-    #
-    #     table_name, handle = self.indirect_set_default_common(line, ws=True)
-    #
-    #     self.client.bm_mt_indirect_ws_set_default_group(0, table_name, handle)
-    #
-    # @handle_bad_input
-    # def table_indirect_reset_default(self, line):
-    #     "Reset default entry for indirect match table: table_indirect_reset_default <table name>"
-    #     args = line.split()
-    #
-    #     self.exactly_n_args(args, 1)
-    #
-    #     table_name = args[0]
-    #
-    #     table = self.get_res("table", table_name, ResType.table)
-    #
-    #     self.client.bm_mt_indirect_reset_default_entry(0, table.name)
 
     @handle_bad_input
     def act_prof_create_group(self, act_prof_name):
@@ -1390,17 +1376,14 @@ class RuntimeAPI(object):
             try:
                 port_num = int(port_num_str)
             except:
-                raise UIn_Error("'%s' is not a valid %s number"
-                                "" % (port_num_str, description))
+                raise UIn_Error("'{}' is not a valid {} number".format(port_num_str, description))
             if port_num < 0:
-                raise UIn_Error("'%s' is not a valid %s number"
-                                "" % (port_num_str, description))
+                raise UIn_Error("'{}' is not a valid {} number".format(port_num_str, description))
             ports_int.append(port_num)
         ports_int.sort()
         for port_num in ports_int:
             if port_num == (last_port_num - 1):
-                raise UIn_Error("Found duplicate %s number '%s'"
-                                "" % (description, port_num))
+                raise UIn_Error("Found duplicate {} number '{}'".format(description, port_num))
             port_map_str += "0" * (port_num - last_port_num) + "1"
             last_port_num = port_num + 1
         return port_map_str[::-1]
@@ -1559,8 +1542,7 @@ class RuntimeAPI(object):
         meter = self.get_res("meter", meter_name, ResType.meter_array)
         if len(rates) != meter.rate_count:
             raise UIn_Error(
-                "Invalid number of rates, expected %d but got %d"\
-                % (meter.rate_count, len(rates))
+                "Invalid number of rates, expected {} but got {}".format(meter.rate_count, len(rates))
             )
         new_rates = []
         for rate, burst in rates:
@@ -1583,8 +1565,7 @@ class RuntimeAPI(object):
             raise UIn_Error("Bad format for index")
         if len(rates) != meter.rate_count:
             raise UIn_Error(
-                "Invalid number of rates, expected %d but got %d"\
-                % (meter.rate_count, len(rates))
+                "Invalid number of rates, expected {} but got {}".format(meter.rate_count, len(rates))
             )
         new_rates = []
         for rate, burst in rates:
@@ -1645,9 +1626,33 @@ class RuntimeAPI(object):
         else:
             value = self.client.bm_counter_read(0, counter.name, index)
 
-        print("%s[%d]= " % (counter_name, index), value)
+        print("{}[{}]= ({} bytes, {} packets)".format(counter_name, index, value.bytes, value.packets))
         return value
 
+    @handle_bad_input
+    def counter_write(self, counter_name, index, pkts, byts):
+        "Write counter value: counter_write <name> <index> <packets> <bytes>"
+
+        counter = self.get_res("counter", counter_name, ResType.counter_array)
+        try:
+            index = int(index)
+        except:
+            raise UIn_Error("Bad format for index")
+        try:
+            pkts = int(pkts)
+        except:
+            raise UIn_Error("Bad format for packets")
+        try:
+            byts = int(byts)
+        except:
+            raise UIn_Error("Bad format for bytes")
+        if counter.is_direct:
+            table_name = counter.binding
+            print("writing to direct counter for table", table_name)
+            self.client.bm_mt_write_counter(0, table_name, index, BmCounterValue(bytes=byts, packets=pkts))
+        else:
+            self.client.bm_counter_write(0, counter_name, index, BmCounterValue(bytes=byts, packets=pkts))
+        print("{}[{}] has been updated".format(counter_name, index))
 
     @handle_bad_input
     def counter_reset(self, counter_name):
@@ -1660,23 +1665,6 @@ class RuntimeAPI(object):
             self.client.bm_mt_reset_counters(0, table_name)
         else:
             self.client.bm_counter_reset_all(0, counter.name)
-
-    @handle_bad_input
-    def counter_write(self, counter_name, index, value):
-        "Write a value to a counter index: counter_read <name> <entry handle> <value>"
-
-        counter = self.get_res("counter", counter_name, ResType.counter_array)
-        try:
-            index = int(index)
-        except:
-            raise UIn_Error("Bad format for index")
-        if counter.is_direct:
-            table_name = counter.binding
-            print("this is the direct counter for table", table_name)
-            # index = index & 0xffffffff
-            self.client.bm_mt_write_counter(0, table_name, index, value)
-        else:
-            self.client.bm_counter_read(0, counter.name, index, value)
 
     @handle_bad_input
     def register_read(self, register_name, index=None, show=False):
@@ -1735,9 +1723,6 @@ class RuntimeAPI(object):
         self.client.bm_register_reset(0, register.name)
 
     def dump_action_and_data(self, action_name, action_data):
-        def hexstr(v):
-            return "".join("{:02x}".format(ord(c)) for c in v)
-
         print("Action entry: {} - {}".format(
             action_name, ", ".join([hexstr(a) for a in action_data])))
 
@@ -1774,18 +1759,20 @@ class RuntimeAPI(object):
         if table.key:
             out_name_w = max(20, max([len(t[0]) for t in table.key]))
 
-        def hexstr(v):
-            return "".join("{:02x}".format(ord(c)) for c in v)
         def dump_exact(p):
              return hexstr(p.exact.key)
+
         def dump_lpm(p):
             return "{}/{}".format(hexstr(p.lpm.key), p.lpm.prefix_length)
+
         def dump_ternary(p):
             return "{} &&& {}".format(hexstr(p.ternary.key),
                                       hexstr(p.ternary.mask))
+
         def dump_range(p):
             return "{} -> {}".format(hexstr(p.range.start),
                                      hexstr(p.range.end_))
+
         def dump_valid(p):
             return "01" if p.valid.key else "00"
         pdumpers = {"exact": dump_exact, "lpm": dump_lpm,
@@ -1928,13 +1915,64 @@ class RuntimeAPI(object):
 
         if len(match_keys) != table.num_key_fields():
             raise UIn_Error(
-                "Table %s needs %d key fields" % (table_name, table.num_key_fields())
+                "Table {} needs {} key fields".format(table_name, table.num_key_fields())
             )
         match_key = parse_match_key(table, match_keys)
 
         entry = self.client.bm_mt_get_entry_from_key(
-            0, table.name, match_key, BmAddEntryOptions(priority = priority))
+            0, table.name, match_key, BmAddEntryOptions(priority=priority))
         self.dump_one_entry(table, entry)
+
+    @handle_bad_input
+    def show_pvs(self, line):
+        "List parser value sets defined in the P4 program: show_pvs"
+        self.exactly_n_args(line.split(), 0)
+        for pvs_name in sorted(self.switch_info.parse_vsets):
+            print(self.switch_info.parse_vsets[pvs_name].parse_vset_str())
+
+    @handle_bad_input
+    def pvs_add(self, pvs_name, value):
+        """
+        Add a value to a parser value set: pvs_add <pvs_name> <value>
+        bmv2 will not report an error if the value already exists.
+        """
+        pvs = self.get_res("parser value set", pvs_name, ResType.parse_vset)
+
+        v = parse_pvs_value(value, pvs.bitwidth)
+        self.client.bm_parse_vset_add(0, pvs_name, v)
+
+    @handle_bad_input
+    def pvs_remove(self, pvs_name, value):
+        """
+        Remove a value from a parser value set: pvs_remove <pvs_name> <value>
+        bmv2 will not report an error if the value does not exist.
+        """
+        pvs = self.get_res("parser value set", pvs_name, ResType.parse_vset)
+
+        v = parse_pvs_value(value, pvs.bitwidth)
+        self.client.bm_parse_vset_remove(0, pvs_name, v)
+
+    @handle_bad_input
+    def pvs_get(self, pvs_name):
+        """
+        Print all values from a parser value set: pvs_get <pvs_name>
+        Values are displayed in no particular order, one per line.
+        """
+        pvs = self.get_res("parser value set", pvs_name, ResType.parse_vset)
+
+        values = self.client.bm_parse_vset_get(0, pvs_name)
+        for v in values:
+            print(hexstr(v))
+        return values
+
+    @handle_bad_input
+    def pvs_clear(self, pvs_name):
+        """
+        Remove all values from a parser value set: pvs_clear <pvs_name>
+        """
+        pvs = self.get_res("parser value set", pvs_name, ResType.parse_vset)
+
+        self.client.bm_parse_vset_clear(0, pvs_name)
 
     @handle_bad_input
     def port_add(self, iface_name, port_num, pcap_path=""):
@@ -1967,7 +2005,7 @@ class RuntimeAPI(object):
         for port_info in ports:
             status = "UP" if port_info.is_up else "DOWN"
             extra_info = "; ".join(
-                [k + "=" + v for k, v in list(port_info.extra.items())])
+                [k + "=" + v for k, v in port_info.extra.items()])
             print("{:^10}{:^20}{:^10}{}".format(
                 port_info.port_num, port_info.iface_name, status, extra_info))
 
@@ -2047,6 +2085,9 @@ class RuntimeAPI(object):
 
     def get_custom_crc_calcs(self):
         return self.switch_info.custom_crc_calcs
+
+    def get_parse_vsets(self):
+        return self.switch_info.parse_vsets
 
     def get_suffix_lookup_map(self):
         return self.switch_info.suffix_lookup_map
