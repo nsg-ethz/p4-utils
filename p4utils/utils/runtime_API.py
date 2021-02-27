@@ -1085,9 +1085,9 @@ class RuntimeAPI(object):
         #for sub_table_name in self.table_multiple_names[table.name]:
         try:
             entry_handle = int(entry_handle)
-            self.table_entries_match_to_handle[table.name][tuple(match_keys)] = entry_handle
+            self.table_entries_match_to_handle[table.name] = {str(match_keys) : entry_handle}
         except:
-            print("Could not add entry with handle %s" % entry_handle)
+            print("Could not add entry with handle {}" % entry_handle)
             return entry_handle
 
         print("Entry has been added with handle", entry_handle)
@@ -1867,8 +1867,7 @@ class RuntimeAPI(object):
             self.table_entries_match_to_handle[table_name].clear()
             switch_entries = self.client.bm_mt_get_entries(0, table.name)
             for entry in switch_entries:
-                self.table_entries_match_to_handle[table_name][tuple(entry.match_key)] = \
-                    entry.entry_handle
+                self.table_entries_match_to_handle[table_name] = {str(entry.match_key) : entry.entry_handle}
 
     @handle_bad_input
     def table_dump(self, table_name):
