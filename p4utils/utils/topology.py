@@ -279,7 +279,7 @@ class TopologyDBP4(TopologyDB):
             return [x for x in self[p4switch]['interfaces_to_port'].keys() if 'cpu' in x][0]
         else:
             if not quiet:
-                print(("Switch {} has no cpu port".format(p4switch))
+                print("Switch {} has no cpu port".format(p4switch))
             return None
 
     def get_cpu_port_index(self, p4switch, quiet=False):
