@@ -415,7 +415,7 @@ class UIn_ResourceError(UIn_Error):
         self.name = name
 
     def __str__(self):
-        return "Invalid %s name (%s)" % (self.res_type, self.name)
+        return "Invalid {} name ({})".format(self.res_type, self.name)
 
 
 class UIn_MatchKeyError(UIn_Error):
@@ -555,7 +555,7 @@ def parse_runtime_data(action, params):
             return parse_param(field, bw)
         except UIn_BadParamError as e:
             raise UIn_RuntimeDataError(
-                "Error while parsing %s - %s" % (field, e)
+                "Error while parsing {} - {}".format(field, e)
             )
 
     bitwidths = [bw for(_, bw) in action.runtime_data]
@@ -581,7 +581,7 @@ def parse_match_key(table, key_fields):
             return parse_param(field, bw)
         except UIn_BadParamError as e:
             raise UIn_MatchKeyError(
-                "Error while parsing %s - %s" % (field, e)
+                "Error while parsing {} - {}".format(field, e)
             )
 
     params = []
@@ -615,7 +615,7 @@ def parse_match_key(table, key_fields):
             mask = bytes_to_string(parse_param_(mask, bw))
             if len(mask) != len(key):
                 raise UIn_MatchKeyError(
-                    "Key and mask have different lengths in expression %s" % field
+                    "Key and mask have different lengths in expression {}".forma(field)
                 )
             param = BmMatchParam(type=param_type,
                                  ternary=BmMatchParamTernary(key, mask))
@@ -634,11 +634,11 @@ def parse_match_key(table, key_fields):
             end = bytes_to_string(parse_param_(end, bw))
             if len(start) != len(end):
                 raise UIn_MatchKeyError(
-                    "start and end have different lengths in expression %s" % field
+                    "start and end have different lengths in expression {}".format(field)
                 )
             if start > end:
                 raise UIn_MatchKeyError(
-                    "start is less than end in expression %s" % field
+                    "start is less than end in expression {}".format(field)
                 )
             param = BmMatchParam(type=param_type,
                                  range=BmMatchParamRange(start, end))
@@ -776,7 +776,7 @@ def handle_bad_input_mc(f):
             return handle_bad_input(f)(*args, **kwargs)
         except EType as e:
             error = Codes._VALUES_TO_NAMES[e.code]
-            print("Invalid PRE operation (%s)" % error)
+            print("Invalid PRE operation ({})".format(error))
     return handle
 
 
@@ -982,7 +982,7 @@ class RuntimeAPI(object):
         action = table.get_action(action_name, self.switch_info.suffix_lookup_map)
         if action is None:
             raise UIn_Error(
-                "Table %s has no action %s" % (table_name, action_name)
+                "Table {} has no action {}".format(table_name, action_name)
             )
 
         runtime_data = self.parse_runtime_data(action, action_params)
@@ -1087,7 +1087,7 @@ class RuntimeAPI(object):
             entry_handle = int(entry_handle)
             self.table_entries_match_to_handle[table.name] = {str(match_keys) : entry_handle}
         except:
-            print("Could not add entry with handle {}" % entry_handle)
+            print("Could not add entry with handle {}".format(entry_handle))
             return entry_handle
 
         print("Entry has been added with handle", entry_handle)
