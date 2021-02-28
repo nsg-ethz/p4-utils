@@ -122,8 +122,8 @@ class TopologyDB(object):
                 continue
 
             props[nh.node.name] = {
-                'ip': '%s/%s' % (itf.ip, itf.prefixLen),
-                'mac': '%s' % (itf.mac),
+                'ip': '{}/{}'.format(itf.ip, itf.prefixLen),
+                'mac': '{}'.format(itf.mac),
                 'intf': itf.name,
                 'bw': itf.params.get('bw', -1),
                 'loss': itf.params.get('loss', 0),
@@ -279,7 +279,7 @@ class TopologyDBP4(TopologyDB):
             return [x for x in self[p4switch]['interfaces_to_port'].keys() if 'cpu' in x][0]
         else:
             if not quiet:
-                print(("Switch %s has no cpu port" % p4switch))
+                print(("Switch {} has no cpu port".format(p4switch))
             return None
 
     def get_cpu_port_index(self, p4switch, quiet=False):
@@ -296,26 +296,26 @@ class TopologyDBP4(TopologyDB):
             return self[p4switch]['interfaces_to_port'][intf]
         else:
             if not quiet:
-                print(("Switch %s has no cpu port" % p4switch))
+                print("Switch {} has no cpu port".format(p4switch))
             return None
 
     def get_thrift_port(self, switch):
         """Return the Thrift port used to communicate with the P4 switch."""
         if self._node(switch).get('subtype', None) != 'p4switch':
-            raise TypeError('%s is not a P4 switch' % switch)
+            raise TypeError('{} is not a P4 switch'.format(switch))
         return self._node(switch)['thrift_port']
 
 
     def get_thrift_ip(self, switch):
         """Return the Thrift ip used to communicate with the P4 switch."""
         if self._node(switch).get('subtype', None) != 'p4switch':
-            raise TypeError('%s is not a P4 switch' % switch)
+            raise TypeError('{} is not a P4 switch'.format(switch))
         return self._node(switch)['thrift_ip']
 
     def get_ctl_cpu_intf(self, switch):
         """Returns the controller side cpu interface used to listent for cpu packets"""
         if self._node(switch).get('subtype', None) != 'p4switch':
-            raise TypeError('%s is not a P4 switch' % switch)
+            raise TypeError('{} is not a P4 switch'.format(switch))
         
         if self._node(switch).get('ctl_cpu_intf', None):
             return self._node(switch)['ctl_cpu_intf']
@@ -484,7 +484,7 @@ class Topology(TopologyDBP4):
             ID of P4 switch as a string
         """
         if self[sw_name].get('subtype', None) != 'p4switch':
-            raise TypeError('%s is not a P4 switch' % sw_name)
+            raise TypeError('{} is not a P4 switch'.format(sw_name))
         return self[sw_name]['sw_id']
 
     def are_neighbors(self, node1, node2):
