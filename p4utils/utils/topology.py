@@ -274,9 +274,9 @@ class TopologyDBP4(TopologyDB):
 
         Returns: index
         """
-        has_cpu_port = any('cpu' in x for x in list(self[p4switch]['interfaces_to_port'].keys()))
+        has_cpu_port = any('cpu' in x for x in self[p4switch]['interfaces_to_port'].keys())
         if self.is_p4switch(p4switch) and has_cpu_port:
-            return [x for x in list(self[p4switch]['interfaces_to_port'].keys()) if 'cpu' in x][0]
+            return [x for x in self[p4switch]['interfaces_to_port'].keys() if 'cpu' in x][0]
         else:
             if not quiet:
                 print(("Switch %s has no cpu port" % p4switch))
@@ -290,7 +290,7 @@ class TopologyDBP4(TopologyDB):
 
         Returns: index
         """
-        has_cpu_port = any('cpu' in x for x in list(self[p4switch]['interfaces_to_port'].keys()))
+        has_cpu_port = any('cpu' in x for x in self[p4switch]['interfaces_to_port'].keys())
         if self.is_p4switch(p4switch) and has_cpu_port:
             intf = self.get_cpu_port_intf(p4switch)
             return self[p4switch]['interfaces_to_port'][intf]
@@ -554,7 +554,7 @@ class Topology(TopologyDBP4):
         networks = []
         hosts = self.get_hosts_connected_to(switch)
         for host in hosts:
-            sub_nets = [self.subnet(host, neighbor) for neighbor in list(self[host]['interfaces_to_node'].values())]
+            sub_nets = [self.subnet(host, neighbor) for neighbor in self[host]['interfaces_to_node'].values()]
             networks += sub_nets
         return set(networks)
 
