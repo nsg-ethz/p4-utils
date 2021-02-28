@@ -12,8 +12,8 @@ def cleanup():
     mininet.clean.cleanup()
     bridges = mininet.clean.sh("brctl show | awk 'FNR > 1 {print $1}'").splitlines()
     for bridge in bridges:
-        mininet.clean.sh("ifconfig %s down" %bridge)
-        mininet.clean.sh("brctl delbr %s" % bridge)
+        mininet.clean.sh("ifconfig {} down".format(bridge))
+        mininet.clean.sh("brctl delbr {}".format(bridge))
 
 def check_listening_on_port(port):
     for c in psutil.net_connections(kind='inet'):
@@ -87,7 +87,7 @@ def check_imports_last_modified(input_file, import_last_modifications):
     for import_file in imported_files:
 
         if not os.path.exists(import_file):
-            log.error("File %s does not exist \n" % import_file)
+            log.error("File {} does not exist \n".format(import_file))
 
             os.chdir(previous_path)
             raise IOError
@@ -156,17 +156,17 @@ def compile_p4_to_bmv2(config):
         elif compiler.startswith('p4c-'):
             output = output_file
         else:
-            log_error('Unknown Compiler %s' % compiler)
+            log_error('Unknown Compiler {}'.format(compiler))
             sys.exit()
 
-        compiler_args.append('"%s"' % program_file)
-        compiler_args.append('-o "%s"' % output)
+        compiler_args.append('"{}"'.format(program_file))
+        compiler_args.append('-o "{}"'.format(output))
     else:
-        log_error("Unknown P4 file %s" % program_file)
+        log_error("Unknown P4 file {}".format(program_file))
         sys.exit(1)
 
-    print (compiler + ' %s' % ' '.join(compiler_args))
-    return_value = run_command(compiler + ' %s' % ' '.join(compiler_args))
+    print (compiler + ' {}'.format(' '.join(compiler_args)))
+    return_value = run_command(compiler + ' {}'.format(' '.join(compiler_args)))
 
     if return_value != 0:
         raise CompilationError
@@ -224,7 +224,7 @@ def compile_all_p4(config):
                         switch_to_json[switch_name] = sw_attributes
                         p4programs_already_compiled[program_name] = json_name
                 else:
-                    raise Exception('Did not find a P4 program for switch %s' % switch_name)
+                    raise Exception('Did not find a P4 program for switch {}'.format(switch_name))
         return switch_to_json
 
     raise Exception('No topology or switches in configuration file.')
@@ -267,8 +267,8 @@ def read_register(register, idx, thrift_port=9090):
         Register value at index
     """
     p = open_cli_process(thrift_port, DEFAULT_CLI)
-    stdout, stderr = p.communicate(input="register_read %s %d" % (register, idx))
-    reg_val = [l for l in stdout.split('\n') if ' %s[%d]' % (register, idx) in l][0].split('= ', 1)[1]
+    stdout, stderr = p.communicate(input="register_read {} {}".format(register, idx))
+    reg_val = [l for l in stdout.split('\n') if ' {}[{}]'.format(register, idx) in l][0].split('= ', 1)[1]
     return int(reg_val)
 
 def read_tables(thrift_port=9090, cli=DEFAULT_CLI):
