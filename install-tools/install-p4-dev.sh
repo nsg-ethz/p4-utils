@@ -4,8 +4,6 @@
 KERNEL=$(uname -r)
 DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 USER_NAME=$(whoami)
-PYTHON3_BIN=$(which python3)
-PIP3_BIN=$(which pip3)
 BUILD_DIR=~/p4-tools
 SCRIPT_DIR=$(pwd)
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
@@ -40,7 +38,6 @@ python3-setuptools \
 libboost-test-dev \
 vim \
 wget \
-tshark \
 bridge-utils \
 traceroute \
 bash-completion \
@@ -69,8 +66,8 @@ libgmp-dev \
 libgmp10
 
 # Set Python3 as the default binary
-sudo ln -sf ${PYTHON3_BIN} /usr/bin/python
-sudo ln -sf ${PIP3_BIN} /usr/bin/pip
+sudo ln -sf $(which python3) /usr/bin/python
+sudo ln -sf $(which pip3) /usr/bin/pip
 
 # Make the system passwordless
 function no_passwd {
@@ -231,6 +228,10 @@ function do_wireshark {
     sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
     echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
     sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common
+
+    sudo apt-get -y --no-install-recommends install \
+    tshark \
+    tcpdump
 }
 
 # Install iperf3
