@@ -175,9 +175,7 @@ function do_protobuf_deps {
 }
 
 # Install gprcio dependencies
-function do_grpc_deps {
-    # grpc depends only on shared deps
-}
+# grpc depends only on shared deps
 
 # Install sysrepo dependencies
 function do_sysrepo_libyang_deps {
@@ -277,9 +275,6 @@ function do_protobuf {
 
 # Install grpc (needed for PI)
 function do_grpc {
-    # Install dependencies
-    do_grpc_deps
-
     # Clone source
     cd ${BUILD_DIR}
     if [ ! -d grpc ]; then
