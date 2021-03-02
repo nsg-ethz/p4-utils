@@ -373,7 +373,6 @@ function do_PI {
     sudo make install
     sudo ldconfig
     make clean
-    #move_usr_local_lib_python3_from_site_packages_to_dist_packages
 }
 
 # Install behavioral model
@@ -419,7 +418,6 @@ function do_bmv2 {
         sudo make install
         sudo ldconfig
     fi
-    #move_usr_local_lib_python3_from_site_packages_to_dist_packages
 }
 
 # Install p4c

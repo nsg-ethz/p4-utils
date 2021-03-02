@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+# Modified from https://github.com/jafingerhut/p4-guide/blob/master/bin/py3localpath.py
 
 import re
 import sys
