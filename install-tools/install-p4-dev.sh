@@ -1,258 +1,329 @@
 #!/bin/bash
 
+# Configuration variables
+KERNEL=$(uname -r)
+DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 USER_NAME=$(whoami)
+BUILD_DIR=~/p4-tools
+SCRIPT_DIR=$(pwd)
+NUM_CORES=`grep -c ^processor /proc/cpuinfo`
+DEBUG_FLAGS=true
+ENABLE_P4_RUNTIME=true
+
+# Software versions
+PI_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713"    # Feb 4 2021
+BMV2_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # Feb 11 2021
+P4C_COMMIT="451b208a5f1a54d9b5ac7975e496ca0a5dee6deb"   # Feb 23 2021
+PROTOBUF_COMMIT="v3.6.1"
+GRPC_COMMIT="tags/v1.17.2"
 
 # Print commands and exit on errors
 set -xe
 
-#Install Generic Dependencies and Programs
-
-sudo apt-get update
-
-# removed
-KERNEL=$(uname -r)
-DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
-sudo apt-get install -y --no-install-recommends \
-  autoconf \
-  automake \
-  bison \
-  build-essential \
-  ca-certificates \
-  cmake \
-  cpp \
-  curl \
-  emacs nano\
-  flex \
-  git \
-  git-review \
-  libboost-dev \
-  libboost-filesystem-dev \
-  libboost-iostreams-dev \
-  libboost-program-options-dev \
-  libboost-system-dev \
-  libboost-thread-dev \
-  libc6-dev \
-  libevent-dev \
-  libffi-dev \
-  libfl-dev \
-  libgc-dev \
-  libgc1c2 \
-  libgflags-dev \
-  libgmp-dev \
-  libgmp10 \
-  libgmpxx4ldbl \
-  libjudy-dev \
-  libpcap-dev \
-  libreadline-dev \
-  libtool \
-  linux-headers-$KERNEL\
-  make \
-  pkg-config \
-  python \
-  python-dev \
-  python-ipaddr \
-  python-setuptools \
-  tcpdump \
-  zip unzip \
-  vim \
-  wget \
-  xcscope-el \
-  xterm \
-  htop \
-  arping \
-  gawk \
-  iptables \
-  libprotobuf-c-dev \
-  g++ \
-  bash-completion \
-  traceroute
-
-
-#Install pip (Python2.7) from source
-#curl https://bootstrap.pypa.io/2.7/get-pip.py -o get-pip2.py
-# python 2
-#python get-pip2.py
-#sudo python get-pip2.py
-
-#Install pip (Python3) from source
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip3.py
-# python 3
-python get-pip3.py
-sudo python get-pip3.py
-
-# remove
-#rm get-pip2.py
-rm get-pip3.py
-
-#Python2 libraries
-sudo pip install ipaddress
-
-# debugging
-sudo pip install ipython ipdb
-
-# make the system passwordless
-sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet"
-sudo chmod 440 /etc/sudoers.d/99_advnet
-
-sudo locale-gen en_US.UTF-8
-
-
-# user apps
-#Installs wireshark skiping the inte
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
-echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
-sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common
-
-sudo apt-get -y --no-install-recommends install \
-    vim \
-    wget \
-    tshark
-
-# Install iperf3 (last version)
-PREV_PATH=`pwd`
-cd /tmp
-sudo apt-get remove  -y --no-install-recommends iperf3 libiperf0
-wget https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
-wget https://iperf.fr/download/ubuntu/iperf3_3.1.3-1_amd64.deb
-sudo dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
-rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
-
-cd $PREV_PATH
-cp conf_files/tmux.conf ~/.tmux.conf
-
-# P4 Tools installs
-BUILD_DIR=~/p4-tools
-
-#Install requirements (a lot of them might be redundant
-
-sudo apt update
-sudo apt-get install -y --no-install-recommends \
-    libavl-dev \
-    libboost-test-dev \
-    libev-dev \
-    libpcre3-dev \
-    libtool \
-    make \
-    pkg-config \
-    protobuf-c-compiler \
-    tcpdump \
-    wget \
-    unzip \
-    valgrind \
-    bridge-utils
-
-sudo -H pip install setuptools cffi ipaddr ipaddress pypcap
-
-# Advanced Topics in Communication networks 2019 Commits
-#BMV2_COMMIT="b447ac4c0cfd83e5e72a3cc6120251c1e91128ab" # Aug 6 2019
-#P4C_COMMIT="8742052c70836a8b0855e621aad9d6cc11b1f6ee"  # Sep 8 2019
-#PI_COMMIT="41358da0ff32c94fa13179b9cee0ab597c9ccbcc"   # Aug 6 2019
-
-# Advanced Topics in Communication networks 2020 Commits
-PI_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713" # Feb 4 2021
-BMV2_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # Feb 11 2021
-P4C_COMMIT="451b208a5f1a54d9b5ac7975e496ca0a5dee6deb"   # Feb 23 2021
-
-PROTOBUF_COMMIT="v3.6.1"
-GRPC_COMMIT="tags/v1.17.2"
-
-NUM_CORES=`grep -c ^processor /proc/cpuinfo`
-
+# Create BUILD_DIR
 mkdir -p ${BUILD_DIR}
 
-# If false, build tools without debug features to improve throughput of BMv2 and
-# reduce CPU/memory footprint.
-DEBUG_FLAGS=true
-ENABLE_P4_RUNTIME=true
+# Set locale
+sudo locale-gen en_US.UTF-8
 
-#install mininet
-function do_mininet {
+# Update packages list
+sudo apt-get update
 
-    cd $HOME
+# Install generic dependencies
+sudo apt-get install -y --no-install-recommends \
+git \
+python3 \
+python3-pip \
+python3-setuptools \
+libboost-test-dev \
+vim \
+wget \
+tshark \
+bridge-utils \
+traceroute \
+bash-completion \
+zip \
+xterm \
+htop \
+arping \
+xcscope-el \
+gawk \
+linux-headers-$KERNEL \
+libpcap-dev \
+libgmpxx4ldbl \
+ca-certificates \
+cpp \
+emacs \
+nano \
+git-review \
+libboost-filesystem-dev \
+libboost-program-options-dev \
+libc6-dev \
+libevent-dev \
+libffi-dev \
+libgc1c2 \
+libgflags-dev \
+libgmp-dev \
+libgmp10
 
-    git clone git://github.com/mininet/mininet mininet
-    cd mininet
-    sudo ./util/install.sh -nwv
-    cd ..
+# Set Python3 as the default binary
+sudo ln -sf /usr/bin/python3 /usr/bin/python
+sudo ln -sf /usr/bin/pip3 /usr/bin/pip
+
+# Make the system passwordless
+function no_passwd {
+    sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet"
+    sudo chmod 440 /etc/sudoers.d/99_advnet
 }
 
-#Install Protobuf
-function do_protobuf {
-    cd ${BUILD_DIR}
-    if [ ! -d protobuf ]; then
-      git clone https://github.com/google/protobuf.git
+# Fix site-packages issue (https://github.com/jafingerhut/p4-guide/blob/4111c7fa0a26ccdc40d3200040c767e9bba478ea/bin/install-p4dev-v4.sh#L244)
+PY3LOCALPATH=`python ${SCRIPT_DIR}/py3localpath.py`
+function move_usr_local_lib_python3_from_site_packages_to_dist_packages {
+    local SRC_DIR
+    local DST_DIR
+    local j
+    local k
+
+    SRC_DIR="${PY3LOCALPATH}/site-packages"
+    DST_DIR="${PY3LOCALPATH}/dist-packages"
+
+    # When I tested this script on Ubunt 16.04, there was no
+    # site-packages directory.  Return without doing anything else if
+    # this is the case.
+    if [ ! -d ${SRC_DIR} ]
+    then
+	return 0
     fi
-    cd protobuf
-    git fetch
-    git checkout ${PROTOBUF_COMMIT}
 
-    export CFLAGS="-Os"
-    export CXXFLAGS="-Os"
-    export LDFLAGS="-Wl,-s"
-    ./autogen.sh
-    ./configure --prefix=/usr
-    make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
-    unset CFLAGS CXXFLAGS LDFLAGS
-    #clean 0.5G
-    make clean
+    # Do not move any __pycache__ directory that might be present.
+    sudo rm -fr ${SRC_DIR}/__pycache__
 
-    # force install python module
-    cd python
-    sudo python setup.py install --cpp_implementation
+    echo "Source dir contents before moving: ${SRC_DIR}"
+    ls -lrt ${SRC_DIR}
+    echo "Dest dir contents before moving: ${DST_DIR}"
+    ls -lrt ${DST_DIR}
+    for j in ${SRC_DIR}/*
+    do
+	echo $j
+	k=`basename $j`
+	# At least sometimes (perhaps always?) there is a directory
+	# 'p4' or 'google' in both the surce and dest directory.  I
+	# think I want to merge their contents.  List them both so I
+	# can see in the log what was in both at the time:
+        if [ -d ${SRC_DIR}/$k -a -d ${DST_DIR}/$k ]
+   	then
+	    echo "Both source and dest dir contain a directory: $k"
+	    echo "Source dir $k directory contents:"
+	    ls -l ${SRC_DIR}/$k
+	    echo "Dest dir $k directory contents:"
+	    ls -l ${DST_DIR}/$k
+            sudo mv ${SRC_DIR}/$k/* ${DST_DIR}/$k/
+	    sudo rmdir ${SRC_DIR}/$k
+	else
+	    echo "Not a conflicting directory: $k"
+            sudo mv ${SRC_DIR}/$k ${DST_DIR}/$k
+	fi
+    done
+
+    echo "Source dir contents after moving: ${SRC_DIR}"
+    ls -lrt ${SRC_DIR}
+    echo "Dest dir contents after moving: ${DST_DIR}"
+    ls -lrt ${DST_DIR}
 }
 
-#needed for PI.
-function do_grpc {
-    cd ${BUILD_DIR}
-    if [ ! -d grpc ]; then
-      git clone https://github.com/grpc/grpc.git
-    fi
-    cd grpc
-    git fetch
-    git checkout ${GRPC_COMMIT}
-    git submodule update --init --recursive
-
-    export LDFLAGS="-Wl,-s"
-    make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
-    unset LDFLAGS
-    make clean
-
-    # Install gRPC Python Package
-    sudo pip install -r requirements.txt
-    sudo pip install grpcio==1.17.1
-    sudo pip install protobuf==3.6.1
-    sudo pip install .
+## Dependencies
+# Install protobuf dependencies
+function do_protobuf_deps {
+    sudo apt-get install -y --no-install-recommends \
+    autoconf \
+    automake \
+    libtool \
+    curl \
+    make \
+    g++ \
+    unzip
 }
 
-#needed for PI, this is the same than install_deps.sh but without the first apt-gets
+# Install gprcio dependencies
+function do_grpc_deps {
+    sudo apt-get install -y --no-install-recommends \
+    build-essential \
+    autoconf \
+    libtool \
+    pkg-config
+}
+
+# Install sysrepo dependencies
+function do_sysrepo_libyang_deps {
+    # Dependencies in : https://github.com/p4lang/PI/blob/master/proto/README.md
+    sudo apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    libpcre3-dev \
+    libavl-dev \
+    libev-dev \
+    libprotobuf-c-dev \
+    protobuf-c-compiler
+}
+
+# Install PI dependencies
+function do_PI_deps {
+    sudo apt-get install -y --no-install-recommends \
+    libjudy-dev \
+    libreadline-dev \
+    valgrind \
+    libtool-bin \
+    libboost-dev \
+    libboost-system-dev \
+    libboost-thread-dev
+}
+
+# Install p4c dependencies
+function do_p4c_deps {
+    sudo apt-get install -y --no-install-recommends \
+    cmake \
+    g++ \
+    git \
+    automake \
+    libtool \
+    libgc-dev \
+    bison \
+    flex \
+    libfl-dev \
+    libgmp-dev \
+    libboost-dev \
+    libboost-iostreams-dev \
+    libboost-graph-dev \
+    llvm \
+    pkg-config \
+    python3 \
+    python3-pip \
+    tcpdump \
+    doxygen \
+    graphviz \
+    texlive-full
+
+    sudo pip install \
+    scapy \
+    ply \
+    ipaddr
+}
+
+# Install behavioral model dependencies
 function do_bmv2_deps {
-    # BMv2 deps (needed by PI)
+    # Clone source
     cd ${BUILD_DIR}
     if [ ! -d bmv2 ]; then
         git clone https://github.com/p4lang/behavioral-model.git bmv2
     fi
     cd bmv2
     git checkout ${BMV2_COMMIT}
+
+    # Install dependencies
     ./install_deps.sh
 }
 
-#Tentative gNMI support with sysrepo
-function do_sysrepo {
-    # Dependencies in : https://github.com/p4lang/PI/blob/master/proto/README.md
-    sudo apt-get --yes install build-essential cmake libpcre3-dev libavl-dev libev-dev libprotobuf-c-dev protobuf-c-compiler
+## Modules
+# Install wireshark
+function do_wireshark {
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
+    echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
+    sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common
+}
 
+# Install iperf3
+function do_iperf3 {
+    # Install iperf3 (last version)
+    cd /tmp
+    sudo apt-get remove  -y --no-install-recommends iperf3 libiperf0
+    wget https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
+    wget https://iperf.fr/download/ubuntu/iperf3_3.1.3-1_amd64.deb
+    sudo dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
+    rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
+}
+
+# Configure tmux
+function do_tmux {
+    cd $SCRIPT_DIR
+    cp conf_files/tmux.conf ~/.tmux.conf
+}
+
+# Install protobuf from source
+function do_protobuf {
+    # Install dependencies
+    do_protobuf_deps
+
+    # Clone source
     cd ${BUILD_DIR}
+    if [ ! -d protobuf ]; then
+        git clone https://github.com/protocolbuffers/protobuf protobuf
+    fi
+    cd protobuf
+    git checkout ${PROTOBUF_COMMIT}
+    git submodule update --init --recursive
 
-    # Install libyang
+    # Build protobuf C++
+    export CFLAGS="-Os"
+    export CXXFLAGS="-Os"
+    export LDFLAGS="-Wl,-s"
+
+    ./autogen.sh
+    ./configure --prefix=/usr
+    make -j${NUM_CORES}
+    sudo make install
+    sudo ldconfig
+    make clean
+
+    unset CFLAGS CXXFLAGS LDFLAGS
+
+    # Build protobuf Python
+    cd python
+    sudo python setup.py install --cpp_implementation
+}
+
+# Install grpc (needed for PI)
+function do_grpc {
+    # Install dependencies
+    do_grpc_deps
+
+    # Clone source
+    cd ${BUILD_DIR}
+    if [ ! -d grpc ]; then
+      git clone https://github.com/grpc/grpc.git grpc
+    fi
+    cd grpc
+    git checkout ${GRPC_COMMIT}
+    git submodule update --init --recursive
+
+    # Build grpc
+    export LDFLAGS="-Wl,-s"
+
+    make -j${NUM_CORES}
+    sudo make install
+    sudo ldconfig
+    make clean
+
+    unset LDFLAGS
+
+    # Build gprcio
+    sudo pip install -r requirements.txt
+    sudo pip install .
+}
+
+# Install sysrepo (tentative gNMI support with sysrepo)
+function do_sysrepo_libyang {
+    # Install dependencies
+    do_sysrepo_libyang_deps
+
+    # Clone source libyang
+    cd ${BUILD_DIR}
     if [ ! -d libyang ]; then
-        git clone https://github.com/CESNET/libyang.git
+        git clone https://github.com/CESNET/libyang.git libyang
     fi
     cd libyang
     git checkout v0.16-r1
+
+    # Build libyang
     mkdir build
     cd build
     cmake ..
@@ -260,33 +331,38 @@ function do_sysrepo {
     sudo make install
     sudo ldconfig
 
-    cd ../..
-
-    # Install sysrepo
+    # Clone source sysrepo
+    cd ${BUILD_DIR}
     if [ ! -d sysrepo ]; then
-        git clone https://github.com/sysrepo/sysrepo.git
+        git clone https://github.com/sysrepo/sysrepo.git sysrepo
     fi
     cd sysrepo
     git checkout v0.7.5
+
+    # Build sysrepo
     mkdir build
     cd build
     cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=Off -DCALL_TARGET_BINS_DIRECTLY=Off ..
     make
     sudo make install
     sudo ldconfig
-    cd ..
 }
 
-#only if we want P4Runtime
+# Install PI
 function do_PI {
+    # Install dependencies
+    do_PI_deps
+
+    # Clone source
     cd ${BUILD_DIR}
     if [ ! -d PI ]; then
-        git clone https://github.com/p4lang/PI.git
+        git clone https://github.com/p4lang/PI.git PI
     fi
     cd PI
-    git fetch
     git checkout ${PI_COMMIT}
     git submodule update --init --recursive
+
+    # Build PI
     ./autogen.sh
     if [ "$DEBUG_FLAGS" = true ] ; then
         ./configure --with-proto --with-sysrepo "CXXFLAGS=-O0 -g"
@@ -296,171 +372,154 @@ function do_PI {
     make -j${NUM_CORES}
     sudo make install
     sudo ldconfig
-    cd ..
+    make clean
+    #move_usr_local_lib_python3_from_site_packages_to_dist_packages
 }
 
+# Install behavioral model
 function do_bmv2 {
-
+    # Install dependencies
     if [ "$ENABLE_P4_RUNTIME" = false ] ; then
         do_bmv2_deps
     fi
 
+    # Clone source
     cd ${BUILD_DIR}
     if [ ! -d bmv2 ]; then
-       git clone https://github.com/p4lang/behavioral-model.git bmv2
+        git clone https://github.com/p4lang/behavioral-model.git bmv2
     fi
     cd bmv2
     git checkout ${BMV2_COMMIT}
+
+    # Build behavioral-model
     ./autogen.sh
-
-    #./configure 'CXXFLAGS=-O0 -g' --with-nanomsg --with-thrift --enable-debugger
     if [ "$DEBUG_FLAGS" = true ] && [ "$ENABLE_P4_RUNTIME" = true ] ; then
-        #./configure --enable-debugger --enable-elogger --with-thrift --with-nanomsg  "CXXFLAGS=-O0 -g"
-        ./configure --with-pi --enable-debugger --with-thrift --with-nanomsg --disable-elogger "CXXFLAGS=-O0 -g"
-
+        ./configure --with-pi --with-thrift --with-nanomsg --enable-debugger --disable-elogger "CXXFLAGS=-O0 -g"
     elif [ "$DEBUG_FLAGS" = true ] && [ "$ENABLE_P4_RUNTIME" = false ] ; then
-        ./configure --enable-debugger --enable-elogger --with-thrift --with-nanomsg  "CXXFLAGS=-O0 -g"
-
+        ./configure --with-thrift --with-nanomsg --enable-debugger --enable-elogger "CXXFLAGS=-O0 -g"
     elif [ "$DEBUG_FLAGS" = false ] && [ "$ENABLE_P4_RUNTIME" = true ] ; then
-         ./configure --with-pi --without-nanomsg --disable-elogger --disable-logging-macros 'CFLAGS=-g -O2' 'CXXFLAGS=-g -O2'
-    else #both false
-        #Option removed until we use this commit: https://github.com/p4lang/behavioral-model/pull/673
-        #./configure --with-pi --disable-logging-macros --disable-elogger --without-nanomsg
+        ./configure --with-pi --without-nanomsg --disable-elogger --disable-logging-macros 'CFLAGS=-g -O2' 'CXXFLAGS=-g -O2'
+    else
         ./configure --without-nanomsg --disable-elogger --disable-logging-macros 'CFLAGS=-g -O2' 'CXXFLAGS=-g -O2'
-
     fi
     make -j${NUM_CORES}
     sudo make install
     sudo ldconfig
 
-    # Simple_switch_grpc target
+    # Build simple_switch_grpc
     if [ "$ENABLE_P4_RUNTIME" = true ] ; then
         cd targets/simple_switch_grpc
         ./autogen.sh
-
         if [ "$DEBUG_FLAGS" = true ] ; then
             ./configure --with-sysrepo --with-thrift "CXXFLAGS=-O0 -g"
         else
             ./configure --with-sysrepo --with-thrift
         fi
-
         make -j${NUM_CORES}
         sudo make install
         sudo ldconfig
-        cd ../../..
     fi
+    #move_usr_local_lib_python3_from_site_packages_to_dist_packages
 }
 
-function do_bmv2_opt {
-
-    cd ${BUILD_DIR}
-    if [ ! -d bmv2-opt ]; then
-       git clone https://github.com/p4lang/behavioral-model.git bmv2-opt
-    fi
-    cd bmv2-opt
-    
-    git checkout ${BMV2_COMMIT}
-    ./autogen.sh
-
-    ./configure --without-nanomsg --disable-elogger --disable-logging-macros 'CFLAGS=-g -O2' 'CXXFLAGS=-g -O2'
-    make -j${NUM_CORES}
-    
-    # dont install by default
-    #sudo make install
-    #sudo ldconfig
-}
-
+# Install p4c
 function do_p4c {
+    # Install dependencies
+    do_p4c_deps
+
+    # Clone source
     cd ${BUILD_DIR}
     if [ ! -d p4c ]; then
-        git clone https://github.com/p4lang/p4c.git
+        git clone https://github.com/p4lang/p4c.git p4c
     fi
     cd p4c
-    git fetch
     git checkout ${P4C_COMMIT}
     git submodule update --init --recursive
-
     mkdir -p build
     cd build
 
+    # Build p4c
     if [ "$DEBUG_FLAGS" = true ] ; then
         cmake .. -DCMAKE_BUILD_TYPE=DEBUG $*
-
     else
         # Debug build
         cmake ..
     fi
-
     make -j${NUM_CORES}
     sudo make install
     sudo ldconfig
-
     cd ..
     rm -rf build/
     cd ..
 }
 
-function do_scapy-vxlan {
-    cd ${BUILD_DIR}
-    if [ ! -d scapy-vxlan ]; then
-        git clone https://github.com/p4lang/scapy-vxlan.git
-    fi
-    cd scapy-vxlan
-
-    git pull origin master
-
-    sudo python setup.py install
-}
-
-function do_scapy {
-    # Installs normal scapy (installs latest version 2.4.4 right now)
-    sudo pip install scapy
-}
-
+# Install ptf
 function do_ptf {
+    # Clone source
     cd ${BUILD_DIR}
     if [ ! -d ptf ]; then
-        git clone https://github.com/p4lang/ptf.git
+        git clone https://github.com/p4lang/ptf.git ptf
     fi
     cd ptf
     git pull origin master
 
+    # Build ptf
     sudo python setup.py install
 }
 
+# Install mininet
+function do_mininet {
+    # Clone source
+    cd $HOME
+    git clone git://github.com/mininet/mininet mininet
+    cd mininet
+
+    # Build mininet
+    sudo ./util/install.sh -nwv
+}
+
+# Install p4-utils
 function do_p4-utils {
+    # Clone source
     cd ${BUILD_DIR}
     if [ ! -d p4-utils ]; then
-        git clone https://github.com/nsg-ethz/p4-utils.git
+        git clone https://github.com/nsg-ethz/p4-utils.git p4-utils
     fi
     cd p4-utils
     git checkout junota
+
+    # Build p4-utils    
     sudo ./install.sh
-    cd ..
 }
 
+# Install p4-learning
 function do_p4-learning {
+    # Clone source
     cd ${BUILD_DIR}
     if [ ! -d p4-learning ]; then
-        git clone https://github.com/nsg-ethz/p4-learning.git
+        git clone https://github.com/nsg-ethz/p4-learning.git p4-learning
     fi
-    cd ..
+    cd p4-learning
+    git checkout junota
 }
 
-# its needed for p4c
+no_passwd
+do_wireshark
+do_iperf3
+do_tmux
 do_protobuf
 if [ "$ENABLE_P4_RUNTIME" = true ] ; then
     do_grpc
     do_bmv2_deps
-    do_sysrepo
+    do_sysrepo_libyang
     do_PI
 fi
 do_bmv2
-#do_bmv2_opt
 do_p4c
-do_scapy
+# ptf is Python2 only
 do_ptf
 do_mininet
 do_p4-utils
 do_p4-learning
-echo "Done with p4-tools install!"
+move_usr_local_lib_python3_from_site_packages_to_dist_packages
+echo "Installation complete!"
