@@ -4,8 +4,6 @@
 KERNEL=$(uname -r)
 DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 USER_NAME=$(whoami)
-PYTHON3_BIN=$(which python3)
-PIP3_BIN=$(which pip3)
 BUILD_DIR=~/p4-tools
 SCRIPT_DIR=$(pwd)
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
@@ -22,6 +20,10 @@ GRPC_COMMIT="tags/v1.17.2"
 # Print commands and exit on errors
 set -xe
 
+# Make the system passwordless
+sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet"
+sudo chmod 440 /etc/sudoers.d/99_advnet
+
 # Create BUILD_DIR
 mkdir -p ${BUILD_DIR}
 
@@ -31,25 +33,35 @@ sudo locale-gen en_US.UTF-8
 # Update packages list
 sudo apt-get update
 
-# Install generic dependencies
+# Install shared dependencies
 sudo apt-get install -y --no-install-recommends \
+arping \
+autoconf \
+automake \
+bash-completion \
+bridge-utils \
+build-essential \
+cmake \
+curl \
+make \
+libtool \
+gawk \
+g++ \
 git \
+pkg-config \
 python3 \
+python3-dev \
 python3-pip \
 python3-setuptools \
+libboost-dev \
 libboost-test-dev \
 vim \
 wget \
-tshark \
-bridge-utils \
 traceroute \
-bash-completion \
 zip \
 xterm \
 htop \
-arping \
 xcscope-el \
-gawk \
 linux-headers-$KERNEL \
 libpcap-dev \
 libgmpxx4ldbl \
@@ -69,14 +81,36 @@ libgmp-dev \
 libgmp10
 
 # Set Python3 as the default binary
-sudo ln -sf ${PYTHON3_BIN} /usr/bin/python
-sudo ln -sf ${PIP3_BIN} /usr/bin/pip
+sudo ln -sf $(which python3) /usr/bin/python
+sudo ln -sf $(which pip3) /usr/bin/pip
 
-# Make the system passwordless
-function no_passwd {
-    sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet"
-    sudo chmod 440 /etc/sudoers.d/99_advnet
-}
+# Install shared dependencies (pip)
+sudo pip install \
+ipaddress \
+ipython \
+ipdb \
+cffi \
+pypcap
+
+# Install wireshark
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
+echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
+sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common
+sudo apt-get -y --no-install-recommends install \
+tshark \
+tcpdump
+
+# Install iperf3 (last version)
+cd /tmp
+sudo apt-get remove  -y --no-install-recommends iperf3 libiperf0
+wget https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
+wget https://iperf.fr/download/ubuntu/iperf3_3.1.3-1_amd64.deb
+sudo dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
+rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
+
+# Configure tmux
+cd $SCRIPT_DIR
+cp conf_files/tmux.conf ~/.tmux.conf
 
 # Fix site-packages issue (https://github.com/jafingerhut/p4-guide/blob/4111c7fa0a26ccdc40d3200040c767e9bba478ea/bin/install-p4dev-v4.sh#L244)
 PY3LOCALPATH=`python ${SCRIPT_DIR}/py3localpath.py`
@@ -133,34 +167,22 @@ function move_usr_local_lib_python3_from_site_packages_to_dist_packages {
     ls -lrt ${DST_DIR}
 }
 
-## Dependencies
+## Module-specific dependencies
 # Install protobuf dependencies
 function do_protobuf_deps {
     sudo apt-get install -y --no-install-recommends \
-    autoconf \
-    automake \
-    libtool \
-    curl \
-    make \
-    g++ \
     unzip
 }
 
 # Install gprcio dependencies
 function do_grpc_deps {
-    sudo apt-get install -y --no-install-recommends \
-    build-essential \
-    autoconf \
-    libtool \
-    pkg-config
+    # grpc depends only on shared deps
 }
 
 # Install sysrepo dependencies
 function do_sysrepo_libyang_deps {
     # Dependencies in : https://github.com/p4lang/PI/blob/master/proto/README.md
     sudo apt-get install -y --no-install-recommends \
-    build-essential \
-    cmake \
     libpcre3-dev \
     libavl-dev \
     libev-dev \
@@ -175,7 +197,6 @@ function do_PI_deps {
     libreadline-dev \
     valgrind \
     libtool-bin \
-    libboost-dev \
     libboost-system-dev \
     libboost-thread-dev
 }
@@ -183,32 +204,27 @@ function do_PI_deps {
 # Install p4c dependencies
 function do_p4c_deps {
     sudo apt-get install -y --no-install-recommends \
-    cmake \
-    g++ \
-    git \
-    automake \
-    libtool \
     libgc-dev \
     bison \
     flex \
     libfl-dev \
-    libgmp-dev \
-    libboost-dev \
     libboost-iostreams-dev \
     libboost-graph-dev \
     llvm \
-    pkg-config \
-    python3 \
-    python3-pip \
-    tcpdump \
     doxygen \
     graphviz \
-    texlive-full
+    texlive-full \
+    libelf-dev \
+    zlib1g-dev \
+    clang \
+    iptables \
+    net-tools
 
     sudo pip install \
     scapy \
     ply \
-    ipaddr
+    ipaddr \
+    pyroute2
 }
 
 # Install behavioral model dependencies
@@ -226,30 +242,6 @@ function do_bmv2_deps {
 }
 
 ## Modules
-# Install wireshark
-function do_wireshark {
-    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
-    echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
-    sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common
-}
-
-# Install iperf3
-function do_iperf3 {
-    # Install iperf3 (last version)
-    cd /tmp
-    sudo apt-get remove  -y --no-install-recommends iperf3 libiperf0
-    wget https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
-    wget https://iperf.fr/download/ubuntu/iperf3_3.1.3-1_amd64.deb
-    sudo dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
-    rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
-}
-
-# Configure tmux
-function do_tmux {
-    cd $SCRIPT_DIR
-    cp conf_files/tmux.conf ~/.tmux.conf
-}
-
 # Install protobuf from source
 function do_protobuf {
     # Install dependencies
@@ -503,10 +495,6 @@ function do_p4-learning {
     git checkout junota
 }
 
-no_passwd
-do_wireshark
-do_iperf3
-do_tmux
 do_protobuf
 if [ "$ENABLE_P4_RUNTIME" = true ] ; then
     do_grpc
