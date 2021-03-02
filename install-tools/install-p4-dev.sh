@@ -41,44 +41,44 @@ automake \
 bash-completion \
 bridge-utils \
 build-essential \
+ca-certificates \
 cmake \
+cpp \
 curl \
-make \
-libtool \
+emacs \
 gawk \
-g++ \
 git \
+git-review \
+g++ \
+htop \
+libboost-dev \
+libboost-filesystem-dev \
+libboost-program-options-dev \
+libboost-test-dev \
+libc6-dev \
+libevent-dev \
+libgc1c2 \
+libgflags-dev \
+libgmpxx4ldbl \
+libgmp10 \
+libgmp-dev \
+libffi-dev \
+libtool \
+libpcap-dev \
+linux-headers-$KERNEL \
+make \
+nano \
 pkg-config \
 python3 \
 python3-dev \
 python3-pip \
 python3-setuptools \
-libboost-dev \
-libboost-test-dev \
+traceroute \
 vim \
 wget \
-traceroute \
-zip \
-xterm \
-htop \
 xcscope-el \
-linux-headers-$KERNEL \
-libpcap-dev \
-libgmpxx4ldbl \
-ca-certificates \
-cpp \
-emacs \
-nano \
-git-review \
-libboost-filesystem-dev \
-libboost-program-options-dev \
-libc6-dev \
-libevent-dev \
-libffi-dev \
-libgc1c2 \
-libgflags-dev \
-libgmp-dev \
-libgmp10
+xterm \
+zip
 
 # Set Python3 as the default binary
 sudo ln -sf $(which python3) /usr/bin/python
@@ -86,10 +86,10 @@ sudo ln -sf $(which pip3) /usr/bin/pip
 
 # Install shared dependencies (pip)
 sudo pip install \
-ipaddress \
-ipython \
-ipdb \
 cffi \
+ipaddress \
+ipdb \
+ipython \
 pypcap
 
 # Install wireshark
@@ -97,8 +97,8 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
 echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
 sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common
 sudo apt-get -y --no-install-recommends install \
-tshark \
-tcpdump
+tcpdump \
+tshark
 
 # Install iperf3 (last version)
 cd /tmp
@@ -183,9 +183,9 @@ function do_grpc_deps {
 function do_sysrepo_libyang_deps {
     # Dependencies in : https://github.com/p4lang/PI/blob/master/proto/README.md
     sudo apt-get install -y --no-install-recommends \
-    libpcre3-dev \
     libavl-dev \
     libev-dev \
+    libpcre3-dev \
     libprotobuf-c-dev \
     protobuf-c-compiler
 }
@@ -193,38 +193,38 @@ function do_sysrepo_libyang_deps {
 # Install PI dependencies
 function do_PI_deps {
     sudo apt-get install -y --no-install-recommends \
+    libboost-system-dev \
+    libboost-thread-dev \
     libjudy-dev \
     libreadline-dev \
-    valgrind \
     libtool-bin \
-    libboost-system-dev \
-    libboost-thread-dev
+    valgrind
 }
 
 # Install p4c dependencies
 function do_p4c_deps {
     sudo apt-get install -y --no-install-recommends \
-    libgc-dev \
     bison \
-    flex \
-    libfl-dev \
-    libboost-iostreams-dev \
-    libboost-graph-dev \
-    llvm \
-    doxygen \
-    graphviz \
-    texlive-full \
-    libelf-dev \
-    zlib1g-dev \
     clang \
+    doxygen \
+    flex \
+    graphviz \
     iptables \
-    net-tools
+    libboost-graph-dev \
+    libboost-iostreams-dev \
+    libelf-dev \
+    libfl-dev \
+    libgc-dev \
+    llvm \
+    net-tools \
+    texlive-full \
+    zlib1g-dev
 
     sudo pip install \
-    scapy \
-    ply \
     ipaddr \
-    pyroute2
+    pyroute2 \
+    ply \
+    scapy
 }
 
 # Install behavioral model dependencies
