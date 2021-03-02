@@ -4,6 +4,8 @@
 KERNEL=$(uname -r)
 DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 USER_NAME=$(whoami)
+PYTHON3_BIN=$(which python3)
+PIP3_BIN=$(which pip3)
 BUILD_DIR=~/p4-tools
 SCRIPT_DIR=$(pwd)
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
@@ -67,8 +69,8 @@ libgmp-dev \
 libgmp10
 
 # Set Python3 as the default binary
-sudo ln -sf /usr/bin/python3 /usr/bin/python
-sudo ln -sf /usr/bin/pip3 /usr/bin/pip
+sudo ln -sf ${PYTHON3_BIN} /usr/bin/python
+sudo ln -sf ${PIP3_BIN} /usr/bin/pip
 
 # Make the system passwordless
 function no_passwd {
