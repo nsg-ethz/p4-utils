@@ -1,5 +1,7 @@
 #!/bin/bash
 
+USER_NAME=$(whoami)
+
 # Print commands and exit on errors
 set -xe
 
@@ -8,7 +10,6 @@ set -xe
 sudo apt-get update
 
 # removed
-# lubuntu-desktop \
 KERNEL=$(uname -r)
 DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 sudo apt-get install -y --no-install-recommends \
@@ -67,27 +68,30 @@ sudo apt-get install -y --no-install-recommends \
   traceroute
 
 
-#Install pip from source
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+#Install pip (Python2.7) from source
+#curl https://bootstrap.pypa.io/2.7/get-pip.py -o get-pip2.py
 # python 2
-python get-pip.py
-sudo python get-pip.py
+#python get-pip2.py
+#sudo python get-pip2.py
 
+#Install pip (Python3) from source
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip3.py
 # python 3
-python get-pip.py
-sudo python get-pip.py
+python get-pip3.py
+sudo python get-pip3.py
 
 # remove
-rm get-pip.py
+#rm get-pip2.py
+rm get-pip3.py
 
-#python libraries
+#Python2 libraries
 sudo pip install ipaddress
 
 # debugging
 sudo pip install ipython ipdb
 
 # make the system passwordless
-sudo bash -c 'echo "adv-net ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99_advnet'
+sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet"
 sudo chmod 440 /etc/sudoers.d/99_advnet
 
 sudo locale-gen en_US.UTF-8
@@ -145,9 +149,9 @@ sudo -H pip install setuptools cffi ipaddr ipaddress pypcap
 #PI_COMMIT="41358da0ff32c94fa13179b9cee0ab597c9ccbcc"   # Aug 6 2019
 
 # Advanced Topics in Communication networks 2020 Commits
-BMV2_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713" # Feb 4 2021
-P4C_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # Feb 11 2021
-PI_COMMIT="451b208a5f1a54d9b5ac7975e496ca0a5dee6deb"   # Feb 23 2021
+PI_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713" # Feb 4 2021
+BMV2_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # Feb 11 2021
+P4C_COMMIT="451b208a5f1a54d9b5ac7975e496ca0a5dee6deb"   # Feb 23 2021
 
 PROTOBUF_COMMIT="v3.6.1"
 GRPC_COMMIT="tags/v1.17.2"
@@ -354,13 +358,13 @@ function do_bmv2_opt {
        git clone https://github.com/p4lang/behavioral-model.git bmv2-opt
     fi
     cd bmv2-opt
-    
+
     git checkout ${BMV2_COMMIT}
     ./autogen.sh
 
     ./configure --without-nanomsg --disable-elogger --disable-logging-macros 'CFLAGS=-g -O2' 'CXXFLAGS=-g -O2'
     make -j${NUM_CORES}
-    
+
     # dont install by default
     #sudo make install
     #sudo ldconfig
@@ -430,6 +434,7 @@ function do_p4-utils {
         git clone https://github.com/nsg-ethz/p4-utils.git
     fi
     cd p4-utils
+    git checkout junota
     sudo ./install.sh
     cd ..
 }
@@ -440,13 +445,6 @@ function do_p4-learning {
         git clone https://github.com/nsg-ethz/p4-learning.git
     fi
     cd ..
-}
-
-function do-adv-net {
-    cd ~/
-    if [ ! -d adv-net-2020 ]; then
-        git clone https://gitlab.ethz.ch/nsg/public/adv-net-2020.git
-    fi
 }
 
 # its needed for p4c
@@ -465,5 +463,4 @@ do_ptf
 do_mininet
 do_p4-utils
 do_p4-learning
-do-adv-net
 echo "Done with p4-tools install!"
