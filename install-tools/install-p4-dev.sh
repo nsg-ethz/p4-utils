@@ -204,9 +204,7 @@ function do_p4c_deps {
     sudo apt-get install -y --no-install-recommends \
     bison \
     clang \
-    doxygen \
     flex \
-    graphviz \
     iptables \
     libboost-graph-dev \
     libboost-iostreams-dev \
@@ -215,7 +213,6 @@ function do_p4c_deps {
     libgc-dev \
     llvm \
     net-tools \
-    texlive-full \
     zlib1g-dev
 
     sudo pip install \
