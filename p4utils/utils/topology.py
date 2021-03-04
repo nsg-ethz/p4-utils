@@ -669,7 +669,7 @@ class NetworkGraph(nx.Graph):
     def add_edge(self, node1, node2):
         """Connects node1 and node2 using an edge"""
         if node1 in self.node and node2 in self.node:
-            super(NetworkGraph, self).add_edge(node1, node2)
+            super().add_edge(node1, node2)
 
     def add_node(self, node, attributes):
         """
@@ -684,21 +684,21 @@ class NetworkGraph(nx.Graph):
         # check if the node has a subtype
         subtype = attributes.get('subtype', None)
         if subtype:
-            self.node[node] = {'subtype': subtype}
+            self.node[node]['subtype'] = subtype
 
         for neighbor_node in self.topology_db.get_neighbors(node):
             if neighbor_node in self.nodes():
                 weight = attributes[neighbor_node].get("weight", 1)
                 bw = attributes[neighbor_node].get("bw", 1000)
-                super(NetworkGraph, self).add_edge(node, neighbor_node, weight=weight, bw=bw)
+                super().add_edge(node, neighbor_node, weight=weight, bw=bw)
 
     def set_node_shape(self, node, shape):
         """Sets node's shape. Used when plotting the network"""
-        self.node[node] = {'node_shape': shape}
+        self.node[node]['node_shape'] = shape
 
     def set_node_color(self, node, color):
         """Sets node's color. Used when plotting the network"""
-        self.node[node] = {'node_color': color}
+        self.node[node]['node_color'] = color
 
     def set_node_type_shape(self, type, shape):
         """Sets all node's with a given type shape. Used when plotting the network"""
