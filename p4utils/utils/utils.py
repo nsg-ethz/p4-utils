@@ -247,13 +247,13 @@ def add_entries(thrift_port, entries, log_output = None, cli=DEFAULT_CLI, thrift
         entries = '\n'.join(entries)
 
     p = open_cli_process(thrift_port, thrift_ip, cli)
-    stdout, stderr = p.communicate(input=entries)
+    stdout, stderr = p.communicate(input=entries.encode())
 
     if log_output:
         with open(log_output, "w") as log_file:
-            log_file.write(stdout)
+            log_file.write(stdout.decode())
 
-    return stdout
+    return stdout.decode()
 
 def read_register(register, idx, thrift_port=9090):
     """Read register value from P4 switch using the DEFAULT_CLI.
@@ -267,8 +267,8 @@ def read_register(register, idx, thrift_port=9090):
         Register value at index
     """
     p = open_cli_process(thrift_port, DEFAULT_CLI)
-    stdout, stderr = p.communicate(input="register_read {} {}".format(register, idx))
-    reg_val = [l for l in stdout.split('\n') if ' {}[{}]'.format(register, idx) in l][0].split('= ', 1)[1]
+    stdout, stderr = p.communicate(input="register_read {} {}".format(register, idx).encode())
+    reg_val = [l for l in stdout.decode().split('\n') if ' {}[{}]'.format(register, idx) in l][0].split('= ', 1)[1]
     return int(reg_val)
 
 def read_tables(thrift_port=9090, cli=DEFAULT_CLI):
@@ -280,5 +280,5 @@ def read_tables(thrift_port=9090, cli=DEFAULT_CLI):
     """
     p = open_cli_process(thrift_port, cli)
 
-    stdout, stderr = p.communicate(input="show_tables")
-    return stdout
+    stdout, stderr = p.communicate(input="show_tables".encode())
+    return stdout.decode()
