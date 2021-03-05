@@ -821,35 +821,39 @@ def deprecated_act_prof(substitute, with_selection=False,
 
 
 def hex_to_i16(h):
-    x = int(h, 0)
-    if (x > 0xFFFF):
+    if type(h) != int:
+        h = int(h, 0)
+    if (h > 0xFFFF):
         raise UIn_Error("Integer cannot fit within 16 bits")
-    if (x > 0x7FFF):
-        x -= 0x10000
-    return x
+    if (h > 0x7FFF):
+        h -= 0x10000
+    return h
 
 
 def i16_to_hex(h):
-    x = int(h)
-    if (x & 0x8000):
-        x += 0x10000
-    return x
+    if type(h) != int:
+        h = int(h)
+    if (h & 0x8000):
+        h += 0x10000
+    return h
 
 
 def hex_to_i32(h):
-    x = int(h, 0)
-    if (x > 0xFFFFFFFF):
+    if type(h) != int:
+        h = int(h, 0)
+    if (h > 0xFFFFFFFF):
         raise UIn_Error("Integer cannot fit within 32 bits")
-    if (x > 0x7FFFFFFF):
-        x -= 0x100000000
-    return x
+    if (h > 0x7FFFFFFF):
+        h -= 0x100000000
+    return h
 
 
 def i32_to_hex(h):
-    x = int(h)
-    if (x & 0x80000000):
-        x += 0x100000000
-    return x
+    if type(h) != int:
+        h = int(h)
+    if (h & 0x80000000):
+        h += 0x100000000
+    return h
 
 
 def parse_bool(s):
