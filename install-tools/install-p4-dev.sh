@@ -112,13 +112,13 @@ rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
 cd $SCRIPT_DIR
 cp conf_files/tmux.conf ~/.tmux.conf
 
-# Fix site-packages issue (https://github.com/jafingerhut/p4-guide/blob/4111c7fa0a26ccdc40d3200040c767e9bba478ea/bin/install-p4dev-v4.sh#L244)
+# Fix site-packages issue 
+# Modified file from 
+# https://github.com/jafingerhut/p4-guide/blob/4111c7fa0a26ccdc40d3200040c767e9bba478ea/bin/install-p4dev-v4.sh#L244
 PY3LOCALPATH=`python ${SCRIPT_DIR}/py3localpath.py`
-function move_usr_local_lib_python3_from_site_packages_to_dist_packages {
+function site_packages_fix {
     local SRC_DIR
     local DST_DIR
-    local j
-    local k
 
     SRC_DIR="${PY3LOCALPATH}/site-packages"
     DST_DIR="${PY3LOCALPATH}/dist-packages"
@@ -130,40 +130,9 @@ function move_usr_local_lib_python3_from_site_packages_to_dist_packages {
 	    return 0
     fi
 
-    # Do not move any __pycache__ directory that might be present.
-    sudo rm -fr ${SRC_DIR}/__pycache__
-
-    echo "Moving contents from ${SRC_DIR} to ${DST_DIR}..."
-    #echo "Source dir contents before moving: ${SRC_DIR}"
-    #ls -lrt ${SRC_DIR}
-    #echo "Dest dir contents before moving: ${DST_DIR}"
-    #ls -lrt ${DST_DIR}
-    for j in ${SRC_DIR}/*; do
-        echo $j
-        k=`basename $j`
-        # At least sometimes (perhaps always?) there is a directory
-        # 'p4' or 'google' in both the surce and dest directory.  I
-        # think I want to merge their contents.  List them both so I
-        # can see in the log what was in both at the time:
-        if [ -d ${SRC_DIR}/$k -a -d ${DST_DIR}/$k ]; then
-            echo "Both source and dest dir contain a directory: $k"
-            #echo "Source dir $k directory contents:"
-            #ls -l ${SRC_DIR}/$k
-            #echo "Dest dir $k directory contents:"
-            #ls -l ${DST_DIR}/$k
-            sudo mv ${SRC_DIR}/$k/* ${DST_DIR}/$k/
-            sudo rmdir ${SRC_DIR}/$k
-        else
-            echo "Not a conflicting directory: $k"
-            sudo mv ${SRC_DIR}/$k ${DST_DIR}/$k
-        fi
-    done
-
+    echo "Adding ${SRC_DIR} to Python3 path..."
+    sudo su -c "echo '${SRC_DIR}' > ${DST_DIR}/p4-tools.pth"
     echo "Done!"
-    #echo "Source dir contents after moving: ${SRC_DIR}"
-    #ls -lrt ${SRC_DIR}
-    #echo "Dest dir contents after moving: ${DST_DIR}"
-    #ls -lrt ${DST_DIR}
 }
 
 ## Module-specific dependencies
@@ -498,7 +467,13 @@ do_p4c
 # ptf is Python2 only
 do_ptf
 do_mininet
+
+# Mininet installs Python2 which becomes the system default binary.
+# This sets again Python3 as the system default binary.
+sudo ln -sf $(which python3) /usr/bin/python
+sudo ln -sf $(which pip3) /usr/bin/pip
+
 do_p4-utils
 do_p4-learning
-move_usr_local_lib_python3_from_site_packages_to_dist_packages
+site_packages_fix
 echo "Installation complete!"
