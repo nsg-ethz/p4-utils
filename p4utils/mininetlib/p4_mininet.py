@@ -31,23 +31,11 @@ def configureP4Switch(**switch_args):
     The purpose is to ensure each switch's thrift server is using a unique port number.
     """
 
-    if "sw_path" in switch_args and 'grpc' in switch_args['sw_path']:
-        # If grpc appears in the BMv2 switch target, we assume will start P4 Runtime
-        class ConfiguredP4RuntimeSwitch(P4RuntimeSwitch):
-            def __init__(self, *opts, **kwargs):
-                kwargs.update(switch_args)
-                P4RuntimeSwitch.__init__(self, *opts, **kwargs)
 
-            def describe(self):
-                print(("%s -> gRPC port: %d" % (self.name, self.grpc_port)))
-
-        return ConfiguredP4RuntimeSwitch
-    else:
-        class ConfiguredP4Switch(P4Switch):
+    class ConfiguredP4Switch(P4Switch):
             next_thrift_port = 9090
 
             def __init__(self, *opts, **kwargs):
-                global next_thrift_port
                 kwargs.update(switch_args)
                 kwargs['thrift_port'] = ConfiguredP4Switch.next_thrift_port
                 ConfiguredP4Switch.next_thrift_port += 1
@@ -56,12 +44,33 @@ def configureP4Switch(**switch_args):
             def describe(self):
                 print("%s -> Thrift port: %d" % (self.name, self.thrift_port))
 
+
+    class ConfiguredP4RuntimeSwitch(P4RuntimeSwitch, ConfiguredP4Switch):
+                next_grpc_port = 9559
+
+                def __init__(self, *opts, **kwargs):
+                    kwargs.update(switch_args)
+                    kwargs['grpc_port'] = ConfiguredP4RuntimeSwitch.next_grpc_port
+                    kwargs['thrift_port'] = ConfiguredP4Switch.next_thrift_port
+                    ConfiguredP4RuntimeSwitch.next_grpc_port += 1
+                    ConfiguredP4Switch.next_thrift_port += 1
+                    P4RuntimeSwitch.__init__(self, *opts, **kwargs)
+
+                def describe(self):
+                    print("%s -> gRPC port: %d" % (self.name, self.grpc_port))
+                    print("%s -> Thrift port: %d" % (self.name, self.thrift_port))
+
+
+    if "sw_path" in switch_args and 'grpc' in switch_args['sw_path']:
+        return ConfiguredP4RuntimeSwitch
+    else:
         return ConfiguredP4Switch
 
-class P4Host(Host):
 
+class P4Host(Host):
+    """Virtual hosts with custom configuration to work with P4 switches"""
     def config(self, **params):
-        r = super(P4Host, self).config(**params)
+        r = super().config(**params)
 
         for off in ["rx", "tx", "sg"]:
             cmd = "/sbin/ethtool --offload %s %s off" % (self.defaultIntf().name, off)
@@ -106,7 +115,10 @@ class P4Switch(Switch):
 
         id = device_id if device_id else P4Switch.device_id
 
-        Switch.__init__(self, name, dpid =self.dpidToStr(id), **kwargs)
+        super().__init__(name,
+                         dpid=self.dpidToStr(id),
+                         **kwargs)
+
         assert sw_path
         assert json_path
 
@@ -195,11 +207,12 @@ class P4Switch(Switch):
         if self.log_console:
             args.append("--log-console")
             args.append('>' + self.log_file)
-        info(' '.join(args) + "\n")
+        cmd = ' '.join(args)
+        info(cmd + "\n")
 
         self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd(' '.join(args) + ' 2>&1 & echo $! >> ' + f.name)
+            self.cmd(cmd + '> ' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
             self.simple_switch_pid = int(f.read())
         debug("P4 switch {} PID is {}.\n".format(self.name, self.simple_switch_pid))
         sleep(1)
@@ -211,7 +224,6 @@ class P4Switch(Switch):
 
         # only do this for l3..
         #self.cmd('sysctl', '-w', 'net.ipv4.ip_forward=1')
-
 
     def stop_p4switch(self):
         """Just stops simple switch."""
@@ -236,57 +248,19 @@ class P4Switch(Switch):
         """"Disconnect a data port."""
         assert 0
 
+
 class P4RuntimeSwitch(P4Switch):
     "BMv2 switch with gRPC support"
-    next_grpc_port = 50051
-
-    def __init__(self, name, sw_path = None, json_path = None,
+    def __init__(self, *args,
                  grpc_port = None,
-                 pcap_dump = False,
-                 log_console = False,
-                 verbose = False,
-                 device_id = None,
-                 enable_debugger = False,
                  **kwargs):
-        Switch.__init__(self, name, **kwargs)
-        assert (sw_path)
-        self.sw_path = sw_path
-        # make sure that the provided sw_path is valid
-        pathCheck(sw_path)
 
-        if json_path is not None:
-            # make sure that the provided JSON file exists
-            if not os.path.isfile(json_path):
-                error("Invalid JSON file.\n")
-                exit(1)
-            self.json_path = json_path
-        else:
-            self.json_path = None
-
-        if grpc_port is not None:
-            self.grpc_port = grpc_port
-        else:
-            self.grpc_port = P4RuntimeSwitch.next_grpc_port
-            P4RuntimeSwitch.next_grpc_port += 1
-
+        super().__init__(*args, **kwargs)
+                         
+        self.grpc_port = grpc_port
         if check_listening_on_port(self.grpc_port):
             error('%s cannot bind port %d because it is bound by another process\n' % (self.name, self.grpc_port))
             exit(1)
-
-        self.verbose = verbose
-        logfile = "/tmp/p4s.{}.log".format(self.name)
-        self.output = open(logfile, 'w')
-        self.pcap_dump = pcap_dump
-        self.enable_debugger = enable_debugger
-        self.log_console = log_console
-        if device_id is not None:
-            self.device_id = device_id
-            P4Switch.device_id = max(P4Switch.device_id, device_id)
-        else:
-            self.device_id = P4Switch.device_id
-            P4Switch.device_id += 1
-        self.nanomsg = "ipc:///tmp/bm-{}-log.ipc".format(self.device_id)
-
 
     def check_switch_started(self, pid):
         for _ in range(SWITCH_START_TIMEOUT * 2):
@@ -321,10 +295,9 @@ class P4RuntimeSwitch(P4Switch):
         cmd = ' '.join(args)
         info(cmd + "\n")
 
-        logfile = "/tmp/p4s.{}.log".format(self.name)
         pid = None
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd(cmd + ' >' + logfile + ' 2>&1 & echo $! >> ' + f.name)
+            self.cmd(cmd + ' >' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
             pid = int(f.read())
         debug("P4 switch {} PID is {}.\n".format(self.name, pid))
         if not self.check_switch_started(pid):
