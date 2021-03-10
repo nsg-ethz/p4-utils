@@ -319,9 +319,11 @@ function do_PI {
     # Build PI
     ./autogen.sh
     if [ "$DEBUG_FLAGS" = true ]; then
-        ./configure --with-proto --with-sysrepo "CXXFLAGS=-O0 -g"
+        #./configure --with-proto --with-sysrepo "CXXFLAGS=-O0 -g"
+        ./configure --with-proto "CXXFLAGS=-O0 -g"
     else
-        ./configure --with-proto --with-sysrepo
+        #./configure --with-proto --with-sysrepo
+        ./configure --with-proto
     fi
     make -j${NUM_CORES}
     sudo make install
@@ -364,9 +366,11 @@ function do_bmv2 {
         cd targets/simple_switch_grpc
         ./autogen.sh
         if [ "$DEBUG_FLAGS" = true ]; then
-            ./configure --with-sysrepo --with-thrift "CXXFLAGS=-O0 -g"
+            #./configure --with-sysrepo --with-thrift "CXXFLAGS=-O0 -g"
+            ./configure --with-thrift "CXXFLAGS=-O0 -g"
         else
-            ./configure --with-sysrepo --with-thrift
+            #./configure --with-sysrepo --with-thrift
+            ./configure --with-thrift
         fi
         make -j${NUM_CORES}
         sudo make install
@@ -459,7 +463,7 @@ do_protobuf
 if [ "$ENABLE_P4_RUNTIME" = true ]; then
     do_grpc
     do_bmv2_deps
-    do_sysrepo_libyang
+    #do_sysrepo_libyang
     do_PI
 fi
 do_bmv2
