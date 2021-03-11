@@ -57,8 +57,8 @@ def configureP4Switch(**switch_args):
                     P4RuntimeSwitch.__init__(self, *opts, **kwargs)
 
                 def describe(self):
+                    ConfiguredP4Switch.describe(self)
                     print("%s -> gRPC port: %d" % (self.name, self.grpc_port))
-                    print("%s -> Thrift port: %d" % (self.name, self.thrift_port))
 
 
     if "sw_path" in switch_args and 'grpc' in switch_args['sw_path']:
@@ -120,14 +120,9 @@ class P4Switch(Switch):
                          **kwargs)
 
         assert sw_path
-        assert json_path
-
         # make sure that the provided sw_path is valid
         pathCheck(sw_path)
-        # make sure that the provided JSON file exists
-        if not os.path.isfile(json_path):
-            error("Invalid JSON file.\n")
-            exit(1)
+            
         self.sw_path = sw_path
         self.json_path = json_path
         self.pcap_dir = pcap_dir
@@ -136,12 +131,17 @@ class P4Switch(Switch):
         self.enable_debugger = enable_debugger
         self.log_console = log_console
         self.log_file = log_file
+        self.thrift_port = thrift_port
+        self.nanomsg = "ipc:///tmp/bm-{}-log.ipc".format(self.device_id)
+        self.simple_switch_pid = None
+
+        # make sure that the provided JSON file exists
+        if self.json_path and not os.path.isfile(self.json_path):
+            error("Invalid JSON file.\n")
+            exit(1)
         if self.log_file is None:
             self.log_file = "/tmp/p4s.{}.log".format(self.name)
-        if self.log_console:
-            self.output = open(self.log_file, 'w')
-        self.thrift_port = thrift_port
-        if check_listening_on_port(self.thrift_port):
+        if self.thrift_listening():
             error('%s cannot bind port %d because it is bound by another process\n' % (self.name, self.thrift_port))
             exit(1)
         if device_id is not None:
@@ -150,73 +150,77 @@ class P4Switch(Switch):
         else:
             self.device_id = P4Switch.device_id
             P4Switch.device_id += 1
-        self.nanomsg = "ipc:///tmp/bm-{}-log.ipc".format(self.device_id)
-
-        self.simple_switch_pid = None
-
+       
     @classmethod
     def setup(cls):
         pass
 
     def dpidToStr(self, id):
-
         strDpid = str(id)
         if len(strDpid) < 16:
             return "0"*(16-len(strDpid)) + strDpid
         return strDpid
 
-    def check_switch_started(self):
-        """Check if switch has started properly.
+    def switch_started(self):
+        """Check if the switch process has started."""
+        return os.path.exists(os.path.join("/proc", str(self.simple_switch_pid)))
 
-        While the process is running (pid exists), we check if the Thrift
-        server has been started. If the Thrift server is ready, we assume that
-        the switch was started successfully. This is only reliable if the Thrift
-        server is started at the end of the init process.
-        """
-        while True:
-            if not os.path.exists(os.path.join("/proc", str(self.simple_switch_pid))):
-                return False
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(0.5)
-            result = sock.connect_ex(("localhost", self.thrift_port))
-            if result == 0:
-                return  True
+    def thrift_listening(self):
+        """Check if a thrift process listens on the thrift port."""
+        return check_listening_on_port(self.thrift_port)
 
-    def start(self, controllers = None):
-        """Start up a new P4 switch."""
-        info("Starting P4 switch {}.\n".format(self.name))
+    def switch_status(self):
+        """Check if all the switch processes have started correctly."""
+        status = {'switch': self.switch_started(),
+                  'thrift': self.thrift_listening()}
+        if status['switch']:
+            for _ in range(SWITCH_START_TIMEOUT * 2):
+                if status['thrift']:
+                    break
+                else:
+                    status['thrift'] = self.thrift_listening()
+                sleep(0.5)
+        return status
+
+    def add_arguments(self):
+        """Add arguments to the simple switch process"""
         args = [self.sw_path]
         for port, intf in list(self.intfs.items()):
             if not intf.IP():
-                args.extend(['-i', str(port) + "@" + intf.name])
+                args.extend(['-i', str(port) + '@' + intf.name])
         if self.pcap_dump:
             if self.pcap_dir:
-                args.append("--pcap="+self.pcap_dir)
+                args.append('--pcap=' + self.pcap_dir)
             else:
-                args.append("--pcap")
-
+                args.append('--pcap')
         if self.thrift_port:
             args.extend(['--thrift-port', str(self.thrift_port)])
         if self.nanomsg:
             args.extend(['--nanolog', self.nanomsg])
         args.extend(['--device-id', str(self.device_id)])
-
-        args.append(self.json_path)
+        if self.json_path:
+            args.append(self.json_path)
+        else:
+            args.append("--no-p4")
         if self.enable_debugger:
-            args.append("--debugger")
+            args.append('--debugger')
         if self.log_console:
-            args.append("--log-console")
-            args.append('>' + self.log_file)
-        cmd = ' '.join(args)
+            args.append('--log-console')
+        return args
+
+    def start(self, controllers = None):
+        """Start up a new P4 switch."""
+        info("\nStarting P4 switch {}.\n".format(self.name))
+        cmd = ' '.join(self.add_arguments())
         info(cmd + "\n")
 
         self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd(cmd + '> ' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
+            self.cmd(cmd + ' > ' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
             self.simple_switch_pid = int(f.read())
         debug("P4 switch {} PID is {}.\n".format(self.name, self.simple_switch_pid))
         sleep(1)
-        if not self.check_switch_started():
+        if not all(self.switch_status().values()):
             error("P4 switch {} did not start correctly."
                   " Check the switch log file.\n".format(self.name))
             exit(1)
@@ -234,8 +238,6 @@ class P4Switch(Switch):
 
     def stop(self):
         """Terminate P4 switch."""
-        if self.log_console:
-            self.output.flush()
         self.cmd('kill %' + self.sw_path)
         self.cmd('wait')
         self.deleteIntfs()
@@ -258,50 +260,32 @@ class P4RuntimeSwitch(P4Switch):
         super().__init__(*args, **kwargs)
                          
         self.grpc_port = grpc_port
-        if check_listening_on_port(self.grpc_port):
+        if self.grpc_listening():
             error('%s cannot bind port %d because it is bound by another process\n' % (self.name, self.grpc_port))
             exit(1)
 
-    def check_switch_started(self, pid):
-        for _ in range(SWITCH_START_TIMEOUT * 2):
-            if not os.path.exists(os.path.join("/proc", str(pid))):
-                return False
-            if check_listening_on_port(self.grpc_port):
-                return True
-            sleep(0.5)
+    def grpc_listening(self):
+        """Check if a grpc process listens on the grpc port."""
+        return check_listening_on_port(self.grpc_port)
 
-    def start(self, controllers):
-        info("Starting P4 switch {}.\n".format(self.name))
-        args = [self.sw_path]
-        for port, intf in list(self.intfs.items()):
-            if not intf.IP():
-                args.extend(['-i', str(port) + "@" + intf.name])
-        if self.pcap_dump:
-            args.append("--pcap")
-        if self.nanomsg:
-            args.extend(['--nanolog', self.nanomsg])
-        args.extend(['--device-id', str(self.device_id)])
-        P4Switch.device_id += 1
-        if self.json_path:
-            args.append(self.json_path)
-        else:
-            args.append("--no-p4")
-        if self.enable_debugger:
-            args.append("--debugger")
-        if self.log_console:
-            args.append("--log-console")
+    def switch_status(self):
+        """Check if all the switch processes have started correctly."""
+        status = {'switch': self.switch_started(),
+                  'thrift': self.thrift_listening(),
+                  'grpc': self.grpc_listening()}
+        if status['switch']:
+            for _ in range(SWITCH_START_TIMEOUT*2):
+                if status['thrift'] and status['grpc']:
+                    break
+                else:
+                    status['thrift'] = self.thrift_listening()
+                    status['grpc'] = self.grpc_listening()
+                sleep(0.5)
+        return status
+
+    def add_arguments(self):
+        """Add arguments to the simple switch process"""
+        args = super().add_arguments()
         if self.grpc_port:
             args.append("-- --grpc-server-addr 0.0.0.0:" + str(self.grpc_port))
-        cmd = ' '.join(args)
-        info(cmd + "\n")
-
-        pid = None
-        with tempfile.NamedTemporaryFile() as f:
-            self.cmd(cmd + ' >' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
-            pid = int(f.read())
-        debug("P4 switch {} PID is {}.\n".format(self.name, pid))
-        if not self.check_switch_started(pid):
-            error("P4 switch {} did not start correctly.\n".format(self.name))
-            exit(1)
-        info("P4 switch {} has been started.\n".format(self.name))
-
+        return args

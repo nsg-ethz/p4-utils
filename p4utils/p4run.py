@@ -280,7 +280,7 @@ class AppRunner(object):
         # TODO: this should not be for the entire net, we should support non p4 switches
         switchClass = configureP4Switch(sw_path=self.bmv2_exe,
                                         log_console=self.log_enabled,
-                                        pcap_dump=self.pcap_dump, pcap_dir= self.pcap_dir)
+                                        pcap_dump=self.pcap_dump, pcap_dir=self.pcap_dir)
 
         # start P4 Mininet
         self.net = self.app_mininet(topo=self.topo,
