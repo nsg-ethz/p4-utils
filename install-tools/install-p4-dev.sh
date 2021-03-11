@@ -9,6 +9,8 @@ SCRIPT_DIR=$(pwd)
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
 DEBUG_FLAGS=true
 ENABLE_P4_RUNTIME=true
+SYSREPO=false
+# Sysrepo prevents simple_switch_grpc from starting correctly
 
 # Software versions
 PI_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713"    # Feb 4 2021
@@ -319,11 +321,17 @@ function do_PI {
     # Build PI
     ./autogen.sh
     if [ "$DEBUG_FLAGS" = true ]; then
-        #./configure --with-proto --with-sysrepo "CXXFLAGS=-O0 -g"
-        ./configure --with-proto "CXXFLAGS=-O0 -g"
+        if [ "$SYSREPO" = true ]; then
+            ./configure --with-proto --with-sysrepo "CXXFLAGS=-O0 -g"
+        else
+            ./configure --with-proto "CXXFLAGS=-O0 -g"
+        fi
     else
-        #./configure --with-proto --with-sysrepo
-        ./configure --with-proto
+        if [ "$SYSREPO" = true ]; then
+            ./configure --with-proto --with-sysrepo
+        else
+            ./configure --with-proto
+        fi
     fi
     make -j${NUM_CORES}
     sudo make install
@@ -366,11 +374,17 @@ function do_bmv2 {
         cd targets/simple_switch_grpc
         ./autogen.sh
         if [ "$DEBUG_FLAGS" = true ]; then
-            #./configure --with-sysrepo --with-thrift "CXXFLAGS=-O0 -g"
-            ./configure --with-thrift "CXXFLAGS=-O0 -g"
+            if [ "$SYSREPO" = true ]; then
+                ./configure --with-sysrepo --with-thrift "CXXFLAGS=-O0 -g"
+            else
+                ./configure --with-thrift "CXXFLAGS=-O0 -g"
+            fi
         else
-            #./configure --with-sysrepo --with-thrift
-            ./configure --with-thrift
+            if [ "$SYSREPO" = true ]; then
+                ./configure --with-sysrepo --with-thrift
+            else
+                ./configure --with-thrift
+            fi
         fi
         make -j${NUM_CORES}
         sudo make install
@@ -463,7 +477,9 @@ do_protobuf
 if [ "$ENABLE_P4_RUNTIME" = true ]; then
     do_grpc
     do_bmv2_deps
-    #do_sysrepo_libyang
+    if [ "$SYSREPO" = true ]; then
+        do_sysrepo_libyang
+    fi
     do_PI
 fi
 do_bmv2
