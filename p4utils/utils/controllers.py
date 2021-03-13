@@ -15,7 +15,7 @@ class ThriftController:
         quiet (bool): whether to show messages on execution
     """
     def __init__(self, sw_name, thrift_port, quiet=False):
-        self.sw_name = sw_name,
+        self.sw_name = sw_name
         self.thrift_port = thrift_port
         self.quiet = quiet
 
@@ -41,13 +41,13 @@ class ThriftController:
             with open(conf_path, "r") as fin:
                 entries = [x.strip() for x in fin.readlines() if x.strip() != ""]
                 entries = [x for x in entries if ( not x.startswith("//") and not x.startswith("#")) ]
+                entries = '\n'.join(entries)
+                p = subprocess.Popen([cli, '--thrift-port', str(self.thrift_port)],
+                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                stdout, stderr = p.communicate(input=entries.encode())
                 if log_enabled:
-                    with open(log_path, 'w') as fout:
-                        subprocess.Popen([cli, '--thrift-port', str(self.thrift_port)],
-                                    stdin=fin, stdout=fout)
-                else:
-                    subprocess.Popen([cli, '--thrift-port', str(self.thrift_port)],
-                                stdin=fin, stdout=None)
+                    with open(log_path, "w") as log_file:
+                        log_file.write(stdout.decode())
 
 
 class RuntimeController:

@@ -124,7 +124,7 @@ class P4Switch(Switch):
         assert sw_path
         # make sure that the provided sw_path is valid
         pathCheck(sw_path)
-            
+
         self.sw_path = sw_path
         self.json_path = json_path
         self.pcap_dir = pcap_dir
@@ -137,7 +137,7 @@ class P4Switch(Switch):
         self.nanomsg = "ipc:///tmp/bm-{}-log.ipc".format(self.device_id)
         self.simple_switch_pid = None
         self.thrift_controller = ThriftController(self.name,
-                                           self.thrift_port)
+                                                  self.thrift_port)
 
         # make sure that the provided JSON file exists
         if self.json_path and not os.path.isfile(self.json_path):
