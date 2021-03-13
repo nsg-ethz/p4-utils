@@ -2,7 +2,7 @@ import os
 import subprocess
 import sys
 #import bmv2
-import helper
+#import helper
 
 class ThriftController:
     """
