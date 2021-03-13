@@ -297,17 +297,24 @@ class AppRunner(object):
                 run_command(script["cmd"])
 
     def program_switches(self):
-        """If any command files were provided for the switches, this method will start up the
+        """
+        If any command files were provided for the switches, this method will start up the
         CLI on each switch and use the contents of the command files as input.
 
         Assumes:
             A mininet instance is stored as self.net and self.net.start() has been called.
         """
-
+        for sw_name, sw_dict in list(self.conf.get('topology',{}).get('switches', {}).items()):
+            if 'cli_input' not in sw_dict:
+                continue
+            sw_obj = self.net.get(sw_name)
+            sw_obj.thrift_controller.conf(sw_dict['cli_input'],
+                                          log_dir=self.log_dir,
+                                          log_enabled=self.log_enabled)
         # run controller
-        controller = self.app_controller(self.conf, self.net, self.log_dir, self.log_enabled)
-        controller.start()
-        return controller
+        #controller = self.app_controller(self.conf, self.net, self.log_dir, self.log_enabled)
+        #controller.start()
+        #return controller
 
     def program_hosts(self):
         """Adds static ARP entries and default routes to each mininet host.

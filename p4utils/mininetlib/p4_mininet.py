@@ -13,21 +13,23 @@
 # limitations under the License.
 #
 
-from sys import exit
-from time import sleep
 import os
 import tempfile
 import socket
+from sys import exit
+from time import sleep
 from mininet.node import Switch, Host
 from mininet.log import setLogLevel, info, error, debug
 from mininet.moduledeps import pathCheck
 
 from p4utils.utils.utils import check_listening_on_port
+from p4utils.utils.controllers import ThriftController
 
 SWITCH_START_TIMEOUT = 10
 
 def configureP4Switch(**switch_args):
-    """ Helper class that is called by mininet to initialize the virtual P4 switches.
+    """ 
+    Helper class that is called by mininet to initialize the virtual P4 switches.
     The purpose is to ensure each switch's thrift server is using a unique port number.
     """
 
@@ -101,13 +103,13 @@ class P4Switch(Switch):
     device_id = 1
 
     def __init__(self, name,
-                 sw_path=None,
+                 sw_path=None,  
                  json_path=None,
-                 log_file=None,
                  thrift_port=None,
                  pcap_dump=False,
-                 pcap_dir = "",
-                 log_console=False,
+                 pcap_dir='',
+                 log_enabled=False,
+                 log_dir='/tmp',
                  verbose=False,
                  device_id=None,
                  enable_debugger=False,
@@ -129,20 +131,29 @@ class P4Switch(Switch):
         self.verbose = verbose
         self.pcap_dump = pcap_dump
         self.enable_debugger = enable_debugger
-        self.log_console = log_console
-        self.log_file = log_file
+        self.log_enabled = log_enabled
+        self.log_dir = log_dir
         self.thrift_port = thrift_port
         self.nanomsg = "ipc:///tmp/bm-{}-log.ipc".format(self.device_id)
         self.simple_switch_pid = None
+        self.thrift_controller = ThriftController(self.name,
+                                           self.thrift_port)
 
         # make sure that the provided JSON file exists
         if self.json_path and not os.path.isfile(self.json_path):
             error("Invalid JSON file.\n")
             exit(1)
-        if self.log_file is None:
-            self.log_file = "/tmp/p4s.{}.log".format(self.name)
+        if self.log_enabled:
+            # make sure that the provided log path is not pointing to a file
+            # and, if necessary, create an empty log dir
+            if not os.path.isdir(self.log_dir):
+                if os.path.exists(self.log_dir):
+                    error("'%s' exists and is not a directory!".format(self.log_dir))
+                    exit(1)
+                else:
+                    os.mkdir(self.log_dir)
         if self.thrift_listening():
-            error('%s cannot bind port %d because it is bound by another process\n' % (self.name, self.thrift_port))
+            error('{} cannot bind port {} because it is bound by another process\n'.format(self.name, self.thrift_port))
             exit(1)
         if device_id is not None:
             self.device_id = device_id
@@ -204,11 +215,11 @@ class P4Switch(Switch):
             args.append("--no-p4")
         if self.enable_debugger:
             args.append('--debugger')
-        if self.log_console:
+        if self.log_enabled:
             args.append('--log-console')
         return args
 
-    def start(self, controllers = None):
+    def start(self, controllers=None):
         """Start up a new P4 switch."""
         info("\nStarting P4 switch {}.\n".format(self.name))
         cmd = ' '.join(self.add_arguments())
@@ -216,7 +227,7 @@ class P4Switch(Switch):
 
         self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd(cmd + ' > ' + self.log_file + ' 2>&1 & echo $! >> ' + f.name)
+            self.cmd(cmd + ' > ' + self.log_dir + '/p4s.{}.log'.format(self.name) + ' 2>&1 & echo $! >> ' + f.name)
             self.simple_switch_pid = int(f.read())
         debug("P4 switch {} PID is {}.\n".format(self.name, self.simple_switch_pid))
         sleep(1)
