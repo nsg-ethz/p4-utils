@@ -1,7 +1,7 @@
 import os
 import subprocess
 import sys
-import bmv2
+#import bmv2
 import helper
 
 class ThriftController:
