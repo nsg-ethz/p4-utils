@@ -339,6 +339,19 @@ function do_PI {
     make clean
 }
 
+# Install p4runtime-client
+function do_p4runtime_client {
+    # Clone source
+    cd ${BUILD_DIR}
+    if [ ! -d bmv2 ]; then
+        git clone https://github.com/jurijnota/p4runtime-client.git p4runtime-cli
+    fi
+    cd p4runtime-cli
+
+    # Install p4runtime-client
+    sudo pip3 install -e "."
+}
+
 # Install behavioral model
 function do_bmv2 {
     # Install dependencies
@@ -481,6 +494,7 @@ if [ "$ENABLE_P4_RUNTIME" = true ]; then
         do_sysrepo_libyang
     fi
     do_PI
+    do_p4runtime_client
 fi
 do_bmv2
 do_p4c
