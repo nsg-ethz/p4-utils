@@ -343,7 +343,7 @@ function do_PI {
 function do_p4runtime_client {
     # Clone source
     cd ${BUILD_DIR}
-    if [ ! -d bmv2 ]; then
+    if [ ! -d p4runtime-cli ]; then
         git clone https://github.com/jurijnota/p4runtime-client.git p4runtime-cli
     fi
     cd p4runtime-cli
