@@ -39,7 +39,7 @@ class ThriftController:
                 if log_enabled:
                     with open(log_path, "w") as log_file:
                         log_file.write(stdout.decode())
-            info('Configured switch {} with thrift file {}'.format(self.sw_name, conf_path))
+            info('Configured switch {} with thrift file {}\n'.format(self.sw_name, conf_path))
 
 
 class RuntimeController:
