@@ -16,10 +16,9 @@
 import os
 import tempfile
 import socket
-from sys import exit
 from time import sleep
+from mininet.log import debug, info, warning
 from mininet.node import Switch, Host
-from mininet.log import setLogLevel, info, error, debug
 from mininet.moduledeps import pathCheck
 
 from p4utils.utils.utils import check_listening_on_port
@@ -141,20 +140,17 @@ class P4Switch(Switch):
 
         # make sure that the provided JSON file exists
         if self.json_path and not os.path.isfile(self.json_path):
-            error("Invalid JSON file.\n")
-            exit(1)
+            raise FileNotFoundError("Invalid JSON file.")
         if self.log_enabled:
             # make sure that the provided log path is not pointing to a file
             # and, if necessary, create an empty log dir
             if not os.path.isdir(self.log_dir):
                 if os.path.exists(self.log_dir):
-                    error("'%s' exists and is not a directory!".format(self.log_dir))
-                    exit(1)
+                    raise NotADirectoryError("'{}' exists and is not a directory.".format(self.log_dir))
                 else:
                     os.mkdir(self.log_dir)
         if self.thrift_listening():
-            error('{} cannot bind port {} because it is bound by another process\n'.format(self.name, self.thrift_port))
-            exit(1)
+            raise ConnectionRefusedError('{} cannot bind port {} because it is bound by another process.'.format(self.name, self.thrift_port))
         if device_id is not None:
             self.device_id = device_id
             P4Switch.device_id = max(P4Switch.device_id, device_id)
@@ -232,9 +228,7 @@ class P4Switch(Switch):
         debug("P4 switch {} PID is {}.\n".format(self.name, self.simple_switch_pid))
         sleep(1)
         if not all(self.switch_status().values()):
-            error("P4 switch {} did not start correctly."
-                  " Check the switch log file.\n".format(self.name))
-            exit(1)
+            raise ChildProcessError("P4 switch {} did not start correctly. Check the switch log file.".format(self.name))
         info("P4 switch {} has been started.\n".format(self.name))
 
         # only do this for l3..
@@ -272,8 +266,7 @@ class P4RuntimeSwitch(P4Switch):
                          
         self.grpc_port = grpc_port
         if self.grpc_listening():
-            error('%s cannot bind port %d because it is bound by another process\n' % (self.name, self.grpc_port))
-            exit(1)
+            raise ConnectionRefusedError('{} cannot bind port {} because it is bound by another process.'.format(self.name, self.grpc_port))
 
     def grpc_listening(self):
         """Check if a grpc process listens on the grpc port."""
