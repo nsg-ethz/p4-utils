@@ -1,12 +1,19 @@
-import sys, os
-import subprocess
+import sys
+import os
+import psutil
 import json
+import subprocess
 from mininet import log
 import mininet.clean
 
 from p4utils import DEFAULT_COMPILER, DEFAULT_CLI
+from p4utils.utils.compilers import P4C
 
-import psutil
+
+def load_custom_object(module_name, object_name):
+    module = importlib.import_module(module_name)
+    return getattr(module, object_name)
+
 
 def cleanup():
     mininet.clean.cleanup()
@@ -15,11 +22,13 @@ def cleanup():
         mininet.clean.sh("ifconfig {} down".format(bridge))
         mininet.clean.sh("brctl delbr {}".format(bridge))
 
+
 def check_listening_on_port(port):
     for c in psutil.net_connections(kind='inet'):
         if c.status == 'LISTEN' and c.laddr[1] == port:
             return True
     return False
+
 
 class CompilationError(Exception):
     pass
@@ -191,13 +200,20 @@ def compile_all_p4(config):
     default_p4 = config.get("program", None)
     default_options = config.get("options", None)
 
-    #non mandatory defaults.
+    #non mandatory defaults. ## TODO: INTRODUCE COMPILER MODULE
     default_compiler = config.get("compiler", DEFAULT_COMPILER)
 
     default_config = {"program": default_p4, "options": default_options, "compiler": default_compiler}
 
+    default_compiler = P4C(default_p4, 
+                           outdir=os.path.dirname(os.path.realpath(default_p4)),
+                           options=default_options,
+                           p4runtime=True)
+
     if default_p4 and default_options:
-        json_name = compile_p4_to_bmv2(default_config)
+        default_compiler.compile()
+        #json_name = compile_p4_to_bmv2(default_config)
+        json_name = default_compiler.get_json_out()
         p4programs_already_compiled[default_p4] = json_name
     else:
         log.debug('Default program was not compiled')
@@ -213,13 +229,19 @@ def compile_all_p4(config):
 
                 program_name = switch_conf.get("program", None)
 
-                if program_name:
+                if default_p4:
                     json_name = p4programs_already_compiled.get(program_name, None)
                     if json_name:
                         sw_attributes.update({"json":json_name})
                         switch_to_json[switch_name] = sw_attributes
                     else:
-                        json_name = compile_p4_to_bmv2(switch_conf)
+                        compiler = P4C(program_name, 
+                                       outdir=os.path.dirname(os.path.realpath(program_name)),
+                                       options=default_options,
+                                       p4runtime=True)
+                        compiler.compile()
+                        json_name = compiler.get_json_out()
+                        #json_name = compile_p4_to_bmv2(switch_conf)
                         sw_attributes.update({"json": json_name})
                         switch_to_json[switch_name] = sw_attributes
                         p4programs_already_compiled[program_name] = json_name

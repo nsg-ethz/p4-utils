@@ -1,10 +1,22 @@
 import os
 import tempfile
 from mininet.log import debug, info, warning
-from p4.v1 import p4runtime_pb2
-from p4.v1 import p4runtime_pb2_grpc
-from p4.config.v1 import p4info_pb2
-from p4.tmp import p4config_pb2
+
+def run_command(command):
+    debug(command)
+    return os.WEXITSTATUS(os.system(command))
+
+class CompilationError(Exception):
+    pass
+
+
+class NotCompiledError(Exception):
+    pass
+
+
+class P4InfoDisabled(Exception):
+    pass
+
 
 class P4C:
     """
@@ -37,7 +49,7 @@ class P4C:
         self.p4runtime = p4runtime
         
         p4_basename = os.path.basename(self.p4_filepath)
-        p4rt_out_basename = p4_basename.replace('.p4', '') + '.p4rt'
+        p4rt_out_basename = p4_basename.replace('.p4', '') + '_p4rt.txt'
         json_out_basename = p4_basename.replace('.p4', '') + '.json'
 
         # If outdir is not set, create a temporary directory
@@ -57,17 +69,34 @@ class P4C:
         compiler_args.append(self.options)
         compiler_args.append('-o "{}"'.format(self.outdir))
 
-        if p4runtime:
+        if self.p4runtime:
             compiler_args.append('--p4runtime-files "{}"'.format(self.p4rt_out))
         
         compiler_args.append('"{}"'.format(self.p4_filepath))
-        debug(compiler + ' {}'.format(' '.join(compiler_args))))
+        info(compiler + ' {}'.format(' '.join(compiler_args)))
         return_value = run_command(compiler + ' {}'.format(' '.join(compiler_args)))
         if return_value != 0:
-            raise Exception('CompilationError')
+            raise CompilationError
         else:
             info("{} compiled successfully.".format(self.p4_filepath))
             self.compiled = True
+    
+    def get_json_out(self):
+        """Returns the json configuration filepath"""
+        if self.compiled:
+            return self.json_out
+        else:
+            raise NotCompiledError
+
+    def get_p4rt_out(self):
+        """Returns the p4info filepath"""
+        if self.compiled:
+            if self.p4runtime:
+                return self.p4rt_out
+            else:
+                raise P4InfoDisabled
+        else:
+            raise NotCompiledError
 
     def clean(self):
         """Unset temporary files if present"""
