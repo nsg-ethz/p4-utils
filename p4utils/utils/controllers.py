@@ -1,18 +1,16 @@
 import os
 import subprocess
 import sys
-#import bmv2
-#import helper
 
 class ThriftController:
     """
     This controller reads commands from a thrift configuration
-    file and uses it to set up the thrift switch
+    file and uses it to set up the thrift switch.
 
     Attributes:
-        sw_name (string): name of the switch to configure
-        thrift_port (int): thrift server port number
-        quiet (bool): whether to show messages on execution
+        sw_name (string)    : name of the switch to configure.
+        thrift_port (int)   : thrift server port number.
+        quiet (bool)        : whether to show messages on execution.
     """
     def __init__(self, sw_name, thrift_port, quiet=False):
         self.sw_name = sw_name
@@ -28,9 +26,9 @@ class ThriftController:
         This method configures the switch with the provided file.
 
         Arguments:
-            conf_path (string): path of the configuration file
-            log_path (string): path of the log file
-            log_enabled (bool): whether to save logs or not
+            conf_path (string)  : path of the configuration file.
+            log_path (string)   : path of the log file.
+            log_enabled (bool)  : whether to save logs or not.
         """
         cli = 'simple_switch_CLI'
         log_path = log_dir + '/{}_cli_output.log'.format(self.sw_name)

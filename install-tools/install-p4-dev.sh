@@ -433,7 +433,6 @@ function do_p4c {
     sudo ldconfig
     cd ..
     rm -rf build/
-    cd ..
 }
 
 # Install ptf
