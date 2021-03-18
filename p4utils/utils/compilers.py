@@ -1,10 +1,8 @@
 import os
 import tempfile
 from mininet.log import debug, info, warning
+from p4utils.utils import run_command
 
-def run_command(command):
-    debug(command)
-    return os.WEXITSTATUS(os.system(command))
 
 class CompilationError(Exception):
     pass

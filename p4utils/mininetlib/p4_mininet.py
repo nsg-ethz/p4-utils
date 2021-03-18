@@ -21,7 +21,7 @@ from mininet.log import debug, info, warning
 from mininet.node import Switch, Host
 from mininet.moduledeps import pathCheck
 
-from p4utils.utils.utils import check_listening_on_port
+from p4utils.utils import check_listening_on_port
 from p4utils.utils.controllers import ThriftController
 
 SWITCH_START_TIMEOUT = 10
@@ -34,32 +34,34 @@ def configureP4Switch(**switch_args):
 
 
     class ConfiguredP4Switch(P4Switch):
-            next_thrift_port = 9090
+        """Configuration class for P4Switch which sets unique thrift port."""
+        next_thrift_port = 9090
 
-            def __init__(self, *opts, **kwargs):
-                kwargs.update(switch_args)
-                kwargs['thrift_port'] = ConfiguredP4Switch.next_thrift_port
-                ConfiguredP4Switch.next_thrift_port += 1
-                P4Switch.__init__(self, *opts, **kwargs)
+        def __init__(self, *opts, **kwargs):
+            kwargs.update(switch_args)
+            kwargs['thrift_port'] = ConfiguredP4Switch.next_thrift_port
+            ConfiguredP4Switch.next_thrift_port += 1
+            P4Switch.__init__(self, *opts, **kwargs)
 
-            def describe(self):
-                print("%s -> Thrift port: %d" % (self.name, self.thrift_port))
+        def describe(self):
+            print("%s -> Thrift port: %d" % (self.name, self.thrift_port))
 
 
     class ConfiguredP4RuntimeSwitch(P4RuntimeSwitch, ConfiguredP4Switch):
-                next_grpc_port = 9559
+        """Configuration class for P4SwitchRuntime which sets unique thrift and grpc ports."""
+        next_grpc_port = 9559
 
-                def __init__(self, *opts, **kwargs):
-                    kwargs.update(switch_args)
-                    kwargs['grpc_port'] = ConfiguredP4RuntimeSwitch.next_grpc_port
-                    kwargs['thrift_port'] = ConfiguredP4Switch.next_thrift_port
-                    ConfiguredP4RuntimeSwitch.next_grpc_port += 1
-                    ConfiguredP4Switch.next_thrift_port += 1
-                    P4RuntimeSwitch.__init__(self, *opts, **kwargs)
+        def __init__(self, *opts, **kwargs):
+            kwargs.update(switch_args)
+            kwargs['grpc_port'] = ConfiguredP4RuntimeSwitch.next_grpc_port
+            kwargs['thrift_port'] = ConfiguredP4Switch.next_thrift_port
+            ConfiguredP4RuntimeSwitch.next_grpc_port += 1
+            ConfiguredP4Switch.next_thrift_port += 1
+            P4RuntimeSwitch.__init__(self, *opts, **kwargs)
 
-                def describe(self):
-                    ConfiguredP4Switch.describe(self)
-                    print("%s -> gRPC port: %d" % (self.name, self.grpc_port))
+        def describe(self):
+            ConfiguredP4Switch.describe(self)
+            print("%s -> gRPC port: %d" % (self.name, self.grpc_port))
 
 
     if "sw_path" in switch_args and 'grpc' in switch_args['sw_path']:

@@ -4,16 +4,67 @@ import re
 from ipaddress import IPv4Network
 from p4utils.utils.utils import ip_address_to_mac
 
-class AppTopo(Topo):
-    """The mininet topology class.
+# The basic idea is to move as many functions as possible
+# from AppTopo to P4Topo in order to make AppTopo a mere
+# configuration class for P4Topo. Ideally the same relationship
+# between ConfiguredP4Switch and P4Switch should exist between
+# AppTopo and P4Topo.
 
-    A custom class is used because the exercises make a few topology assumptions,
-    mostly about the IP and MAC addresses.
+class P4Topo(Topo):
+    """Extension of the mininet topology class with P4 switches."""
+
+    def isP4Switch(self, node):
+        """Check if node is a P4 switch.
+
+        Params:
+            node: Mininet node
+
+        Returns:
+            True if node is a P4 switch
+        """
+        return self.g.node[node].get('isP4Switch', False)
+
+    def addP4Switch(self, name, **opts):
+        """Add P4 switch to Mininet topology.
+
+        Params:
+            name: switch name
+            opts: switch options
+
+        Returns:
+            switch name
+        """
+        if not opts and self.sopts:
+            opts = self.sopts
+        return self.addNode(name, isSwitch=True, isP4Switch=True, **opts)
+
+    def isHiddenNode(self, node):
+        """Check if node is a Hidden Node
+
+        Params:
+            node: Mininet node
+
+        Returns:
+            True if its a hidden node
+        """
+        return self.g.node[node].get('isHiddenNode', False)
+
+
+class AppTopo(P4Topo):
+    """
+    Configuration class for P4Topo.
+
+    Attributes:
+        hosts (dict)    : dictionary containing all the hosts
+        switches (dict) : dictionary containing all the switches
+        links (dict)    : dictionary containing all the links
+        conf (dict)     : json network configuration file
+        log_dir (string): path to the log directory
     """
 
     def __init__(self, hosts, switches, links, log_dir, conf, **opts):
 
-        Topo.__init__(self, **opts)
+        super().__init__(**opts)
 
         self._hosts = hosts
         self._switches = switches
@@ -100,7 +151,6 @@ class AppTopo(Topo):
     def get_sw_position(self, link):
 
         return 'node1' if link['node1'] in self._switches else 'node2'
-
 
     def check_host_valid_ip_from_name(self, host):
 
@@ -468,45 +518,6 @@ class AppTopo(Topo):
 
         self.add_cpu_port()
         self.printPortMapping()
-
-
-    def addP4Switch(self, name, **opts):
-        """Add P4 switch to Mininet topology.
-
-        Params:
-            name: switch name
-            opts: switch options
-
-        Returns:
-            switch name
-        """
-        if not opts and self.sopts:
-            opts = self.sopts
-        return self.addNode(name, isSwitch=True, isP4Switch=True, **opts)
-
-    def isHiddenNode(self, node):
-        """Check if node is a Hidden Node
-
-        Params:
-            node: Mininet node
-
-        Returns:
-            True if its a hidden node
-        """
-        return self.g.node[node].get('isHiddenNode', False)
-
-
-    def isP4Switch(self, node):
-        """Check if node is a P4 switch.
-
-        Params:
-            node: Mininet node
-
-        Returns:
-            True if node is a P4 switch
-        """
-        return self.g.node[node].get('isP4Switch', False)
-
 
     def addSwitchPort(self, sw, node2):
         if sw not in self.sw_port_mapping:
