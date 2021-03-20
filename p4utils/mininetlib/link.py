@@ -1,6 +1,6 @@
 from mininet.link import Link, TCIntf
 
-class TCLink( Link ):
+class TCLink(Link):
     "Link with symmetric TC interfaces configured via opts"
     def __init__( self, node1, node2, port1=None, port2=None,
                   intfName1=None, intfName2=None,
