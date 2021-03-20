@@ -18,61 +18,22 @@ import tempfile
 import socket
 from time import sleep
 from mininet.log import debug, info, warning
+from mininet.clean import sh
 from mininet.node import Switch, Host
 from mininet.moduledeps import pathCheck
 
 from p4utils.utils import check_listening_on_port
-from p4utils.utils.controllers import ThriftController
+from p4utils.utils.controller import ThriftController
 
 SWITCH_START_TIMEOUT = 10
 
-def configureP4Switch(**switch_args):
-    """ 
-    Helper class that is called by mininet to initialize the virtual P4 switches.
-    The purpose is to ensure each switch's thrift server is using a unique port number.
-    """
-
-
-    class ConfiguredP4Switch(P4Switch):
-        """Configuration class for P4Switch which sets unique thrift port."""
-        next_thrift_port = 9090
-
-        def __init__(self, *opts, **kwargs):
-            kwargs.update(switch_args)
-            kwargs['thrift_port'] = ConfiguredP4Switch.next_thrift_port
-            ConfiguredP4Switch.next_thrift_port += 1
-            P4Switch.__init__(self, *opts, **kwargs)
-
-        def describe(self):
-            print("%s -> Thrift port: %d" % (self.name, self.thrift_port))
-
-
-    class ConfiguredP4RuntimeSwitch(P4RuntimeSwitch, ConfiguredP4Switch):
-        """Configuration class for P4SwitchRuntime which sets unique thrift and grpc ports."""
-        next_grpc_port = 9559
-
-        def __init__(self, *opts, **kwargs):
-            kwargs.update(switch_args)
-            kwargs['grpc_port'] = ConfiguredP4RuntimeSwitch.next_grpc_port
-            kwargs['thrift_port'] = ConfiguredP4Switch.next_thrift_port
-            ConfiguredP4RuntimeSwitch.next_grpc_port += 1
-            ConfiguredP4Switch.next_thrift_port += 1
-            P4RuntimeSwitch.__init__(self, *opts, **kwargs)
-
-        def describe(self):
-            ConfiguredP4Switch.describe(self)
-            print("%s -> gRPC port: %d" % (self.name, self.grpc_port))
-
-
-    if "sw_path" in switch_args and 'grpc' in switch_args['sw_path']:
-        return ConfiguredP4RuntimeSwitch
-    else:
-        return ConfiguredP4Switch
-
 
 class P4Host(Host):
-    """Virtual hosts with custom configuration to work with P4 switches"""
+    """Virtual hosts with custom configuration to work with P4 switches."""
+
     def config(self, **params):
+        """Configure host."""
+
         r = super().config(**params)
 
         for off in ["rx", "tx", "sg"]:
@@ -87,6 +48,8 @@ class P4Host(Host):
         return r
 
     def describe(self, sw_addr=None, sw_mac=None):
+        """Describe host."""
+
         print("**********")
         print("Network configuration for: %s" % self.name)
         print("Default interface: %s\t%s\t%s" %(
@@ -102,16 +65,31 @@ class P4Host(Host):
 class P4Switch(Switch):
     """P4 virtual switch"""
     device_id = 1
+    sw_bin='simple_switch'
+
+    @classmethod
+    def setup(cls):
+        pass
+
+    @classmethod
+    def set_binary(self, sw_bin):
+        """Set class default binary"""
+        # Make sure that the provided sw_bin is valid
+        pathCheck(sw_bin)
+        P4Switch.sw_bin = sw_bin
+
+    @classmethod
+    def stop_all(self):
+        sh('killall {}'.format(self.sw_bin))
 
     def __init__(self, name,
-                 sw_path=None,  
+                 sw_bin=None,  
                  json_path=None,
                  thrift_port=None,
                  pcap_dump=False,
                  pcap_dir='',
                  log_enabled=False,
                  log_dir='/tmp',
-                 verbose=False,
                  device_id=None,
                  enable_debugger=False,
                  **kwargs):
@@ -120,16 +98,14 @@ class P4Switch(Switch):
 
         super().__init__(name,
                          dpid=self.dpidToStr(id),
-                         **kwargs)
+                         **kwargs)  
 
-        assert sw_path
-        # make sure that the provided sw_path is valid
-        pathCheck(sw_path)
+        # If a non default binary is given, use it
+        if sw_bin is not None:
+            self.set_binary(sw_bin)
 
-        self.sw_path = sw_path
         self.json_path = json_path
         self.pcap_dir = pcap_dir
-        self.verbose = verbose
         self.pcap_dump = pcap_dump
         self.enable_debugger = enable_debugger
         self.log_enabled = log_enabled
@@ -159,10 +135,6 @@ class P4Switch(Switch):
         else:
             self.device_id = P4Switch.device_id
             P4Switch.device_id += 1
-       
-    @classmethod
-    def setup(cls):
-        pass
 
     def dpidToStr(self, id):
         strDpid = str(id)
@@ -193,7 +165,7 @@ class P4Switch(Switch):
 
     def add_arguments(self):
         """Add arguments to the simple switch process"""
-        args = [self.sw_path]
+        args = [self.sw_bin]
         for port, intf in list(self.intfs.items()):
             if not intf.IP():
                 args.extend(['-i', str(port) + '@' + intf.name])
@@ -237,15 +209,14 @@ class P4Switch(Switch):
         #self.cmd('sysctl', '-w', 'net.ipv4.ip_forward=1')
 
     def stop_p4switch(self):
-        """Just stops simple switch."""
-        #kills simple_switch started in this shell with kill %
+        """Just stops simple switch without deleting interfaces."""
         info("Stopping P4 switch {}.\n".format(self.name))
-        self.cmd('kill %' + self.sw_path)
+        self.cmd('kill %' + self.sw_bin)
         self.cmd('wait')
 
     def stop(self):
         """Terminate P4 switch."""
-        self.cmd('kill %' + self.sw_path)
+        self.cmd('kill %' + self.sw_bin)
         self.cmd('wait')
         self.deleteIntfs()
 
@@ -257,18 +228,36 @@ class P4Switch(Switch):
         """"Disconnect a data port."""
         assert 0
 
+    def describe(self):
+        """Describe P4Switch."""
+        print('{} -> Thrift port: {}'.format(self.name, self.thrift_port))
+
 
 class P4RuntimeSwitch(P4Switch):
     "BMv2 switch with gRPC support"
+    sw_bin = 'simple_switch_grpc'
+
+    @classmethod
+    def set_binary(self, sw_bin):
+        """Set class default binary"""
+        # Make sure that the provided sw_bin is valid
+        pathCheck(sw_bin)
+        P4RuntimeSwitch.sw_bin = sw_bin
+
     def __init__(self, *args,
-                 grpc_port = None,
+                 sw_bin=None,
+                 grpc_port=None,
                  **kwargs):
 
-        super().__init__(*args, **kwargs)
-                         
         self.grpc_port = grpc_port
         if self.grpc_listening():
             raise ConnectionRefusedError('{} cannot bind port {} because it is bound by another process.'.format(self.name, self.grpc_port))
+
+        # If a non default binary is given, use it
+        if sw_bin is not None:
+            self.set_binary(sw_bin)
+
+        super().__init__(*args, **kwargs)
 
     def grpc_listening(self):
         """Check if a grpc process listens on the grpc port."""
@@ -295,3 +284,8 @@ class P4RuntimeSwitch(P4Switch):
         if self.grpc_port:
             args.append("-- --grpc-server-addr 0.0.0.0:" + str(self.grpc_port))
         return args
+
+    def describe(self):
+        """Describe P4RuntimeSwitch."""
+        super().describe()
+        print('{} -> gRPC port: {}'.format(self.name, self.grpc_port))

@@ -1,7 +1,7 @@
 import os
 from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
-from p4utils.utils.utils import *
+from p4utils.utils import *
 from p4utils import FAILED_STATUS, SUCCESS_STATUS
 from p4utils.utils.topology import Topology
 
@@ -48,7 +48,7 @@ class P4CLI(CLI):
         args = line.split()
         conf = args[0]
         if not os.path.exists(conf):
-            warn('Configuratuion file %s does not exist' % conf)
+            warn('Configuration file %s does not exist' % conf)
             return
         self.conf_file = conf
         self.config = load_conf(conf)

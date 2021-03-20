@@ -19,162 +19,411 @@
 #
 # Further work: Edgar Costa Molero (cedgar@ethz.ch)
 # Further work: Fabian Schleiss (fabian.schleiss@alumni.ethz.ch)
-#
+# Further work: Jurij Nota (junota@student.ethz.ch)
 
 import os
-import sys
 import argparse
+import mininet
 from time import sleep
-import importlib
 from ipaddress import ip_interface
-
-from p4utils import *
-from p4utils.mininetlib.p4net import P4Mininet
-from p4utils.mininetlib.p4_mininet import P4Switch, P4Host, P4RuntimeSwitch, configureP4Switch
-from p4utils.utils.topology import Topology as DefaultTopoDB
-from p4utils.mininetlib.cli import P4CLI
-from p4utils.mininetlib.apptopo import AppTopoStrategies as DefaultTopo
-from p4utils.mininetlib.appcontroller import AppController as DefaultController
-from p4utils.utils.utils import run_command, compile_all_p4, load_conf, CompilationError, read_entries, add_entries, cleanup
-
-from p4utils.mininetlib.link import TCLink
-from mininet.log import setLogLevel, info
+from mininet.log import setLogLevel, info, output, debug, warning
 from mininet.clean import sh
+
+from p4utils import DEFAULT_CLI
+from p4utils.utils import load_conf, formatLatency, load_custom_object, run_command, cleanup
+from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
+from p4utils.utils.controller import ThriftController as DEFAULT_CONTROLLER
+from p4utils.utils.topology import Topology as DEFAULT_TOPODB
+from p4utils.mininetlib.node import P4RuntimeSwitch as DEFAULT_SWITCH
+from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
+from p4utils.mininetlib.topo import AppTopoStrategies as DEFAULT_TOPO
+from p4utils.mininetlib.link import TCLink
+from p4utils.mininetlib.cli import P4CLI
+from p4utils.mininetlib.net import P4Mininet as DEFAULT_NET
 
 
 class AppRunner(object):
-    """Class for running P4 applications.
+    """
+    Class for running P4 applications.
 
     Attributes:
-        log_dir (string): directory for mininet log files
-        pcap_dump (bool): determines if we generate pcap files for interfaces
-        quiet (bool): determines if we print script debug messages
-
-        hosts (list<string>): list of mininet host names
-        switches (dict<string, dict>): mininet host names and their associated properties
-        links (list<dict>) : list of mininet link properties
-
-        switch_json (string): json of the compiled p4 example
-        bmv2_exe (string): name or path of the p4 switch binary
-
-        conf (dict<string, dict>): parsed configuration from conf_file
-        topo (Topo object): the mininet topology instance
-        net (Mininet object): the mininet instance
+        log_dir (string): directory for mininet log files.
+        pcap_dump (bool): determines if we generate pcap files for interfaces.
+        verbosity (string): see https://github.com/mininet/mininet/blob/master/mininet/log.py#L14
+        hosts (list): list of mininet host names.
+        switches (dict): mininet host names and their associated properties.
+        links (list) : list of mininet link properties.
+        switch_json (string): json of the compiled p4 example.
+        bmv2_exe (string): name or path of the p4 switch binary.
+        conf (dict): parsed configuration from conf_file.
+        topo (Topo object): the mininet topology instance.
+        net (Mininet object): the mininet instance.
     """
 
-    def __init__(self, conf_file, log_dir, pcap_dir,
-                 cli_enabled=True, quiet=False, empty_p4=False):
-        """Initializes some attributes and reads the topology json.
+    def __init__(self, conf_file,
+                 cli_enabled=True,
+                 empty_p4=False,
+                 log_dir=None,
+                 pcap_dir=None,
+                 verbosity='info'):
+        """
+        Initializes some attributes and reads the topology json.
 
         Args:
-            conf_file (string): A json file which describes the mininet topology.
-            switch_json (string): Path to a compiled p4 json to run in bmv2.
-            log_dir (string): Path to a directory for storing logs.
-            bmv2_exe (string): Path to the p4 behavioral model binary.
-            cli_enabled (bool): Enable mininet CLI.
-            pcap_dump (bool): Enable generation of pcap files for interfaces.
-            quiet (bool): Disable script debug messages.
-            empty_p4 (bool): Enables using an empty program for debugging.
+            verbosity (string): see https://github.com/mininet/mininet/blob/master/mininet/log.py#L14
+            conf_file (string): a json file which describes the mininet topology.
+            empty_p4 (bool): use an empty program for debugging.
+            cli_enabled (bool): enable mininet CLI.
+            log_dir (string): directory where to store logs.
+            pcap_dir (string): directory where to store pcap files.
+
+        Example of JSON structure of conf_file:
+        {
+            "program": "<path_to_gobal_p4_program",
+            "cli": "<true|false>",
+            "pcap_dump": "<true|false>",
+            "enable_log": "<true|false>",
+            "host_node":
+            {
+                "file_path": "<path_to_module>",
+                "module_name": "<module_file_name>",
+                "object_name": "<module_object>",
+                "options": options_passed_to_init
+            },
+            "switch_node":
+            {
+                "file_path": "<path_to_module>",
+                "module_name": "<module_file_name>",
+                "object_name": "<module_object>"
+            },
+            "compiler_module":
+            {
+                "file_path": "<path_to_module>",
+                "module_name": "<module_file_name>",
+                "object_name": "<module_object>",
+                "options": options_passed_to_init
+            },
+            "controller_module":
+            {
+                "file_path": "<path_to_module>",
+                "module_name": "<module_file_name>",
+                "object_name": "<module_object>",
+                "options": options_passed_to_init
+            },
+            "topo_module":
+            {
+                "file_path": "<path_to_module>",
+                "module_name": "<module_file_name>",
+                "object_name": "<module_object>"
+            },
+            "topodb_module":
+            {
+                "file_path": "<path_to_module>",
+                "module_name": "<module_file_name>",
+                "object_name": "<module_object>"
+            },
+            "mininet_module":
+            {
+                "file_path": "<path_to_module>",
+                "module_name": "<module_file_name>",
+                "object_name": "<module_object>"
+            },
+            "exec_scripts": 
+            [
+                {
+                    "cmd": "<path_to_script>",
+                    "reboot_run": "<true|false>"
+                },
+                {
+                    "cmd": "<path_to_another_script>",
+                    "reboot_run": "<true|false>"
+                }
+            ],
+            "topology": 
+            {
+                "assignment_strategy": assignment_strategy,
+                "default":
+                {
+                    <see parse_links and program_hosts>
+                }
+                "links": 
+                [
+                    <see parse_links>
+                ],
+                "hosts": 
+                {
+                    "h1":{}
+                },
+                "switches": {
+                    <see parse_switch>
+                }
+            }
+        }
         """
 
-        self.quiet = quiet
-        self.logger('Reading configuration file.')
+        # Set verbosity
+        self.verbosity = verbosity
+        setLogLevel(self.verbosity)
+
+        # Read JSON configuration file
         self.conf_file = conf_file
-        if not os.path.isfile(conf_file):
-            raise Exception("Configuration %s is not in the directory!" % conf_file)
-        self.conf = load_conf(conf_file)
+
+        mininet.log.info('Reading JSON configuration file...\n')
+        debug('Opening file {}'.format(self.conf_file))
+        if not os.path.isfile(self.conf_file):
+            raise FileNotFoundError("{} is not in the directory!".format(os.path.realpath(self.conf_file)))
+        self.conf = load_conf(self.conf_file)
 
         # we can start topologies with no program to test
         if empty_p4:
+            info('Empty P4 program selected.')
             import p4utils
             lib_path = os.path.dirname(p4utils.__file__)
-            lib_path += "/../empty_program/empty_program.p4"
-            
-            # modify config
-            self.conf["program"] = lib_path
-            for switch, info in list(self.conf["topology"]["switches"].items()):
-                if info.get("program", False):
-                    info["program"] = lib_path
+            lib_path += '/../empty_program/empty_program.p4'
+            # Set default program to empty program
+            self.conf['program'] = lib_path
+
+            # Override custom switch programs with empty program
+            for switch, info in self.conf['topology']['switches'].items():
+                if info.get('program', False):
+                    info['program'] = lib_path
 
         self.cli_enabled = cli_enabled
         self.pcap_dir = pcap_dir
         self.log_dir = log_dir
-        self.bmv2_exe = str(self.conf.get('switch', DEFAULT_SWITCH))
 
-        # Clean switches
-        sh("killall %s" % self.bmv2_exe)
+        """
+        Inside self.conf can be present several module configuration objects. These are the possible values:
+            - "switch_node" loads the switch node to be used with Mininet (see mininetlib/node.py),
+            - "compiler_module" loads the compiler for P4 codes,
+            - "host_node" loads the host node to be used with Mininet,
+            - "controller_module" loads the controller to program switches from files.
+            - "topo_module" loads Mininet topology module
+            - "topodb_module" loads the topology database (will be removed soon)
+            - "mininet_module" loads the network module
+        """
+        
+        ## Mininet nodes
+        # Load default switch node
+        self.switch_node = {}
+        if self.conf.get('switch_node', None):
+            self.switch_node = load_custom_object(self.conf.get('switch_node'))
+        else:
+            self.switch_node = DEFAULT_SWITCH
 
-        # get configurations
+        # Load default host node
+        self.host_node = {}
+        if self.conf.get('host_node', None):
+            self.host_node = load_custom_object(self.conf.get('host_node'))
+        else:
+            self.host_node = DEFAULT_HOST
+
+        ## Modules
+        # Load default compiler module
+        self.compiler_module = {}
+        if self.conf.get('compiler_module', None):
+            if self.conf['compiler_module'].get('object_name', None):
+                self.compiler_module['module'] = load_custom_object(self.conf.get('compiler_module'))
+            else:
+                self.compiler_module['module'] = DEFAULT_COMPILER
+            # Load default compiler module arguments
+            self.compiler_module['kwargs'] = self.conf['compiler_module'].get('options', {})
+        else:
+            self.compiler_module['module'] = DEFAULT_COMPILER
+            self.compiler_module['kwargs'] = {}
+
+        # Load default controller module
+        self.controller_module = {}
+        if self.conf.get('controller_module', None):
+            if self.conf['controller_module'].get('object_name', None):
+                self.controller_module['module'] = load_custom_object(self.conf.get('controller_module'))
+            else:
+                self.controlle_module['module'] = DEFAULT_CONTROLLER
+            # Load default controller module arguments
+            self.controller_module['kwargs'] = self.conf['controller_module'].get('options', {})
+        else:
+            self.controller_module['module'] = DEFAULT_CONTROLLER
+            self.controller_module['kwargs'] = {}
+
+        ## Old modules
+        if self.conf.get('topo_module', None):
+            self.app_topo = load_custom_object(self.conf.get('topo_module'))
+        else:
+            self.app_topo = DEFAULT_TOPO
+
+        if self.conf.get('topodb_module', None):
+            self.app_topodb = load_custom_object(self.conf.get('topodb_module'))
+        else:
+            self.app_topodb = DEFAULT_TOPODB
+
+        if self.conf.get('mininet_module', None):
+            self.app_mininet = load_custom_object(self.conf.get('mininet_module'))
+        else:
+            self.app_mininet = DEFAULT_NET
+
+
+        # Clean default switches
+        self.switch_node.stop_all()
+
+        # Get log settings
         self.log_enabled = self.conf.get("enable_log", False)
+
         # Ensure that all the needed directories exist and are directories
         if self.log_enabled:
             if not os.path.isdir(self.log_dir):
                 if os.path.exists(self.log_dir):
-                    raise Exception("'%s' exists and is not a directory!" % self.log_dir)
-                os.mkdir(self.log_dir)
+                    raise FileExistsError("'{}' exists and is not a directory!".format(self.log_dir))
+                else:
+                    debug('Creating directory {} for logs.'.format(self.log_dir))
+                    os.mkdir(self.log_dir)
+        
+        os.environ['P4APP_LOGDIR'] = self.log_dir
 
+        # Get pcap settings
         self.pcap_dump = self.conf.get("pcap_dump", False)
+
+        # Ensure that all the needed directories exist and are directories
         if self.pcap_dump:
             if not os.path.isdir(self.pcap_dir):
                 if os.path.exists(self.pcap_dir):
-                    raise Exception("'%s' exists and is not a directory!" % self.pcap_dir)
-                os.mkdir(self.pcap_dir)
+                    raise FileExistsError("'{}' exists and is not a directory!".format(self.pcap_dir))
+                else:
+                    debug('Creating directory {} for pcap files.'.format(self.pcap_dir))
+                    os.mkdir(self.pcap_dir)
 
-        # load topology
+        # Load topology 
         topology = self.conf.get('topology', False)
         if not topology:
-            raise Exception("topology to create is not defined in %s" % self.conf)
-
-        self.hosts = topology['hosts']
-        self.switches = topology['switches']
-        self.links = self.parse_links(topology['links'])
-
-        os.environ['P4APP_LOGDIR'] = log_dir
-
-        # Setting default builders
-        self.app_topo = DefaultTopo
-        self.app_controller = DefaultController
-        self.app_topodb = DefaultTopoDB
-        self.app_mininet = P4Mininet
-
-        if self.conf.get('topo_module', None):
-            self.app_topo = self.load_custom_object('topo_module')
-
-        if self.conf.get('controller_module', None):
-            self.app_controller = self.load_custom_object('controller_module')
-
-        if self.conf.get('topodb_module', None):
-            self.app_topodb = self.load_custom_object('topodb_module')
-
-        if self.conf.get('mininet_module', None):
-            self.app_mininet = self.load_custom_object('mininet_module')
-
-    def load_custom_object(self, object_type):
-
-        file_path = self.conf[object_type].get("file_path", ".")
-        sys.path.insert(0, file_path)
-
-        module_name = self.conf[object_type]["module_name"]
-        object_name = self.conf[object_type]["object_name"]
-
-        module = importlib.import_module(module_name)
-        return getattr(module, object_name)
-
-    def logger(self, *items):
-        if not self.quiet:
-            print(' '.join(items))
-
-    def formatLatency(self, latency):
-        """Helper method for formatting link latencies."""
-        if isinstance(latency, str):
-            return latency
+            raise Exception('Topology to create is not defined in {}'.format(self.conf))
         else:
-            return str(latency) + "ms"
+            # Import topology components
+            self.hosts = topology['hosts']
+            self.switches = self.parse_switches(topology['switches'])
+            self.links = self.parse_links(topology['links'])
+            self.assignment_strategy = topology['assignment_strategy']
+
+    def exec_scripts(self):
+        """
+        Executes the script present in the "exec_scripts" field of self.conf.
+        """
+        if isinstance(self.conf.get('exec_scripts', None), list):
+            for script in self.conf.get('exec_scripts'):
+                self.logger("Exec Script: {}".format(script["cmd"]))
+                run_command(script["cmd"])
+
+    def parse_switches(self, unparsed_switches):
+        """
+        A switch should have the following structure inside the topology object
+        "switches":
+        {
+            switch_name:
+            {
+                "program": path_to_p4_program,
+                "cpu_port": <true|false>,
+                "cli_input": path_to_cli_input_file,
+                "switch_node": custom_switch_node,
+                "controller_module": custom_controller_module,
+                "opts":
+                {
+                    "sw_bin": switch_binary,
+                    "thrift_port": thrift_port,
+                    "grpc_port": grpc_port
+                }
+            },
+            ...
+        }
+
+        These settings override the default ones. The field "opts" gathers all the mininet
+        options used to initialize the Mininet switch class. None of these fields is mandatory.
+        """
+        switches = {}
+        next_thrift_port = 9090
+        next_grpc_port = 9559
+        default = {
+                    'program': self.conf['program'],
+                    'cpu_port': True,
+                    'switch_node': self.switch_node,
+                    'controller_module': self.controller_module, # For the moment, this module is ignored as the switch uses by default the ThriftController
+                    'opts': 
+                    {
+                        'pcap_dump': self.pcap_dump,
+                        'pcap_dir': self.pcap_dir,
+                        'log_enabled': self.log_enabled
+                    }
+                  }
+
+        for sw_name, custom_params in unparsed_switches.items():
+            params = default.copy()
+
+            params['opts']['thrift_port'] = next_thrift_port
+            params['opts']['grpc_port'] = next_grpc_port
+            next_thrift_port += 1
+            next_grpc_port += 1
+
+            # Set node type
+            if 'switch_node' in custom_params:
+                custom_params['switch_node'] = load_custom_object(custom_params['switch_node'])
+
+            # For the moment, this module is ignored as the switch uses by default the ThriftController
+            if 'controller_module' in custom_params:
+                controller_module = {}
+                controller_module['module'] = load_custom_object(custom_params['controller_module'])
+                controller_module['kwarg'] = custom_params['controller_module'].get('options', {})
+                custom_params['controller_module']  = controller_module
+            
+            params.update(custom_params)
+            params['opts']['cls'] = params['switch_node']
+            switches[sw_name] = params
+        
+        return switches
 
     def parse_links(self, unparsed_links):
-        """Given a list of links descriptions of the form [node1, node2, latency, bandwidth, weight]
-        with the latency and bandwidth being optional and weight, parses these descriptions
-        into dictionaries and store them as self.links.
+        """
+        Load a list of links descriptions of the form 
+        "links":
+        [
+            [
+                node1,
+                node2, 
+                { 
+                    "weight": weight,
+                    "port1": port1,
+                    "port2": port2,
+                    "intfName1": intfName1,
+                    "intfName2": intfName2,
+                    "addr1": addr1,
+                    "addr2": addr2,
+                    "params1": { parameters_for_interface1 },
+                    "params2": { parameters_for_interface2 },
+                    "bw": bandwidth,
+                    "delay": transmit_delay,
+                    "loss": loss,
+                    "max_queue_size": max_queue_size
+                }
+            ],
+            ...
+        ]
+        where the only mandatory fields are node1 and node2 and complete missing with
+        default values and store them as self.links.
+
+        For what concernes the Mininet classes used, we have that:
+            "weight" is used by Networkx,
+            "port*" are used by Mininet.topo and are propagated to link.TCLink.
+            "intfName*" are propagated to link.TCLink and used by each Mininet.link.Intf of the link.
+            "addr*" are propagated to link.TCLink and used by each Mininet.link.Intf of the link.
+            "params*" are propagated to link.TCLink and used by each Mininet.link.Intf of the link.
+            "bw", "delay", "loss" and "max_queue_size" are propagated to link.TCLink and used by both Mininet.link.Intf of the link.
+        
+        "weight", "bw", "delay", "loss", "max_queue_size" default value can be set by
+        putting inside "topology" the following object:
+        "default":
+        {
+            "weight": weight,
+            "bw": bandwidth,
+            "delay": transmit_delay,
+            "loss": loss,
+            "max_queue_size": max_queue_size
+        }
 
         Args:
             uparsed_links (array): unparsed links from topology json
@@ -182,149 +431,86 @@ class AppRunner(object):
         Returns:
             array of parsed link dictionaries
         """
+
         links = []
 
-        default_delay = None
-        default_bw = None
-        default_loss = None
-        default_queue_length = None
-        default_link_weight = 1
-
-        if self.conf['topology'].get('default_delay', None):
-            default_delay = self.conf['topology'].get('default_delay', None)
-
-        if self.conf['topology'].get('default_bw', None):
-            default_bw = self.conf['topology'].get('default_bw', None)
-
-        if self.conf['topology'].get('default_loss', None):
-            default_loss = self.conf['topology'].get('default_loss', None)
-
-        if self.conf['topology'].get('default_queue_length', None):
-            default_queue_length = self.conf['topology'].get('default_queue_length', None)
-
-        if self.conf['topology'].get('default_link_weight', None):
-            default_link_weight = self.conf['topology'].get('default_link_weight', None)
+        default = self.conf['topology'].get('default', {})
+        default.setdefault('weight', 1)
+        default.setdefault('bw', None)
+        default.setdefault('delay', None)
+        default.setdefault('loss', None)
+        default.setdefault('max_queue_size', None)
 
         for link in unparsed_links:
-            # make sure that the endpoints of each link are ordered alphabetically
-            node_a, node_b, = link[0], link[1]
-            #if node_a > node_b:
-            #    node_a, node_b = node_b, node_a
-
-            link_dict = {'node1': node_a,
-                         'node2': node_b,
-                         'delay': default_delay,
-                         'bw': default_bw,
-                         'loss': default_loss,
-                         'queue_length': default_queue_length,
-                         'weight': default_link_weight
-                         }
-            # parse extra parameters, check if they are not an empty element for
-            # example when wanting to set weight but not latency
-
+            node1 = link[0]
+            node2 = link[1]
+            opts = default.copy()
+            # If attributes are present for that link
             if len(link) > 2:
-                link_dict.update(link[2])
-
+                opts.update(link[2])
             # Hosts are not allowed to connect to another host.
-            if node_a in self.hosts:
-                assert node_b not in self.hosts, 'Hosts should be connected to switches: %s <-> %s link not possible' % (node_a, node_b)
+            if node1 in self.hosts:
+                assert node2 not in self.hosts, 'Hosts should be connected to switches: {} <-> {} link not possible'.format(node1, node2)
+            links.append([link[0],link[1],opts])
 
-            links.append(link_dict)
         return links
 
-    def run_app(self):
-        """Sets up the mininet instance, programs the switches, and starts the mininet CLI.
-
-        This is the main method to run after initializing the object.
-        """
-        # Initialize mininet with the topology specified by the configuration
-
-        self.create_network()
-        self.net.start()
-        sleep(1)
-
-        # Some programming that must happen after the network has started
-        self.program_hosts()
-        self.program_switches()
-
-        # Save mininet topology to a database
-        self.save_topology()
-        sleep(1)
-
-        self.exec_scripts()
-
-        # Start up the mininet CLI
-        if self.cli_enabled or (self.conf.get('cli', False)):
-            self.do_net_cli()
-
-            # Stop right after the CLI is exited
-            self.net.stop()
-
     def create_network(self):
-        """Create the mininet network object, and store it as self.net.
+        """
+        Create the mininet network object, and store it as self.net.
 
         Side effects:
+            - The path of the compiled P4 JSON file is added to each switch
+              in the field 'opts' under the name 'json_path'.
+            - The dict self.p4compiled contains all the already compiled files and their
+              related compilers.
             - Mininet topology instance stored as self.topo
             - Mininet instance stored as self.net
         """
-        self.logger("Building mininet topology.")
-        # compile all p4 programs and give them to every different switch
-        try:
-            self.switch_to_json = compile_all_p4(self.conf)
-        except CompilationError:
-            self.logger("Compilation Error")
-            sys.exit(0)
+        info('Compiling P4 programs...\n')
+        self.p4compiled = {}
+        for sw_name, params in self.switches.items():
+            if params['program'] not in self.p4compiled:
+                compiler = self.compiler_module['module'](p4_filepath=params['program'],
+                                                          **self.compiler_module['kwargs'])
+                compiler.compile()
+                params['opts']['json_path'] = compiler.get_json_out()
+                try:
+                    params['opts']['p4rt_path'] = compiler.get_p4rt_out()
+                except P4InfoDisabled:
+                    pass
+                self.switches[sw_name] = params
+            else:
+                continue
 
-        self.topo = self.app_topo(self.hosts, self.switch_to_json, self.links, self.log_dir, self.conf)
+        # Generate topology
+        self.topo = self.app_topo(hosts = self.hosts, 
+                                  switches = self.switches,
+                                  links = self.links,
+                                  assignment_strategy = self.assignment_strategy)
 
-        # TODO: this should not be for the entire net, we should support non p4 switches
-        switchClass = configureP4Switch(sw_path=self.bmv2_exe,
-                                        log_console=self.log_enabled,
-                                        pcap_dump=self.pcap_dump, pcap_dir=self.pcap_dir)
-
-        # start P4 Mininet
+        # Start P4 Mininet
         self.net = self.app_mininet(topo=self.topo,
                                     link=TCLink,
-                                    host=P4Host,
-                                    switch=switchClass,
+                                    host=self.host_node,
                                     controller=None)
 
-    def exec_scripts(self):
-
-        if isinstance(self.conf.get('exec_scripts', None), list):
-            for script in self.conf.get('exec_scripts'):
-                self.logger("Exec Script: {}".format(script["cmd"]))
-                run_command(script["cmd"])
-
-    def program_switches(self):
-        """
-        If any command files were provided for the switches, this method will start up the
-        CLI on each switch and use the contents of the command files as input.
-
-        Assumes:
-            A mininet instance is stored as self.net and self.net.start() has been called.
-        """
-        for sw_name, sw_dict in list(self.conf.get('topology',{}).get('switches', {}).items()):
-            if 'cli_input' not in sw_dict:
-                continue
-            sw_obj = self.net.get(sw_name)
-            sw_obj.thrift_controller.conf(sw_dict['cli_input'],
-                                          log_dir=self.log_dir,
-                                          log_enabled=self.log_enabled)
-        # run controller
-        #controller = self.app_controller(self.conf, self.net, self.log_dir, self.log_enabled)
-        #controller.start()
-        #return controller
-
     def program_hosts(self):
-        """Adds static ARP entries and default routes to each mininet host.
+        """
+        Adds static ARP entries and default routes to each mininet host.
 
         Assumes:
             A mininet instance is stored as self.net and self.net.start() has been called.
+            A default field is found in "topology" containing (possibly) these fields.
+            "default":
+            {
+                "auto_arp_tables": <true|false>,
+                "auto_gw_arp": <true|false>
+            }
         """
-        topology = self.conf.get('topology')
-        auto_arp_tables = topology.get('auto_arp_tables', True)
-        auto_gw_arp = topology.get('auto_gw_arp', True)
+        default = self.conf['topology'].get('default', {})
+        auto_arp_tables = default.get('auto_arp_tables', True)
+        auto_gw_arp = default.get('auto_gw_arp', True)
 
         for host_name in self.topo.hosts():
             h = self.net.get(host_name)
@@ -343,35 +529,53 @@ class AppRunner(object):
 
             if auto_arp_tables:
                 # set arp rules for all the hosts in the same subnet
-                host_address = ip_interface("%s/%d" % (h.IP(), self.topo.hosts_info[host_name]["mask"]))
+                host_address = ip_interface('{}/{}'.format(h.IP(), self.topo.hosts_info[host_name]["mask"]))
                 for hosts_same_subnet in self.topo.hosts():
                     if hosts_same_subnet == host_name:
                         continue
 
                     #check if same subnet
                     other_host_address = ip_interface(str("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
-                                                                         self.topo.hosts_info[hosts_same_subnet]["mask"])))
+                                                                            self.topo.hosts_info[hosts_same_subnet]["mask"])))
 
                     if host_address.network.compressed == other_host_address.network.compressed:
                         h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
-                                                          self.topo.hosts_info[hosts_same_subnet]['mac']))
+                                                            self.topo.hosts_info[hosts_same_subnet]['mac']))
 
             # if the host is configured to use dhcp
-            auto_ip = topology["hosts"][host_name].pop("auto", None)
+            auto_ip = self.hosts[host_name].get('auto', False)
             if auto_ip:
-                h.cmd('dhclient -r %s' % h_iface.name)
-                h.cmd('dhclient %s &' % h_iface.name)
+                h.cmd('dhclient -r {}'.format(h_iface.name))
+                h.cmd('dhclient {} &'.format(h_iface.name))
 
             # run startup commands (this commands must be non blocking)
-            commands = topology["hosts"][host_name].get("commands", [])
+            commands = self.hosts[host_name].get('commands', [])
             for command in commands:
                 h.cmd(command)
 
+    def program_switches(self):
+        """
+        If any command files were provided for the switches, this method will start up the
+        CLI on each switch and use the contents of the command files as input.
+
+        Assumes:
+            A mininet instance is stored as self.net and self.net.start() has been called.
+        """
+        for sw_name, sw_dict in self.switches.items():
+            if 'cli_input' not in sw_dict:
+                continue
+            else:
+                # Only thrift controller available for the moment, this will change in the future
+                sw_obj = self.net.get(sw_name)
+                sw_obj.thrift_controller.conf(sw_dict['cli_input'],
+                                            log_dir=self.log_dir,
+                                            log_enabled=self.log_enabled)
+
     def save_topology(self):
         """Saves mininet topology to database."""
-        self.logger("Saving mininet topology to database.")
+        info("Saving mininet topology to database.")
         self.app_topodb(net=self.net).save("./topology.db")
-
+    
     def do_net_cli(self):
         """Starts up the mininet CLI and prints some helpful output.
 
@@ -383,7 +587,7 @@ class AppRunner(object):
                 switch.describe()
         for host in self.net.hosts:
             host.describe()
-        self.logger("Starting mininet CLI")
+        info("Starting mininet CLI...\n")
         # Generate a message that will be printed by the Mininet CLI to make
         # interacting with the simple switch a little easier.
         print('')
@@ -408,6 +612,35 @@ class AppRunner(object):
         # Start CLI
         P4CLI(self.net, conf_file=self.conf_file, script=self.conf.get("cli_script", None))
 
+    def run_app(self):
+        """Sets up the mininet instance, programs the switches, and starts the mininet CLI.
+
+        This is the main method to run after initializing the object.
+        """
+        # Initialize mininet with the topology specified by the configuration
+
+        self.create_network()
+        self.net.start()
+        sleep(1)
+
+        # Some programming that must happen after the network has started
+        self.program_hosts()
+        self.program_switches()
+
+        # Save mininet topology to a database
+        #self.save_topology()
+        sleep(1)
+
+        # Execute configuration scripts on the nodes
+        self.exec_scripts()
+
+        # Start up the mininet CLI
+        if self.cli_enabled or (self.conf.get('cli', False)):
+            self.do_net_cli()
+            # Stop right after the CLI is exited
+            self.net.stop()
+
+
 def get_args():
     cwd = os.getcwd()
     default_log = os.path.join(cwd, 'log')
@@ -421,8 +654,8 @@ def get_args():
                         action='store_true', required=False, default=default_pcap)
     parser.add_argument('--cli', help='Run mininet CLI.',
                         action='store_true', required=False, default=True)
-    parser.add_argument('--quiet', help='Disable script debug messages.',
-                        action='store_true', required=False, default=False)
+    parser.add_argument('--verbosity', help='Set messages verbosity.',
+                        action='store_true', required=False, default='info')
     parser.add_argument('--clean', help='Cleans previous log files',
                         action='store_true', required=False, default=False)
     parser.add_argument('--clean-dir', help='Cleans previous log files and closes',
@@ -437,7 +670,6 @@ def main():
 
     args = get_args()
 
-    # set logging level
     setLogLevel('info')
 
     # clean
@@ -469,8 +701,12 @@ def main():
         if args.clean_dir:
             return
 
-    app = AppRunner(args.config, args.log_dir,
-                    args.pcap_dir, args.cli, args.quiet, args.empty_p4)                  
+    app = AppRunner(args.config,
+                    cli_enabled=args.cli,
+                    empty_p4=args.empty_p4,
+                    log_dir=args.log_dir,
+                    pcap_dir=args.pcap_dir,
+                    verbosity=args.verbosity)                  
     app.run_app()
 
 

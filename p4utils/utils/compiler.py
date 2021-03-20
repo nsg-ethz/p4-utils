@@ -32,9 +32,9 @@ class P4C:
     compiled = False
 
     def __init__(self, p4_filepath,
-                 outdir=None,
+                 outdir='.',
                  options='--target bmv2 --arch v1model --std p4-16',
-                 p4runtime=False):
+                 p4runtime=True):
 
         # Check whether the p4file is valid
         if os.path.isfile(p4_filepath):
@@ -49,10 +49,6 @@ class P4C:
         p4_basename = os.path.basename(self.p4_filepath)
         p4rt_out_basename = p4_basename.replace('.p4', '') + '_p4rt.txt'
         json_out_basename = p4_basename.replace('.p4', '') + '.json'
-
-        # If outdir is not set, create a temporary directory
-        if self.outdir is None:
-            self.outdir = tempfile.TemporaryDirectory()
 
         self.p4rt_out = self.outdir + '/' + p4rt_out_basename
         self.json_out = self.outdir + '/' + json_out_basename
@@ -71,12 +67,12 @@ class P4C:
             compiler_args.append('--p4runtime-files "{}"'.format(self.p4rt_out))
         
         compiler_args.append('"{}"'.format(self.p4_filepath))
-        info(compiler + ' {}'.format(' '.join(compiler_args)))
+        info(compiler + ' {}'.format(' '.join(compiler_args)) + '\n')
         return_value = run_command(compiler + ' {}'.format(' '.join(compiler_args)))
         if return_value != 0:
             raise CompilationError
         else:
-            info("{} compiled successfully.".format(self.p4_filepath))
+            info('{} compiled successfully.\n'.format(self.p4_filepath))
             self.compiled = True
     
     def get_json_out(self):
@@ -98,11 +94,8 @@ class P4C:
 
     def clean(self):
         """Unset temporary files if present"""
-        if isinstance(self.outdir, tempfile.TemporaryDirectory):
-            self.outdir.cleanup()
-        else:
-            os.remove(self.p4rt_out)
-            os.remove(self.json_out)
+        os.remove(self.p4rt_out)
+        os.remove(self.json_out)
         self.compiled = False
 
 

@@ -6,11 +6,11 @@ class P4Mininet(Mininet):
     def __init__(self, *args, **kwargs):
         """Adds p4switches."""
         self.p4switches = []
-        super(P4Mininet, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def build(self):
         """Build P4Mininet."""
-        super(P4Mininet, self).build()
+        super().build()
 
         for switch in self.switches:
             name = switch.name
@@ -19,7 +19,7 @@ class P4Mininet(Mininet):
 
 
     def start(self):
-        super(P4Mininet, self).start()
+        super().start()
 
         hosts_mtu = 9500
         # Trick to allow switches to add headers
