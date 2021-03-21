@@ -2,8 +2,10 @@ import os
 from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
 from p4utils.utils import *
-from p4utils import FAILED_STATUS, SUCCESS_STATUS
 from p4utils.utils.topology import Topology
+
+FAILED_STATUS = 100
+SUCCESS_STATUS = 200
 
 class P4CLI(CLI):
 

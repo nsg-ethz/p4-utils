@@ -87,7 +87,7 @@ class P4Switch(Switch):
                  json_path=None,
                  thrift_port=None,
                  pcap_dump=False,
-                 pcap_dir='',
+                 pcap_dir=None,
                  log_enabled=False,
                  log_dir='/tmp',
                  device_id=None,

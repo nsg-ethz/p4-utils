@@ -29,7 +29,6 @@ from ipaddress import ip_interface
 from mininet.log import setLogLevel, info, output, debug, warning
 from mininet.clean import sh
 
-from p4utils import DEFAULT_CLI
 from p4utils.utils import load_conf, formatLatency, load_custom_object, run_command, cleanup
 from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
 from p4utils.utils.controller import ThriftController as DEFAULT_CONTROLLER
@@ -600,7 +599,7 @@ class AppRunner(object):
         print('')
         print('To inspect or change the switch configuration, connect to')
         print('its CLI from your host operating system using this command:')
-        print('  %s --thrift-port <switch thrift port>' % DEFAULT_CLI)
+        print('  {} --thrift-port <switch thrift port>'.format(DEFAULT_CONTROLLER.cli_bin))
         print('')
         print('To view a switch log, run this command from your host OS:')
         print('  tail -f %s/<switchname>.log' % self.log_dir.replace("edgar", "p4"))

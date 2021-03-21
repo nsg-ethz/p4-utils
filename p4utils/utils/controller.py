@@ -10,10 +10,21 @@ class ThriftController:
     Attributes:
         sw_name (string)    : name of the switch to configure.
         thrift_port (int)   : thrift server port number.
+        cli_bin (strin)     : path to the controller client binary
     """
-    def __init__(self, sw_name, thrift_port):
+    cli_bin = 'simple_switch_CLI'
+
+    @classmethod
+    def set_binary(self, cli_bin):
+        """Set class default binary"""
+        ThriftController.cli_bin = cli_bin
+
+    def __init__(self, sw_name, thrift_port, cli_bin=None):
         self.sw_name = sw_name
         self.thrift_port = thrift_port
+
+        if cli_bin is not None:
+            self.set_binary(cli_bin)
 
     def conf(self, conf_path, log_dir='/tmp', log_enabled=True):
         """

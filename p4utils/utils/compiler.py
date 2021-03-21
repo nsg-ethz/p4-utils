@@ -23,18 +23,29 @@ class P4C:
 
     Attributes:
         p4_filepath (string): path of the p4 file to compile.
-        outdir (string) : directory containing all the output files. If set to
-                          None, then a every output is stored in temporary files.
-        options (string): p4c compilation options
-        p4runtime (bool): whether to output the p4info file used to
-                          establish p4runtime connection to simple_switch_grpc.
+        p4c_bin (string)    : path to the compiler binary
+        outdir (string)     : directory containing all the output files. If set to
+                              None, then a every output is stored in temporary files.
+        options (string)    : p4c compilation options
+        p4runtime (bool)    : whether to output the p4info file used to
+                              establish p4runtime connection to simple_switch_grpc.
     """
     compiled = False
+    p4c_bin = 'p4c'
+
+    @classmethod
+    def set_binary(self, p4c_bin):
+        """Set class default binary"""
+        P4C.p4c_bin = p4c_bin
 
     def __init__(self, p4_filepath,
+                 p4c_bin=None,
                  outdir='.',
                  options='--target bmv2 --arch v1model --std p4-16',
                  p4runtime=True):
+
+        if p4c_bin is not None:
+            self.set_binary(p4c_bin)
 
         # Check whether the p4file is valid
         if os.path.isfile(p4_filepath):
@@ -58,7 +69,6 @@ class P4C:
         This method compiles the .p4 file and generates the
         configuration files
         """
-        compiler = 'p4c'
         compiler_args = []
         compiler_args.append(self.options)
         compiler_args.append('-o "{}"'.format(self.outdir))
@@ -67,8 +77,8 @@ class P4C:
             compiler_args.append('--p4runtime-files "{}"'.format(self.p4rt_out))
         
         compiler_args.append('"{}"'.format(self.p4_filepath))
-        info(compiler + ' {}'.format(' '.join(compiler_args)) + '\n')
-        return_value = run_command(compiler + ' {}'.format(' '.join(compiler_args)))
+        info(self.p4c_bin + ' {}'.format(' '.join(compiler_args)) + '\n')
+        return_value = run_command(self.p4c_bin + ' {}'.format(' '.join(compiler_args)))
         if return_value != 0:
             raise CompilationError
         else:
