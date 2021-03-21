@@ -1,7 +1,7 @@
 import os
 import tempfile
 from mininet.log import debug, info, warning
-from p4utils.utils import run_command
+from p4utils.utils.helper import *
 
 
 class CompilationError(Exception):

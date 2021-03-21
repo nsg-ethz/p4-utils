@@ -1,7 +1,7 @@
 import os
 from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
-from p4utils.utils import *
+from p4utils.utils.helper import *
 from p4utils.utils.topology import Topology
 
 FAILED_STATUS = 100
@@ -28,14 +28,10 @@ class P4CLI(CLI):
         return FAILED_STATUS
 
     def do_load_topo_conf(self, line= ""):
-
         """
-        Updates the topo config
-        Args:
-            line:
-
-        Returns:
-
+        Updates the topo config.
+        Exec:
+            load_topo_conf
         """
         args = line.split()
         if args:

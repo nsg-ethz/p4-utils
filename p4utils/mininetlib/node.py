@@ -22,7 +22,7 @@ from mininet.clean import sh
 from mininet.node import Switch, Host
 from mininet.moduledeps import pathCheck
 
-from p4utils.utils import check_listening_on_port
+from p4utils.utils.helper import *
 from p4utils.utils.controller import ThriftController
 
 SWITCH_START_TIMEOUT = 10

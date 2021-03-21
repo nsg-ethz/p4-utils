@@ -3,7 +3,7 @@ from ipaddress import IPv4Network
 from mininet.topo import Topo
 from mininet.nodelib import LinuxBridge
 
-from p4utils.utils import ip_address_to_mac
+from p4utils.utils.helper import *
 from p4utils.mininetlib.node import *
 
 # The basic idea is to move as many functions as possible

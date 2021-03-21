@@ -29,7 +29,7 @@ from ipaddress import ip_interface
 from mininet.log import setLogLevel, info, output, debug, warning
 from mininet.clean import sh
 
-from p4utils.utils import load_conf, formatLatency, load_custom_object, run_command, cleanup
+from p4utils.utils.helper import *
 from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
 from p4utils.utils.controller import ThriftController as DEFAULT_CONTROLLER
 from p4utils.utils.topology import Topology as DEFAULT_TOPODB
@@ -168,14 +168,14 @@ class AppRunner(object):
         self.conf_file = conf_file
 
         mininet.log.info('Reading JSON configuration file...\n')
-        debug('Opening file {}'.format(self.conf_file))
+        debug('Opening file {}\n'.format(self.conf_file))
         if not os.path.isfile(self.conf_file):
             raise FileNotFoundError("{} is not in the directory!".format(os.path.realpath(self.conf_file)))
         self.conf = load_conf(self.conf_file)
 
         # we can start topologies with no program to test
         if empty_p4:
-            info('Empty P4 program selected.')
+            info('Empty P4 program selected.\n')
             import p4utils
             lib_path = os.path.dirname(p4utils.__file__)
             lib_path += '/../empty_program/empty_program.p4'
@@ -273,7 +273,7 @@ class AppRunner(object):
                 if os.path.exists(self.log_dir):
                     raise FileExistsError("'{}' exists and is not a directory!".format(self.log_dir))
                 else:
-                    debug('Creating directory {} for logs.'.format(self.log_dir))
+                    debug('Creating directory {} for logs.\n'.format(self.log_dir))
                     os.mkdir(self.log_dir)
         
         os.environ['P4APP_LOGDIR'] = self.log_dir
@@ -287,7 +287,7 @@ class AppRunner(object):
                 if os.path.exists(self.pcap_dir):
                     raise FileExistsError("'{}' exists and is not a directory!".format(self.pcap_dir))
                 else:
-                    debug('Creating directory {} for pcap files.'.format(self.pcap_dir))
+                    debug('Creating directory {} for pcap files.\n'.format(self.pcap_dir))
                     os.mkdir(self.pcap_dir)
 
         # Load topology 
@@ -454,22 +454,22 @@ class AppRunner(object):
 
         return links
 
-    def create_network(self):
+    def compile_p4(self):
         """
-        Create the mininet network object, and store it as self.net.
+        Compile all the P4 files provided by the configuration file.
 
         Side effects:
             - The path of the compiled P4 JSON file is added to each switch
               in the field 'opts' under the name 'json_path'.
-            - The dict self.p4compiled contains all the already compiled files and their
-              related compilers.
-            - Mininet topology instance stored as self.topo
-            - Mininet instance stored as self.net
+            - The dict self.p4compilers contains all the compilers object used
+              (one per different P4 file).
         """
         info('Compiling P4 programs...\n')
-        self.p4compiled = {}
+        self.p4compilers = []
         for sw_name, params in self.switches.items():
-            if params['program'] not in self.p4compiled:
+            if is_compiled(params['program'], self.p4compilers):
+                continue
+            else:
                 compiler = self.compiler_module['module'](p4_filepath=params['program'],
                                                           **self.compiler_module['kwargs'])
                 compiler.compile()
@@ -478,10 +478,17 @@ class AppRunner(object):
                     params['opts']['p4rt_path'] = compiler.get_p4rt_out()
                 except P4InfoDisabled:
                     pass
-                self.switches[sw_name] = params
-            else:
-                continue
+                self.p4compilers.append(compiler)
 
+    def create_network(self):
+        """
+        Create the mininet network object, and store it as self.net.
+
+        Side effects:
+            - Mininet topology instance stored as self.topo
+            - Mininet instance stored as self.net
+        """
+        debug('Generating topology...\n')
         # Generate topology
         self.topo = self.app_topo(hosts = self.hosts, 
                                   switches = self.switches,
@@ -489,6 +496,7 @@ class AppRunner(object):
                                   assignment_strategy = self.assignment_strategy)
 
         # Start P4 Mininet
+        debug('Starting network...\n')
         self.net = self.app_mininet(topo=self.topo,
                                     link=TCLink,
                                     host=self.host_node,
@@ -572,7 +580,7 @@ class AppRunner(object):
 
     def save_topology(self):
         """Saves mininet topology to database."""
-        info("Saving mininet topology to database.")
+        info("Saving mininet topology to database.\n")
         self.app_topodb(net=self.net).save("./topology.db")
     
     def do_net_cli(self):
@@ -612,13 +620,15 @@ class AppRunner(object):
         P4CLI(self.net, conf_file=self.conf_file, script=self.conf.get("cli_script", None))
 
     def run_app(self):
-        """Sets up the mininet instance, programs the switches, and starts the mininet CLI.
-
+        """
+        Sets up the mininet instance, programs the switches, and starts the mininet CLI.
         This is the main method to run after initializing the object.
         """
-        # Initialize mininet with the topology specified by the configuration
-
+        # Compile P4 programs
+        self.compile_p4()
+        # Initialize Mininet with the topology specified by the configuration
         self.create_network()
+        # Start Mininet
         self.net.start()
         sleep(1)
 
