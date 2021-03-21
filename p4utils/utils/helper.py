@@ -2,6 +2,7 @@ import os
 import sys
 import psutil
 import mininet
+import hashlib
 import importlib
 import json
 import subprocess
@@ -13,6 +14,11 @@ def check_listening_on_port(port):
         if c.status == 'LISTEN' and c.laddr[1] == port:
             return True
     return False
+
+
+def cksum(filename):
+    """Returns the md5 checksum of a file."""
+    return hashlib.md5(open(filename,'rb').read()).hexdigest()
 
 
 def cleanup():
@@ -47,8 +53,8 @@ def is_compiled(p4_filepath, compilers):
     one compiler in the list.
 
     Arguments:
-        p4_filepath (string)   : P4 file path
-        compilers (list): list of P4 compiler objects (see compiler.py)
+        p4_filepath (string)    : P4 file path
+        compilers (list)        : list of P4 compiler objects (see compiler.py)
     
     Returns:
         True/False depending on whether the file has been already compiled.
@@ -58,6 +64,18 @@ def is_compiled(p4_filepath, compilers):
             return True
     else:
         return False
+
+
+def get_by_attr(attr_name, attr_value, obj_list):
+    """
+    Return the object in the list which has the attribute attr_name
+    value equal to attr_value
+    """
+    for obj in obj_list:
+        if attr_value == getattr(obj, attr_name):
+            return obj
+    else:
+        return None
 
 
 def load_conf(conf_file):

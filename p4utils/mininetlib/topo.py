@@ -173,14 +173,14 @@ class AppTopo(P4Topo):
 
     def add_cpu_port(self):
         add_bridge = True # We use the bridge but at the same time we use the bug it has so the interfaces are not added to it, but at least we can clean easily thanks to that.
-        for sw_name, params in self._switches.items():
-            if self.g.node[sw_name].get('isP4Switch', False):
+        for switch, params in self._switches.items():
+            if self.g.node[switch].get('isP4Switch', False):
                 if params['cpu_port']:
                     if add_bridge:
                         sw = self.addSwitch("sw-cpu", cls=LinuxBridge, dpid='1000000000000000')
-                        self.addSwitchPort(sw_name, sw)
+                        self.addSwitchPort(switch, sw)
                         add_bridge = False
-                    self.addLink(sw_name, sw, intfName1='%s-cpu-eth0' % sw_name, intfName2= '%s-cpu-eth1' % sw_name, deleteIntfs=True)
+                    self.addLink(switch, sw, intfName1='{}-cpu-eth0'.format(switch), intfName2= '{}-cpu-eth1'.format(switch), deleteIntfs=True)
 
     def l2_assignment_strategy(self):
 

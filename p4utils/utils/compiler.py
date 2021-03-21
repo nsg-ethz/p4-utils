@@ -1,5 +1,6 @@
 import os
 import tempfile
+import hashlib
 from mininet.log import debug, info, warning
 from p4utils.utils.helper import *
 
@@ -22,7 +23,7 @@ class P4C:
     the configuration files used by switches.
 
     Attributes:
-        p4_filepath (string): path of the p4 file to compile.
+        p4_filepath (string): path of the source P4 file to compile.
         p4c_bin (string)    : path to the compiler binary
         outdir (string)     : directory containing all the output files. If set to
                               None, then a every output is stored in temporary files.
@@ -42,17 +43,14 @@ class P4C:
                  p4c_bin=None,
                  outdir='.',
                  options='--target bmv2 --arch v1model --std p4-16',
-                 p4runtime=True):
+                 p4runtime=True,
+                 **kwargs):
 
         if p4c_bin is not None:
             self.set_binary(p4c_bin)
 
-        # Check whether the p4file is valid
-        if os.path.isfile(p4_filepath):
-            self.p4_filepath = p4_filepath
-        else:
-            raise FileNotFoundError('FileMissing: could not find file {}'.format(p4_filepath))
-        
+        self.p4_filepath = None
+        self.set_source(p4_filepath)        
         self.outdir = outdir
         self.options = options
         self.p4runtime = p4runtime
@@ -69,6 +67,10 @@ class P4C:
         This method compiles the .p4 file and generates the
         configuration files
         """
+        # Compute checksum of P4 file. This allows to recognize modified files.
+        self.cksum = cksum(self.p4_filepath)
+        debug('source: {}\tcksum: {}\n'.format(self.p4_filepath, self.cksum))
+
         compiler_args = []
         compiler_args.append(self.options)
         compiler_args.append('-o "{}"'.format(self.outdir))
@@ -103,10 +105,26 @@ class P4C:
             raise NotCompiledError
 
     def clean(self):
-        """Unset temporary files if present"""
+        """Remove output files and set compiler as uncompiled."""
         os.remove(self.p4rt_out)
         os.remove(self.json_out)
         self.compiled = False
 
+    def new_source(self):
+        """
+        Returns True if the source P4 file has changed since
+        the last time it was compiled.
+        """
+        cksum = cksum(self.p4_filepath)
+        return cksum == self.cksum
 
+    def set_source(self, p4_filepath):
+        """Set the P4 source file path."""
+        # Check whether the p4file is valid
+        if os.path.isfile(p4_filepath):
+            if self.p4_filepath != os.path.realpath(p4_filepath):
+                self.compiled = False
+                self.p4_filepath = os.path.realpath(p4_filepath)
+        else:
+            raise FileNotFoundError('FileMissing: could not find file {}'.format(p4_filepath))
     

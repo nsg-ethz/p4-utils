@@ -104,7 +104,15 @@ class P4Switch(Switch):
         if sw_bin is not None:
             self.set_binary(sw_bin)
 
-        self.json_path = json_path
+        self.set_json(json_path)
+
+        if device_id is not None:
+            self.device_id = device_id
+            P4Switch.device_id = max(P4Switch.device_id, device_id)
+        else:
+            self.device_id = P4Switch.device_id
+            P4Switch.device_id += 1
+        
         self.pcap_dir = pcap_dir
         self.pcap_dump = pcap_dump
         self.enable_debugger = enable_debugger
@@ -113,12 +121,7 @@ class P4Switch(Switch):
         self.thrift_port = thrift_port
         self.nanomsg = "ipc:///tmp/bm-{}-log.ipc".format(self.device_id)
         self.simple_switch_pid = None
-        self.thrift_controller = ThriftController(self.name,
-                                                  self.thrift_port)
 
-        # make sure that the provided JSON file exists
-        if self.json_path and not os.path.isfile(self.json_path):
-            raise FileNotFoundError("Invalid JSON file.")
         if self.log_enabled:
             # make sure that the provided log path is not pointing to a file
             # and, if necessary, create an empty log dir
@@ -127,14 +130,17 @@ class P4Switch(Switch):
                     raise NotADirectoryError("'{}' exists and is not a directory.".format(self.log_dir))
                 else:
                     os.mkdir(self.log_dir)
+
         if self.thrift_listening():
             raise ConnectionRefusedError('{} cannot bind port {} because it is bound by another process.'.format(self.name, self.thrift_port))
-        if device_id is not None:
-            self.device_id = device_id
-            P4Switch.device_id = max(P4Switch.device_id, device_id)
+
+    def set_json(self, json_path):
+        """Set the compiled P4 JSON file."""
+        # make sure that the provided JSON file exists if it is not None
+        if json_path and not os.path.isfile(json_path):
+            raise FileNotFoundError("Invalid JSON file.")
         else:
-            self.device_id = P4Switch.device_id
-            P4Switch.device_id += 1
+            self.json_path = json_path
 
     def dpidToStr(self, id):
         strDpid = str(id)

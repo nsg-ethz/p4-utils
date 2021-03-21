@@ -24,6 +24,7 @@
 import os
 import argparse
 import mininet
+from copy import deepcopy
 from time import sleep
 from ipaddress import ip_interface
 from mininet.log import setLogLevel, info, output, debug, warning
@@ -69,6 +70,7 @@ class AppRunner(object):
         Initializes some attributes and reads the topology json.
 
         Args:
+            conf_file (string): JSON configuration file according to the following structure.
             verbosity (string): see https://github.com/mininet/mininet/blob/master/mininet/log.py#L14
             conf_file (string): a json file which describes the mininet topology.
             empty_p4 (bool): use an empty program for debugging.
@@ -158,6 +160,9 @@ class AppRunner(object):
                 }
             }
         }
+
+        Notice: none of the modules or nodes are mandatory. In case they are not specified,
+        default settings will be used.
         """
 
         # Set verbosity
@@ -174,6 +179,7 @@ class AppRunner(object):
         self.conf = load_conf(self.conf_file)
 
         # we can start topologies with no program to test
+        # need to improve !!!!!!!!!!!!!!!!!!!!!!!!!
         if empty_p4:
             info('Empty P4 program selected.\n')
             import p4utils
@@ -183,13 +189,39 @@ class AppRunner(object):
             self.conf['program'] = lib_path
 
             # Override custom switch programs with empty program
-            for switch, info in self.conf['topology']['switches'].items():
-                if info.get('program', False):
-                    info['program'] = lib_path
+            for switch, params in self.conf['topology']['switches'].items():
+                if params.get('program', False):
+                    params['program'] = lib_path
 
         self.cli_enabled = cli_enabled
         self.pcap_dir = pcap_dir
         self.log_dir = log_dir
+
+        ## Get log settings
+        self.log_enabled = self.conf.get("enable_log", False)
+
+        # Ensure that all the needed directories exist and are directories
+        if self.log_enabled:
+            if not os.path.isdir(self.log_dir):
+                if os.path.exists(self.log_dir):
+                    raise FileExistsError("'{}' exists and is not a directory!".format(self.log_dir))
+                else:
+                    debug('Creating directory {} for logs.\n'.format(self.log_dir))
+                    os.mkdir(self.log_dir)
+        
+        os.environ['P4APP_LOGDIR'] = self.log_dir
+
+        ## Get pcap settings
+        self.pcap_dump = self.conf.get("pcap_dump", False)
+
+        # Ensure that all the needed directories exist and are directories
+        if self.pcap_dump:
+            if not os.path.isdir(self.pcap_dir):
+                if os.path.exists(self.pcap_dir):
+                    raise FileExistsError("'{}' exists and is not a directory!".format(self.pcap_dir))
+                else:
+                    debug('Creating directory {} for pcap files.\n'.format(self.pcap_dir))
+                    os.mkdir(self.pcap_dir)
 
         """
         Inside self.conf can be present several module configuration objects. These are the possible values:
@@ -233,16 +265,21 @@ class AppRunner(object):
 
         # Load default controller module
         self.controller_module = {}
+        # Set default options for the controller
+        default_controller_kwargs = {
+                                        'log_enabled': True,
+                                        'log_dir': self.log_dir
+                                    }
         if self.conf.get('controller_module', None):
             if self.conf['controller_module'].get('object_name', None):
                 self.controller_module['module'] = load_custom_object(self.conf.get('controller_module'))
             else:
                 self.controlle_module['module'] = DEFAULT_CONTROLLER
             # Load default controller module arguments
-            self.controller_module['kwargs'] = self.conf['controller_module'].get('options', {})
+            self.controller_module['kwargs'] = self.conf['controller_module'].get('options', default_controller_kwargs)
         else:
             self.controller_module['module'] = DEFAULT_CONTROLLER
-            self.controller_module['kwargs'] = {}
+            self.controller_module['kwargs'] = default_controller_kwargs
 
         ## Old modules
         if self.conf.get('topo_module', None):
@@ -260,37 +297,10 @@ class AppRunner(object):
         else:
             self.app_mininet = DEFAULT_NET
 
-
         # Clean default switches
         self.switch_node.stop_all()
 
-        # Get log settings
-        self.log_enabled = self.conf.get("enable_log", False)
-
-        # Ensure that all the needed directories exist and are directories
-        if self.log_enabled:
-            if not os.path.isdir(self.log_dir):
-                if os.path.exists(self.log_dir):
-                    raise FileExistsError("'{}' exists and is not a directory!".format(self.log_dir))
-                else:
-                    debug('Creating directory {} for logs.\n'.format(self.log_dir))
-                    os.mkdir(self.log_dir)
-        
-        os.environ['P4APP_LOGDIR'] = self.log_dir
-
-        # Get pcap settings
-        self.pcap_dump = self.conf.get("pcap_dump", False)
-
-        # Ensure that all the needed directories exist and are directories
-        if self.pcap_dump:
-            if not os.path.isdir(self.pcap_dir):
-                if os.path.exists(self.pcap_dir):
-                    raise FileExistsError("'{}' exists and is not a directory!".format(self.pcap_dir))
-                else:
-                    debug('Creating directory {} for pcap files.\n'.format(self.pcap_dir))
-                    os.mkdir(self.pcap_dir)
-
-        # Load topology 
+        ## Load topology 
         topology = self.conf.get('topology', False)
         if not topology:
             raise Exception('Topology to create is not defined in {}'.format(self.conf))
@@ -307,8 +317,8 @@ class AppRunner(object):
         """
         if isinstance(self.conf.get('exec_scripts', None), list):
             for script in self.conf.get('exec_scripts'):
-                self.logger("Exec Script: {}".format(script["cmd"]))
-                run_command(script["cmd"])
+                self.logger("Exec Script: {}".format(script['cmd']))
+                run_command(script['cmd'])
 
     def parse_switches(self, unparsed_switches):
         """
@@ -338,12 +348,13 @@ class AppRunner(object):
         switches = {}
         next_thrift_port = 9090
         next_grpc_port = 9559
+        # Set general default options
         default = {
                     'program': self.conf['program'],
                     'cpu_port': True,
                     'switch_node': self.switch_node,
-                    'controller_module': self.controller_module, # For the moment, this module is ignored as the switch uses by default the ThriftController
-                    'opts': 
+                    'controller_module': self.controller_module,
+                    'opts':
                     {
                         'pcap_dump': self.pcap_dump,
                         'pcap_dir': self.pcap_dir,
@@ -351,29 +362,29 @@ class AppRunner(object):
                     }
                   }
 
-        for sw_name, custom_params in unparsed_switches.items():
-            params = default.copy()
-
+        for switch, custom_params in unparsed_switches.items():
+            params = deepcopy(default)
+            # Set switch specific default options
             params['opts']['thrift_port'] = next_thrift_port
             params['opts']['grpc_port'] = next_grpc_port
-            next_thrift_port += 1
-            next_grpc_port += 1
-
-            # Set node type
+            # Set controller default options
+            params['controller_module']['kwargs']['sw_name'] = switch
+            params['controller_module']['kwargs']['thrift_port'] = next_thrift_port
+            params['controller_module']['kwargs']['grpc_port'] = next_grpc_port
+            # Set non default node type
             if 'switch_node' in custom_params:
                 custom_params['switch_node'] = load_custom_object(custom_params['switch_node'])
-
-            # For the moment, this module is ignored as the switch uses by default the ThriftController
+            # Set non default controller type
             if 'controller_module' in custom_params:
-                controller_module = {}
-                controller_module['module'] = load_custom_object(custom_params['controller_module'])
-                controller_module['kwarg'] = custom_params['controller_module'].get('options', {})
-                custom_params['controller_module']  = controller_module
-            
+                custom_params['controller_module']['module'] = load_custom_object(custom_params['controller_module'])
             params.update(custom_params)
+            # Set switch node
             params['opts']['cls'] = params['switch_node']
-            switches[sw_name] = params
-        
+            switches[switch] = deepcopy(params)
+            # Update switch port numbers
+            next_thrift_port = max(next_thrift_port + 1, params['opts']['thrift_port'])
+            next_grpc_port = max(next_grpc_port + 1, params['opts']['grpc_port'])
+    
         return switches
 
     def parse_links(self, unparsed_links):
@@ -461,24 +472,25 @@ class AppRunner(object):
         Side effects:
             - The path of the compiled P4 JSON file is added to each switch
               in the field 'opts' under the name 'json_path'.
-            - The dict self.p4compilers contains all the compilers object used
+            - The dict self.compilers contains all the compilers object used
               (one per different P4 file).
         """
         info('Compiling P4 programs...\n')
-        self.p4compilers = []
-        for sw_name, params in self.switches.items():
-            if is_compiled(params['program'], self.p4compilers):
-                continue
-            else:
+        self.compilers = []
+        for switch, params in self.switches.items():
+            if not is_compiled(os.path.realpath(params['program']), self.compilers):
                 compiler = self.compiler_module['module'](p4_filepath=params['program'],
                                                           **self.compiler_module['kwargs'])
                 compiler.compile()
-                params['opts']['json_path'] = compiler.get_json_out()
-                try:
-                    params['opts']['p4rt_path'] = compiler.get_p4rt_out()
-                except P4InfoDisabled:
-                    pass
-                self.p4compilers.append(compiler)
+                self.compilers.append(compiler)
+            else:
+                compiler = get_by_attr('p4_filepath', os.path.realpath(params['program']), self.compilers)
+            params['opts']['json_path'] = compiler.get_json_out()
+            try:
+                params['opts']['p4rt_path'] = compiler.get_p4rt_out()
+            except P4InfoDisabled:
+                pass
+            self.switches[switch] = deepcopy(params)
 
     def create_network(self):
         """
@@ -568,15 +580,13 @@ class AppRunner(object):
         Assumes:
             A mininet instance is stored as self.net and self.net.start() has been called.
         """
-        for sw_name, sw_dict in self.switches.items():
-            if 'cli_input' not in sw_dict:
-                continue
-            else:
-                # Only thrift controller available for the moment, this will change in the future
-                sw_obj = self.net.get(sw_name)
-                sw_obj.thrift_controller.conf(sw_dict['cli_input'],
-                                            log_dir=self.log_dir,
-                                            log_enabled=self.log_enabled)
+        self.controllers = []
+        for params in self.switches.values():
+            controller = params['controller_module']['module'](conf_path=params.get('cli_input', None),
+                                                               **params['controller_module']['kwargs'])
+            if 'cli_input' in params:
+                controller.configure()
+            self.controllers.append(controller)
 
     def save_topology(self):
         """Saves mininet topology to database."""
@@ -584,7 +594,8 @@ class AppRunner(object):
         self.app_topodb(net=self.net).save("./topology.db")
     
     def do_net_cli(self):
-        """Starts up the mininet CLI and prints some helpful output.
+        """
+        Starts up the mininet CLI and prints some helpful output.
 
         Assumes:
             A mininet instance is stored as self.net and self.net.start() has been called.
@@ -610,14 +621,14 @@ class AppRunner(object):
         print('  {} --thrift-port <switch thrift port>'.format(DEFAULT_CONTROLLER.cli_bin))
         print('')
         print('To view a switch log, run this command from your host OS:')
-        print('  tail -f %s/<switchname>.log' % self.log_dir.replace("edgar", "p4"))
+        print('  tail -f {}/<switchname>.log'.format(self.log_dir))
         print('')
-        print('To view the switch output pcap, check the pcap files in \n %s:' % self.pcap_dir.replace("edgar", "p4"))
+        print('To view the switch output pcap, check the pcap files in \n {}:'.format(self.pcap_dir))
         print(' for example run:  sudo tcpdump -xxx -r s1-eth1.pcap')
         print('')
 
         # Start CLI
-        P4CLI(self.net, conf_file=self.conf_file, script=self.conf.get("cli_script", None))
+        P4CLI(mininet=self.net, controllers=self.controllers, compilers=self.compilers)
 
     def run_app(self):
         """
