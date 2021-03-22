@@ -2,7 +2,7 @@ import os
 import subprocess
 from mininet.log import debug, info, warning
 
-class ThriftController:
+class ThriftClient:
     """
     This controller reads commands from a thrift configuration
     file and uses it to set up the thrift switch.
@@ -38,6 +38,10 @@ class ThriftController:
 
         if cli_bin is not None:
             self.set_binary(cli_bin)
+
+    def get_conf(self):
+        """Returns self.conf_path"""
+        return self.conf_path
 
     def set_conf(self, conf_path):
         """Set the configuration file path."""

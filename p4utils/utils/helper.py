@@ -65,10 +65,23 @@ def is_compiled(p4_filepath, compilers):
     else:
         return False
 
+def get_node_attr(node, attr_name):
+    """
+    Finds the value of the attribute attr_name of the Mininet node
+    by looking also inside node.params (for implicit attributes).
+    """
+    try:
+        value = getattr(node, attr_name)
+    except AttributeError:
+        params = getattr(node, 'params')
+        if attr_name in params.keys():
+            return params[attr_name]
+        else:
+            raise AttributeError
 
 def get_by_attr(attr_name, attr_value, obj_list):
     """
-    Return the object in the list which has the attribute attr_name
+    Return the object in the list which has the attribute 'attr_name'
     value equal to attr_value
     """
     for obj in obj_list:
@@ -112,5 +125,5 @@ def load_custom_object(obj):
 
 
 def run_command(command):
-    debug(command)
+    debug(command+'\n')
     return os.WEXITSTATUS(os.system(command))

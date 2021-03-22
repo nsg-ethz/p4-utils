@@ -1,4 +1,5 @@
 import os
+from copy import deepcopy
 from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
 from p4utils.utils.helper import *
@@ -12,12 +13,20 @@ class NetworkError(Exception):
 class P4CLI(CLI):
 
     def __init__(self, *args, **kwargs):
-        self.controllers = kwargs.get('controllers', None)
-        self.compilers = kwargs.get('compilers', None)
-        # Class CLI from mininet.cli does not have controllers and compilers attributes
+        self.clients = kwargs.get('clients', [])
+        self.compilers = kwargs.get('compilers', [])
+        self.compiler_module = kwargs.get('compiler_module', None)
+        self.client_module = kwargs.get('client_module', None)
+        # Class CLI from mininet.cli does not have clients and compilers attributes
         # so they can be removed
-        kwargs.__delitem__('controllers')
-        kwargs.__delitem__('compilers')
+        if 'clients' in kwargs:
+            del kwargs['clients']
+        if 'compilers' in kwargs:
+            del kwargs['compilers']
+        if 'compiler_module' in kwargs:
+            del kwargs['compiler_module']
+        if 'client_module' in kwargs:
+            del kwargs['client_module']
         CLI.__init__(self, *args, **kwargs)
         # self.mn stores the Mininet network object according to the parent object
 
@@ -58,29 +67,38 @@ class P4CLI(CLI):
             return False
 
         # Check if new P4 source file has been provided
+        p4_src = get_node_attr(p4switch,'p4_src')
         if '--p4src' in args:
-            p4src = args[args.index('--p4src') + 1]
+            p4_src = args[args.index('--p4src') + 1]
             # Check if file exists
-            if not os.path.exists(p4src):
-                error('File Error: P4 source {} does not exist\n'.format(p4src))
+            if not os.path.exists(p4_src):
+                error('File Error: P4 source {} does not exist\n'.format(p4_src))
                 return False
             # Check if its not a file
-            if not os.path.isfile(p4src):
-                error('File Error: p4source {} is not a file\n'.format(p4src))
+            if not os.path.isfile(p4_src):
+                error('File Error: p4source {} is not a file\n'.format(p4_src))
                 return False
-            compiler = get_by_attr('p4_filepath', os.path.realpath(p4src), self.compilers)
-            # If a compiler for the same p4_filepath has been found
-            if compiler:
-                # If new file has been provided
-                if compiler.new_source():
-                    compiler.compile()
-            # Add compiling functionality for compilers not present.
+        compiler = get_by_attr('p4_filepath', os.path.realpath(p4_src), self.compilers)
+        # If a compiler for the same p4_filepath has been found
+        if compiler:
+            # If new file has been provided
+            if compiler.new_source():
+                debug('New p4 source file detected!\n')
+                compiler.compile()
+        # If this file is compiled for the first time
+        elif self.compiler_module is not None: 
+            compiler = self.compiler_module['module'](p4_filepath=p4_src,
+                                                        **self.compiler_module['kwargs'])
+            self.compilers.append(compiler)
+        else:
+            error('No compiler module provided!')
 
 
         # Start switch
         p4switch.start()
         
-        controller = get_by_attr('sw_name', switch_name, self.controllers)
+        client = get_by_attr('sw_name', switch_name, self.clients)
+        cmd_path = None
         # Check if new cmd file has been provided
         if '--cmds' in args:
             cmd_path = args[args.index("--cmds") + 1]
@@ -92,12 +110,35 @@ class P4CLI(CLI):
             if not os.path.isfile(cmd_path):
                 error('File Error: command file {} is not a file\n'.format(cmd_path))
                 return False
-            controller.set_conf(cmd_path)
-        # Configure switch
-        try:
-            controller.configure()
-        except FileNotFoundError:
-            debug('Not configuring {}: no file found.'.format(switch_name))
+        # If a client is present
+        if client:
+            if cmd_path is not None:
+                client.set_conf(cmd_path)
+            # Configure switch
+            try:
+                client.configure()
+            except FileNotFoundError:
+                debug('Not configuring {}: no file found!\n'.format(switch_name))
+        # If the switch has no client yet
+        elif self.client_module is not None:
+            try:
+                thrift_port = getattr(p4switch, 'thrift_port')
+            except AttributeError:
+                pass
+            try:
+                grpc_port = getattr(p4switch, 'grpc_port')
+            except AttributeError:
+                pass
+            client = self.client_module(sw_name=switch_name,
+                                        thrift_port=thrift_port,
+                                        grpc_port=grpc_port,
+                                        **kwargs)
+            client.set_conf(cmd_path)
+            # Configure switch
+            try:
+                client.configure()
+            except FileNotFoundError:
+                debug('Not configuring {}: no file found!\n'.format(switch_name))
 
     def do_p4switch_reboot(self, line=""):
         """Reboot a P4 switch with a new program."""

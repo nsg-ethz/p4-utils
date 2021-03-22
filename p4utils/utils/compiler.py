@@ -115,8 +115,7 @@ class P4C:
         Returns True if the source P4 file has changed since
         the last time it was compiled.
         """
-        cksum = cksum(self.p4_filepath)
-        return cksum == self.cksum
+        return cksum(self.p4_filepath) != self.cksum
 
     def set_source(self, p4_filepath):
         """Set the P4 source file path."""

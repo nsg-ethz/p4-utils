@@ -23,7 +23,6 @@ from mininet.node import Switch, Host
 from mininet.moduledeps import pathCheck
 
 from p4utils.utils.helper import *
-from p4utils.utils.controller import ThriftController
 
 SWITCH_START_TIMEOUT = 10
 
@@ -197,7 +196,7 @@ class P4Switch(Switch):
 
     def start(self, controllers=None):
         """Start up a new P4 switch."""
-        info("\nStarting P4 switch {}.\n".format(self.name))
+        info("Starting P4 switch {}.\n".format(self.name))
         cmd = ' '.join(self.add_arguments())
         info(cmd + "\n")
 

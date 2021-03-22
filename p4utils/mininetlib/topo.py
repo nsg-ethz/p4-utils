@@ -137,7 +137,7 @@ class AppTopo(P4Topo):
                     sw_id +=1
                 id = sw_id
             
-            sw_attributes = self._switches[sw]['opts']
+            sw_attributes = self._switches[sw]
             self.addP4Switch(sw,
                              device_id=id,
                              **sw_attributes)

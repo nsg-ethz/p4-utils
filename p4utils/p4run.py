@@ -32,7 +32,7 @@ from mininet.clean import sh
 
 from p4utils.utils.helper import *
 from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
-from p4utils.utils.controller import ThriftController as DEFAULT_CONTROLLER
+from p4utils.utils.client import ThriftClient as DEFAULT_CLIENT
 from p4utils.utils.topology import Topology as DEFAULT_TOPODB
 from p4utils.mininetlib.node import P4RuntimeSwitch as DEFAULT_SWITCH
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
@@ -80,72 +80,70 @@ class AppRunner(object):
 
         Example of JSON structure of conf_file:
         {
-            "program": "<path_to_gobal_p4_program",
-            "cli": "<true|false>",
-            "pcap_dump": "<true|false>",
-            "enable_log": "<true|false>",
+            "p4_src": <path to gobal p4 source> (string),
+            "cli": <true|false> (bool),
+            "pcap_dump": <true|false> (bool),
+            "enable_log": <true|false> (bool),
             "host_node":
             {
-                "file_path": "<path_to_module>",
-                "module_name": "<module_file_name>",
-                "object_name": "<module_object>",
-                "options": options_passed_to_init
+                "file_path": <path to module> (string),
+                "module_name": <module file name> (string),
+                "object_name": <module object> (string)
             },
             "switch_node":
             {
-                "file_path": "<path_to_module>",
-                "module_name": "<module_file_name>",
-                "object_name": "<module_object>"
+                "file_path": <path to module> (string),
+                "module_name": <module file name> (string),
+                "object_name": <module object> (string)
             },
+            SINCE WE ARE ALWAYS USING P4C, THIS OPTION CAN BE REMOVED
             "compiler_module":
             {
-                "file_path": "<path_to_module>",
-                "module_name": "<module_file_name>",
-                "object_name": "<module_object>",
-                "options": options_passed_to_init
+                "file_path": <path to module> (string),
+                "module_name": <module file name> (string),
+                "object_name": <module object> (string),
+                "options": <options passed to init> (string)
             },
-            "controller_module":
+            "client_module":
             {
-                "file_path": "<path_to_module>",
-                "module_name": "<module_file_name>",
-                "object_name": "<module_object>",
-                "options": options_passed_to_init
+                "file_path": <path to module> (string),
+                "module_name": <module file name> (string),
+                "object_name": <module object> (string),
+                "options": <options passed to init> (string)
             },
             "topo_module":
             {
-                "file_path": "<path_to_module>",
-                "module_name": "<module_file_name>",
-                "object_name": "<module_object>"
+                "file_path": <path to module> (string),
+                "module_name": <module file name> (string),
+                "object_name": <module object> (string)
             },
             "topodb_module":
             {
-                "file_path": "<path_to_module>",
-                "module_name": "<module_file_name>",
-                "object_name": "<module_object>"
+                "file_path": <path to module> (string),
+                "module_name": <module file name> (string),
+                "object_name": <module object> (string)
             },
+            SINCE WE ARE USING ALWAYS P4MININET AS NETWORK, THIS OPTION CAN BE REMOVED
             "mininet_module":
             {
-                "file_path": "<path_to_module>",
-                "module_name": "<module_file_name>",
-                "object_name": "<module_object>"
+                "file_path": <path to module> (string),
+                "module_name": <module file name> (string),
+                "object_name": <module object> (string)
             },
             "exec_scripts": 
             [
                 {
-                    "cmd": "<path_to_script>",
-                    "reboot_run": "<true|false>"
+                    "cmd": <path to script> (string),
+                    "reboot_run": <true|false> (bool)
                 },
-                {
-                    "cmd": "<path_to_another_script>",
-                    "reboot_run": "<true|false>"
-                }
+                ...
             ],
             "topology": 
             {
                 "assignment_strategy": assignment_strategy,
                 "default":
                 {
-                    <see parse_links and program_hosts>
+                    <default links and hosts configurations, see parse_links>
                 }
                 "links": 
                 [
@@ -164,6 +162,10 @@ class AppRunner(object):
         Notice: none of the modules or nodes are mandatory. In case they are not specified,
         default settings will be used.
         """
+        # Clients of switches
+        self.clients = []
+        # Compilers of switches
+        self.compilers = []
 
         # Set verbosity
         self.verbosity = verbosity
@@ -186,12 +188,12 @@ class AppRunner(object):
             lib_path = os.path.dirname(p4utils.__file__)
             lib_path += '/../empty_program/empty_program.p4'
             # Set default program to empty program
-            self.conf['program'] = lib_path
+            self.conf['p4_src'] = lib_path
 
             # Override custom switch programs with empty program
             for switch, params in self.conf['topology']['switches'].items():
-                if params.get('program', False):
-                    params['program'] = lib_path
+                if params.get('p4_src', False):
+                    params['p4_src'] = lib_path
 
         self.cli_enabled = cli_enabled
         self.pcap_dir = pcap_dir
@@ -228,7 +230,7 @@ class AppRunner(object):
             - "switch_node" loads the switch node to be used with Mininet (see mininetlib/node.py),
             - "compiler_module" loads the compiler for P4 codes,
             - "host_node" loads the host node to be used with Mininet,
-            - "controller_module" loads the controller to program switches from files.
+            - "client_module" loads the client to program switches from files.
             - "topo_module" loads Mininet topology module
             - "topodb_module" loads the topology database (will be removed soon)
             - "mininet_module" loads the network module
@@ -263,23 +265,23 @@ class AppRunner(object):
             self.compiler_module['module'] = DEFAULT_COMPILER
             self.compiler_module['kwargs'] = {}
 
-        # Load default controller module
-        self.controller_module = {}
-        # Set default options for the controller
-        default_controller_kwargs = {
-                                        'log_enabled': True,
-                                        'log_dir': self.log_dir
-                                    }
-        if self.conf.get('controller_module', None):
-            if self.conf['controller_module'].get('object_name', None):
-                self.controller_module['module'] = load_custom_object(self.conf.get('controller_module'))
+        # Load default client module
+        self.client_module = {}
+        # Set default options for the client
+        default_client_kwargs = {
+                                    'log_enabled': True,
+                                    'log_dir': self.log_dir
+                                }
+        if self.conf.get('client_module', None):
+            if self.conf['client_module'].get('object_name', None):
+                self.client_module['module'] = load_custom_object(self.conf.get('client_module'))
             else:
-                self.controlle_module['module'] = DEFAULT_CONTROLLER
-            # Load default controller module arguments
-            self.controller_module['kwargs'] = self.conf['controller_module'].get('options', default_controller_kwargs)
+                self.client_module['module'] = DEFAULT_CLIENT
+            # Load default client module arguments
+            self.client_module['kwargs'] = self.conf['client_module'].get('options', default_client_kwargs)
         else:
-            self.controller_module['module'] = DEFAULT_CONTROLLER
-            self.controller_module['kwargs'] = default_controller_kwargs
+            self.client_module['module'] = DEFAULT_CLIENT
+            self.client_module['kwargs'] = default_client_kwargs
 
         ## Old modules
         if self.conf.get('topo_module', None):
@@ -327,63 +329,87 @@ class AppRunner(object):
         {
             switch_name:
             {
-                "program": path_to_p4_program,
-                "cpu_port": <true|false>,
-                "cli_input": path_to_cli_input_file,
-                "switch_node": custom_switch_node,
-                "controller_module": custom_controller_module,
-                "opts":
-                {
-                    "sw_bin": switch_binary,
-                    "thrift_port": thrift_port,
-                    "grpc_port": grpc_port
-                }
+                "p4_src": path_to_p4_program (string),
+                "cpu_port": <true|false> (bool),
+                "cli_input": <path to cli input file> (string),
+                "switch_node": custom_switch_node (dict),
+                "client_module": custom_client_module (dict),
+                "log_enabled" : <true|false> (bool), (*)
+                "log_dir": <log path for switch binary> (string), (*)
+                "pcap_dump": <true|false> (bool), (*)
+                "pcap_dir": <path for pcap files> (string), (*)
+                "sw_bin": switch_binary (string), (*)
+                "thrift_port": thrift_port (int), (*)
+                "grpc_port": grpc_port (int) (*)
             },
             ...
         }
 
+        (*) Parameters used to initialize the actual Mininet node (see p4utils.mininetlib.node).
+        The other parameters are needed for other application features and functions and can be retrieved
+        under getattr(mininetlib.net['node_name'],'params') dictionary.
         These settings override the default ones. The field "opts" gathers all the mininet
         options used to initialize the Mininet switch class. None of these fields is mandatory.
         """
         switches = {}
         next_thrift_port = 9090
         next_grpc_port = 9559
-        # Set general default options
+        # Set general default switch options
         default = {
-                    'program': self.conf['program'],
+                    'p4_src': self.conf['p4_src'],
                     'cpu_port': True,
                     'switch_node': self.switch_node,
-                    'controller_module': self.controller_module,
-                    'opts':
-                    {
-                        'pcap_dump': self.pcap_dump,
-                        'pcap_dir': self.pcap_dir,
-                        'log_enabled': self.log_enabled
-                    }
+                    'client_module': self.client_module,
+                    'pcap_dump': self.pcap_dump,
+                    'pcap_dir': self.pcap_dir,
+                    'log_enabled': self.log_enabled
                   }
 
         for switch, custom_params in unparsed_switches.items():
             params = deepcopy(default)
-            # Set switch specific default options
-            params['opts']['thrift_port'] = next_thrift_port
-            params['opts']['grpc_port'] = next_grpc_port
-            # Set controller default options
-            params['controller_module']['kwargs']['sw_name'] = switch
-            params['controller_module']['kwargs']['thrift_port'] = next_thrift_port
-            params['controller_module']['kwargs']['grpc_port'] = next_grpc_port
-            # Set non default node type
+
+            # Set Switch node specific default options
+            params['thrift_port'] = next_thrift_port
+            params['grpc_port'] = next_grpc_port
+
+            ## Parse Switch node type
+            # Set non default node type (the module JSON is converted into a Switch object)
             if 'switch_node' in custom_params:
-                custom_params['switch_node'] = load_custom_object(custom_params['switch_node'])
-            # Set non default controller type
-            if 'controller_module' in custom_params:
-                custom_params['controller_module']['module'] = load_custom_object(custom_params['controller_module'])
+                custom_params['cls'] = load_custom_object(custom_params['switch_node'])
+                # This field is not propagated further
+                del custom_params['switch_node']
+            else:
+                params['cls'] = params['switch_node']
+            # This field is not propagated further
+            del params['switch_node']
+
+            ## Parse Switch client type
+            # Set non default client type (the module JSON is converted into a Contoller object)
+            kwargs = params['client_module']['kwargs']
+            if 'client_module' in custom_params:
+                module = load_custom_object(custom_params['client_module'])
+                kwargs.update(custom_params['client_module']['kwargs'])
+                # This field is not propagated further
+                del custom_params['client_module']
+            else:
+                module = params['client_module']['module']
+            # This field is not propagated further
+            del params['client_module']
+            # If a client command input is set
+            if 'cli_input' in custom_params:
+                kwargs.setdefault('conf_path',custom_params['cli_input'])
+            # Add client to list
+            self.clients.append(module(sw_name=switch,
+                                       thrift_port=next_thrift_port,
+                                       grpc_port=next_grpc_port,
+                                       **kwargs))
+ 
+            # Update default parameters with custom ones
             params.update(custom_params)
-            # Set switch node
-            params['opts']['cls'] = params['switch_node']
             switches[switch] = deepcopy(params)
             # Update switch port numbers
-            next_thrift_port = max(next_thrift_port + 1, params['opts']['thrift_port'])
-            next_grpc_port = max(next_grpc_port + 1, params['opts']['grpc_port'])
+            next_thrift_port = max(next_thrift_port + 1, params['thrift_port'])
+            next_grpc_port = max(next_grpc_port + 1, params['grpc_port'])
     
         return switches
 
@@ -461,7 +487,7 @@ class AppRunner(object):
             # Hosts are not allowed to connect to another host.
             if node1 in self.hosts:
                 assert node2 not in self.hosts, 'Hosts should be connected to switches: {} <-> {} link not possible'.format(node1, node2)
-            links.append([link[0],link[1],opts])
+            links.append([node1, node2, deepcopy(opts)])
 
         return links
 
@@ -478,18 +504,23 @@ class AppRunner(object):
         info('Compiling P4 programs...\n')
         self.compilers = []
         for switch, params in self.switches.items():
-            if not is_compiled(os.path.realpath(params['program']), self.compilers):
-                compiler = self.compiler_module['module'](p4_filepath=params['program'],
+            # If the file has not been compiled yet
+            if not is_compiled(os.path.realpath(params['p4_src']), self.compilers):
+                compiler = self.compiler_module['module'](p4_filepath=params['p4_src'],
                                                           **self.compiler_module['kwargs'])
                 compiler.compile()
                 self.compilers.append(compiler)
             else:
-                compiler = get_by_attr('p4_filepath', os.path.realpath(params['program']), self.compilers)
-            params['opts']['json_path'] = compiler.get_json_out()
+                # Retrieve compiler
+                compiler = get_by_attr('p4_filepath', os.path.realpath(params['p4_src']), self.compilers)
+            # Retrieve json_path
+            params['json_path'] = compiler.get_json_out()
+            # Try to retrieve p4 runtime info file path
             try:
-                params['opts']['p4rt_path'] = compiler.get_p4rt_out()
+                params['p4rt_path'] = compiler.get_p4rt_out()
             except P4InfoDisabled:
                 pass
+            # Deepcopy needed for non flat dicts
             self.switches[switch] = deepcopy(params)
 
     def create_network(self):
@@ -578,15 +609,11 @@ class AppRunner(object):
         CLI on each switch and use the contents of the command files as input.
 
         Assumes:
-            A mininet instance is stored as self.net and self.net.start() has been called.
+            self.clients has been populated and self.net.start() has been called.
         """
-        self.controllers = []
-        for params in self.switches.values():
-            controller = params['controller_module']['module'](conf_path=params.get('cli_input', None),
-                                                               **params['controller_module']['kwargs'])
-            if 'cli_input' in params:
-                controller.configure()
-            self.controllers.append(controller)
+        for cli in self.clients:
+            if cli.get_conf():
+                cli.configure()
 
     def save_topology(self):
         """Saves mininet topology to database."""
@@ -618,7 +645,7 @@ class AppRunner(object):
         print('')
         print('To inspect or change the switch configuration, connect to')
         print('its CLI from your host operating system using this command:')
-        print('  {} --thrift-port <switch thrift port>'.format(DEFAULT_CONTROLLER.cli_bin))
+        print('  {} --thrift-port <switch thrift port>'.format(DEFAULT_CLIENT.cli_bin))
         print('')
         print('To view a switch log, run this command from your host OS:')
         print('  tail -f {}/<switchname>.log'.format(self.log_dir))
@@ -628,7 +655,11 @@ class AppRunner(object):
         print('')
 
         # Start CLI
-        P4CLI(mininet=self.net, controllers=self.controllers, compilers=self.compilers)
+        P4CLI(mininet=self.net,
+              clients=self.clients,
+              compilers=self.compilers,
+              compiler_module=self.compiler_module,
+              client_module=self.client_module)
 
     def run_app(self):
         """
