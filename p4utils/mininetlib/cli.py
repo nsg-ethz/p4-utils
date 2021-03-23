@@ -17,6 +17,7 @@ class P4CLI(CLI):
         self.compilers = kwargs.get('compilers', [])
         self.compiler_module = kwargs.get('compiler_module', None)
         self.client_module = kwargs.get('client_module', None)
+        self.scripts = kwargs.get('scripts', None)
         # Class CLI from mininet.cli does not have clients and compilers attributes
         # so they can be removed
         if 'clients' in kwargs:
@@ -27,21 +28,57 @@ class P4CLI(CLI):
             del kwargs['compiler_module']
         if 'client_module' in kwargs:
             del kwargs['client_module']
+        if 'scripts' in kwargs:
+            del kwargs['scripts']
         CLI.__init__(self, *args, **kwargs)
         # self.mn stores the Mininet network object according to the parent object
+
+    def getP4Switch(self, node_name):
+        """
+        Return the requested P4 Switch.
+        
+        Arguments:
+            node_name (string): name of the P4 Switch
+        
+        Returns:
+            p4switch (Mininet node object): requested node or None if no such object was found
+        """
+        # Check if switch is in Mininet
+        if node_name not in self.mn:
+            error('P4 Switch {} not found in the network.\n'.format(node_name))
+            return None
+
+        node = self.mn[node_name]
+
+        try:
+            isP4Switch = get_node_attr(node, 'isP4Switch')
+            if not isP4Switch:
+                error('P4 Switch {} not found in the network\n'.format(node_name))
+                return None
+            else:
+                return node
+        except AttributeError:
+            error('P4 Switch {} not found in the network\n'.format(node_name))
+            return None
 
     def do_p4switch_stop(self, line=""):
         """Stop simple switch from switch namespace."""
         switch_name = line.split()
+
+        # Check args validity
         if not switch_name or len(switch_name) > 1:
+            error('Wrong syntax.\n')
             error('usage: p4switch_stop <p4switch name>\n')
-        else:
-            switch_name = switch_name[0]
-            if switch_name not in self.mn:
-                error("p4switch {} not in the network\n".format(switch_name))
-            else:
-                p4switch = self.mn[switch_name]
-                p4switch.stop_p4switch()
+            return False
+
+        switch_name = switch_name[0]
+        p4switch = self.getP4Switch(switch_name)
+
+        if not p4switch:
+            error('usage: p4switch_stop <p4switch name>\n')
+            return False
+        
+        p4switch.stop_p4switch()
 
     def do_p4switch_start(self, line=""):
         """Start again simple switch from namespace."""
@@ -49,17 +86,17 @@ class P4CLI(CLI):
 
         # Check args validity
         if len(args) > 5:
+            error('Wrong syntax.\n')
             error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds path]\n')
             return False
 
         switch_name = args[0]
 
-        # Check if switch is in Mininet
-        if switch_name not in self.mn:
-            error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds path]\n')
-            return False
+        p4switch = self.getP4Switch(switch_name)
 
-        p4switch = self.mn[switch_name]
+        if not p4switch:
+            error('usage: p4switch_start <p4switch name>\n')
+            return False
 
         # Check if switch is running
         if p4switch.switch_started():
@@ -78,21 +115,21 @@ class P4CLI(CLI):
             if not os.path.isfile(p4_src):
                 error('File Error: p4source {} is not a file\n'.format(p4_src))
                 return False
-        compiler = get_by_attr('p4_filepath', os.path.realpath(p4_src), self.compilers)
-        # If a compiler for the same p4_filepath has been found
-        if compiler:
-            # If new file has been provided
-            if compiler.new_source():
-                debug('New p4 source file detected!\n')
-                compiler.compile()
-        # If this file is compiled for the first time
-        elif self.compiler_module is not None: 
-            compiler = self.compiler_module['module'](p4_filepath=p4_src,
+        if p4_src is not None:
+            compiler = get_by_attr('p4_src', os.path.realpath(p4_src), self.compilers)
+            # If a compiler for the same p4_src has been found
+            if compiler:
+                # If new file has been provided
+                if compiler.new_source():
+                    debug('New p4 source file detected!\n')
+                    compiler.compile()
+            # If this file is compiled for the first time
+            elif self.compiler_module is not None: 
+                compiler = self.compiler_module['module'](p4_src=p4_src,
                                                         **self.compiler_module['kwargs'])
-            self.compilers.append(compiler)
-        else:
-            error('No compiler module provided!')
-
+                self.compilers.append(compiler)
+            else:
+                error('No compiler module provided!')
 
         # Start switch
         p4switch.start()
@@ -163,6 +200,13 @@ class P4CLI(CLI):
             tmp_line = switch_name + " " +line
             self.do_p4switch_start(line=tmp_line)
 
+        #run scripts
+        if isinstance(self.scripts, list):
+            for script in self.scripts:
+                if script["reboot_run"]:
+                    info("Exec Script: {}\n".format(script["cmd"]))
+                    run_command(script["cmd"])
+
     def do_test_p4(self, line=""):
         """Tests start stop functionalities."""
         self.do_p4switch_stop("s1")
@@ -173,89 +217,83 @@ class P4CLI(CLI):
     def do_printSwitches(self, line=""):
         """Print names of all switches."""
         for sw in self.mn.p4switches:
-            print(sw.name)   
-
-        #run scripts
-        if isinstance(self.config.get('exec_scripts', None), list):
-            for script in self.config.get('exec_scripts'):
-                if script["reboot_run"]:
-                    info("Exec Script: {}\n".format(script["cmd"]))
-                    run_command(script["cmd"])
+            print(sw.name)
 
     def do_pingset(self ,line=""):
+        """"""
         hosts_names = line.strip().split()
         hosts = [x for x in self.mn.hosts if x.name in hosts_names]
         self.mn.ping(hosts=hosts, timeout=1)
 
-    def do_printNetInfo(self, line=""):
-        """Prints Topology Info"""
+    # def do_printNetInfo(self, line=""):
+    #     """Prints Topology Info"""
 
-        self.topo = Topology(db="topology.db")
+    #     self.topo = Topology(db="topology.db")
    
-        print("\n*********************")
-        print("Network Information:")
-        print("*********************\n")
+    #     print("\n*********************")
+    #     print("Network Information:")
+    #     print("*********************\n")
         
-        switches = self.topo.get_switches()
+    #     switches = self.topo.get_switches()
 
-        for sw in sorted(switches.keys()):
+    #     for sw in sorted(switches.keys()):
             
-            # skip linux bridge
-            if sw == "sw-cpu":
-                continue
+    #         # skip linux bridge
+    #         if sw == "sw-cpu":
+    #             continue
 
-            thrift_port = self.topo.get_thrift_port(sw)
-            switch_id = self.topo[sw].get("sw_id", "N/A")
-            cpu_index = self.topo.get_cpu_port_index(sw, quiet=True)
-            header = "{}(thirft->{}, cpu_port->{})".format(sw, thrift_port, cpu_index)
+    #         thrift_port = self.topo.get_thrift_port(sw)
+    #         switch_id = self.topo[sw].get("sw_id", "N/A")
+    #         cpu_index = self.topo.get_cpu_port_index(sw, quiet=True)
+    #         header = "{}(thirft->{}, cpu_port->{})".format(sw, thrift_port, cpu_index)
 
-            header2 = "{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format("port", "intf", "node", "mac", "ip", "bw", "weight", "delay", "loss","queue")                                                                                     
+    #         header2 = "{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format("port", "intf", "node", "mac", "ip", "bw", "weight", "delay", "loss","queue")                                                                                     
 
-            print(header)
-            print((len(header2)*"-")) 
-            print(header2)
+    #         print(header)
+    #         print((len(header2)*"-")) 
+    #         print(header2)
             
-            for intf,port_number  in sorted(list(self.topo.get_interfaces_to_port(sw).items()), key=lambda x: x[1]):
-                if intf == "lo":
-                    continue
+    #         for intf,port_number  in sorted(list(self.topo.get_interfaces_to_port(sw).items()), key=lambda x: x[1]):
+    #             if intf == "lo":
+    #                 continue
                 
-                other_node = self.topo.get_interfaces_to_node(sw)[intf]
-                mac = self.topo[sw][other_node]['mac']
-                ip = self.topo[sw][other_node]['ip'].split("/")[0]
-                bw = self.topo[sw][other_node]['bw']
-                weight = self.topo[sw][other_node]['weight']
-                delay = self.topo[sw][other_node]['delay']
-                loss = self.topo[sw][other_node]['loss']
-                queue_length = self.topo[sw][other_node]['queue_length']
-                print(("{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(port_number, intf, other_node, mac, ip, bw, weight, delay, loss, queue_length)))
+    #             other_node = self.topo.get_interfaces_to_node(sw)[intf]
+    #             mac = self.topo[sw][other_node]['mac']
+    #             ip = self.topo[sw][other_node]['ip'].split("/")[0]
+    #             bw = self.topo[sw][other_node]['bw']
+    #             weight = self.topo[sw][other_node]['weight']
+    #             delay = self.topo[sw][other_node]['delay']
+    #             loss = self.topo[sw][other_node]['loss']
+    #             queue_length = self.topo[sw][other_node]['queue_length']
+    #             print(("{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(port_number, intf, other_node, mac, ip, bw, weight, delay, loss, queue_length)))
 
-            print((len(header2)*"-")) 
-            print("")
+    #         print((len(header2)*"-")) 
+    #         print("")
 
-        # HOST INFO
-        print("Hosts Info")
+    #     # HOST INFO
+    #     print("Hosts Info")
 
-        header = "{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(
-            "name", "intf", "node", "mac", "ip", "bw", "weight", "delay", "loss","queue")    
+    #     header = "{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(
+    #         "name", "intf", "node", "mac", "ip", "bw", "weight", "delay", "loss","queue")    
         
-        print((len(header)*"-")) 
-        print(header)
+    #     print((len(header)*"-")) 
+    #     print(header)
 
-        for host in sorted(self.topo.get_hosts()):           
-            for intf,port_number  in sorted(list(self.topo.get_interfaces_to_port(host).items()), key=lambda x: x[1]):
+    #     for host in sorted(self.topo.get_hosts()):           
+    #         for intf,port_number  in sorted(list(self.topo.get_interfaces_to_port(host).items()), key=lambda x: x[1]):
                 
-                other_node = self.topo.get_interfaces_to_node(host)[intf]
-                mac = self.topo[host][other_node]['mac']
-                ip = self.topo[host][other_node]['ip'].split("/")[0]
-                bw = self.topo[host][other_node]['bw']
-                weight = self.topo[host][other_node]['weight']
-                delay = self.topo[host][other_node]['delay']
-                loss = self.topo[host][other_node]['loss']
-                queue_length = self.topo[host][other_node]['queue_length']
-                print(("{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(host, intf, other_node, mac, ip, bw, weight, delay, loss, queue_length)))
+    #             other_node = self.topo.get_interfaces_to_node(host)[intf]
+    #             mac = self.topo[host][other_node]['mac']
+    #             ip = self.topo[host][other_node]['ip'].split("/")[0]
+    #             bw = self.topo[host][other_node]['bw']
+    #             weight = self.topo[host][other_node]['weight']
+    #             delay = self.topo[host][other_node]['delay']
+    #             loss = self.topo[host][other_node]['loss']
+    #             queue_length = self.topo[host][other_node]['queue_length']
+    #             print(("{:>4} {:>15} {:>8} {:>20} {:>16} {:>8} {:>8} {:>8} {:>8} {:>8}".format(host, intf, other_node, mac, ip, bw, weight, delay, loss, queue_length)))
 
-        print((len(header)*"-")) 
-        print("")
+    #     print((len(header)*"-")) 
+    #     print("")
 
 #def describe(self, sw_addr=None, sw_mac=None):
 #    print "**********"

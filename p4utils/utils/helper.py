@@ -47,28 +47,35 @@ def ip_address_to_mac(ip):
     return mac_address
 
 
-def is_compiled(p4_filepath, compilers):
+def is_compiled(p4_src, compilers):
     """
     Check if a file has been already compiled by at least
     one compiler in the list.
 
     Arguments:
-        p4_filepath (string)    : P4 file path
+        p4_src (string)    : P4 file path
         compilers (list)        : list of P4 compiler objects (see compiler.py)
     
     Returns:
         True/False depending on whether the file has been already compiled.
     """
     for compiler in compilers:
-        if compiler.compiled and compiler.p4_filepath == p4_filepath:
+        if getattr(compiler, 'compiled') and getattr(compiler, 'p4_src') == p4_src:
             return True
     else:
         return False
 
 def get_node_attr(node, attr_name):
     """
-    Finds the value of the attribute attr_name of the Mininet node
-    by looking also inside node.params (for implicit attributes).
+    Finds the value of the attribute 'attr_name' of the Mininet node
+    by looking also inside node.params (for unparsed attributes).
+
+    Arguments:
+        node                : Mininet node object
+        attr_name (string)  : attribute to looking for (also inside unparsed ones)
+    
+    Returns:
+        the value of the requested attribute.
     """
     try:
         value = getattr(node, attr_name)
@@ -81,8 +88,16 @@ def get_node_attr(node, attr_name):
 
 def get_by_attr(attr_name, attr_value, obj_list):
     """
-    Return the object in the list which has the attribute 'attr_name'
-    value equal to attr_value
+    Return the first object in the list that has the attribute 'attr_name'
+    value equal to attr_value.
+
+    Arguments:
+        attr_name (string)  : attribute name
+        attr_value          : attrubute value
+        obj_list (list)     : list of objects
+
+    Returns:
+        obj : the requested object or None
     """
     for obj in obj_list:
         if attr_value == getattr(obj, attr_name):

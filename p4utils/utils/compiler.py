@@ -23,7 +23,7 @@ class P4C:
     the configuration files used by switches.
 
     Attributes:
-        p4_filepath (string): path of the source P4 file to compile.
+        p4_src (string): path of the source P4 file to compile.
         p4c_bin (string)    : path to the compiler binary
         outdir (string)     : directory containing all the output files. If set to
                               None, then a every output is stored in temporary files.
@@ -39,23 +39,38 @@ class P4C:
         """Set class default binary"""
         P4C.p4c_bin = p4c_bin
 
-    def __init__(self, p4_filepath,
+    def __init__(self, p4_src,
                  p4c_bin=None,
-                 outdir='.',
+                 outdir=None,
                  options='--target bmv2 --arch v1model --std p4-16',
-                 p4runtime=True,
+                 p4runtime=False,
                  **kwargs):
 
         if p4c_bin is not None:
             self.set_binary(p4c_bin)
 
-        self.p4_filepath = None
-        self.set_source(p4_filepath)        
-        self.outdir = outdir
+        # Check whether the p4file is valid
+        if p4_src is not None:
+            if os.path.isfile(p4_src):
+                self.p4_src = os.path.realpath(p4_src)
+            else:
+                 raise FileNotFoundError('Could not find file {}'.format(p4_src))
+        else:
+            raise FileNotFoundError('No source file provided'.format(p4_src))
+
+        if outdir is None:  
+                self.outdir = os.path.dirname(os.path.realpath(self.p4_src))
+        else:
+            if os.path.isdir(outdir): 
+                self.outdir = outdir
+            else:
+                raise NotADirectoryError('{} is not a directory'.dormat(outdir))
+
         self.options = options
         self.p4runtime = p4runtime
+        self.compiled = False
         
-        p4_basename = os.path.basename(self.p4_filepath)
+        p4_basename = os.path.basename(self.p4_src)
         p4rt_out_basename = p4_basename.replace('.p4', '') + '_p4rt.txt'
         json_out_basename = p4_basename.replace('.p4', '') + '.json'
 
@@ -68,8 +83,8 @@ class P4C:
         configuration files
         """
         # Compute checksum of P4 file. This allows to recognize modified files.
-        self.cksum = cksum(self.p4_filepath)
-        debug('source: {}\tcksum: {}\n'.format(self.p4_filepath, self.cksum))
+        self.cksum = cksum(self.p4_src)
+        debug('source: {}\tcksum: {}\n'.format(self.p4_src, self.cksum))
 
         compiler_args = []
         compiler_args.append(self.options)
@@ -78,13 +93,13 @@ class P4C:
         if self.p4runtime:
             compiler_args.append('--p4runtime-files "{}"'.format(self.p4rt_out))
         
-        compiler_args.append('"{}"'.format(self.p4_filepath))
+        compiler_args.append('"{}"'.format(self.p4_src))
         info(self.p4c_bin + ' {}'.format(' '.join(compiler_args)) + '\n')
         return_value = run_command(self.p4c_bin + ' {}'.format(' '.join(compiler_args)))
         if return_value != 0:
             raise CompilationError
         else:
-            info('{} compiled successfully.\n'.format(self.p4_filepath))
+            info('{} compiled successfully.\n'.format(self.p4_src))
             self.compiled = True
     
     def get_json_out(self):
@@ -115,15 +130,6 @@ class P4C:
         Returns True if the source P4 file has changed since
         the last time it was compiled.
         """
-        return cksum(self.p4_filepath) != self.cksum
+        return cksum(self.p4_src) != self.cksum
 
-    def set_source(self, p4_filepath):
-        """Set the P4 source file path."""
-        # Check whether the p4file is valid
-        if os.path.isfile(p4_filepath):
-            if self.p4_filepath != os.path.realpath(p4_filepath):
-                self.compiled = False
-                self.p4_filepath = os.path.realpath(p4_filepath)
-        else:
-            raise FileNotFoundError('FileMissing: could not find file {}'.format(p4_filepath))
     

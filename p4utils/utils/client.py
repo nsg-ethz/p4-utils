@@ -2,6 +2,8 @@ import os
 import subprocess
 from mininet.log import debug, info, warning
 
+from p4utils.utils.helper import *
+
 class ThriftClient:
     """
     This controller reads commands from a thrift configuration
@@ -58,7 +60,7 @@ class ThriftClient:
         if self.conf_path is not None:
             if not os.path.isfile(self.conf_path):
                 raise FileNotFoundError('Could not find file {} for switch {}'.format(self.conf_path, self.sw_name))
-            else:
+            elif check_listening_on_port(self.thrift_port):
                 log_path = self.log_dir + '/{}_cli_output.log'.format(self.sw_name)
                 with open(self.conf_path, 'r') as fin:
                     entries = [x.strip() for x in fin.readlines() if x.strip() != '']
@@ -71,6 +73,8 @@ class ThriftClient:
                         with open(log_path, 'w') as log_file:
                             log_file.write(stdout.decode())
                 info('Configured switch {} with thrift file {}\n'.format(self.sw_name, self.conf_path))
+            else:
+                raise ConnectionRefusedError('Could not connect to switch {} on port {}'.format(self.sw_name, self.thrift_port))
         else:
             raise FileNotFoundError('Could not find file {} for switch {}'.format(self.conf_path, self.sw_name))
 

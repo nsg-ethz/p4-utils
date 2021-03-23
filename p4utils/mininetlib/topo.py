@@ -19,7 +19,7 @@ class P4Topo(Topo):
         """
         Check if node is a P4 switch.
 
-        Params:
+        Arguments:
             node (string): Mininet node name
 
         Returns:
@@ -31,7 +31,7 @@ class P4Topo(Topo):
         """
         Add P4 switch node to Mininet topology.
 
-        Params:
+        Arguments:
             name (string): switch name
             opts (kwargs): switch options
 
@@ -42,23 +42,36 @@ class P4Topo(Topo):
             opts = self.sopts
         return self.addSwitch(name, isP4Switch=True, **opts)
 
+    def p4switches( self, sort=True ):
+        """
+        Return switches.
+
+        Arguments:
+           sort (bool): sort switches alphabetically
+
+        Returns: 
+            dpids (list): list of dpids
+        """
+        return [ n for n in self.nodes( sort ) if self.isP4Switch( n ) ]
+
     def addHiddenNode(self, name, **opts):
         """
-        Add hidden node to Mininet topology.
+        Add hidden node to Mininet topology. (TO IMPLEMENT)
 
-        Params:
+        Arguments:
             name (string): node name
             opts (kwargs): node options
 
         Returns:
             hidden node name (string)
         """
+        pass
 
     def isHiddenNode(self, node):
         """
         Check if node is a hidden node
 
-        Params:
+        Arguments:
             node (string): Mininet node name
 
         Returns:
@@ -138,9 +151,14 @@ class AppTopo(P4Topo):
                 id = sw_id
             
             sw_attributes = self._switches[sw]
-            self.addP4Switch(sw,
-                             device_id=id,
-                             **sw_attributes)
+            if issubclass(sw_attributes['cls'], P4Switch):
+                self.addP4Switch(sw,
+                                device_id=id,
+                                **sw_attributes)
+            else:
+                self.addSwitch(sw,
+                               device_id=id,
+                               **sw_attributes)
 
             sw_to_id[sw] = id
 

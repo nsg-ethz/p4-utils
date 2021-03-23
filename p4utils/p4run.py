@@ -31,10 +31,11 @@ from mininet.log import setLogLevel, info, output, debug, warning
 from mininet.clean import sh
 
 from p4utils.utils.helper import *
+from p4utils.utils.compiler import P4InfoDisabled
 from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
 from p4utils.utils.client import ThriftClient as DEFAULT_CLIENT
 from p4utils.utils.topology import Topology as DEFAULT_TOPODB
-from p4utils.mininetlib.node import P4RuntimeSwitch as DEFAULT_SWITCH
+from p4utils.mininetlib.node import P4Switch as DEFAULT_SWITCH
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
 from p4utils.mininetlib.topo import AppTopoStrategies as DEFAULT_TOPO
 from p4utils.mininetlib.link import TCLink
@@ -319,7 +320,7 @@ class AppRunner(object):
         """
         if isinstance(self.conf.get('exec_scripts', None), list):
             for script in self.conf.get('exec_scripts'):
-                self.logger("Exec Script: {}".format(script['cmd']))
+                info("Exec Script: {}".format(script['cmd']))
                 run_command(script['cmd'])
 
     def parse_switches(self, unparsed_switches):
@@ -354,23 +355,20 @@ class AppRunner(object):
         switches = {}
         next_thrift_port = 9090
         next_grpc_port = 9559
-        # Set general default switch options
-        default = {
-                    'p4_src': self.conf['p4_src'],
-                    'cpu_port': True,
-                    'switch_node': self.switch_node,
-                    'client_module': self.client_module,
-                    'pcap_dump': self.pcap_dump,
-                    'pcap_dir': self.pcap_dir,
-                    'log_enabled': self.log_enabled
-                  }
 
         for switch, custom_params in unparsed_switches.items():
-            params = deepcopy(default)
-
-            # Set Switch node specific default options
-            params['thrift_port'] = next_thrift_port
-            params['grpc_port'] = next_grpc_port
+            # Set general default switch options
+            params = {
+                         'p4_src': self.conf['p4_src'],
+                         'cpu_port': True,
+                         'switch_node': deepcopy(self.switch_node),
+                         'client_module': deepcopy(self.client_module),
+                         'pcap_dump': self.pcap_dump,
+                         'pcap_dir': self.pcap_dir,
+                         'log_enabled': self.log_enabled,
+                         'thrift_port': next_thrift_port,
+                         'grpc_port': next_grpc_port
+                     }
 
             ## Parse Switch node type
             # Set non default node type (the module JSON is converted into a Switch object)
@@ -506,13 +504,13 @@ class AppRunner(object):
         for switch, params in self.switches.items():
             # If the file has not been compiled yet
             if not is_compiled(os.path.realpath(params['p4_src']), self.compilers):
-                compiler = self.compiler_module['module'](p4_filepath=params['p4_src'],
+                compiler = self.compiler_module['module'](p4_src=params['p4_src'],
                                                           **self.compiler_module['kwargs'])
                 compiler.compile()
                 self.compilers.append(compiler)
             else:
                 # Retrieve compiler
-                compiler = get_by_attr('p4_filepath', os.path.realpath(params['p4_src']), self.compilers)
+                compiler = get_by_attr('p4_src', os.path.realpath(params['p4_src']), self.compilers)
             # Retrieve json_path
             params['json_path'] = compiler.get_json_out()
             # Try to retrieve p4 runtime info file path
@@ -659,7 +657,8 @@ class AppRunner(object):
               clients=self.clients,
               compilers=self.compilers,
               compiler_module=self.compiler_module,
-              client_module=self.client_module)
+              client_module=self.client_module,
+              scripts=self.conf.get('exec_scripts', None))
 
     def run_app(self):
         """
