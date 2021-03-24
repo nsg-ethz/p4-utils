@@ -24,17 +24,22 @@
 import os
 import argparse
 import mininet
+import json
 from copy import deepcopy
 from time import sleep
 from ipaddress import ip_interface
 from mininet.log import setLogLevel, info, output, debug, warning
 from mininet.clean import sh
+from networkx.classes.multigraph import MultiGraph
+from networkx.classes.graph import Graph
+from networkx.readwrite.json_graph import node_link_data
 
 from p4utils.utils.helper import *
 from p4utils.utils.compiler import P4InfoDisabled
 from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
 from p4utils.utils.client import ThriftClient as DEFAULT_CLIENT
 from p4utils.utils.topology import Topology as DEFAULT_TOPODB
+from p4utils.utils.topology_new import NetworkGraph
 from p4utils.mininetlib.node import P4Switch as DEFAULT_SWITCH
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
 from p4utils.mininetlib.topo import AppTopoStrategies as DEFAULT_TOPO
@@ -46,19 +51,6 @@ from p4utils.mininetlib.net import P4Mininet as DEFAULT_NET
 class AppRunner(object):
     """
     Class for running P4 applications.
-
-    Attributes:
-        log_dir (string): directory for mininet log files.
-        pcap_dump (bool): determines if we generate pcap files for interfaces.
-        verbosity (string): see https://github.com/mininet/mininet/blob/master/mininet/log.py#L14
-        hosts (list): list of mininet host names.
-        switches (dict): mininet host names and their associated properties.
-        links (list) : list of mininet link properties.
-        switch_json (string): json of the compiled p4 example.
-        bmv2_exe (string): name or path of the p4 switch binary.
-        conf (dict): parsed configuration from conf_file.
-        topo (Topo object): the mininet topology instance.
-        net (Mininet object): the mininet instance.
     """
 
     def __init__(self, conf_file,
@@ -70,14 +62,37 @@ class AppRunner(object):
         """
         Initializes some attributes and reads the topology json.
 
-        Args:
-            conf_file (string): JSON configuration file according to the following structure.
-            verbosity (string): see https://github.com/mininet/mininet/blob/master/mininet/log.py#L14
-            conf_file (string): a json file which describes the mininet topology.
-            empty_p4 (bool): use an empty program for debugging.
+        Attributes:
+            conf_file (string): a JSON file which describes the mininet topology.
             cli_enabled (bool): enable mininet CLI.
-            log_dir (string): directory where to store logs.
+            empty_p4 (bool): use an empty program for debugging.
+            log_dir (string): directory for mininet log files.
             pcap_dir (string): directory where to store pcap files.
+            verbosity (string): see https://github.com/mininet/mininet/blob/master/mininet/log.py#L14
+
+        The following attributes are initialized during the execution and are
+        not specified in the constructor:
+            pcap_dump (bool)    : determines if we generate pcap files for interfaces.
+            hosts (list)        : list of mininet host names.
+            switches (dict)     : mininet host names and their associated properties.
+            links (list)        : list of mininet link properties.
+            clients (list)      : list of clients (one per client-capable switch) to populate tables
+            compilers (list)    : list of compilers (one per P4 source provided) to compile P4 code
+            conf (dict)         : parsed configuration from conf_file.
+            topo (Topo object)  : the mininet topology instance.
+            net (Mininet object): the mininet instance.
+            *_module (dict/obj) : module dict used to import the specified module (see below)
+            *_node (dict/obj)   : node dict uset to import the specified Mininet node (see below)
+            
+        Modules and nodes available
+        Inside self.conf can be present several module configuration objects. These are the possible values:
+            - "switch_node" loads the switch node to be used with Mininet (see mininetlib/node.py),
+            - "compiler_module" loads the compiler for P4 codes,
+            - "host_node" loads the host node to be used with Mininet,
+            - "client_module" loads the client to program switches from files.
+            - "topo_module" loads Mininet topology module
+            - "topodb_module" loads the topology database (will be removed soon)
+            - "mininet_module" loads the network module
 
         Example of JSON structure of conf_file:
         {
@@ -226,17 +241,6 @@ class AppRunner(object):
                     debug('Creating directory {} for pcap files.\n'.format(self.pcap_dir))
                     os.mkdir(self.pcap_dir)
 
-        """
-        Inside self.conf can be present several module configuration objects. These are the possible values:
-            - "switch_node" loads the switch node to be used with Mininet (see mininetlib/node.py),
-            - "compiler_module" loads the compiler for P4 codes,
-            - "host_node" loads the host node to be used with Mininet,
-            - "client_module" loads the client to program switches from files.
-            - "topo_module" loads Mininet topology module
-            - "topodb_module" loads the topology database (will be removed soon)
-            - "mininet_module" loads the network module
-        """
-        
         ## Mininet nodes
         # Load default switch node
         self.switch_node = {}
@@ -442,11 +446,11 @@ class AppRunner(object):
 
         For what concernes the Mininet classes used, we have that:
             "weight" is used by Networkx,
-            "port*" are used by Mininet.topo and are propagated to link.TCLink.
-            "intfName*" are propagated to link.TCLink and used by each Mininet.link.Intf of the link.
-            "addr*" are propagated to link.TCLink and used by each Mininet.link.Intf of the link.
-            "params*" are propagated to link.TCLink and used by each Mininet.link.Intf of the link.
-            "bw", "delay", "loss" and "max_queue_size" are propagated to link.TCLink and used by both Mininet.link.Intf of the link.
+            "port*" are used by mininet.Topo and are propagated to link.TCLink.
+            "intfName*" are propagated to link.TCLink and used by each mininet.link.Intf of the link.
+            "addr*" are propagated to link.TCLink and used by each mininet.link.Intf of the link.
+            "params*" are propagated to link.TCLink and used by each mininet.link.Intf of the link.
+            "bw", "delay", "loss" and "max_queue_size" are propagated to link.TCLink and used by both mininet.link.Intf of the link.
         
         "weight", "bw", "delay", "loss", "max_queue_size" default value can be set by
         putting inside "topology" the following object:
@@ -613,10 +617,32 @@ class AppRunner(object):
             if cli.get_conf():
                 cli.configure()
 
-    def save_topology(self):
-        """Saves mininet topology to database."""
-        info("Saving mininet topology to database.\n")
-        self.app_topodb(net=self.net).save("./topology.db")
+    def save_topology(self, json_path='topology.json', multigraph=False):
+        """
+        Saves mininet topology to a JSON file.
+        
+        Arguments:
+            json_path (string): output JSON file path
+            multigraph (bool) : whether to convert to multigraph (multiple links
+                                allowed between two nodes) or graph (only one link
+                                allowed between two nodes).
+
+        Notice that multigraphs are not supported yet by p4utils.utils.Topology
+        """
+        # This function return None for each not serializable
+        # obect so that no TypeError is thrown.
+        def default(obj):
+            return None
+
+        info('Saving mininet topology to database: {}\n'.format(json_path))
+        if multigraph:
+            warning('Multigraph topology selected!\n')
+            graph = self.topo.g.convertTo(MultiGraph, data=True, keys=True)
+        else:
+            graph = self.topo.g.convertTo(NetworkGraph, data=True, keys=False)
+        graph_dict = node_link_data(graph)
+        with open(json_path,'w') as f:
+            json.dump(graph_dict, f, default=default)
     
     def do_net_cli(self):
         """
@@ -678,7 +704,7 @@ class AppRunner(object):
         self.program_switches()
 
         # Save mininet topology to a database
-        #self.save_topology()
+        self.save_topology()
         sleep(1)
 
         # Execute configuration scripts on the nodes

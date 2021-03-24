@@ -21,15 +21,6 @@ class P4C:
     """
     This compiler reads the .p4 program and outputs
     the configuration files used by switches.
-
-    Attributes:
-        p4_src (string): path of the source P4 file to compile.
-        p4c_bin (string)    : path to the compiler binary
-        outdir (string)     : directory containing all the output files. If set to
-                              None, then a every output is stored in temporary files.
-        options (string)    : p4c compilation options
-        p4runtime (bool)    : whether to output the p4info file used to
-                              establish p4runtime connection to simple_switch_grpc.
     """
     compiled = False
     p4c_bin = 'p4c'
@@ -45,6 +36,16 @@ class P4C:
                  options='--target bmv2 --arch v1model --std p4-16',
                  p4runtime=False,
                  **kwargs):
+        """
+        Attributes:
+            p4_src (string): path of the source P4 file to compile.
+            p4c_bin (string)    : path to the compiler binary
+            outdir (string)     : directory containing all the output files. If set to
+                                None, then a every output is stored in temporary files.
+            options (string)    : p4c compilation options
+            p4runtime (bool)    : whether to output the p4info file used to
+                                establish p4runtime connection to simple_switch_grpc.
+        """
 
         if p4c_bin is not None:
             self.set_binary(p4c_bin)

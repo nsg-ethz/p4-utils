@@ -15,17 +15,18 @@ from p4utils.mininetlib.node import *
 class P4Topo(Topo):
     """Extension of the mininet topology class with P4 switches."""
 
-    def isP4Switch(self, node):
+    def addHost(self, name, **opts):
         """
-        Check if node is a P4 switch.
+        Add P4 host node to Mininet topology.
 
         Arguments:
-            node (string): Mininet node name
+            name (string): switch name
+            opts (kwargs): switch options
 
         Returns:
-            True if node is a P4 switch, else False (bool)
+            P4 host name (string)
         """
-        return self.g.node[node].get('isP4Switch', False)
+        return super().addHost(name, isHost=True, **opts)
 
     def addP4Switch(self, name, **opts):
         """
@@ -40,19 +41,19 @@ class P4Topo(Topo):
         """
         if not opts and self.sopts:
             opts = self.sopts
-        return self.addSwitch(name, isP4Switch=True, **opts)
+        return super().addSwitch(name, isP4Switch=True, **opts)
 
-    def p4switches( self, sort=True ):
+    def isP4Switch(self, node):
         """
-        Return switches.
+        Check if node is a P4 switch.
 
         Arguments:
-           sort (bool): sort switches alphabetically
+            node (string): Mininet node name
 
-        Returns: 
-            dpids (list): list of dpids
+        Returns:
+            True if node is a P4 switch, else False (bool)
         """
-        return [ n for n in self.nodes( sort ) if self.isP4Switch( n ) ]
+        return self.g.node[node].get('isP4Switch', False)
 
     def addHiddenNode(self, name, **opts):
         """

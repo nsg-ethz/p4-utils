@@ -8,14 +8,6 @@ class ThriftClient:
     """
     This controller reads commands from a thrift configuration
     file and uses it to set up the thrift switch.
-
-    Attributes:
-        cli_bin (string)    : client binary file path.
-        conf_path (string)  : path of the configuration text file.
-        log_enabled (bool)  : whether to enable logs.
-        log_dir (string)    : directory to store logs.
-        thrift_port (int)   : thrift server thrift_port number.
-        sw_name (string)    : name of the switch to configure.
     """
     cli_bin = 'simple_switch_CLI'
 
@@ -31,6 +23,15 @@ class ThriftClient:
                  log_enabled=True,
                  log_dir='/tmp',
                  **kwargs):
+        """
+        Attributes:
+            cli_bin (string)    : client binary file path.
+            conf_path (string)  : path of the configuration text file.
+            log_enabled (bool)  : whether to enable logs.
+            log_dir (string)    : directory to store logs.
+            thrift_port (int)   : thrift server thrift_port number.
+            sw_name (string)    : name of the switch to configure.
+        """
         
         self.set_conf(conf_path)
         self.log_enabled = log_enabled

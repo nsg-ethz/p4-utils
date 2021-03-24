@@ -6,7 +6,10 @@ import hashlib
 import importlib
 import json
 import subprocess
+from networkx.readwrite.json_graph import node_link_graph
 from mininet.log import info, output, error, warn, debug
+
+from p4utils.utils.topology_new import NetworkGraph
 
 
 def check_listening_on_port(port):
@@ -110,6 +113,22 @@ def load_conf(conf_file):
     with open(conf_file, 'r') as f:
         config = json.load(f)
     return config
+
+
+def load_topo(json_path):
+    """
+    Load the topology from the json_path provided
+
+    Arguments:
+        json_path (string): path of the JSON file to load
+
+    Returns:
+        p4utils.utils.topology.NetworkGraph object
+    """
+    with open(json_path,'r') as f:
+        graph_dict = json.load(f)
+        graph = node_link_graph(graph_dict)
+    return NetworkGraph(graph)
 
 
 def load_custom_object(obj):
