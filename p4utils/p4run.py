@@ -29,6 +29,7 @@ from copy import deepcopy
 from time import sleep
 from ipaddress import ip_interface
 from mininet.log import setLogLevel, info, output, debug, warning
+from mininet.link import TCIntf
 from mininet.clean import sh
 from networkx.classes.multigraph import MultiGraph
 from networkx.classes.graph import Graph
@@ -43,7 +44,6 @@ from p4utils.utils.topology_new import NetworkGraph
 from p4utils.mininetlib.node import P4Switch as DEFAULT_SWITCH
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
 from p4utils.mininetlib.topo import AppTopoStrategies as DEFAULT_TOPO
-from p4utils.mininetlib.link import TCLink
 from p4utils.mininetlib.cli import P4CLI
 from p4utils.mininetlib.net import P4Mininet as DEFAULT_NET
 
@@ -543,7 +543,7 @@ class AppRunner(object):
         # Start P4 Mininet
         debug('Starting network...\n')
         self.net = self.app_mininet(topo=self.topo,
-                                    link=TCLink,
+                                    intf=TCIntf,
                                     host=self.host_node,
                                     controller=None)
 
@@ -640,6 +640,34 @@ class AppRunner(object):
             graph = self.topo.g.convertTo(MultiGraph, data=True, keys=True)
         else:
             graph = self.topo.g.convertTo(NetworkGraph, data=True, keys=False)
+            # Add additional informations to the graph which are not loaded automatically
+            for _, _, params in graph.edges(data=True):
+                node1_name = params['node1']
+                node2_name = params['node2']
+                node1 = self.net[node1_name]
+                node2 = self.net[node2_name]
+                edge = graph[node1_name][node2_name]
+
+                # Get link
+                link = self.net.linksBetween(node1, node2)[0]
+
+                # Get interfaces
+                intf1 =  getattr(link, 'intf1')
+                intf2 =  getattr(link, 'intf2')
+
+                # Get interface names
+                edge['intfName1'] = getattr(intf1, 'name')
+                edge['intfName2'] = getattr(intf2, 'name')
+                
+                # Get interface ip addresses
+                ip1, prefixLen1 = getattr(intf1, 'ip'), getattr(intf1, 'prefixLen')
+                if ip1 and prefixLen1:
+                    edge['ip1'] = ip1 + '/' + prefixLen1
+            
+                ip2, prefixLen2 = getattr(intf2, 'ip'), getattr(intf2, 'prefixLen')
+                if ip2 and prefixLen2:
+                    edge['ip2'] = ip2 + '/' + prefixLen2
+    
         graph_dict = node_link_data(graph)
         with open(json_path,'w') as f:
             json.dump(graph_dict, f, default=default)
