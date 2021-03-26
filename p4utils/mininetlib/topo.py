@@ -196,7 +196,7 @@ class AppTopo(P4Topo):
             if self.g.node[switch].get('isP4Switch', False):
                 if params['cpu_port']:
                     if add_bridge:
-                        sw = self.addSwitch("sw-cpu", cls=LinuxBridge, dpid='1000000000000000')
+                        sw = self.addSwitch('sw-cpu', cls=LinuxBridge, dpid='1000000000000000')
                         self.addSwitchPort(switch, sw)
                         add_bridge = False
                     self.addLink(switch, sw, intfName1='{}-cpu-eth0'.format(switch), intfName2= '{}-cpu-eth1'.format(switch), deleteIntfs=True)

@@ -577,7 +577,7 @@ class AppRunner(object):
                     link = h_iface.link
                     sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
                     gw_ip = h.params['defaultRoute'].split()[-1]
-                    h.cmd('arp -i %s -s %s %s' % (h_iface.name, gw_ip, sw_iface.mac))
+                    h.cmd('arp -i {} -s {} {}'.format(h_iface.name, gw_ip, sw_iface.mac))
 
             if auto_arp_tables:
                 # set arp rules for all the hosts in the same subnet
@@ -640,7 +640,9 @@ class AppRunner(object):
             graph = self.topo.g.convertTo(MultiGraph, data=True, keys=True)
         else:
             graph = self.topo.g.convertTo(NetworkGraph, data=True, keys=False)
-            # Add additional informations to the graph which are not loaded automatically
+            
+            ## Add additional informations to the graph which are not loaded automatically
+            # Add links informations
             for _, _, params in graph.edges(data=True):
                 node1_name = params['node1']
                 node2_name = params['node2']
