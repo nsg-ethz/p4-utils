@@ -39,7 +39,6 @@ from p4utils.utils.helper import *
 from p4utils.utils.compiler import P4InfoDisabled
 from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
 from p4utils.utils.client import ThriftClient as DEFAULT_CLIENT
-from p4utils.utils.topology import Topology as DEFAULT_TOPODB
 from p4utils.utils.topology_new import NetworkGraph
 from p4utils.mininetlib.node import P4Switch as DEFAULT_SWITCH
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
@@ -91,7 +90,6 @@ class AppRunner(object):
             - "host_node" loads the host node to be used with Mininet,
             - "client_module" loads the client to program switches from files.
             - "topo_module" loads Mininet topology module
-            - "topodb_module" loads the topology database (will be removed soon)
             - "mininet_module" loads the network module
 
         Example of JSON structure of conf_file:
@@ -128,12 +126,6 @@ class AppRunner(object):
                 "options": <options passed to init> (string)
             },
             "topo_module":
-            {
-                "file_path": <path to module> (string),
-                "module_name": <module file name> (string),
-                "object_name": <module object> (string)
-            },
-            "topodb_module":
             {
                 "file_path": <path to module> (string),
                 "module_name": <module file name> (string),
@@ -259,6 +251,11 @@ class AppRunner(object):
         ## Modules
         # Load default compiler module
         self.compiler_module = {}
+        # Set default options for the compiler
+        default_compiler_kwargs = {
+                                     'opts': '--target bmv2 --arch v1model --std p4-16',
+                                     'p4rt': False 
+                                  }
         if self.conf.get('compiler_module', None):
             if self.conf['compiler_module'].get('object_name', None):
                 self.compiler_module['module'] = load_custom_object(self.conf.get('compiler_module'))
@@ -293,11 +290,6 @@ class AppRunner(object):
             self.app_topo = load_custom_object(self.conf.get('topo_module'))
         else:
             self.app_topo = DEFAULT_TOPO
-
-        if self.conf.get('topodb_module', None):
-            self.app_topodb = load_custom_object(self.conf.get('topodb_module'))
-        else:
-            self.app_topodb = DEFAULT_TOPODB
 
         if self.conf.get('mininet_module', None):
             self.app_mininet = load_custom_object(self.conf.get('mininet_module'))
@@ -364,7 +356,7 @@ class AppRunner(object):
             # Set general default switch options
             params = {
                          'p4_src': self.conf['p4_src'],
-                         'cpu_port': True,
+                         'cpu_port': False,
                          'switch_node': deepcopy(self.switch_node),
                          'client_module': deepcopy(self.client_module),
                          'pcap_dump': self.pcap_dump,

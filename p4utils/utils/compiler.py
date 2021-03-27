@@ -33,18 +33,18 @@ class P4C:
     def __init__(self, p4_src,
                  p4c_bin=None,
                  outdir=None,
-                 options='--target bmv2 --arch v1model --std p4-16',
-                 p4runtime=False,
+                 opts='',
+                 p4rt=False,
                  **kwargs):
         """
         Attributes:
-            p4_src (string): path of the source P4 file to compile.
-            p4c_bin (string)    : path to the compiler binary
-            outdir (string)     : directory containing all the output files. If set to
-                                None, then a every output is stored in temporary files.
-            options (string)    : p4c compilation options
-            p4runtime (bool)    : whether to output the p4info file used to
-                                establish p4runtime connection to simple_switch_grpc.
+            p4_src (string) : path of the source P4 file to compile.
+            p4c_bin (string): path to the compiler binary
+            outdir (string) : directory containing all the output files. If set to None,
+                              then every output is stored in the directory of p4_src.
+            opts (string)   : p4c compilation options
+            p4rt (bool)     : whether to output the p4info file used to
+                              establish p4runtime connection to simple_switch_grpc.
         """
 
         if p4c_bin is not None:
@@ -67,8 +67,8 @@ class P4C:
             else:
                 raise NotADirectoryError('{} is not a directory'.dormat(outdir))
 
-        self.options = options
-        self.p4runtime = p4runtime
+        self.opts = opts
+        self.p4rt = p4rt
         self.compiled = False
         
         p4_basename = os.path.basename(self.p4_src)
@@ -88,10 +88,10 @@ class P4C:
         debug('source: {}\tcksum: {}\n'.format(self.p4_src, self.cksum))
 
         compiler_args = []
-        compiler_args.append(self.options)
+        compiler_args.append(self.opts)
         compiler_args.append('-o "{}"'.format(self.outdir))
 
-        if self.p4runtime:
+        if self.p4rt:
             compiler_args.append('--p4runtime-files "{}"'.format(self.p4rt_out))
         
         compiler_args.append('"{}"'.format(self.p4_src))
@@ -113,7 +113,7 @@ class P4C:
     def get_p4rt_out(self):
         """Returns the p4info filepath"""
         if self.compiled:
-            if self.p4runtime:
+            if self.p4rt:
                 return self.p4rt_out
             else:
                 raise P4InfoDisabled

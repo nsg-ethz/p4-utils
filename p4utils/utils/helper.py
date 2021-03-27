@@ -40,6 +40,48 @@ def formatLatency(latency):
         return str(latency) + "ms"
 
 
+def get_node_attr(node, attr_name):
+    """
+    Finds the value of the attribute 'attr_name' of the Mininet node
+    by looking also inside node.params (for unparsed attributes).
+
+    Arguments:
+        node                : Mininet node object
+        attr_name (string)  : attribute to looking for (also inside unparsed ones)
+    
+    Returns:
+        the value of the requested attribute.
+    """
+    try:
+        value = getattr(node, attr_name)
+    except AttributeError:
+        params = getattr(node, 'params')
+        if attr_name in params.keys():
+            return params[attr_name]
+        else:
+            raise AttributeError
+
+
+def get_by_attr(attr_name, attr_value, obj_list):
+    """
+    Return the first object in the list that has the attribute 'attr_name'
+    value equal to attr_value.
+
+    Arguments:
+        attr_name (string)  : attribute name
+        attr_value          : attrubute value
+        obj_list (list)     : list of objects
+
+    Returns:
+        obj : the requested object or None
+    """
+    for obj in obj_list:
+        if attr_value == getattr(obj, attr_name):
+            return obj
+    else:
+        return None
+
+
 def ip_address_to_mac(ip):
     """Generate MAC from IP address."""
     if "/" in ip:
@@ -67,46 +109,6 @@ def is_compiled(p4_src, compilers):
             return True
     else:
         return False
-
-def get_node_attr(node, attr_name):
-    """
-    Finds the value of the attribute 'attr_name' of the Mininet node
-    by looking also inside node.params (for unparsed attributes).
-
-    Arguments:
-        node                : Mininet node object
-        attr_name (string)  : attribute to looking for (also inside unparsed ones)
-    
-    Returns:
-        the value of the requested attribute.
-    """
-    try:
-        value = getattr(node, attr_name)
-    except AttributeError:
-        params = getattr(node, 'params')
-        if attr_name in params.keys():
-            return params[attr_name]
-        else:
-            raise AttributeError
-
-def get_by_attr(attr_name, attr_value, obj_list):
-    """
-    Return the first object in the list that has the attribute 'attr_name'
-    value equal to attr_value.
-
-    Arguments:
-        attr_name (string)  : attribute name
-        attr_value          : attrubute value
-        obj_list (list)     : list of objects
-
-    Returns:
-        obj : the requested object or None
-    """
-    for obj in obj_list:
-        if attr_value == getattr(obj, attr_name):
-            return obj
-    else:
-        return None
 
 
 def load_conf(conf_file):
