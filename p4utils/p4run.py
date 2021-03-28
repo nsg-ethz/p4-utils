@@ -189,7 +189,7 @@ class AppRunner(object):
         self.conf = load_conf(self.conf_file)
 
         # we can start topologies with no program to test
-        # need to improve !!!!!!!!!!!!!!!!!!!!!!!!!
+        # Should verify this to see if it works...
         if empty_p4:
             info('Empty P4 program selected.\n')
             import p4utils
@@ -654,14 +654,26 @@ class AppRunner(object):
                 edge['intfName2'] = getattr(intf2, 'name')
                 
                 # Get interface addresses
-                ip1, prefixLen1 = getattr(intf1, 'ip'), getattr(intf1, 'prefixLen')
-                if ip1 and prefixLen1:
-                    edge['ip1'] = ip1 + '/' + prefixLen1
+                try:
+                    # Fake switch IP
+                    edge['ip1'] = edge['sw_ip1']
+                    del edge['sw_ip1']
+                except KeyError:
+                    # Real IP
+                    ip1, prefixLen1 = getattr(intf1, 'ip'), getattr(intf1, 'prefixLen')
+                    if ip1 and prefixLen1:
+                        edge['ip1'] = ip1 + '/' + prefixLen1
 
-                ip2, prefixLen2 = getattr(intf2, 'ip'), getattr(intf2, 'prefixLen')
-                if ip2 and prefixLen2:
-                    edge['ip2'] = ip2 + '/' + prefixLen2
-                
+                try:
+                    # Fake switch IP
+                    edge['ip2'] = edge['sw_ip2']
+                    del edge['sw_ip2']
+                except KeyError:
+                    # Real IP
+                    ip2, prefixLen2 = getattr(intf2, 'ip'), getattr(intf2, 'prefixLen')
+                    if ip2 and prefixLen2:
+                        edge['ip2'] = ip2 + '/' + prefixLen2
+
                 mac1 = getattr(intf1, 'mac')
                 if mac1:
                     edge['addr1'] = mac1
