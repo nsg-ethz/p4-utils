@@ -30,7 +30,7 @@ class P4CLI(CLI):
             del kwargs['client_module']
         if 'scripts' in kwargs:
             del kwargs['scripts']
-        CLI.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         # self.mn stores the Mininet network object according to the parent object
 
     def getP4Switch(self, node_name):

@@ -1,5 +1,6 @@
 from mininet.net import Mininet
 
+
 class P4Mininet(Mininet):
     """P4Mininet is the Mininet Class extended with P4 switches."""
 
@@ -16,7 +17,6 @@ class P4Mininet(Mininet):
             name = switch.name
             if self.topo.isP4Switch(name):
                 self.p4switches.append(switch)
-
 
     def start(self):
         super().start()

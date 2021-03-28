@@ -403,7 +403,7 @@ class AppTopo(P4Topo):
                 link_ops['addr1'] = host_mac
                 link_ops['addr2'] = direct_sw_mac
                 link_ops.setdefault('params2', {})
-                link_ops['params2']['sw_ip'] = host_gw + '/24' # Fake IP since it is a switch interface
+                link_ops['sw_ip2'] = host_gw + '/24' # Fake IP since it is a switch interface
 
                 self.addHost(host_name, **host_ops)
                 self.addLink(host_name, direct_sw, **link_ops)
@@ -421,8 +421,8 @@ class AppTopo(P4Topo):
                 link_ops = link[2]
                 link_ops.setdefault('params1', {})
                 link_ops.setdefault('params2', {})
-                link_ops['params1']['sw_ip'] = sw1_ip+'/24' # Fake IP since it is a switch interface
-                link_ops['params2']['sw_ip'] = sw2_ip+'/24' # Fake IP since it is a switch interface
+                link_ops['sw_ip1'] = sw1_ip+'/24' # Fake IP since it is a switch interface
+                link_ops['sw_ip2'] = sw2_ip+'/24' # Fake IP since it is a switch interface
 
                 self.addLink(link[0], link[1], **link_ops)
                 self.addSwitchPort(link[0], link[1])
@@ -480,10 +480,10 @@ class AppTopo(P4Topo):
             else:
                 link_ops = link[2]
                 # Get mac address from ip address
-                if link_ops['params1']['sw_ip'] and not link_ops['addr1']:
-                    link_ops['addr1'] = ip_address_to_mac(link_ops['params1']['sw_ip']) % (1)
-                if link_ops['params2']['sw_ip'] and not link_ops['addr2']:
-                    link_ops['addr2'] = ip_address_to_mac(link_ops['params2']['sw_ip']) % (1)
+                if link_ops['sw_ip1'] and not link_ops['addr1']:
+                    link_ops['addr1'] = ip_address_to_mac(link_ops['sw_ip1']) % (1)
+                if link_ops['sw_ip2'] and not link_ops['addr2']:
+                    link_ops['addr2'] = ip_address_to_mac(link_ops['sw_ip2']) % (1)
 
                 self.addLink(link[0], link[1], **link_ops)
                 self.addSwitchPort(link[0], link[1])

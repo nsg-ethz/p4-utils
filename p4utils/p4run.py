@@ -653,15 +653,23 @@ class AppRunner(object):
                 edge['intfName1'] = getattr(intf1, 'name')
                 edge['intfName2'] = getattr(intf2, 'name')
                 
-                # Get interface ip addresses
+                # Get interface addresses
                 ip1, prefixLen1 = getattr(intf1, 'ip'), getattr(intf1, 'prefixLen')
                 if ip1 and prefixLen1:
                     edge['ip1'] = ip1 + '/' + prefixLen1
-            
+
                 ip2, prefixLen2 = getattr(intf2, 'ip'), getattr(intf2, 'prefixLen')
                 if ip2 and prefixLen2:
                     edge['ip2'] = ip2 + '/' + prefixLen2
-    
+                
+                mac1 = getattr(intf1, 'mac')
+                if mac1:
+                    edge['addr1'] = mac1
+
+                mac2 = getattr(intf2, 'mac')
+                if mac1:
+                    edge['addr2'] = mac2
+
         graph_dict = node_link_data(graph)
         with open(json_path,'w') as f:
             json.dump(graph_dict, f, default=default)
