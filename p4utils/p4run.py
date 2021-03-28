@@ -271,7 +271,7 @@ class AppRunner(object):
         self.client_module = {}
         # Set default options for the client
         default_client_kwargs = {
-                                    'log_enabled': True,
+                                    'log_enabled': self.log_enabled,
                                     'log_dir': self.log_dir
                                 }
         if self.conf.get('client_module', None):
