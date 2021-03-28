@@ -109,7 +109,7 @@ class NetworkGraph(nx.Graph):
                     for field in fields:
                         reduced_intfs[node_a][node_b].append(self.edge_to_intf[node_a][node_b].get(field, None))
                     reduced_intfs[node_a][node_b] = tuple(reduced_intfs[node_a][node_b])
-                    if len(reduced_intfs[node_a][node_b]) == 1:
+                    if len(fields) == 1:
                         reduced_intfs[node_a][node_b] = reduced_intfs[node_a][node_b][0]
             return reduced_intfs
         else:
@@ -132,57 +132,142 @@ class NetworkGraph(nx.Graph):
                     for field in fields:
                         reduced_intfs[node][intf].append(self.node_to_intf[node][intf].get(field, None))
                     reduced_intfs[node][intf] = tuple(reduced_intfs[node][intf])
-                    if len(reduced_intfs[node][intf]) == 1:
+                    if len(fields) == 1:
                         reduced_intfs[node][intf] = reduced_intfs[node][intf][0]
             return reduced_intfs
         else:
             return self.node_to_intf
 
-    def Nodes(self):
+    def Nodes(self, fields=[]):
         """
         A dict containing all the nodes.
+        If fields (list of strings) is specified, the method returns a dict (nodes)
+        of tuples (one per node) containing all the specified fields' values in 
+        the given order (or the single value if only one field is specified).
         """
-        return dict(self.nodes)
+        nodes = dict(self.nodes)
+        if len(fields) > 0:
+            reduced_nodes = {}
+            for node in nodes:
+                reduced_nodes[node] = []
+                for field in fields:
+                    reduced_nodes[node].append(nodes[node].get(field, None))
+                reduced_nodes[node] = tuple(reduced_nodes[node])
+                if len(fields) == 1:
+                    reduced_nodes[node] = reduced_nodes[node][0]
+            return reduced_nodes
+        else:
+            return nodes
 
-    def Switches(self):
+    def Switches(self, fields=[]):
         """
         A dict containing all the switches.
+        If fields (list of strings) is specified, the method returns a dict (switches)
+        of tuples (one per switch) containing all the specified fields' values in 
+        the given order (or the single value if only one field is specified).
         """
         switches_subgraph = nx.subgraph_view(self, filter_node=self.isSwitch)
         switches = dict(switches_subgraph.nodes)
-        return switches
+        if len(fields) > 0:
+            reduced_switches = {}
+            for switch in switches:
+                reduced_switches[switch] = []
+                for field in fields:
+                    reduced_switches[switch].append(switches[switch].get(field, None))
+                reduced_switches[switch] = tuple(reduced_switches[switch])
+                if len(fields) == 1:
+                    reduced_switches[switch] = reduced_switches[switch][0]
+            return reduced_switches
+        else:
+            return switches
 
-    def P4Switches(self):
+    def P4Switches(self, fields=[]):
         """
         A dict containing all the P4 switches.
+        If fields (list of strings) is specified, the method returns a dict (p4switches)
+        of tuples (one per P4 switch) containing all the specified fields' values in 
+        the given order (or the single value if only one field is specified).
         """
         p4switches_subgraph = nx.subgraph_view(self, filter_node=self.isP4Switch)
         p4switches = dict(p4switches_subgraph.nodes)
-        return p4switches
+        if len(fields) > 0:
+            reduced_p4switches = {}
+            for p4switch in p4switches:
+                reduced_p4switches[p4switch] = []
+                for field in fields:
+                    reduced_p4switches[p4switch].append(p4switches[p4switch].get(field, None))
+                reduced_p4switches[p4switch] = tuple(reduced_p4switches[p4switch])
+                if len(fields) == 1:
+                    reduced_p4switches[p4switch] = reduced_p4switches[p4switch][0]
+            return reduced_p4switches
+        else:
+            return p4switches
 
-    def P4RuntimeSwitches(self):
+    def P4RuntimeSwitches(self, fields=[]):
         """
         A dict containing all the P4 runtime switches.
+        If fields (list of strings) is specified, the method returns a dict (p4rtswitches)
+        of tuples (one per P4 runtime switch) containing all the specified fields' values in 
+        the given order (or the single value if only one field is specified).
         """
         p4rtswitches_subgraph = nx.subgraph_view(self, filter_node=self.isP4RuntimeSwitch)
         p4rtswitches = dict(p4rtswitches_subgraph.nodes)
-        return p4rtswitches
+        if len(fields) > 0:
+            reduced_p4rtswitches = {}
+            for p4rtswitch in p4rtswitches:
+                reduced_p4rtswitches[p4rtswitch] = []
+                for field in fields:
+                    reduced_p4rtswitches[p4rtswitch].append(p4rtswitches[p4rtswitch].get(field, None))
+                reduced_p4rtswitches[p4rtswitch] = tuple(reduced_p4rtswitches[p4rtswitch])
+                if len(fields) == 1:
+                    reduced_p4rtswitches[p4rtswitch] = reduced_p4rtswitches[p4rtswitch][0]
+            return reduced_p4rtswitches
+        else:
+            return p4rtswitches
 
-    def Hosts(self):
+    def Hosts(self, fields=[]):
         """
         A dict containing all the hosts.
+        If fields (list of strings) is specified, the method returns a dict (hosts)
+        of tuples (one per hosts) containing all the specified fields' values in 
+        the given order (or the single value if only one field is specified).
         """
         hosts_subgraph = nx.subgraph_view(self, filter_node=self.isHost)
         hosts = dict(hosts_subgraph.nodes)
-        return hosts
+        if len(fields) > 0:
+            reduced_hosts = {}
+            for host in hosts:
+                reduced_hosts[host] = []
+                for field in fields:
+                    reduced_hosts[host].append(hosts[host].get(field, None))
+                reduced_hosts[host] = tuple(reduced_hosts[host])
+                if len(fields) == 1:
+                    reduced_hosts[host] = reduced_hosts[host][0]
+            return reduced_hosts
+        else:
+            return hosts
 
-    def Routers(self):
+    def Routers(self, fields=[]):
         """
         A dict containing all the routers.
+        If fields (list of strings) is specified, the method returns a dict (routers)
+        of tuples (one per router) containing all the specified fields' values in 
+        the given order (or the single value if only one field is specified).
         """
         routers_subgraph = nx.subgraph_view(self, filter_node=self.isRouter)
         routers = dict(routers_subgraph.nodes)
-        return routers
+        if len(fields) > 0:
+            reduced_routers = {}
+            for router in routers:
+                reduced_routers[router] = []
+                for field in fields:
+                    reduced_routers[router].append(routers[router].get(field, None))
+                reduced_routers[router] = tuple(reduced_routers[router])
+                if len(fields) == 1:
+                    reduced_routers[router] = reduced_routers[router][0]
+            return reduced_routers
+        else:
+            return routers
 
     def Neighbors(self, n):
         """
