@@ -349,7 +349,7 @@ function do_p4runtime_client {
     cd p4runtime-cli
 
     # Install p4runtime-client
-    sudo pip3 install -e "."
+    sudo python setup.py install
 }
 
 # Install behavioral model
