@@ -1,6 +1,10 @@
 from mininet.link import Link, TCIntf
 
 
+# Since the interface type can be set globally with Mininet by passing it to the network
+# constructor, this class is not used since its only relevant purpose is to use TCIntf
+# interface.
+
 class TCLink(Link):
     "Link with symmetric TC interfaces configured via opts"
     def __init__( self, node1, node2, port1=None, port2=None,

@@ -436,11 +436,11 @@ class AppRunner(object):
 
         For what concernes the Mininet classes used, we have that:
             "weight" is used by Networkx,
-            "port*" are used by mininet.Topo and are propagated to link.TCLink.
-            "intfName*" are propagated to link.TCLink and used by each mininet.link.Intf of the link.
-            "addr*" are propagated to link.TCLink and used by each mininet.link.Intf of the link.
-            "params*" are propagated to link.TCLink and used by each mininet.link.Intf of the link.
-            "bw", "delay", "loss" and "max_queue_size" are propagated to link.TCLink and used by both mininet.link.Intf of the link.
+            "port*" are used by mininet.Topo and are propagated to mininet.Link.
+            "intfName*" are propagated to mininet.Link and used by each mininet.link.Intf of the mininter.Link.
+            "addr*" are propagated to mininet.Link and used by each mininet.link.Intf of the mininet.Link.
+            "params*" are propagated to mininet.Link and used by each mininet.link.Intf of the link.
+            "bw", "delay", "loss" and "max_queue_size" are propagated to mininet.Link and used by both mininet.link.Intf of the mininet.Link.
         
         "weight", "bw", "delay", "loss", "max_queue_size" default value can be set by
         putting inside "topology" the following object:
