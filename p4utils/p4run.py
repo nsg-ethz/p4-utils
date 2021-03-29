@@ -39,7 +39,7 @@ from p4utils.utils.helper import *
 from p4utils.utils.compiler import P4InfoDisabled
 from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
 from p4utils.utils.client import ThriftClient as DEFAULT_CLIENT
-from p4utils.utils.topology_new import NetworkGraph
+from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.node import P4Switch as DEFAULT_SWITCH
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
 from p4utils.mininetlib.topo import AppTopoStrategies as DEFAULT_TOPO

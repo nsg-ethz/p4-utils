@@ -3,7 +3,6 @@ from copy import deepcopy
 from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
 from p4utils.utils.helper import *
-from p4utils.utils.topology import Topology
 
 
 class NetworkError(Exception):
@@ -123,10 +122,14 @@ class P4CLI(CLI):
                 if compiler.new_source():
                     debug('New p4 source file detected!\n')
                     compiler.compile()
+                else:
+                    debug('P4 source already compiled!\n')
             # If this file is compiled for the first time
             elif self.compiler_module is not None: 
+                debug('New p4 source file detected!\n')
                 compiler = self.compiler_module['module'](p4_src=p4_src,
                                                         **self.compiler_module['kwargs'])
+                compiler.compile()
                 self.compilers.append(compiler)
             else:
                 error('No compiler module provided!')

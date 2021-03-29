@@ -277,26 +277,20 @@ You can find a configuration example, that uses all the fields [here](./p4app_ex
 You can use the topology object by simply:
 
 ```python
-from p4utils.utils.topology import Topology
-topo = Topology(db="path_to_topology_db")
+from p4utils.utils.helper import load_topo
+topo = load_topo('path_to_topology_json')
 
 # Get all the switches
 topo.get_p4switches().keys()
-[u's3', u's2', u's1', u's4']
+['s3', 's2', 's1', 's4']
 
 # One node information
-topo.node('h1') #this also works topo['h1']
-{u'gateway': u'10.1.1.1',
- u'interfaces_to_node': {u'h1-eth0': u's1'},
- u'interfaces_to_port': {u'h1-eth0': 0},
- u's1': {u'bw': None,
- u'delay': u'0ms',
- u'intf': u'h1-eth0',
- u'ip': u'10.1.1.2/24',
- u'mac': u'00:00:0a:01:01:02',
- u'queue_length': 1000,
- u'weight': 1},
- u'type': u'host'}
+topo.get_nodes()['h1']
+{"isHost": True, 
+"ip": "10.2.1.2/24", 
+"mac": "00:00:0a:02:01:02", 
+"defaultRoute": "via 10.2.1.1", 
+"id": "h1"}
 ```
 
 #### Methods Documentation
