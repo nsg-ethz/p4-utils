@@ -110,20 +110,19 @@ class AppRunner(object):
                 "module_name": <module file name> (string),
                 "object_name": <module object> (string)
             },
-            SINCE WE ARE ALWAYS USING P4C, THIS OPTION CAN BE REMOVED
             "compiler_module":
             {
                 "file_path": <path to module> (string),
                 "module_name": <module file name> (string),
                 "object_name": <module object> (string),
-                "options": <options passed to init> (string)
+                "options": <options passed to init> (dict)
             },
             "client_module":
             {
                 "file_path": <path to module> (string),
                 "module_name": <module file name> (string),
                 "object_name": <module object> (string),
-                "options": <options passed to init> (string)
+                "options": <options passed to init> (dict)
             },
             "topo_module":
             {
@@ -131,7 +130,6 @@ class AppRunner(object):
                 "module_name": <module file name> (string),
                 "object_name": <module object> (string)
             },
-            SINCE WE ARE USING ALWAYS P4MININET AS NETWORK, THIS OPTION CAN BE REMOVED
             "mininet_module":
             {
                 "file_path": <path to module> (string),

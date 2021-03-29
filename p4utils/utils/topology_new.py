@@ -92,7 +92,7 @@ class NetworkGraph(nx.Graph):
                     intf[key.replace('1','_neigh')] = value
         return intf
 
-    def Intfs(self, fields=[]):
+    def get_intfs(self, fields=[]):
         """
         Alias of self.edge_to_intf useful for rapid access.
         A dict of dicts which stores the interface of 'node1' which faces 'node2'.
@@ -115,7 +115,7 @@ class NetworkGraph(nx.Graph):
         else:
             return self.edge_to_intf
 
-    def NodeIntfs(self, fields=[]):
+    def get_node_intfs(self, fields=[]):
         """
         Alias of self.node_to_intf useful for rapid access.
         A dict of dicts which stores the interface of 'node' which has the name 'intf'.
@@ -138,7 +138,7 @@ class NetworkGraph(nx.Graph):
         else:
             return self.node_to_intf
 
-    def Nodes(self, fields=[]):
+    def get_nodes(self, fields=[]):
         """
         A dict containing all the nodes.
         If fields (list of strings) is specified, the method returns a dict (nodes)
@@ -159,7 +159,7 @@ class NetworkGraph(nx.Graph):
         else:
             return nodes
 
-    def Switches(self, fields=[]):
+    def get_switches(self, fields=[]):
         """
         A dict containing all the switches.
         If fields (list of strings) is specified, the method returns a dict (switches)
@@ -181,7 +181,7 @@ class NetworkGraph(nx.Graph):
         else:
             return switches
 
-    def P4Switches(self, fields=[]):
+    def get_p4switches(self, fields=[]):
         """
         A dict containing all the P4 switches.
         If fields (list of strings) is specified, the method returns a dict (p4switches)
@@ -203,7 +203,7 @@ class NetworkGraph(nx.Graph):
         else:
             return p4switches
 
-    def P4RuntimeSwitches(self, fields=[]):
+    def get_p4rtswitches(self, fields=[]):
         """
         A dict containing all the P4 runtime switches.
         If fields (list of strings) is specified, the method returns a dict (p4rtswitches)
@@ -225,7 +225,7 @@ class NetworkGraph(nx.Graph):
         else:
             return p4rtswitches
 
-    def Hosts(self, fields=[]):
+    def get_hosts(self, fields=[]):
         """
         A dict containing all the hosts.
         If fields (list of strings) is specified, the method returns a dict (hosts)
@@ -247,7 +247,7 @@ class NetworkGraph(nx.Graph):
         else:
             return hosts
 
-    def Routers(self, fields=[]):
+    def get_routers(self, fields=[]):
         """
         A dict containing all the routers.
         If fields (list of strings) is specified, the method returns a dict (routers)
@@ -269,15 +269,15 @@ class NetworkGraph(nx.Graph):
         else:
             return routers
 
-    def Neighbors(self, n):
+    def get_neighbors(self, n):
         """
         A list containing all the names of the neighbors of node n.
         """
-        return list(self.Intfs()[n].keys())
+        return list(self.get_intfs()[n].keys())
 
     def isNode(self, node):
         """Return True if the node exists."""
-        return node in self.Nodes()
+        return node in self.get_nodes()
 
     def checkNode(self, node):
         """Check if node exists, else raise a NodeDoesNotExist error."""
@@ -300,27 +300,27 @@ class NetworkGraph(nx.Graph):
     def isHost(self, node):
         """Return True if the node is a host."""
         self.checkNode(node)
-        return self.Nodes()[node].get('isHost', False)
+        return self.get_nodes()[node].get('isHost', False)
 
     def isSwitch(self, node):
         """Return True if the node is a switch."""
         self.checkNode(node)
-        return self.Nodes()[node].get('isSwitch', False)
+        return self.get_nodes()[node].get('isSwitch', False)
 
     def isP4Switch(self, node):
         """Return True if the node is a P4 switch."""
         self.checkNode(node)
-        return self.Nodes()[node].get('isP4Switch', False)
+        return self.get_nodes()[node].get('isP4Switch', False)
 
     def isP4RuntimeSwitch(self, node):
         """Return True if the node is a P4 runtime switch."""
         self.checkNode(node)
-        return self.Nodes()[node].get('isP4RuntimeSwitch', False)
+        return self.get_nodes()[node].get('isP4RuntimeSwitch', False)
 
     def isRouter(self, node):
         """Return True if the node is a router."""
         self.checkNode(node)
-        return self.Nodes()[node].get('isRouter', False)
+        return self.get_nodes()[node].get('isRouter', False)
 
     def isType(self, node, node_type):
         """
@@ -358,7 +358,7 @@ class NetworkGraph(nx.Graph):
     def node_to_node_interface_ip(self, node1, node2):
         """Return the ip_interface for node1 facing node2."""
         self.checkIntf(node1, node2)
-        return self.Intfs()[node1][node2].get('ip', None)
+        return self.get_intfs()[node1][node2].get('ip', None)
 
     def node_to_node_interface_bw(self, node1, node2):
         """
@@ -366,10 +366,10 @@ class NetworkGraph(nx.Graph):
         If it is unlimited, return -1.
         """
         self.checkIntf(node1, node2)
-        if self.Intfs()[node1][node2].get('bw', None) is None:
+        if self.get_intfs()[node1][node2].get('bw', None) is None:
             return -1
         else:
-            return self.Intfs()[node1][node2]['bw']
+            return self.get_intfs()[node1][node2]['bw']
     
     def node_interface_ip(self, node, intf):
         """Returns the IP address of a given interface and node."""
@@ -409,7 +409,7 @@ class NetworkGraph(nx.Graph):
         Returns:
             CPU interface of the P4 switch
         """
-        if self.isP4Switch(p4switch) and self.Nodes()[p4switch]['cpu_port']:
+        if self.isP4Switch(p4switch) and self.get_nodes()[p4switch]['cpu_port']:
             return [x for x in self.node_to_intf[p4switch].keys() if 'cpu' in x][0]
         else:
             if not quiet:
@@ -426,7 +426,7 @@ class NetworkGraph(nx.Graph):
         Returns:
             Port number of the P4 switch
         """
-        if self.isP4Switch(p4switch) and self.Nodes()[p4switch]['cpu_port']:
+        if self.isP4Switch(p4switch) and self.get_nodes()[p4switch]['cpu_port']:
             intf = self.get_cpu_port_intf(p4switch)
             return self._node_interface(p4switch, intf)['port']
         else:
@@ -437,7 +437,7 @@ class NetworkGraph(nx.Graph):
     def get_thrift_port(self, p4switch):
         """Return the Thrift port used to communicate with the P4 switch."""
         if self.isP4Switch(p4switch):
-            return self.Nodes()[p4switch]['thrift_port']
+            return self.get_nodes()[p4switch]['thrift_port']
         else:
             raise TypeError('{} is not a P4 switch.'.format(p4switch))
 
@@ -446,14 +446,14 @@ class NetworkGraph(nx.Graph):
         if self.isP4Switch(p4switch):
             print('This method is not yet fully implemented, all switches listen on 0.0.0.0.')
             return '0.0.0.0'
-            #return self.Nodes()[switch]['thrift_ip']
+            #return self.get_nodes()[switch]['thrift_ip']
         else:
             raise TypeError('{} is not a P4 switch.'.format(p4switch))
 
     def get_grpc_port(self, p4rtswitch):
         """Return the grpc port used to communicate with the P4 runtime switch."""
         if self.isP4RuntimeSwitch(p4rtswitch):
-            return self.Nodes()[p4rtswitch]['grpc_port']
+            return self.get_nodes()[p4rtswitch]['grpc_port']
         else:
             raise TypeError('{} is not a P4 runtime switch.'.format(p4rtswitch))
 
@@ -462,14 +462,14 @@ class NetworkGraph(nx.Graph):
         if self.isP4RuntimeSwitch(p4rtswitch):
             print('This method is not yet fully implemented, all switches listen on 0.0.0.0.')
             return '0.0.0.0'
-            #return self.Nodes()[p4rtswitch]['thrift_ip']
+            #return self.get_nodes()[p4rtswitch]['thrift_ip']
         else:
             raise TypeError('{} is not a P4 switch.'.format(p4rtswitch))
 
     def get_ctl_cpu_intf(self, p4switch):
         """Returns the controller side cpu interface used to listen for cpu packets."""
-        if self.isP4Switch(p4switch) and self.Nodes()[p4switch]['cpu_port']:
-            return self.Intfs()['sw-cpu'][p4switch]['intfName']
+        if self.isP4Switch(p4switch) and self.get_nodes()[p4switch]['cpu_port']:
+            return self.get_intfs()['sw-cpu'][p4switch]['intfName']
         else:
             raise TypeError('Switch {} has no cpu port.'.format(p4switch))
 
@@ -517,7 +517,7 @@ class NetworkGraph(nx.Graph):
             name: host's name
         """
         if self.isHost(host):
-            ip = self.Nodes()[host].get('ip', None)
+            ip = self.get_nodes()[host].get('ip', None)
             if ip is not None:
                 return ip.split("/")[0]
             else:
@@ -550,7 +550,7 @@ class NetworkGraph(nx.Graph):
             ID of P4 switch as a string
         """
         if self.isP4Switch(p4switch):
-            return self.Nodes()[p4switch]['device_id']
+            return self.get_nodes()[p4switch]['device_id']
         else:
             raise TypeError('{} is not a P4 switch.'.format(p4switch))
 
@@ -567,7 +567,7 @@ class NetworkGraph(nx.Graph):
         """
         self.checkNode(node1)
         self.checkNode(node2)
-        return node1 in self.Neighbors(node2)
+        return node1 in self.get_neighbors(node2)
         
     def get_hosts_connected_to(self, node):
         """
@@ -579,7 +579,7 @@ class NetworkGraph(nx.Graph):
         Returns: list of hosts
         """
         self.checkNode(node)
-        nodes = self.Neighbors(node)
+        nodes = self.get_neighbors(node)
         return [host for host in nodes if self.isHost(host)]
 
     def get_switches_connected_to(self, node):
@@ -592,7 +592,7 @@ class NetworkGraph(nx.Graph):
         Returns: list of switches
         """
         self.checkNode(node)
-        nodes = self.Neighbors(node)
+        nodes = self.get_neighbors(node)
         return [switch for switch in nodes if self.isSwitch(switch)]
 
     def get_p4switches_connected_to(self, node):
@@ -605,7 +605,7 @@ class NetworkGraph(nx.Graph):
         Returns: list of switches
         """
         self.checkNode(node)
-        nodes = self.Neighbors(node)
+        nodes = self.get_neighbors(node)
         return [switch for switch in nodes if self.isP4Switch(switch)]
 
     def get_routers_connected_to(self, node):
@@ -618,7 +618,7 @@ class NetworkGraph(nx.Graph):
         Returns: list of routers
         """
         self.checkNode(node)
-        nodes = self.Neighbors(node)
+        nodes = self.get_neighbors(node)
         return [router for router in nodes if self.isRouter(router)]
 
     def get_direct_host_networks_from_switch(self, switch):
@@ -679,7 +679,7 @@ class NetworkGraph(nx.Graph):
             node2: dst node
         """
         self.checkIntf(node1, node2)
-        return self.Intfs()[node1][node2].get('port', None)
+        return self.get_intfs()[node1][node2].get('port', None)
 
     def node_to_node_mac(self, node1, node2):
         """
@@ -690,13 +690,13 @@ class NetworkGraph(nx.Graph):
             node2: dst node
         """
         self.checkIntf(node1, node2)
-        return self.Intfs()[node1][node2].get('addr', None)
+        return self.get_intfs()[node1][node2].get('addr', None)
 
     def total_number_of_paths(self):
         """Returns the total number of shortests paths between all host pairs in the network."""
         total_paths = 0
-        for host in self.Hosts():
-            for host_pair in self.Hosts():
+        for host in self.get_hosts():
+            for host_pair in self.get_hosts():
                 if host == host_pair:
                     continue
                 # compute the number of paths
@@ -739,24 +739,24 @@ class NetworkGraph(nx.Graph):
 
     def keep_only_switches(self):
         """Returns a networkx subgraph including only switch nodes."""
-        return self.subgraph(list(self.Switches().keys()))
+        return self.subgraph(list(self.get_switches().keys()))
 
     def keep_only_p4switches(self):
         """Returns a networkx subgraph including only P4 switch nodes."""
-        return self.subgraph(list(self.P4Switches().keys()))
+        return self.subgraph(list(self.get_p4switches().keys()))
 
     def keep_only_p4switches_and_hosts(self):
         """Returns a networkx subgraph including only hosts and P4 switch nodes."""
-        return self.subgraph(list(self.P4Switches().keys()) + list(self.Hosts().keys()))
+        return self.subgraph(list(self.get_p4switches().keys()) + list(self.get_hosts().keys()))
 
     # Drawing
     def set_node_shape(self, node, shape):
         """Sets node's shape. Used when plotting the network."""
-        self.Nodes()[node]['node_shape'] = shape
+        self.get_nodes()[node]['node_shape'] = shape
 
     def set_node_color(self, node, color):
         """Sets node's color. Used when plotting the network."""
-        self.Nodes()[node]['node_color'] = color
+        self.get_nodes()[node]['node_color'] = color
 
     def set_node_type_shape(self, node_type, shape):
         """
@@ -771,8 +771,8 @@ class NetworkGraph(nx.Graph):
 
         Used when plotting the network.
         """
-        for node in self.Nodes():
-            if self.isType(self.Nodes()[node], node_type):
+        for node in self.get_nodes():
+            if self.isType(self.get_nodes()[node], node_type):
                 self.set_node_shape(node, shape)
 
     def set_node_type_color(self, node_type, color):
@@ -788,6 +788,6 @@ class NetworkGraph(nx.Graph):
 
         Used when plotting the network.
         """
-        for node in self.Nodes():
-            if self.isType(self.Nodes()[node], node_type):
+        for node in self.get_nodes():
+            if self.isType(self.get_nodes()[node], node_type):
                 self.set_node_color(node, color)
