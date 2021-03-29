@@ -9,7 +9,7 @@ import subprocess
 from networkx.readwrite.json_graph import node_link_graph
 from mininet.log import info, output, error, warn, debug
 
-from p4utils.utils.topology_new import NetworkGraph
+from p4utils.utils.topology import NetworkGraph
 
 
 def check_listening_on_port(port):
