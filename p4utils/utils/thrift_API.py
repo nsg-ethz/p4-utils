@@ -873,7 +873,7 @@ def hexstr(v):
     return "".join([format(c, "02x") for c in v])
 
 
-class RuntimeAPI(object):
+class ThriftAPI(object):
 
     @staticmethod
     def get_thrift_services(pre_type):
@@ -894,16 +894,13 @@ class RuntimeAPI(object):
         if isinstance(pre_type, str):
             pre_type = PreType.from_str(pre_type)
 
-        standard_client, mc_client = thrift_connect(
-            thrift_ip, thrift_port,
-            RuntimeAPI.get_thrift_services(pre_type)
-        )
+        standard_client, mc_client = thrift_connect(thrift_ip,
+                                                    thrift_port,
+                                                    ThriftAPI.get_thrift_services(pre_type))
 
         # Controller to Switch Info
         self.switch_info = SwitchInfo()
         self.switch_info.load_json_config(standard_client, json_path)
-
-        #    load_json_config(standard_client, json_path)
 
         self.client = standard_client
         self.mc_client = mc_client

@@ -21,17 +21,18 @@
 # Edgar Costa (cedgar@ethz.ch)
 #
 
-import p4utils.utils.runtime_API as runtime_API
-from p4utils.utils.runtime_API import UIn_Error
-
 from functools import wraps
 
 from sswitch_runtime import SimpleSwitch
 from sswitch_runtime.ttypes import *
 
+import p4utils.utils.thrift_API as thrift_API
+from p4utils.utils.thrift_API import UIn_Error
+
+
 def handle_bad_input(f):
     @wraps(f)
-    @runtime_API.handle_bad_input
+    @thrift_API.handle_bad_input
     def handle(*args, **kwargs):
         try:
             return f(*args, **kwargs)
@@ -40,29 +41,32 @@ def handle_bad_input(f):
             print("Invalid mirroring operation ({})".format(error))
     return handle
 
-class SimpleSwitchAPI(runtime_API.RuntimeAPI):
+
+class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
     @staticmethod
     def get_thrift_services():
         return [("simple_switch", SimpleSwitch.Client)]
 
-    def __init__(self, thrift_port, thrift_ip = 'localhost', json_path=None):
+    def __init__(self, thrift_port,
+                 thrift_ip='localhost',
+                 json_path=None):
 
-        pre_type = runtime_API.PreType.SimplePreLAG
+        pre_type = thrift_API.PreType.SimplePreLAG
 
-        runtime_API.RuntimeAPI.__init__(self, thrift_port,
-                                        thrift_ip, pre_type, json_path)
+        super().__init__(thrift_port,
+                         thrift_ip,
+                         pre_type, 
+                         json_path)
 
-        self.sswitch_client = runtime_API.thrift_connect(
-            thrift_ip, thrift_port, SimpleSwitchAPI.get_thrift_services()
-        )[0]
-
+        self.sswitch_client = thrift_API.thrift_connect(thrift_ip,
+                                                         thrift_port,
+                                                         SimpleSwitchThriftAPI.get_thrift_services())[0]
 
     def parse_int(self, arg, name):
         try:
             return int(arg)
         except:
-            raise runtime_API.UIn_Error("Bad format for {}, expected integer".format(name))
-
+            raise thrift_API.UIn_Error("Bad format for {}, expected integer".format(name))
 
     @handle_bad_input
     def set_queue_depth(self, queue_depth, egress_port=None):
