@@ -260,10 +260,10 @@ class AppRunner(object):
             else:
                 self.compiler_module['module'] = DEFAULT_COMPILER
             # Load default compiler module arguments
-            self.compiler_module['kwargs'] = self.conf['compiler_module'].get('options', {})
+            self.compiler_module['kwargs'] = self.conf['compiler_module'].get('options', default_compiler_kwargs)
         else:
             self.compiler_module['module'] = DEFAULT_COMPILER
-            self.compiler_module['kwargs'] = {}
+            self.compiler_module['kwargs'] = default_compiler_kwargs
 
         # Load default client module
         self.client_module = {}
