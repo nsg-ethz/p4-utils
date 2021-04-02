@@ -59,6 +59,8 @@ class SimpleSwitchP4RuntimeAPI:
 
 
     def table_add(self, table_name, action_name, match_keys, action_params=[], prio=None):
+        print('TableEntry')
+        print('table: '+table_name)
         entry = api.TableEntry(self.client, self.context, table_name)(action=action_name)
         if len(match_keys) == self.context.get_mf_len(table_name):
             entry.match.set(**self.parse_match_key(table_name, match_keys))
@@ -66,6 +68,7 @@ class SimpleSwitchP4RuntimeAPI:
             raise Exception('Table {} has {} match keys, {} entered.'.format(table_name,
                                                                              self.context.get_mf_len(table_name),
                                                                              len(match_keys)))
+        print('action: '+action_name)
         if len(action_params) == self.context.get_param_len(action_name):
             entry.action.set(**self.parse_action_param(action_name, action_params))
         else:
