@@ -35,30 +35,30 @@ class P4Host(Host):
 
         r = super().config(**params)
 
-        for off in ["rx", "tx", "sg"]:
-            cmd = "/sbin/ethtool --offload %s %s off" % (self.defaultIntf().name, off)
+        for off in ['rx', 'tx', 'sg']:
+            cmd = '/sbin/ethtool --offload {} {} off'.format(self.defaultIntf().name, off)
             self.cmd(cmd)
 
         # disable IPv6
-        self.cmd("sysctl -w net.ipv6.conf.all.disable_ipv6=1")
-        self.cmd("sysctl -w net.ipv6.conf.default.disable_ipv6=1")
-        self.cmd("sysctl -w net.ipv6.conf.lo.disable_ipv6=1")
+        self.cmd('sysctl -w net.ipv6.conf.all.disable_ipv6=1')
+        self.cmd('sysctl -w net.ipv6.conf.default.disable_ipv6=1')
+        self.cmd('sysctl -w net.ipv6.conf.lo.disable_ipv6=1')
 
         return r
 
     def describe(self, sw_addr=None, sw_mac=None):
         """Describe host."""
 
-        print("**********")
-        print("Network configuration for: %s" % self.name)
-        print("Default interface: %s\t%s\t%s" %(
+        print('**********')
+        print('Network configuration for: {}'.format(self.name))
+        print('Default interface: {}\t{}\t{}'.format(
             self.defaultIntf().name,
             self.defaultIntf().IP(),
             self.defaultIntf().MAC()
         ))
         if sw_addr is not None or sw_mac is not None:
-            print("Default route to switch: %s (%s)" % (sw_addr, sw_mac))
-        print("**********")
+            print('Default route to switch: {} ({})'.format(sw_addr, sw_mac))
+        print('**********')
 
 
 class P4Switch(Switch):
@@ -118,7 +118,7 @@ class P4Switch(Switch):
         self.log_enabled = log_enabled
         self.log_dir = log_dir
         self.thrift_port = thrift_port
-        self.nanomsg = "ipc:///tmp/bm-{}-log.ipc".format(self.device_id)
+        self.nanomsg = 'ipc:///tmp/bm-{}-log.ipc'.format(self.device_id)
         self.simple_switch_pid = None
 
         if self.log_enabled:
@@ -137,19 +137,19 @@ class P4Switch(Switch):
         """Set the compiled P4 JSON file."""
         # make sure that the provided JSON file exists if it is not None
         if json_path and not os.path.isfile(json_path):
-            raise FileNotFoundError("Invalid JSON file.")
+            raise FileNotFoundError('Invalid JSON file.')
         else:
             self.json_path = json_path
 
     def dpidToStr(self, id):
         strDpid = str(id)
         if len(strDpid) < 16:
-            return "0"*(16-len(strDpid)) + strDpid
+            return '0'*(16-len(strDpid)) + strDpid
         return strDpid
 
     def switch_started(self):
         """Check if the switch process has started."""
-        return os.path.exists(os.path.join("/proc", str(self.simple_switch_pid)))
+        return os.path.exists(os.path.join('/proc', str(self.simple_switch_pid)))
 
     def thrift_listening(self):
         """Check if a thrift process listens on the thrift port."""
@@ -187,7 +187,7 @@ class P4Switch(Switch):
         if self.json_path:
             args.append(self.json_path)
         else:
-            args.append("--no-p4")
+            args.append('--no-p4')
         if self.enable_debugger:
             args.append('--debugger')
         if self.log_enabled:
@@ -196,7 +196,7 @@ class P4Switch(Switch):
 
     def start(self, controllers=None):
         """Start up a new P4 switch."""
-        info("Starting P4 switch {}.\n".format(self.name))
+        info('Starting P4 switch {}.\n'.format(self.name))
         cmd = ' '.join(self.add_arguments())
         info(cmd + "\n")
 
@@ -204,18 +204,18 @@ class P4Switch(Switch):
         with tempfile.NamedTemporaryFile() as f:
             self.cmd(cmd + ' > ' + self.log_dir + '/p4s.{}.log'.format(self.name) + ' 2>&1 & echo $! >> ' + f.name)
             self.simple_switch_pid = int(f.read())
-        debug("P4 switch {} PID is {}.\n".format(self.name, self.simple_switch_pid))
+        debug('P4 switch {} PID is {}.\n'.format(self.name, self.simple_switch_pid))
         sleep(1)
         if not all(self.switch_status().values()):
-            raise ChildProcessError("P4 switch {} did not start correctly. Check the switch log file.".format(self.name))
-        info("P4 switch {} has been started.\n".format(self.name))
+            raise ChildProcessError('P4 switch {} did not start correctly. Check the switch log file.'.format(self.name))
+        info('P4 switch {} has been started.\n'.format(self.name))
 
         # only do this for l3..
         #self.cmd('sysctl', '-w', 'net.ipv4.ip_forward=1')
 
     def stop_p4switch(self):
         """Just stops simple switch without deleting interfaces."""
-        info("Stopping P4 switch {}.\n".format(self.name))
+        info('Stopping P4 switch {}.\n'.format(self.name))
         self.cmd('kill %' + self.sw_bin)
         self.cmd('wait')
 
@@ -287,7 +287,7 @@ class P4RuntimeSwitch(P4Switch):
         """Add arguments to the simple switch process"""
         args = super().add_arguments()
         if self.grpc_port:
-            args.append("-- --grpc-server-addr 0.0.0.0:" + str(self.grpc_port))
+            args.append('-- --grpc-server-addr 0.0.0.0:' + str(self.grpc_port))
         return args
 
     def describe(self):
