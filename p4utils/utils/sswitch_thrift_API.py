@@ -59,8 +59,8 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
                          json_path)
 
         self.sswitch_client = thrift_API.thrift_connect(thrift_ip,
-                                                         thrift_port,
-                                                         SimpleSwitchThriftAPI.get_thrift_services())[0]
+                                                        thrift_port,
+                                                        SimpleSwitchThriftAPI.get_thrift_services())[0]
 
     def parse_int(self, arg, name):
         try:
