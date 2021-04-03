@@ -43,38 +43,148 @@ class SimpleSwitchP4RuntimeAPI:
                                                     election_id=(1,0)
                                                  )
 
-
     def parse_match_key(self, table_name, key_fields):
         match_keys_dict = {}
         for i in range(len(key_fields)):
-            match_keys_dict[self.context.get_mf_name(table_name, i+1)] = str(key_fields[i])
+            match_keys_dict[self.context.get_mf_name(table_name, i+1)] = key_fields[i]
         return match_keys_dict
 
-    
     def parse_action_param(self, action_name, action_params):
         params_dict = {}
         for i in range(len(action_params)):
-            params_dict[self.context.get_param_name(action_name, i+1)] = str(action_params[i])
+            params_dict[self.context.get_param_name(action_name, i+1)] = action_params[i]
         return params_dict
 
-
     def table_add(self, table_name, action_name, match_keys, action_params=[], prio=None):
-        print('TableEntry')
-        print('table: '+table_name)
+        """
+        Add entry to a match table.
+
+        Args:
+            table_name (string)             : name of the table
+            action_name (string)            : action to execute on hit
+            match_keys (list of strings)    : value to match
+            action_params (list of strings) : parameters passed to action
+            prio (int)                      : priority in ternary match
+        
+        Different kinds of matches:
+            * For exact match: '<value>'
+            * For ternary match: '<value>&&&<mask>'
+            * For LPM match: '<value>/<mask>'
+            * For range match: '<value>..<mask>'
+        """
+        print('Adding entry to: '+table_name)
+        if not isinstance(match_keys, list):
+            raise TypeError('match_keys is not a list.')
+        if not isinstance(action_params, list):
+            raise TypeError('action_params is not a list.')
         entry = api.TableEntry(self.client, self.context, table_name)(action=action_name)
         if len(match_keys) == self.context.get_mf_len(table_name):
             entry.match.set(**self.parse_match_key(table_name, match_keys))
         else:
-            raise Exception('Table {} has {} match keys, {} entered.'.format(table_name,
+            raise Exception('Table "{}" has {} match keys, {} entered.'.format(table_name,
                                                                              self.context.get_mf_len(table_name),
                                                                              len(match_keys)))
         print('action: '+action_name)
         if len(action_params) == self.context.get_param_len(action_name):
             entry.action.set(**self.parse_action_param(action_name, action_params))
         else:
-            raise Exception('Action {} has {} params, {} entered.'.format(action_name,
-                                                                          self.context.get_mf_len(action_name),
-                                                                          len(action_params)))
+            raise Exception('Action "{}" takes {} params, {} entered.'.format(action_name,
+                                                                            self.context.get_mf_len(action_name),
+                                                                            len(action_params)))
+        if prio:
+            entry.priority = prio
         entry.insert()
 
+    def table_set_default(self, table_name, action_name, action_params=[]):
+        """
+        Set or reset default action for a match table.
         
+        Args:
+            table_name (string)             : name of the table
+            action_name (string)            : action to execute on hit
+            action_params (list of strings) : parameters passed to action
+        """
+        print('Adding default action to: '+table_name)
+        if not isinstance(action_params, list):
+            raise TypeError('action_params is not a list.')
+        entry = api.TableEntry(self.client, self.context, table_name)(action=action_name, is_default=True)
+        print('action: '+action_name)
+        if len(action_params) == self.context.get_param_len(action_name):
+            entry.action.set(**self.parse_action_param(action_name, action_params))
+        else:
+            raise Exception('Action "{}" takes {} params, {} entered.'.format(action_name,
+                                                                            self.context.get_mf_len(action_name),
+                                                                            len(action_params)))
+        entry.modify()
+
+    def table_delete(self, table_name, match_keys, prio=None):
+        """
+        Delete an existing entry in a table.
+
+        Args:
+            Args:
+            table_name (string)             : name of the table
+            match_keys (list of strings)    : value to match
+            prio (int)                      : priority in ternary match
+        """
+        print('Deleting entry of: '+table_name)
+        if not isinstance(match_keys, list):
+            raise TypeError('match_keys is not a list.')
+        entry = api.TableEntry(self.client, self.context, table_name)
+        if len(match_keys) == self.context.get_mf_len(table_name):
+            entry.match.set(**self.parse_match_key(table_name, match_keys))
+        else:
+            raise Exception('Table "{}" has {} match keys, {} entered.'.format(table_name,
+                                                                             self.context.get_mf_len(table_name),
+                                                                             len(match_keys)))
+        if prio:
+            entry.priority = prio
+        entry.delete()
+
+    def table_modify(self, table_name, action_name, match_keys, action_params=[], prio=None):
+        """
+        Modify entry in a table.
+
+        Args:
+            Args:
+            table_name (string)             : name of the table
+            action_name (string)            : action to execute on hit
+            match_keys (list of strings)    : value to match
+            action_params (list of strings) : parameters passed to action
+            prio (int)                      : priority in ternary match
+        """
+        print('Modifying entry of: '+table_name)
+        if not isinstance(match_keys, list):
+            raise TypeError('match_keys is not a list.')
+        if not isinstance(action_params, list):
+            raise TypeError('action_params is not a list.')
+        entry = api.TableEntry(self.client, self.context, table_name)(action=action_name)
+        if len(match_keys) == self.context.get_mf_len(table_name):
+            entry.match.set(**self.parse_match_key(table_name, match_keys))
+        else:
+            raise Exception('Table "{}" has {} match keys, {} entered.'.format(table_name,
+                                                                             self.context.get_mf_len(table_name),
+                                                                             len(match_keys)))
+        print('action: '+action_name)
+        if len(action_params) == self.context.get_param_len(action_name):
+            entry.action.set(**self.parse_action_param(action_name, action_params))
+        else:
+            raise Exception('Action "{}" takes {} params, {} entered.'.format(action_name,
+                                                                            self.context.get_mf_len(action_name),
+                                                                            len(action_params)))
+        if prio:
+            entry.priority = prio
+        entry.modify()
+
+    def table_clear(self, table_name):
+        """
+        Clear all entries in a match table (direct or indirect), but not the default entry.
+        """
+        print('Deleting entries of: '+table_name)
+        entry = api.TableEntry(self.client, self.context, table_name).read(function=lambda x: x.delete())
+
+    def table_set_timeout(self, table_name, entry_handle, timeout_ms):
+        """
+        Set a timeout in ms for a given entry; the table has to support timeouts.
+        """
+        pass
