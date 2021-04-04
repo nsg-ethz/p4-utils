@@ -43,6 +43,7 @@ class SimpleSwitchP4RuntimeAPI:
                                                     election_id=(1,0)
                                                  )
 
+    ## Tables
     def parse_match_key(self, table_name, key_fields):
         match_keys_dict = {}
         for i in range(len(key_fields)):
@@ -122,7 +123,6 @@ class SimpleSwitchP4RuntimeAPI:
         Delete an existing entry in a table.
 
         Args:
-            Args:
             table_name (string)             : name of the table
             match_keys (list of strings)    : value to match
             prio (int)                      : priority in ternary match
@@ -141,12 +141,11 @@ class SimpleSwitchP4RuntimeAPI:
             entry.priority = prio
         entry.delete()
 
-    def table_modify(self, table_name, action_name, match_keys, action_params=[], prio=None):
+    def table_modify_match(self, table_name, action_name, match_keys, action_params=[], prio=None):
         """
         Modify entry in a table.
 
         Args:
-            Args:
             table_name (string)             : name of the table
             action_name (string)            : action to execute on hit
             match_keys (list of strings)    : value to match
@@ -179,12 +178,12 @@ class SimpleSwitchP4RuntimeAPI:
     def table_clear(self, table_name):
         """
         Clear all entries in a match table (direct or indirect), but not the default entry.
+        
+        Args:
+            table_name (string)             : name of the table
         """
         print('Deleting entries of: '+table_name)
         entry = api.TableEntry(self.client, self.context, table_name).read(function=lambda x: x.delete())
 
-    def table_set_timeout(self, table_name, entry_handle, timeout_ms):
-        """
-        Set a timeout in ms for a given entry; the table has to support timeouts.
-        """
-        pass
+    ## Counters
+        
