@@ -83,27 +83,32 @@ class SimpleSwitchP4RuntimeAPI:
             entry.match.set(**self.parse_match_key(table_name, match_keys))
         else:
             raise Exception('Table "{}" has {} match keys, {} entered.'.format(table_name,
-                                                                             self.context.get_mf_len(table_name),
-                                                                             len(match_keys)))
+                                                                               self.context.get_mf_len(table_name),
+                                                                               len(match_keys)))
         print('action: '+action_name)
         if len(action_params) == self.context.get_param_len(action_name):
             entry.action.set(**self.parse_action_param(action_name, action_params))
         else:
             raise Exception('Action "{}" takes {} params, {} entered.'.format(action_name,
-                                                                            self.context.get_mf_len(action_name),
-                                                                            len(action_params)))
+                                                                              self.context.get_mf_len(action_name),
+                                                                              len(action_params)))
         if prio:
             entry.priority = prio
         entry.insert()
 
     def table_set_default(self, table_name, action_name, action_params=[]):
         """
-        Set or reset default action for a match table.
+        Set default action for a match table.
         
         Args:
             table_name (string)             : name of the table
             action_name (string)            : action to execute on hit
             action_params (list of strings) : parameters passed to action
+
+        Notice:
+            When setting the default entry, the configurations for
+            its direct resources will be reset to their defaults
+            (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources).
         """
         print('Adding default action to: '+table_name)
         if not isinstance(action_params, list):
@@ -118,7 +123,23 @@ class SimpleSwitchP4RuntimeAPI:
                                                                             len(action_params)))
         entry.modify()
 
-    def table_delete(self, table_name, match_keys, prio=None):
+    def table_reset_default(self, table_name):
+        """
+        Reset default action for a match table.
+        
+        Args:
+            table_name (string)             : name of the table
+
+        Notice:
+            When resetting the default entry, the configurations for
+            its direct resources will be reset to their defaults
+            (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-default-entry).
+        """
+        print('Resetting default action of: '+table_name)
+        entry = api.TableEntry(self.client, self.context, table_name)(is_default=True)
+        entry.modify()
+
+    def table_delete_match(self, table_name, match_keys, prio=None):
         """
         Delete an existing entry in a table.
 
@@ -151,6 +172,11 @@ class SimpleSwitchP4RuntimeAPI:
             match_keys (list of strings)    : value to match
             action_params (list of strings) : parameters passed to action
             prio (int)                      : priority in ternary match
+
+        Notice:
+            When modifying the default entry, the configurations for
+            its direct resources will be reset to their defaults
+            (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources).
         """
         print('Modifying entry of: '+table_name)
         if not isinstance(match_keys, list):
