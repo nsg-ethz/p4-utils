@@ -343,8 +343,7 @@ class AppRunner(object):
         (*) Parameters used to initialize the actual Mininet node (see p4utils.mininetlib.node).
         The other parameters are needed for other application features and functions and can be retrieved
         under getattr(mininetlib.net['node_name'],'params') dictionary.
-        These settings override the default ones. The field "opts" gathers all the mininet
-        options used to initialize the Mininet switch class. None of these fields is mandatory.
+        These settings override the default ones. None of these fields is mandatory.
         """
         switches = {}
         next_thrift_port = 9090
