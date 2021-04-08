@@ -18,7 +18,12 @@ class CounterType(enum.Enum):
     both = 3
 
 class SimpleSwitchP4RuntimeAPI:
-
+    """
+    For a better documentation of the primitives and the assumptions used,
+    please take a look at:
+    - P4Runtime Client repository
+    - P4 Runtime Specification (https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html)
+    """
     def __init__(self, device_id,
                  grpc_port,
                  grpc_ip='0.0.0.0',
@@ -104,7 +109,7 @@ class SimpleSwitchP4RuntimeAPI:
         if len(match_keys) == self.context.get_mf_len(table_name):
             entry.match.set(**self.parse_match_key(table_name, match_keys))
         else:
-            raise Exception('Table "{}" has {} match keys, {} entered.'.format(table_name,
+            raise Exception('table "{}" has {} match keys, {} entered.'.format(table_name,
                                                                                self.context.get_mf_len(table_name),
                                                                                len(match_keys)))
         
@@ -112,7 +117,7 @@ class SimpleSwitchP4RuntimeAPI:
         if len(action_params) == self.context.get_param_len(action_name):
             entry.action.set(**self.parse_action_param(action_name, action_params))
         else:
-            raise Exception('Action "{}" takes {} params, {} entered.'.format(action_name,
+            raise Exception('action "{}" takes {} params, {} entered.'.format(action_name,
                                                                               self.context.get_mf_len(action_name),
                                                                               len(action_params)))
         if prio:
@@ -142,7 +147,7 @@ class SimpleSwitchP4RuntimeAPI:
         if len(action_params) == self.context.get_param_len(action_name):
             entry.action.set(**self.parse_action_param(action_name, action_params))
         else:
-            raise Exception('Action "{}" takes {} params, {} entered.'.format(action_name,
+            raise Exception('action "{}" takes {} params, {} entered.'.format(action_name,
                                                                               self.context.get_mf_len(action_name),
                                                                               len(action_params)))
         entry.modify()
@@ -181,7 +186,7 @@ class SimpleSwitchP4RuntimeAPI:
         if len(match_keys) == self.context.get_mf_len(table_name):
             entry.match.set(**self.parse_match_key(table_name, match_keys))
         else:
-            raise Exception('Table "{}" has {} match keys, {} entered.'.format(table_name,
+            raise Exception('table "{}" has {} match keys, {} entered.'.format(table_name,
                                                                                self.context.get_mf_len(table_name),
                                                                                len(match_keys)))
         if prio:
@@ -216,7 +221,7 @@ class SimpleSwitchP4RuntimeAPI:
         if len(match_keys) == self.context.get_mf_len(table_name):
             entry.match.set(**self.parse_match_key(table_name, match_keys))
         else:
-            raise Exception('Table "{}" has {} match keys, {} entered.'.format(table_name,
+            raise Exception('table "{}" has {} match keys, {} entered.'.format(table_name,
                                                                              self.context.get_mf_len(table_name),
                                                                              len(match_keys)))
 
@@ -224,7 +229,7 @@ class SimpleSwitchP4RuntimeAPI:
         if len(action_params) == self.context.get_param_len(action_name):
             entry.action.set(**self.parse_action_param(action_name, action_params))
         else:
-            raise Exception('Action "{}" takes {} params, {} entered.'.format(action_name,
+            raise Exception('action "{}" takes {} params, {} entered.'.format(action_name,
                                                                             self.context.get_mf_len(action_name),
                                                                             len(action_params)))
         if prio:
@@ -273,7 +278,7 @@ class SimpleSwitchP4RuntimeAPI:
         if len(match_keys) == self.context.get_mf_len(table_name):
             entry.table_entry.match.set(**self.parse_match_key(table_name, match_keys))
         else:
-            raise Exception('Table "{}" has {} match keys, {} entered.'.format(table_name,
+            raise Exception('table "{}" has {} match keys, {} entered.'.format(table_name,
                                                                                self.context.get_mf_len(table_name),
                                                                                len(match_keys)))
         if prio:
@@ -305,9 +310,9 @@ class SimpleSwitchP4RuntimeAPI:
         if len(match_keys) == self.context.get_mf_len(table_name):
             entry.table_entry.match.set(**self.parse_match_key(table_name, match_keys))
         else:
-            raise Exception('Table "{}" has {} match keys, {} entered.'.format(table_name,
-                                                                               self.context.get_mf_len(table_name),
-                                                                               len(match_keys)))
+            raise Exception('counter "{}" has {} match keys, {} entered.'.format(table_name,
+                                                                                 self.context.get_mf_len(table_name),
+                                                                                 len(match_keys)))
         if prio:
             print('priority: {}'.format(prio))
             entry.table_entry.priority = prio
@@ -322,7 +327,145 @@ class SimpleSwitchP4RuntimeAPI:
     def direct_counter_reset(self, direct_counter_name):
         """
         Reset all the direct counters values.
+
+        Args:
+            direct_counter_name (string): name of the direct counter
         """
-        pass
+        print('Resetting direct counter: "{}"'.format(direct_counter_name))
+        entries = api.DirectCounterEntry(self.client, self.context, direct_counter_name).read()
+        for entry in entries:
+            direct_counter_type = entry._counter_type
+            if direct_counter_type in [CounterType.packets.value, CounterType.both.value]:
+                entry.packet_count = 0
+            if direct_counter_type in [CounterType.bytes.value, CounterType.both.value]:
+                entry.byte_count = 0
+            entry.modify()
         
     ## DirectMeters
+    def direct_meter_array_set_rates(self, direct_meter_name, rates=[]):
+        """
+        Configure rates for an entire direct meter array.
+
+        Args:
+            direct_meter_name (string): name of the direct meter
+            rates (list)              : [(cir, cburst), (pir, pburst)] (default: [], i.e.
+                                        all packets are marked as green)
+        """
+        print('Setting direct meter array: "{}"'.format(direct_meter_name))
+        if not isinstance(rates, list):
+            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+        entries = api.DirectMeterEntry(self.client, self.context, direct_meter_name).read()
+        
+        if len(rates) != 2:
+            if len(rates) != 0:
+                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+            else:
+                # Mark all packets as GREEN according to P4 Runtime Specification, i.e. meter's default behavior
+                # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-directmeterentry)
+                for entry in entries:
+                    entry.config = None
+        else:
+            if not isintance(rates[0], tuple):
+                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+            if not isintance(rates[1], tuple):
+                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+            # Set rates
+            for entry in entries:
+                entry.cir = rates[0][0]
+                entry.cburst = rates[0][1]
+                entry.pir = rates[1][0]
+                entry.pburst = rates[1][1]
+        
+        entry.modify()
+
+    def direct_meter_set_rates(self, direct_meter_name, match_keys, prio=0, rates=[]):
+        """
+        Configure rates for a single direct meter entry.
+
+        Args:
+            direct_meter_name (string)  : name of the direct meter
+            match_keys (list of strings): values to match (used to identify the table
+                                          entry to which the direct meter is attached)
+            prio (int)                  : priority in ternary match (used to identify the table
+                                          entry to which the direct meter is attached)
+            rates (list)                : [(cir, cburst), (pir, pburst)] (default: [], i.e.
+                                          all packets are marked as green)
+        """
+        print('Setting direct meter: "{}"'.format(direct_meter_name))
+        if not isinstance(match_keys, list):
+            raise TypeError('match_keys is not a list.')
+        if not isinstance(rates, list):
+            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+        entry = api.DirectMeterEntry(self.client, self.context, direct_meter_name)
+        table_name = entry._direct_table_name
+
+        print('match:')
+        if len(match_keys) == self.context.get_mf_len(table_name):
+            entry.table_entry.match.set(**self.parse_match_key(table_name, match_keys))
+        else:
+            raise Exception('meter "{}" has {} match keys, {} entered.'.format(direct_meter_name,
+                                                                               self.context.get_mf_len(table_name),
+                                                                               len(match_keys)))
+        if prio:
+            print('priority: {}'.format(prio))
+            entry.table_entry.priority = prio
+
+        if len(rates) != 2:
+            if len(rates) != 0:
+                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+            else:
+                # Mark all packets as GREEN according to P4 Runtime Specification, i.e. meter's default behavior
+                # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-directmeterentry)
+                entry.config = None
+        else:
+            if not isintance(rates[0], tuple):
+                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+            if not isintance(rates[1], tuple):
+                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+            # Set rates
+                entry.cir = rates[0][0]
+                entry.cburst = rates[0][1]
+                entry.pir = rates[1][0]
+                entry.pburst = rates[1][1]
+
+        entry.modify()   
+
+    def direct_meter_get_rates(self, direct_meter_name, match_keys, prio=0):
+        """
+        Retrieve rates for a direct meter.
+
+        Args:
+            direct_meter_name (string)    : name of the direct meter
+            match_keys (list of strings)  : values to match (used to identify the table
+                                            entry to which the direct meter is attached)
+            prio (int)                    : priority in ternary match (used to identify the table
+        
+        Return:
+            [(cir, cburst), (pir, pburst)] if meter is configured, [] if meter is not configured
+        """
+
+        print('Reading rates of direct meter: "{}"'.format(direct_meter_name))
+        if not isinstance(match_keys, list):
+            raise TypeError('match_keys is not a list.')
+        entry = api.DirectMeterEntry(self.client, self.context, direct_meter_name)
+        table_name = entry._direct_table_name
+
+        print('match:')
+        if len(match_keys) == self.context.get_mf_len(table_name):
+            entry.table_entry.match.set(**self.parse_match_key(table_name, match_keys))
+        else:
+            raise Exception('meter "{}" has {} match keys, {} entered.'.format(direct_meter_name,
+                                                                               self.context.get_mf_len(table_name),
+                                                                               len(match_keys)))
+        if prio:
+            print('priority: {}'.format(prio))
+            entry.table_entry.priority = prio
+
+        entry = list(entry.read())[0]
+
+        if entry.config:
+            return [(entry.cir, entry.cburst), (entry.pir, entry.pburst)]
+        else:
+            return []
+
+## Change [] with None for meters' rates.
