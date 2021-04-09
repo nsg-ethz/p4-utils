@@ -1538,7 +1538,10 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def meter_array_set_rates(self, meter_name, rates):
-        "Configure rates for an entire meter array: meter_array_set_rates <name> [(<rate_1>,<burst_1>), (<rate_2>,<burst_2>)] ..."
+        """
+        Configure rates for an entire meter array: meter_array_set_rates <name> [(<rate_1>,<burst_1>), (<rate_2>,<burst_2>)] ...
+        Rate uses units/microsecond and burst uses units where units is bytes or packets.
+        """
 
         meter = self.get_res("meter", meter_name, ResType.meter_array)
         if len(rates) != meter.rate_count:
@@ -1557,7 +1560,10 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def meter_set_rates(self, meter_name, index, rates):
-        "Configure rates for a meter: meter_set_rates <name> <index> [(<rate_1>,<burst_1>), (<rate_2>,<burst_2>)] ..."
+        """
+        Configure rates for a meter: meter_set_rates <name> <index> [(<rate_1>,<burst_1>), (<rate_2>,<burst_2>)] ...
+        Rate uses units/microsecond and burst uses units where units is bytes or packets.
+        """
 
         meter = self.get_res("meter", meter_name, ResType.meter_array)
         try:
@@ -1584,7 +1590,10 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def meter_get_rates(self, meter_name, index):
-        "Retrieve rates for a meter: meter_get_rates <name> <index>"
+        """
+        Retrieve rates for a meter: meter_get_rates <name> <index>.
+        Rate uses units/microsecond and burst uses units where units is bytes or packets.
+        """
 
         meter = self.get_res("meter", meter_name, ResType.meter_array)
         try:
