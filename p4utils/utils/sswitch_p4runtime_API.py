@@ -56,11 +56,10 @@ class SimpleSwitchP4RuntimeAPI:
             self.client, self.context = api.setup(
                                                     device_id=self.device_id,
                                                     grpc_addr=self.grpc_ip+':'+str(self.grpc_port),
-                                                    config=api.FwdPipeConfig(self.p4rt_path, self.json_path),
-                                                    election_id=(1,0)
+                                                    config=api.FwdPipeConfig(self.p4rt_path, self.json_path)
                                                  )
 
-    ## Tables
+    ## Utils
     def parse_match_key(self, table_name, key_fields):
         match_keys_dict = {}
         for i in range(len(key_fields)):
@@ -73,6 +72,7 @@ class SimpleSwitchP4RuntimeAPI:
             params_dict[self.context.get_param_name(action_name, i+1)] = action_params[i]
         return params_dict
 
+    ## Tables
     def table_add(self, table_name, action_name, match_keys, action_params=[], prio=None):
         """
         Add entry to a match table.
@@ -375,18 +375,18 @@ class SimpleSwitchP4RuntimeAPI:
         else:
             raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')        
 
-    def direct_meter_set_rates(self, direct_meter_name, rates, match_keys, prio=0):
+    def direct_meter_set_rates(self, direct_meter_name, match_keys, prio=0, rates=None):
         """
         Configure rates for a single direct meter entry.
 
         Args:
             direct_meter_name (string)  : name of the direct meter
-            rates (list)                : [(cir, cburst), (pir, pburst)] (default: None, i.e.
-                                          all packets are marked as green)
             match_keys (list of strings): values to match (used to identify the table
                                           entry to which the direct meter is attached)
             prio (int)                  : priority in ternary match (used to identify the table
                                           entry to which the direct meter is attached)
+            rates (list)                : [(cir, cburst), (pir, pburst)] (default: None, i.e.
+                                          all packets are marked as green)
         
         Notice:
             cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
@@ -444,7 +444,6 @@ class SimpleSwitchP4RuntimeAPI:
             cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
             depending on the meter type.
         """
-
         print('Reading rates of direct meter: "{}"'.format(direct_meter_name))
         if not isinstance(match_keys, list):
             raise TypeError('match_keys is not a list.')
@@ -461,6 +460,171 @@ class SimpleSwitchP4RuntimeAPI:
         if prio:
             print('priority: {}'.format(prio))
             entry.table_entry.priority = prio
+
+        entry = list(entry.read())[0]
+
+        return [(entry.cir, entry.cburst), (entry.pir, entry.pburst)]
+
+    ## Counters
+    def counter_read(self, counter_name, index):
+        """
+        Read counter value.
+
+        Args:
+            counter_name (string): name of the counter
+            index (int)          : index of the counter to read (first element is at 0)
+
+        Returns:
+            byte_count (int)            : number of bytes counted
+            packet_count (int)          : number of packets counted
+
+        Notice:
+            P4Runtime does not distinguish between the different PSA counter types, i.e. counters are
+            always considered of PACKETS_AND_BYTES and both values are returned. It is user's responsability
+            to use only the correct value (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry).
+        """
+        print('Reading counter: "{}"'.format(counter_name))
+        entry = api.CounterEntry(self.client, self.context, counter_name)
+
+        print('index: {}'.format(index))
+        entry.index = index
+        
+        entry = list(entry.read())[0]
+        return entry.byte_count, entry.packet_count
+
+    def counter_write(self, counter_name, index, pkts=0, byts=0):
+        """
+        Write counter values. If no values are specified, the counter is reset.
+
+        Args:
+            counter_name (string): name of the counter
+            index (int)          : index of the counter to write (first element is at 0)
+            pkts (int)           : number of packets to write (default: 0)
+            byts (int)           : number of bytes to write (default: 0)
+        """
+        print('Writing to counter: "{}"'.format(counter_name))
+        entry = api.CounterEntry(self.client, self.context, counter_name)
+
+        print('index: {}'.format(index))
+        entry.index = index
+
+        counter_type = entry._counter_type
+        if counter_type in [CounterType.packets.value, CounterType.both.value]:
+            entry.packet_count = pkts
+        if counter_type in [CounterType.bytes.value, CounterType.both.value]:
+            entry.byte_count = byts
+        entry.modify()
+
+    def counter_reset(self, counter_name):
+        """
+        Reset all the counters values.
+
+        Args:
+            counter_name (string): name of the counter
+        """
+        print('Resetting counter: "{}"'.format(counter_name))
+        entries = api.CounterEntry(self.client, self.context, counter_name).read()
+
+        for entry in entries:
+            counter_type = entry._counter_type
+            if counter_type in [CounterType.packets.value, CounterType.both.value]:
+                entry.packet_count = 0
+            if counter_type in [CounterType.bytes.value, CounterType.both.value]:
+                entry.byte_count = 0
+            entry.modify()
+
+    ## Meters
+    def meter_array_set_rates(self, meter_name, rates):
+        """
+        Configure rates for an entire meter array.
+
+        Args:
+            meter_name (string): name of the meter
+            rates (list)       : [(cir, cburst), (pir, pburst)]
+
+        Notice:
+            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+            depending on the meter type.
+        """
+        print('Setting meter array: "{}"'.format(meter_name))
+        entries = api.MeterEntry(self.client, self.context, meter_name).read()
+
+        if isinstance(rates, list):
+            if len(rates) == 2:
+                if not isinstance(rates[0], tuple):
+                    raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                if not isinstance(rates[1], tuple):
+                    raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                # Set rates
+                for entry in entries:
+                    entry.cir = rates[0][0]
+                    entry.cburst = rates[0][1]
+                    entry.pir = rates[1][0]
+                    entry.pburst = rates[1][1]
+                    entry.modify()
+            else:
+                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+        else:
+            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')        
+
+    def meter_set_rates(self, meter_name, index, rates):
+        """
+        Configure rates for a single  meter entry.
+
+        Args:
+            meter_name (string): name of the meter
+            rates (list)       : [(cir, cburst), (pir, pburst)] (default: None, i.e.
+                                 all packets are marked as green)
+            index (int)        : index of the meter to set (first element is at 0)
+        
+        Notice:
+            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+            depending on the meter type.
+        """
+        print('Setting meter: "{}"'.format(meter_name))
+        entry = api.MeterEntry(self.client, self.context, meter_name)
+
+        print('index: {}'.format(index))
+        entry.index = index
+
+        if isinstance(rates, list):
+            if len(rates) == 2:
+                if not isinstance(rates[0], tuple):
+                    raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                if not isinstance(rates[1], tuple):
+                    raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                # Set rates
+                entry.cir = rates[0][0]
+                entry.cburst = rates[0][1]
+                entry.pir = rates[1][0]
+                entry.pburst = rates[1][1]
+            else:
+                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+        else:
+            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+
+        entry.modify()
+
+    def meter_get_rates(self, meter_name, index):
+        """
+        Retrieve rates for a meter.
+
+        Args:
+            meter_name (string): name of the meter
+            index (int)        : index of the meter to read (first element is at 0)
+        
+        Return:
+            [(cir, cburst), (pir, pburst)] if meter is configured, None if meter is not configured
+
+        Notice:
+            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+            depending on the meter type.
+        """
+        print('Reading rates of meter: "{}"'.format(meter_name))
+        entry = api.MeterEntry(self.client, self.context, meter_name)
+        
+        print('index: {}'.format(index))
+        entry.index = index
 
         entry = list(entry.read())[0]
 
