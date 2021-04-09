@@ -342,60 +342,59 @@ class SimpleSwitchP4RuntimeAPI:
             entry.modify()
         
     ## DirectMeters
-    def direct_meter_array_set_rates(self, direct_meter_name, rates=[]):
+    def direct_meter_array_set_rates(self, direct_meter_name, rates):
         """
         Configure rates for an entire direct meter array.
 
         Args:
             direct_meter_name (string): name of the direct meter
-            rates (list)              : [(cir, cburst), (pir, pburst)] (default: [], i.e.
-                                        all packets are marked as green)
+            rates (list)              : [(cir, cburst), (pir, pburst)]
+
+        Notice:
+            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+            depending on the meter type.
         """
         print('Setting direct meter array: "{}"'.format(direct_meter_name))
-        if not isinstance(rates, list):
-            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
         entries = api.DirectMeterEntry(self.client, self.context, direct_meter_name).read()
         
-        if len(rates) != 2:
-            if len(rates) != 0:
-                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
-            else:
-                # Mark all packets as GREEN according to P4 Runtime Specification, i.e. meter's default behavior
-                # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-directmeterentry)
+        if isinstance(rates, list):
+            if len(rates) == 2:
+                if not isinstance(rates[0], tuple):
+                    raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                if not isinstance(rates[1], tuple):
+                    raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                # Set rates
                 for entry in entries:
-                    entry.config = None
+                    entry.cir = rates[0][0]
+                    entry.cburst = rates[0][1]
+                    entry.pir = rates[1][0]
+                    entry.pburst = rates[1][1]
+                    entry.modify()
+            else:
+                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
         else:
-            if not isintance(rates[0], tuple):
-                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
-            if not isintance(rates[1], tuple):
-                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
-            # Set rates
-            for entry in entries:
-                entry.cir = rates[0][0]
-                entry.cburst = rates[0][1]
-                entry.pir = rates[1][0]
-                entry.pburst = rates[1][1]
-        
-        entry.modify()
+            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')        
 
-    def direct_meter_set_rates(self, direct_meter_name, match_keys, prio=0, rates=[]):
+    def direct_meter_set_rates(self, direct_meter_name, rates, match_keys, prio=0):
         """
         Configure rates for a single direct meter entry.
 
         Args:
             direct_meter_name (string)  : name of the direct meter
+            rates (list)                : [(cir, cburst), (pir, pburst)] (default: None, i.e.
+                                          all packets are marked as green)
             match_keys (list of strings): values to match (used to identify the table
                                           entry to which the direct meter is attached)
             prio (int)                  : priority in ternary match (used to identify the table
                                           entry to which the direct meter is attached)
-            rates (list)                : [(cir, cburst), (pir, pburst)] (default: [], i.e.
-                                          all packets are marked as green)
+        
+        Notice:
+            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+            depending on the meter type.
         """
         print('Setting direct meter: "{}"'.format(direct_meter_name))
         if not isinstance(match_keys, list):
             raise TypeError('match_keys is not a list.')
-        if not isinstance(rates, list):
-            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
         entry = api.DirectMeterEntry(self.client, self.context, direct_meter_name)
         table_name = entry._direct_table_name
 
@@ -410,25 +409,23 @@ class SimpleSwitchP4RuntimeAPI:
             print('priority: {}'.format(prio))
             entry.table_entry.priority = prio
 
-        if len(rates) != 2:
-            if len(rates) != 0:
-                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
-            else:
-                # Mark all packets as GREEN according to P4 Runtime Specification, i.e. meter's default behavior
-                # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-directmeterentry)
-                entry.config = None
-        else:
-            if not isintance(rates[0], tuple):
-                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
-            if not isintance(rates[1], tuple):
-                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
-            # Set rates
+        if isinstance(rates, list):
+            if len(rates) == 2:
+                if not isinstance(rates[0], tuple):
+                    raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                if not isinstance(rates[1], tuple):
+                    raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                # Set rates
                 entry.cir = rates[0][0]
                 entry.cburst = rates[0][1]
                 entry.pir = rates[1][0]
                 entry.pburst = rates[1][1]
+            else:
+                raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+        else:
+            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
 
-        entry.modify()   
+        entry.modify()
 
     def direct_meter_get_rates(self, direct_meter_name, match_keys, prio=0):
         """
@@ -441,7 +438,11 @@ class SimpleSwitchP4RuntimeAPI:
             prio (int)                    : priority in ternary match (used to identify the table
         
         Return:
-            [(cir, cburst), (pir, pburst)] if meter is configured, [] if meter is not configured
+            [(cir, cburst), (pir, pburst)] if meter is configured, None if meter is not configured
+
+        Notice:
+            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+            depending on the meter type.
         """
 
         print('Reading rates of direct meter: "{}"'.format(direct_meter_name))
@@ -463,9 +464,4 @@ class SimpleSwitchP4RuntimeAPI:
 
         entry = list(entry.read())[0]
 
-        if entry.config:
-            return [(entry.cir, entry.cburst), (entry.pir, entry.pburst)]
-        else:
-            return []
-
-## Change [] with None for meters' rates.
+        return [(entry.cir, entry.cburst), (entry.pir, entry.pburst)]
