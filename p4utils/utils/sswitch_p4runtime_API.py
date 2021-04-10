@@ -629,3 +629,67 @@ class SimpleSwitchP4RuntimeAPI:
         entry = list(entry.read())[0]
 
         return [(entry.cir, entry.cburst), (entry.pir, entry.pburst)]
+
+    ## MulticastGroups
+    def mc_mgrp_create(self, mgrp):
+        """
+        Create multicast group.
+
+        Args:
+            mgrp (int): multicast group id
+
+        Notice:
+            mgrp must be greater than 0.
+        """
+        print('Creating multicast group: {}'.format(mgrp))
+        entry = api.MulticastGroupEntry(self.client, self.context, mgrp)
+        entry.insert()
+    
+    def mc_mgrp_destroy(self, mgrp):
+        """
+        Destroy multicast group.
+
+        Args:
+            mgrp (int): multicast group id
+
+        Notice:
+            mgrp must be greater than 0.
+        """
+        print('Destroying multicast group: {}'.format(mgrp))
+        entry = api.MulticastGroupEntry(self.client, self.context, mgrp)
+        entry.delete()
+
+    def mc_set_replicas(self, mgrp, ports, instances=None):
+        """
+        Set replicas for multicast group.
+
+        Args:
+            mgrp (int)             : multicast group id
+            ports (list of int)    : list of port numbers to add to the multicast group
+            instances (list of int): list of instances of the corresponding ports
+
+        Notice:
+            mgrp must be greater than 0.
+            A replica is a tuple (port, instance) which has to be unique within the 
+            same multicast group. Instances can be explicitly assigned to ports by 
+            passing the list instances to this function. If the list instances is not
+            specified, then the instance number is set to 0 for all the replicas.
+        """
+        print('Adding replicas to multicast group: {}'.format(mgrp))
+        entry = api.MulticastGroupEntry(self.client, self.context, mgrp)
+        
+        if not isinstance(ports, list):
+            raise TypeError('ports is not a list.')
+        elif instances:
+            if not isinstance(instances, list):
+                raise TypeError('instances is not a list.')
+            elif len(instances) != len(ports):
+                raise Exception('instances and ports have different lengths.')
+            else:
+                for i in range(len(ports)):
+                    entry = entry.add(ports[i], instances[i])
+        else:
+            for i in range(len(ports)):
+                entry = entry.add(ports[i])
+
+        entry.modify()
