@@ -314,7 +314,7 @@ class AppRunner(object):
         """
         if isinstance(self.conf.get('exec_scripts', None), list):
             for script in self.conf.get('exec_scripts'):
-                info("Exec Script: {}".format(script['cmd']))
+                info('Exec Script: {}\n'.format(script['cmd']))
                 run_command(script['cmd'])
 
     def parse_switches(self, unparsed_switches):

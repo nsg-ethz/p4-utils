@@ -55,6 +55,33 @@ class P4Topo(Topo):
         """
         return self.g.node[node].get('isP4Switch', False)
 
+    def addP4RuntimeSwitch(self, name, **opts):
+        """
+        Add P4 runtime switch node to Mininet topology.
+
+        Arguments:
+            name (string): switch name
+            opts (kwargs): switch options
+
+        Returns:
+            P4 switch name (string)
+        """
+        if not opts and self.sopts:
+            opts = self.sopts
+        return super().addSwitch(name, isP4Switch=True, isP4RuntimeSwitch=True, **opts)
+
+    def isP4RuntimeSwitch(self, node):
+        """
+        Check if node is a P4 runtime switch.
+
+        Arguments:
+            node (string): Mininet node name
+
+        Returns:
+            True if node is a P4 switch, else False (bool)
+        """
+        return self.g.node[node].get('isP4RuntimeSwitch', False)
+
     def addHiddenNode(self, name, **opts):
         """
         Add hidden node to Mininet topology. (TO IMPLEMENT)
@@ -153,9 +180,14 @@ class AppTopo(P4Topo):
             
             sw_attributes = self._switches[sw]
             if issubclass(sw_attributes['cls'], P4Switch):
-                self.addP4Switch(sw,
-                                device_id=id,
-                                **sw_attributes)
+                if issubclass(sw_attributes['cls'], P4RuntimeSwitch):
+                    self.addP4RuntimeSwitch(sw,
+                                    device_id=id,
+                                    **sw_attributes)
+                else:
+                    self.addP4Switch(sw,
+                                    device_id=id,
+                                    **sw_attributes)
             else:
                 self.addSwitch(sw,
                                device_id=id,
