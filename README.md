@@ -320,7 +320,7 @@ more automated control plane functions.
 
 While we write a more complete documentation you can check which functions are available to use directly at the source code:
 - [SimpleSwitchThriftAPI](p4utils/utils/sswitch_thrift_API.py) and [ThriftAPI](p4utils/utils/thrift_API.py) for thrift switches,
-- [SimpleSwitchP4RuntimeAPI](p4utile/utils/sswitch_p4runtime_API.py) for grpc switches.
+- [SimpleSwitchP4RuntimeAPI](p4utils/utils/sswitch_p4runtime_API.py) for grpc switches.
 
 **Note:** Some of the least used functions from the CLI have not been included in this API. However, some extra functions that do not exist in the CLI have
 been added here.
