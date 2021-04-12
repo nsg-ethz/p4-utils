@@ -112,7 +112,7 @@ rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
 
 # Configure tmux
 cd $SCRIPT_DIR
-#cp conf_files/tmux.conf ~/.tmux.conf
+cp conf_files/tmux.conf ~/.tmux.conf
 
 # Fix site-packages issue 
 # Modified file from 
@@ -485,28 +485,28 @@ function do_p4-learning {
     git checkout junota
 }
 
-#do_protobuf
-#if [ "$ENABLE_P4_RUNTIME" = true ]; then
-#    do_grpc
-#    do_bmv2_deps
-#    if [ "$SYSREPO" = true ]; then
-#        do_sysrepo_libyang
-#    fi
-#    do_PI
-#    do_p4runtime_client
-#fi
-#do_bmv2
-#do_p4c
-# ptf is Python2 only
-#do_ptf
-#do_mininet
+do_protobuf
+if [ "$ENABLE_P4_RUNTIME" = true ]; then
+    do_grpc
+    do_bmv2_deps
+    if [ "$SYSREPO" = true ]; then
+        do_sysrepo_libyang
+    fi
+    do_PI
+    do_p4runtime_client
+fi
+do_bmv2
+do_p4c
+ ptf is Python2 only
+do_ptf
+do_mininet
 
 # Mininet installs Python2 which becomes the system default binary.
 # This sets again Python3 as the system default binary.
-#sudo ln -sf $(which python3) /usr/bin/python
-#sudo ln -sf $(which pip3) /usr/bin/pip
+sudo ln -sf $(which python3) /usr/bin/python
+sudo ln -sf $(which pip3) /usr/bin/pip
 
-#do_p4-utils
-#do_p4-learning
+do_p4-utils
+do_p4-learning
 site_packages_fix
 echo "Installation complete!"
