@@ -2,9 +2,9 @@
 import os
 import enum
 
-import p4runtime_cli
-import p4runtime_cli.api as api
-import p4runtime_cli.context as ctx
+import p4utils.utils.p4runtime_API
+import p4utils.utils.p4runtime_API.api as api
+import p4utils.utils.p4runtime_API.context as ctx
 
 @enum.unique
 class CounterType(enum.Enum):
@@ -45,7 +45,7 @@ class SimpleSwitchP4RuntimeAPI:
                                                     device_id=self.device_id,
                                                     grpc_addr=self.grpc_ip+':'+str(self.grpc_port)
                                                  )
-        except p4runtime_cli.p4runtime.P4RuntimeException:
+        except p4utils.utils.p4runtime_API.p4runtime.P4RuntimeException:
             # If the client fails to retrieve the configuration information from the server,
             # it will establish the connection using the configuration files provided.
             if not os.path.isfile(self.p4rt_path):
