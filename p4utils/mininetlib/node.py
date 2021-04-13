@@ -294,3 +294,32 @@ class P4RuntimeSwitch(P4Switch):
         """Describe P4RuntimeSwitch."""
         super().describe()
         print('{} -> gRPC port: {}'.format(self.name, self.grpc_port))
+
+
+class Router(Switch):
+
+    """Router definition built on Mininet switch"""
+
+    ID = 0 
+
+    def __init__(self, name, **kwargs):
+
+        kwargs['inNamespace'] = True 
+        Switch.__init__(self, name, **kwargs)
+
+        Router.ID += 1
+        self.switch_id = Router.ID
+
+    @classmethod
+    def stop_all(self):
+        debug('Stop all FRR deamons')
+        pass
+
+    def start(self, controllers):
+        pass
+
+    def defaultIntf(self):
+        if hasattr(self, "controlIntf") and self.controlIntf:
+            return self.controlIntf
+
+        return self.defaultIntf(self)

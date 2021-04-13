@@ -41,6 +41,7 @@ from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
 from p4utils.utils.client import ThriftClient as DEFAULT_CLIENT
 from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.node import P4Switch as DEFAULT_SWITCH
+from p4utils.mininetlib.node import Router as DEFAULT_ROUTER
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
 from p4utils.mininetlib.topo import AppTopoStrategies as DEFAULT_TOPO
 from p4utils.mininetlib.cli import P4CLI
@@ -246,6 +247,13 @@ class AppRunner(object):
         else:
             self.host_node = DEFAULT_HOST
 
+        # Load default router node
+        self.router_node = {}
+        if self.conf.get('router_node', None):
+            self.switch_node = load_custom_object(self.conf.get('router_node'))
+        else:
+            self.router_node = DEFAULT_ROUTER
+
         ## Modules
         # Load default compiler module
         self.compiler_module = {}
@@ -296,6 +304,7 @@ class AppRunner(object):
 
         # Clean default switches
         self.switch_node.stop_all()
+        self.router_node.stop_all()
 
         ## Load topology 
         topology = self.conf.get('topology', False)
@@ -304,7 +313,9 @@ class AppRunner(object):
         else:
             # Import topology components
             self.hosts = topology['hosts']
-            self.switches = self.parse_switches(topology['switches'])
+            self.switches = self.parse_switches(topology.get('switches', None))
+            import ipdb; ipdb.set_trace()
+            self.routers = self.parse_routers(topology.get('routers'))
             self.links = self.parse_links(topology['links'])
             self.assignment_strategy = topology['assignment_strategy']
 
@@ -346,6 +357,9 @@ class AppRunner(object):
         These settings override the default ones. None of these fields is mandatory.
         """
         switches = {}
+        # When there are no switches in the topology
+        if not unparsed_switches:
+            return switches
         next_thrift_port = 9090
         next_grpc_port = 9559
 
@@ -403,6 +417,21 @@ class AppRunner(object):
             next_grpc_port = max(next_grpc_port + 1, params['grpc_port'])
     
         return switches
+
+    def parse_routers(self, unparsed_routers):
+        """ Parse the routers from the json file to run FRR on the routers
+            Due to the code sturcture requirements, parsing the routers similar to
+            the switches but with minimum requirements?
+        """
+
+        routers = {}
+        # when there are no routers in the topology
+        if not unparsed_routers:
+            return routers
+
+        for router, custom_params in unparsed_routers.items():
+            routers[router] = deepcopy(custom_params)
+        return routers        
 
     def parse_links(self, unparsed_links):
         """

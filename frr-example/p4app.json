@@ -1,5 +1,5 @@
 {
-  "p4_src": "p4src/forwarding.p4",
+  "p4_src": "forwarding.p4",
   "cli": true,
   "pcap_dump": false,
   "enable_log": false,
