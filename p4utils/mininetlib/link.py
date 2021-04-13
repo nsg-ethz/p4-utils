@@ -21,10 +21,10 @@ class TCLink(Link):
         if _params2:
             params2.update(_params2)
 
-        Link.__init__( self, node1, node2, port1=port1, port2=port2,
-                       intfName1=intfName1, intfName2=intfName2,
-                       cls1=TCIntf,
-                       cls2=TCIntf,
-                       addr1=addr1, addr2=addr2,
-                       params1=params1,
-                       params2=params2)
+        super().__init__(node1, node2, port1=port1, port2=port2,
+                         intfName1=intfName1, intfName2=intfName2,
+                         cls1=TCIntf,
+                         cls2=TCIntf,
+                         addr1=addr1, addr2=addr2,
+                         params1=params1,
+                         params2=params2)

@@ -149,7 +149,7 @@ class AppRunner(object):
                 "assignment_strategy": assignment_strategy,
                 "default":
                 {
-                    <default links and hosts configurations, see parse_links>
+                    <default links and hosts configurations, see parse_links and parse_hosts>
                 }
                 "links": 
                 [
@@ -234,14 +234,14 @@ class AppRunner(object):
         ## Mininet nodes
         # Load default switch node
         self.switch_node = {}
-        if self.conf.get('switch_node', None):
+        if self.conf.get('switch_node'):
             self.switch_node = load_custom_object(self.conf.get('switch_node'))
         else:
             self.switch_node = DEFAULT_SWITCH
 
         # Load default host node
         self.host_node = {}
-        if self.conf.get('host_node', None):
+        if self.conf.get('host_node'):
             self.host_node = load_custom_object(self.conf.get('host_node'))
         else:
             self.host_node = DEFAULT_HOST
@@ -254,9 +254,9 @@ class AppRunner(object):
                                      'opts': '--target bmv2 --arch v1model --std p4-16',
                                      'p4rt': False 
                                   }
-        if self.conf.get('compiler_module', None):
-            if self.conf['compiler_module'].get('object_name', None):
-                self.compiler_module['module'] = load_custom_object(self.conf.get('compiler_module'))
+        if self.conf.get('compiler_module'):
+            if self.conf['compiler_module'].get('object_name'):
+                self.compiler_module['module'] = load_custom_object(self.conf['compiler_module'])
             else:
                 self.compiler_module['module'] = DEFAULT_COMPILER
             # Load default compiler module arguments
@@ -272,9 +272,9 @@ class AppRunner(object):
                                     'log_enabled': self.log_enabled,
                                     'log_dir': self.log_dir
                                 }
-        if self.conf.get('client_module', None):
-            if self.conf['client_module'].get('object_name', None):
-                self.client_module['module'] = load_custom_object(self.conf.get('client_module'))
+        if self.conf.get('client_module'):
+            if self.conf['client_module'].get('object_name'):
+                self.client_module['module'] = load_custom_object(self.conf['client_module'])
             else:
                 self.client_module['module'] = DEFAULT_CLIENT
             # Load default client module arguments
@@ -283,36 +283,39 @@ class AppRunner(object):
             self.client_module['module'] = DEFAULT_CLIENT
             self.client_module['kwargs'] = default_client_kwargs
 
-        ## Old modules
-        if self.conf.get('topo_module', None):
-            self.app_topo = load_custom_object(self.conf.get('topo_module'))
+        # Load default Mininet topology builder
+        if self.conf.get('topo_module'):
+            self.app_topo = load_custom_object(self.conf['topo_module'])
         else:
             self.app_topo = DEFAULT_TOPO
 
-        if self.conf.get('mininet_module', None):
-            self.app_mininet = load_custom_object(self.conf.get('mininet_module'))
+        # Load default Mininet network
+        if self.conf.get('mininet_module'):
+            self.app_mininet = load_custom_object(self.conf['mininet_module'])
         else:
             self.app_mininet = DEFAULT_NET
 
         # Clean default switches
         self.switch_node.stop_all()
 
-        ## Load topology 
-        topology = self.conf.get('topology', False)
+        ## Load topology
+        topology = self.conf.get('topology')
         if not topology:
-            raise Exception('Topology to create is not defined in {}'.format(self.conf))
+            raise Exception('no topology defined in {}.'.format(self.conf))
         else:
+            # Set default options for the topology
+            default_assignment_strategy = 'l2'
             # Import topology components
             self.hosts = topology['hosts']
             self.switches = self.parse_switches(topology['switches'])
             self.links = self.parse_links(topology['links'])
-            self.assignment_strategy = topology['assignment_strategy']
+            self.assignment_strategy = topology.get('assignment_strategy', default_assignment_strategy)
 
     def exec_scripts(self):
         """
         Executes the script present in the "exec_scripts" field of self.conf.
         """
-        if isinstance(self.conf.get('exec_scripts', None), list):
+        if isinstance(self.conf.get('exec_scripts'), list):
             for script in self.conf.get('exec_scripts'):
                 info('Exec Script: {}\n'.format(script['cmd']))
                 run_command(script['cmd'])
@@ -524,10 +527,10 @@ class AppRunner(object):
         """
         debug('Generating topology...\n')
         # Generate topology
-        self.topo = self.app_topo(hosts = self.hosts, 
-                                  switches = self.switches,
-                                  links = self.links,
-                                  assignment_strategy = self.assignment_strategy)
+        self.topo = self.app_topo(hosts=self.hosts, 
+                                  switches=self.switches,
+                                  links=self.links,
+                                  assignment_strategy=self.assignment_strategy)
 
         # Start P4 Mininet
         debug('Starting network...\n')
@@ -723,7 +726,7 @@ class AppRunner(object):
               compilers=self.compilers,
               compiler_module=self.compiler_module,
               client_module=self.client_module,
-              scripts=self.conf.get('exec_scripts', None))
+              scripts=self.conf.get('exec_scripts'))
 
     def run_app(self):
         """

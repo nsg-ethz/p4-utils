@@ -147,7 +147,7 @@ def load_custom_object(obj):
         "object_name": module_object,
     }
 
-    "file_path" is optional and has to be used if the module is not present in sys.path.
+    'file_path' is optional and has to be used if the module is not present in sys.path.
     """
 
     file_path = obj.get("file_path", ".")

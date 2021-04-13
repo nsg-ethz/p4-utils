@@ -2,6 +2,7 @@ import re
 from ipaddress import IPv4Network
 from mininet.topo import Topo
 from mininet.nodelib import LinuxBridge
+from mininet.log import setLogLevel, info, output, debug, warning
 
 from p4utils.utils.helper import *
 from p4utils.mininetlib.node import *
@@ -146,8 +147,9 @@ class AppTopo(P4Topo):
 
         elif self.assignment_strategy == "manual":
             self.manual_assignment_strategy()
-        #default
+        # Fallback strategy
         else:
+            warning('"{}" is not a valid assignment strategy, falling back to "mixed"\n'.format(self.assignment_strategy))
             self.mixed_assignment_strategy()
 
     def node_sorting(self, node):
@@ -235,6 +237,8 @@ class AppTopo(P4Topo):
 
     def l2_assignment_strategy(self):
 
+        info('"l2" assignment strategy selected.\n')
+        
         self.add_switches()
         ip_generator = IPv4Network('10.0.0.0/16').hosts()
 
@@ -298,6 +302,8 @@ class AppTopo(P4Topo):
         self.printPortMapping()
 
     def mixed_assignment_strategy(self):
+
+        info('"mixed" assignment strategy selected.\n')
 
         sw_to_id = self.add_switches()
         sw_to_generator = {}
@@ -379,6 +385,8 @@ class AppTopo(P4Topo):
         self.printPortMapping()
 
     def l3_assignment_strategy(self):
+
+        info('"l3" assignment strategy selected.\n')
 
         sw_to_id = self.add_switches()
         sw_to_next_available_host_id = {}
@@ -464,6 +472,8 @@ class AppTopo(P4Topo):
         self.printPortMapping()
 
     def manual_assignment_strategy(self):
+
+        info('"manual" assignment strategy selected.\n')
 
         #adds switches to the topology and sets an ID
         sw_to_id = self.add_switches()

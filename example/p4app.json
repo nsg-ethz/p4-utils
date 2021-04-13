@@ -3,8 +3,8 @@
   "cli": true,
   "pcap_dump": true,
   "enable_log": true,
-    "topology": {
-	"assignment_strategy": "mixed",
+  "topology": {
+	  "assignment_strategy": "mixed",
     "links": [["h1", "s1", {"delay":"20ms", "bw": 20, "max_queue_size": 100, "weight":5}], ["h2", "s2"], ["s1", "s2"], ["h3", "s3"], ["h4", "s3"], ["s1", "s3"]],
     "hosts": {
       "h1": {
