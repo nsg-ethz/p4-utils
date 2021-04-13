@@ -7,12 +7,13 @@ class P4Mininet(Mininet):
     def __init__(self, *args, **kwargs):
         """Adds p4switches."""
         self.p4switches = []
+        self.routers = []
         super().__init__(*args, **kwargs)
 
     def build(self):
         """Build P4Mininet."""
         super().build()
-
+        
         for switch in self.switches:
             name = switch.name
             if self.topo.isP4Switch(name):

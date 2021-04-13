@@ -323,3 +323,71 @@ class Router(Switch):
             return self.controlIntf
 
         return self.defaultIntf(self)
+
+
+    #@staticmethod 
+    #def start_daemon(node, daemon, conf_dir, extra_params):
+    #    """Start FRR on a given router"""
+#
+    #    cmd = (("{bin_dir}/{daemon}"
+    #        " -f {conf_dir}/{node_name}.conf"
+    #        " -d"
+    #        " {options}"
+    #        " --vty_socket {vty_path}/{node_name}/"
+    #        " -i /tmp/{node_name}-{daemon}.pid"
+    #        " > /tmp/{node_name}-{daemon}.out 2>&1")
+    #        .format(bin_dir=FRR_DIR,
+    #                daemon=daemon,
+    #                options=" ".join(extra_params),
+    #                conf_dir=conf_dir,
+    #                node_name=node.name,
+    #                vty_path=VTY_SOCKET_PATH))
+    #    #print(cmd)
+    #    node.cmd(cmd)
+    #    node.waitOutput()
+#
+    #@staticmethod 
+    #def clean():
+    #"""Clean up files from previous run.
+    #"""
+    #os.system("rm -f /tmp/r*.log /tmp/r*.pid /tmp/r*.out")
+    #os.system("rm -f /tmp/h*.log /tmp/h*.pid /tmp/h*.out")
+    #os.system("mn -c >/dev/null 2>&1")
+    #os.system("killall -9 {} > /dev/null 2>&1"
+    #          .format(' '.join(os.listdir(FRR_DIR))))  
+#
+#
+    ## Method to run FRR daemons on the routers
+    #def program_routers(self):
+#
+    #    FRR_DIR = "/usr/local/sbin"
+#
+    #    if not os.path.isfile(FRR_DIR + "/" + "zebra"):
+    #        print("Binaries path {} does not contain daemons!".format(FRR_DIR))
+    #        exit(0)
+#
+    #    VTY_SOCKET_PATH = "/var/run/"
+#
+    #    if "zebra" in experiment.daemons:
+    #    assert (experiment.daemons[0] == "zebra")  
+#
+    #    conf_dir = experiment.directory[0]
+#
+    #    for node in self.routers:
+#
+    #        os.system("mkdir {}/{}".format(VTY_SOCKET_PATH, node))
+#
+    #        for daemon in experiment.daemons:
+    #            options = [" -u root"]
+    #            if daemon=="zebra":
+    #                options  += ["-M fpm"]
+#
+    #            path = daemon
+    #            _conf_dir = os.path.join(conf_dir, path)
+    #            #print(_conf_dir)
+    #            start_daemon(node, daemon, _conf_dir, options)
+#
+    #        if node.name.startswith('r'):
+    #            # Enable IP forwarding
+    #            node.cmd("sysctl -w net.ipv4.ip_forward=1")
+    #            node.waitOutput()        

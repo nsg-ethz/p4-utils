@@ -137,16 +137,18 @@ class AppTopo(P4Topo):
     Attributes:
         hosts (dict)                   : dictionary containing all the hosts
         switches (dict)                : dictionary containing all the switches
+        routers (dict)                : dictionary containing all the routers
         links (dict)                   : dictionary containing all the links
         assignment_strategy (dict)     : IP and MAC addressing strategy
     """
 
-    def __init__(self, hosts=None, switches=None, links=None, assignment_strategy="l2"):
+    def __init__(self, hosts=None, switches=None, routers=None, links=None, assignment_strategy="l2"):
 
         super().__init__()
         self.assignment_strategy = assignment_strategy
         self._hosts = hosts
         self._switches = switches
+        self._routers = routers
         self._links = links
 
         self.sw_port_mapping = {}
@@ -182,6 +184,12 @@ class AppTopo(P4Topo):
             for i, c in enumerate(node):
                 index += ord(c) * (255*(len(node)-i))
         return index
+
+    def add_routers(self):
+        routers =[]
+        for rtr, params in self._routers.items():
+                self.addRouter(rtr, cls = Router, **params)
+        return routers
 
     def add_switches(self):
         sw_to_id = {}
@@ -254,6 +262,20 @@ class AppTopo(P4Topo):
                         self.addSwitchPort(switch, sw)
                         add_bridge = False
                     self.addLink(switch, sw, intfName1='{}-cpu-eth0'.format(switch), intfName2= '{}-cpu-eth1'.format(switch), deleteIntfs=True)
+
+    def addSwitchPort(self, sw, node2):
+        if sw not in self.sw_port_mapping:
+            self.sw_port_mapping[sw] = []
+        portno = len(self.sw_port_mapping[sw]) + 1
+        self.sw_port_mapping[sw].append((portno, node2))
+
+    def printPortMapping(self):
+        print('Switch port mapping:')
+        for sw in sorted(self.sw_port_mapping.keys()):
+            print('{}: '.format(sw), end=' ')
+            for portno, node2 in self.sw_port_mapping[sw]:
+                print('{}:{}\t'.format(portno, node2), end=' ')
+            print()                    
 
     def l2_assignment_strategy(self):
 
@@ -546,19 +568,6 @@ class AppTopo(P4Topo):
         self.add_cpu_port()
         self.printPortMapping()
 
-    def addSwitchPort(self, sw, node2):
-        if sw not in self.sw_port_mapping:
-            self.sw_port_mapping[sw] = []
-        portno = len(self.sw_port_mapping[sw]) + 1
-        self.sw_port_mapping[sw].append((portno, node2))
-
-    def printPortMapping(self):
-        print('Switch port mapping:')
-        for sw in sorted(self.sw_port_mapping.keys()):
-            print('{}: '.format(sw), end=' ')
-            for portno, node2 in self.sw_port_mapping[sw]:
-                print('{}:{}\t'.format(portno, node2), end=' ')
-            print()
 
 #AppTopo Alias
 AppTopoStrategies = AppTopo
