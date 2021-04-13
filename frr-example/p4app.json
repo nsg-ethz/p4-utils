@@ -1,0 +1,33 @@
+{
+  "p4_src": "p4src/forwarding.p4",
+  "cli": true,
+  "pcap_dump": false,
+  "enable_log": false,
+  "topology": {
+    "assignment_strategy": "l2",
+    "links": [["h1", "s1"], ["h2", "s2"], ["s1", "s2"], ["s1", "r1"], ["s2", "r2"], ["r1", "r2"]],
+    "hosts": {
+      "h1": {
+      },
+      "h2": {
+      }
+    }
+    ,
+    "switches": {
+      "s1": {
+        "cli_input": "s1-commands.txt"
+      },
+      "s2": {
+        "cli_input": "s2-commands.txt"
+      }
+    }
+    ,
+    "routers": {
+      "r1" :{ 
+      }
+      ,
+      "r2" :{
+      }
+    } 
+  }
+}
