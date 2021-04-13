@@ -313,11 +313,11 @@ class AppRunner(object):
         else:
             # Import topology components
             self.hosts = topology['hosts']
-            self.switches = self.parse_switches(topology.get('switches', None))
-            import ipdb; ipdb.set_trace()
-            self.routers = self.parse_routers(topology.get('routers'))
             self.links = self.parse_links(topology['links'])
-            self.assignment_strategy = topology['assignment_strategy']
+            self.switches = self.parse_switches(topology.get('switches', None))
+            self.routers = self.parse_routers(topology.get('routers', None))
+            self.assignment_strategy = topology.get('assignment_strategy', "l2")
+            import ipdb; ipdb.set_trace()
 
     def exec_scripts(self):
         """
@@ -555,6 +555,7 @@ class AppRunner(object):
         # Generate topology
         self.topo = self.app_topo(hosts = self.hosts, 
                                   switches = self.switches,
+                                  routers = self.routers,
                                   links = self.links,
                                   assignment_strategy = self.assignment_strategy)
 

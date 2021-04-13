@@ -2,7 +2,6 @@ import re
 from ipaddress import IPv4Network
 from mininet.topo import Topo
 from mininet.nodelib import LinuxBridge
-
 from p4utils.utils.helper import *
 from p4utils.mininetlib.node import *
 
@@ -27,6 +26,29 @@ class P4Topo(Topo):
             P4 host name (string)
         """
         return super().addHost(name, isHost=True, **opts)
+
+    def addRouter(self, name, **opts):
+        """ 
+        Add a router to the Mininet topology.
+        Arguments:
+            name (string): switch name
+            opts (kwargs): switch options
+        Returns:
+            Router name (string)
+        """
+        if not opts and self.sopts:
+            opts = self.sopts
+        return super().addNode(name, isRouter=True, **opts)
+
+    def isRouter(self, node):
+        """
+        Check if node is a router.
+        Arguments:
+            node (string): Mininet node name
+        Returns:
+            True if node is a router, else False (bool)
+        """
+        return self.g.node[node].get('isRouter', False)        
 
     def addP4Switch(self, name, **opts):
         """
