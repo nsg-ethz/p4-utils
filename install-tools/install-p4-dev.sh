@@ -483,7 +483,7 @@ if [ "$ENABLE_P4_RUNTIME" = true ]; then
 fi
 do_bmv2
 do_p4c
- ptf is Python2 only
+# ptf is Python2 only
 do_ptf
 do_mininet
 
