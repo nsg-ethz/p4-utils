@@ -558,8 +558,6 @@ class AppRunner(object):
                                   links = self.links,
                                   assignment_strategy = self.assignment_strategy)
 
-        import ipdb; ipdb.set_trace()
-
         # Start P4 Mininet
         debug('Starting network...\n')
         self.net = self.app_mininet(topo=self.topo,

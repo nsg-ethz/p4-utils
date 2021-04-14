@@ -1,4 +1,5 @@
 from mininet.net import Mininet
+from mininet.log import info, error, debug, output, warn
 
 
 class P4Mininet(Mininet):
@@ -13,11 +14,43 @@ class P4Mininet(Mininet):
     def build(self):
         """Build P4Mininet."""
         super().build()
-        
+
         for switch in self.switches:
             name = switch.name
             if self.topo.isP4Switch(name):
                 self.p4switches.append(switch)
+
+    def addRouter(self, name: str, cls=None, **params):
+        """Add a router to the network
+        :param name: the node name
+        :param cls: the class to use to instantiate it"""
+
+        # here we will define our params
+        defaults = {}
+
+        defaults.update(params)
+
+        if not cls:
+            cls = self.router
+        r = cls(name, **defaults)
+        self.routers.append(r)
+        self.nameToNode[name] = r
+        return r                
+
+    def buildFromTopo( self, topo=None ):
+        """Build mininet from a topology object
+           At the end of this function, everything should be connected
+           and up."""
+
+        # add routers before the real mininet method is called
+        info('\n*** Adding Routers:\n')
+        for routerName in topo.routers():
+            self.addRouter(routerName, **topo.nodeInfo(routerName))
+            info(routerName + ' ')
+        info('\n')
+
+        super().buildFromTopo(topo)
+
 
     def start(self):
         super().start()
