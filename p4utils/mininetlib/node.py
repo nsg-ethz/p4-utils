@@ -19,7 +19,7 @@ import socket
 from time import sleep
 from mininet.log import debug, info, warning
 from mininet.clean import sh
-from mininet.node import Switch, Host
+from mininet.node import Switch, Host, Node
 from mininet.moduledeps import pathCheck
 
 from p4utils.utils.helper import *
@@ -296,27 +296,39 @@ class P4RuntimeSwitch(P4Switch):
         print('{} -> gRPC port: {}'.format(self.name, self.grpc_port))
 
 
-class Router(Switch):
+class Router( Switch ):
 
     """Router definition built on Mininet switch"""
 
     ID = 0 
+    FRR_DIR = "/usr/local/sbin"
+    VTY_SOCKET_PATH = "/var/run/"
 
-    def __init__(self, name, **kwargs):
+    def __init__(self, name, daemons=None, conf_path=None, **kwargs):
 
         kwargs['inNamespace'] = True 
-        Switch.__init__(self, name, **kwargs)
+        super().__init__(name, **kwargs)
 
         Router.ID += 1
         self.switch_id = Router.ID
 
+        self.daemons = daemons
+        self.conf_path = conf_path
+
     @classmethod
     def stop_all(self):
         debug('Stop all FRR deamons')
-        pass
+        Router.clean()
 
-    def start(self, controllers):
-        pass
+    @classmethod 
+    def clean(self):
+        """Clean up files from previous run.
+        """
+        os.system("rm -f /tmp/r*.log /tmp/r*.pid /tmp/r*.out")
+        os.system("rm -f /tmp/h*.log /tmp/h*.pid /tmp/h*.out")
+        os.system("mn -c >/dev/null 2>&1")
+        os.system("killall -9 {} > /dev/null 2>&1"
+                    .format(' '.join(os.listdir(Router.FRR_DIR)))) 
 
     def defaultIntf(self):
         if hasattr(self, "controlIntf") and self.controlIntf:
@@ -324,70 +336,57 @@ class Router(Switch):
 
         return self.defaultIntf(self)
 
+    def start(self):
+        self.program_router()
 
-    #@staticmethod 
-    #def start_daemon(node, daemon, conf_dir, extra_params):
-    #    """Start FRR on a given router"""
-#
-    #    cmd = (("{bin_dir}/{daemon}"
-    #        " -f {conf_dir}/{node_name}.conf"
-    #        " -d"
-    #        " {options}"
-    #        " --vty_socket {vty_path}/{node_name}/"
-    #        " -i /tmp/{node_name}-{daemon}.pid"
-    #        " > /tmp/{node_name}-{daemon}.out 2>&1")
-    #        .format(bin_dir=FRR_DIR,
-    #                daemon=daemon,
-    #                options=" ".join(extra_params),
-    #                conf_dir=conf_dir,
-    #                node_name=node.name,
-    #                vty_path=VTY_SOCKET_PATH))
-    #    #print(cmd)
-    #    node.cmd(cmd)
-    #    node.waitOutput()
-#
-    #@staticmethod 
-    #def clean():
-    #"""Clean up files from previous run.
-    #"""
-    #os.system("rm -f /tmp/r*.log /tmp/r*.pid /tmp/r*.out")
-    #os.system("rm -f /tmp/h*.log /tmp/h*.pid /tmp/h*.out")
-    #os.system("mn -c >/dev/null 2>&1")
-    #os.system("killall -9 {} > /dev/null 2>&1"
-    #          .format(' '.join(os.listdir(FRR_DIR))))  
-#
-#
-    ## Method to run FRR daemons on the routers
-    #def program_routers(self):
-#
-    #    FRR_DIR = "/usr/local/sbin"
-#
-    #    if not os.path.isfile(FRR_DIR + "/" + "zebra"):
-    #        print("Binaries path {} does not contain daemons!".format(FRR_DIR))
-    #        exit(0)
-#
-    #    VTY_SOCKET_PATH = "/var/run/"
-#
-    #    if "zebra" in experiment.daemons:
-    #    assert (experiment.daemons[0] == "zebra")  
-#
-    #    conf_dir = experiment.directory[0]
-#
-    #    for node in self.routers:
-#
-    #        os.system("mkdir {}/{}".format(VTY_SOCKET_PATH, node))
-#
-    #        for daemon in experiment.daemons:
-    #            options = [" -u root"]
-    #            if daemon=="zebra":
-    #                options  += ["-M fpm"]
-#
-    #            path = daemon
-    #            _conf_dir = os.path.join(conf_dir, path)
-    #            #print(_conf_dir)
-    #            start_daemon(node, daemon, _conf_dir, options)
-#
-    #        if node.name.startswith('r'):
-    #            # Enable IP forwarding
-    #            node.cmd("sysctl -w net.ipv4.ip_forward=1")
-    #            node.waitOutput()        
+    def stop(self):
+        super().stop()
+        os.system("killall -9 {}".format(' '.join(self.daemons.keys())))  
+        os.system(" rm -rf {}/{}".format(Router.VTY_SOCKET_PATH, self.name))
+
+    def start_daemon(self, daemon, conf_dir, extra_params):
+       """Start FRR on a given router"""
+
+       cmd = (("{bin_dir}/{daemon}"
+           " -f {conf_dir}/{node_name}.conf"
+           " -d"
+           " {options}"
+           " --vty_socket {vty_path}/{node_name}/"
+           " -i /tmp/{node_name}-{daemon}.pid"
+           " > /tmp/{node_name}-{daemon}.out 2>&1")
+           .format(bin_dir=Router.FRR_DIR,
+                   daemon=daemon,
+                   options=" ".join(extra_params),
+                   conf_dir=conf_dir,
+                   node_name=self.name,
+                   vty_path=Router.VTY_SOCKET_PATH))
+       #print(cmd)
+       self.cmd(cmd)
+       self.waitOutput()
+
+    # Method to run FRR daemons on the routers
+    def program_router(self):
+
+        if not os.path.isfile(Router.FRR_DIR + "/" + "zebra"):
+            print("Binaries path {} does not contain daemons!".format(Router.FRR_DIR))
+            exit(0)
+
+        if not self.daemons:
+            print("Nothing to start in Router")
+
+        os.system("mkdir -p {}/{}".format(Router.VTY_SOCKET_PATH, self.name))
+
+        for daemon in self.daemons:
+            options = [" -u root"]
+            if daemon=="zebra":
+                options  += ["-M fpm"]
+
+            path = daemon
+            _conf_dir = os.path.join(self.conf_path, path)
+            #print(_conf_dir)
+            self.start_daemon(daemon, _conf_dir, options)
+
+        if self.name.startswith('r'):
+            # Enable IP forwarding
+            self.cmd("sysctl -w net.ipv4.ip_forward=1")
+            self.waitOutput()        

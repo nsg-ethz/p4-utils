@@ -27,10 +27,20 @@
     }
     ,
     "routers": {
-      "r1" :{ 
+      "r1" :{
+        "conf_path": "./routers_conf/", 
+        "daemons" : {
+        "zebra": {},
+        "ospf": {}
+       }
       }
       ,
       "r2" :{
+        "conf_path": "./routers_conf/", 
+        "daemons" : {
+          "zebra": {},
+          "ospf": {}
+        }        
       }
     } 
   }

@@ -55,6 +55,12 @@ class P4Mininet(Mininet):
     def start(self):
         super().start()
 
+        # start routers
+        info( '*** Starting %s routers\n' % len( self.routers ) )
+        for router in self.routers:
+            info( router.name + ' ')
+            router.start()
+
         hosts_mtu = 9500
         # Trick to allow switches to add headers
         # when packets have the max MTU
@@ -85,3 +91,13 @@ class P4Mininet(Mininet):
 
             link.intf1.cmd(cmd3.format(link.intf1.name, mtu))
             link.intf2.cmd(cmd3.format(link.intf2.name, mtu))
+
+    def stop(self):
+
+        super().stop()
+
+        info( '*** Stopping %i routers\n' % len( self.routers ) )
+        for router in self.routers:
+            info( router.name + ' ' )
+            router.stop()
+            router.terminate()
