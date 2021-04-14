@@ -73,7 +73,7 @@ class SimpleSwitchP4RuntimeAPI:
         return params_dict
 
     ## Tables
-    def table_add(self, table_name, action_name, match_keys, action_params=[], prio=None):
+    def table_add(self, table_name, action_name, match_keys, action_params=[], prio=0, rates=None, pkts=None, byts=None):
         """
         Add entry to a match table.
 
@@ -83,6 +83,17 @@ class SimpleSwitchP4RuntimeAPI:
             match_keys (list of strings)    : values to match
             action_params (list of strings) : parameters passed to action
             prio (int)                      : priority in ternary match
+        
+        If a direct meter is attached to the table
+            rates (list)                    : [(cir, cburst), (pir, pburst)] (if None, the meter
+                                              is set to its default behavior, i.e. marks
+                                              all packets as GREEN)
+
+        If a direct counter is attached to the table
+            pkts (int)                      : number of packets to write (if None, the count
+                                              is not changed)
+            byts (int)                      : number of bytes to write (if None, the count
+                                              is not changed)
         
         Different kinds of matches:
             * For exact match: '<value>'
@@ -97,6 +108,11 @@ class SimpleSwitchP4RuntimeAPI:
             RANGE match type) or to zero otherwise. A higher priority number indicates 
             that the entry must be given higher priority when performing a table lookup. 
             (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry)
+
+            There are three types of counters:
+            - BYTES, only the field 'byts' is written and the value of 'pkts' is ignored
+            - PACKETS, only the field 'pkts' is written and the value of 'byts' is ignored
+            - PACKETS_AND_BYTES, both 'byts' and 'pkts' are written
         """
         print('Adding entry to: '+table_name)
         if not isinstance(match_keys, list):
@@ -123,6 +139,45 @@ class SimpleSwitchP4RuntimeAPI:
         if prio:
             print('priority: {}'.format(prio))
             entry.priority = prio
+
+        # DirectMeter
+        if rates:
+            if entry._direct_meter:
+                if isinstance(rates, list):
+                    if len(rates) == 2:
+                        if not isinstance(rates[0], tuple):
+                            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                        if not isinstance(rates[1], tuple):
+                            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                        # Set rates
+                        entry.meter_config.cir = rates[0][0]
+                        entry.meter_config.cburst = rates[0][1]
+                        entry.meter_config.pir = rates[1][0]
+                        entry.meter_config.pburst = rates[1][1]
+                    else:
+                        raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                else:
+                    raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+            else:
+                raise Exception('table {} has no direct meter attached.'.format(table_name))
+
+        # DirectCounter
+        if pkts:
+            if entry._direct_counter:
+                direct_counter_type = entry._direct_counter.spec.unit
+                if direct_counter_type in [CounterType.packets.value, CounterType.both.value]:
+                    entry.counter_data.packet_count = pkts
+            else:
+                raise Exception('table {} has no direct counter attached.'.format(table_name))
+
+        if byts:
+            if entry._direct_counter:
+                direct_counter_type = entry._direct_counter.spec.unit
+                if direct_counter_type in [CounterType.bytes.value, CounterType.both.value]:
+                    entry.counter_data.byte_count = byts
+            else:
+                raise Exception('table {} has no direct counter attached.'.format(table_name))
+
         entry.insert()
 
     def table_set_default(self, table_name, action_name, action_params=[]):
@@ -194,7 +249,7 @@ class SimpleSwitchP4RuntimeAPI:
             entry.priority = prio
         entry.delete()
 
-    def table_modify_match(self, table_name, action_name, match_keys, action_params=[], prio=None):
+    def table_modify_match(self, table_name, action_name, match_keys, action_params=[], prio=0, rates=None, pkts=None, byts=None):
         """
         Modify entry in a table.
 
@@ -205,10 +260,26 @@ class SimpleSwitchP4RuntimeAPI:
             action_params (list of strings) : parameters passed to action
             prio (int)                      : priority in ternary match
 
+        If a direct meter is attached to the table
+            rates (list)                    : [(cir, cburst), (pir, pburst)] (if None, the meter
+                                              is set to its default behavior, i.e. marks
+                                              all packets as GREEN)
+
+        If a direct counter is attached to the table
+            pkts (int)                      : number of packets to write (if None, the count
+                                              is not changed)
+            byts (int)                      : number of bytes to write (if None, the count
+                                              is not changed)
+
         Notice:
             When modifying the default entry, the configurations for
             its direct resources will be reset to their defaults
             (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources).
+
+            There are three types of counters:
+            - BYTES, only the field 'byts' is written and the value of 'pkts' is ignored
+            - PACKETS, only the field 'pkts' is written and the value of 'byts' is ignored
+            - PACKETS_AND_BYTES, both 'byts' and 'pkts' are written
         """
         print('Modifying entry of: '+table_name)
         if not isinstance(match_keys, list):
@@ -235,6 +306,46 @@ class SimpleSwitchP4RuntimeAPI:
         if prio:
             print('priority: {}'.format(prio))
             entry.priority = prio
+
+        # DirectMeter
+        if rates:
+            if entry._direct_meter:
+                if isinstance(rates, list):
+                    if len(rates) == 2:
+                        if not isinstance(rates[0], tuple):
+                            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                        if not isinstance(rates[1], tuple):
+                            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                        # Set rates
+                        entry.meter_config.cir = rates[0][0]
+                        entry.meter_config.cburst = rates[0][1]
+                        entry.meter_config.pir = rates[1][0]
+                        entry.meter_config.pburst = rates[1][1]
+                    else:
+                        raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+                else:
+                    raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+            else:
+                raise Exception('table {} has no direct meter attached.'.format(table_name))
+
+        # DirectCounter
+        if pkts:
+            if entry._direct_counter:
+                direct_counter_type = entry._direct_counter.spec.unit
+                print(direct_counter_type)
+                if direct_counter_type in [CounterType.packets.value, CounterType.both.value]:
+                    entry.counter_data.packet_count = pkts
+            else:
+                raise Exception('table {} has no direct counter attached.'.format(table_name))
+
+        if byts:
+            if entry._direct_counter:
+                direct_counter_type = entry._direct_counter.spec.unit
+                if direct_counter_type in [CounterType.bytes.value, CounterType.both.value]:
+                    entry.counter_data.byte_count = byts
+            else:
+                raise Exception('table {} has no direct counter attached.'.format(table_name))
+
         entry.modify()
 
     def table_clear(self, table_name):
@@ -299,6 +410,12 @@ class SimpleSwitchP4RuntimeAPI:
                                           entry to which the direct counter is attached)
             pkts (int)                  : number of packets to write (default: 0)
             byts (int)                  : number of bytes to write (default: 0)
+
+        Notice:
+            There are three types of counters:
+            - BYTES, only the field 'byts' is written and the value of 'pkts' is ignored
+            - PACKETS, only the field 'pkts' is written and the value of 'byts' is ignored
+            - PACKETS_AND_BYTES, both 'byts' and 'pkts' are written
         """
         print('Writing to direct counter: "{}"'.format(direct_counter_name))
         if not isinstance(match_keys, list):
@@ -501,6 +618,12 @@ class SimpleSwitchP4RuntimeAPI:
             index (int)          : index of the counter to write (first element is at 0)
             pkts (int)           : number of packets to write (default: 0)
             byts (int)           : number of bytes to write (default: 0)
+        
+        Notice:
+            There are three types of counters:
+            - BYTES, only the field 'byts' is written and the value of 'pkts' is ignored
+            - PACKETS, only the field 'pkts' is written and the value of 'byts' is ignored
+            - PACKETS_AND_BYTES, both 'byts' and 'pkts' are written
         """
         print('Writing to counter: "{}"'.format(counter_name))
         entry = api.CounterEntry(self.client, self.context, counter_name)
