@@ -317,7 +317,6 @@ class AppRunner(object):
             self.switches = self.parse_switches(topology.get('switches', None))
             self.routers = self.parse_routers(topology.get('routers', None))
             self.assignment_strategy = topology.get('assignment_strategy', "l2")
-            import ipdb; ipdb.set_trace()
 
     def exec_scripts(self):
         """
@@ -559,6 +558,8 @@ class AppRunner(object):
                                   links = self.links,
                                   assignment_strategy = self.assignment_strategy)
 
+        import ipdb; ipdb.set_trace()
+
         # Start P4 Mininet
         debug('Starting network...\n')
         self.net = self.app_mininet(topo=self.topo,
@@ -770,9 +771,11 @@ class AppRunner(object):
 
         # Some programming that must happen after the network has started
         self.program_hosts()
+        # maybe program routers
         self.program_switches()
 
         # Save mininet topology to a database
+        # this might fail with the routers?
         self.save_topology()
         sleep(1)
 

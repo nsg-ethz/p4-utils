@@ -14,6 +14,18 @@ from p4utils.mininetlib.node import *
 class P4Topo(Topo):
     """Extension of the mininet topology class with P4 switches."""
 
+    def hosts( self, sort=True ):
+        """Return hosts.
+           sort: sort hosts alphabetically
+           returns: list of hosts"""
+        return [ n for n in self.nodes( sort ) if not self.isSwitch( n ) and not self.isRouter()]    
+
+    def routers( self, sort=True ):
+        """Return routers.
+           sort: sort routers alphabetically
+           returns: list of routers"""
+        return [ n for n in self.nodes( sort ) if self.isRouter( n ) ]        
+
     def addHost(self, name, **opts):
         """
         Add P4 host node to Mininet topology.
@@ -170,6 +182,9 @@ class AppTopo(P4Topo):
 
         elif self.assignment_strategy == "manual":
             self.manual_assignment_strategy()
+        
+        elif self.assignment_strategy == "manual-frr":
+            self.manual_frr_assignment_strategy()
         #default
         else:
             self.mixed_assignment_strategy()
@@ -186,10 +201,8 @@ class AppTopo(P4Topo):
         return index
 
     def add_routers(self):
-        routers =[]
         for rtr, params in self._routers.items():
                 self.addRouter(rtr, cls = Router, **params)
-        return routers
 
     def add_switches(self):
         sw_to_id = {}
@@ -231,6 +244,18 @@ class AppTopo(P4Topo):
 
         return link[0] in self._hosts or link[1] in self._hosts
 
+    def is_router_link(self, link):
+
+        return link[0] in self._routers or link[1] in self._routers
+
+    def is_both_router_link(self, link):
+
+        return link[0] in self._routers and link[1] in self._routers
+
+    def is_switch_link(self, link):
+
+        return link[0] in self._switches and link[1] in self._switches         
+
     def get_host_position(self, link):
 
         return 0 if link[0] in self._hosts else 1
@@ -238,6 +263,10 @@ class AppTopo(P4Topo):
     def get_sw_position(self, link):
 
         return 0 if link[0] in self._switches else 1
+
+    def get_rtr_position(self, link):
+
+        return 0 if link[0] in self._routers else 1        
 
     def check_host_valid_ip_from_name(self, host):
 
@@ -568,6 +597,69 @@ class AppTopo(P4Topo):
         self.add_cpu_port()
         self.printPortMapping()
 
+    def manual_frr_assignment_strategy(self):
+
+        #adds switches to the topology and sets an ID
+        sw_to_id = self.add_switches()
+
+        # add routers
+        self.add_routers()
+
+        # add links and configure them: ips, macs, etc
+        # assumes hosts are connected to one switch only
+        for link in self._links:
+            print(link)
+            if self.is_host_link(link):
+
+                host_name = link[self.get_host_position(link)]
+                direct_sw = link[self.get_sw_position(link)]
+
+                sw_id = sw_to_id[direct_sw]
+                assert sw_id < 254
+
+                #host_gw = None
+                host_mac = None
+
+                host_ops = self._hosts[host_name]
+                assert host_ops['ip'], 'Host does not have an IP assigned or "auto" assignment'
+
+                if host_ops['ip'] == 'auto':
+                    host_ops['ip'] = None
+                    host_ops['auto'] = True
+
+                if host_ops['ip'] and not '/' in host_ops['ip']:
+                    host_ops['ip'] += '/24'
+
+                # Get mac address from ip address
+                if host_ops['ip'] and not host_ops.get('mac', False):
+                    host_mac = ip_address_to_mac(host_ops['ip']) % (0)
+                    host_ops['mac'] = host_mac
+
+                self.addHost(host_name, **host_ops)
+
+                link_ops = link[2]
+                link_ops['addr1'] = host_mac
+
+                self.addLink(host_name, direct_sw, **link_ops)
+                self.addSwitchPort(direct_sw, host_name)
+                plane_ip = host_ops['ip'].split("/")[0]
+                self.hosts_info[host_name] = {"sw": direct_sw, "ip":  plane_ip, "mac": host_mac, "mask": 24}
+            
+            # switch to switch link
+            else:
+                link_ops = link[2]
+                # Get mac address from ip address
+                if link_ops['sw_ip1'] and not link_ops['addr1']:
+                    link_ops['addr1'] = ip_address_to_mac(link_ops['sw_ip1']) % (1)
+                if link_ops['sw_ip2'] and not link_ops['addr2']:
+                    link_ops['addr2'] = ip_address_to_mac(link_ops['sw_ip2']) % (1)
+
+                self.addLink(link[0], link[1], **link_ops)
+                self.addSwitchPort(link[0], link[1])
+                self.addSwitchPort(link[1], link[0])
+
+        self.add_cpu_port()
+        self.printPortMapping()
 
 #AppTopo Alias
 AppTopoStrategies = AppTopo
