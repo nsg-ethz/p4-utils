@@ -244,6 +244,10 @@ class AppTopo(P4Topo):
 
         return link[0] in self._hosts or link[1] in self._hosts
 
+    def is_one_router_link(self, link):
+
+        return link[0] in self._routers or link[1] in self._routers
+
     def is_router_link(self, link):
 
         return link[0] in self._routers and link[1] in self._routers
@@ -257,6 +261,14 @@ class AppTopo(P4Topo):
         if link[0] in self._switches and link[1] in self._routers:
             return True
         elif link[1] in self._switches and link[0] in self._routers:
+            return True       
+        return False
+
+    def is_host_router_link(self, link):
+
+        if link[0] in self._hosts and link[1] in self._routers:
+            return True
+        elif link[1] in self._hosts and link[0] in self._routers:
             return True       
         return False
 
@@ -613,7 +625,7 @@ class AppTopo(P4Topo):
         # assumes hosts are connected to one switch only
         for link in self._links:
             print(link)
-            if self.is_host_link(link):
+            if self.is_host_link(link)== True and self.is_one_router_link==False:
 
                 host_name = link[self.get_host_position(link)]
                 direct_sw = link[self.get_sw_position(link)]
@@ -666,6 +678,46 @@ class AppTopo(P4Topo):
             elif self.is_switch_router_link(link):
                 self.addLink(link[0], link[1], **link_ops)
                 pass
+
+            elif self.is_router_link(link):
+                self.addLink(link[0], link[1], **link_ops)
+                pass
+
+            elif self.is_host_router_link(link):
+                
+
+                host_name = link[self.get_host_position(link)]
+                router = link[self.get_router_position(link)]
+
+                #host_gw = None
+                host_mac = None
+
+                host_ops = self._hosts[host_name]
+                assert host_ops['ip'], 'Host does not have an IP assigned or "auto" assignment'
+
+                if host_ops['ip'] == 'auto':
+                    host_ops['ip'] = None
+                    host_ops['auto'] = True
+
+
+                if host_ops['ip'] and not '/' in host_ops['ip']:
+                    host_ops['ip'] += '/24'
+
+                # Get mac address from ip address
+                if host_ops['ip'] and not host_ops.get('mac', False):
+                    host_mac = ip_address_to_mac(host_ops['ip']) % (0)
+                    host_ops['mac'] = host_mac
+
+                self.addHost(host_name, **host_ops)
+
+                link_ops = link[2]
+                link_ops['addr1'] = host_mac
+
+                self.addLink(host_name, router, **link_ops)
+                plane_ip = host_ops['ip'].split("/")[0]
+                self.hosts_info[host_name] = {"router": router, "ip":  plane_ip, "mac": host_mac, "mask": 24}
+                pass
+
 
         self.add_cpu_port()
         self.printPortMapping()
