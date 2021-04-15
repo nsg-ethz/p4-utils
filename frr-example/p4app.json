@@ -8,12 +8,12 @@
     "links": [["h1", "s1"], ["h2", "s2"], ["s1", "s2"], ["s1", "r1"], ["s2", "r2"]],
     "hosts": {
       "h1": {
-        "ip": "10.0.1.2/24",
-        "defaultRoute": "via 10.0.1.1"
+        "ip": "10.1.0.1/24",
+        "defaultRoute": "via 10.1.0.2"
       },
       "h2": {
-        "ip": "10.0.3.2/24",
-        "defaultRoute": "via 10.0.3.1"
+        "ip": "10.2.0.1/24",
+        "defaultRoute": "via 10.2.0.2"
       }
     }
     ,
@@ -31,7 +31,7 @@
         "conf_path": "./routers_conf/", 
         "daemons" : {
         "zebra": {},
-        "ospf": {}
+        "ospfd": {}
        }
       }
       ,
@@ -39,7 +39,7 @@
         "conf_path": "./routers_conf/", 
         "daemons" : {
           "zebra": {},
-          "ospf": {}
+          "ospfd": {}
         }        
       }
     } 
