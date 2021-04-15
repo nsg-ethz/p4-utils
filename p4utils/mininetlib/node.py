@@ -337,14 +337,15 @@ class Router( Switch ):
         return self.defaultIntf(self)
 
     def start(self):
-        self.program_router()
+        pass
+        #self.program_router()
 
     def stop(self):
         super().stop()
-        os.system("killall -9 {}".format(' '.join(self.daemons.keys())))  
-        os.system(" rm -rf {}/{}".format(Router.VTY_SOCKET_PATH, self.name))
+        #os.system("killall -9 {}".format(' '.join(self.daemons.keys())))  
+        #os.system(" rm -rf {}/{}".format(Router.VTY_SOCKET_PATH, self.name))'''
 
-    def start_daemon(self, daemon, conf_dir, extra_params):
+    '''def start_daemon(self, daemon, conf_dir, extra_params):
        """Start FRR on a given router"""
 
        cmd = (("{bin_dir}/{daemon}"
@@ -389,4 +390,4 @@ class Router( Switch ):
         if self.name.startswith('r'):
             # Enable IP forwarding
             self.cmd("sysctl -w net.ipv4.ip_forward=1")
-            self.waitOutput()        
+            self.waitOutput()'''        

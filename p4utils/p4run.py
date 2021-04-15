@@ -315,7 +315,14 @@ class AppRunner(object):
             self.hosts = topology['hosts']
             self.links = self.parse_links(topology['links'])
             self.switches = self.parse_switches(topology.get('switches', None))
-            self.routers = self.parse_routers(topology.get('routers', None))
+            self.routers = self.parse_routers(topology.get('routers', None))[0]
+            self.daemons = self.parse_routers(topology.get('routers', None))[1]
+            self.conf_path = "routers_conf"
+
+        
+            #print(self.routers)
+            #print(self.daemons)
+            
             self.assignment_strategy = topology.get('assignment_strategy', "l2")
 
     def exec_scripts(self):
@@ -424,13 +431,23 @@ class AppRunner(object):
         """
 
         routers = {}
+        daemons = set()
         # when there are no routers in the topology
         if not unparsed_routers:
             return routers
 
         for router, custom_params in unparsed_routers.items():
             routers[router] = deepcopy(custom_params)
-        return routers        
+
+            for features, values in custom_params.items():
+
+                if "zebra" in values:
+                    daemons.add("zebra")
+                if "ospfd" in values:
+                    daemons.add("ospfd")
+            
+
+        return routers, list(daemons)        
 
     def parse_links(self, unparsed_links):
         """
@@ -623,6 +640,63 @@ class AppRunner(object):
             for command in commands:
                 h.cmd(command)
 
+    def start_daemon(self, node, daemon, conf_dir, extra_params):
+       """Start FRR on a given router"""
+
+       cmd = (("{bin_dir}/{daemon}"
+           " -f {conf_dir}/{node_name}.conf"
+           " -d"
+           " {options}"
+           " --vty_socket {vty_path}/{node_name}/"
+           " -i /tmp/{node_name}-{daemon}.pid"
+           " > /tmp/{node_name}-{daemon}.out 2>&1")
+           .format(bin_dir=AppRunner.FRR_DIR,
+                   daemon=daemon,
+                   options=" ".join(extra_params),
+                   conf_dir=conf_dir,
+                   node_name=node.name,
+                   vty_path=AppRunner.VTY_SOCKET_PATH))
+       #print(cmd)
+       node.cmd(cmd)
+       node.waitOutput()
+
+    FRR_DIR = "/usr/local/sbin"
+    VTY_SOCKET_PATH = "/var/run/"
+
+    # Method to run FRR daemons on the routers
+    def program_routers(self, nodes):
+
+        if not os.path.isfile(AppRunner.FRR_DIR + "/" + "zebra"):
+            print("Binaries path {} does not contain daemons!".format(AppRunner.FRR_DIR))
+            exit(0)
+
+        if not self.daemons:
+            print("Nothing to start in Router")
+
+        for node in nodes:
+
+            #print(type(node))
+            #import ipdb; ipdb.set_trace()
+
+            os.system("mkdir -p {}/{}".format(AppRunner.VTY_SOCKET_PATH, node))
+
+            for daemon in self.daemons:
+                options = [" -u root"]
+                if daemon=="zebra":
+                    options  += ["-M fpm"]
+
+                path = daemon
+                _conf_dir = os.path.join(self.conf_path, path)
+                #print(_conf_dir)
+                self.start_daemon(node, daemon, _conf_dir, options)
+
+            if node.name.startswith('r'):
+                # Enable IP forwarding
+                node.cmd("sysctl -w net.ipv4.ip_forward=1")
+                node.waitOutput() 
+
+             
+
     def program_switches(self):
         """
         If any command files were provided for the switches, this method will start up the
@@ -767,6 +841,10 @@ class AppRunner(object):
         self.net.start()
         sleep(1)
 
+        # start the FRR daemons on the routers
+
+        self.program_routers(self.net.routers)
+
         # Some programming that must happen after the network has started
         self.program_hosts()
         # maybe program routers
@@ -785,6 +863,12 @@ class AppRunner(object):
             self.do_net_cli()
             # Stop right after the CLI is exited
             self.net.stop()
+
+            if self.daemons:
+                os.system("killall -9 {}".format(' '.join(self.daemons)))  
+
+            for node in self.net.routers:
+                os.system(" rm -rf {}/{}".format(AppRunner.VTY_SOCKET_PATH, node))
 
 
 def get_args():
