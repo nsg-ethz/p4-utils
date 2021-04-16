@@ -193,6 +193,9 @@ class SimpleSwitchP4RuntimeAPI:
             When setting the default entry, the configurations for
             its direct resources will be reset to their defaults
             (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources).
+            
+            However, for the current implementation the specification is not followed and
+            direct resources are not reset when modifying a table entry.
         """
         print('Adding default action to: '+table_name)
         if not isinstance(action_params, list):
@@ -814,5 +817,70 @@ class SimpleSwitchP4RuntimeAPI:
         else:
             for i in range(len(ports)):
                 entry = entry.add(ports[i])
+
+        entry.modify()
+
+    ## CloseSession
+    def cs_create(self, session_id):
+        """
+        Add a packet cloning session.
+
+        Args:
+            session_id (int): clone session id
+        """
+        print('Adding clone session: {}'.format(session_id))
+        entry = api.CloneSessionEntry(self.client, self.context, session_id)
+        entry.insert()
+
+    def cs_destroy(self, session_id):
+        """
+        Remove a packet cloning session.
+
+        Args:
+            session_id (int): clone session id
+        """
+        print('Removing clone session: {}'.format(session_id))
+        entry = api.CloneSessionEntry(self.client, self.context, session_id)
+        entry.delete()
+
+    def cs_set_replicas(self, session_id, ports, instances=None, cos=0, packet_length=0):
+        """
+        Configure a packet cloning session.
+
+        Args:
+            session_id (int)       : clone session id
+            ports (list of int)    : list of port numbers to add to the clone session
+            instances (list of int): list of instances of the corresponding ports
+            cos (int)              : Class of Service (see https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress)
+            packet_lentgth (int)   : maximal packet length in bytes (after which, packets are truncated)
+
+        Notice:
+            A replica is a tuple (port, instance) which has to be unique within the 
+            same multicast group. Instances can be explicitly assigned to ports by 
+            passing the list instances to this function. If the list instances is not
+            specified, then the instance number is set to 0 for all the replicas.
+
+            By default, the packet_length is set to 0 i.e. no truncation happens and 
+            class of service is set to 0 (normal packet classification).
+        """
+        print('Adding replicas to clone session: {}'.format(session_id))
+        entry = api.CloneSessionEntry(self.client, self.context, session_id)
+
+        if not isinstance(ports, list):
+            raise TypeError('ports is not a list.')
+        elif instances:
+            if not isinstance(instances, list):
+                raise TypeError('instances is not a list.')
+            elif len(instances) != len(ports):
+                raise Exception('instances and ports have different lengths.')
+            else:
+                for i in range(len(ports)):
+                    entry = entry.add(ports[i], instances[i])
+        else:
+            for i in range(len(ports)):
+                entry = entry.add(ports[i])
+
+        entry.cos = cos
+        entry.packet_length_bytes = packet_length
 
         entry.modify()
