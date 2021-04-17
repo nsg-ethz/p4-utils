@@ -29,10 +29,10 @@ class P4Topo(Topo):
     """Extension of the mininet topology class with P4 switches."""
 
     # Adds a dummy interface to the routers, with a null interface on the other side
-    def addIntf( self, switch, intfName ):
+    def addIntf( self, switch, intfName, pos):
         "Add intf intfName to router (switch)"
-        self.addLink( switch, switch, cls=NullLink,
-                      intfName1=intfName, cls2=NullIntf )
+        self.addDummyLink( switch, switch, cls=NullLink,
+                      intfName1=intfName, cls2=NullIntf )[pos]
 
     def hosts( self, sort=True ):
         """Return hosts.
@@ -96,6 +96,24 @@ class P4Topo(Topo):
         if not opts and self.sopts:
             opts = self.sopts
         return super().addSwitch(name, isP4Switch=True, **opts)
+
+    edges = []
+
+    def addDummyLink( self, node1, node2, port1=None, port2=None,
+                 key=None, **opts ):
+        """node1, node2: nodes to link together
+           port1, port2: ports (optional)
+           opts: link options (optional)
+           returns: link info key"""
+        if not opts and self.lopts:
+            opts = self.lopts
+        port1, port2 = self.addPort( node1, node2, port1, port2 )
+        opts = dict( opts )
+
+        opts.update( node1=node1, node2=node2, port1=port1, port2=port2 )
+        P4Topo.edges.append(self.g.add_edge(node1, node2, key, opts ))
+
+        return P4Topo.edges
 
     def isP4Switch(self, node):
         """
@@ -223,8 +241,10 @@ class AppTopo(P4Topo):
     def add_routers(self):
         for rtr, params in self._routers.items():
                 self.addRouter(rtr, cls = Router, **params)
-                self.addIntf(rtr,'eth-1')
-                self.addIntf(rtr,'eth-2')
+                self.addIntf(rtr,'eth-1',0)
+                self.addIntf(rtr,'eth-2',1)
+                print("edges are ", P4Topo.edges)
+                
 
     def add_switches(self):
         sw_to_id = {}
@@ -702,13 +722,11 @@ class AppTopo(P4Topo):
                 pass
 
             elif self.is_router_link(link):
-                self.addIntf(s1,'tap0')
                 #self.addLink(link[0], link[1], **link_ops)
                 pass
 
             elif self.is_host_router_link(link):
                 
-
                 host_name = link[self.get_host_position(link)]
                 router = link[self.get_router_position(link)]
 

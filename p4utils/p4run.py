@@ -640,63 +640,6 @@ class AppRunner(object):
             for command in commands:
                 h.cmd(command)
 
-    '''def start_daemon(self, node, daemon, conf_dir, extra_params):
-       """Start FRR on a given router"""
-
-       cmd = (("{bin_dir}/{daemon}"
-           " -f {conf_dir}/{node_name}.conf"
-           " -d"
-           " {options}"
-           " --vty_socket {vty_path}/{node_name}/"
-           " -i /tmp/{node_name}-{daemon}.pid"
-           " > /tmp/{node_name}-{daemon}.out 2>&1")
-           .format(bin_dir=AppRunner.FRR_DIR,
-                   daemon=daemon,
-                   options=" ".join(extra_params),
-                   conf_dir=conf_dir,
-                   node_name=node.name,
-                   vty_path=AppRunner.VTY_SOCKET_PATH))
-       #print(cmd)
-       node.cmd(cmd)
-       node.waitOutput()
-
-    FRR_DIR = "/usr/local/sbin"
-    VTY_SOCKET_PATH = "/var/run/"
-
-    # Method to run FRR daemons on the routers
-    def program_routers(self, nodes):
-
-        if not os.path.isfile(AppRunner.FRR_DIR + "/" + "zebra"):
-            print("Binaries path {} does not contain daemons!".format(AppRunner.FRR_DIR))
-            exit(0)
-
-        if not self.daemons:
-            print("Nothing to start in Router")
-
-        for node in nodes:
-
-            #print(type(node))
-            #import ipdb; ipdb.set_trace()
-
-            os.system("mkdir -p {}/{}".format(AppRunner.VTY_SOCKET_PATH, node))
-
-            for daemon in self.daemons:
-                options = [" -u root"]
-                if daemon=="zebra":
-                    options  += ["-M fpm"]
-
-                path = daemon
-                _conf_dir = os.path.join(self.conf_path, path)
-                #print(_conf_dir)
-                self.start_daemon(node, daemon, _conf_dir, options)
-
-            if node.name.startswith('r'):
-                # Enable IP forwarding
-                node.cmd("sysctl -w net.ipv4.ip_forward=1")
-                node.waitOutput() '''
-
-             
-
     def program_switches(self):
         """
         If any command files were provided for the switches, this method will start up the
