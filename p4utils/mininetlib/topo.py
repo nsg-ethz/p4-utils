@@ -4,6 +4,8 @@ from mininet.topo import Topo
 from mininet.nodelib import LinuxBridge
 from p4utils.utils.helper import *
 from p4utils.mininetlib.node import *
+from mininet.link import Link, Intf
+
 
 # The basic idea is to move as many functions as possible
 # from AppTopo to P4Topo in order to make AppTopo a mere
@@ -11,8 +13,26 @@ from p4utils.mininetlib.node import *
 # between ConfiguredP4Switch and P4Switch should exist between
 # AppTopo and P4Topo.
 
+class NullIntf( Intf ):
+    "A dummy interface with a blank name that doesn't do any configuration"
+    def __init__( self, name, **params ):
+        self.name = ''
+
+class NullLink( Link ):
+    "A dummy link that does nothing, adds from router to itself i.e. a fake interface"
+    def makeIntfPair( cls, intf1, intf2, *args, **kwargs ):
+        pass
+    def delete( self ):
+        pass
+
 class P4Topo(Topo):
     """Extension of the mininet topology class with P4 switches."""
+
+    # Adds a dummy interface to the routers, with a null interface on the other side
+    def addIntf( self, switch, intfName ):
+        "Add intf intfName to router (switch)"
+        self.addLink( switch, switch, cls=NullLink,
+                      intfName1=intfName, cls2=NullIntf )
 
     def hosts( self, sort=True ):
         """Return hosts.
@@ -203,6 +223,8 @@ class AppTopo(P4Topo):
     def add_routers(self):
         for rtr, params in self._routers.items():
                 self.addRouter(rtr, cls = Router, **params)
+                self.addIntf(rtr,'eth-1')
+                self.addIntf(rtr,'eth-2')
 
     def add_switches(self):
         sw_to_id = {}
@@ -680,7 +702,8 @@ class AppTopo(P4Topo):
                 pass
 
             elif self.is_router_link(link):
-                self.addLink(link[0], link[1], **link_ops)
+                self.addIntf(s1,'tap0')
+                #self.addLink(link[0], link[1], **link_ops)
                 pass
 
             elif self.is_host_router_link(link):

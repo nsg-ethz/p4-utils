@@ -640,7 +640,7 @@ class AppRunner(object):
             for command in commands:
                 h.cmd(command)
 
-    def start_daemon(self, node, daemon, conf_dir, extra_params):
+    '''def start_daemon(self, node, daemon, conf_dir, extra_params):
        """Start FRR on a given router"""
 
        cmd = (("{bin_dir}/{daemon}"
@@ -693,7 +693,7 @@ class AppRunner(object):
             if node.name.startswith('r'):
                 # Enable IP forwarding
                 node.cmd("sysctl -w net.ipv4.ip_forward=1")
-                node.waitOutput() 
+                node.waitOutput() '''
 
              
 
@@ -742,8 +742,9 @@ class AppRunner(object):
                 node2 = self.net[node2_name]
                 edge = graph[node1_name][node2_name]
 
-                # Get link
-                link = self.net.linksBetween(node1, node2)[0]
+                # Get real link if available (not Null link)
+                if len(self.net.linksBetween(node1, node2)) != 0:
+                    link = self.net.linksBetween(node1, node2)[0]
 
                 # Get interfaces
                 intf1 =  getattr(link, 'intf1')
@@ -843,7 +844,7 @@ class AppRunner(object):
 
         # start the FRR daemons on the routers
 
-        self.program_routers(self.net.routers)
+        #self.program_routers(self.net.routers)
 
         # Some programming that must happen after the network has started
         self.program_hosts()
@@ -864,11 +865,11 @@ class AppRunner(object):
             # Stop right after the CLI is exited
             self.net.stop()
 
-            if self.daemons:
+            '''if self.daemons:
                 os.system("killall -9 {}".format(' '.join(self.daemons)))  
 
             for node in self.net.routers:
-                os.system(" rm -rf {}/{}".format(AppRunner.VTY_SOCKET_PATH, node))
+                os.system(" rm -rf {}/{}".format(AppRunner.VTY_SOCKET_PATH, node))'''
 
 
 def get_args():

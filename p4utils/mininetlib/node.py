@@ -22,6 +22,12 @@ from mininet.clean import sh
 from mininet.node import Switch, Host, Node
 from mininet.moduledeps import pathCheck
 
+from mininet.util import ( quietRun, errRun, errFail, moveIntf, isShellBuiltin,
+                           numCores, retry, mountCgroups, BaseString, decode,
+                           encode, getincrementaldecoder, Python3, which )
+
+from mininet.link import Link, Intf
+
 from p4utils.utils.helper import *
 
 SWITCH_START_TIMEOUT = 10
@@ -330,22 +336,23 @@ class Router( Switch ):
         os.system("killall -9 {} > /dev/null 2>&1"
                     .format(' '.join(os.listdir(Router.FRR_DIR)))) 
 
-    def defaultIntf(self):
+    def defaultIntf(self, event=None):
         if hasattr(self, "controlIntf") and self.controlIntf:
             return self.controlIntf
 
         return self.defaultIntf(self)
 
+
     def start(self):
-        pass
-        #self.program_router()
+        #pass
+        self.program_router()
 
     def stop(self):
         super().stop()
-        #os.system("killall -9 {}".format(' '.join(self.daemons.keys())))  
-        #os.system(" rm -rf {}/{}".format(Router.VTY_SOCKET_PATH, self.name))'''
+        os.system("killall -9 {}".format(' '.join(self.daemons.keys())))  
+        os.system(" rm -rf {}/{}".format(Router.VTY_SOCKET_PATH, self.name))
 
-    '''def start_daemon(self, daemon, conf_dir, extra_params):
+    def start_daemon(self, daemon, conf_dir, extra_params):
        """Start FRR on a given router"""
 
        cmd = (("{bin_dir}/{daemon}"
@@ -390,4 +397,4 @@ class Router( Switch ):
         if self.name.startswith('r'):
             # Enable IP forwarding
             self.cmd("sysctl -w net.ipv4.ip_forward=1")
-            self.waitOutput()'''        
+            self.waitOutput()        
