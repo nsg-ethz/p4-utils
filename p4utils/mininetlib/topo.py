@@ -29,7 +29,7 @@ class P4Topo(Topo):
     """Extension of the mininet topology class with P4 switches."""
 
     # Adds a dummy interface to the routers, with a null interface on the other side
-    def addIntf( self, switch, intfName, pos):
+    def addIntf( self, switch, intfName, pos=None):
         "Add intf intfName to router (switch)"
         self.addDummyLink( switch, switch, cls=NullLink,
                       intfName1=intfName, cls2=NullIntf )[pos]
@@ -97,7 +97,28 @@ class P4Topo(Topo):
             opts = self.sopts
         return super().addSwitch(name, isP4Switch=True, **opts)
 
-    edges = []
+    '''def add_edge( self, src, dst, key=None, attr_dict=None, **attrs ):
+        """Add edge to graph
+           key: optional key
+           attr_dict: optional attribute dict
+           attrs: more attributes
+           warning: updates attr_dict with attrs"""
+        attr_dict = {} if attr_dict is None else attr_dict
+        attr_dict.update( attrs )
+        self.node.setdefault( src, {} )
+        self.node.setdefault( dst, {} )
+        self.edge.setdefault( src, {} )
+        self.edge.setdefault( dst, {} )
+        self.edge[ src ].setdefault( dst, {} )
+        entry = self.edge[ dst ][ src ] = self.edge[ src ][ dst ]
+        # If no key, pick next ordinal number
+        if key is None:
+            keys = [ k for k in entry.keys() if isinstance( k, int ) ]
+            key = max( [ 0 ] + keys ) + 1
+        entry[ key ] = attr_dict
+        return key'''
+
+    
 
     def addDummyLink( self, node1, node2, port1=None, port2=None,
                  key=None, **opts ):
@@ -105,15 +126,19 @@ class P4Topo(Topo):
            port1, port2: ports (optional)
            opts: link options (optional)
            returns: link info key"""
+        edges = []
         if not opts and self.lopts:
             opts = self.lopts
         port1, port2 = self.addPort( node1, node2, port1, port2 )
         opts = dict( opts )
 
         opts.update( node1=node1, node2=node2, port1=port1, port2=port2 )
-        P4Topo.edges.append(self.g.add_edge(node1, node2, key, opts ))
+        print(opts)
+        edges.append(self.g.add_edge(node1, node2, key, opts ))
 
-        return P4Topo.edges
+        return edges
+
+    
 
     def isP4Switch(self, node):
         """
@@ -241,10 +266,15 @@ class AppTopo(P4Topo):
     def add_routers(self):
         for rtr, params in self._routers.items():
                 self.addRouter(rtr, cls = Router, **params)
-                self.addIntf(rtr,'eth-1',0)
-                self.addIntf(rtr,'eth-2',1)
-                print("edges are ", P4Topo.edges)
-                
+                #self.addIntf(rtr,'eth-1',0)
+                #self.addIntf(rtr,'eth-2',1)
+                #print("edges are ", P4Topo.edges)
+
+    # Add "fake" interfaces
+    def add_interfaces(self):
+        for rtr, params in self._routers.items():
+            self.addIntf(rtr,'eth-1',0)
+            self.addIntf(rtr,'eth-2',0)            
 
     def add_switches(self):
         sw_to_id = {}
@@ -663,10 +693,13 @@ class AppTopo(P4Topo):
         # add routers
         self.add_routers()
 
+        #add fake interfaces
+        self.add_interfaces()
+
         # add links and configure them: ips, macs, etc
         # assumes hosts are connected to one switch only
         for link in self._links:
-            print(link)
+            
             if self.is_host_link(link)== True and self.is_one_router_link==False:
 
                 host_name = link[self.get_host_position(link)]
