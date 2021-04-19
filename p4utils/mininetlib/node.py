@@ -310,7 +310,7 @@ class Router( Switch ):
     FRR_DIR = "/usr/local/sbin"
     VTY_SOCKET_PATH = "/var/run/"
 
-    def __init__(self, name, daemons=None, conf_path=None, **kwargs):
+    def __init__(self, name, daemons=None, conf_path=None, fake_interfaces = None, **kwargs):
 
         kwargs['inNamespace'] = True 
         super().__init__(name, **kwargs)
@@ -320,6 +320,7 @@ class Router( Switch ):
 
         self.daemons = daemons
         self.conf_path = conf_path
+        self.fake_interfaces = fake_interfaces
 
     @classmethod
     def stop_all(self):
@@ -343,14 +344,30 @@ class Router( Switch ):
         return self.defaultIntf(self)
 
 
+    def create_fake_interface(self):
+
+        for item in self.fake_interfaces.keys():
+    
+            cmd1 = ("ip link set dev {} up".format(item))
+            self.cmd(cmd1)
+            self.waitOutput()
+            
+
     def start(self):
         #pass
+        self.create_fake_interface()
         self.program_router()
 
     def stop(self):
         super().stop()
         os.system("killall -9 {}".format(' '.join(self.daemons.keys())))  
         os.system(" rm -rf {}/{}".format(Router.VTY_SOCKET_PATH, self.name))
+
+        for item in self.fake_interfaces.keys():
+            cmd = ("ip link set dev {} down".format(item))
+            self.cmd(cmd)
+            self.waitOutput()
+
 
     def start_daemon(self, daemon, conf_dir, extra_params):
        """Start FRR on a given router"""

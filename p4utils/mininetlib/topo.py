@@ -97,29 +97,6 @@ class P4Topo(Topo):
             opts = self.sopts
         return super().addSwitch(name, isP4Switch=True, **opts)
 
-    '''def add_edge( self, src, dst, key=None, attr_dict=None, **attrs ):
-        """Add edge to graph
-           key: optional key
-           attr_dict: optional attribute dict
-           attrs: more attributes
-           warning: updates attr_dict with attrs"""
-        attr_dict = {} if attr_dict is None else attr_dict
-        attr_dict.update( attrs )
-        self.node.setdefault( src, {} )
-        self.node.setdefault( dst, {} )
-        self.edge.setdefault( src, {} )
-        self.edge.setdefault( dst, {} )
-        self.edge[ src ].setdefault( dst, {} )
-        entry = self.edge[ dst ][ src ] = self.edge[ src ][ dst ]
-        # If no key, pick next ordinal number
-        if key is None:
-            keys = [ k for k in entry.keys() if isinstance( k, int ) ]
-            key = max( [ 0 ] + keys ) + 1
-        entry[ key ] = attr_dict
-        return key'''
-
-    
-
     def addDummyLink( self, node1, node2, port1=None, port2=None,
                  key=None, **opts ):
         """node1, node2: nodes to link together
@@ -271,10 +248,12 @@ class AppTopo(P4Topo):
                 #print("edges are ", P4Topo.edges)
 
     # Add "fake" interfaces
-    def add_interfaces(self):
-        for rtr, params in self._routers.items():
+    def add_fake_interface(self, fake_router_name, intf_name, IP=None, MAC = None):
+        print(fake_router_name, intf_name)
+        pass
+        '''for rtr, params in self._routers.items():
             self.addIntf(rtr,'eth-1',0)
-            self.addIntf(rtr,'eth-2',0)            
+            self.addIntf(rtr,'eth-2',0)'''            
 
     def add_switches(self):
         sw_to_id = {}
@@ -690,11 +669,24 @@ class AppTopo(P4Topo):
         #adds switches to the topology and sets an ID
         sw_to_id = self.add_switches()
 
+        fake_routers = [link[1] for link in self._links if link[1] in self._routers]
+
+        for index, switch in enumerate(self._switches):
+            intf_num = 0
+            for link in self._links:
+
+                #Add as many interfaces as on the switch apart from switch - fake_router interface
+                if switch in link  and not link[1] in self._routers:
+                    intf_num += 1 
+                    fake_router = fake_routers[index]
+                    self.add_fake_interface(fake_router, "eth{}".format(intf_num))
+                    intf_name = "eth{}".format(intf_num)
+                    self._routers[fake_router]["fake_interfaces"][intf_name] = {}
+                        
+        #print(self._routers)
+
         # add routers
         self.add_routers()
-
-        #add fake interfaces
-        self.add_interfaces()
 
         # add links and configure them: ips, macs, etc
         # assumes hosts are connected to one switch only

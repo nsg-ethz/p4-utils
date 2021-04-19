@@ -32,7 +32,8 @@
         "daemons" : {
         "zebra": {},
         "ospfd": {}
-       }
+       },
+       "fake_interfaces" :{}
       }
       ,
       "r2" :{
@@ -40,7 +41,8 @@
         "daemons" : {
           "zebra": {},
           "ospfd": {}
-        }        
+        },
+        "fake_interfaces" :{}        
       }
     } 
   }

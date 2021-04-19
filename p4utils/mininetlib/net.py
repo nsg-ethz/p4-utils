@@ -85,6 +85,8 @@ class P4Mininet(Mininet):
         for router in self.routers:
             info( router.name + ' ')
             router.start()
+        
+        #import ipdb; ipdb.set_trace()
             
         hosts_mtu = 9500
         # Trick to allow switches to add headers
