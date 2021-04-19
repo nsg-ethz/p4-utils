@@ -346,9 +346,12 @@ class Router( Switch ):
 
     def create_fake_interface(self):
 
-        for item in self.fake_interfaces.keys():
-    
+        for index, item in enumerate(self.fake_interfaces.keys()):
+            
+            cmd0 = ("ip link add {}-{} type veth peer name dum-{}".format(self.name, item, index))
             cmd1 = ("ip link set dev {} up".format(item))
+            self.cmd(cmd0)
+            self.waitOutput()
             self.cmd(cmd1)
             self.waitOutput()
             

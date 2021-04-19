@@ -97,7 +97,7 @@ class P4Topo(Topo):
             opts = self.sopts
         return super().addSwitch(name, isP4Switch=True, **opts)
 
-    def addDummyLink( self, node1, node2, port1=None, port2=None,
+    '''def addDummyLink( self, node1, node2, port1=None, port2=None,
                  key=None, **opts ):
         """node1, node2: nodes to link together
            port1, port2: ports (optional)
@@ -113,7 +113,7 @@ class P4Topo(Topo):
         print(opts)
         edges.append(self.g.add_edge(node1, node2, key, opts ))
 
-        return edges
+        return edges'''
 
     
 
@@ -751,8 +751,9 @@ class AppTopo(P4Topo):
                 pass
 
             elif self.is_host_router_link(link):
+                pass
                 
-                host_name = link[self.get_host_position(link)]
+                '''host_name = link[self.get_host_position(link)]
                 router = link[self.get_router_position(link)]
 
                 #host_gw = None
@@ -781,8 +782,8 @@ class AppTopo(P4Topo):
 
                 self.addLink(host_name, router, **link_ops)
                 plane_ip = host_ops['ip'].split("/")[0]
-                self.hosts_info[host_name] = {"router": router, "ip":  plane_ip, "mac": host_mac, "mask": 24}
-                pass
+                self.hosts_info[host_name] = {"router": router, "ip":  plane_ip, "mac": host_mac, "mask": 24}'''
+                
 
 
         self.add_cpu_port()
