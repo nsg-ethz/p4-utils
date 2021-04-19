@@ -692,7 +692,7 @@ class AppTopo(P4Topo):
         # assumes hosts are connected to one switch only
         for link in self._links:
             
-            if self.is_host_link(link)== True and self.is_one_router_link==False:
+            if self.is_host_link(link):
 
                 host_name = link[self.get_host_position(link)]
                 direct_sw = link[self.get_sw_position(link)]
