@@ -348,7 +348,8 @@ class Router( Switch ):
 
         for index, item in enumerate(self.fake_interfaces.keys()):
             
-            cmd0 = ("ip link add {}-{} type veth peer name dum-{}".format(self.name, item, index))
+            #cmd0 = ("ip link add {}-{} type veth peer name dum-{}".format(self.name, item, index))
+            cmd0 = ("ip tuntap add mode tap {}-{}".format(self.name, item))
             cmd1 = ("ip link set dev {} up".format(item))
             self.cmd(cmd0)
             self.waitOutput()

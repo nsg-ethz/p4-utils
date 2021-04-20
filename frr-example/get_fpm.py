@@ -13,11 +13,15 @@ from importlib import import_module
 from pyroute2.common import load_dump
 from pyroute2.common import hexdump
 
-HOST = '127.0.0.1'
-PORT = 2620
+HOSTS = ['10.0.0.1', '10.0.0.2']
+PORT = 2621
 
 
 def new_socket_create():
+
+    num = sys.argv[1]
+    HOST = HOSTS[int(num[1])-1]
+    print(HOST)
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -104,12 +108,13 @@ def read_fpm_message(data):
             #print(nt_msg)
 
             nt_msg = ":".join("{:02x}".format(ord(c)) for c in nt_msg)
-            with open('nt_msg.data', 'w') as f:
+            file_name = 'nt_msg'+sys.argv[1]+'.data'
+            with open(file_name, 'w') as f:
                 f.write(nt_msg)
             #print(nt_msg)
            # print(value)
 
-            t = decoder('pyroute2.netlink.rtnl.rtmsg.rtmsg', 'nt_msg.data')
+            t = decoder('pyroute2.netlink.rtnl.rtmsg.rtmsg', file_name)
             #print(t)
             start = value
             
