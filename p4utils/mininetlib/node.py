@@ -344,17 +344,29 @@ class Router( Switch ):
         return self.defaultIntf(self)
 
 
+    # Create fake tap or veth dummpy interfaces on the routers for OSPF
     def create_fake_interface(self):
 
         for index, item in enumerate(self.fake_interfaces.keys()):
-            
-            #cmd0 = ("ip link add {}-{} type veth peer name dum-{}".format(self.name, item, index))
-            cmd0 = ("ip tuntap add mode tap {}-{}".format(self.name, item))
+
+            sw_name = "s"+self.name[1]
+            sw_intf = "eth"+str(index+4)
+            print(sw_name, sw_intf)
+
+            '''if item == "eth1":
+                continue'''
+            cmd0 = ("ip link add {}-{} type veth peer name {}-{}".format(self.name, item, sw_name, sw_intf))
+            '''cmd0 = ("ip link add {}-{} type veth peer name dum-{}".format(self.name, item, index))'''
+            #cmd0 = ("ip tuntap add mode tap {}-{}".format(self.name, item))
             cmd1 = ("ip link set dev {} up".format(item))
+            cmd2 = ("ip link set dev {}-{} up".format(sw_name, sw_intf))
             self.cmd(cmd0)
             self.waitOutput()
             self.cmd(cmd1)
             self.waitOutput()
+            self.cmd(cmd2)
+            self.waitOutput()
+
             
 
     def start(self):
@@ -368,9 +380,13 @@ class Router( Switch ):
         os.system(" rm -rf {}/{}".format(Router.VTY_SOCKET_PATH, self.name))
 
         for item in self.fake_interfaces.keys():
-            cmd = ("ip link set dev {} down".format(item))
-            self.cmd(cmd)
+            cmd0 = ("ip link set dev {} down".format(item))
+            cmd1 = ("tunctl -d {}-{}".format(self.name, item))
+            self.cmd(cmd0)
             self.waitOutput()
+            self.cmd(cmd1)
+            self.waitOutput()
+
 
 
     def start_daemon(self, daemon, conf_dir, extra_params):
