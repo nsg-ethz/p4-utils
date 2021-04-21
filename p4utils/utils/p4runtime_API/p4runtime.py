@@ -199,12 +199,26 @@ class P4RuntimeClient:
             print("You are not the primary client, you only have read access to the server")
 
     def get_stream_packet(self, type_, timeout=1):
+        """
+        Retrieve packet from the StreamChannel.
+
+        Args:
+            type_ (string)       : name of a field present in the packet
+            timeout (int or None): time to wait for packet, if set to None,
+                                   the function will wait indefinitely
+        
+        Return:
+            packet (protobuf message)
+        """
         start = time.time()
         try:
             while True:
-                remaining = timeout - (time.time() - start)
-                if remaining < 0:
-                    break
+                if timeout is not None:
+                    remaining = timeout - (time.time() - start)
+                    if remaining < 0:
+                        break
+                else:
+                    remaining = None
                 msg = self.stream_in_q.get(timeout=remaining)
                 if msg is None:
                     return None
@@ -214,6 +228,41 @@ class P4RuntimeClient:
         except queue.Empty:  # timeout expired
             pass
         return None
+
+    def get_digest_list(self, timeout=None):
+        """
+        Retrieve DigestList and send back acknowledgment.
+
+        Args:
+            timeout (int or None): time to wait for packet, if set to None,
+                                   the function will wait indefinitely
+
+        Return:
+            DigestList packet (protobuf message) or None if the timeout has
+            expired and no packet has been received.
+        
+        Notice:
+            See https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543
+            for further details.
+        """
+        # Listen for DigestLists
+        digList = self.get_stream_packet("digest", timeout)
+
+        if digList is not None:
+            # Retrieve fields
+            digest_id = digList.digest.digest_id
+            list_id = digList.digest.list_id
+
+            # Generate acknowledgment
+            ack = p4runtime_pb2.DigestListAck()
+            ack.digest_id = digest_id
+            ack.list_id = list_id
+
+            # Send acknowledgment
+            self.stream_out_q.put(ack)
+
+        # Return DigestList
+        return digList
 
     @parse_p4runtime_error
     def get_p4info(self):

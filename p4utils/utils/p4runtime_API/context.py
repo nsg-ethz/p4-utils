@@ -27,6 +27,7 @@ class P4Type(enum.Enum):
     direct_counter = 5
     meter = 6
     direct_meter = 7
+    digest = 8
 
 
 P4Type.table.p4info_name = "tables"
@@ -36,6 +37,7 @@ P4Type.counter.p4info_name = "counters"
 P4Type.direct_counter.p4info_name = "direct_counters"
 P4Type.meter.p4info_name = "meters"
 P4Type.direct_meter.p4info_name = "direct_meters"
+P4Type.digest.p4info_name = "digests"
 
 
 for obj_type in P4Type:
@@ -53,6 +55,7 @@ class P4RuntimeEntity(enum.Enum):
     counter_entry = 6
     direct_counter_entry = 7
     packet_replication_engine_entry = 8
+    digest_entry = 9
 
 
 class Context:
