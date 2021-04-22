@@ -86,7 +86,7 @@ class P4CLI(CLI):
         # Check args validity
         if len(args) > 5:
             error('Wrong syntax.\n')
-            error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds path]\n')
+            error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds <path>]\n')
             return False
 
         switch_name = args[0]
@@ -183,7 +183,7 @@ class P4CLI(CLI):
     def do_p4switch_reboot(self, line=""):
         """Reboot a P4 switch with a new program."""
         if not line or len(line.split()) > 5:
-            error('usage: p4switch_reboot <p4switch name> [--p4src <path>] [--cmds path]\n')
+            error('usage: p4switch_reboot <p4switch name> [--p4src <path>] [--cmds <path>]\n')
         else:
             switch_name = line.split()[0]
             self.do_p4switch_stop(line=switch_name)
@@ -196,19 +196,22 @@ class P4CLI(CLI):
         Note:
             If you provide a P4 source code or cmd, all switches will have the same.
         """
-        for sw in self.mn.p4switches:
-            switch_name = sw.name
-            self.do_p4switch_stop(line=switch_name)
+        if not line or len(line.split()) > 4:
+            error('usage: p4switches_reboot [--p4src <path>] [--cmds <path>]\n')
+        else:
+            for sw in self.mn.p4switches:
+                switch_name = sw.name
+                self.do_p4switch_stop(line=switch_name)
 
-            tmp_line = switch_name + " " +line
-            self.do_p4switch_start(line=tmp_line)
+                tmp_line = switch_name + " " +line
+                self.do_p4switch_start(line=tmp_line)
 
-        #run scripts
-        if isinstance(self.scripts, list):
-            for script in self.scripts:
-                if script["reboot_run"]:
-                    info("Exec Script: {}\n".format(script["cmd"]))
-                    run_command(script["cmd"])
+            #run scripts
+            if isinstance(self.scripts, list):
+                for script in self.scripts:
+                    if script["reboot_run"]:
+                        info("Exec Script: {}\n".format(script["cmd"]))
+                        run_command(script["cmd"])
 
     def do_test_p4(self, line=""):
         """Tests start stop functionalities."""
