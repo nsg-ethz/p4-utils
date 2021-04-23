@@ -33,6 +33,17 @@ header ipv4_t {
     ip4Addr_t dstAddr;
 }
 
+header ospf_t {
+    bit<8>    version;
+    bit<8>    type;
+    bit<16>   pktLen;
+    bit<32>   rtrID;
+    bit<32>   areaID;
+    bit<16>   checksum;
+    bit<16>   auType;
+    bit<32>   authen;
+}
+
 struct metadata {
     /* empty */
 }
@@ -40,6 +51,7 @@ struct metadata {
 struct headers {
     ethernet_t   ethernet;
     ipv4_t       ipv4;
+    ospf_t       ospf;
 }
 
 /*************************************************************************
@@ -66,8 +78,19 @@ parser MyParser(packet_in packet,
     state ipv4 {
 
         packet.extract(hdr.ipv4);
+        transition select(hdr.ipv4.protocol){
+            89 : parse_ospf;
+            default: accept;
+        }
+
+    }
+
+    // parse the ospf header
+    state parse_ospf {
+        packet.extract(hdr.ospf);
         transition accept;
     }
+
 
 }
 
@@ -93,15 +116,9 @@ control MyIngress(inout headers hdr,
         mark_to_drop(standard_metadata);
     }
 
-    action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
+    action ospf_hello_forward(egressSpec_t port) {
 
-        //set the src mac address as the previous dst, this is not correct right?
-        hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
-
-       //set the destination mac address that we got from the match in the table
-        hdr.ethernet.dstAddr = dstAddr;
-
-        //set the output port that we also get from the table
+        //set the output port from the table
         standard_metadata.egress_spec = port;
 
         //decrease ttl by 1
@@ -109,12 +126,12 @@ control MyIngress(inout headers hdr,
 
     }
 
-    table ipv4_lpm {
+    table ospf_hello{
         key = {
-            hdr.ipv4.dstAddr: lpm;
+            standard_metadata.ingress_port: exact;
         }
         actions = {
-            ipv4_forward;
+            ospf_hello_forward;
             drop;
             NoAction;
         }
@@ -124,9 +141,13 @@ control MyIngress(inout headers hdr,
 
     apply {
 
-        //only if IPV4 the rule is applied. Therefore other packets will not be forwarded.
+        // only if IPV4 the rule is applied. Here only one type of IP packet = OSPF hello
+        // Further conditions not needed here.
         if (hdr.ipv4.isValid()){
-            ipv4_lpm.apply();
+            // If packet is an OSPF packet
+            if(hdr.ipv4.protocol == 89){
+            ospf_hello.apply();
+            }
 
         }
     }

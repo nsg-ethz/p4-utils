@@ -349,17 +349,17 @@ class Router( Switch ):
 
         for index, item in enumerate(self.fake_interfaces.keys()):
 
-            sw_name = "s"+self.name[1]
-            sw_intf = "eth"+str(index+4)
-            print(sw_name, sw_intf)
+            dummy_name = "dum"+self.name[1]
+            dummy_intf = "eth"+str(index)
+            print(dummy_name, dummy_intf)
 
             '''if item == "eth1":
                 continue'''
-            cmd0 = ("ip link add {}-{} type veth peer name {}-{}".format(self.name, item, sw_name, sw_intf))
+            cmd0 = ("ip link add {}-{} type veth peer name {}-{}".format(self.name, item, dummy_name, dummy_intf))
             '''cmd0 = ("ip link add {}-{} type veth peer name dum-{}".format(self.name, item, index))'''
             #cmd0 = ("ip tuntap add mode tap {}-{}".format(self.name, item))
             cmd1 = ("ip link set dev {} up".format(item))
-            cmd2 = ("ip link set dev {}-{} up".format(sw_name, sw_intf))
+            cmd2 = ("ip link set dev {}-{} up".format(dummy_name, dummy_intf))
             self.cmd(cmd0)
             self.waitOutput()
             self.cmd(cmd1)

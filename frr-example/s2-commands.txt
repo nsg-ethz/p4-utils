@@ -1,4 +1,7 @@
-table_set_default ipv4_lpm drop
-table_add ipv4_lpm ipv4_forward 10.0.1.1/32 => 00:00:00:01:02:00 2
-table_add ipv4_lpm ipv4_forward 10.0.2.2/32 => 00:00:0a:00:02:02 1
-table_add ipv4_lpm ipv4_forward 10.0.3.0/24 => 00:00:00:01:02:00 2
+table_set_default ospf_hello drop
+
+table_add ospf_hello ospf_hello_forward 3 => 2
+table_add ospf_hello ospf_hello_forward 2 => 3
+
+
+

@@ -63,7 +63,7 @@ def decoder(mod, data):
     #print(msg)
     attrs = msg['attrs']
     hdr = msg['header']
-    print(attrs)
+    print(msg)
 
 
 
