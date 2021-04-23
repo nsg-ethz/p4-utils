@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import os
 import enum
+from functools import wraps
 
-import p4utils.utils.p4runtime_API
+import p4utils
 import p4utils.utils.p4runtime_API.api as api
 import p4utils.utils.p4runtime_API.context as ctx
 
@@ -16,6 +17,15 @@ class CounterType(enum.Enum):
     bytes = 1
     packets = 2
     both = 3
+
+def handle_bad_input(f):
+    @wraps(f)
+    def handle(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except Exception as e:
+            print(e)
+    return handle
 
 class SimpleSwitchP4RuntimeAPI:
     """
@@ -41,10 +51,9 @@ class SimpleSwitchP4RuntimeAPI:
             # The client will always attempt to retrieve the configuration info from the server.
             # This works only if the switch has been configured via grpc at least once to avoid
             # unwanted overwrites of the current configuration.
-            self.client, self.context = api.setup(
-                                                    device_id=self.device_id,
-                                                    grpc_addr=self.grpc_ip+':'+str(self.grpc_port)
-                                                 )
+            self.client, self.context = api.setup(device_id=self.device_id,
+                                                  grpc_addr=self.grpc_ip+':'+str(self.grpc_port))
+
         except p4utils.utils.p4runtime_API.p4runtime.P4RuntimeException:
             # If the client fails to retrieve the configuration information from the server,
             # it will establish the connection using the configuration files provided.
@@ -53,11 +62,9 @@ class SimpleSwitchP4RuntimeAPI:
             if not os.path.isfile(self.json_path):
                 raise FileNotFoundError('No P4 compiled JSON file provided.')
 
-            self.client, self.context = api.setup(
-                                                    device_id=self.device_id,
-                                                    grpc_addr=self.grpc_ip+':'+str(self.grpc_port),
-                                                    config=api.FwdPipeConfig(self.p4rt_path, self.json_path)
-                                                 )
+            self.client, self.context = api.setup(device_id=self.device_id,
+                                                  grpc_addr=self.grpc_ip+':'+str(self.grpc_port),
+                                                  config=api.FwdPipeConfig(self.p4rt_path, self.json_path))
 
     ## Utils
     def parse_match_key(self, table_name, key_fields):
@@ -72,7 +79,65 @@ class SimpleSwitchP4RuntimeAPI:
             params_dict[self.context.get_param_name(action_name, i+1)] = action_params[i]
         return params_dict
 
+    def reset_state(self):
+        """
+        Reset the grpc server of switch by establishing a new ForwardingPipelineConfig.
+        This method is buggy, please read the following warnings.
+
+        Notice:
+            Due to some bug in the implementation of the grpc server, this command
+            does not fully erase all the forwarding state of the switch, but only resets its
+            grpc server. Therefore, it is recommended to use TriftAPI.reset_state() 
+            to reset the forwarding states. Moreover, please notice that if you only use
+            the ThriftAPI to reset the switch, the grpc server will not be reset.
+            So in order, to do the things properly both methods need to be called 
+            (the one from ThriftAPI and the one from SimpleSwitchP4RuntimeAPI).
+
+            For further details about this method, please check
+            https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668
+            Indeed, this method sends to the server a SetForwardingPipelineConfigRequest with
+            action VERIFY_AND_COMMIT.
+        """
+        if not os.path.isfile(self.p4rt_path):
+            raise FileNotFoundError('No P4 runtime information file provided.')
+        if not os.path.isfile(self.json_path):
+            raise FileNotFoundError('No P4 compiled JSON file provided.')
+
+        # Disconnect
+        self.teardown()
+
+        # Reconnect
+        self.client, self.context = api.setup(device_id=self.device_id,
+                                              grpc_addr=self.grpc_ip+':'+str(self.grpc_port),
+                                              config=api.FwdPipeConfig(self.p4rt_path, self.json_path))
+
+    def teardown(self):
+        """
+        Tear down grpc connection with the switch server.
+        """
+        api.teardown(self.client)
+    
+    def get_digest_list(self, timeout=None):
+        """
+        Alias for P4RuntimeClient.get_digest_list in p4runtime.py
+        Retrieve DigestList and send back acknowledgment.
+
+        Args:
+            timeout (int or None): time to wait for packet, if set to None,
+                                   the function will wait indefinitely
+
+        Return:
+            DigestList packet (protobuf message) or None if the timeout has
+            expired and no packet has been received.
+        
+        Notice:
+            See https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543
+            for further details.
+        """
+        return self.client.get_digest_list(timeout)
+
     ## Tables
+    @handle_bad_input
     def table_add(self, table_name, action_name, match_keys, action_params=[], prio=0, rates=None, pkts=None, byts=None):
         """
         Add entry to a match table.
@@ -180,6 +245,7 @@ class SimpleSwitchP4RuntimeAPI:
 
         entry.insert()
 
+    @handle_bad_input
     def table_set_default(self, table_name, action_name, action_params=[]):
         """
         Set default action for a match table.
@@ -210,6 +276,7 @@ class SimpleSwitchP4RuntimeAPI:
                                                                               len(action_params)))
         entry.modify()
 
+    @handle_bad_input
     def table_reset_default(self, table_name):
         """
         Reset default action for a match table.
@@ -226,6 +293,7 @@ class SimpleSwitchP4RuntimeAPI:
         entry = api.TableEntry(self.client, self.context, table_name)(is_default=True)
         entry.modify()
 
+    @handle_bad_input
     def table_delete_match(self, table_name, match_keys, prio=None):
         """
         Delete an existing entry in a table.
@@ -252,6 +320,7 @@ class SimpleSwitchP4RuntimeAPI:
             entry.priority = prio
         entry.delete()
 
+    @handle_bad_input
     def table_modify_match(self, table_name, action_name, match_keys, action_params=[], prio=0, rates=None, pkts=None, byts=None):
         """
         Modify entry in a table.
@@ -351,6 +420,7 @@ class SimpleSwitchP4RuntimeAPI:
 
         entry.modify()
 
+    @handle_bad_input
     def table_clear(self, table_name):
         """
         Clear all entries in a match table (direct or indirect), but not the default entry.
@@ -362,6 +432,7 @@ class SimpleSwitchP4RuntimeAPI:
         entry = api.TableEntry(self.client, self.context, table_name).read(function=lambda x: x.delete())
 
     ## DirectCounters
+    @handle_bad_input
     def direct_counter_read(self, direct_counter_name, match_keys, prio=0):
         """
         Read direct counter values.
@@ -398,9 +469,10 @@ class SimpleSwitchP4RuntimeAPI:
         if prio:
             print('priority: {}'.format(prio))
             entry.table_entry.priority = prio
-        entry = list(entry.read())[0]
+        entry = next(entry.read())
         return entry.byte_count, entry.packet_count
 
+    @handle_bad_input
     def direct_counter_write(self, direct_counter_name, match_keys, prio=0, pkts=0, byts=0):
         """
         Write direct counter values. If no values are specified, the counter is reset.
@@ -444,6 +516,7 @@ class SimpleSwitchP4RuntimeAPI:
             entry.byte_count = byts
         entry.modify()
 
+    @handle_bad_input
     def direct_counter_reset(self, direct_counter_name):
         """
         Reset all the direct counters values.
@@ -462,6 +535,7 @@ class SimpleSwitchP4RuntimeAPI:
             entry.modify()
         
     ## DirectMeters
+    @handle_bad_input
     def direct_meter_array_set_rates(self, direct_meter_name, rates):
         """
         Configure rates for an entire direct meter array.
@@ -495,6 +569,7 @@ class SimpleSwitchP4RuntimeAPI:
         else:
             raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')        
 
+    @handle_bad_input
     def direct_meter_set_rates(self, direct_meter_name, match_keys, prio=0, rates=None):
         """
         Configure rates for a single direct meter entry.
@@ -547,6 +622,7 @@ class SimpleSwitchP4RuntimeAPI:
 
         entry.modify()
 
+    @handle_bad_input
     def direct_meter_get_rates(self, direct_meter_name, match_keys, prio=0):
         """
         Retrieve rates for a direct meter.
@@ -581,11 +657,12 @@ class SimpleSwitchP4RuntimeAPI:
             print('priority: {}'.format(prio))
             entry.table_entry.priority = prio
 
-        entry = list(entry.read())[0]
+        entry = next(entry.read())
 
         return [(entry.cir, entry.cburst), (entry.pir, entry.pburst)]
 
     ## Counters
+    @handle_bad_input
     def counter_read(self, counter_name, index):
         """
         Read counter value.
@@ -609,9 +686,10 @@ class SimpleSwitchP4RuntimeAPI:
         print('index: {}'.format(index))
         entry.index = index
         
-        entry = list(entry.read())[0]
+        entry = next(entry.read())
         return entry.byte_count, entry.packet_count
 
+    @handle_bad_input
     def counter_write(self, counter_name, index, pkts=0, byts=0):
         """
         Write counter values. If no values are specified, the counter is reset.
@@ -641,6 +719,7 @@ class SimpleSwitchP4RuntimeAPI:
             entry.byte_count = byts
         entry.modify()
 
+    @handle_bad_input
     def counter_reset(self, counter_name):
         """
         Reset all the counters values.
@@ -660,6 +739,7 @@ class SimpleSwitchP4RuntimeAPI:
             entry.modify()
 
     ## Meters
+    @handle_bad_input
     def meter_array_set_rates(self, meter_name, rates):
         """
         Configure rates for an entire meter array.
@@ -693,6 +773,7 @@ class SimpleSwitchP4RuntimeAPI:
         else:
             raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')        
 
+    @handle_bad_input
     def meter_set_rates(self, meter_name, index, rates):
         """
         Configure rates for a single  meter entry.
@@ -731,6 +812,7 @@ class SimpleSwitchP4RuntimeAPI:
 
         entry.modify()
 
+    @handle_bad_input
     def meter_get_rates(self, meter_name, index):
         """
         Retrieve rates for a meter.
@@ -752,25 +834,51 @@ class SimpleSwitchP4RuntimeAPI:
         print('index: {}'.format(index))
         entry.index = index
 
-        entry = list(entry.read())[0]
+        entry = next(entry.read())
 
         return [(entry.cir, entry.cburst), (entry.pir, entry.pburst)]
 
     ## MulticastGroups
-    def mc_mgrp_create(self, mgrp):
+    @handle_bad_input
+    def mc_mgrp_create(self, mgrp, ports=[], instances=None):
         """
         Create multicast group.
 
         Args:
-            mgrp (int): multicast group id
+            mgrp (int)             : multicast group id
+            ports (list of int)    : list of port numbers to add to the multicast group
+            instances (list of int): list of instances of the corresponding ports
 
         Notice:
             mgrp must be greater than 0.
+
+            A replica is a tuple (port, instance) which has to be unique within the 
+            same multicast group. Instances can be explicitly assigned to ports by 
+            passing the list instances to this function. If the list instances is not
+            specified, then the instance number is set to 0 for all the replicas.
+
+            If ports is an empty list, then the packets are not multicasted to any port.
         """
         print('Creating multicast group: {}'.format(mgrp))
         entry = api.MulticastGroupEntry(self.client, self.context, mgrp)
+
+        if not isinstance(ports, list):
+            raise TypeError('ports is not a list.')
+        elif instances:
+            if not isinstance(instances, list):
+                raise TypeError('instances is not a list.')
+            elif len(instances) != len(ports):
+                raise Exception('instances and ports have different lengths.')
+            else:
+                for i in range(len(ports)):
+                    entry.add(ports[i], instances[i])
+        else:
+            for i in range(len(ports)):
+                entry.add(ports[i])
+
         entry.insert()
     
+    @handle_bad_input
     def mc_mgrp_destroy(self, mgrp):
         """
         Destroy multicast group.
@@ -785,7 +893,8 @@ class SimpleSwitchP4RuntimeAPI:
         entry = api.MulticastGroupEntry(self.client, self.context, mgrp)
         entry.delete()
 
-    def mc_set_replicas(self, mgrp, ports, instances=None):
+    @handle_bad_input
+    def mc_set_replicas(self, mgrp, ports=[], instances=None):
         """
         Set replicas for multicast group.
 
@@ -796,14 +905,17 @@ class SimpleSwitchP4RuntimeAPI:
 
         Notice:
             mgrp must be greater than 0.
+
             A replica is a tuple (port, instance) which has to be unique within the 
             same multicast group. Instances can be explicitly assigned to ports by 
             passing the list instances to this function. If the list instances is not
             specified, then the instance number is set to 0 for all the replicas.
+
+            If ports is an empty list, then the packets are not multicasted to any port.
         """
-        print('Adding replicas to multicast group: {}'.format(mgrp))
+        print('Setting replicas of multicast group: {}'.format(mgrp))
         entry = api.MulticastGroupEntry(self.client, self.context, mgrp)
-        
+
         if not isinstance(ports, list):
             raise TypeError('ports is not a list.')
         elif instances:
@@ -813,25 +925,97 @@ class SimpleSwitchP4RuntimeAPI:
                 raise Exception('instances and ports have different lengths.')
             else:
                 for i in range(len(ports)):
-                    entry = entry.add(ports[i], instances[i])
+                    entry.add(ports[i], instances[i])
         else:
             for i in range(len(ports)):
-                entry = entry.add(ports[i])
+                entry.add(ports[i])
 
         entry.modify()
 
+    @handle_bad_input
+    def mc_get_replicas(self, mgrp):
+        """
+        Get replicas which belog to a multicast group.
+
+        Args:
+            mgrp (int)             : multicast group id
+        
+        Return:
+            ports (list of int)    : list of port numbers of the multicast group
+            instances (list of int): list of instances of the corresponding ports
+
+        Notice:
+            mgrp must be greater than 0.
+
+            A replica is a tuple (port, instance) which has to be unique within the 
+            same multicast group. Instances can be explicitly assigned to ports by 
+            passing the list instances to this function. If the list instances is not
+            specified, then the instance number is set to 0 for all the replicas.
+        """
+        ports = []
+        instances = []
+
+        # Read MulticastGroup entries
+        print('Reading replicas of multicast group: {}'.format(mgrp))
+        entry = api.MulticastGroupEntry(self.client, self.context, mgrp)
+        entry = entry.read()
+
+        # Get replicas
+        replicas = entry.replicas
+        
+        for replica in replicas:
+            ports.append(replica.port)
+            instances.append(replica.instance)
+
+        return ports, instances
+
     ## CloseSession
-    def cs_create(self, session_id):
+    @handle_bad_input
+    def cs_create(self, session_id, ports=[], instances=None, cos=0, packet_length=0):
         """
         Add a packet cloning session.
 
         Args:
-            session_id (int): clone session id
+            session_id (int)       : clone session id
+            ports (list of int)    : list of port numbers to add to the clone session
+            instances (list of int): list of instances of the corresponding ports
+            cos (int)              : Class of Service (see https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress)
+            packet_lentgth (int)   : maximal packet length in bytes (after which, packets are truncated)
+
+        Notice:
+            A replica is a tuple (port, instance) which has to be unique within the 
+            same multicast group. Instances can be explicitly assigned to ports by 
+            passing the list instances to this function. If the list instances is not
+            specified, then the instance number is set to 0 for all the replicas.
+
+            By default, the packet_length is set to 0 i.e. no truncation happens and 
+            class of service is set to 0 (normal packet classification).
+
+            If ports is an empty list, then the packets are not cloned to any port.
         """
-        print('Adding clone session: {}'.format(session_id))
+        print('Creating clone session: {}'.format(session_id))
         entry = api.CloneSessionEntry(self.client, self.context, session_id)
+
+        if not isinstance(ports, list):
+            raise TypeError('ports is not a list.')
+        elif instances:
+            if not isinstance(instances, list):
+                raise TypeError('instances is not a list.')
+            elif len(instances) != len(ports):
+                raise Exception('instances and ports have different lengths.')
+            else:
+                for i in range(len(ports)):
+                    entry.add(ports[i], instances[i])
+        else:
+            for i in range(len(ports)):
+                entry.add(ports[i])
+
+        entry.cos = cos
+        entry.packet_length_bytes = packet_length
+
         entry.insert()
 
+    @handle_bad_input
     def cs_destroy(self, session_id):
         """
         Remove a packet cloning session.
@@ -843,7 +1027,8 @@ class SimpleSwitchP4RuntimeAPI:
         entry = api.CloneSessionEntry(self.client, self.context, session_id)
         entry.delete()
 
-    def cs_set_replicas(self, session_id, ports, instances=None, cos=0, packet_length=0):
+    @handle_bad_input
+    def cs_set_replicas(self, session_id, ports=[], instances=None, cos=0, packet_length=0):
         """
         Configure a packet cloning session.
 
@@ -862,8 +1047,10 @@ class SimpleSwitchP4RuntimeAPI:
 
             By default, the packet_length is set to 0 i.e. no truncation happens and 
             class of service is set to 0 (normal packet classification).
+
+            If ports is an empty list, then the packets are not cloned to any port.
         """
-        print('Adding replicas to clone session: {}'.format(session_id))
+        print('Setting replicas of clone session: {}'.format(session_id))
         entry = api.CloneSessionEntry(self.client, self.context, session_id)
 
         if not isinstance(ports, list):
@@ -875,17 +1062,53 @@ class SimpleSwitchP4RuntimeAPI:
                 raise Exception('instances and ports have different lengths.')
             else:
                 for i in range(len(ports)):
-                    entry = entry.add(ports[i], instances[i])
+                    entry.add(ports[i], instances[i])
         else:
             for i in range(len(ports)):
-                entry = entry.add(ports[i])
+                entry.add(ports[i])
 
         entry.cos = cos
         entry.packet_length_bytes = packet_length
 
         entry.modify()
 
+    @handle_bad_input
+    def cd_get_replicas(self, session_id):
+        """
+        Get replicas which belog to a clone session.
+
+        Args:
+            session_id (int)       : clone session id
+        
+        Return:
+            ports (list of int)    : list of port numbers of the clone session
+            instances (list of int): list of instances of the corresponding ports
+
+        Notice:
+            A replica is a tuple (port, instance) which has to be unique within the 
+            same multicast group. Instances can be explicitly assigned to ports by 
+            passing the list instances to this function. If the list instances is not
+            specified, then the instance number is set to 0 for all the replicas.
+        """
+        ports = []
+        instances = []
+
+        # Read MulticastGroup entries
+        print('Reading replicas of clone session: {}'.format(session_id))
+        entry = api.CloneSessionEntry(self.client, self.context, session_id)
+        entry = entry.read()
+
+        # Get replicas
+        replicas = entry.replicas
+        
+        for replica in replicas:
+            ports.append(replica.port)
+            instances.append(replica.instance)
+
+        return ports, instances
+
     ## Digests
+    @handle_bad_input
     def digest_enable(self, digest_name, max_timeout_ns=0, max_list_size=1, ack_timeout_ns=0):
         """
         Enable and configure the digests generation of the switch.
@@ -921,6 +1144,7 @@ class SimpleSwitchP4RuntimeAPI:
 
         entry.insert()
 
+    @handle_bad_input
     def digest_set_conf(self, digest_name, max_timeout_ns=0, max_list_size=1, ack_timeout_ns=0):
         """
         Configure the digests generation of the switch.
@@ -956,6 +1180,7 @@ class SimpleSwitchP4RuntimeAPI:
 
         entry.modify()
 
+    @handle_bad_input
     def digest_get_conf(self, digest_name):
         """
         Enable and configure the digests generation of the switch.
@@ -964,20 +1189,25 @@ class SimpleSwitchP4RuntimeAPI:
             digest_name (string): name of the digest (the name is shown in the P4 runtime information file
                                   generated by the compiler)
 
+        Return:
+            max_timeout_ns (int): the maximum server buffering delay in nanoseconds for an outstanding digest message
+            max_list_size (int) : the maximum digest list size — in number of digest messages — sent by the server
+                                  to the client as a single DigestList Protobuf message
+            ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement 
+                                  from the client before new digest messages can be generated for the same learned data
+
         Notice:
             P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
             digest<named_struct_type>(1, {struct_field_1, struct_field_2, ...}) where 'named_struct_type' must 
             be explicited and previously defined. The name of the digest for the configuration's sake 
             is the name of the struct type (i.e. 'named_struct_type').
-
-            By default, max_timeout_ns is set to 0, i.e. the server should generate a DigestList 
-            message for every digest message generated by the data plane.
-            By default, max_list_size is set to 1, i.e. the server should generate a DigestList 
-            message for every digest message generated by the data plane.
-            By default, ack_timeout_ns is set to 0, i.e. the cache of digests not yet acknowledged must 
-            always be an empty set.
         """
         print('Enabling digest: {}'.format(digest_name))
         entry = api.DigestEntry(self.client, self.context, digest_name)
+        entry = next(entry.read())
 
-        print(list(entry.read())[0])
+        max_timeout_ns = entry.max_timeout_ns
+        max_list_size = entry.max_list_size
+        ack_timeout_ns = entry.ack_timeout_ns
+
+        return max_timeout_ns, max_list_size, ack_timeout_ns

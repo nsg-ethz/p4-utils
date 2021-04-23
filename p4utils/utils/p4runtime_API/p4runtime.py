@@ -245,24 +245,28 @@ class P4RuntimeClient:
             See https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543
             for further details.
         """
-        # Listen for DigestLists
-        digList = self.get_stream_packet("digest", timeout)
+        # Listen for StreamMessageResponse DigestLists
+        rep = self.get_stream_packet("digest", timeout)
+        # Initialize digList to None
+        dig_list = None
 
-        if digList is not None:
+        if rep is not None:
+            # Retrieve digList
+            dig_list = rep.digest
             # Retrieve fields
-            digest_id = digList.digest.digest_id
-            list_id = digList.digest.list_id
+            digest_id = dig_list.digest_id
+            list_id = dig_list.list_id
 
             # Generate acknowledgment
-            ack = p4runtime_pb2.DigestListAck()
+            req = p4runtime_pb2.StreamMessageRequest()
+            ack = req.digest_ack
             ack.digest_id = digest_id
             ack.list_id = list_id
-
             # Send acknowledgment
-            self.stream_out_q.put(ack)
+            self.stream_out_q.put(req)
 
         # Return DigestList
-        return digList
+        return dig_list
 
     @parse_p4runtime_error
     def get_p4info(self):
