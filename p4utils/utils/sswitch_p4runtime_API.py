@@ -19,12 +19,18 @@ class CounterType(enum.Enum):
     both = 3
 
 def handle_bad_input(f):
+    """
+    Handle bad input and return True if the function was correctly executed,
+    and False if it was not.
+    """
     @wraps(f)
     def handle(*args, **kwargs):
         try:
-            return f(*args, **kwargs)
+            f(*args, **kwargs)
+            return True
         except Exception as e:
             print(e)
+            return False
     return handle
 
 class SimpleSwitchP4RuntimeAPI:
@@ -70,7 +76,11 @@ class SimpleSwitchP4RuntimeAPI:
     def parse_match_key(self, table_name, key_fields):
         match_keys_dict = {}
         for i in range(len(key_fields)):
-            match_keys_dict[self.context.get_mf_name(table_name, i+1)] = key_fields[i]
+            # Allow for don't care matches (e.g. 0.0.0.0/0). Indeed, by P4Runtime spec
+            # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-match-format)
+            # don't care matches have to be unset in the message.
+            if key_fields[i]:
+                match_keys_dict[self.context.get_mf_name(table_name, i+1)] = key_fields[i]
         return match_keys_dict
 
     def parse_action_param(self, action_name, action_params):
@@ -164,7 +174,7 @@ class SimpleSwitchP4RuntimeAPI:
             * For exact match: '<value>'
             * For ternary match: '<value>&&&<mask>'
             * For LPM match: '<value>/<mask>'
-            * For range match: '<value>..<mask>'
+            * For range match: '<start>..<end>'
 
         Notice:
             The priority field must be set to a non-zero value if the match key includes 

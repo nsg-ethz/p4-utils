@@ -304,7 +304,7 @@ Set a field value with <self>['<field_name>'] = '...'
   * For exact match: <self>['<f>'] = '<value>'
   * For ternary match: <self>['<f>'] = '<value>&&&<mask>'
   * For LPM match: <self>['<f>'] = '<value>/<mask>'
-  * For range match: <self>['<f>'] = '<value>..<mask>'
+  * For range match: <self>['<f>'] = '<start>..<end>'
 
 If it's inconvenient to use the whole field name, you can use a unique suffix.
 
