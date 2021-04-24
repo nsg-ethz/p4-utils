@@ -95,7 +95,7 @@ class NetworkGraph(nx.Graph):
     def get_intfs(self, fields=[]):
         """
         Alias of self.edge_to_intf useful for rapid access.
-        A dict of dicts which stores the interface of 'node1' which faces 'node2'.
+        A dict of dicts which stores the interface of 'node1' which faces 'node2': self.get_intfs()['node1']['node2'].
         If fields (list of strings) is specified, the method returns a dict (node1) of dicts (node2)
         of tuples (one per interface) containing all the specified fields' values in 
         the given order (or the single value if only one field is specified).
@@ -118,7 +118,7 @@ class NetworkGraph(nx.Graph):
     def get_node_intfs(self, fields=[]):
         """
         Alias of self.node_to_intf useful for rapid access.
-        A dict of dicts which stores the interface of 'node' which has the name 'intf'.
+        A dict of dicts which stores the interface of 'node' which has the name 'intf': self.get_node_intfs()['node']['intf'].
         If fields (list of strings) is specified, the method returns a dict (nodes) of dicts (interfaces)
         of tuples (one per interface) containing all the specified fields' values in 
         the given order (or the single value if only one field is specified).
