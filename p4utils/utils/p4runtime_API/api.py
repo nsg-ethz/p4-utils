@@ -329,8 +329,13 @@ You may also use <self>.set(<f>='<value>')
 
     def __setitem__(self, name, value):
         field_info = self._get_mf(name)
-        self._mk[name] = self._parse_mf(value, field_info)
-        print(self._mk[name])
+        # Allow for don't care matches (e.g. 0.0.0.0/0). Indeed, by P4Runtime spec
+        # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-match-format)
+        # don't care matches have to be unset in the message.
+        mf = self._parse_mf(value, field_info)
+        if mf:
+            self._mk[name] = mf
+            print(self._mk[name])
 
     def __getitem__(self, name):
         _ = self._get_mf(name)
@@ -376,8 +381,12 @@ You may also use <self>.set(<f>='<value>')
     # TODO(antonin): use canonical representation when server supports it
     def _sanitize_and_convert_mf_lpm(self, prefix, length, field_info):
         if length == 0:
-            raise UserError(
-                "Ignoring LPM don't care match (prefix length of 0) as per P4Runtime spec")
+            # Allow for don't care matches (e.g. 0.0.0.0/0). Indeed, by P4Runtime spec
+            # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-match-format)
+            # don't care matches have to be unset in the message.
+            return None
+            # raise UserError(
+            #     "Ignoring LPM don't care match (prefix length of 0) as per P4Runtime spec")
 
         mf = p4runtime_pb2.FieldMatch()
         mf.field_id = field_info.id
@@ -422,7 +431,11 @@ You may also use <self>.set(<f>='<value>')
     # TODO(antonin): use canonical representation when server supports it
     def _sanitize_and_convert_mf_ternary(self, value, mask, field_info):
         if int.from_bytes(mask, byteorder='big') == 0:
-            raise UserError("Ignoring ternary don't care match (mask of 0s) as per P4Runtime spec")
+            # Allow for don't care matches (e.g. 0.0.0.0/0). Indeed, by P4Runtime spec
+            # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-match-format)
+            # don't care matches have to be unset in the message.
+            return None
+            # raise UserError("Ignoring ternary don't care match (mask of 0s) as per P4Runtime spec")
 
         mf = p4runtime_pb2.FieldMatch()
         mf.field_id = field_info.id
@@ -462,8 +475,12 @@ You may also use <self>.set(<f>='<value>')
         if start_ > end_:
             raise UserError("Invalid range match: start is greater than end")
         if start_ == 0 and end_ == ((1 << field_info.bitwidth) - 1):
-            raise UserError(
-                "Ignoring range don't care match (all possible values) as per P4Runtime spec")
+            # Allow for don't care matches (e.g. 0.0.0.0/0). Indeed, by P4Runtime spec
+            # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-match-format)
+            # don't care matches have to be unset in the message.
+            return None
+            # raise UserError(
+            #     "Ignoring range don't care match (all possible values) as per P4Runtime spec")
         mf = p4runtime_pb2.FieldMatch()
         mf.field_id = field_info.id
         mf.range.low = start

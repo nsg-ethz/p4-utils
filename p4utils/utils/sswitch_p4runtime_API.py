@@ -76,11 +76,7 @@ class SimpleSwitchP4RuntimeAPI:
     def parse_match_key(self, table_name, key_fields):
         match_keys_dict = {}
         for i in range(len(key_fields)):
-            # Allow for don't care matches (e.g. 0.0.0.0/0). Indeed, by P4Runtime spec
-            # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-match-format)
-            # don't care matches have to be unset in the message.
-            if key_fields[i]:
-                match_keys_dict[self.context.get_mf_name(table_name, i+1)] = key_fields[i]
+            match_keys_dict[self.context.get_mf_name(table_name, i+1)] = key_fields[i]
         return match_keys_dict
 
     def parse_action_param(self, action_name, action_params):
