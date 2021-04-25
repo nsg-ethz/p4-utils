@@ -350,7 +350,7 @@ class Router( Switch ):
         for index, item in enumerate(self.fake_interfaces.keys()):
 
             dummy_name = "dum"+self.name[1]
-            dummy_intf = "eth"+str(index)
+            dummy_intf = "eth"+str(index+5)
             print(dummy_name, dummy_intf)
 
             '''if item == "eth1":

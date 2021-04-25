@@ -13,6 +13,7 @@ rtr = sys.argv[1]
 # Send packet on real interface
 def send(pckt):
     iface = str(rtr)+"-eth0"
+    pckt.show()
     sendp(pckt, iface=iface)
     print("sending on interface %s"%iface)
 
