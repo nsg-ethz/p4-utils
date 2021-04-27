@@ -10,6 +10,11 @@ from scapy.all import *
 
 rtr = sys.argv[1]
 
+if rtr.endswith('1'):
+    list_of_ips = ["10.0.1.2", "10.2.0.2"]
+elif rtr.endswith('2'):
+    list_of_ips = ["10.0.1.1", "10.1.0.2"]
+
 # Send packet on real interface
 def send(pckt):
     iface = str(rtr)+"-eth0"
@@ -29,7 +34,6 @@ def get_pkt_from_fake_2():
     intf = str(rtr) + "-eth2"
     sniff(iface=str(intf), prn = send)
 
-
 def main():
 
     if len(sys.argv)<1:
@@ -38,6 +42,7 @@ def main():
 
     Thread(target = get_pkt_from_fake_1).start()
     Thread(target = get_pkt_from_fake_2).start()
+    
 
 if __name__ == '__main__':
     main()
