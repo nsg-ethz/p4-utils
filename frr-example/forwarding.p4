@@ -2,7 +2,10 @@
 #include <core.p4>
 #include <v1model.p4>
 
+
 const bit<16> TYPE_IPV4 = 0x800;
+
+#define REGISTER_LENGTH 32
 
 /*************************************************************************
 *********************** H E A D E R S  ***********************************
@@ -112,6 +115,8 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
 
+    register<bit<8>>(REGISTER_LENGTH) OSPF_type_register;
+
     action drop() {
         mark_to_drop(standard_metadata);
     }
@@ -144,9 +149,16 @@ control MyIngress(inout headers hdr,
         // only if IPV4 the rule is applied. Here only one type of IP packet = OSPF hello
         // Further conditions not needed here.
         if (hdr.ipv4.isValid()){
-            // If packet is an OSPF packet
+            //If packet is an OSPF packet
             if(hdr.ipv4.protocol == 89){
             ospf_hello.apply();
+
+            if (hdr.ospf.isValid()){
+                // check which type of OSPF packets are being sent, register written with value at type index
+                
+                OSPF_type_register.write((bit<32>)hdr.ospf.type, hdr.ospf.type);
+            }
+
             }
 
         }

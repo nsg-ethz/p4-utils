@@ -15,9 +15,9 @@ rtr = sys.argv[1]
 if not rtr.startswith('r'):
     sw = rtr
 
-if rtr.endswith('1'):
+if rtr.endswith('2'):
     list_of_ips = ["10.0.1.2", "10.2.0.2"]
-elif rtr.endswith('2'):
+elif rtr.endswith('1'):
     list_of_ips = ["10.0.1.1", "10.1.0.2"]
 
 def get_pkt():
