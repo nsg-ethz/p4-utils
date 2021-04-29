@@ -15,9 +15,9 @@ rtr = sys.argv[1]
 if not rtr.startswith('r'):
     sw = rtr
 
-if rtr.endswith('2'):
+if rtr.endswith('1'):
     list_of_ips = ["10.0.1.2", "10.2.0.2"]
-elif rtr.endswith('1'):
+elif rtr.endswith('2'):
     list_of_ips = ["10.0.1.1", "10.1.0.2"]
 
 def get_pkt():
@@ -28,14 +28,15 @@ def get_pkt():
             exit(1)
         intf = str(sw) + "-" +str(sys.argv[2])
     else:
-        intf = str(rtr) + "-eth0"
+        intf = str(rtr) + "-" +str(sys.argv[2])
 
     # Sniff packets on the CP routers incoming interface and filter messages which are sent by the router itself
     if rtr.startswith('r'):
-        sniff(filter = "ip src {} or ip src {}".format(list_of_ips[0],list_of_ips[1]), iface=str(intf), prn = lambda x : x.show())
+        sniff(iface=str(intf), prn = lambda x : x.show())
+        #sniff(filter = "ip src {} or ip src {}".format(list_of_ips[0],list_of_ips[1]), iface=str(intf), prn = lambda x : x.show())
     
     else:
-        sniff(iface=str(intf), prn = lambda x : x.show())
+        sniff(filter = "ip src {} or ip src {}".format(list_of_ips[0],list_of_ips[1]), iface=str(intf), prn = lambda x : x.show())
 
 def main():
 

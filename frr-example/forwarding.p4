@@ -159,7 +159,7 @@ control MyIngress(inout headers hdr,
                 OSPF_type_register.write((bit<32>)hdr.ospf.type, hdr.ospf.type);
             }
 
-            }
+           }
 
         }
     }
