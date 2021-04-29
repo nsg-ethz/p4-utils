@@ -31,6 +31,7 @@ from mininet.link import Link, Intf
 from p4utils.utils.helper import *
 
 SWITCH_START_TIMEOUT = 10
+sw_PID = []
 
 
 class P4Host(Host):
@@ -343,31 +344,38 @@ class Router( Switch ):
 
         return self.defaultIntf(self)
 
+    def get_fake_interfaces(self):
+        fake_interfaces = []
+        for index, item in enumerate(self.fake_interfaces.keys()):
+            fake_interfaces.append(item)
+        
+        return fake_interfaces
+
 
     # Create fake tap or veth dummpy interfaces on the routers for OSPF
     def create_fake_interface(self):
 
         for index, item in enumerate(self.fake_interfaces.keys()):
 
-            dummy_name = "dum"+self.name[1]
-            dummy_intf = "eth"+str(index+5)
-            print(dummy_name, dummy_intf)
+            sw_name = "s"+self.name[1]
+            sw_intf = "eth"+str(index+5)
+            print(sw_name, sw_intf)
+            #print(sw_name.pid)
 
             '''if item == "eth1":
                 continue'''
-            cmd0 = ("ip link add {}-{} type veth peer name {}-{}".format(self.name, item, dummy_name, dummy_intf))
-            '''cmd0 = ("ip link add {}-{} type veth peer name dum-{}".format(self.name, item, index))'''
-            #cmd0 = ("ip tuntap add mode tap {}-{}".format(self.name, item))
+            cmd0 = ("ip link add {}-{} type veth peer name {}-{}".format(self.name, item, sw_name, sw_intf))
+            cmd00 = ("ip link set {}-{} netns {}".format(self.name, item, self.pid))
+            
             cmd1 = ("ip link set dev {} up".format(item))
-            cmd2 = ("ip link set dev {}-{} up".format(dummy_name, dummy_intf))
-            self.cmd(cmd0)
-            self.waitOutput()
+            cmd2 = ("ip link set dev {}-{} up".format(sw_name, sw_intf))
+            
+            os.system(cmd0)
+            os.system(cmd00)
+            
             self.cmd(cmd1)
             self.waitOutput()
-            self.cmd(cmd2)
-            self.waitOutput()
-
-            
+            os.system(cmd2)
 
     def start(self):
         #pass

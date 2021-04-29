@@ -793,7 +793,7 @@ class AppRunner(object):
         self.program_hosts()
         # maybe program routers
         self.program_switches()
-
+        
         # Save mininet topology to a database
         # this might fail with the routers?
         self.save_topology()
@@ -808,11 +808,7 @@ class AppRunner(object):
             # Stop right after the CLI is exited
             self.net.stop()
 
-            '''if self.daemons:
-                os.system("killall -9 {}".format(' '.join(self.daemons)))  
-
-            for node in self.net.routers:
-                os.system(" rm -rf {}/{}".format(AppRunner.VTY_SOCKET_PATH, node))'''
+        
 
 
 def get_args():
