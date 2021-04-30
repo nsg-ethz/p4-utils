@@ -63,55 +63,30 @@ class P4Host(Host):
 
 class P4Switch(Switch):
     """P4 virtual switch"""
-    device_id = 1
-    sw_bin='simple_switch'
-
-    @classmethod
-    def setup(cls):
-        pass
-
-    @classmethod
-    def set_binary(self, sw_bin):
-        """Set class default binary"""
-        # Make sure that the provided sw_bin is valid
-        pathCheck(sw_bin)
-        P4Switch.sw_bin = sw_bin
-
-    @classmethod
-    def stop_all(self):
-        sh('killall {}'.format(self.sw_bin))
 
     def __init__(self, name,
-                 sw_bin=None,  
+                 device_id,
+                 sw_bin='simple_switch',  
                  json_path=None,
                  thrift_port=None,
                  pcap_dump=False,
                  pcap_dir=None,
                  log_enabled=False,
                  log_dir='/tmp',
-                 device_id=None,
                  enable_debugger=False,
                  **kwargs):
 
-        id = device_id if device_id else P4Switch.device_id
-
-        super().__init__(name,
-                         dpid=self.dpidToStr(id),
-                         **kwargs)  
-
-        # If a non default binary is given, use it
-        if sw_bin is not None:
-            self.set_binary(sw_bin)
-
-        self.set_json(json_path)
-
-        if device_id is not None:
+        if isinstance(device_id, int):
             self.device_id = device_id
-            P4Switch.device_id = max(P4Switch.device_id, device_id)
         else:
-            self.device_id = P4Switch.device_id
-            P4Switch.device_id += 1
+            raise TypeError('device_id is not an integer.')
+
+        kwargs.update(dpid=dpidToStr(self.device_id))
         
+        super().__init__(name, **kwargs)  
+
+        self.set_binary(sw_bin)
+        self.set_json(json_path)        
         self.pcap_dir = pcap_dir
         self.pcap_dump = pcap_dump
         self.enable_debugger = enable_debugger
@@ -133,19 +108,19 @@ class P4Switch(Switch):
         if self.thrift_listening():
             raise ConnectionRefusedError('{} cannot bind port {} because it is bound by another process.'.format(self.name, self.thrift_port))
 
+    def set_binary(self, sw_bin):
+        """Set switch default binary"""
+        # Make sure that the provided sw_bin is valid
+        pathCheck(sw_bin)
+        self.sw_bin = sw_bin
+
     def set_json(self, json_path):
         """Set the compiled P4 JSON file."""
-        # make sure that the provided JSON file exists if it is not None
+        # Make sure that the provided JSON file exists if it is not None
         if json_path and not os.path.isfile(json_path):
             raise FileNotFoundError('Invalid JSON file.')
         else:
             self.json_path = json_path
-
-    def dpidToStr(self, id):
-        strDpid = str(id)
-        if len(strDpid) < 16:
-            return '0'*(16-len(strDpid)) + strDpid
-        return strDpid
 
     def switch_started(self):
         """Check if the switch process has started."""
@@ -240,17 +215,9 @@ class P4Switch(Switch):
 
 class P4RuntimeSwitch(P4Switch):
     "BMv2 switch with gRPC support"
-    sw_bin = 'simple_switch_grpc'
-
-    @classmethod
-    def set_binary(self, sw_bin):
-        """Set class default binary"""
-        # Make sure that the provided sw_bin is valid
-        pathCheck(sw_bin)
-        P4RuntimeSwitch.sw_bin = sw_bin
 
     def __init__(self, *args,
-                 sw_bin=None,
+                 sw_bin='simple_switch_grpc',
                  grpc_port=None,
                  **kwargs):
 
@@ -258,11 +225,7 @@ class P4RuntimeSwitch(P4Switch):
         if self.grpc_listening():
             raise ConnectionRefusedError('{} cannot bind port {} because it is bound by another process.'.format(self.name, self.grpc_port))
 
-        # If a non default binary is given, use it
-        if sw_bin is not None:
-            self.set_binary(sw_bin)
-
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, sw_bin=sw_bin, **kwargs)
 
     def grpc_listening(self):
         """Check if a grpc process listens on the grpc port."""

@@ -409,7 +409,7 @@ class NetworkGraph(nx.Graph):
         Returns:
             CPU interface of the P4 switch
         """
-        if self.isP4Switch(p4switch) and self.get_nodes()[p4switch]['cpu_port']:
+        if self.isP4Switch(p4switch) and self.get_nodes()[p4switch].get('cpu_port', False):
             return [x for x in self.node_to_intf[p4switch].keys() if 'cpu' in x][0]
         else:
             if not quiet:
@@ -426,7 +426,7 @@ class NetworkGraph(nx.Graph):
         Returns:
             Port number of the P4 switch
         """
-        if self.isP4Switch(p4switch) and self.get_nodes()[p4switch]['cpu_port']:
+        if self.isP4Switch(p4switch) and self.get_nodes()[p4switch].get('cpu_port', False):
             intf = self.get_cpu_port_intf(p4switch)
             return self._node_interface(p4switch, intf)['port']
         else:

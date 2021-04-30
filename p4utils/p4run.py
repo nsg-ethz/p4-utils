@@ -295,9 +295,6 @@ class AppRunner(object):
         else:
             self.app_mininet = DEFAULT_NET
 
-        # Clean default switches
-        self.switch_node.stop_all()
-
         ## Load topology
         topology = self.conf.get('topology')
         if not topology:

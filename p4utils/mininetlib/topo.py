@@ -7,11 +7,6 @@ from mininet.log import setLogLevel, info, output, debug, warning
 from p4utils.utils.helper import *
 from p4utils.mininetlib.node import *
 
-# The basic idea is to move as many functions as possible
-# from AppTopo to P4Topo in order to make AppTopo a mere
-# configuration class for P4Topo. Ideally the same relationship
-# between ConfiguredP4Switch and P4Switch should exist between
-# AppTopo and P4Topo.
 
 class P4Topo(Topo):
     """Extension of the mininet topology class with P4 switches."""
@@ -27,7 +22,36 @@ class P4Topo(Topo):
         Returns:
             P4 host name (string)
         """
-        return super().addHost(name, isHost=True, **opts)
+        if not opts and self.hopts:
+            opts = self.hopts
+        opts.update(isHost = True)
+        return super().addHost(name, **opts)
+
+    def isHost(self, node):
+        """
+        Check if node is a host.
+
+        Arguments:
+            node (string): node name
+
+        Returns:
+            True if node is a host, else False (bool)
+        """
+        return self.g.node[node].get('isHost', False)
+
+    def addSwitch( self, name, **opts ):
+        """
+        Add switch to graph.
+            name (string): switch name
+            opts (kwargs): switch options
+
+        Returns:
+            switch name (string)
+        """
+        if not opts and self.sopts:
+            opts = self.sopts
+        opts.update(isSwitch = True)
+        return super().addNode(name, **opts)
 
     def addP4Switch(self, name, **opts):
         """
@@ -42,14 +66,15 @@ class P4Topo(Topo):
         """
         if not opts and self.sopts:
             opts = self.sopts
-        return super().addSwitch(name, isP4Switch=True, **opts)
+        opts.update(isP4Switch = True)
+        return self.addSwitch(name, **opts)
 
     def isP4Switch(self, node):
         """
         Check if node is a P4 switch.
 
         Arguments:
-            node (string): Mininet node name
+            node (string): node name
 
         Returns:
             True if node is a P4 switch, else False (bool)
@@ -69,45 +94,86 @@ class P4Topo(Topo):
         """
         if not opts and self.sopts:
             opts = self.sopts
-        return super().addSwitch(name, isP4Switch=True, isP4RuntimeSwitch=True, **opts)
+        opts.update(isP4Switch = True, isP4RuntimeSwitch = True)
+        return self.addSwitch(name, **opts)
 
     def isP4RuntimeSwitch(self, node):
         """
         Check if node is a P4 runtime switch.
 
         Arguments:
-            node (string): Mininet node name
+            node (string): node name
 
         Returns:
             True if node is a P4 switch, else False (bool)
         """
         return self.g.node[node].get('isP4RuntimeSwitch', False)
 
-    def addHiddenNode(self, name, **opts):
+    def hosts(self, sort=True):
         """
-        Add hidden node to Mininet topology. (TO IMPLEMENT)
-
+        Return hosts.
+        
         Arguments:
-            name (string): node name
-            opts (kwargs): node options
+           sort (bool): sort hosts alphabetically
 
         Returns:
-            hidden node name (string)
+           list of hosts
         """
-        pass
+        return [n for n in self.nodes(sort) if self.isHost(n)]
 
-    def isHiddenNode(self, node):
+    def p4switches(self, sort=True):
         """
-        Check if node is a hidden node
+        Return P4 switches.
+
+        Arguments:
+           sort (bool): sort switches alphabetically
+
+        Returns:
+           list of P4 switches
+        """
+        return [n for n in self.nodes(sort) if self.isP4Switch(n)]   
+
+    def p4rtswitches(self, sort=True):
+        """
+        Return P4 runtime switches.
+
+        Arguments:
+           sort (bool): sort switches alphabetically
+
+        Returns:
+           list of P4 runtime switches
+        """
+        return [n for n in self.nodes(sort) if self.isP4RuntimeSwitch(n)]
+
+    def deleteLink(self, node1, node2, key=None):
+        """
+        Delete link.
+
+        Arguments:
+            node1, node2 (string): nodes to link together
+            key (int)            : id used to identify multiple edges which
+                                   link two same nodes (optional)
+        """
+        entry1, key = self._linkEntry(node1, node2, key=key)
+        entry1.pop(key)
+        if len(entry1.keys()) == 0:
+            del self.g[node1][node2]
+            del self.g[node2][node1]            
+
+    def deleteNode(self, node):
+        """
+        Delete node.
 
         Arguments:
             node (string): Mininet node name
-
-        Returns:
-            True if its a hidden node, else False (bool)
         """
-        return self.g.node[node].get('isHiddenNode', False)
+        # Delete incident links
+        self.g.edge.pop(node, None)
+        for n in self.g.edge.keys():
+            self.g.edge[n].pop(node, None)
 
+        # Delete node
+        self.g.node.pop(node) 
 
 class AppTopo(P4Topo):
     """

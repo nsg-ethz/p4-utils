@@ -12,6 +12,56 @@ from mininet.log import info, output, error, warn, debug
 from p4utils.utils.topology import NetworkGraph
 
 
+def merge_dict(dst, src):
+    """
+    Merge dictionary src into dictionary dst (nested dictionaries
+    are update).
+    """
+    stack = [(dst, src)]
+    while stack:
+        current_dst, current_src = stack.pop()
+        for key in current_src:
+            if key not in current_dst:
+                current_dst[key] = current_src[key]
+            else:
+                if isinstance(current_src[key], dict) and isinstance(current_dst[key], dict):
+                    stack.append((current_dst[key], current_src[key]))
+                else:
+                    current_dst[key] = current_src[key]
+
+
+def next_element(elems, minimum=None, maximum=None):
+    """
+    Given a list of integers, return the next number not
+    already present in the set.
+    """
+    elements = set(elems)
+    if len(elems) != len(elements):
+        raise Exception('the list contains duplicates.')
+    if minimum is None:
+        minimum = min(elements)
+    if maximum is None:
+        maximum = max(elements)
+    if len(elements) == (maximum - minimum) + 1:
+        return maximum + 1
+    elif len(elements) < (maximum - minimum) + 1:
+        for elem in range(minimum, maximum+1):
+            if elem not in elements:
+                return elem
+    else:
+        raise Exception('too many elements in the list.')
+
+
+def dpidToStr(id):
+    """
+    Compute a string dpid from an integer id.
+    """
+    strDpid = hex(id)[2:]
+    if len(strDpid) < 16:
+        return '0'*(16-len(strDpid)) + strDpid
+    return strDpid
+
+
 def check_listening_on_port(port):
     for c in psutil.net_connections(kind='inet'):
         if c.status == 'LISTEN' and c.laddr[1] == port:
