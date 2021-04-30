@@ -1,7 +1,8 @@
 table_set_default ospf_hello drop
 
-table_add ospf_hello ospf_hello_forward 3 => 2
-table_add ospf_hello ospf_hello_forward 2 => 3
+table_add ospf_hello ospf_hello_forward 5 => 2
+table_add ospf_hello ospf_hello_forward 6 => 2
+table_add ospf_hello ospf_hello_forward 2 => 5
 
 
 

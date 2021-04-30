@@ -181,6 +181,8 @@ class P4Switch(Switch):
         for port, intf in list(self.intfs.items()):
             if not intf.IP():
                 args.extend(['-i', str(port) + '@' + intf.name])
+        args.extend(['-i', str(5) + '@' + self.name+"-eth5"])
+        args.extend(['-i', str(6) + '@' + self.name+"-eth6"])
         if self.pcap_dump:
             if self.pcap_dir:
                 args.append('--pcap=' + self.pcap_dir)

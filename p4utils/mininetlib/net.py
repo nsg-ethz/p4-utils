@@ -78,13 +78,15 @@ class P4Mininet(Mininet):
         return list_of_links
 
     def start(self):
-        super().start()
+        #super().start()
 
         # start routers
         info( '*** Starting %s routers\n' % len( self.routers ) )
         for router in self.routers:
             info( router.name + ' ')
             router.start()
+
+        super().start()
         
         #import ipdb; ipdb.set_trace()
             

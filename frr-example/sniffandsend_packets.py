@@ -56,7 +56,7 @@ def main():
         exit(1)
 
     Thread(target = get_pkt_from_fake_1).start()
-    Thread(target = get_pkt_from_fake_2).start()
+    #Thread(target = get_pkt_from_fake_2).start()
     
     Thread(target = get_pkt_from_real).start()
     
