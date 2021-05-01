@@ -60,7 +60,7 @@ class P4C:
             raise FileNotFoundError('No source file provided'.format(p4_src))
 
         if outdir is None:  
-                self.outdir = os.path.dirname(os.path.realpath(self.p4_src))
+                self.outdir = os.path.dirname(self.p4_src)
         else:
             if os.path.isdir(outdir): 
                 self.outdir = outdir

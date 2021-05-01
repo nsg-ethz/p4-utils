@@ -148,8 +148,8 @@ def is_compiled(p4_src, compilers):
     one compiler in the list.
 
     Arguments:
-        p4_src (string)    : P4 file path
-        compilers (list)        : list of P4 compiler objects (see compiler.py)
+        p4_src (string) : P4 file path
+        compilers (list): list of P4 compiler objects (see compiler.py)
     
     Returns:
         True/False depending on whether the file has been already compiled.

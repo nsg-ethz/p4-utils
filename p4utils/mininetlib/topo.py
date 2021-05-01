@@ -157,20 +157,27 @@ class P4Topo(Topo):
         entry1, key = self._linkEntry(node1, node2, key=key)
         entry1.pop(key)
         if len(entry1.keys()) == 0:
-            del self.g[node1][node2]
-            del self.g[node2][node1]            
+            self.g.edge[node1].pop(node2)
+            if len(self.g.edge[node1].keys()) == 0:
+                self.g.edge.pop(node1)
+            self.g.edge[node2].pop(node1)
+            if len(self.g.edge[node2].keys()) == 0:
+                self.g.edge.pop(node2)
 
-    def deleteNode(self, node):
+    def deleteNode(self, node, remove_links=True):
         """
         Delete node.
 
         Arguments:
-            node (string): Mininet node name
+            node         (string): Mininet node name
+            remove_links (bool)  : whether to remove all the incident
+                                   links
         """
         # Delete incident links
-        self.g.edge.pop(node, None)
-        for n in self.g.edge.keys():
-            self.g.edge[n].pop(node, None)
+        if remove_links:
+            self.g.edge.pop(node, None)
+            for n in self.g.edge.keys():
+                self.g.edge[n].pop(node, None)
 
         # Delete node
         self.g.node.pop(node) 
