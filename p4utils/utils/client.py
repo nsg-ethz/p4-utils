@@ -78,7 +78,3 @@ class ThriftClient:
                 raise ConnectionRefusedError('Could not connect to switch {} on port {}'.format(self.sw_name, self.thrift_port))
         else:
             raise FileNotFoundError('Could not find file {} for switch {}'.format(self.conf_path, self.sw_name))
-
-
-class RuntimeController:
-    pass

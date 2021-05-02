@@ -33,7 +33,7 @@ class P4C:
     def __init__(self, p4_src,
                  p4c_bin=None,
                  outdir=None,
-                 opts='',
+                 opts='--target bmv2 --arch v1model --std p4-16',
                  p4rt=False,
                  **kwargs):
         """
@@ -100,7 +100,7 @@ class P4C:
         if return_value != 0:
             raise CompilationError
         else:
-            info('{} compiled successfully.\n'.format(self.p4_src))
+            output('{} compiled successfully.\n'.format(self.p4_src))
             self.compiled = True
     
     def get_json_out(self):
