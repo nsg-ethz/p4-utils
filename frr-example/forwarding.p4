@@ -4,6 +4,7 @@
 
 
 const bit<16> TYPE_IPV4 = 0x800;
+const bit<16> TYPE_ARP = 0x806;
 
 #define REGISTER_LENGTH 32
 
@@ -121,6 +122,16 @@ control MyIngress(inout headers hdr,
         mark_to_drop(standard_metadata);
     }
 
+    action arp_forward(egressSpec_t port) {
+
+        //set the output port from the table
+        standard_metadata.egress_spec = port;
+
+        //decrease ttl by 1
+        hdr.ipv4.ttl = hdr.ipv4.ttl -1;
+
+    }
+
     action ospf_hello_forward(egressSpec_t port) {
 
         //set the output port from the table
@@ -129,6 +140,19 @@ control MyIngress(inout headers hdr,
         //decrease ttl by 1
         hdr.ipv4.ttl = hdr.ipv4.ttl -1;
 
+    }
+
+    table arp{
+        key = {
+            standard_metadata.ingress_port: exact;
+        }
+        actions = {
+            arp_forward;
+            drop;
+            NoAction;
+        }
+        size = 1024;
+        default_action = NoAction();
     }
 
     table ospf_hello{
@@ -146,22 +170,35 @@ control MyIngress(inout headers hdr,
 
     apply {
 
-        // only if IPV4 the rule is applied. Here only one type of IP packet = OSPF hello
-        // Further conditions not needed here.
-        if (hdr.ipv4.isValid()){
-            //If packet is an OSPF packet
-            if(hdr.ipv4.protocol == 89){
-            ospf_hello.apply();
+        
+        // Forward ARP packets for resolution of address
+        if (hdr.ethernet.isValid()){
 
-            if (hdr.ospf.isValid()){
-                // check which type of OSPF packets are being sent, register written with value at type index
-                
-                OSPF_type_register.write((bit<32>)hdr.ospf.type, hdr.ospf.type);
+             if(hdr.ethernet.etherType == TYPE_ARP){
+
+                arp.apply();
+             }
+
+            // only if IPV4 the rule is applied. Here only one type of IP packet = OSPF
+            if (hdr.ipv4.isValid()){
+                //If packet is an OSPF packet
+                if(hdr.ipv4.protocol == 89){
+
+                    ospf_hello.apply();
+
+                    if (hdr.ospf.isValid()){
+                        // check which type of OSPF packets are being sent, register written with value at type index
+                    
+                        OSPF_type_register.write((bit<32>)hdr.ospf.type, hdr.ospf.type);
+                    }
+
+                }
+
             }
 
-           }
-
         }
+
+        
     }
 }
 

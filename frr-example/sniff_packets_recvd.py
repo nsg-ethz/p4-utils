@@ -32,7 +32,7 @@ def get_pkt():
 
     # Sniff packets on the CP routers incoming interface and filter messages which are sent by the router itself
     if rtr.startswith('r'):
-        sniff(filter = "ip src 10.0.1.2 or ip src 10.0.1.1",iface=str(intf), prn = lambda x : x.show())
+        sniff(iface=str(intf), prn = lambda x : x.show())
         #sniff(filter = "ip src {} or ip src {}".format(list_of_ips[0],list_of_ips[1]), iface=str(intf), prn = lambda x : x.show())
     
     else:
