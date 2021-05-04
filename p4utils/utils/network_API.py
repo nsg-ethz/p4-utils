@@ -22,14 +22,14 @@ class NetworkAPI:
     def __init__(self):
         # Set log level
         setLogLevel('output')
-        # List of switch IDs
-        self.switch_ids = []
         # Name of the CPU bridge
         self.cpu_bridge = None
         # Whether to enable the client or not
         self.cli_enabled = True
         # Topology data file
         self.topology = './topology.json'
+        # IP default generator
+        self.ipv4_net = IPv4Network('10.0.0.0/8')
 
         ## External modules default configuration dictionary
         self.modules = {}
@@ -151,7 +151,6 @@ class NetworkAPI:
         with open(json_path,'w') as f:
             json.dump(graph_dict, f, default=default)
 
-
     def compile(self):
         for p4switch in self.p4switches():
             p4_src = self.getNode(p4switch).get('p4_src')
@@ -227,11 +226,11 @@ class NetworkAPI:
 
     def node_ports(self):
         """
-        Build a dictionary from the links where the ports
-        of every node are stored.
+        Build a dictionary from the links and store the ports
+        of every node.
         """
         ports = {}
-        for _, _, key, info in self.links(withKeys=True, withInfo=True):
+        for _, _, info in self.links(withInfo=True):
             ports.setdefault(info['node1'], {})
             ports.setdefault(info['node2'], {})
             ports[info['node1']].update({info['port1'] : info['node2']})
@@ -240,16 +239,67 @@ class NetworkAPI:
 
     def node_intfs(self):
         """
-        Build a dictionary from the links where the interfaces
-        of every node are stored.
+        Build a dictionary from the links and store the interfaces
+        of every node.
         """
         ports = {}
-        for _, _, key, info in self.links(withKeys=True, withInfo=True):
+        for _, _, info in self.links(withInfo=True):
             ports.setdefault(info['node1'], {})
             ports.setdefault(info['node2'], {})
             ports[info['node1']].update({info['intfName1'] : info['node2']})
             ports[info['node2']].update({info['intfName2'] : info['node1']})     
-        return ports
+        return ports            
+
+    def switch_ids(self):
+        """
+        Return a list containing all the switch IDs.
+        """
+        ids = []
+        for switch, info in self.switches(withInfo=True):
+            if self.isP4Switch(switch):
+                ids.append(info['device_id'])
+            else:
+                ids.append(int(info['dpid'], 16))
+        return ids
+
+    def mac_addresses(self):
+        """
+        Return a list containing all the MAC addresses.
+        """
+        macs = set()
+        for _, _, info in self.links(withInfo=True):
+            macs.add(info['addr1'])
+            macs.add(info['addr2'])
+        return macs
+
+    def ip_addresses(self):
+        """
+        Return a list containing all the IPv4 addresses.
+        """
+        ips = set()
+        for node1, node2, info in self.links(withInfo=True):
+            if self.isSwitch(node1):
+                ip = info.get('sw_ip1')
+                if ip is not None:
+                    ips.add(ip.split('/')[0])
+            else:
+                params = info.get('params1')
+                if params is not None:
+                    ip = params.get('ip')
+                    if ip is not None:
+                        ips.add(ip.split('/')[0])
+
+            if self.isSwitch(node2):
+                ip = info.get('sw_ip2')
+                if ip is not None:
+                    ips.add(ip.split('/')[0])
+            else:
+                params = info.get('params2')
+                if params is not None:
+                    ip = params.get('ip')
+                    if ip is not None:
+                        ips.add(ip.split('/')[0])
+        return ips
 
     def check_host_valid_ip_from_name(self, host):
         """
@@ -280,10 +330,11 @@ class NetworkAPI:
         """
         Compute the next switch id that can be used.
         """
-        if len(self.switch_ids) == 0:
+        switch_ids = self.switch_ids()
+        if len(switch_ids) == 0:
             return base
         else:
-            return next_element(self.switch_ids, minimum=base)
+            return next_element(switch_ids, minimum=base)
 
     def next_port_num(self, node, node_ports, base=0):
         """
@@ -302,6 +353,37 @@ class NetworkAPI:
                 return next_element(ports_list, minimum=base)
         else:
             return base
+
+    def next_mac_address(self):
+        """
+        Generate the next MAC address, different from anyone already generated.
+        """
+        mac = rand_mac()
+        while mac in self.mac_addresses():
+            mac = rand_mac()
+        return mac
+
+    def auto_ip_address(self):
+        """
+        Generate the next IP address, different from anyone already generated.
+        """
+        ip_generator = self.ipv4_net.hosts()
+        ip = str(next(ip_generator))
+        prefixLen = str(self.ipv4_net.prefixlen)
+        while ip in self.ip_addresses():
+            ip = str(next(ip_generator))
+        return ip + '/' + prefixLen
+
+    def auto_assignment(self):
+        """
+        This function automatically assigns unique MACs and IPs to
+        all the devices which requires them (i.e. L2 and L3 devices
+        respectively).
+        """
+        pass
+
+    def get_default_intf(self, name):
+        pass
 
 ### API
 ## External modules management
@@ -326,6 +408,23 @@ class NetworkAPI:
         self.modules['topo']['kwargs'].update(kwargs)
         # Topology is instantiated right at the beginning
         self.topo = self.module('topo')
+
+    def setIPBase(self, ipBase):
+        """
+        Set the network in which all the L3 devices will be placed,
+        if no explicit assignment is performed (e.g. assignment strategies
+        or manual assignment).
+
+        Arguments:
+            ipBase (string): IP address/mask (e.g. '10.0.0.0/8')
+
+        Notice:
+            Remember that setting the IP base won't automatically change
+            the already assigned IP. If you want to specify a network
+            different from '10.0.0.0/8' (default one), please use this method
+            before any node is added to the network.
+        """
+        self.ipv4_net = IPv4Network(ipBase)
 
     def setCompiler(self, compilerClass=None, **kwargs):
         """
@@ -413,7 +512,8 @@ class NetworkAPI:
 ### Links
 ## Link setter
     def addLink(self, node1, node2, port1=None, port2=None,
-                intfName1=None, intfName2=None, key=None, **opts):
+                intfName1=None, intfName2=None, addr1=None,
+                addr2=None, key=None, **opts):
         """
         Add link between two nodes. If key is None, then the next
         ordinal number is used.
@@ -421,6 +521,7 @@ class NetworkAPI:
         Arguments:
             node1, node2 (string): nodes to link together
             port1, port2 (int)   : ports (optional)
+            addr1, addr2 (string): MAC addresses
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
             opts                 : link options (optional)
@@ -430,6 +531,10 @@ class NetworkAPI:
         """
         node_ports = self.node_ports()
         node_intfs = self.node_intfs()
+        mac_addresses = self.mac_addresses()
+        ip_addresses = self.ip_addresses()
+
+        # Ports
         if port1 is not None:
             if node1 in node_ports.keys():
                 if port1 in node_ports[node1].keys():
@@ -450,24 +555,65 @@ class NetworkAPI:
             else:
                 port2 = self.next_port_num(node2, node_ports)
 
+        # Interface names
         if intfName1 is not None:
             if node1 in node_intfs.keys():
                 if intfName1 in node_intfs[node1].keys():
-                    raise Exception('interface {} already present on node {}'.format(intfName1, node1))
+                    raise Exception('interface {} already present on node {}.'.format(intfName1, node1))
         else:
             intfName1 = self.intf_name(node1, port1)
 
         if intfName2 is not None:
             if node2 in node_intfs.keys():
                 if intfName2 in node_intfs[node2].keys():
-                    raise Exception('interface {} already present on node {}'.format(intfName2, node2))
+                    raise Exception('interface {} already present on node {}.'.format(intfName2, node2))
         else:
             intfName2 = self.intf_name(node2, port2)
+
+        # MACs
+        if addr1 is not None:
+            if addr1 in mac_addresses:
+                warning('MAC {} has been already assigned.\n'.format(addr1))
+
+        if addr2 is not None:
+            if addr2 in mac_addresses:
+                warning('MAC {} has been already assigned.\n'.format(addr2))
+
+        # IPs
+        if self.isSwitch(node1):
+            sw_ip1 = opts.get('sw_ip1')
+            if sw_ip1 is not None:
+                sw_ip = sw_ip1.split('/')[0]
+                if sw_ip in ip_addresses:
+                    warning('IP {} has been already assigned.\n'.format(sw_ip))
+        else:
+            params1 = opts.get('params1')
+            if params1 is not None:
+                ip1 = params1.get('ip')
+                if ip1 is not None:
+                    ip = ip1.split('/')[0]
+                    if ip in ip_addresses:
+                        warning('IP {} has been already assigned.\n'.format(ip))
+
+        if self.isSwitch(node2):
+            sw_ip2 = opts.get('sw_ip2')
+            if sw_ip2 is not None:
+                sw_ip = sw_ip2.split('/')[0]
+                if sw_ip in ip_addresses:
+                    warning('IP {} has been already assigned.\n'.format(sw_ip))
+        else:
+            params2 = opts.get('params2')
+            if params2 is not None:
+                ip2 = params2.get('ip')
+                if ip2 is not None:
+                    ip = ip2.split('/')[0]
+                    if ip in ip_addresses:
+                        warning('IP {} has been already assigned.\n'.format(ip))
 
         opts.setdefault('intf', TCIntf)
         return self.topo.addLink(node1, node2, port1=port1, port2=port2,
                                  intfName1=intfName1, intfName2=intfName2,
-                                 key=key, **opts)
+                                 addr1=addr1, addr2=addr2, key=key, **opts)
 
 ## Link getter
     def getLink(self, node1, node2, key=None):
@@ -618,14 +764,13 @@ class NetworkAPI:
         if 'dpid' in opts.keys():
             dpid = opts['dpid']
             switch_id = int(dpid, 16)
-            if switch_id in self.switch_ids:
+            if switch_id in self.switch_ids():
                 raise Exception('dpid {} already in use.'.format(dpid))
         else:
             switch_id = self.next_switch_id()
             dpid = dpidToStr(switch_id)
             opts['dpid'] = dpid
 
-        self.switch_ids.append(switch_id)
         return self.topo.addSwitch(name, **opts)
 
     def addP4Switch(self, name, **opts):
@@ -642,13 +787,12 @@ class NetworkAPI:
         """
         if 'device_id' in opts.keys():
             switch_id = opts['device_id']
-            if switch_id in self.switch_ids:
+            if switch_id in self.switch_ids():
                 raise Exception('switch ID {} already in use.'.format(switch_id))
         else:
             switch_id = self.next_switch_id()
             opts['device_id'] = switch_id
 
-        self.switch_ids.append(switch_id)
         opts.setdefault('cls', P4Switch)
         return self.topo.addP4Switch(name, **opts)
 
@@ -666,13 +810,12 @@ class NetworkAPI:
         """
         if 'device_id' in opts.keys():
             switch_id = opts['device_id']
-            if switch_id in self.switch_ids:
+            if switch_id in self.switch_ids():
                 raise Exception('switch ID {} already in use.'.format(switch_id))
         else:
             switch_id = self.next_switch_id()
             opts['device_id'] = switch_id
 
-        self.switch_ids.append(switch_id)
         opts.setdefault('cls', P4RuntimeSwitch)
         return self.topo.addP4RuntimeSwitch(name, **opts)
 
@@ -731,15 +874,6 @@ class NetworkAPI:
             node metadata dict
         """
         node = self.getNode(name)
-        switch_id = node.get('device_id')
-        if switch_id is not None:
-            self.switch_ids.remove(switch_id)
-        else:
-            # Non P4 switches have only dpid
-            dpid = node.get('dpid')
-            if dpid is not None:
-                switch_id = int(dpid, 16)
-                self.switch_ids.remove(switch_id)
         self.topo.deleteNode(name, remove_links=remove_links)
         return node
 
@@ -805,7 +939,7 @@ class NetworkAPI:
         return self.getNode(node).get('cpu_port', False)
 
 ## Lists of node names by type
-    def nodes(self, sort=True):
+    def nodes(self, sort=True, withInfo=False):
         """
         Return nodes.
         
@@ -815,9 +949,9 @@ class NetworkAPI:
         Returns:
            list of node names
         """
-        return self.topo.nodes(sort)
+        return self.topo.nodes(sort=sort, withInfo=withInfo)
 
-    def hosts(self, sort=True):
+    def hosts(self, sort=True, withInfo=False):
         """
         Return hosts.
         
@@ -827,9 +961,9 @@ class NetworkAPI:
         Returns:
            list of host names
         """
-        return self.topo.hosts(sort)
+        return self.topo.hosts(sort=sort, withInfo=withInfo)
 
-    def switches(self, sort=True):
+    def switches(self, sort=True, withInfo=False):
         """
         Return switches.
 
@@ -839,9 +973,9 @@ class NetworkAPI:
         Returns:
             list of switch names    
         """
-        return self.topo.switches(sort)
+        return self.topo.switches(sort=sort, withInfo=withInfo)
 
-    def p4switches(self, sort=True):
+    def p4switches(self, sort=True, withInfo=False):
         """
         Return P4 switches.
 
@@ -853,7 +987,7 @@ class NetworkAPI:
         """
         return self.topo.p4switches(sort)
 
-    def p4rtswitches(self, sort=True):
+    def p4rtswitches(self, sort=True, withInfo=False):
         """
         Return P4 runtime switches.
 
@@ -863,7 +997,7 @@ class NetworkAPI:
         Returns:
            list of P4 runtime switch names
         """
-        return self.topo.p4rtswitches(sort)
+        return self.topo.p4rtswitches(sort=sort, withInfo=withInfo)
 
 ## Hosts
     def setHostMAC(self, name, mac):
@@ -913,6 +1047,24 @@ class NetworkAPI:
         else:
             raise Exception('{} is not a host.'.format(name))
 
+## Switches
+    def setSwitchDpid(self, name, dpid):
+        """
+        Set Switch DPID. Only applies to non P4 switches
+        since their DPID is determined by their ID.
+
+        Arguments:
+            name (string): name of the P4 switch
+            dpid (string): switch DPID (16 hexadecimal characters)
+        """
+        if self.isSwitch(name):
+            if self.isP4Switch(name):
+                raise Exception('cannot set DPID to P4 switches.')
+            else:
+                self.updateNode(name, dpid=dpid)
+        else:
+            raise Exception('{} is not a switch.'.format(name))
+
 ## P4 Switches
     def setP4Source(self, name, p4_src):
         """
@@ -929,7 +1081,7 @@ class NetworkAPI:
         else:
             raise Exception('{} is not a P4 switch.'.format(name))
 
-    def setSwitchID(self, name, id):
+    def setP4SwitchID(self, name, id):
         """
         Set P4 Switch ID.
 

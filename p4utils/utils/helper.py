@@ -1,5 +1,7 @@
 import os
+import re
 import sys
+import random
 import psutil
 import mininet
 import hashlib
@@ -50,6 +52,41 @@ def next_element(elems, minimum=None, maximum=None):
                 return elem
     else:
         raise Exception('too many elements in the list.')
+
+
+def natural(text):
+    """
+    To sort sanely/alphabetically: sorted(l, key=natural).
+    """
+    def num(s):
+        """
+        Convert text segment to int if necessary.
+        """
+        return int(s) if s.isdigit() else s
+    return [num(s) for s in re.split(r'(\d+)', str(text))]
+
+
+def naturalSeq(t):
+    """
+    Natural sort key function for sequences.
+    """
+    return [ natural( x ) for x in t ]
+
+
+def rand_mac():
+    """
+    Return a random, non-multicast MAC address.
+    """
+    hex_str = hex(random.randint(1, 2**48-1) & 0xfeffffffffff | 0x020000000000)[2:]
+    hex_str = '0'*(12-len(hex_str)) + hex_str
+    mac_str = ''
+    i = 0
+    while i < len(hex_str):
+        mac_str += hex_str[i]
+        mac_str += hex_str[i+1]
+        mac_str += ':'
+        i += 2
+    return mac_str[:-1]
 
 
 def dpidToStr(id):

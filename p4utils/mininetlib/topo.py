@@ -109,41 +109,85 @@ class P4Topo(Topo):
         """
         return self.g.node[node].get('isP4RuntimeSwitch', False)
 
-    def hosts(self, sort=True):
+    def nodes(self, sort=True, withInfo=False):
+        """
+        Return nodes in graph.
+
+        Arguments:
+            sort (bool)    : sort nodes alphabetically
+            withInfo (bool): retrieve node information
+        """
+        nodes = self.g.nodes(data=withInfo)
+        if not sort:
+            return nodes
+        else:
+            # Ignore info when sorting
+            tupleSize = 2
+            return sorted(nodes, key=(lambda l: naturalSeq(l[:tupleSize])))
+
+    def hosts(self, sort=True, withInfo=False):
         """
         Return hosts.
         
         Arguments:
-           sort (bool): sort hosts alphabetically
+            sort (bool)    : sort hosts alphabetically
+            withInfo (bool): retrieve node information
 
         Returns:
-           list of hosts
+            list of hosts
         """
-        return [n for n in self.nodes(sort) if self.isHost(n)]
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isHost(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isHost(n)]
 
-    def p4switches(self, sort=True):
+    def switches(self, sort=True, withInfo=False):
+        """
+        Return switches.
+
+        Arguments:
+            sort (bool)    : sort switches alphabetically
+            withInfo (bool): retrieve node information
+           
+        Returns: 
+            list of switches
+        """
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isSwitch(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isSwitch(n)]
+    
+    def p4switches(self, sort=True, withInfo=False):
         """
         Return P4 switches.
 
         Arguments:
-           sort (bool): sort switches alphabetically
+            sort (bool)    : sort switches alphabetically
+            withInfo (bool): retrieve node information
 
         Returns:
-           list of P4 switches
+            list of P4 switches
         """
-        return [n for n in self.nodes(sort) if self.isP4Switch(n)]   
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isP4Switch(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4Switch(n)]
 
-    def p4rtswitches(self, sort=True):
+    def p4rtswitches(self, sort=True, withInfo=False):
         """
         Return P4 runtime switches.
 
         Arguments:
-           sort (bool): sort switches alphabetically
+            sort (bool)    : sort switches alphabetically
+            withInfo (bool): retrieve node information
 
         Returns:
-           list of P4 runtime switches
+            list of P4 runtime switches
         """
-        return [n for n in self.nodes(sort) if self.isP4RuntimeSwitch(n)]
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isP4RuntimeSwitch(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4RuntimeSwitch(n)]
 
     def deleteLink(self, node1, node2, key=None):
         """
