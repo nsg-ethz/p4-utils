@@ -1,4 +1,7 @@
 /* -*- P4_16 -*- */
+
+/* Code inspired by nsg/p4-learning and AdvNet course*/
+
 #include <core.p4>
 #include <v1model.p4>
 
@@ -122,6 +125,7 @@ control MyIngress(inout headers hdr,
         mark_to_drop(standard_metadata);
     }
 
+    // Forward ARP lookup for OSPF messages
     action arp_forward(egressSpec_t port) {
 
         //set the output port from the table
@@ -132,6 +136,7 @@ control MyIngress(inout headers hdr,
 
     }
 
+    // Forward OSPF packets (hello, DD, LSU, LSR, LSAck)
     action ospf_hello_forward(egressSpec_t port) {
 
         //set the output port from the table
@@ -140,6 +145,22 @@ control MyIngress(inout headers hdr,
         //decrease ttl by 1
         hdr.ipv4.ttl = hdr.ipv4.ttl -1;
 
+    }
+
+    // IPv4 forwarding between hosts and switches
+    action set_nhop(macAddr_t dstAddr, egressSpec_t port) {
+
+        //set the src mac address as the previous dst
+        hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
+
+        //set the destination mac address from the table
+        hdr.ethernet.dstAddr = dstAddr;
+
+        //set the output port that from the table
+        standard_metadata.egress_spec = port;
+
+        //decrease ttl by 1
+        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
     table arp{
@@ -168,6 +189,20 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
+    table ipv4_lpm {
+        key = {
+            hdr.ipv4.dstAddr: lpm;
+        }
+        actions = {
+            set_nhop;
+            drop;
+            
+        }
+        size = 1024;
+        default_action =  drop;
+    }
+
+
     apply {
 
         
@@ -191,9 +226,12 @@ control MyIngress(inout headers hdr,
                     
                         OSPF_type_register.write((bit<32>)hdr.ospf.type, hdr.ospf.type);
                     }
-
+                
                 }
-
+                else if (hdr.ipv4.protocol != 89){
+                // IP forwarding 
+                ipv4_lpm.apply();
+                }
             }
 
         }

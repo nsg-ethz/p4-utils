@@ -8,10 +8,52 @@ import socket
 import sys
 from struct import *
 import os
+import multiprocessing
 
 from importlib import import_module
 from pyroute2.common import load_dump
 from pyroute2.common import hexdump
+
+from p4utils.utils.topology import NetworkGraph
+from p4utils.utils.helper import load_topo
+from p4utils.utils.sswitch_thrift_API import SimpleSwitchThriftAPI
+
+class Controller(object):
+
+    def __init__(self):
+
+        self.topo = load_topo('topology.json')
+        self.controllers = {}
+        self.init()
+
+    def init(self):
+        self.connect_to_switches()
+        self.reset_states()
+        self.set_table_defaults()
+        self.set_table_entries()
+
+    
+    def reset_states(self):
+        [controller.reset_state() for controller in self.controllers.values()]
+
+    def connect_to_switches(self):
+        for p4switch in self.topo.get_p4switches():
+            
+            thrift_port = self.topo.get_thrift_port(p4switch)
+            num = sys.argv[1]
+
+            # Check for router namespace which matches switch
+            if num[1] == p4switch[1]:
+                self.controllers[p4switch] = SimpleSwitchThriftAPI(thrift_port, thrift_ip = "{}.0.0.{}".format(str(int(p4switch[1])*15), str(1)))
+
+    def set_table_defaults(self):
+        for controller in self.controllers.values():
+            pass
+            #controller.table_set_default("ipv4_lpm", "NoAction", [])
+
+    def set_table_entries(self):
+        pass
+    
 
 HOSTS = ['10.0.0.1', '10.0.0.2']
 PORT = 2621
@@ -57,7 +99,7 @@ def decoder(mod, data):
     fname = router+"route"+".data"
     
     f = open(fname,"a")
-    f.write(str(msg)+"\n")
+    f.write(str(msg["attrs"])+"\n")
     f.close()
 
     #print(msg)
@@ -126,12 +168,14 @@ def get_fpm(conn, addr):
         print('Connected with ' + addr[0] + ':' + str(addr[1]))
         flag = True
         while flag:
-            data = conn.recv(4096)
+            data = conn.recv(2048)
+            read_fpm_message(data)
+            return None
             if not data:
                 print("no data")
                 flag = False
-                #break
-            read_fpm_message(data)
+                conn.close()
+            
                 #conn.sendall(data)
     
 
@@ -152,5 +196,7 @@ def main():
     s.close()
 
 
+
 if __name__== "__main__":
     main()
+    controller = Controller()
