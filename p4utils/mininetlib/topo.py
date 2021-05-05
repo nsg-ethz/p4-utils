@@ -109,6 +109,18 @@ class P4Topo(Topo):
         """
         return self.g.node[node].get('isP4RuntimeSwitch', False)
 
+    def isNode(self, node):
+        """
+        Check if node exists.
+
+        Arguments:
+            node (string): node name
+
+        Returns:
+            True if node exists, else False (bool)
+        """
+        return node in self.g.nodes()
+
     def nodes(self, sort=True, withInfo=False):
         """
         Return nodes in graph.
