@@ -420,17 +420,17 @@ class NetworkAPI:
             # MACs
             addr1 = info.get('addr1')
             if addr1 is None:
-                mac1 = self.auto_mac_address()
-                self.setIntfMAC(node1, node2, mac1, key=key)
-                if def_intf1:
-                    self.setDefaultIntfMAC(node1, mac1)
+                addr1 = self.auto_mac_address()
+                self.setIntfMAC(node1, node2, addr1, key=key)
+            if def_intf1:
+                self.setDefaultIntfMAC(node1, addr1)
             
             addr2 = info.get('addr2')
             if addr2 is None:
-                mac2 = self.auto_mac_address()
-                self.setIntfMAC(node2, node1, mac2, key=key)
-                if def_intf2:
-                    self.setDefaultIntfMAC(node2, mac2)
+                addr2 = self.auto_mac_address()
+                self.setIntfMAC(node2, node1, addr2, key=key)
+            if def_intf2:
+                self.setDefaultIntfMAC(node2, addr2)
 
             # IPs
             if not self.isSwitch(node1):
@@ -438,30 +438,26 @@ class NetworkAPI:
                 if params1 is None:
                     ip1 = self.auto_ip_address()
                     self.setIntfIP(node1, node2, ip1, key=key)
-                    if def_intf1:
-                        self.setDefaultIntfIP(node1, ip1)
                 else:
                     ip1 = params1.get('ip')
                     if ip1 is None:
                         ip1 = self.auto_ip_address()
                         self.setIntfIP(node1, node2, ip1, key=key)
-                        if def_intf1:
-                            self.setDefaultIntfIP(node1, ip1)
+                if def_intf1:
+                    self.setDefaultIntfIP(node1, ip1)
 
             if not self.isSwitch(node2):
                 params2 = info.get('params2')
                 if params2 is None:
                     ip2 = self.auto_ip_address()
                     self.setIntfIP(node2, node1, ip2, key=key)
-                    if def_intf2:
-                        self.setDefaultIntfIP(node2, ip2)
                 else:
                     ip2 = params2.get('ip')
                     if ip2 is None:
                         ip2 = self.auto_ip_address()
                         self.setIntfIP(node2, node1, ip2, key=key)
-                        if def_intf2:
-                            self.setDefaultIntfIP(node2, ip2)
+                if def_intf2:
+                    self.setDefaultIntfIP(node2, ip2)
 
     def update_default_intfs(self):
         """
