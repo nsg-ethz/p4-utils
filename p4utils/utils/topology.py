@@ -58,7 +58,7 @@ class NetworkGraph(nx.Graph):
 
         for node in self.nodes:
             if self.isHost(node):
-                ip = self.nodes[node].get('ip', None)
+                ip = self.nodes[node].get('ip')
                 if ip is not None:
                     self.ip_to_host[ip.split("/")[0]] = {'name': node}
                     self.ip_to_host[ip.split("/")[0]].update(self.nodes[node])
@@ -107,7 +107,7 @@ class NetworkGraph(nx.Graph):
                 for node_b in self.edge_to_intf[node_a]:
                     reduced_intfs[node_a][node_b] = []
                     for field in fields:
-                        reduced_intfs[node_a][node_b].append(self.edge_to_intf[node_a][node_b].get(field, None))
+                        reduced_intfs[node_a][node_b].append(self.edge_to_intf[node_a][node_b].get(field))
                     reduced_intfs[node_a][node_b] = tuple(reduced_intfs[node_a][node_b])
                     if len(fields) == 1:
                         reduced_intfs[node_a][node_b] = reduced_intfs[node_a][node_b][0]
@@ -130,7 +130,7 @@ class NetworkGraph(nx.Graph):
                 for intf in self.node_to_intf[node]:
                     reduced_intfs[node][intf] = []
                     for field in fields:
-                        reduced_intfs[node][intf].append(self.node_to_intf[node][intf].get(field, None))
+                        reduced_intfs[node][intf].append(self.node_to_intf[node][intf].get(field))
                     reduced_intfs[node][intf] = tuple(reduced_intfs[node][intf])
                     if len(fields) == 1:
                         reduced_intfs[node][intf] = reduced_intfs[node][intf][0]
@@ -151,7 +151,7 @@ class NetworkGraph(nx.Graph):
             for node in nodes:
                 reduced_nodes[node] = []
                 for field in fields:
-                    reduced_nodes[node].append(nodes[node].get(field, None))
+                    reduced_nodes[node].append(nodes[node].get(field))
                 reduced_nodes[node] = tuple(reduced_nodes[node])
                 if len(fields) == 1:
                     reduced_nodes[node] = reduced_nodes[node][0]
@@ -173,7 +173,7 @@ class NetworkGraph(nx.Graph):
             for switch in switches:
                 reduced_switches[switch] = []
                 for field in fields:
-                    reduced_switches[switch].append(switches[switch].get(field, None))
+                    reduced_switches[switch].append(switches[switch].get(field))
                 reduced_switches[switch] = tuple(reduced_switches[switch])
                 if len(fields) == 1:
                     reduced_switches[switch] = reduced_switches[switch][0]
@@ -195,7 +195,7 @@ class NetworkGraph(nx.Graph):
             for p4switch in p4switches:
                 reduced_p4switches[p4switch] = []
                 for field in fields:
-                    reduced_p4switches[p4switch].append(p4switches[p4switch].get(field, None))
+                    reduced_p4switches[p4switch].append(p4switches[p4switch].get(field))
                 reduced_p4switches[p4switch] = tuple(reduced_p4switches[p4switch])
                 if len(fields) == 1:
                     reduced_p4switches[p4switch] = reduced_p4switches[p4switch][0]
@@ -217,7 +217,7 @@ class NetworkGraph(nx.Graph):
             for p4rtswitch in p4rtswitches:
                 reduced_p4rtswitches[p4rtswitch] = []
                 for field in fields:
-                    reduced_p4rtswitches[p4rtswitch].append(p4rtswitches[p4rtswitch].get(field, None))
+                    reduced_p4rtswitches[p4rtswitch].append(p4rtswitches[p4rtswitch].get(field))
                 reduced_p4rtswitches[p4rtswitch] = tuple(reduced_p4rtswitches[p4rtswitch])
                 if len(fields) == 1:
                     reduced_p4rtswitches[p4rtswitch] = reduced_p4rtswitches[p4rtswitch][0]
@@ -239,7 +239,7 @@ class NetworkGraph(nx.Graph):
             for host in hosts:
                 reduced_hosts[host] = []
                 for field in fields:
-                    reduced_hosts[host].append(hosts[host].get(field, None))
+                    reduced_hosts[host].append(hosts[host].get(field))
                 reduced_hosts[host] = tuple(reduced_hosts[host])
                 if len(fields) == 1:
                     reduced_hosts[host] = reduced_hosts[host][0]
@@ -261,7 +261,7 @@ class NetworkGraph(nx.Graph):
             for router in routers:
                 reduced_routers[router] = []
                 for field in fields:
-                    reduced_routers[router].append(routers[router].get(field, None))
+                    reduced_routers[router].append(routers[router].get(field))
                 reduced_routers[router] = tuple(reduced_routers[router])
                 if len(fields) == 1:
                     reduced_routers[router] = reduced_routers[router][0]
@@ -358,7 +358,7 @@ class NetworkGraph(nx.Graph):
     def node_to_node_interface_ip(self, node1, node2):
         """Return the ip_interface for node1 facing node2."""
         self.checkIntf(node1, node2)
-        return self.get_intfs()[node1][node2].get('ip', None)
+        return self.get_intfs()[node1][node2].get('ip')
 
     def node_to_node_interface_bw(self, node1, node2):
         """
@@ -366,14 +366,14 @@ class NetworkGraph(nx.Graph):
         If it is unlimited, return -1.
         """
         self.checkIntf(node1, node2)
-        if self.get_intfs()[node1][node2].get('bw', None) is None:
+        if self.get_intfs()[node1][node2].get('bw') is None:
             return -1
         else:
             return self.get_intfs()[node1][node2]['bw']
     
     def node_interface_ip(self, node, intf):
         """Returns the IP address of a given interface and node."""
-        ip = self._node_interface(node, intf).get('ip', None)
+        ip = self._node_interface(node, intf).get('ip')
         if ip is not None:
             return ip.split("/")[0]
         else:
@@ -381,7 +381,7 @@ class NetworkGraph(nx.Graph):
 
     def node_interface_bw(self, node, intf):
         """Returns the bw of a given interface and node."""
-        if self._node_interface(node, intf).get('bw', None) is None:
+        if self._node_interface(node, intf).get('bw') is None:
             return -1
         else:
             return self._node_interface(node, intf)['bw']
@@ -483,14 +483,15 @@ class NetworkGraph(nx.Graph):
         Returns:
             name of the host whose ip corresponds to the one provided
         """
-        host = self.ip_to_host.get(ip, None)
+        host = self.ip_to_host.get(ip)
         if host:
             return host['name']
         else:
             raise InvalidHostIP(ip)
         
     def get_host_first_interface(self, host):
-        """Returns the first interface from a host. Assume it's single-homed.
+        """
+        Returns the first interface from a host. Assume it's single-homed.
 
         Args:
             host: host name
@@ -517,7 +518,7 @@ class NetworkGraph(nx.Graph):
             name: host's name
         """
         if self.isHost(host):
-            ip = self.get_nodes()[host].get('ip', None)
+            ip = self.get_nodes()[host].get('ip')
             if ip is not None:
                 return ip.split("/")[0]
             else:
@@ -679,7 +680,7 @@ class NetworkGraph(nx.Graph):
             node2: dst node
         """
         self.checkIntf(node1, node2)
-        return self.get_intfs()[node1][node2].get('port', None)
+        return self.get_intfs()[node1][node2].get('port')
 
     def node_to_node_mac(self, node1, node2):
         """
@@ -690,7 +691,7 @@ class NetworkGraph(nx.Graph):
             node2: dst node
         """
         self.checkIntf(node1, node2)
-        return self.get_intfs()[node1][node2].get('addr', None)
+        return self.get_intfs()[node1][node2].get('addr')
 
     def total_number_of_paths(self):
         """Returns the total number of shortests paths between all host pairs in the network."""
