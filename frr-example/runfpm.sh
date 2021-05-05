@@ -3,7 +3,7 @@
 function spawn_fpm () {
     dest="$1"
     size=$2
-    tmux split-window -h -p "$size" -d "mx '$dest' python3 get_fpm.py '$dest'"
+    tmux split-window -h -p "$size" -d "mx '$dest' python3 fpmcontroller.py '$dest'"
 }
 
 while [ ! -z "$1" ]; do

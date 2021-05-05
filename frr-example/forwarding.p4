@@ -206,7 +206,7 @@ control MyIngress(inout headers hdr,
     apply {
 
         
-        // Forward ARP packets for resolution of address
+        // Forward ARP packets for resolution of address (needed for OSPF)
         if (hdr.ethernet.isValid()){
 
              if(hdr.ethernet.etherType == TYPE_ARP){
@@ -214,24 +214,28 @@ control MyIngress(inout headers hdr,
                 arp.apply();
              }
 
-            // only if IPV4 the rule is applied. Here only one type of IP packet = OSPF
+            // Only if IPV4 the rule is applied
             if (hdr.ipv4.isValid()){
-                //If packet is an OSPF packet
+
+                //If packet is an OSPF packet, then OSPF hellos must be routed.
                 if(hdr.ipv4.protocol == 89){
 
                     ospf_hello.apply();
 
                     if (hdr.ospf.isValid()){
                         // check which type of OSPF packets are being sent, register written with value at type index
-                    
+                        
                         OSPF_type_register.write((bit<32>)hdr.ospf.type, hdr.ospf.type);
                     }
                 
                 }
                 else if (hdr.ipv4.protocol != 89){
-                // IP forwarding 
-                ipv4_lpm.apply();
+
+                    // Apply IPv4 forwarding for non OSPF packets, from host to host
+                    ipv4_lpm.apply();
+
                 }
+                    
             }
 
         }
