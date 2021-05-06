@@ -1,5 +1,5 @@
 import os
-from copy import deepcopy
+from time import sleep
 from ipaddress import IPv4Network
 from networkx import MultiGraph, Graph
 from networkx.readwrite.json_graph import node_link_data
@@ -74,6 +74,20 @@ class NetworkAPI:
         cleanup()
 
 ## Utils
+    def is_multigraph(self):
+        """
+        Check whether the graph is a multigraph, i.e. it has multiple parallel
+        links.
+        """
+        multigraph = False
+        for node1 in self.nodes():
+            for node2 in self.nodes():
+                if self.areNeighbors(node1, node2):
+                    if len(self.topo._linkEntry(node1, node2)[0]) > 1:
+                        multigraph = True
+                        break
+        return multigraph
+
     def save_topology(self):
         """
         Saves mininet topology to a JSON file.
@@ -88,13 +102,7 @@ class NetworkAPI:
         info('Saving mininet topology to database: {}\n'.format(self.topoFile))
 
         # Check whether the graph is a multigraph or not
-        multigraph = False
-        for node1 in self.nodes():
-            for node2 in self.nodes():
-                if self.areNeighbors(node1, node2):
-                    if len(self.topo._linkEntry(node1, node2)[0]) > 1:
-                        multigraph = True
-                        break
+        multigraph = self.is_multigraph()
 
         if multigraph:
             debug('Multigraph topology selected.\n')
@@ -191,6 +199,23 @@ class NetworkAPI:
                 except P4InfoDisabled:
                     pass
 
+    def program_switches(self):
+        """
+        If any command files were provided for the switches, this method will start up the
+        CLI on each switch and use the contents of the command files as input.
+
+        Assumes:
+            self.sw_clients has been populated and self.net.start() has been called.
+        """
+        for p4switch, info in self.p4switches(withInfo=True):
+            print(info)
+            conf_path = info.get('conf_path')
+            thrift_port = info.get('thrift_port')
+            if conf_path is not None:
+                sw_client = self.module('sw_cli', thrift_port, p4switch, conf_path=conf_path)
+                sw_client.configure()
+                self.sw_clients.append(sw_client)
+
     def start_net_cli(self):
         """
         Starts up the mininet CLI and prints some helpful output.
@@ -241,10 +266,11 @@ class NetworkAPI:
         Returns:
             configured instance of the class of the module
         """
-        default_kwargs = deepcopy(self.modules[mod_name]['kwargs'])
+        default_kwargs = self.modules[mod_name]['kwargs']
         default_class = self.modules[mod_name]['class']
-        default_kwargs.update(kwargs)
-        return default_class(*args, **default_kwargs)
+        for key, value in default_kwargs.items():
+            kwargs.setdefault(key, value)
+        return default_class(*args, **kwargs)
 
     def node_ports(self):
         """
@@ -608,6 +634,11 @@ class NetworkAPI:
         info('Saving topology to disk...\n')
         self.save_topology()
         output('Topology saved to disk!\n')
+
+        sleep(1)
+        info('Programming switches...\n')
+        self.program_switches()
+        output('Switches programmed correctly!\n')
 
         if self.cli_enabled:
             self.start_net_cli()
@@ -1112,7 +1143,7 @@ class NetworkAPI:
         Returns:
            list of P4 switch names
         """
-        return self.topo.p4switches(sort)
+        return self.topo.p4switches(sort=sort, withInfo=withInfo)
 
     def p4rtswitches(self, sort=True, withInfo=False):
         """
@@ -1161,8 +1192,7 @@ class NetworkAPI:
         else:
             raise Exception('{} does not exists.'.format(name))
 
-# Hosts
-    def setHostDefaultRoute(self, name, default_route):
+    def setDefaultRoute(self, name, default_route):
         """
         Set the host's default route.
 
@@ -1196,7 +1226,7 @@ class NetworkAPI:
 ## P4 Switches
     def setP4Source(self, name, p4_src):
         """
-        Set p4 source for the switch and specify the options
+        Set the P4 source for the switch and specify the options
         for the P4C compiler.
 
         Arguments:
@@ -1206,6 +1236,16 @@ class NetworkAPI:
         """
         if self.isP4Switch(name):
             self.updateNode(name, p4_src=p4_src)
+        else:
+            raise Exception('{} is not a P4 switch.'.format(name))
+
+    def setP4CliInput(self, name, conf_path):
+        """
+        Set the path to the command line configuration file for
+        the Thrift capable switch.
+        """
+        if self.isP4Switch(name):
+            self.updateNode(name, conf_path=conf_path)
         else:
             raise Exception('{} is not a P4 switch.'.format(name))
 
@@ -1367,7 +1407,7 @@ class NetworkAPI:
         if self.isP4Switch(name):
             # We use the bridge but at the same time we use the bug it has so the
             # interfaces are not added to it, but at least we can clean easily thanks to that.
-            if not self.cpu_bridge:
+            if self.cpu_bridge is not None:
                 self.cpu_bridge = self.addSwitch('sw-cpu', cls=LinuxBridge, dpid='1000000000000000')
             self.addLink(name, self.cpu_bridge, intfName1='{}-cpu-eth0'.format(name), intfName2= '{}-cpu-eth1'.format(name), deleteIntfs=True)
             self.updateNode(name, cpu_port=True)
@@ -1398,6 +1438,11 @@ class NetworkAPI:
     def enableCpuPortAll(self):
         """
         Enable CPU port on all the P4 switches.
+
+        Notice:
+            This applies only to already defined switches. If other
+            switches are added after this command, they won't have
+            any CPU port enabled.
         """
         for switch in self.p4switches():
             self.enableCpuPort(switch)
@@ -1631,6 +1676,7 @@ class NetworkAPI:
         Assumptions:
             Each host is connected to one switch only.
             Only switches and hosts are allowed.
+            Parallel links are not allowed.
         """
         output('"l2" assignment strategy selected.\n')
         ip_generator = IPv4Network('10.0.0.0/16').hosts()
@@ -1638,6 +1684,9 @@ class NetworkAPI:
         assigned_ips = set()
 
         for node in self.nodes():
+            # Skip CPU switch
+            if node == 'sw-cpu':
+                continue
             if self.isHost(node):
                 # Reserve IPs for normal hosts
                 if self.check_host_valid_ip_from_name(node):
@@ -1650,7 +1699,13 @@ class NetworkAPI:
                 # If it is not a host, it must be a switch
                 assert self.isSwitch(node)
 
-        for node1, node2, key in self.links(withKeys=True):
+        # Check whether the graph is a multigraph
+        assert not self.is_multigraph()
+
+        for node1, node2 in self.links():
+            # Skip CPU switch
+            if node1 == 'sw-cpu' or node2 == 'sw-cpu':
+                continue
             # Node-switch link
             if self.isHost(node1):
                 host_name = node1
@@ -1690,3 +1745,264 @@ class NetworkAPI:
 
             self.setDefaultIntfIP(host_name, host_ip+'/16')
             self.setDefaultIntfMAC(host_name, host_mac)
+
+    def mixed(self):
+        """
+        Automated IP/MAC assignment strategy for already initialized 
+        links and nodes. All the hosts linked to a switch are placed
+        in the same subnetwork. Different switches (even those linked
+        together) are placed in different subnetworks.
+
+        Assumptions:
+            Each host is connected to one switch only.
+            Only switches and hosts are allowed.
+            Parallel links are not allowed.
+        """
+        output('"mixed" assignment strategy selected.\n')
+        reserved_ips = {}
+        assigned_ips = set()
+        sw_to_generator = {}
+        sw_to_id = {}
+
+        for node, info in self.nodes(withInfo=True):
+            # Skip CPU switch
+            if node == 'sw-cpu':
+                continue
+            if self.isSwitch(node):
+                # Generate a subnetwork per each switch
+                if self.isP4Switch(node):
+                    sw_id = info['device_id']
+                else:
+                    sw_id = int(info['dpid'], 16)
+                upper_bytex = (sw_id & 0xff00) >> 8
+                lower_bytex = (sw_id & 0x00ff)
+                net = '10.%d.%d.0/24' % (upper_bytex, lower_bytex)
+                sw_to_generator[node] = IPv4Network(str(net)).hosts()
+                sw_to_id[node] = sw_id
+            else:
+                # If it is not a switch, it must be a host
+                assert self.isHost(node)
+        
+        # Check whether the graph is a multigraph
+        assert not self.is_multigraph()
+
+        for node1, node2 in self.links():
+            # Skip CPU switch
+            if node1 == 'sw-cpu' or node2 == 'sw-cpu':
+                continue
+            # Node-switch link
+            if self.isHost(node1):
+                host_name = node1
+                direct_sw = node2
+                assert self.isSwitch(node2)
+            # Switch-node link
+            elif self.isHost(node2):
+                host_name = node2
+                direct_sw = node1
+                assert self.isSwitch(node1)
+            # Switch-switch link
+            else:
+                continue
+
+            sw_id = sw_to_id[direct_sw]
+            upper_byte = (sw_id & 0xff00) >> 8
+            lower_byte = (sw_id & 0x00ff)
+
+            # Reserve IPs for normal hosts
+            if self.check_host_valid_ip_from_name(host_name):
+                host_num = int(host_name[1:])
+                assert host_num < 254
+                host_ip = '10.%d.%d.%d' % (upper_byte, lower_byte, host_num)
+                reserved_ips[host_name] = host_ip
+
+        for node1, node2 in self.links():
+            # Skip CPU switch
+            if node1 == 'sw-cpu' or node2 == 'sw-cpu':
+                continue
+            # Node-switch link
+            if self.isHost(node1):
+                host_name = node1
+                direct_sw = node2
+                assert self.isSwitch(node2)
+            # Switch-node link
+            elif self.isHost(node2):
+                host_name = node2
+                direct_sw = node1
+                assert self.isSwitch(node1)
+            # Switch-switch link
+            else:
+                continue
+
+            sw_id = sw_to_id[direct_sw]
+            upper_byte = (sw_id & 0xff00) >> 8
+            lower_byte = (sw_id & 0x00ff)
+            ip_generator = sw_to_generator[direct_sw]
+
+            if self.check_host_valid_ip_from_name(host_name):
+                host_ip = reserved_ips[host_name]
+                # We check if for some reason the ip was already given by the ip_generator. 
+                # This can only happen if the host naming is not <h_x>.
+                # This should not be possible anymore since we reserve ips for h_x hosts.
+                while host_ip in assigned_ips:
+                    host_ip = str(next(ip_generator).compressed)
+                assigned_ips.add(host_ip)
+            else:
+                host_ip = next(ip_generator).compressed
+                # We check if for some reason the ip was already given by the ip_generator. 
+                # This can only happen if the host naming is not <h_x>.
+                # This should not be possible anymore since we reserve ips for h_x hosts.
+                while host_ip in assigned_ips or host_ip in list(reserved_ips.values()):
+                    host_ip = str(next(ip_generator).compressed)
+                assigned_ips.add(host_ip)
+
+            host_gw = '10.%d.%d.254' % (upper_byte, lower_byte)
+            host_mac = ip_address_to_mac(host_ip) % (0)
+            direct_sw_mac = ip_address_to_mac(host_ip) % (1)
+
+            self.setIntfMAC(host_name, direct_sw, host_mac)
+            self.setIntfMAC(direct_sw, host_name, direct_sw_mac)
+
+            self.setDefaultIntfMAC(host_name, host_mac)
+            self.setDefaultIntfIP(host_name, host_ip + '/24')
+            self.setDefaultRoute(host_name, host_gw)
+
+    def l3(self):
+        """
+        Automated IP/MAC assignment strategy for already initialized 
+        links and nodes. All the hosts have a different subnetwork shared
+        with the fake IP address of the switch port they are connected to.
+
+        Assumptions:
+            Each host is connected to one switch only.
+            Only switches and hosts are allowed.
+            Parallel links are not allowed.
+        """
+        output('"l3" assignment strategy selected.\n')
+        reserved_ips = {}
+        assigned_ips = set()
+        sw_to_next_available_host_id = {}
+        sw_to_id = {}
+
+        for node, info in self.nodes(withInfo=True):
+            # Skip CPU switch
+            if node == 'sw-cpu':
+                continue
+            if self.isSwitch(node):
+                # Generate a subnetwork per each switch
+                if self.isP4Switch(node):
+                    sw_id = info['device_id']
+                else:
+                    sw_id = int(info['dpid'], 16)
+                sw_to_next_available_host_id[node] = []
+                sw_to_id[node] = sw_id
+            else:
+                # If it is not a switch, it must be a host
+                assert self.isHost(node)
+
+        # Check whether the graph is a multigraph
+        assert not self.is_multigraph()
+
+        for node1, node2 in self.links():
+            # Skip CPU switch
+            if node1 == 'sw-cpu' or node2 == 'sw-cpu':
+                continue
+            # Node-switch link
+            if self.isHost(node1):
+                host_name = node1
+                direct_sw = node2
+                assert self.isSwitch(node2)
+            # Switch-node link
+            elif self.isHost(node2):
+                host_name = node2
+                direct_sw = node1
+                assert self.isSwitch(node1)
+            # Switch-switch link
+            else:
+                continue
+
+            # Reserve IPs for normal hosts
+            if self.check_host_valid_ip_from_name(host_name):
+                sw_id = sw_to_id[direct_sw]
+                host_num = int(host_name[1:])
+                assert host_num < 254
+                host_ip = '10.%d.%d.2' % (sw_id, host_num)
+                reserved_ips[host_name] = host_ip
+                sw_to_next_available_host_id[direct_sw].append(host_num)
+
+        for node1, node2 in self.links():
+            # Skip CPU switch
+            if node1 == 'sw-cpu' or node2 == 'sw-cpu':
+                continue
+            # Node-switch link
+            if self.isHost(node1):
+                host_name = node1
+                direct_sw = node2
+                assert self.isSwitch(node2)
+            # Switch-node link
+            elif self.isHost(node2):
+                host_name = node2
+                direct_sw = node1
+                assert self.isSwitch(node1)
+            # Switch-switch link
+            else:
+                continue
+
+            sw_id = sw_to_id[direct_sw]
+            assert sw_id < 254
+
+            if self.check_host_valid_ip_from_name(host_name):
+                host_num = int(host_name[1:])
+                assert host_num < 254
+                host_ip = '10.%d.%d.2' % (sw_id, host_num)
+                host_gw = '10.%d.%d.1' % (sw_id, host_num)
+                # We check if for some reason the ip was already given by the ip_generator. 
+                # This can only happen if the host naming is not <h_x>.
+                # This should not be possible anymore since we reserve ips for h_x hosts.
+                if host_ip in assigned_ips:
+                    raise Exception('{} has been already assigned to host.'.format(host_ip))
+                assigned_ips.add(host_ip)
+                if host_gw in assigned_ips:
+                    raise Exception('{} has been already assigned to host.'.format(host_gw))
+                assigned_ips.add(host_gw)
+            else:
+                host_num = next_element(sw_to_next_available_host_id[direct_sw], minimum=1, maximum=254)
+                host_ip = '10.%d.%d.2' % (sw_id, host_num)
+                host_gw = '10.%d.%d.1' % (sw_id, host_num)
+                # We check if for some reason the ip was already given by the ip_generator. 
+                # This can only happen if the host naming is not <h_x>.
+                # This should not be possible anymore since we reserve ips for h_x hosts.
+                if host_ip in assigned_ips:
+                    raise Exception('{} has been already assigned to host.'.format(host_ip))
+                assigned_ips.add(host_ip)
+                if host_gw in assigned_ips:
+                    raise Exception('{} has been already assigned to host.'.format(host_gw))
+                assigned_ips.add(host_gw)
+                sw_to_next_available_host_id[direct_sw].append(host_num)
+
+            host_mac = ip_address_to_mac(host_ip) % (0)
+            direct_sw_mac = ip_address_to_mac(host_ip) % (1)
+
+            self.setIntfMAC(host_name, direct_sw, host_mac)
+            self.setIntfMAC(direct_sw, host_name, direct_sw_mac)
+
+            self.setDefaultIntfMAC(host_name, host_mac)
+            self.setDefaultIntfIP(host_name, host_ip + '/24')
+            self.setDefaultRoute(host_name, host_gw)
+
+        for node1, node2 in self.links():
+            # Skip CPU switch
+            if node1 == 'sw-cpu' or node2 == 'sw-cpu':
+                continue
+            # Switch-switch link
+            if self.isSwitch(node1) and self.isSwitch(node2):
+                sw1_ip = '20.%d.%d.1/24' % (sw_to_id[node1], sw_to_id[node2])
+                sw2_ip = '20.%d.%d.2/24' % (sw_to_id[node1], sw_to_id[node2])
+                if sw1_ip in assigned_ips:
+                    raise Exception('{} has been already assigned to host.'.format(sw1_ip))
+                assigned_ips.add(sw1_ip)
+                if sw2_ip in assigned_ips:
+                    raise Exception('{} has been already assigned to host.'.format(sw2_ip))
+                assigned_ips.add(sw2_ip)
+
+                self.setIntfIP(node1, node2, sw1_ip) # Fake and real IPs are handled by the same method setIntfIP.
+                self.setIntfIP(node2, node1, sw2_ip) # Fake and real IPs are handled by the same method setIntfIP.
