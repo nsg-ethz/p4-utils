@@ -10,6 +10,7 @@ import sys
 from struct import *
 import os
 import multiprocessing
+import time
 
 from importlib import import_module
 from pyroute2.common import load_dump
@@ -31,7 +32,12 @@ class Controller(object):
     # Initialization of controller for switches
     def init(self):
         self.connect_to_switches()
+        self.reset_states()
         self.set_table_defaults()
+
+    def reset_states(self):
+        for controller in self.controllers.values():
+            controller.table_clear("ipv4_lpm")
         
     # Connect to fake IP based thrift port on the switches to access it
     def connect_to_switches(self):
@@ -55,8 +61,16 @@ class Controller(object):
         print(fib)
 
         for sw_name, controller in self.controllers.items():
-            
 
+            # Can only use if running all routers parallely via a script, else concurrency issues
+            # Adding table entries for OSPF_hello and ARP    
+            """self.controllers[sw_name].table_add("arp", "arp_forward", [str(2)], [str(5)])
+            self.controllers[sw_name].table_add("arp", "arp_forward", [str(5)], [str(2)])
+            
+            self.controllers[sw_name].table_add("ospf_hello", "ospf_hello_forward", [str(2)], [str(5)])
+            self.controllers[sw_name].table_add("ospf_hello", "ospf_hello_forward", [str(5)], [str(2)])"""
+
+            
             for host in self.topo.get_hosts_connected_to(sw_name):
 
                 host_ip = self.topo.get_host_ip(host) + "/24"
@@ -81,7 +95,7 @@ class Controller(object):
                 else:
                     sw_port = 2
                 
-                print()
+                print(sw_port)
 
                 print ("table_add at {}:".format(sw_name))
                 self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(host_mac), str(sw_port)])
