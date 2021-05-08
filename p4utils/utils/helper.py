@@ -40,18 +40,25 @@ def next_element(elems, minimum=None, maximum=None):
     elements = set(elems)
     if len(elems) != len(elements):
         raise Exception('the list contains duplicates.')
-    if minimum is None:
-        minimum = min(elements)
-    if maximum is None:
-        maximum = max(elements)
-    if len(elements) == (maximum - minimum) + 1:
-        return maximum + 1
-    elif len(elements) < (maximum - minimum) + 1:
-        for elem in range(minimum, maximum+1):
-            if elem not in elements:
-                return elem
+    if len(elems) == 0:
+        return minimum
     else:
-        raise Exception('too many elements in the list.')
+        if maximum is None:
+            maximum = max(elements)
+        if minimum is None:
+            minimum = min(elements)
+        else:
+            for elem in elements:
+                if elem < minimum:
+                    elements.pop(elem)
+        if len(elements) == (maximum - minimum) + 1:
+            return maximum + 1
+        elif len(elements) < (maximum - minimum) + 1:
+            for elem in range(minimum, maximum+1):
+                if elem not in elements:
+                    return elem
+        else:
+            raise Exception('too many elements in the list.')
 
 
 def natural(text):
