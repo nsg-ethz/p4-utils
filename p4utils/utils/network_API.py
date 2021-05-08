@@ -209,7 +209,8 @@ class NetworkAPI:
         CLI on each switch and use the contents of the command files as input.
 
         Assumes:
-            self.sw_clients has been populated and self.net.start() has been called.
+            A mininet instance is stored as self.net.
+            self.net.start() has been called.
         """
         for p4switch, info in self.p4switches(withInfo=True):
             conf_path = info.get('conf_path')
@@ -224,45 +225,53 @@ class NetworkAPI:
         Adds static and default routes ARP entries to each mininet host.
 
         Assumes:
-            A mininet instance is stored as self.net and self.net.start() has been called.
+            Each host is connected to one switch only.
+            Only switches and hosts are allowed.
+            The gateway is directly connected to the host via its default interface.
+            A mininet instance is stored as self.net.
+            self.net.start() has been called.
         """
-        ## Not working now...
-        for host_name, host_info in self.hosts(withInfo=True):
-            h = self.net.get(host_name)
+        for host1 in self.hosts():
 
-            # Ensure each host's interface name is unique, or else
-            # mininet cannot shutdown gracefully
-            h_iface = list(h.intfs.values())[0]
-
-            if self.auto_gw_arp:
-                # if there is gateway assigned
-                if 'defaultRoute' in h.params:
-                    link = h_iface.link
-                    sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
-                    gw_ip = h.params['defaultRoute'].split()[-1]
-                    h.setARP(gw_ip, sw_iface.mac)
+            # Get mininet node
+            h1 = self.net.get(host1)
             
+            # Set gateway static ARP
+            if self.auto_gw_arp:
+                # If there is gateway assigned
+                if 'defaultRoute' in h1.params:
+                    # Get default interface
+                    h1_def_intf = h.defaultIntf()
+                    link = h1_def_intf.link
+                    gw_intf = link.intf1 if link.intf1 != h1_def_intf else link.intf2
+                    gw_ip = h1.params['defaultRoute'].split()[-1]
+                    h.setARP(gw_ip, gw_intf.mac)
+            
+            # Set static ARP entries
             if self.auto_arp_tables:
-                # set arp rules for all the hosts in the same subnet
-                host_address = ip_interface('{}/{}'.format(h.IP(), self.topo.host_info["mask"]))
-                for hosts_same_subnet in self.topo.hosts():
-                    if hosts_same_subnet == host_name:
-                        continue
+                for intf1 in h1.intfs.values():
+                    # Set arp rules for all the hosts in the same subnet
+                    h1_intf_addr = ip_interface('{}/{}'.format(intf1.ip, intf1.prefixLen))
 
-                    #check if same subnet
-                    other_host_address = ip_interface(str("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
-                                                                            self.topo.hosts_info[hosts_same_subnet]["mask"])))
+                    for host2 in self.hosts():
+                        if host1 == host2:
+                            continue
 
-                    if host_address.network.compressed == other_host_address.network.compressed:
-                        h.setARP(self.topo.hosts_info[hosts_same_subnet]['ip'], self.topo.hosts_info[hosts_same_subnet]['mac'])
+                        h2 = self.net.get(host2) 
 
+                        for intf2 in h2.intfs.values():
+                            h2_intf_addr = ip_interface('{}/{}'.format(intf2.ip, intf2.prefixLen))
+
+                            if h1_intf_addr.network.compressed == h2_intf_addr.network.compressed:
+                                h1.setARP(intf2.ip, intf2.mac)
 
     def start_net_cli(self):
         """
         Starts up the mininet CLI and prints some helpful output.
 
         Assumes:
-            A mininet instance is stored as self.net and self.net.start() has been called.
+            A mininet instance is stored as self.net.
+            self.net.start() has been called.
         """
         for switch in self.net.switches:
             if self.topo.isP4Switch(switch.name):
@@ -824,9 +833,9 @@ class NetworkAPI:
         self.program_switches()
         output('Switches programmed correctly!\n')
 
-        # info('Programming hosts...\n')
-        # self.program_hosts()
-        # output('Hosts programmed correctly!\n')
+        info('Programming hosts...\n')
+        self.program_hosts()
+        output('Hosts programmed correctly!\n')
 
         if self.cli_enabled:
             self.start_net_cli()
@@ -858,7 +867,7 @@ class NetworkAPI:
            link info key
 
         Notice:
-            If not specified all the optional fields are assigned automatically
+            If not specified, all the optional fields are assigned automatically
             by the method self.auto_assignment before the network is started.
             The interface names must not be in the canonical format (i.e. 'node-ethN'
             where N is the port number of the interface) because the automatic
