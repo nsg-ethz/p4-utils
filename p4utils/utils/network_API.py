@@ -471,11 +471,8 @@ class NetworkAPI:
         Returns:
             the computed switch id (int)
         """
-        switch_ids = self.switch_ids()
-        if len(switch_ids) == 0:
-            return base
-        else:
-            return next_element(switch_ids, minimum=base)
+        switch_ids = self.switch_ids().union(self.grpc_ports())
+        return next_element(switch_ids, minimum=base)
 
     def auto_grpc_port(self, base=9559):
         """
@@ -487,11 +484,8 @@ class NetworkAPI:
         Returns:
             the computed grpc port (int)
         """
-        grpc_ports = self.grpc_ports()
-        if len(grpc_ports) == 0:
-            return base
-        else:
-            return next_element(grpc_ports, minimum=base)
+        grpc_ports = self.grpc_ports().union(self.thrift_ports())
+        return next_element(grpc_ports, minimum=base)
 
     def auto_thrift_port(self, base=9090):
         """
@@ -504,10 +498,7 @@ class NetworkAPI:
             the computed thrift port (int)
         """
         thrift_ports = self.thrift_ports()
-        if len(thrift_ports) == 0:
-            return base
-        else:
-            return next_element(thrift_ports, minimum=base)
+        return next_element(thrift_ports, minimum=base)
 
     def auto_port_num(self, node, base=0):
         """
@@ -522,10 +513,7 @@ class NetworkAPI:
         ports = self.node_ports().get(node)
         if ports is not None:
             ports_list = list(ports.keys())
-            if len(ports_list) == 0:
-                return base
-            else:
-                return next_element(ports_list, minimum=base)
+            return next_element(ports_list, minimum=base)
         else:
             return base
 

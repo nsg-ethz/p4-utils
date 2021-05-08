@@ -35,7 +35,8 @@ def merge_dict(dst, src):
 def next_element(elems, minimum=None, maximum=None):
     """
     Given a list of integers, return the next number not
-    already present in the set.
+    already present in the set starting from minimum and
+    ending in maximum.
     """
     elements = set(elems)
     if len(elems) != len(elements):
@@ -48,9 +49,15 @@ def next_element(elems, minimum=None, maximum=None):
         if minimum is None:
             minimum = min(elements)
         else:
+            # Remove elements lower than minimum
+            del_elements = set()
             for elem in elements:
                 if elem < minimum:
-                    elements.pop(elem)
+                    del_elements.add(elem)
+            elements.difference(del_elements)
+            # Update maximum
+            maximum = max(maximum, minimum)
+
         if len(elements) == (maximum - minimum) + 1:
             return maximum + 1
         elif len(elements) < (maximum - minimum) + 1:
