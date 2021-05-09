@@ -54,7 +54,7 @@ def next_element(elems, minimum=None, maximum=None):
             for elem in elements:
                 if elem < minimum:
                     del_elements.add(elem)
-            elements.difference(del_elements)
+            elements.difference_update(del_elements)
             # Update maximum
             maximum = max(maximum, minimum)
 

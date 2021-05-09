@@ -5,6 +5,7 @@ from networkx import MultiGraph, Graph
 from networkx.readwrite.json_graph import node_link_data
 from mininet.link import TCIntf
 from mininet.nodelib import LinuxBridge
+from mininet.topo import Topo
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info, output, debug, warning
 
@@ -14,14 +15,15 @@ from p4utils.utils.compiler import P4C
 from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.node import *
 from p4utils.mininetlib.net import P4Mininet
-from p4utils.mininetlib.topo import P4Topo
 
 
-class NetworkAPI:
+class NetworkAPI(Topo):
     """
     Network definition and initialization API.
     """
-    def __init__(self):
+    def __init__(self, *args, **params):
+        # Init superclass
+        super().__init__(*args, **params)
         # Set log level
         setLogLevel('output')
         # Name of the CPU bridge
@@ -39,14 +41,6 @@ class NetworkAPI:
 
         ## External modules default configuration dictionary
         self.modules = {}
-
-        # Topology module
-        self.modules['topo'] = {}
-        self.modules['topo']['class'] = P4Topo
-        # Default kwargs
-        self.modules['topo']['kwargs'] = {}
-        # Topology is instantiated right at the beginning
-        self.topo = self.module('topo')
 
         # Network module
         self.modules['net'] = {}
@@ -87,7 +81,7 @@ class NetworkAPI:
         for node1 in self.nodes():
             for node2 in self.nodes():
                 if self.areNeighbors(node1, node2):
-                    if len(self.topo._linkEntry(node1, node2)[0]) > 1:
+                    if len(self._linkEntry(node1, node2)[0]) > 1:
                         multigraph = True
                         break
         return multigraph
@@ -110,10 +104,10 @@ class NetworkAPI:
 
         if multigraph:
             debug('Multigraph topology selected.\n')
-            graph = self.topo.g.convertTo(MultiGraph, data=True, keys=True)
+            graph = self.g.convertTo(MultiGraph, data=True, keys=True)
         else:
             debug('Simple graph topology selected.\n')
-            graph = self.topo.g.convertTo(NetworkGraph, data=True, keys=False)
+            graph = self.g.convertTo(NetworkGraph, data=True, keys=False)
             
             for _, _, params in graph.edges(data=True):
                 
@@ -223,47 +217,65 @@ class NetworkAPI:
     def program_hosts(self):
         """
         Adds static and default routes ARP entries to each mininet host.
+        Multihomed hosts are allowed.
 
         Assumes:
-            Each host is connected to one switch only.
             Only switches and hosts are allowed.
-            The gateway is directly connected to the host via its default interface.
+            No duplicated IP addresses exist in the Network (e.g. no NAT allowed
+            for the same subnet).
             A mininet instance is stored as self.net.
             self.net.start() has been called.
         """
-        for host1 in self.hosts():
-
+        for host1, info in self.hosts(withInfo=True):
             # Get mininet node
             h1 = self.net.get(host1)
-            
             # Set gateway static ARP
             if self.auto_gw_arp:
                 # If there is gateway assigned
                 if 'defaultRoute' in h1.params:
-                    # Get default interface
-                    h1_def_intf = h.defaultIntf()
-                    link = h1_def_intf.link
-                    gw_intf = link.intf1 if link.intf1 != h1_def_intf else link.intf2
+                    # Get gateway IP
                     gw_ip = h1.params['defaultRoute'].split()[-1]
-                    h.setARP(gw_ip, gw_intf.mac)
+                    for node in self.nodes():
+                        if host1 == node:
+                            continue
+                        n = self.net.get(node)
+                        # If it is a switch, handle fake IPs
+                        if self.isSwitch(node):
+                            for intf in n.intfs.values():
+                                # Get link from interface
+                                link = intf.link
+                                # Get fake IP
+                                n_ip = intf.params.get('sw_ip1') if intf == link.intf1 else intf.params.get('sw_ip2')
+                                # Check if the IPs match and set ARP
+                                if n_ip == gw_ip:
+                                    h1.setARP(gw_ip, intf.mac)
+                        else:
+                            for intf in n.intfs.values():
+                                n_ip = intf.ip
+                                if n_ip == gw_ip:
+                                    h1.setARP(gw_ip, intf.mac)
             
             # Set static ARP entries
             if self.auto_arp_tables:
                 for intf1 in h1.intfs.values():
                     # Set arp rules for all the hosts in the same subnet
-                    h1_intf_addr = ip_interface('{}/{}'.format(intf1.ip, intf1.prefixLen))
-
+                    h1_intf_ip = ip_interface('{}/{}'.format(intf1.ip, intf1.prefixLen))
                     for host2 in self.hosts():
                         if host1 == host2:
                             continue
-
                         h2 = self.net.get(host2) 
-
                         for intf2 in h2.intfs.values():
-                            h2_intf_addr = ip_interface('{}/{}'.format(intf2.ip, intf2.prefixLen))
-
-                            if h1_intf_addr.network.compressed == h2_intf_addr.network.compressed:
+                            # Get the other interface's IP
+                            h2_intf_ip = ip_interface('{}/{}'.format(intf2.ip, intf2.prefixLen))
+                            # Check if the subnet is the same
+                            if h1_intf_ip.network.compressed == h2_intf_ip.network.compressed:
                                 h1.setARP(intf2.ip, intf2.mac)
+
+            # Set DHCP autoconfiguration
+            if info.get('dhcp', False):
+                for intf1 in h1.intfs.values():
+                    h1.cmd('dhclient -r {}'.format(intf1.name))
+                    h1.cmd('dhclient {} &'.format(intf1.name))
 
     def start_net_cli(self):
         """
@@ -274,7 +286,7 @@ class NetworkAPI:
             self.net.start() has been called.
         """
         for switch in self.net.switches:
-            if self.topo.isP4Switch(switch.name):
+            if self.isP4Switch(switch.name):
                 switch.describe()
         for host in self.net.hosts:
             host.describe()
@@ -331,8 +343,12 @@ class NetworkAPI:
         for _, _, key, info in self.links(withKeys=True, withInfo=True):
             ports.setdefault(info['node1'], {})
             ports.setdefault(info['node2'], {})
-            ports[info['node1']].update({info['port1'] : (info['node1'], info['node2'], key)})
-            ports[info['node2']].update({info['port2'] : (info['node2'], info['node1'], key)})
+            port1 = info.get('port1')
+            if port1 is not None:
+                ports[info['node1']].update({port1 : (info['node1'], info['node2'], key)})
+            port2 = info.get('port2')
+            if port2 is not None:
+                ports[info['node2']].update({port2 : (info['node2'], info['node1'], key)})
         return ports
 
     def node_intfs(self):
@@ -344,8 +360,12 @@ class NetworkAPI:
         for _, _, key, info in self.links(withKeys=True, withInfo=True):
             ports.setdefault(info['node1'], {})
             ports.setdefault(info['node2'], {})
-            ports[info['node1']].update({info['intfName1'] : (info['node1'], info['node2'], key)})
-            ports[info['node2']].update({info['intfName2'] : (info['node2'], info['node1'], key)})     
+            intfName1 = info.get('intfName1')
+            if intfName1 is not None:
+                ports[info['node1']].update({intfName1 : (info['node1'], info['node2'], key)})
+            intfName2 = info.get('intfName2')
+            if intfName2 is not None:
+                ports[info['node2']].update({intfName2 : (info['node2'], info['node1'], key)})     
         return ports
 
     def switch_ids(self):
@@ -556,6 +576,7 @@ class NetworkAPI:
         to the devices which require them. When a default interface is
         encountered, the respective device entry is updated.
         """
+        # Set nodes' parameters automatically
         for node, info in self.nodes(withInfo=True):
 
             if self.isP4Switch(node):
@@ -588,21 +609,34 @@ class NetworkAPI:
                     device_id = self.auto_switch_id()
                     dpid = dpidToStr(device_id)
                     self.setSwitchDpid(node, dpid)
-            
+
+        # Set links' parameters automatically
         for node1, node2, key, info in self.links(withKeys=True, withInfo=True):
-            
-            # Check if there are default interfaces
-            def_intf1 = self.isDefaultIntf(node1, node2, key=key)
-            def_intf2 = self.isDefaultIntf(node2, node1, key=key)
+
+            # Port numbers
+            port1 = info.get('port1')
+            if port1 is None:
+                if self.isSwitch(node1):
+                    port1 = self.auto_port_num(node1, base=1)
+                else:
+                    port1 = self.auto_port_num(node1)
+                self.setIntfPort(node1, node2, port1, key=key)
+
+            port2 = info.get('port2')
+            if port2 is None:
+                if self.isSwitch(node2):
+                    port2 = self.auto_port_num(node2, base=1)
+                else:
+                    port2 = self.auto_port_num(node2)
+                self.setIntfPort(node2, node1, port2, key=key)
 
             # Interface names
-            port1 = info.get('port1')
             intfName1 = info.get('intfName1')
             if intfName1 is None:
                 intfName1 = self.intf_name(node1, port1)
                 self.setIntfName(node1, node2, intfName1, key=key)
             
-            port2 = info.get('port2')
+            
             intfName2 = info.get('intfName2')
             if intfName2 is None:
                 intfName2 = self.intf_name(node2, port2)
@@ -613,15 +647,11 @@ class NetworkAPI:
             if addr1 is None:
                 addr1 = self.auto_mac_address()
                 self.setIntfMac(node1, node2, addr1, key=key)
-            if def_intf1:
-                self.setDefaultIntfMac(node1, addr1)
             
             addr2 = info.get('addr2')
             if addr2 is None:
                 addr2 = self.auto_mac_address()
                 self.setIntfMac(node2, node1, addr2, key=key)
-            if def_intf2:
-                self.setDefaultIntfMac(node2, addr2)
 
             # IPs
             if not self.isSwitch(node1):
@@ -634,8 +664,6 @@ class NetworkAPI:
                     if ip1 is None:
                         ip1 = self.auto_ip_address()
                         self.setIntfIp(node1, node2, ip1, key=key)
-                if def_intf1:
-                    self.setDefaultIntfIp(node1, ip1)
 
             if not self.isSwitch(node2):
                 params2 = info.get('params2')
@@ -647,22 +675,61 @@ class NetworkAPI:
                     if ip2 is None:
                         ip2 = self.auto_ip_address()
                         self.setIntfIp(node2, node1, ip2, key=key)
-                if def_intf2:
-                    self.setDefaultIntfIp(node2, ip2)
+            
+        # Update hosts' default interfaces
+        for node1, node2, key, info in self.links(withKeys=True, withInfo=True):
 
-    def update_default_intfs(self):
+            if self.isHost(node1):
+                # Check if it is a default interfaces
+                if self.is_default_intf(node1, node2, key=key):
+                    self.setDefaultIntfMac(node1, info['addr1'])
+                    self.setDefaultIntfIp(node1, info['params1']['ip'])
+
+            if self.isHost(node2):
+                 # Check if it is a default interfaces
+                if self.is_default_intf(node2, node1, key=key):
+                    self.setDefaultIntfMac(node2, info['addr2'])
+                    self.setDefaultIntfIp(node2, info['params2']['ip'])
+
+    def get_default_intf(self, node1):
         """
-        If a default interface parameter has been set, set the corresponding
-        link parameter.
+        Return the tuple (node1, node2, key) identifying the
+        default interface.
         """
-        for node, info in self.nodes(withInfo=True):
-            def_mac = info.get('mac')
-            node1, node2, key = self.getDefaultIntf(node)
-            if def_mac is not None:
-                self.setIntfMac(node1, node2, def_mac, key=key)
-            def_ip = info.get('ip')
-            if def_ip is not None:
-                self.setIntfIp(node1, node2, def_ip, key=key)
+        if self.isNode(node1):
+            node_ports = self.node_ports()
+            ports = node_ports.get(node1)
+            if ports is not None:
+                return ports[min(node_ports[node1].keys())]
+            else:
+                warning('node {} has no incident links.\n'.format(node1))
+                return None, None, None
+        else:
+            raise Exception('"{}" does not exist.'.format(node1))
+
+    def is_default_intf(self, node1, node2, key=None):
+        """
+        Check if the specified interface is the default one for node1.
+        
+        Arguments:
+            node1, node2 (string): nodes linked together
+            key (int)            : id used to identify multiple edges which
+                                   link two same nodes (optional)
+
+        Returns:
+            True if the interface is default, False else
+
+        Notice:
+            Since interfaces can be removed, the default interface
+            may change during the definition of the network. So this is
+            reliable only if no other interfaces are added/removed afterwards.
+        """
+        assert self.isNode(node1)
+        assert self.isNode(node2)
+        def_intf = self.get_default_intf(node1)
+        _, key = self._linkEntry(node1, node2, key=key)
+        intf = (node1, node2, key)
+        return def_intf == intf
 
 ### API
 ## External modules management
@@ -675,18 +742,6 @@ class NetworkAPI:
                                'warning', 'error', 'critical'.
         """
         setLogLevel(logLevel)
-
-    def setTopo(self, topoClass=None, **kwargs):
-        """
-        Set the default topology class and options.
-        This deletes all the informations (links, nodes) previously
-        added.
-        """
-        if topoClass is not None:
-            self.modules['topo']['class'] = topoClass
-        self.modules['topo']['kwargs'].update(kwargs)
-        # Topology is instantiated right at the beginning
-        self.topo = self.module('topo')
 
     def setIpBase(self, ipBase):
         """
@@ -804,9 +859,6 @@ class NetworkAPI:
         Once the topology has been created, create and start the Mininet network.
         If enabled, start the client.
         """
-        debug('Updating default interfaces...\n')
-        self.update_default_intfs()
-
         debug('Auto configuration of not configured interfaces...\n')
         self.auto_assignment()
         
@@ -817,7 +869,7 @@ class NetworkAPI:
         self.printPortMapping()
 
         info('Creating network...\n')
-        self.net = self.module('net', topo=self.topo, controller=None)
+        self.net = self.module('net', topo=self, controller=None)
         output('Network created!\n')
 
         info('Starting network...\n')
@@ -847,8 +899,7 @@ class NetworkAPI:
 ### Links
 ## Link setter
     def addLink(self, node1, node2, port1=None, port2=None,
-                intfName1=None, intfName2=None, addr1=None,
-                addr2=None, key=None, weight=1, **opts):
+                key=None, **opts):
         """
         Add link between two nodes. If key is None, then the next
         ordinal number is used.
@@ -856,12 +907,15 @@ class NetworkAPI:
         Arguments:
             node1, node2 (string)        : nodes to link together
             port1, port2 (int)           : ports (optional)
-            intfName1, intfName2 (string): names of the interfaces (optional)
-            addr1, addr2 (string)        : MAC addresses (optional)
             key (int)                    : id used to identify multiple edges which
                                            link two same nodes (optional)
+            opts                         : link options as listed below (optional)
+    
+        Link options:
+            intfName1, intfName2 (string): names of the interfaces (optional)
+            addr1, addr2 (string)        : MAC addresses (optional)
+            
             weight (int)                 : weight used to compute shortest paths
-            opts                         : link options (optional)
         
         Returns:
            link info key
@@ -887,38 +941,32 @@ class NetworkAPI:
             if node1 in node_ports.keys():
                 if port1 in node_ports[node1].keys():
                     raise Exception('port {} already present on node "{}".'.format(port1, node1))
-        else:
-            if self.isSwitch(node1):
-                port1 = self.auto_port_num(node1, base=1)
-            else:
-                port1 = self.auto_port_num(node1)
 
         if port2 is not None:
             if node2 in node_ports.keys():
                 if port2 in node_ports[node2].keys():
                     raise Exception('port {} already present on node "{}".'.format(port2, node2))
-        else:
-            if self.isSwitch(node2):
-                port2 = self.auto_port_num(node2, base=1)
-            else:
-                port2 = self.auto_port_num(node2)
 
         # Interface names
+        intfName1 = opts.get('intfName1')
         if intfName1 is not None:
             if node1 in node_intfs.keys():
                 if intfName1 in node_intfs[node1].keys():
                     raise Exception('interface "{}" already present on node "{}".'.format(intfName1, node1))
 
+        intfName2 = opts.get('intfName2')
         if intfName2 is not None:
             if node2 in node_intfs.keys():
                 if intfName2 in node_intfs[node2].keys():
                     raise Exception('interface "{}" already present on node "{}".'.format(intfName2, node2))
 
         # MACs
+        addr1 = opts.get('addr1')
         if addr1 is not None:
             if addr1 in mac_addresses:
                 warning('Node "{}": MAC {} has been already assigned.\n'.format(node1, addr1))
 
+        addr2 = opts.get('addr2')
         if addr2 is not None:
             if addr2 in mac_addresses or addr1 == addr2:
                 warning('Node "{}": MAC {} has been already assigned.\n'.format(node2, addr2))
@@ -956,11 +1004,18 @@ class NetworkAPI:
                     if ip2 in ip_addresses or ip1 == ip2:
                         warning('Node "{}": IP {} has been already assigned.\n'.format(node2, ip2))
 
+        # Modified version of the mininet addLink. Built-in port numbering removed.
+        # (see https://github.com/mininet/mininet/blob/master/mininet/topo.py#L151)
+        if not opts and self.lopts:
+            opts = self.lopts
+        opts = dict(opts)
+
+        # Set default options
         opts.setdefault('intf', TCIntf)
-        return self.topo.addLink(node1, node2, port1=port1, port2=port2,
-                                 intfName1=intfName1, intfName2=intfName2,
-                                 addr1=addr1, addr2=addr2, key=key,
-                                 weight=weight, **opts)
+        opts.setdefault('weight', 1)
+
+        opts.update(node1=node1, node2=node2, port1=port1, port2=port2)
+        return self.g.add_edge(node1, node2, key, opts)
 
 ## Link getter
     def getLink(self, node1, node2, key=None):
@@ -976,7 +1031,7 @@ class NetworkAPI:
         Returns:
             (link metadata dict, key)
         """
-        entry, key = self.topo._linkEntry(node1, node2, key=key)
+        entry, key = self._linkEntry(node1, node2, key=key)
         return entry[key], key
 
 ## Link updater
@@ -1018,6 +1073,25 @@ class NetworkAPI:
         return self.addLink(node1, node2, key=key, **info)
 
 ## Link deleter
+    def deleteLink(self, node1, node2, key=None):
+        """
+        Delete link.
+
+        Arguments:
+            node1, node2 (string): nodes to link together
+            key (int)            : id used to identify multiple edges which
+                                   link two same nodes (optional)
+        """
+        entry1, key = self._linkEntry(node1, node2, key=key)
+        entry1.pop(key)
+        if len(entry1.keys()) == 0:
+            self.g.edge[node1].pop(node2)
+            if len(self.g.edge[node1].keys()) == 0:
+                self.g.edge.pop(node1)
+            self.g.edge[node2].pop(node1)
+            if len(self.g.edge[node2].keys()) == 0:
+                self.g.edge.pop(node2)
+
     def popLink(self, node1, node2, key=None):
         """
         Pop link. If key is None, then the link with the lowest
@@ -1032,7 +1106,7 @@ class NetworkAPI:
             (link metadata dict, key)
         """
         link, key = self.getLink(node1, node2, key=key)
-        self.topo.deleteLink(link['node1'], link['node2'], key=key)
+        self.deleteLink(link['node1'], link['node2'], key=key)
         return link, key
 
 ## Method to check neighbors
@@ -1046,8 +1120,8 @@ class NetworkAPI:
         Returns:
             True if node1 and node2 are neighbors, False else.
         """
-        if node1 in self.topo.g.edge.keys():
-            if node2 in self.topo.g.edge[node1].keys():
+        if node1 in self.g.edge.keys():
+            if node2 in self.g.edge[node1].keys():
                 return True
         return False
 
@@ -1065,7 +1139,7 @@ class NetworkAPI:
         Returns: 
             list of (src, dst [,key, info ])
         """
-        return self.topo.links(sort, withKeys, withInfo)
+        return super().links(sort, withKeys, withInfo)
 
 ### Nodes
 ## Node setters
@@ -1080,7 +1154,7 @@ class NetworkAPI:
         Returns:
             node name
         """
-        return self.topo.addNode(name, **opts)
+        return super().addNode(name, **opts)
 
     def addHost(self, name, **opts):
         """
@@ -1095,7 +1169,8 @@ class NetworkAPI:
             P4 host name (string)
         """
         opts.setdefault('cls', P4Host)
-        return self.topo.addHost(name, **opts)
+        opts.update(isHost = True)
+        return super().addHost(name, **opts)
 
     def addSwitch(self, name, **opts):
         """
@@ -1115,7 +1190,10 @@ class NetworkAPI:
             if switch_id in self.switch_ids():
                 raise Exception('dpid {} already in use.'.format(dpid))
 
-        return self.topo.addSwitch(name, **opts)
+        if not opts and self.sopts:
+            opts = self.sopts
+        opts.update(isSwitch = True)
+        return self.addNode(name, **opts)
 
     def addP4Switch(self, name, **opts):
         """
@@ -1135,7 +1213,8 @@ class NetworkAPI:
                 raise Exception('switch ID {} already in use.'.format(switch_id))
 
         opts.setdefault('cls', P4Switch)
-        return self.topo.addP4Switch(name, **opts)
+        opts.update(isP4Switch = True)
+        return self.addSwitch(name, **opts)
 
     def addP4RuntimeSwitch(self, name, **opts):
         """
@@ -1149,13 +1228,10 @@ class NetworkAPI:
         Returns:
             P4 runtime switch name (string)
         """
-        switch_id = opts.get('device_id')
-        if switch_id is not None:
-            if switch_id in self.switch_ids():
-                raise Exception('switch ID {} already in use.'.format(switch_id))
 
         opts.setdefault('cls', P4RuntimeSwitch)
-        return self.topo.addP4RuntimeSwitch(name, **opts)
+        opts.update(isP4RuntimeSwitch = True)
+        return self.addP4Switch(name, **opts)
 
 ## Node getter
     def getNode(self, name):
@@ -1168,7 +1244,7 @@ class NetworkAPI:
         Returns:
             node metadata dict
         """
-        return self.topo.nodeInfo(name)
+        return self.nodeInfo(name)
 
 ## Node updaters
     def updateNode(self, name, **opts):
@@ -1199,6 +1275,24 @@ class NetworkAPI:
         return node_setter(name, **info)
 
 ## Node deleter
+    def deleteNode(self, node, remove_links=True):
+        """
+        Delete node.
+
+        Arguments:
+            node         (string): Mininet node name
+            remove_links (bool)  : whether to remove all the incident
+                                   links
+        """
+        # Delete incident links
+        if remove_links:
+            self.g.edge.pop(node, None)
+            for n in self.g.edge.keys():
+                self.g.edge[n].pop(node, None)
+
+        # Delete node
+        self.g.node.pop(node) 
+
     def popNode(self, name, remove_links=True):
         """
         Pop node.
@@ -1212,11 +1306,11 @@ class NetworkAPI:
             node metadata dict
         """
         node = self.getNode(name)
-        self.topo.deleteNode(name, remove_links=remove_links)
+        self.deleteNode(name, remove_links=remove_links)
         return node
 
 ## Methods to check the node type
-    def isNode(self, name):
+    def isNode(self, node):
         """
         Check if node exists.
 
@@ -1226,19 +1320,19 @@ class NetworkAPI:
         Returns:
             True if node exists, else False (bool)
         """
-        return self.topo.isNode(name)
+        return node in self.g.nodes()
 
-    def isHost(self, name):
+    def isHost(self, node):
         """
         Check if node is a host.
 
         Arguments:
-            node (string): Mininet node name
+            node (string): node name
 
         Returns:
             True if node is a host, else False (bool)
         """
-        return self.topo.isHost(name)
+        return self.g.node[node].get('isHost', False)
 
     def isSwitch(self, name):
         """
@@ -1250,31 +1344,31 @@ class NetworkAPI:
         Returns:
             True if node is a switch, else False (bool)
         """
-        return self.topo.isSwitch(name)
+        return super().isSwitch(name)
 
     def isP4Switch(self, node):
         """
         Check if node is a P4 switch.
 
         Arguments:
-            node (string): Mininet node name
+            node (string): node name
 
         Returns:
             True if node is a P4 switch, else False (bool)
         """
-        return self.topo.isP4Switch(node)
+        return self.g.node[node].get('isP4Switch', False)
 
     def isP4RuntimeSwitch(self, node):
         """
         Check if node is a P4 runtime switch.
 
         Arguments:
-            node (string): Mininet node name
+            node (string): node name
 
         Returns:
             True if node is a P4 switch, else False (bool)
         """
-        return self.topo.isP4RuntimeSwitch(node)
+        return self.g.node[node].get('isP4RuntimeSwitch', False)
 
     def hasCpuPort(self, node):
         """
@@ -1291,63 +1385,83 @@ class NetworkAPI:
 ## Lists of node names by type
     def nodes(self, sort=True, withInfo=False):
         """
-        Return nodes.
-        
-        Arguments:
-           sort (bool): sort nodes alphabetically
+        Return nodes in graph.
 
-        Returns:
-           list of node names
+        Arguments:
+            sort (bool)    : sort nodes alphabetically
+            withInfo (bool): retrieve node information
         """
-        return self.topo.nodes(sort=sort, withInfo=withInfo)
+        nodes = self.g.nodes(data=withInfo)
+        if not sort:
+            return nodes
+        else:
+            # Ignore info when sorting
+            tupleSize = 2
+            return sorted(nodes, key=(lambda l: naturalSeq(l[:tupleSize])))
 
     def hosts(self, sort=True, withInfo=False):
         """
         Return hosts.
         
         Arguments:
-           sort (bool): sort hosts alphabetically
+            sort (bool)    : sort hosts alphabetically
+            withInfo (bool): retrieve node information
 
         Returns:
-           list of host names
+            list of hosts
         """
-        return self.topo.hosts(sort=sort, withInfo=withInfo)
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isHost(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isHost(n)]
 
     def switches(self, sort=True, withInfo=False):
         """
         Return switches.
 
         Arguments:
-           sort (bool): sort switches alphabetically
-
-        Returns:
-            list of switch names    
+            sort (bool)    : sort switches alphabetically
+            withInfo (bool): retrieve node information
+           
+        Returns: 
+            list of switches
         """
-        return self.topo.switches(sort=sort, withInfo=withInfo)
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isSwitch(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isSwitch(n)]
 
     def p4switches(self, sort=True, withInfo=False):
         """
         Return P4 switches.
 
         Arguments:
-           sort (bool): sort P4 switches alphabetically
+            sort (bool)    : sort switches alphabetically
+            withInfo (bool): retrieve node information
 
         Returns:
-           list of P4 switch names
+            list of P4 switches
         """
-        return self.topo.p4switches(sort=sort, withInfo=withInfo)
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isP4Switch(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4Switch(n)]
 
     def p4rtswitches(self, sort=True, withInfo=False):
         """
         Return P4 runtime switches.
 
         Arguments:
-           sort (bool): sort P4 runtime switches alphabetically
+            sort (bool)    : sort switches alphabetically
+            withInfo (bool): retrieve node information
 
         Returns:
-           list of P4 runtime switch names
+            list of P4 runtime switches
         """
-        return self.topo.p4rtswitches(sort=sort, withInfo=withInfo)
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isP4RuntimeSwitch(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4RuntimeSwitch(n)]
 
 ## Nodes
     def setDefaultIntfMac(self, name, mac):
@@ -1356,7 +1470,7 @@ class NetworkAPI:
         This method leads to predictable configuration only if
         the node has only one interface (not considering the
         loopback interface). For multihomed nodes, use the method
-        self.setIntfMac. This method overrides self.setIntfMac.
+        self.setIntfMac. This method is overridden by self.setIntfMac.
 
         Arguments:
             name (string): name of the host
@@ -1373,7 +1487,7 @@ class NetworkAPI:
         This method leads to predictable configuration only if
         the node has only one interface (not considering the
         loopback interface). For multihomed nodes, use the method
-        self.setIntfIp. This method overrides self.setIntfIp.
+        self.setIntfIp. This method is overridden by self.setIntfIp.
 
         Arguments:
             name (string): name of the host
@@ -1704,46 +1818,6 @@ class NetworkAPI:
             raise Exception('"{}" is not a P4 runtime switch.'.format(name))
 
 ## Links
-    def getDefaultIntf(self, node1):
-        """
-        Return the tuple (node1, node2, key) identifying the
-        default interface.
-        """
-        if self.isNode(node1):
-            node_ports = self.node_ports()
-            ports = node_ports.get(node1)
-            if ports is not None:
-                return ports[min(node_ports[node1].keys())]
-            else:
-                warning('node {} has no incident links.\n'.format(node1))
-                return None, None, None
-        else:
-            raise Exception('"{}" does not exist.'.format(node1))
-
-    def isDefaultIntf(self, node1, node2, key=None):
-        """
-        Check if the specified interface is the default one for node1.
-        
-        Arguments:
-            node1, node2 (string): nodes linked together
-            key (int)            : id used to identify multiple edges which
-                                   link two same nodes (optional)
-
-        Returns:
-            True if the interface is default, False else
-
-        Notice:
-            Since interfaces can be removed, the default interface
-            may change during the definition of the network. So this is
-            reliable only if no other interfaces are added/removed afterwards.
-        """
-        assert self.isNode(node1)
-        assert self.isNode(node2)
-        def_intf = self.getDefaultIntf(node1)
-        _, key = self.topo._linkEntry(node1, node2, key=key)
-        intf = (node1, node2, key)
-        return def_intf == intf
-
     def setBw(self, node1, node2, bw, key=None):
         """
         Set link bandwidth. If key is None, then the link with the lowest
