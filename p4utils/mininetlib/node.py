@@ -183,8 +183,9 @@ class P4Switch(Switch):
                 args.extend(['-i', str(port) + '@' + intf.name])
 
         # Extend P4 interfaces to listen to fake links between CP routers and switches        
-        args.extend(['-i', str(5) + '@' + self.name+"-eth5"])
-        args.extend(['-i', str(6) + '@' + self.name+"-eth6"])
+        args.extend(['-i', str(100) + '@' + self.name+"-dum100"])
+        args.extend(['-i', str(101) + '@' + self.name+"-dum101"])
+        args.extend(['-i', str(102) + '@' + self.name+"-dum102"])
         
         if self.pcap_dump:
             if self.pcap_dir:
@@ -213,7 +214,7 @@ class P4Switch(Switch):
         info(cmd + "\n")
 
         # Add fake IP address to the intf connected to CP router
-        self.cmd("ifconfig {}-eth3 {}.0.0.{} netmask 255.255.255.0".format(self.name, str(int(self.name[1])*15), str(1)))
+        self.cmd("ifconfig {}-eth4 {}.0.0.{} netmask 255.255.255.0".format(self.name, str(int(self.name[1])*15), str(1)))
 
         self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
@@ -366,7 +367,7 @@ class Router( Switch ):
         for index, item in enumerate(self.fake_interfaces.keys()):
 
             sw_name = "s"+self.name[1]
-            sw_intf = "eth"+str(index+5)
+            sw_intf = "dum"+str(index+100)
             print(sw_name, sw_intf)
             #print(sw_name.pid)
 
