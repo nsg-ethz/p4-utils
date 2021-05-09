@@ -5,10 +5,6 @@ from mininet.log import info, output, error, warn, debug
 from p4utils.utils.helper import *
 
 
-class NetworkError(Exception):
-    pass
-
-
 class P4CLI(CLI):
 
     def __init__(self, *args, **kwargs):
@@ -127,7 +123,7 @@ class P4CLI(CLI):
             # If this file is compiled for the first time
             elif self.compiler_module is not None: 
                 debug('New p4 source file detected!\n')
-                compiler = self.compiler_module['module'](p4_src=p4_src,
+                compiler = self.compiler_module['class'](p4_src=p4_src,
                                                         **self.compiler_module['kwargs'])
                 compiler.compile()
                 self.compilers.append(compiler)
@@ -169,10 +165,10 @@ class P4CLI(CLI):
                 grpc_port = getattr(p4switch, 'grpc_port')
             except AttributeError:
                 pass
-            client = self.client_module(sw_name=switch_name,
+            client = self.client_module['class'](sw_name=switch_name,
                                         thrift_port=thrift_port,
                                         grpc_port=grpc_port,
-                                        **kwargs)
+                                        **self.client_module['kwargs'])
             client.set_conf(cmd_path)
             # Configure switch
             try:

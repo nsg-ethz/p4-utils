@@ -256,13 +256,13 @@ class AppRunner(object):
                                   }
         if self.conf.get('compiler_module'):
             if self.conf['compiler_module'].get('object_name'):
-                self.compiler_module['module'] = load_custom_object(self.conf['compiler_module'])
+                self.compiler_module['class'] = load_custom_object(self.conf['compiler_module'])
             else:
-                self.compiler_module['module'] = DEFAULT_COMPILER
+                self.compiler_module['class'] = DEFAULT_COMPILER
             # Load default compiler module arguments
             self.compiler_module['kwargs'] = self.conf['compiler_module'].get('options', default_compiler_kwargs)
         else:
-            self.compiler_module['module'] = DEFAULT_COMPILER
+            self.compiler_module['class'] = DEFAULT_COMPILER
             self.compiler_module['kwargs'] = default_compiler_kwargs
 
         # Load default client module
@@ -274,13 +274,13 @@ class AppRunner(object):
                                 }
         if self.conf.get('client_module'):
             if self.conf['client_module'].get('object_name'):
-                self.client_module['module'] = load_custom_object(self.conf['client_module'])
+                self.client_module['class'] = load_custom_object(self.conf['client_module'])
             else:
-                self.client_module['module'] = DEFAULT_CLIENT
+                self.client_module['class'] = DEFAULT_CLIENT
             # Load default client module arguments
             self.client_module['kwargs'] = self.conf['client_module'].get('options', default_client_kwargs)
         else:
-            self.client_module['module'] = DEFAULT_CLIENT
+            self.client_module['class'] = DEFAULT_CLIENT
             self.client_module['kwargs'] = default_client_kwargs
 
         # Load default Mininet topology builder
@@ -383,7 +383,7 @@ class AppRunner(object):
                 # This field is not propagated further
                 del custom_params['client_module']
             else:
-                module = params['client_module']['module']
+                module = params['client_module']['class']
             # This field is not propagated further
             del params['client_module']
             # If a client command input is set
@@ -497,7 +497,7 @@ class AppRunner(object):
         for switch, params in self.switches.items():
             # If the file has not been compiled yet
             if not is_compiled(os.path.realpath(params['p4_src']), self.compilers):
-                compiler = self.compiler_module['module'](p4_src=params['p4_src'],
+                compiler = self.compiler_module['class'](p4_src=params['p4_src'],
                                                           **self.compiler_module['kwargs'])
                 compiler.compile()
                 self.compilers.append(compiler)

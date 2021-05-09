@@ -11,10 +11,11 @@ from mininet.log import setLogLevel, info, output, debug, warning
 
 from p4utils.utils.helper import *
 from p4utils.utils.client import ThriftClient
-from p4utils.utils.compiler import P4C
+from p4utils.utils.compiler import *
 from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.node import *
 from p4utils.mininetlib.net import P4Mininet
+from p4utils.mininetlib.cli import P4CLI
 
 
 class NetworkAPI(Topo):
@@ -38,6 +39,9 @@ class NetworkAPI(Topo):
         self.auto_gw_arp = True
         # Static ARP entries
         self.auto_arp_tables = True
+        # List of scripts to execute in
+        # the main namespace
+        self.scripts = []
 
         ## External modules default configuration dictionary
         self.modules = {}
@@ -68,10 +72,14 @@ class NetworkAPI(Topo):
         # List of switch clients
         self.sw_clients = []
 
-        # Clean up old Mininet processes
+## Utils
+    def cleanup(self):
+        """
+        Removes old Mininet files and processes.
+        """
+        # Mininet cleanup
         cleanup()
 
-## Utils
     def is_multigraph(self):
         """
         Check whether the graph is a multigraph, i.e. it has multiple parallel
@@ -180,6 +188,9 @@ class NetworkAPI(Topo):
             json.dump(graph_dict, f, default=default)
 
     def compile(self):
+        """
+        Compile all the required P4 files.
+        """
         for p4switch in self.p4switches():
             p4_src = self.getNode(p4switch).get('p4_src')
             if p4_src is not None:
@@ -277,6 +288,14 @@ class NetworkAPI(Topo):
                     h1.cmd('dhclient -r {}'.format(intf1.name))
                     h1.cmd('dhclient {} &'.format(intf1.name))
 
+    def exec_scripts(self):
+        """
+        Executes the scripts in the main namespace after network boot.
+        """
+        for script in self.scripts:
+            info('Exec Script: {}\n'.format(script['cmd']))
+            run_command(script['cmd'])
+
     def start_net_cli(self):
         """
         Starts up the mininet CLI and prints some helpful output.
@@ -293,26 +312,33 @@ class NetworkAPI(Topo):
         info("Starting mininet CLI...\n")
         # Generate a message that will be printed by the Mininet CLI to make
         # interacting with the simple switch a little easier.
-        print('')
-        print('======================================================================')
-        print('Welcome to the P4 Utils Mininet CLI!')
-        print('======================================================================')
-        print('Your P4 program is installed into the BMV2 software switch')
-        print('and your initial configuration is loaded. You can interact')
-        print('with the network using the mininet CLI below.')
-        print('')
-        # print('To inspect or change the switch configuration, connect to')
-        # print('its CLI from your host operating system using this command:')
-        # print('  {} --thrift-port <switch thrift port>'.format(DEFAULT_CLIENT.cli_bin))
-        # print('')
-        # print('To view a switch log, run this command from your host OS:')
-        # print('  tail -f {}/<switchname>.log'.format(self.log_dir))
-        # print('')
-        # print('To view the switch output pcap, check the pcap files in \n {}:'.format(self.pcap_dir))
-        # print(' for example run:  sudo tcpdump -xxx -r s1-eth1.pcap')
-        # print('')
+        output('\n')
+        output('======================================================================\n')
+        output('Welcome to the P4 Utils Mininet CLI!\n')
+        output('======================================================================\n')
+        output('Your P4 program is installed into the BMV2 software switch\n')
+        output('and your initial configuration is loaded. You can interact\n')
+        output('with the network using the mininet CLI below.\n')
+        output('\n')
+        output('To inspect or change the switch configuration, connect to\n')
+        output('its CLI from your host operating system using this command:\n')
+        output('  {} --thrift-port <switch thrift port>\n'.format(ThriftClient.cli_bin))
+        output('\n')
+        output('To view a switch log, run this command from your host OS:\n')
+        output('  tail -f <log_dir>/<switchname>.log\n')
+        output('By default log directory is ".log".\n')
+        output('\n')
+        output('To view the switch output pcap, check the pcap files in <pcap_dir>:\n')
+        output('  for example run:  sudo tcpdump -xxx -r s1-eth1.pcap\n')
+        output('By default pcap directory is ".pcap".\n')
+        output('\n')
 
-        CLI(self.net)
+        P4CLI(mininet=self.net,
+              clients=self.sw_clients,
+              compilers=self.compilers,
+              compiler_module=self.modules['comp'],
+              client_module=self.modules['sw_cli'],
+              scripts=self.scripts)
 
     def module(self, mod_name, *args, **kwargs):
         """
@@ -797,6 +823,18 @@ class NetworkAPI(Topo):
                 print('{}:{}\t'.format(port1, intf[1]), end=' ')
             print()
 
+    def execScript(self, cmd, reboot=True):
+        """
+        Execute the given command in the main namespace after
+        the network boot.
+
+        Arguments:
+            cmd (string) : command to execute
+            reboot (bool): whether to rerun the script every time
+                           all the P4 switches are rebooted.
+        """
+        self.scripts.append({'cmd': cmd, 'reboot_run': reboot})
+
     def describeP4Nodes(self):
         """
         Print a description for the P4 nodes in the network.
@@ -859,6 +897,9 @@ class NetworkAPI(Topo):
         Once the topology has been created, create and start the Mininet network.
         If enabled, start the client.
         """
+        debug('Cleanup old files and processes...\n')
+        self.cleanup()
+
         debug('Auto configuration of not configured interfaces...\n')
         self.auto_assignment()
         
@@ -888,6 +929,10 @@ class NetworkAPI(Topo):
         info('Programming hosts...\n')
         self.program_hosts()
         output('Hosts programmed correctly!\n')
+        
+        info('Executing scripts...\n')
+        self.exec_scripts()
+        output('All scripts executed correctly!\n')
 
         if self.cli_enabled:
             self.start_net_cli()
