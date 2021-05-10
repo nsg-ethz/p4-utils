@@ -161,13 +161,8 @@ class P4CLI(CLI):
                 thrift_port = getattr(p4switch, 'thrift_port')
             except AttributeError:
                 pass
-            try:
-                grpc_port = getattr(p4switch, 'grpc_port')
-            except AttributeError:
-                pass
             client = self.client_module['class'](sw_name=switch_name,
                                         thrift_port=thrift_port,
-                                        grpc_port=grpc_port,
                                         **self.client_module['kwargs'])
             client.set_conf(cmd_path)
             # Configure switch
@@ -192,7 +187,7 @@ class P4CLI(CLI):
         Note:
             If you provide a P4 source code or cmd, all switches will have the same.
         """
-        if not line or len(line.split()) > 4:
+        if len(line.split()) > 4:
             error('usage: p4switches_reboot [--p4src <path>] [--cmds <path>]\n')
         else:
             for sw in self.mn.p4switches:
