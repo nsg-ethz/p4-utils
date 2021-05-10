@@ -97,13 +97,22 @@ class P4Switch(Switch):
         self.simple_switch_pid = None
 
         if self.log_enabled:
-            # make sure that the provided log path is not pointing to a file
+            # Make sure that the provided log path is not pointing to a file
             # and, if necessary, create an empty log dir
             if not os.path.isdir(self.log_dir):
                 if os.path.exists(self.log_dir):
                     raise NotADirectoryError("'{}' exists and is not a directory.".format(self.log_dir))
                 else:
                     os.mkdir(self.log_dir)
+
+        if self.pcap_dump:
+            # Make sure that the provided pcap path is not pointing to a file
+            # and, if necessary, create an empty pcap dir
+            if not os.path.isdir(self.pcap_dir):
+                if os.path.exists(self.pcap_dir):
+                    raise NotADirectoryError("'{}' exists and is not a directory.".format(self.pcap_dir))
+                else:
+                    os.mkdir(self.pcap_dir)
 
         if self.thrift_listening():
             raise ConnectionRefusedError('{} cannot bind port {} because it is bound by another process.'.format(self.name, self.thrift_port))
