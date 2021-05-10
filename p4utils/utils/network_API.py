@@ -326,11 +326,11 @@ class NetworkAPI(Topo):
         output('\n')
         output('To view a switch log, run this command from your host OS:\n')
         output('  tail -f <log_dir>/<switchname>.log\n')
-        output('By default log directory is ".log".\n')
+        output('By default log directory is "./log".\n')
         output('\n')
         output('To view the switch output pcap, check the pcap files in <pcap_dir>:\n')
         output('  for example run:  sudo tcpdump -xxx -r s1-eth1.pcap\n')
-        output('By default pcap directory is ".pcap".\n')
+        output('By default pcap directory is "./pcap".\n')
         output('\n')
 
         P4CLI(mininet=self.net,
@@ -963,7 +963,7 @@ class NetworkAPI(Topo):
             weight (int)                 : weight used to compute shortest paths
         
         Returns:
-           link info key
+            key (int)
 
         Notice:
             If not specified, all the optional fields are assigned automatically
