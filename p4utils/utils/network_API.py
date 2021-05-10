@@ -199,7 +199,7 @@ class NetworkAPI(Topo):
                     compiler.compile()
                     self.compilers.append(compiler)
                 else:
-                    compiler = get_by_attr('p4_src', os.path.realpath(params['p4_src']), self.compilers)
+                    compiler = get_by_attr('p4_src', os.path.realpath(p4_src), self.compilers)
                 # Retrieve json_path
                 self.updateNode(p4switch, json_path=compiler.get_json_out())
                 # Try to retrieve p4 runtime info file path
@@ -702,20 +702,20 @@ class NetworkAPI(Topo):
                         ip2 = self.auto_ip_address()
                         self.setIntfIp(node2, node1, ip2, key=key)
             
-        # Update hosts' default interfaces
+        # Update hosts' default interfaces (from links' parameters to hosts' parameters)
         for node1, node2, key, info in self.links(withKeys=True, withInfo=True):
 
             if self.isHost(node1):
                 # Check if it is a default interfaces
                 if self.is_default_intf(node1, node2, key=key):
-                    self.setDefaultIntfMac(node1, info['addr1'])
-                    self.setDefaultIntfIp(node1, info['params1']['ip'])
+                    self.updateNode(node1, mac=info['addr1'])
+                    self.updateNode(node1, ip=info['params1']['ip'])
 
             if self.isHost(node2):
                  # Check if it is a default interfaces
                 if self.is_default_intf(node2, node1, key=key):
-                    self.setDefaultIntfMac(node2, info['addr2'])
-                    self.setDefaultIntfIp(node2, info['params2']['ip'])
+                    self.updateNode(node2, mac=info['addr2'])
+                    self.updateNode(node2, ip=info['params2']['ip'])
 
     def get_default_intf(self, node1):
         """
@@ -1509,40 +1509,6 @@ class NetworkAPI(Topo):
             return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4RuntimeSwitch(n)]
 
 ## Nodes
-    def setDefaultIntfMac(self, name, mac):
-        """
-        Set MAC address of the node's default interface.
-        This method leads to predictable configuration only if
-        the node has only one interface (not considering the
-        loopback interface). For multihomed nodes, use the method
-        self.setIntfMac. This method is overridden by self.setIntfMac.
-
-        Arguments:
-            name (string): name of the host
-            mac (string) : MAC address to configure
-        """
-        if self.isNode(name):
-            self.updateNode(name, mac=mac)
-        else:
-            raise Exception('"{}" does not exists.'.format(name))
-
-    def setDefaultIntfIp(self, name, ip):
-        """
-        Set IP address of the node's default interface.
-        This method leads to predictable configuration only if
-        the node has only one interface (not considering the
-        loopback interface). For multihomed nodes, use the method
-        self.setIntfIp. This method is overridden by self.setIntfIp.
-
-        Arguments:
-            name (string): name of the host
-            ip (string)  : IP address/mask to configure
-        """
-        if self.isNode(name):
-            self.updateNode(name, ip=ip)
-        else:
-            raise Exception('"{}" does not exists.'.format(name))
-
     def setDefaultRoute(self, name, default_route):
         """
         Set the host's default route.
@@ -1798,7 +1764,7 @@ class NetworkAPI(Topo):
         if self.isP4Switch(name):
             # We use the bridge but at the same time we use the bug it has so the
             # interfaces are not added to it, but at least we can clean easily thanks to that.
-            if self.cpu_bridge is not None:
+            if self.cpu_bridge is None:
                 self.cpu_bridge = self.addSwitch('sw-cpu', cls=LinuxBridge, dpid='1000000000000000')
             self.addLink(name, self.cpu_bridge, intfName1='{}-cpu-eth0'.format(name), intfName2= '{}-cpu-eth1'.format(name), deleteIntfs=True)
             self.updateNode(name, cpu_port=True)
@@ -1985,8 +1951,7 @@ class NetworkAPI(Topo):
     def setIntfIp(self, node1, node2, ip, key=None):
         """
         Set IP of node1's interface facing node2 with the specified key. If key is None,
-        then the link with the lowest key value is considered. It is overridden by 
-        self.setDefaultIntfIp for the default interface.
+        then the link with the lowest key value is considered.
 
         Arguments:
             node1, node2 (string): nodes linked together
@@ -2007,8 +1972,7 @@ class NetworkAPI(Topo):
     def setIntfMac(self, node1, node2, mac, key=None):
         """
         Set MAC of node1's interface facing node2 with the specified key. If key is None,
-        then the link with the lowest key value is considered. It is overridden by 
-        self.setDefaultIntfMac for the default interface.
+        then the link with the lowest key value is considered.
 
         Arguments:
             node1, node2 (string): nodes linked together
@@ -2138,9 +2102,7 @@ class NetworkAPI(Topo):
 
             self.setIntfMac(host_name, direct_sw, host_mac)
             self.setIntfMac(direct_sw, host_name, direct_sw_mac)
-
-            self.setDefaultIntfIp(host_name, host_ip+'/16')
-            self.setDefaultIntfMac(host_name, host_mac)
+            self.setIntfIp(host_name, direct_sw, host_ip + '/16')
 
     def mixed(self):
         """
@@ -2257,9 +2219,8 @@ class NetworkAPI(Topo):
 
             self.setIntfMac(host_name, direct_sw, host_mac)
             self.setIntfMac(direct_sw, host_name, direct_sw_mac)
+            self.setIntfIp(host_name, direct_sw, host_ip + '/24')
 
-            self.setDefaultIntfMac(host_name, host_mac)
-            self.setDefaultIntfIp(host_name, host_ip + '/24')
             self.setDefaultRoute(host_name, host_gw)
 
     def l3(self):
@@ -2380,9 +2341,8 @@ class NetworkAPI(Topo):
 
             self.setIntfMac(host_name, direct_sw, host_mac)
             self.setIntfMac(direct_sw, host_name, direct_sw_mac)
+            self.setIntfIp(host_name, direct_sw, host_ip + '/24')
 
-            self.setDefaultIntfMac(host_name, host_mac)
-            self.setDefaultIntfIp(host_name, host_ip + '/24')
             self.setDefaultRoute(host_name, host_gw)
 
         for node1, node2 in self.links():
