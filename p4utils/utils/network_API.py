@@ -253,22 +253,36 @@ class NetworkAPI(Topo):
                         # If it is a switch, handle fake IPs
                         if self.isSwitch(node):
                             for intf in n.intfs.values():
+                                # Skip loopback interface
+                                if intf.name == 'lo':
+                                    continue
                                 # Get link from interface
                                 link = intf.link
                                 # Get fake IP
                                 n_ip = intf.params.get('sw_ip1') if intf == link.intf1 else intf.params.get('sw_ip2')
-                                # Check if the IPs match and set ARP
-                                if n_ip == gw_ip:
-                                    h1.setARP(gw_ip, intf.mac)
+                                if n_ip is not None:
+                                    n_ip = n_ip.split('/')[0]
+                                    # Check if the IPs match and set ARP
+                                    if n_ip == gw_ip:
+                                        h1.setARP(gw_ip, intf.mac)
                         else:
                             for intf in n.intfs.values():
+                                # Skip loopback interface
+                                if intf.name == 'lo':
+                                    continue
                                 n_ip = intf.ip
-                                if n_ip == gw_ip:
-                                    h1.setARP(gw_ip, intf.mac)
+                                if n_ip is not None:
+                                    n_ip = n_ip.split('/')[0]
+                                    # Check if the IPs match and set ARP
+                                    if n_ip == gw_ip:
+                                        h1.setARP(gw_ip, intf.mac)
             
             # Set static ARP entries
             if self.auto_arp_tables:
                 for intf1 in h1.intfs.values():
+                    # Skip loopback interface
+                    if intf1.name == 'lo':
+                        continue
                     # Set arp rules for all the hosts in the same subnet
                     h1_intf_ip = ip_interface('{}/{}'.format(intf1.ip, intf1.prefixLen))
                     for host2 in self.hosts():
@@ -276,6 +290,9 @@ class NetworkAPI(Topo):
                             continue
                         h2 = self.net.get(host2) 
                         for intf2 in h2.intfs.values():
+                            # Skip loopback interface
+                            if intf2.name == 'lo':
+                                continue
                             # Get the other interface's IP
                             h2_intf_ip = ip_interface('{}/{}'.format(intf2.ip, intf2.prefixLen))
                             # Check if the subnet is the same
@@ -285,6 +302,9 @@ class NetworkAPI(Topo):
             # Set DHCP autoconfiguration
             if info.get('dhcp', False):
                 for intf1 in h1.intfs.values():
+                    # Skip loopback interface
+                    if intf1.name == 'lo':
+                        continue
                     h1.cmd('dhclient -r {}'.format(intf1.name))
                     h1.cmd('dhclient {} &'.format(intf1.name))
 
@@ -603,7 +623,7 @@ class NetworkAPI(Topo):
         encountered, the respective device entry is updated.
         """
         # Set nodes' parameters automatically
-        for node, info in self.nodes(withInfo=True):
+        for node, info in self.nodes(sort=True, withInfo=True):
 
             if self.isP4Switch(node):
                 
@@ -637,7 +657,7 @@ class NetworkAPI(Topo):
                     self.setSwitchDpid(node, dpid)
 
         # Set links' parameters automatically
-        for node1, node2, key, info in self.links(withKeys=True, withInfo=True):
+        for node1, node2, key, info in self.links(sort=True, withKeys=True, withInfo=True):
 
             # Port numbers
             port1 = info.get('port1')
@@ -1583,23 +1603,37 @@ class NetworkAPI(Topo):
 ## P4 Switches
     def setP4Source(self, name, p4_src):
         """
-        Set the P4 source for the switch and specify the options
-        for the P4C compiler.
+        Set the P4 source for the switch.
 
         Arguments:
             name (string)  : name of the P4 switch
-            p4_src (string): path to the P4 file
-            kwargs (string): other options to pass to P4C class
+            p4_src (string): path to the P4 fil
         """
         if self.isP4Switch(name):
             self.updateNode(name, p4_src=p4_src)
         else:
             raise Exception('"{}" is not a P4 switch.'.format(name))
 
+    def setP4SourceAll(self, p4_src):
+        """
+        Set the same P4 source for all the P4 switches.
+
+        Arguments:
+            name (string)  : name of the P4 switch
+            p4_src (string): path to the P4 file
+        """
+        for p4switch in self.p4switches():
+            self.setP4Source(p4switch, p4_src)
+
     def setP4CliInput(self, name, conf_path):
         """
         Set the path to the command line configuration file for
         the Thrift capable switch.
+
+        Arguments:
+            name (string)     : name of the P4 switch
+            conf_path (string): path to the command line configuration
+                                file
         """
         if self.isP4Switch(name):
             self.updateNode(name, conf_path=conf_path)
@@ -2129,9 +2163,17 @@ class NetworkAPI(Topo):
             if self.isSwitch(node):
                 # Generate a subnetwork per each switch
                 if self.isP4Switch(node):
-                    sw_id = info['device_id']
+                    sw_id = info.get('device_id')
+                    if sw_id is None:
+                        sw_id = self.auto_switch_id()
+                        self.setP4SwitchId(node, sw_id)
                 else:
-                    sw_id = int(info['dpid'], 16)
+                    dpid = info.get('dpid')
+                    if dpid is None:
+                        sw_id = self.auto_switch_id()
+                        self.setSwitchDpid(node, sw_id)
+                    else:
+                        sw_id = int(dpid, 16)
                 upper_bytex = (sw_id & 0xff00) >> 8
                 lower_bytex = (sw_id & 0x00ff)
                 net = '10.%d.%d.0/24' % (upper_bytex, lower_bytex)
@@ -2220,8 +2262,27 @@ class NetworkAPI(Topo):
             self.setIntfMac(host_name, direct_sw, host_mac)
             self.setIntfMac(direct_sw, host_name, direct_sw_mac)
             self.setIntfIp(host_name, direct_sw, host_ip + '/24')
+            self.setIntfIp(direct_sw, host_name, host_gw + '/24')
 
             self.setDefaultRoute(host_name, host_gw)
+
+        for node1, node2 in self.links():
+            # Skip CPU switch
+            if node1 == 'sw-cpu' or node2 == 'sw-cpu':
+                continue
+            # Switch-switch link
+            if self.isSwitch(node1) and self.isSwitch(node2):
+                sw1_ip = '20.%d.%d.1/24' % (sw_to_id[node1], sw_to_id[node2])
+                sw2_ip = '20.%d.%d.2/24' % (sw_to_id[node1], sw_to_id[node2])
+                if sw1_ip in assigned_ips:
+                    raise Exception('IP {} has been already assigned to a host.'.format(sw1_ip))
+                assigned_ips.add(sw1_ip)
+                if sw2_ip in assigned_ips:
+                    raise Exception('IP {} has been already assigned to a host.'.format(sw2_ip))
+                assigned_ips.add(sw2_ip)
+
+                self.setIntfIp(node1, node2, sw1_ip) # Fake and real IPs are handled by the same method setIntfIp.
+                self.setIntfIp(node2, node1, sw2_ip) # Fake and real IPs are handled by the same method setIntfIp.
 
     def l3(self):
         """
@@ -2245,16 +2306,20 @@ class NetworkAPI(Topo):
             if node == 'sw-cpu':
                 continue
             if self.isSwitch(node):
-                # Generate a subnetwork per each switch
                 if self.isP4Switch(node):
-                    sw_id = info['device_id']
+                    sw_id = info.get('device_id')
+                    if sw_id is None:
+                        sw_id = self.auto_switch_id()
+                        self.setP4SwitchId(node, sw_id)
                 else:
-                    sw_id = int(info['dpid'], 16)
+                    dpid = info.get('dpid')
+                    if dpid is None:
+                        sw_id = self.auto_switch_id()
+                        self.setSwitchDpid(node, sw_id)
+                    else:
+                        sw_id = int(dpid, 16)
                 sw_to_next_available_host_id[node] = []
                 sw_to_id[node] = sw_id
-            else:
-                # If it is not a switch, it must be a host
-                assert self.isHost(node)
 
         # Check whether the graph is a multigraph
         assert not self.is_multigraph()
@@ -2342,6 +2407,7 @@ class NetworkAPI(Topo):
             self.setIntfMac(host_name, direct_sw, host_mac)
             self.setIntfMac(direct_sw, host_name, direct_sw_mac)
             self.setIntfIp(host_name, direct_sw, host_ip + '/24')
+            self.setIntfIp(direct_sw, host_name, host_gw + '/24')
 
             self.setDefaultRoute(host_name, host_gw)
 
