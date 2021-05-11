@@ -131,6 +131,15 @@ class NetworkAPI(Topo):
                 for key in params2.keys():
                     edge[key+'2'] = params2[key]
 
+                # Fake switches' IPs
+                if 'sw_ip1' in edge.keys():
+                    edge['ip1'] = edge['sw_ip1']
+                    del edge['sw_ip1']
+                
+                if 'sw_ip2' in edge.keys():
+                    edge['ip2'] = edge['sw_ip2']
+                    del edge['sw_ip2']
+
             # If you want to retrieve informations directly from the network istead of trusting
             # the information contained in the Mininet topology, use the following lines.
 
@@ -839,7 +848,7 @@ class NetworkAPI(Topo):
         node_ports = self.node_ports()
         for node1 in sorted(node_ports.keys()):
             print('{}: '.format(node1), end=' ')
-            for port1, intf in node_ports[node1].items():
+            for port1, intf in sorted(node_ports[node1].items(), key=lambda x: x[0]):
                 print('{}:{}\t'.format(port1, intf[1]), end=' ')
             print()
 
@@ -1870,17 +1879,17 @@ class NetworkAPI(Topo):
 
         Arguments:
             node1, node2 (string): nodes linked together
-            bw (float)           : bandwidth (in Mbps)
+            bw (float, int)      : bandwidth (in Mbps)
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
 
         Returns:
             key (int)
         """
-        if isinstance(bw, float):
+        if isinstance(bw, float) or isinstance(bw, int):
             return self.updateLink(node1, node2, key=key, bw=bw)
         else:
-            raise TypeError('bw is not an integer.')
+            raise TypeError('bw is not a float nor int.')
 
     def setDelay(self, node1, node2, delay, key=None):
         """
