@@ -55,17 +55,21 @@ class P4C:
             if os.path.isfile(p4_src):
                 self.p4_src = os.path.realpath(p4_src)
             else:
-                 raise FileNotFoundError('Could not find file {}'.format(p4_src))
+                 raise FileNotFoundError('could not find file {}.'.format(p4_src))
         else:
-            raise FileNotFoundError('No source file provided'.format(p4_src))
+            raise FileNotFoundError('no source file provided.'.format(p4_src))
 
         if outdir is None:  
                 self.outdir = os.path.dirname(self.p4_src)
         else:
-            if os.path.isdir(outdir): 
-                self.outdir = outdir
-            else:
-                raise NotADirectoryError('{} is not a directory'.dormat(outdir))
+            # Make sure that the provided outdir path is not pointing to a file
+            # and, if necessary, create an empty outdir
+            if not os.path.isdir(outdir):
+                if os.path.exists(outdir):
+                    raise NotADirectoryError("'{}' exists and is not a directory.".format(self.pcap_dir))
+                else:
+                    os.mkdir(outdir)
+            self.outdir = outdir
 
         self.opts = opts
         self.p4rt = p4rt

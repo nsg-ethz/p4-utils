@@ -34,10 +34,19 @@ class ThriftClient:
         """
         
         self.set_conf(conf_path)
-        self.log_enabled = log_enabled
-        self.log_dir = log_dir
         self.sw_name = sw_name
         self.thrift_port = thrift_port
+        self.log_enabled = log_enabled
+        self.log_dir = log_dir
+
+        if self.log_enabled:
+            # Make sure that the provided log path is not pointing to a file
+            # and, if necessary, create an empty log dir
+            if not os.path.isdir(self.log_dir):
+                if os.path.exists(self.log_dir):
+                    raise NotADirectoryError("'{}' exists and is not a directory.".format(self.log_dir))
+                else:
+                    os.mkdir(self.log_dir)
 
         if cli_bin is not None:
             self.set_binary(cli_bin)
@@ -60,7 +69,7 @@ class ThriftClient:
         """
         if self.conf_path is not None:
             if not os.path.isfile(self.conf_path):
-                raise FileNotFoundError('Could not find file {} for switch {}'.format(self.conf_path, self.sw_name))
+                raise FileNotFoundError('could not find file {} for switch {}.'.format(self.conf_path, self.sw_name))
             elif check_listening_on_port(self.thrift_port):
                 log_path = self.log_dir + '/{}_cli_output.log'.format(self.sw_name)
                 with open(self.conf_path, 'r') as fin:
@@ -75,6 +84,6 @@ class ThriftClient:
                             log_file.write(stdout.decode())
                 info('Configured switch {} with thrift file {}\n'.format(self.sw_name, self.conf_path))
             else:
-                raise ConnectionRefusedError('Could not connect to switch {} on port {}'.format(self.sw_name, self.thrift_port))
+                raise ConnectionRefusedError('could not connect to switch {} on port {}.'.format(self.sw_name, self.thrift_port))
         else:
-            raise FileNotFoundError('Could not find file {} for switch {}'.format(self.conf_path, self.sw_name))
+            raise FileNotFoundError('could not find file {} for switch {}.'.format(self.conf_path, self.sw_name))
