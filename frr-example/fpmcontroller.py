@@ -94,12 +94,11 @@ class Controller(object):
                 max_OIF = max(sorted_OIF)
 
                 connected_switches = self.topo.get_p4switches_connected_to(sw_name)
-
+                
+                # Only routes to the end hosts are needed for the swtiches, intermediate routes from OSPF are not needed.
                 _fib = []
                 _fib.append(fib[0])
                 _fib.extend(fib[4:])
-
-
 
                 for entry in _fib:
                     
@@ -151,10 +150,11 @@ class Controller(object):
                         print(host_ip_match_from_fib)
 
                         print ("table_add at {}:".format(sw_name))
-                        self.controllers[sw_name].table_add("ipv4_lpm", "ecmp_group", [str(host_ip_match_from_fib)], [str(n_hops)])
+                        self.controllers[sw_name].table_add("ipv4_lpm", "ecmp_forward", [str(host_ip_match_from_fib)], [str(n_hops)])
 
                         for index, value in enumerate(entry):
-
+                            
+                            # Index 0 refers to the connection to the host
                             if index == 0:
                                 continue
 
@@ -166,7 +166,7 @@ class Controller(object):
                                 print(index)
                                 #print(sw_port)
                                 print ("table_add at {}:".format(sw_name))
-                                self.controllers[sw_name].table_add("ecmp_group_to_nhop", "set_nhop", [str(index)], [str(dst_sw_mac), str(sw_port)])
+                                self.controllers[sw_name].table_add("ecmp_to_nhop", "set_nhop", [str(index-1)], [str(dst_sw_mac), str(sw_port)])
                                 
                             elif port_toforward_from_fib == unique_sorted_OIF[2]:
                                 dst_sw_mac = self.topo.node_to_node_mac(connected_switches[1], sw_name)
@@ -174,7 +174,7 @@ class Controller(object):
                                 print(index)
                                 #print(sw_port)
                                 print ("table_add at {}:".format(sw_name))
-                                self.controllers[sw_name].table_add("ecmp_group_to_nhop", "set_nhop", [str(index)], [str(dst_sw_mac), str(sw_port)])
+                                self.controllers[sw_name].table_add("ecmp_to_nhop", "set_nhop", [str(index-1)], [str(dst_sw_mac), str(sw_port)])
 
 
 
@@ -232,8 +232,17 @@ class Controller(object):
 
         router  = sys.argv[1]
         fname = router+"route"+".data"
+
+        path = os.getcwd()
+        folder = "fpm_data"
+        path_save = os.path.join(path, folder)
+
+        path_save = os.path.join(path_save, fname)
+        file_name = path_save
+
+
         
-        f = open(fname,"a")
+        f = open(file_name,"a")
         f.write(str(msg['attrs'])+"\n")
         f.close()
 
@@ -299,10 +308,19 @@ class Controller(object):
                 #print(nt_msg)
 
                 nt_msg = ":".join("{:02x}".format(ord(c)) for c in nt_msg)
-                file_name = 'nt_msg'+sys.argv[1]+'.data'
+
+                path = os.getcwd()
+                folder = "fpm_data"
+
+                path_save = os.path.join(path, folder)
+                
+                _file = 'nt_msg'+sys.argv[1]+'.data'
+                path_save = os.path.join(path_save, _file)
+
+                file_name = path_save
+
                 with open(file_name, 'w') as f:
                     f.write(nt_msg)
-                
 
                 t = self.decoder('pyroute2.netlink.rtnl.rtmsg.rtmsg', file_name)
                 #print(t)
@@ -333,6 +351,10 @@ class Controller(object):
         fname = router+"route"+".data"
 
         os.system("rm -f {fname}".format(fname = fname))
+
+
+        if not os.path.isdir("fpm_data"):
+            os.mkdir("fpm_data")
 
         s = self.new_socket_create()
         s.listen()

@@ -157,7 +157,7 @@ control MyIngress(inout headers hdr,
     }
 
     // Create an ECMP group ID for a flow
-    action ecmp_group(bit<16> num_nhops){
+    action ecmp_forward(bit<16> num_nhops){
         hash(meta.ecmp_hash,
 	    HashAlgorithm.crc16,
 	    (bit<1>)0,
@@ -235,7 +235,7 @@ control MyIngress(inout headers hdr,
     }
 
 
-    table ecmp_group_to_nhop {
+    table ecmp_to_nhop {
         key = {
             meta.ecmp_hash: exact;
         }
@@ -253,7 +253,7 @@ control MyIngress(inout headers hdr,
         }
         actions = {
             set_nhop;
-            ecmp_group;
+            ecmp_forward;
             drop;
             
         }
@@ -294,8 +294,8 @@ control MyIngress(inout headers hdr,
                     // If multipath is possible, per flow ECMP is carried out on TCP packets
                     switch (ipv4_lpm.apply().action_run){
 
-                        ecmp_group: {
-                            ecmp_group_to_nhop.apply();
+                        ecmp_forward: {
+                            ecmp_to_nhop.apply();
                         }
 
                     }
