@@ -38,7 +38,7 @@ class Controller(object):
     def reset_states(self):
         for controller in self.controllers.values():
             controller.table_clear("ipv4_lpm")
-            controller.table_clear("ecmp_group_to_nhop")
+            controller.table_clear("ecmp_to_nhop")
         
     # Connect to fake IP based thrift port on the switches to access it
     def connect_to_switches(self):
@@ -239,8 +239,6 @@ class Controller(object):
 
         path_save = os.path.join(path_save, fname)
         file_name = path_save
-
-
         
         f = open(file_name,"a")
         f.write(str(msg['attrs'])+"\n")
@@ -350,7 +348,14 @@ class Controller(object):
         router  = sys.argv[1]
         fname = router+"route"+".data"
 
-        os.system("rm -f {fname}".format(fname = fname))
+        path = os.getcwd()
+        folder = "fpm_data"
+        path_save = os.path.join(path, folder)
+
+        path_save = os.path.join(path_save, fname)
+        file_name = path_save
+
+        os.system("rm -f {fname}".format(fname = file_name))
 
 
         if not os.path.isdir("fpm_data"):
