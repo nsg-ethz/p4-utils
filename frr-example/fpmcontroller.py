@@ -38,6 +38,7 @@ class Controller(object):
     def reset_states(self):
         for controller in self.controllers.values():
             controller.table_clear("ipv4_lpm")
+            controller.table_clear("ecmp_group_to_nhop")
         
     # Connect to fake IP based thrift port on the switches to access it
     def connect_to_switches(self):
@@ -59,7 +60,7 @@ class Controller(object):
 
         # get the FPM data for the Forwarding Information Base
         fib = self.main_fpm()
-        print(fib)
+        print(*fib, sep = "\n")
 
         for sw_name, controller in self.controllers.items():
 
@@ -80,76 +81,108 @@ class Controller(object):
                 """ 
                 Key to understand :
                 List of routes installed by fpm
-                position 0 selects the route (choose by looking at the FPM routes, which route to install)
-                position 1 selects the IP match for lookup , tuple of the form ('RTA_DST', IP)
-                position 2 selects the port to forward on , tuple of the form ('RTA_OIF', PORT) """
+                position in FIB list selects the route (choose by looking at the FPM routes, which route to install)
+                position 0 in FIB entry selects the IP match for lookup , tuple of the form ('RTA_DST', IP)
+                position 1 in FIB selects the port to forward on , tuple of the form ('RTA_OIF', PORT) 
+                position 2,3,.... in FIB selects the port to forward on in case of multipath tuple of the form ('RTA_OIF', PORT)"""
 
-                # Connection to directly connected host (4th entry in FIB)
-                host_ip_match_from_fib = fib[3][0][1] + "/24"
-                port_toforward_from_fib = fib[3][1][1]
-                
-                # Need to match interface as PID number to real port
-                if int(port_toforward_from_fib) > (int(fib[1][1][1]) or int(fib[3][1][1])):
+                # Connection to directly connected host (always OIF with the biggest PID)
 
-                    # Port 1 is always connected to the host, port 3 to CP router, port 100 and 101 from CP fake interfaces, other ports to switches
-                    sw_port = self.topo.node_to_node_port_num(sw_name, host)
-                
-                print(sw_port)
-
-                print ("table_add at {}:".format(sw_name))
-                self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(host_mac), str(sw_port)])
+                all_OIF = [x[1] for x in fib]
+                sorted_OIF = sorted([z[1] for z in all_OIF])
+                unique_sorted_OIF = sorted(list(set(sorted_OIF)))
+                max_OIF = max(sorted_OIF)
 
                 connected_switches = self.topo.get_p4switches_connected_to(sw_name)
 
-                # Connection to other switches 
-                host_ip_match_from_fib = fib[1][0][1] + "/24"
-                port_toforward_from_fib = fib[1][1][1]
+                _fib = []
+                _fib.append(fib[0])
+                _fib.extend(fib[4:])
 
-                # Need to match interface as PID number to real port
-                if int(port_toforward_from_fib) > (int(fib[1][1][1]) or int(fib[4][1][1])):
-                    # Port 1 is always connected to the host, port 3 to CP router, port 100 and 101 from CP fake interfaces, other ports to switches
-                    sw_port = self.topo.node_to_node_port_num(sw_name, host)
 
-                else:
-                    sw_port = self.topo.node_to_node_port_num(sw_name, connected_switches[0])
 
-                print(sw_port)
+                for entry in _fib:
+                    
+                    if entry[1][1] == max_OIF:
 
-                print ("table_add at {}:".format(sw_name))
-                self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(host_mac), str(sw_port)])
+                        # Directly connected host to the switch
+                        host_ip_match_from_fib = entry[0][1] + "/24"
+                        print(host_ip_match_from_fib)
+                        port_toforward_from_fib = entry[1][1]
+                
+                        # Need to match interface as PID number to real port
 
-                host_ip_match_from_fib = fib[4][0][1] + "/24"
-                port_toforward_from_fib = fib[4][1][1]
+                        # Port 1 (with biggest PID always) is always connected to the host, port 3 to CP router, port 100,101.. from CP fake interfaces, other ports to switches
+                        sw_port = self.topo.node_to_node_port_num(sw_name, host)
+                
+                        print(sw_port)
 
-                print ("table_add at {}:".format(sw_name))
-                self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(host_mac), str(sw_port)])
+                        print ("table_add at {}:".format(sw_name))
+                        self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(host_mac), str(sw_port)])
 
-                host_ip_match_from_fib = fib[2][0][1] + "/24"
-                port_toforward_from_fib = fib[2][1][1]
+                    # Single path only, no ECMP in that case
+                    elif entry[1][1] != max_OIF and len(entry) <= 2:
 
-                if int(port_toforward_from_fib) > (int(fib[2][1][1]) or int(fib[5][1][1])):
-                    # Port 1 is always connected to the host, port 3 to CP router, port 100 and 101 from CP fake interfaces, other ports to switches
-                    sw_port = self.topo.node_to_node_port_num(sw_name, host)
-                else:
-                    sw_port = self.topo.node_to_node_port_num(sw_name, connected_switches[1])
+                        # Other hosts and switches in the network as destination, not hosts directly
+                        host_ip_match_from_fib = entry[0][1] + "/24"
+                        print(host_ip_match_from_fib)
+                        port_toforward_from_fib = entry[1][1] 
 
-                print(sw_port)
+                        # Need to match interface as PID number to real port ( need to find a bette way to do this )
+                        if port_toforward_from_fib == unique_sorted_OIF[1]:
+                            dst_sw_mac = self.topo.node_to_node_mac(connected_switches[0], sw_name)
+                            sw_port = self.topo.node_to_node_port_num(sw_name, connected_switches[0])
+                            print(sw_port)
+                            print ("table_add at {}:".format(sw_name))
+                            self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(dst_sw_mac), str(sw_port)])
 
-                print ("table_add at {}:".format(sw_name))
-                self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(host_mac), str(sw_port)])
+                        elif port_toforward_from_fib == unique_sorted_OIF[2]:
+                            dst_sw_mac = self.topo.node_to_node_mac(connected_switches[1], sw_name)
+                            sw_port = self.topo.node_to_node_port_num(sw_name, connected_switches[1])
+                            print(sw_port)
+                            print ("table_add at {}:".format(sw_name))
+                            self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(dst_sw_mac), str(sw_port)])
 
-                host_ip_match_from_fib = fib[5][0][1] + "/24"
-                port_toforward_from_fib = fib[5][1][1]
+                    # Multiple ECMP paths as calculated by FRR, OIFs generated by the OSPF
+                    elif len(entry) > 2:
 
-                print ("table_add at {}:".format(sw_name))
-                self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(host_mac), str(sw_port)])
+                        n_hops = len(entry) - 1
+                        host_ip_match_from_fib = entry[0][1] + "/24"
+                        print(host_ip_match_from_fib)
+
+                        print ("table_add at {}:".format(sw_name))
+                        self.controllers[sw_name].table_add("ipv4_lpm", "ecmp_group", [str(host_ip_match_from_fib)], [str(n_hops)])
+
+                        for index, value in enumerate(entry):
+
+                            if index == 0:
+                                continue
+
+                            port_toforward_from_fib = entry[index][1] 
+                            
+                            if port_toforward_from_fib == unique_sorted_OIF[1]:
+                                dst_sw_mac = self.topo.node_to_node_mac(connected_switches[0], sw_name)
+                                sw_port = self.topo.node_to_node_port_num(sw_name, connected_switches[0])
+                                print(index)
+                                #print(sw_port)
+                                print ("table_add at {}:".format(sw_name))
+                                self.controllers[sw_name].table_add("ecmp_group_to_nhop", "set_nhop", [str(index)], [str(dst_sw_mac), str(sw_port)])
+                                
+                            elif port_toforward_from_fib == unique_sorted_OIF[2]:
+                                dst_sw_mac = self.topo.node_to_node_mac(connected_switches[1], sw_name)
+                                sw_port = self.topo.node_to_node_port_num(sw_name, connected_switches[1])
+                                print(index)
+                                #print(sw_port)
+                                print ("table_add at {}:".format(sw_name))
+                                self.controllers[sw_name].table_add("ecmp_group_to_nhop", "set_nhop", [str(index)], [str(dst_sw_mac), str(sw_port)])
+
 
 
     HOSTS = ['10.0.0.1', '10.0.0.2', '10.0.0.3']
     PORT = 2621
 
     # For kernel learnt routes
-    fib_for_forwarding_kernel = []
+    fib_for_forwarding_kernel_and_zebra = []
     # For zebra/OSPF learnt routes
     fib_for_forwarding_zebra = []
     # For multipath/addtional OSPF learnt routes
@@ -206,13 +239,18 @@ class Controller(object):
 
         attrs = msg['attrs']
         hdr = msg['header']
-
-        
+    
+        # Kernel route to host directly connected to switch
         if len(attrs) == 3 and isinstance(attrs[2][1], int):
-            
-            Controller.fib_for_forwarding_kernel.append((attrs[0],attrs[2]))
+            Controller.fib_for_forwarding_kernel_and_zebra.append((attrs[0],attrs[2]))
+        
+        # Zebra OSPF multipath route for ECMP
+        elif len(attrs) == 3 and attrs[2][0] == "RTA_MULTIPATH":
+            Controller.fib_for_forwarding_zebra_multi.append((attrs[0], ('RTA_OIF',attrs[2][1][0]['oif']), ('RTA_OIF',attrs[2][1][1]['oif'])))     
+
+        #Zebra OSPF single route    
         elif len(attrs) == 4:
-            Controller.fib_for_forwarding_zebra.append((attrs[0],attrs[3]))
+            Controller.fib_for_forwarding_kernel_and_zebra.append((attrs[0],attrs[3]))
         else:
             pass
             #Controller.fib_for_forwarding_zebra_multi.append((attrs[0],attrs[3]))
@@ -305,17 +343,19 @@ class Controller(object):
         self.get_fpm(conn, addr)
         s.close()
 
-        for item in Controller.fib_for_forwarding_kernel:
+        for item in Controller.fib_for_forwarding_kernel_and_zebra:
             Controller.fib_for_forwarding.append(item)
         
         Controller.fib_for_forwarding.pop()
         Controller.fib_for_forwarding.pop()
 
-        for item in Controller.fib_for_forwarding_zebra:
+        for item in Controller.fib_for_forwarding_zebra_multi:
             Controller.fib_for_forwarding.append(item)
 
-        '''for item in Controller.fib_for_forwarding_zebra_multi:
+        '''for item in Controller.fib_for_forwarding_zebra:
             Controller.fib_for_forwarding.append(item)'''
+
+        print()
 
         return Controller.fib_for_forwarding
 

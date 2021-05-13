@@ -51,14 +51,37 @@ header ospf_t {
     bit<32>   authen;
 }
 
+header tcp_t{
+    bit<16> srcPort;
+    bit<16> dstPort;
+    bit<32> seqNo;
+    bit<32> ackNo;
+    bit<4>  dataOffset;
+    bit<4>  res;
+    bit<1>  cwr;
+    bit<1>  ece;
+    bit<1>  urg;
+    bit<1>  ack;
+    bit<1>  psh;
+    bit<1>  rst;
+    bit<1>  syn;
+    bit<1>  fin;
+    bit<16> window;
+    bit<16> checksum;
+    bit<16> urgentPtr;
+}
+
 struct metadata {
-    /* empty */
+    bit<14> ecmp_hash;
+    bit<14> ecmp_group_id;
+
 }
 
 struct headers {
     ethernet_t   ethernet;
     ipv4_t       ipv4;
     ospf_t       ospf;
+    tcp_t        tcp;
 }
 
 /*************************************************************************
@@ -87,16 +110,24 @@ parser MyParser(packet_in packet,
         packet.extract(hdr.ipv4);
         transition select(hdr.ipv4.protocol){
             89 : parse_ospf;
+            6 : parse_tcp;
             default: accept;
         }
 
     }
 
-    // parse the ospf header
+    // parse the OSPF header
     state parse_ospf {
         packet.extract(hdr.ospf);
         transition accept;
     }
+
+    // parse the TCP header
+    state parse_tcp {
+        packet.extract(hdr.tcp);
+        transition accept;
+    }
+
 
 
 }
@@ -123,6 +154,20 @@ control MyIngress(inout headers hdr,
 
     action drop() {
         mark_to_drop(standard_metadata);
+    }
+
+    // Create an ECMP group ID for a flow
+    action ecmp_group(bit<16> num_nhops){
+        hash(meta.ecmp_hash,
+	    HashAlgorithm.crc16,
+	    (bit<1>)0,
+	    { hdr.ipv4.srcAddr,
+	      hdr.ipv4.dstAddr,
+          hdr.tcp.srcPort,
+          hdr.tcp.dstPort,
+          hdr.ipv4.protocol},
+	    num_nhops);
+
     }
 
     // Forward ARP lookup for OSPF messages
@@ -189,12 +234,26 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
+
+    table ecmp_group_to_nhop {
+        key = {
+            meta.ecmp_hash: exact;
+        }
+        actions = {
+            drop;
+            set_nhop;
+        }
+        size = 1024;
+    }
+
+
     table ipv4_lpm {
         key = {
             hdr.ipv4.dstAddr: lpm;
         }
         actions = {
             set_nhop;
+            ecmp_group;
             drop;
             
         }
@@ -232,7 +291,14 @@ control MyIngress(inout headers hdr,
                 else if (hdr.ipv4.protocol != 89){
 
                     // Apply IPv4 forwarding for non OSPF packets, from host to host
-                    ipv4_lpm.apply();
+                    // If multipath is possible, per flow ECMP is carried out on TCP packets
+                    switch (ipv4_lpm.apply().action_run){
+
+                        ecmp_group: {
+                            ecmp_group_to_nhop.apply();
+                        }
+
+                    }
 
                 }
                     
@@ -290,6 +356,8 @@ control MyDeparser(packet_out packet, in headers hdr) {
         packet.emit(hdr.ethernet);
         packet.emit(hdr.ipv4);
         packet.emit(hdr.ospf);
+
+        packet.emit(hdr.tcp);
 
     }
 }

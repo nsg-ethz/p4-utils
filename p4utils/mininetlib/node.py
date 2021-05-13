@@ -374,6 +374,8 @@ class Router( Switch ):
             '''if item == "eth1":
                 continue'''
             cmd0 = ("ip link add {}-{} type veth peer name {}-{}".format(self.name, item, sw_name, sw_intf))
+
+            #cmd00 = ("ip netns exec {} ip link set {}-{} netns {}".format(self.pid, self.name, item, self.name[1]))
             cmd00 = ("ip link set {}-{} netns {}".format(self.name, item, self.pid))
             
             cmd1 = ("ip link set dev {} up".format(item))
