@@ -1,4 +1,5 @@
 import os
+import sys
 import math
 import time
 import types
@@ -243,9 +244,9 @@ class TaskScheduler:
                     break
             # Get kwargs from chunks
             bin_data = b''.join(chunks)
-            kwargs = pickle.loads(bin_data)
+            args, kwargs = pickle.loads(bin_data)
             # Initialize a new task
-            task = Task(**kwargs)
+            task = Task(*args, **kwargs)
             # Schedule task
             with self.lock:
                 self.scheduled.append(task)
@@ -277,8 +278,11 @@ class TaskScheduler:
         self.scheduler = th.Thread(target=self.scheduler_loop, daemon=True)
         self.scheduler.start()
         self.server_loop()
-            
+
 
 if __name__ == '__main__':
 
-    ts = TaskScheduler('/tmp/ciao')
+    if len(sys.argv) != 2:
+        raise Exception('wrong execution call.')
+
+    ts = TaskScheduler(sys.argv[1])

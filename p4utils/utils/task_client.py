@@ -3,11 +3,6 @@ import socket
 
 from p4utils.utils.task_scheduler import *
 
-kwargs = {
-    'exe': send_udp_flow,
-    'start': 0,
-    'duration': 10
-}
 
 class TaskClient:
     """
@@ -24,7 +19,19 @@ class TaskClient:
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.socket.setblocking(True)
     
-    def send(self, obj):
+    def send(self, obj, retry=False):
+        """
+        Send an object to the server and close connection.
+
+        Arguments:
+            obj         : serializable object to send to the server
+                          using Pickle
+            retry (bool): whether to attempt a reconnection upon failure
+        """
+        self._send(obj, retry=retry)
+        self._close()
+
+    def _send(self, obj, retry=False):
         """
         Send an object to the server.
 
@@ -35,17 +42,18 @@ class TaskClient:
         # Serialize object
         bin_data = pickle.dumps(obj)
         # Connect socket
-        self.socket.connect(self.unix_socket_file)
-        self.socket.sendall(bin_data)
+        while True:
+            try:
+                self.socket.connect(self.unix_socket_file)
+                break
+            except Exception as e:
+                if not retry:
+                    raise e
+                      
+        self.socket.sendall(bin_data)      
         
-    def close(self):
+    def _close(self):
         """
         Close the socket.
         """
         self.socket.close()
-
-if __name__ == '__main__':
-
-    ts = TaskClient('/tmp/ciao')
-    ts.send(kwargs)
-    ts.close()

@@ -16,6 +16,7 @@ from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.node import *
 from p4utils.mininetlib.net import P4Mininet
 from p4utils.mininetlib.cli import P4CLI
+from p4utils.utils.task_client import TaskClient
 
 
 class NetworkAPI(Topo):
@@ -42,6 +43,8 @@ class NetworkAPI(Topo):
         # List of scripts to execute in
         # the main namespace
         self.scripts = []
+        # Dictionary of scheduled tasks
+        self.tasks = {}
 
         ## External modules default configuration dictionary
         self.modules = {}
@@ -325,6 +328,38 @@ class NetworkAPI(Topo):
             info('Exec Script: {}\n'.format(script['cmd']))
             run_command(script['cmd'])
 
+    def start_schedulers(self):
+        """
+        Start all the required task schedulers.
+
+        Assumes:
+            A mininet instance is stored as self.net.
+            self.net.start() has been called.
+        """
+        for node, data in self.nodes(withInfo=True):
+            if self.hasScheduler(node):
+                unix_path = data.get('unix_path', '/tmp')
+                unix_socket = unix_path + '/' + node + '_socket'
+                info('Node {} task scheduler listens on {}.\n'.format(node, unix_socket))
+                self.net[node].cmd('python3 -m p4utils.utils.task_scheduler "{}" &'.format(unix_socket))
+
+    def distribute_tasks(self):
+        """
+        Distribute all the tasks to the schedulers.
+
+        Assumes:
+            A mininet instance is stored as self.net.
+            self.net.start() has been called.
+        """
+        for node, tasks in self.tasks.items():
+            if self.hasScheduler(node):
+                unix_path = self.getNode(node).get('unix_path', '/tmp')
+                unix_socket = unix_path + '/' + node + '_socket'
+                info('Tasks for node {} distributed to socket {}.\n'.format(node, unix_socket))
+                task_client = TaskClient(unix_socket)
+                for task in tasks:
+                    task_client.send(task, retry=True)
+
     def start_net_cli(self):
         """
         Starts up the mininet CLI and prints some helpful output.
@@ -590,6 +625,7 @@ class NetworkAPI(Topo):
 
         Arguments:
             node (string)    : name of the node
+            base (int)       : starting port number
 
         Returns:
             available port number (int)
@@ -951,6 +987,10 @@ class NetworkAPI(Topo):
         output('Topology saved to disk!\n')
 
         sleep(1)
+        info('Starting schedulers...\n')
+        self.start_schedulers()
+        output('Schedulers started correctly!\n')
+
         info('Programming switches...\n')
         self.program_switches()
         output('Switches programmed correctly!\n')
@@ -962,6 +1002,10 @@ class NetworkAPI(Topo):
         info('Executing scripts...\n')
         self.exec_scripts()
         output('All scripts executed correctly!\n')
+
+        info('Distributing tasks...\n')
+        self.distribute_tasks()
+        output('All tasks distributed correctly!\n')
 
         if self.cli_enabled:
             self.start_net_cli()
@@ -1538,12 +1582,95 @@ class NetworkAPI(Topo):
             return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4RuntimeSwitch(n)]
 
 ## Nodes
-    def setDefaultRoute(self, name, default_route):
+    def enableScheduler(self, name, path='/tmp'):
         """
-        Set the host's default route.
+        Enable the task scheduler server for the node.
 
         Arguments:
-            name (string)         : name of the host
+            name (string): name of the node
+            path (string): name of the directory where the
+                           socket file will be placed
+        """
+        if self.isNode(name):
+            self.updateNode(name, scheduler=True, socket_path=path)
+        else:
+            raise Exception('"{}" does not exists.'.format(name))
+
+    def disableScheduler(self, name):
+        """
+        Disable the task scheduler server for the node.
+
+        Arguments:
+            name (string): name of the node
+        """
+        if self.isNode(name):
+            self.updateNode(name, scheduler=False)
+            self.tasks.update(name=[])
+        else:
+            raise Exception('"{}" does not exists.'.format(name))
+
+    def hasScheduler(self, name):
+        """
+        Whether a host has an active scheduler or not.
+        """
+        return self.getNode(name).get('scheduler', False)
+
+    def enableSchedulerAll(self, path='/tmp'):
+        """
+        Enable the task scheduler server for all the nodes.
+
+        Arguments:
+            path (string): name of the directory where the
+                           socket file will be placed
+        """
+        for node in self.nodes():
+            self.enableScheduler(node, path)
+
+    def disableSchedulerAll(self):
+        """
+        Disable the task scheduler server for all the nodes.
+        """
+        for node in self.nodes():
+            self.disableScheduler(node, path)
+
+    def addTask(self, node, exe, *args, start=0, duration=0, **kwargs):
+        """
+        Add a task to the node.
+
+        Arguments:
+            node (string) : name of the node
+            exe           : executable to run (either a shell string 
+                            command or a python function)
+            args          : positional arguments for the passed function
+            start (int)   : task starting time with respect to the current
+                            time in seconds (i.e. 0 means start as soon as
+                            you receive it)
+            duration (int): task duration time in seconds (if duration is 
+                            lower than or equal to 0, then the task has no 
+                            time limitation)
+            kwargs        : key-word arguments for the passed function
+        """
+        if self.isNode(node):
+            if self.hasScheduler(node):
+                self.tasks.setdefault(node, [])
+                # Parse execution parameters to pass to the server
+                kwargs.update(start=start, duration=duration)
+                args = list(args)
+                args.insert(0, exe)
+                params = (args, kwargs)
+                # Append task to tasks
+                self.tasks[node].append(params)
+            else:
+                raise Exception('"{}" does not have a scheduler.'. format(node))
+        else:
+            raise Exception('"{}" does not exists.'.format(name))
+
+    def setDefaultRoute(self, name, default_route):
+        """
+        Set the node's default route.
+
+        Arguments:
+            name (string)         : name of the node
             default_route (string): default route IP
         """
         if self.isNode(name):
