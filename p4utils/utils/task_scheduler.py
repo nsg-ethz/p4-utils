@@ -3,8 +3,10 @@ import sys
 import math
 import time
 import types
+import queue
 import pickle
 import socket
+import signal
 import shutil as sh
 import threading as th
 import subprocess as sp
@@ -136,34 +138,25 @@ class Task:
             raise Exception('cannot start tasks in the past!')
 
         if duration > 0:
-            self.stop = self.start + duration
+            self.duration = duration
         else:
-            self.stop = None
+            raise Exception('cannot have negative duration!')
 
         self.exe = exe
         self.args = args
         self.kwargs = kwargs
+
+        # Process states
         self.running = False
+        self.stopped = False
+
+        # Spanning processes
         self.proc = None
+        self.thread = None
 
-    def to_start(self):
+    def _start(self):
         """
-        Whether the task has to be started or not.
-        """
-        return time.time() >= self.start
-
-    def to_stop(self):
-        """
-        Whether the task has to be stopped or not.
-        """
-        if self.stop is not None:
-            return time.time() >= self.stop
-        else:
-            return False
-
-    def run(self):
-        """
-        Run the executable in a separate process and populate
+        Start the executable in a separate process and populate
         self.process with it.
         """
         # If it is a function
@@ -172,6 +165,7 @@ class Task:
                                    args=self.args,
                                    kwargs=self.kwargs)
             self.proc.start()
+            # Update state
             self.running = True
         # If it is a shell command
         elif isinstance(self.exe, str):
@@ -179,17 +173,41 @@ class Task:
             self.proc = sp.Popen(self.exe,
                                  stdout=sp.DEVNULL,
                                  stderr=sp.DEVNULL)
+            # Update state
             self.running = True
         else:
             raise TypeError('{} is not a supported type.'.format(type(self.exe)))
     
-    def kill(self):
+    def _stop(self):
         """
         Stops the execution of the process.
         """
-        self.proc.terminate()
+        # Kill process
+        os.kill(self.proc.pid, signal.SIGKILL)
+        # Update state
         self.running = False
+        self.stopped = True
 
+    def _run(self):
+        """
+        Start the process, wait for its end and then kill it.
+        """
+        # Start process
+        self._start()
+        # If duration has been specified, wait and then stop.
+        if self.duration > 0:
+            time.sleep(self.duration)
+            self._stop()
+
+    def run(self):
+        """
+        Start a thread to control the execution of the task.
+        """
+        # Avoid zombie processes
+        signal.signal(signal.SIGCHLD, signal.SIG_IGN)
+        # Run the thread in non-blocking mode
+        self.thread = th.Thread(target=self._run, daemon=True)
+        self.thread.start()
 
 class TaskScheduler:
     """
@@ -214,13 +232,13 @@ class TaskScheduler:
         self.socket.setblocking(True)
         # Bind socket
         self.socket.bind(unix_socket_file)
+        # Server thread
+        self.server = None
 
-        # List of tasks
-        self.scheduled = []
-        # Lock on list of tasks
-        self.lock = th.Lock()
-        # Scheduler thread
-        self.scheduler = None
+        # Queue of received tasks
+        self.queue = queue.Queue()
+        # List of tasks currently managed by the scheduler
+        self.tasks = []
 
         # Start server
         self.start()
@@ -234,6 +252,7 @@ class TaskScheduler:
             # Accept connection
             conn, addr = self.socket.accept()
             chunks = []
+
             # Retrieve chunks
             while True:
                 chunk = conn.recv(4096)
@@ -242,42 +261,53 @@ class TaskScheduler:
                 else:
                     conn.close()
                     break
+
             # Get kwargs from chunks
             bin_data = b''.join(chunks)
             args, kwargs = pickle.loads(bin_data)
             # Initialize a new task
             task = Task(*args, **kwargs)
-            # Schedule task
-            with self.lock:
-                self.scheduled.append(task)
+
+            # Enqueue task
+            self.queue.put(task)
 
     def scheduler_loop(self):
         """
         Start the tasks and stop them when it is required.
         """
         while True:
-            stopped_tasks = []
+                # Try to get task from the queue and wait
+                # for a minute 
+                try:
+                    task = self.queue.get(60)
+                    self.tasks.append(task)
+                except queue.Empty:
+                    pass
 
-            with self.lock:
-                for task in self.scheduled:
-                    if task.running:
-                        if task.to_stop():
-                            task.kill()
-                            stopped_tasks.append(task)
-                    else:
-                        if task.to_start():
-                            task.run()
-
+                # List of stopped tasks to remove
+                stopped_tasks = []
+                
+                for task in self.tasks:
+                    # Identify stopped tasks
+                    if task.stopped and not task.running:
+                        stopped_tasks.append(task)
+                    # Identify new tasks
+                    elif not task.running and not task.stopped:
+                        task.run()
+                
+                # Remove old stopped tasks from the list
                 for task in stopped_tasks:
-                    self.scheduled.remove(task)     
+                    self.tasks.remove(task)
 
     def start(self):
         """
         Start the server.
         """
-        self.scheduler = th.Thread(target=self.scheduler_loop, daemon=True)
-        self.scheduler.start()
-        self.server_loop()
+        # Start server to listen for tasks
+        self.server = th.Thread(target=self.server_loop, daemon=True)
+        self.server.start()
+        # Start scheduler
+        self.scheduler_loop()
 
 
 if __name__ == '__main__':
