@@ -2,6 +2,7 @@ import math
 import time
 import socket
 
+
 def setSizeToInt(size):
     """" Converts the sizes string notation to the corresponding integer
     (in bytes).  Input size can be given with the following
