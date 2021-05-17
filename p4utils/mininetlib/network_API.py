@@ -1636,16 +1636,16 @@ class NetworkAPI(Topo):
         Add a task to the node.
 
         Arguments:
-            node (string) : name of the node
-            exe           : executable to run (either a shell string 
-                            command or a python function)
-            args          : positional arguments for the passed function
-            start (int)   : task starting time with respect to the current
-                            time in seconds.
-            duration (int): task duration time in seconds (if duration is 
-                            lower than or equal to 0, then the task has no 
-                            time limitation)
-            kwargs        : key-word arguments for the passed function
+            node (string)   : name of the node
+            exe             : executable to run (either a shell string 
+                              command or a python function)
+            args            : positional arguments for the passed function
+            start (float)   : task starting time with respect to the current
+                              time in seconds.
+            duration (float): task duration time in seconds (if duration is 
+                             lower than or equal to 0, then the task has no 
+                             time limitation)
+            kwargs          : key-word arguments for the passed function
         """
         if self.isNode(node):
             if self.hasScheduler(node):

@@ -19,14 +19,14 @@ class Task:
     def __init__(self, exe, *args, start=0, duration=0, **kwargs):
         """
         Attributes:
-            exe           : executable to run (either a shell string 
-                            command or a python function)
-            args          : positional arguments for the passed function
-            start (int)   : task absolute starting time (unix time)
-            duration (int): task duration time in seconds (if duration is 
-                            lower than or equal to 0, then the task has no 
-                            time limitation)
-            kwargs        : key-word arguments for the passed function
+            exe             : executable to run (either a shell string 
+                              command or a python function)
+            args            : positional arguments for the passed function
+            start (float)   : task absolute starting time (unix time)
+            duration (float): task duration time in seconds (if duration is 
+                              lower than or equal to 0, then the task has no 
+                              time limitation)
+            kwargs          : key-word arguments for the passed function
         """
         if start >= 0:
             self.start = start
@@ -43,6 +43,7 @@ class Task:
         self.kwargs = kwargs
 
         # Process states
+        self.started = False
         self.running = False
         self.stopped = False
 
@@ -94,7 +95,8 @@ class Task:
         self._start()
         # If duration has been specified, wait and then stop.
         if self.duration > 0:
-            time.sleep(self.duration)
+            # Wait for duration
+            time.sleep(max(0, self.start + self.duration - time.time()))
             self._stop()
 
     def run(self):
@@ -189,10 +191,11 @@ class TaskScheduler:
                 
                 for task in self.tasks:
                     # Identify stopped tasks
-                    if task.stopped and not task.running:
+                    if task.stopped:
                         stopped_tasks.append(task)
                     # Identify new tasks
-                    elif not task.running and not task.stopped:
+                    elif not task.started:
+                        task.started = True
                         task.run()
                 
                 # Remove old stopped tasks from the list
