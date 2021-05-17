@@ -22,18 +22,16 @@ class Task:
             exe           : executable to run (either a shell string 
                             command or a python function)
             args          : positional arguments for the passed function
-            start (int)   : task starting time with respect to the current
-                            time in seconds (i.e. 0 means start as soon as
-                            you receive it)
+            start (int)   : task absolute starting time (unix time)
             duration (int): task duration time in seconds (if duration is 
                             lower than or equal to 0, then the task has no 
                             time limitation)
             kwargs        : key-word arguments for the passed function
         """
         if start >= 0:
-            self.start = start + time.time()
+            self.start = start
         else:
-            raise Exception('cannot start tasks in the past!')
+            raise Exception('cannot have negative Unix time.')
 
         if duration > 0:
             self.duration = duration
@@ -90,6 +88,8 @@ class Task:
         """
         Start the process, wait for its end and then kill it.
         """
+        # Wait for starting time
+        time.sleep(max(0, self.start - time.time()))
         # Start process
         self._start()
         # If duration has been specified, wait and then stop.
@@ -160,14 +160,16 @@ class TaskScheduler:
                     conn.close()
                     break
 
-            # Get kwargs from chunks
+            # Get list from chunks
             bin_data = b''.join(chunks)
-            args, kwargs = pickle.loads(bin_data)
-            # Initialize a new task
-            task = Task(*args, **kwargs)
+            tasks_list = pickle.loads(bin_data)
 
-            # Enqueue task
-            self.queue.put(task)
+            # Iterate over tasks
+            for args, kwargs in tasks_list:
+                # Initialize a new task
+                task = Task(*args, **kwargs)
+                # Enqueue task
+                self.queue.put(task)
 
     def scheduler_loop(self):
         """

@@ -1,5 +1,5 @@
 import os
-from time import sleep
+import time
 from ipaddress import ip_interface, IPv4Network
 from networkx import MultiGraph, Graph
 from networkx.readwrite.json_graph import node_link_data
@@ -357,8 +357,7 @@ class NetworkAPI(Topo):
                 unix_socket = unix_path + '/' + node + '_socket'
                 info('Tasks for node {} distributed to socket {}.\n'.format(node, unix_socket))
                 task_client = TaskClient(unix_socket)
-                for task in tasks:
-                    task_client.send(task, retry=True)
+                task_client.send(tasks, retry=True)
 
     def start_net_cli(self):
         """
@@ -982,14 +981,13 @@ class NetworkAPI(Topo):
         self.net.start()
         output('Network started!\n')
 
-        info('Saving topology to disk...\n')
-        self.save_topology()
-        output('Topology saved to disk!\n')
-
-        sleep(1)
         info('Starting schedulers...\n')
         self.start_schedulers()
         output('Schedulers started correctly!\n')
+
+        info('Saving topology to disk...\n')
+        self.save_topology()
+        output('Topology saved to disk!\n')
 
         info('Programming switches...\n')
         self.program_switches()
@@ -1643,8 +1641,7 @@ class NetworkAPI(Topo):
                             command or a python function)
             args          : positional arguments for the passed function
             start (int)   : task starting time with respect to the current
-                            time in seconds (i.e. 0 means start as soon as
-                            you receive it)
+                            time in seconds.
             duration (int): task duration time in seconds (if duration is 
                             lower than or equal to 0, then the task has no 
                             time limitation)
@@ -1654,7 +1651,7 @@ class NetworkAPI(Topo):
             if self.hasScheduler(node):
                 self.tasks.setdefault(node, [])
                 # Parse execution parameters to pass to the server
-                kwargs.update(start=start, duration=duration)
+                kwargs.update(start=start+time.time(), duration=duration)
                 args = list(args)
                 args.insert(0, exe)
                 params = (args, kwargs)
