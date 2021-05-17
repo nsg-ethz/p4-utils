@@ -17,7 +17,7 @@ from p4utils.utils.topology import NetworkGraph
 def merge_dict(dst, src):
     """
     Merge dictionary src into dictionary dst (nested dictionaries
-    are update).
+    are updated).
     """
     stack = [(dst, src)]
     while stack:

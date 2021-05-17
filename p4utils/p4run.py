@@ -21,40 +21,28 @@
 # Further work: Fabian Schleiss (fabian.schleiss@alumni.ethz.ch)
 # Further work: Jurij Nota (junota@student.ethz.ch)
 
-import os
 import argparse
-import mininet
-import json
 from copy import deepcopy
-from time import sleep
-from ipaddress import ip_interface
-from mininet.log import setLogLevel, info, output, debug, warning
-from mininet.link import TCIntf
+from mininet.log import info, output, debug, warning
 from mininet.clean import sh
-from networkx.classes.multigraph import MultiGraph
-from networkx.classes.graph import Graph
-from networkx.readwrite.json_graph import node_link_data
 
 from p4utils.utils.helper import *
-from p4utils.utils.compiler import P4InfoDisabled
 from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
 from p4utils.utils.client import ThriftClient as DEFAULT_CLIENT
-from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.node import P4Switch as DEFAULT_SWITCH
+from p4utils.mininetlib.node import P4Switch, P4RuntimeSwitch
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
-from p4utils.mininetlib.topo import AppTopoStrategies as DEFAULT_TOPO
-from p4utils.mininetlib.cli import P4CLI
 from p4utils.mininetlib.net import P4Mininet as DEFAULT_NET
+from p4utils.mininetlib.network_API import NetworkAPI
 
 
-class AppRunner(object):
+class AppRunner(NetworkAPI):
     """
     Class for running P4 applications.
     """
 
     def __init__(self, conf_file,
                  cli_enabled=True,
-                 empty_p4=False,
                  log_dir=None,
                  pcap_dir=None,
                  verbosity='info'):
@@ -64,7 +52,6 @@ class AppRunner(object):
         Attributes:
             conf_file (string): a JSON file which describes the mininet topology.
             cli_enabled (bool): enable mininet CLI.
-            empty_p4 (bool): use an empty program for debugging.
             log_dir (string): directory for mininet log files.
             pcap_dir (string): directory where to store pcap files.
             verbosity (string): see https://github.com/mininet/mininet/blob/master/mininet/log.py#L14
@@ -168,38 +155,19 @@ class AppRunner(object):
         Notice: none of the modules or nodes are mandatory. In case they are not specified,
         default settings will be used.
         """
-        # Clients of switches
-        self.clients = []
-        # Compilers of switches
-        self.compilers = []
+        
+        super().__init__()
 
-        # Set verbosity
-        self.verbosity = verbosity
-        setLogLevel(self.verbosity)
+        self.setLogLevel(verbosity)
 
         # Read JSON configuration file
         self.conf_file = conf_file
 
-        mininet.log.info('Reading JSON configuration file...\n')
+        info('Reading JSON configuration file...\n')
         debug('Opening file {}\n'.format(self.conf_file))
         if not os.path.isfile(self.conf_file):
             raise FileNotFoundError("{} is not in the directory!".format(os.path.realpath(self.conf_file)))
         self.conf = load_conf(self.conf_file)
-
-        # we can start topologies with no program to test
-        # Should verify this to see if it works...
-        if empty_p4:
-            info('Empty P4 program selected.\n')
-            import p4utils
-            lib_path = os.path.dirname(p4utils.__file__)
-            lib_path += '/../empty_program/empty_program.p4'
-            # Set default program to empty program
-            self.conf['p4_src'] = lib_path
-
-            # Override custom switch programs with empty program
-            for switch, params in self.conf['topology']['switches'].items():
-                if params.get('p4_src', False):
-                    params['p4_src'] = lib_path
 
         self.cli_enabled = cli_enabled
         self.pcap_dir = pcap_dir
@@ -234,89 +202,111 @@ class AppRunner(object):
         ## Mininet nodes
         # Load default switch node
         self.switch_node = {}
-        if self.conf.get('switch_node'):
-            self.switch_node = load_custom_object(self.conf.get('switch_node'))
+        if self.conf.get('switch_node') is not None:
+            self.switch_node = load_custom_object(self.conf['switch_node'])
         else:
             self.switch_node = DEFAULT_SWITCH
 
         # Load default host node
         self.host_node = {}
-        if self.conf.get('host_node'):
-            self.host_node = load_custom_object(self.conf.get('host_node'))
+        if self.conf.get('host_node') is not None:
+            self.host_node = load_custom_object(self.conf['host_node'])
         else:
             self.host_node = DEFAULT_HOST
 
         ## Modules
         # Load default compiler module
-        self.compiler_module = {}
         # Set default options for the compiler
-        default_compiler_kwargs = {
-                                     'opts': '--target bmv2 --arch v1model --std p4-16',
-                                     'p4rt': False 
-                                  }
-        if self.conf.get('compiler_module'):
+        compiler_kwargs = {
+                            'opts': '--target bmv2 --arch v1model --std p4-16',
+                            'p4rt': False
+                          }
+        compiler = DEFAULT_COMPILER
+        if self.conf.get('compiler_module') is not None:
             if self.conf['compiler_module'].get('object_name'):
-                self.compiler_module['class'] = load_custom_object(self.conf['compiler_module'])
+                compiler = load_custom_object(self.conf['compiler_module'])
             else:
-                self.compiler_module['class'] = DEFAULT_COMPILER
+                compiler = DEFAULT_COMPILER
             # Load default compiler module arguments
-            self.compiler_module['kwargs'] = self.conf['compiler_module'].get('options', default_compiler_kwargs)
-        else:
-            self.compiler_module['class'] = DEFAULT_COMPILER
-            self.compiler_module['kwargs'] = default_compiler_kwargs
+            compiler_kwargs = self.conf['compiler_module'].get('options', {})
+        self.setCompiler(compiler, **compiler_kwargs)
 
         # Load default client module
-        self.client_module = {}
         # Set default options for the client
-        default_client_kwargs = {
-                                    'log_enabled': self.log_enabled,
-                                    'log_dir': self.log_dir
-                                }
-        if self.conf.get('client_module'):
+        client_kwargs = {
+                            'log_enabled': self.log_enabled,
+                            'log_dir': self.log_dir
+                        }
+        client = DEFAULT_CLIENT
+        if self.conf.get('client_module') is not None:
             if self.conf['client_module'].get('object_name'):
-                self.client_module['class'] = load_custom_object(self.conf['client_module'])
+                client = load_custom_object(self.conf['client_module'])
             else:
-                self.client_module['class'] = DEFAULT_CLIENT
+                client = DEFAULT_CLI
             # Load default client module arguments
-            self.client_module['kwargs'] = self.conf['client_module'].get('options', default_client_kwargs)
-        else:
-            self.client_module['class'] = DEFAULT_CLIENT
-            self.client_module['kwargs'] = default_client_kwargs
-
-        # Load default Mininet topology builder
-        if self.conf.get('topo_module'):
-            self.app_topo = load_custom_object(self.conf['topo_module'])
-        else:
-            self.app_topo = DEFAULT_TOPO
+            compiler_kwargs = self.conf['client_module'].get('options', {})
+        self.setSwitchClient(client, **client_kwargs)
 
         # Load default Mininet network
-        if self.conf.get('mininet_module'):
-            self.app_mininet = load_custom_object(self.conf['mininet_module'])
+        if self.conf.get('mininet_module') is not None:
+            mininet = load_custom_object(self.conf['mininet_module'])
         else:
-            self.app_mininet = DEFAULT_NET
+            mininet = DEFAULT_NET
+        self.setNet(mininet)
 
         ## Load topology
         topology = self.conf.get('topology')
-        if not topology:
+        if topology is None:
             raise Exception('no topology defined in {}.'.format(self.conf))
+
+        # Import topology components
+        self.parse_hosts(topology['hosts'])
+        self.parse_switches(topology['switches'])
+        self.parse_links(topology['links'])
+
+        # Execute scripts
+        self._exec_scripts()
+
+        # Set assignment strategy
+        assignment_strategy = topology.get('assignment_strategy', 'l2')
+        if assignment_strategy == 'l2':
+            self.l2()
+        elif assignment_strategy == 'l3':
+            self.l3()
+        elif assignment_strategy == 'mixed':
+            self.mixed()
+
+        if self.cli_enabled:
+            self.enableCli()
         else:
-            # Set default options for the topology
-            default_assignment_strategy = 'l2'
-            # Import topology components
-            self.hosts = topology['hosts']
-            self.switches = self.parse_switches(topology['switches'])
-            self.links = self.parse_links(topology['links'])
-            self.assignment_strategy = topology.get('assignment_strategy', default_assignment_strategy)
+            self.disableCli()
 
-    def exec_scripts(self):
-        """
-        Executes the script present in the "exec_scripts" field of self.conf.
-        """
-        if isinstance(self.conf.get('exec_scripts'), list):
-            for script in self.conf.get('exec_scripts'):
-                info('Exec Script: {}\n'.format(script['cmd']))
-                run_command(script['cmd'])
+        # Start the network
+        self.startNetwork()
 
+    def parse_hosts(self, unparsed_hosts):
+        """
+        Parse hosts and add them to the network. Hosts have
+        the following structure:
+        "hosts":
+        {
+            host_name:
+            {
+                "auto_arp_tables": <true|false> (*),
+                "auto_gw_arp": <true|false> (*),
+                "scheduler": <true|false> (*)
+                "socket_path": <dir to socket file> (*)
+                "defaultRoute": "via <gateway ip>" (*)
+                "dhcp": <true|false> (*)
+            },
+            ...
+        }
+
+        (*) None of these parameters is mandatory.
+        """
+        for host, custom_params in unparsed_hosts.items():
+            self.addHost(host, **custom_params)
+    
     def parse_switches(self, unparsed_switches):
         """
         A switch should have the following structure inside the topology object
@@ -328,7 +318,6 @@ class AppRunner(object):
                 "cpu_port": <true|false> (bool),
                 "cli_input": <path to cli input file> (string),
                 "switch_node": custom_switch_node (dict),
-                "client_module": custom_client_module (dict),
                 "log_enabled" : <true|false> (bool), (*)
                 "log_dir": <log path for switch binary> (string), (*)
                 "pcap_dump": <true|false> (bool), (*)
@@ -345,23 +334,19 @@ class AppRunner(object):
         under getattr(mininetlib.net['node_name'],'params') dictionary.
         These settings override the default ones. None of these fields is mandatory.
         """
-        switches = {}
-        next_thrift_port = 9090
-        next_grpc_port = 9559
-
+        default_params = {
+                            'p4_src': self.conf.get('p4_src'),
+                            'switch_node': deepcopy(self.switch_node),
+                            'pcap_dump': self.pcap_dump,
+                            'pcap_dir': self.pcap_dir,
+                            'log_enabled': self.log_enabled,
+                            'log_dir': self.log_dir
+                         }
+        
         for switch, custom_params in unparsed_switches.items():
+
             # Set general default switch options
-            params = {
-                         'p4_src': self.conf['p4_src'],
-                         'cpu_port': False,
-                         'switch_node': deepcopy(self.switch_node),
-                         'client_module': deepcopy(self.client_module),
-                         'pcap_dump': self.pcap_dump,
-                         'pcap_dir': self.pcap_dir,
-                         'log_enabled': self.log_enabled,
-                         'thrift_port': next_thrift_port,
-                         'grpc_port': next_grpc_port
-                     }
+            params = deepcopy(default_params)
 
             ## Parse Switch node type
             # Set non default node type (the module JSON is converted into a Switch object)
@@ -374,36 +359,19 @@ class AppRunner(object):
             # This field is not propagated further
             del params['switch_node']
 
-            ## Parse Switch client type
-            # Set non default client type (the module JSON is converted into a Contoller object)
-            kwargs = params['client_module']['kwargs']
-            if 'client_module' in custom_params:
-                module = load_custom_object(custom_params['client_module'])
-                kwargs.update(custom_params['client_module']['kwargs'])
-                # This field is not propagated further
-                del custom_params['client_module']
-            else:
-                module = params['client_module']['class']
-            # This field is not propagated further
-            del params['client_module']
-            # If a client command input is set
-            if 'cli_input' in custom_params:
-                kwargs.setdefault('conf_path',custom_params['cli_input'])
-            # Add client to list
-            self.clients.append(module(sw_name=switch,
-                                       thrift_port=next_thrift_port,
-                                       grpc_port=next_grpc_port,
-                                       **kwargs))
- 
             # Update default parameters with custom ones
             params.update(custom_params)
-            switches[switch] = deepcopy(params)
-            # Update switch port numbers
-            next_thrift_port = max(next_thrift_port + 1, params['thrift_port'])
-            next_grpc_port = max(next_grpc_port + 1, params['grpc_port'])
-    
-        return switches
 
+            if issubclass(params['cls'], P4Switch):
+                if issubclass(params['cls'], P4RuntimeSwitch):
+                    self.addP4RuntimeSwitch(switch, **params)
+                else:
+                    self.addP4Switch(switch, **params)
+                if params.get('cpu_port', False):
+                    self.enableCpuPort(switch)
+            else:
+                self.addSwitch(switch, **params)
+            
     def parse_links(self, unparsed_links):
         """
         Load a list of links descriptions of the form 
@@ -449,311 +417,51 @@ class AppRunner(object):
             "bw": bandwidth,
             "delay": transmit_delay,
             "loss": loss,
-            "max_queue_size": max_queue_size
+            "max_queue_size": max_queue_size,
+            "auto_arp_tables": <true|false>,
+            "auto_gw_arp": <true|false>
         }
 
         Args:
             uparsed_links (array): unparsed links from topology json
-
-        Returns:
-            array of parsed link dictionaries
         """
+        default_params = self.conf['topology'].get('default', {})
 
-        links = []
+        # Default topology settings
+        if default_params.get('auto_arp_tables', True):
+            self.enableArpTables()
+        else:
+            self.disableArpTables()
 
-        default = self.conf['topology'].get('default', {})
-        default.setdefault('weight', 1)
-        default.setdefault('bw', None)
-        default.setdefault('delay', None)
-        default.setdefault('loss', None)
-        default.setdefault('max_queue_size', None)
+        if default_params.get('auto_gw_arp', True):
+            self.enableGwArp()
+        else:
+            self.disableGwArp()
+
+        # This field is not propagated further
+        if 'auto_arp_tables' in default_params.keys():
+            del default_params['auto_arp_tables']
+        
+        # This field is not propagated further
+        if 'auto_gw_arp' in default_params.keys():
+            del default_params['auto_gw_arp']
 
         for link in unparsed_links:
             node1 = link[0]
             node2 = link[1]
-            opts = default.copy()
+            params = deepcopy(default_params)
             # If attributes are present for that link
             if len(link) > 2:
-                opts.update(link[2])
-            # Hosts are not allowed to connect to another host.
-            if node1 in self.hosts:
-                assert node2 not in self.hosts, 'Hosts should be connected to switches: {} <-> {} link not possible'.format(node1, node2)
-            links.append([node1, node2, deepcopy(opts)])
+                params.update(link[2])
+            self.addLink(node1, node2, **params)
 
-        return links
-
-    def compile_p4(self):
+    def _exec_scripts(self):
         """
-        Compile all the P4 files provided by the configuration file.
-
-        Side effects:
-            - The path of the compiled P4 JSON file is added to each switch
-              in the field 'opts' under the name 'json_path'.
-            - The dict self.compilers contains all the compilers object used
-              (one per different P4 file).
+        Executes the script present in the "exec_scripts" field of self.conf.
         """
-        info('Compiling P4 programs...\n')
-        self.compilers = []
-        for switch, params in self.switches.items():
-            # If the file has not been compiled yet
-            if not is_compiled(os.path.realpath(params['p4_src']), self.compilers):
-                compiler = self.compiler_module['class'](p4_src=params['p4_src'],
-                                                          **self.compiler_module['kwargs'])
-                compiler.compile()
-                self.compilers.append(compiler)
-            else:
-                # Retrieve compiler
-                compiler = get_by_attr('p4_src', os.path.realpath(params['p4_src']), self.compilers)
-            # Retrieve json_path
-            params['json_path'] = compiler.get_json_out()
-            # Try to retrieve p4 runtime info file path
-            try:
-                params['p4rt_path'] = compiler.get_p4rt_out()
-            except P4InfoDisabled:
-                pass
-            # Deepcopy needed for non flat dicts
-            self.switches[switch] = deepcopy(params)
-
-    def create_network(self):
-        """
-        Create the mininet network object, and store it as self.net.
-
-        Side effects:
-            - Mininet topology instance stored as self.topo
-            - Mininet instance stored as self.net
-        """
-        debug('Generating topology...\n')
-        # Generate topology
-        self.topo = self.app_topo(hosts=self.hosts, 
-                                  switches=self.switches,
-                                  links=self.links,
-                                  assignment_strategy=self.assignment_strategy)
-
-        # Start P4 Mininet
-        debug('Starting network...\n')
-        self.net = self.app_mininet(topo=self.topo,
-                                    intf=TCIntf,
-                                    host=self.host_node,
-                                    controller=None)
-
-    def program_hosts(self):
-        """
-        Adds static ARP entries and default routes to each mininet host.
-
-        Assumes:
-            A mininet instance is stored as self.net and self.net.start() has been called.
-            A default field is found in "topology" containing (possibly) these fields.
-            "default":
-            {
-                "auto_arp_tables": <true|false>,
-                "auto_gw_arp": <true|false>
-            }
-        """
-        default = self.conf['topology'].get('default', {})
-        auto_arp_tables = default.get('auto_arp_tables', True)
-        auto_gw_arp = default.get('auto_gw_arp', True)
-
-        for host_name in self.topo.hosts():
-            h = self.net.get(host_name)
-
-            # Ensure each host's interface name is unique, or else
-            # mininet cannot shutdown gracefully
-            h_iface = list(h.intfs.values())[0]
-
-            # if there is gateway assigned
-            if auto_gw_arp:
-                if 'defaultRoute' in h.params:
-                    link = h_iface.link
-                    sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
-                    gw_ip = h.params['defaultRoute'].split()[-1]
-                    h.cmd('arp -i {} -s {} {}'.format(h_iface.name, gw_ip, sw_iface.mac))
-
-            if auto_arp_tables:
-                # set arp rules for all the hosts in the same subnet
-                host_address = ip_interface('{}/{}'.format(h.IP(), self.topo.hosts_info[host_name]["mask"]))
-                for hosts_same_subnet in self.topo.hosts():
-                    if hosts_same_subnet == host_name:
-                        continue
-
-                    #check if same subnet
-                    other_host_address = ip_interface(str("%s/%d" % (self.topo.hosts_info[hosts_same_subnet]['ip'],
-                                                                            self.topo.hosts_info[hosts_same_subnet]["mask"])))
-
-                    if host_address.network.compressed == other_host_address.network.compressed:
-                        h.cmd('arp -i %s -s %s %s' % (h_iface.name, self.topo.hosts_info[hosts_same_subnet]['ip'],
-                                                            self.topo.hosts_info[hosts_same_subnet]['mac']))
-
-            # if the host is configured to use dhcp
-            auto_ip = self.hosts[host_name].get('auto', False)
-            if auto_ip:
-                h.cmd('dhclient -r {}'.format(h_iface.name))
-                h.cmd('dhclient {} &'.format(h_iface.name))
-
-            # run startup commands (this commands must be non blocking)
-            commands = self.hosts[host_name].get('commands', [])
-            for command in commands:
-                h.cmd(command)
-
-    def program_switches(self):
-        """
-        If any command files were provided for the switches, this method will start up the
-        CLI on each switch and use the contents of the command files as input.
-
-        Assumes:
-            self.clients has been populated and self.net.start() has been called.
-        """
-        for cli in self.clients:
-            if cli.get_conf():
-                cli.configure()
-
-    def save_topology(self, json_path='topology.json', multigraph=False):
-        """
-        Saves mininet topology to a JSON file.
-        
-        Arguments:
-            json_path (string): output JSON file path
-            multigraph (bool) : whether to convert to multigraph (multiple links
-                                allowed between two nodes) or graph (only one link
-                                allowed between two nodes).
-
-        Notice that multigraphs are not supported yet by p4utils.utils.Topology
-        """
-        # This function return None for each not serializable
-        # obect so that no TypeError is thrown.
-        def default(obj):
-            return None
-
-        info('Saving mininet topology to database: {}\n'.format(json_path))
-        if multigraph:
-            warning('Multigraph topology selected!\n')
-            graph = self.topo.g.convertTo(MultiGraph, data=True, keys=True)
-        else:
-            graph = self.topo.g.convertTo(NetworkGraph, data=True, keys=False)
-            
-            ## Add additional informations to the graph which are not loaded automatically
-            # Add links informations
-            for _, _, params in graph.edges(data=True):
-                node1_name = params['node1']
-                node2_name = params['node2']
-                node1 = self.net[node1_name]
-                node2 = self.net[node2_name]
-                edge = graph[node1_name][node2_name]
-
-                # Get link
-                link = self.net.linksBetween(node1, node2)[0]
-
-                # Get interfaces
-                intf1 =  getattr(link, 'intf1')
-                intf2 =  getattr(link, 'intf2')
-
-                # Get interface names
-                edge['intfName1'] = getattr(intf1, 'name')
-                edge['intfName2'] = getattr(intf2, 'name')
-                
-                # Get interface addresses
-                try:
-                    # Fake switch IP
-                    edge['ip1'] = edge['sw_ip1']
-                    del edge['sw_ip1']
-                except KeyError:
-                    # Real IP
-                    ip1, prefixLen1 = getattr(intf1, 'ip'), getattr(intf1, 'prefixLen')
-                    if ip1 and prefixLen1:
-                        edge['ip1'] = ip1 + '/' + prefixLen1
-
-                try:
-                    # Fake switch IP
-                    edge['ip2'] = edge['sw_ip2']
-                    del edge['sw_ip2']
-                except KeyError:
-                    # Real IP
-                    ip2, prefixLen2 = getattr(intf2, 'ip'), getattr(intf2, 'prefixLen')
-                    if ip2 and prefixLen2:
-                        edge['ip2'] = ip2 + '/' + prefixLen2
-
-                mac1 = getattr(intf1, 'mac')
-                if mac1:
-                    edge['addr1'] = mac1
-
-                mac2 = getattr(intf2, 'mac')
-                if mac1:
-                    edge['addr2'] = mac2
-
-        graph_dict = node_link_data(graph)
-        with open(json_path,'w') as f:
-            json.dump(graph_dict, f, default=default)
-    
-    def do_net_cli(self):
-        """
-        Starts up the mininet CLI and prints some helpful output.
-
-        Assumes:
-            A mininet instance is stored as self.net and self.net.start() has been called.
-        """
-        for switch in self.net.switches:
-            if self.topo.isP4Switch(switch.name):
-                switch.describe()
-        for host in self.net.hosts:
-            host.describe()
-        info("Starting mininet CLI...\n")
-        # Generate a message that will be printed by the Mininet CLI to make
-        # interacting with the simple switch a little easier.
-        print('')
-        print('======================================================================')
-        print('Welcome to the P4 Utils Mininet CLI!')
-        print('======================================================================')
-        print('Your P4 program is installed into the BMV2 software switch')
-        print('and your initial configuration is loaded. You can interact')
-        print('with the network using the mininet CLI below.')
-        print('')
-        print('To inspect or change the switch configuration, connect to')
-        print('its CLI from your host operating system using this command:')
-        print('  {} --thrift-port <switch thrift port>'.format(DEFAULT_CLIENT.cli_bin))
-        print('')
-        print('To view a switch log, run this command from your host OS:')
-        print('  tail -f {}/<switchname>.log'.format(self.log_dir))
-        print('')
-        print('To view the switch output pcap, check the pcap files in \n {}:'.format(self.pcap_dir))
-        print(' for example run:  sudo tcpdump -xxx -r s1-eth1.pcap')
-        print('')
-
-        # Start CLI
-        P4CLI(mininet=self.net,
-              clients=self.clients,
-              compilers=self.compilers,
-              compiler_module=self.compiler_module,
-              client_module=self.client_module,
-              scripts=self.conf.get('exec_scripts'))
-
-    def run_app(self):
-        """
-        Sets up the mininet instance, programs the switches, and starts the mininet CLI.
-        This is the main method to run after initializing the object.
-        """
-        # Compile P4 programs
-        self.compile_p4()
-        # Initialize Mininet with the topology specified by the configuration
-        self.create_network()
-        # Start Mininet
-        self.net.start()
-        sleep(1)
-
-        # Some programming that must happen after the network has started
-        self.program_hosts()
-        self.program_switches()
-
-        # Save mininet topology to a database
-        self.save_topology()
-        sleep(1)
-
-        # Execute configuration scripts on the nodes
-        self.exec_scripts()
-
-        # Start up the mininet CLI
-        if self.cli_enabled or (self.conf.get('cli', False)):
-            self.do_net_cli()
-            # Stop right after the CLI is exited
-            self.net.stop()
+        if isinstance(self.conf.get('exec_scripts'), list):
+            for script in self.conf.get('exec_scripts'):
+                self.execScript(script['cmd'], reboot=script.get('reboot_run', False))
 
 
 def get_args():
@@ -774,9 +482,7 @@ def get_args():
     parser.add_argument('--clean', help='Cleans previous log files',
                         action='store_true', required=False, default=False)
     parser.add_argument('--clean-dir', help='Cleans previous log files and closes',
-                        action='store_true', required=False, default=False)
-    parser.add_argument('--empty-p4', help='Runs the topology with an empty p4 program that does nothing',
-                    action='store_true', required=False, default=False)              
+                        action='store_true', required=False, default=False)             
 
     return parser.parse_args()
 
@@ -784,8 +490,6 @@ def get_args():
 def main():
 
     args = get_args()
-
-    setLogLevel('info')
 
     # clean
     cleanup()
@@ -818,11 +522,9 @@ def main():
 
     app = AppRunner(args.config,
                     cli_enabled=args.cli,
-                    empty_p4=args.empty_p4,
                     log_dir=args.log_dir,
                     pcap_dir=args.pcap_dir,
-                    verbosity=args.verbosity)                  
-    app.run_app()
+                    verbosity=args.verbosity)
 
 
 if __name__ == '__main__':

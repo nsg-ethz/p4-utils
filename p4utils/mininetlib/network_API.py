@@ -230,10 +230,10 @@ class NetworkAPI(Topo):
             self.net.start() has been called.
         """
         for p4switch, info in self.p4switches(withInfo=True):
-            conf_path = info.get('conf_path')
+            cli_input = info.get('cli_input')
             thrift_port = info.get('thrift_port')
-            if conf_path is not None:
-                sw_client = self.module('sw_cli', thrift_port, p4switch, conf_path=conf_path)
+            if cli_input is not None:
+                sw_client = self.module('sw_cli', thrift_port, p4switch, cli_input=cli_input)
                 sw_client.configure()
                 self.sw_clients.append(sw_client)
 
@@ -726,7 +726,6 @@ class NetworkAPI(Topo):
                 intfName1 = self.intf_name(node1, port1)
                 self.setIntfName(node1, node2, intfName1, key=key)
             
-            
             intfName2 = info.get('intfName2')
             if intfName2 is None:
                 intfName2 = self.intf_name(node2, port2)
@@ -737,7 +736,7 @@ class NetworkAPI(Topo):
             if addr1 is None:
                 addr1 = self.auto_mac_address()
                 self.setIntfMac(node1, node2, addr1, key=key)
-            
+
             addr2 = info.get('addr2')
             if addr2 is None:
                 addr2 = self.auto_mac_address()
@@ -935,7 +934,7 @@ class NetworkAPI(Topo):
         """
         self.auto_arp_tables = True
 
-    def disableArpTable(self):
+    def disableArpTables(self):
         """
         Disable the static ARP entries for hosts in the
         same network.
@@ -1758,18 +1757,18 @@ class NetworkAPI(Topo):
         for p4switch in self.p4switches():
             self.setP4Source(p4switch, p4_src)
 
-    def setP4CliInput(self, name, conf_path):
+    def setP4CliInput(self, name, cli_input):
         """
         Set the path to the command line configuration file for
         the Thrift capable switch.
 
         Arguments:
             name (string)     : name of the P4 switch
-            conf_path (string): path to the command line configuration
+            cli_input (string): path to the command line configuration
                                 file
         """
         if self.isP4Switch(name):
-            self.updateNode(name, conf_path=conf_path)
+            self.updateNode(name, cli_input=cli_input)
         else:
             raise Exception('"{}" is not a P4 switch.'.format(name))
 
