@@ -105,5 +105,4 @@ def recv_udp_flow(src, dport):
         while True:
             data, address = s.recvfrom(2048)
     except:
-        print("Packets received {}".format(c))
         s.close()
