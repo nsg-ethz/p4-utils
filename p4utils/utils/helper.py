@@ -114,6 +114,10 @@ def dpidToStr(id):
 
 
 def check_listening_on_port(port):
+    """
+    Check if the given port is listening in the main
+    namespace.
+    """
     for c in psutil.net_connections(kind='inet'):
         if c.status == 'LISTEN' and c.laddr[1] == port:
             return True
@@ -133,15 +137,7 @@ def cleanup():
         mininet.clean.sh("brctl delbr {}".format(bridge))
 
 
-def formatLatency(latency):
-    """Helper method for formatting link latencies."""
-    if isinstance(latency, str):
-        return latency
-    else:
-        return str(latency) + "ms"
-
-
-def get_node_attr(node, attr_name):
+def get_node_attr(node, attr_name, default=None):
     """
     Finds the value of the attribute 'attr_name' of the Mininet node
     by looking also inside node.params (for unparsed attributes).
@@ -154,13 +150,16 @@ def get_node_attr(node, attr_name):
         the value of the requested attribute.
     """
     try:
-        value = getattr(node, attr_name)
+        return getattr(node, attr_name)
     except AttributeError:
-        params = getattr(node, 'params')
-        if attr_name in params.keys():
-            return params[attr_name]
-        else:
-            raise AttributeError
+        try:
+            params = getattr(node, 'params')
+            if attr_name in params.keys():
+                return params[attr_name]
+            else:
+                return default
+        except AttributeError:
+            return default
 
 
 def get_by_attr(attr_name, attr_value, obj_list):
@@ -213,6 +212,9 @@ def is_compiled(p4_src, compilers):
 
 
 def load_conf(conf_file):
+    """
+    Load JSON application configuration file.
+    """
     with open(conf_file, 'r') as f:
         config = json.load(f)
     return config
@@ -262,5 +264,103 @@ def load_custom_object(obj):
 
 
 def run_command(command):
+    """
+    Execute command in the main namespace.
+    """
     debug(command+'\n')
     return os.WEXITSTATUS(os.system(command))
+
+
+def parse_line(line):
+    """
+    Parse text line returning a list of substrings.
+    Example:
+        ahjdjf djdfkfo1 --jdke hdjejeek --dfjfj "vneovn rijvtg"
+    Return:
+        ["ahjdjf", "djdfkfo1", "--jdke", "hdjejeek", "--dfjfj", "vneovn rijvtg"]
+    """
+    # Isolate "" terms
+    args1 = line.split('"')
+    args2 = []
+    for i in range(len(args1)):
+        if i % 2 == 0:
+            # Isolate and append spaced terms
+            args2.extend(args1[i].split())
+        else:
+            # Append "" terms
+            args2.append(args1[i])
+    return args2
+
+
+def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
+    """
+    Parse text line and return all the parameters needed
+    to create a task with NetworkAPI.addTask().
+
+    Arguments:
+        line (str)   : string containing all the task information
+        def_mod (str): default module where to look for exe functions
+
+    Notice:
+        The file has to be a set of lines, where each has
+        the following syntax.
+        <node> <start> <duration> <exe> [--mod <module>] [<arg1>] ... [<argN>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
+
+    Return:
+        (args, kwargs)
+    """
+    args = []
+    kwargs = {}
+    skip_next = False
+    mod = importlib.import_module(def_mod) 
+    parsed_cmd = parse_line(line)
+    if len(parsed_cmd) < 4:
+        error('usage: <node> <start> <duration> <exe> [--mod <module>] [<arg1>] ... [<argN>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]\n')
+    for i in range(len(parsed_cmd)):
+        if skip_next:
+            skip_next = False
+            continue
+        # Parse node (index 0 in args)
+        if i == 0:
+            args.append(parsed_cmd[i])
+        # Parse start
+        elif i == 1:
+            kwargs['start'] = int(parsed_cmd[i])
+        # Parse duration
+        elif i == 2:
+            kwargs['duration'] = int(parsed_cmd[i])
+        # Parse exe (index 1 in args)
+        elif i == 3:
+            args.append(parsed_cmd[i])
+        # Parse args and kwargs
+        elif i >= 4:
+            # Parse kwargs
+            if len(parsed_cmd[i]) > 2 and parsed_cmd[i][:2] == '--':
+                # Parse module
+                if parsed_cmd[i] == '--mod':
+                    try:
+                        mod = importlib.import_module(parsed_cmd[i+1])
+                    except IndexError:
+                        error("cannot parse '{}' correctly.\n".format(line))
+                        break
+                else:
+                    try:
+                        kwargs[parsed_cmd[i][2:]] = parsed_cmd[i+1]
+                    except IndexError:
+                        error("cannot parse '{}' correctly.\n".format(line))
+                        break
+                skip_next = True
+            # Parse args
+            else:
+                args.append(parsed_cmd[i])
+    
+    try:
+        # Import function from module
+        exe = getattr(mod, args[1])
+        # Set function as the executable
+        args[1] = exe
+    except AttributeError:
+        # Interpret the executable as a command
+        pass
+
+    return args, kwargs

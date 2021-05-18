@@ -98,7 +98,7 @@ def recv_udp_flow(src, dport):
         src ([str]): source ip address to listen
         dport ([int]): port to listen
     """
-
+    dport = int(dport)
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.bind(("", dport))
     try:

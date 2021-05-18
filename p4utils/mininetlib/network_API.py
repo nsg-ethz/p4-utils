@@ -328,6 +328,23 @@ class NetworkAPI(Topo):
             info('Exec Script: {}\n'.format(script['cmd']))
             run_command(script['cmd'])
 
+    def start_scheduler(self, node):
+        """
+        Start the task scheduler on node if enabled.
+
+        Arguments:
+            node (string): name of the node
+
+        Assumes:
+            A mininet instance is stored as self.net.
+            self.net.start() has been called.
+        """
+        if self.hasScheduler(node):
+            unix_path = self.getNode(node).get('unix_path', '/tmp')
+            unix_socket = unix_path + '/' + node + '_socket'
+            info('Node {} task scheduler listens on {}.\n'.format(node, unix_socket))
+            self.net[node].cmd('python3 -m p4utils.utils.task_scheduler "{}" &'.format(unix_socket))
+
     def start_schedulers(self):
         """
         Start all the required task schedulers.
@@ -336,28 +353,30 @@ class NetworkAPI(Topo):
             A mininet instance is stored as self.net.
             self.net.start() has been called.
         """
-        for node, data in self.nodes(withInfo=True):
+        for node in self.nodes():
             if self.hasScheduler(node):
-                unix_path = data.get('unix_path', '/tmp')
-                unix_socket = unix_path + '/' + node + '_socket'
-                info('Node {} task scheduler listens on {}.\n'.format(node, unix_socket))
-                self.net[node].cmd('python3 -m p4utils.utils.task_scheduler "{}" &'.format(unix_socket))
+                self.start_scheduler(node)
+            else:
+                # Remove node if it has no scheduler
+                self.tasks.pop(node, None)
 
     def distribute_tasks(self):
         """
         Distribute all the tasks to the schedulers.
 
         Assumes:
+            All the nodes in self.tasks have an active scheduler.
             A mininet instance is stored as self.net.
             self.net.start() has been called.
         """
         for node, tasks in self.tasks.items():
-            if self.hasScheduler(node):
-                unix_path = self.getNode(node).get('unix_path', '/tmp')
-                unix_socket = unix_path + '/' + node + '_socket'
-                info('Tasks for node {} distributed to socket {}.\n'.format(node, unix_socket))
-                task_client = TaskClient(unix_socket)
-                task_client.send(tasks, retry=True)
+            unix_path = self.getNode(node).get('unix_path', '/tmp')
+            unix_socket = unix_path + '/' + node + '_socket'
+            info('Tasks for node {} distributed to socket {}.\n'.format(node, unix_socket))
+            task_client = TaskClient(unix_socket)
+            task_client.send(tasks, retry=True)
+            # Remove all the tasks once they are sent
+            self.tasks[node] = []
 
     def start_net_cli(self):
         """
@@ -396,12 +415,7 @@ class NetworkAPI(Topo):
         output('By default pcap directory is "./pcap".\n')
         output('\n')
 
-        P4CLI(mininet=self.net,
-              clients=self.sw_clients,
-              compilers=self.compilers,
-              compiler_module=self.modules['comp'],
-              client_module=self.modules['sw_cli'],
-              scripts=self.scripts)
+        P4CLI(self)
 
     def module(self, mod_name, *args, **kwargs):
         """
@@ -878,13 +892,13 @@ class NetworkAPI(Topo):
         """
         Print the port mapping of all the devices.
         """
-        print('Port mapping:')
+        output('Port mapping:\n')
         node_ports = self.node_ports()
         for node1 in sorted(node_ports.keys()):
-            print('{}: '.format(node1), end=' ')
+            output('{}:  '.format(node1))
             for port1, intf in sorted(node_ports[node1].items(), key=lambda x: x[0]):
-                print('{}:{}\t'.format(port1, intf[1]), end=' ')
-            print()
+                output('{}:{}\t '.format(port1, intf[1]))
+            output('\n')
 
     def execScript(self, cmd, reboot=True):
         """
@@ -1602,7 +1616,6 @@ class NetworkAPI(Topo):
         """
         if self.isNode(name):
             self.updateNode(name, scheduler=False)
-            self.tasks.update(name=[])
         else:
             raise Exception('"{}" does not exists.'.format(name))
 
@@ -1630,34 +1643,58 @@ class NetworkAPI(Topo):
         for node in self.nodes():
             self.disableScheduler(node, path)
 
-    def addTask(self, node, exe, *args, start=0, duration=0, **kwargs):
+    def addTaskFile(self, filepath, def_mod='p4utils.utils.traffic_utils'):
         """
-        Add a task to the node.
+        Add the tasks to the node.
 
         Arguments:
-            node (string)   : name of the node
-            exe             : executable to run (either a shell string 
-                              command or a python function)
-            args            : positional arguments for the passed function
-            start (float)   : task starting time with respect to the current
-                              time in seconds.
-            duration (float): task duration time in seconds (if duration is 
-                             lower than or equal to 0, then the task has no 
-                             time limitation)
-            kwargs          : key-word arguments for the passed function
+            filepath (string): tasks file path
+            def_mod (string) : default module where to look for exe functions
+
+        Notice:
+            The file has to be a set of lines, where each has
+            the following syntax.
+            <node> <start> <duration> <exe> [--mod <module>] [<arg1>] ... [<argN>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
+        """
+        with open(filepath, 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                args, kwargs = parse_task_line(line, def_mod=def_mod)
+                self.addTask(*args, **kwargs)
+
+    def addTask(self, node, exe, *args, start=0, duration=0, enableScheduler=True, **kwargs):
+        """
+        Add a task to the node. It can automatically enable the TaskScheduler
+        on that node with the socket lacated in the default path, if no
+        TaskScheduler has been previously enabled.
+
+        Arguments:
+            node (string)         : name of the node
+            exe                   : executable to run (either a shell string 
+                                    command or a python function)
+            args                  : positional arguments for the passed function
+            start (float)         : task starting time with respect to the current
+                                    time in seconds.
+            duration (float)      : task duration time in seconds (if duration is 
+                                    lower than or equal to 0, then the task has no 
+                                    time limitation)
+            enableScheduler (bool): whether to automatically enable the TaskScheduler or not
+            kwargs                : key-word arguments for the passed function
         """
         if self.isNode(node):
-            if self.hasScheduler(node):
-                self.tasks.setdefault(node, [])
-                # Parse execution parameters to pass to the server
-                kwargs.update(start=start+time.time(), duration=duration)
-                args = list(args)
-                args.insert(0, exe)
-                params = (args, kwargs)
-                # Append task to tasks
-                self.tasks[node].append(params)
-            else:
+            # If the TaskScheduler is not enabled, enable it.
+            if not self.hasScheduler(node) and enableScheduler:
+                self.enableScheduler(node)
+            elif not self.hasScheduler(node) and not enableScheduler:
                 raise Exception('"{}" does not have a scheduler.'. format(node))
+            self.tasks.setdefault(node, [])
+            # Parse execution parameters to pass to the server
+            kwargs.update(start=start+time.time(), duration=duration)
+            args = list(args)
+            args.insert(0, exe)
+            params = (args, kwargs)
+            # Append task to tasks
+            self.tasks[node].append(params)
         else:
             raise Exception('"{}" does not exists.'.format(name))
 

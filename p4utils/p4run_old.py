@@ -43,7 +43,7 @@ from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.node import P4Switch as DEFAULT_SWITCH
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
 from p4utils.mininetlib.topo_old import AppTopoStrategies as DEFAULT_TOPO
-from p4utils.mininetlib.cli import P4CLI
+from p4utils.mininetlib.cli_old import P4CLI
 from p4utils.mininetlib.net import P4Mininet as DEFAULT_NET
 
 
