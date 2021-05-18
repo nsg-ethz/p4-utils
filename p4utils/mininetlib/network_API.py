@@ -534,27 +534,21 @@ class NetworkAPI(Topo):
 
     def ip_addresses(self):
         """
-        Return a set containing all the IPv4 addresses.
+        Return a set containing all the IPv4 addresses of L3 nodes,
+        i.e. of all non-switch nodes. The fake IPs assigned to the
+        switches are not considered.
         """
         ips = set()
 
         for node1, node2, info in self.links(withInfo=True):
-            if self.isSwitch(node1):
-                ip = info.get('sw_ip1')
-                if ip is not None:
-                    ips.add(ip.split('/')[0])
-            else:
+            if not self.isSwitch(node1):
                 params = info.get('params1')
                 if params is not None:
                     ip = params.get('ip')
                     if ip is not None:
                         ips.add(ip.split('/')[0])
 
-            if self.isSwitch(node2):
-                ip = info.get('sw_ip2')
-                if ip is not None:
-                    ips.add(ip.split('/')[0])
-            else:
+            if not self.isSwitch(node2):
                 params = info.get('params2')
                 if params is not None:
                     ip = params.get('ip')
