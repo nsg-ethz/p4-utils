@@ -375,8 +375,9 @@ class NetworkAPI(Topo):
             info('Tasks for node {} distributed to socket {}.\n'.format(node, unix_socket))
             task_client = TaskClient(unix_socket)
             task_client.send(tasks, retry=True)
-            # Remove all the tasks once they are sent
-            self.tasks[node] = []
+
+        # Remove all the tasks once they are sent
+        self.tasks = {}
 
     def start_net_cli(self):
         """

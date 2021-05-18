@@ -232,10 +232,10 @@ class P4CLI(CLI):
         args, kwargs = parse_task_line(line)
         node = args[0]
         if self.getNode(node) is not None:
-            self.net_api.addTask(*args, enableScheduler=False, **kwargs)
             if not self.net_api.hasScheduler(node):
                 self.net_api.enableScheduler(node)
                 self.net_api.start_scheduler(node)
+            self.net_api.addTask(*args, enableScheduler=False, **kwargs)
             self.net_api.distribute_tasks()
         else:
             error('Node {} does not exist!\n'.format(node))
