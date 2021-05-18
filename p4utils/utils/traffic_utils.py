@@ -30,7 +30,7 @@ def send_udp_flow(dst="10.0.0.2", sport=5000, dport=5001, tos=0, rate='10M', dur
     """
     Udp sending function that keeps a constant rate and logs sent packets to a file.
     Args:
-        dst (str, optional): [description]. Defaults to "10.0.1.2".
+        dst (str, optional): [description]. Defaults to "10.0.0.2".
         sport (int, optional): [description]. Defaults to 5000.
         dport (int, optional): [description]. Defaults to 5001.
         tos (int, optional): [description]. Defaults to 0.        
