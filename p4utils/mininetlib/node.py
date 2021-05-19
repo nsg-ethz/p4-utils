@@ -186,7 +186,10 @@ class P4Switch(Switch):
 
         self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd(cmd + ' > ' + self.log_dir + '/p4s.{}.log'.format(self.name) + ' 2>&1 & echo $! >> ' + f.name)
+            if self.log_enabled:
+                self.cmd(cmd + ' > ' + self.log_dir + '/p4s.{}.log'.format(self.name) + ' 2>&1 & echo $! >> ' + f.name)
+            else:
+                self.cmd(cmd + '> /dev/null 2>&1 & echo $! >> ' + f.name)
             self.simple_switch_pid = int(f.read())
         debug('P4 switch {} PID is {}.\n'.format(self.name, self.simple_switch_pid))
         sleep(1)
