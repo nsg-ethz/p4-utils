@@ -44,12 +44,22 @@ class Task:
 
         # Process states
         self.started = False
-        self.running = False
         self.stopped = False
 
         # Spanning processes
         self.proc = None
         self.thread = None
+
+    def is_alive(self):
+        """
+        Check whether the task is alive or not and
+        update the task states.
+        """
+        if isinstance(self.proc, sp.Popen):
+            alive = True if self.proc.poll() is None else False
+        elif isinstance(self.proc, mp.Process):
+            alive = self.proc.is_alive()
+        return alive
 
     def _start(self):
         """
@@ -62,16 +72,12 @@ class Task:
                                    args=self.args,
                                    kwargs=self.kwargs)
             self.proc.start()
-            # Update state
-            self.running = True
         # If it is a shell command
         elif isinstance(self.exe, str):
             self.exe = self.exe.split()
             self.proc = sp.Popen(self.exe,
                                  stdout=sp.DEVNULL,
                                  stderr=sp.DEVNULL)
-            # Update state
-            self.running = True
         else:
             raise TypeError('{} is not a supported type.'.format(type(self.exe)))
     
@@ -79,11 +85,10 @@ class Task:
         """
         Stops the execution of the process.
         """
-        # Kill process
-        os.kill(self.proc.pid, signal.SIGKILL)
-        # Update state
-        self.running = False
-        self.stopped = True
+        # Check if the process is running
+        if self.is_alive():
+            # Kill process
+            os.kill(self.proc.pid, signal.SIGKILL)
 
     def _run(self):
         """
@@ -190,13 +195,20 @@ class TaskScheduler:
                 stopped_tasks = []
                 
                 for task in self.tasks:
+                    # Identify new tasks
+                    if not task.started:
+                        # Update state
+                        task.started = True
+                        # Run
+                        task.run()
+                    # Identify dead tasks
+                    elif task.started and not task.is_alive():
+                        # Update state
+                        task.stopped = True
+
                     # Identify stopped tasks
                     if task.stopped:
                         stopped_tasks.append(task)
-                    # Identify new tasks
-                    elif not task.started:
-                        task.started = True
-                        task.run()
                 
                 # Remove old stopped tasks from the list
                 for task in stopped_tasks:
