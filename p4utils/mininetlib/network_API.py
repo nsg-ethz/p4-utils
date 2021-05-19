@@ -343,7 +343,13 @@ class NetworkAPI(Topo):
             unix_path = self.getNode(node).get('unix_path', '/tmp')
             unix_socket = unix_path + '/' + node + '_socket'
             info('Node {} task scheduler listens on {}.\n'.format(node, unix_socket))
-            self.net[node].cmd('python3 -m p4utils.utils.task_scheduler "{}" &'.format(unix_socket))
+            node_info = self.getNode(node)
+            log_enabled = node_info.get('log_enabled', False)
+            log_dir = node_info.get('log_dir')
+            if log_enabled:
+                self.net[node].cmd('python3 -m p4utils.utils.task_scheduler "{}" > "{}/{}_scheduler.log" 2>&1 &'.format(unix_socket, log_dir, node))
+            else:
+                self.net[node].cmd('python3 -m p4utils.utils.task_scheduler "{}" > /dev/null 2>&1 &'.format(unix_socket))
 
     def start_schedulers(self):
         """
@@ -1588,6 +1594,48 @@ class NetworkAPI(Topo):
             return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4RuntimeSwitch(n)]
 
 ## Nodes
+    def enableLog(self, name, log_dir='./log'):
+        """
+        Enable log for node (also for the task scheduler).
+
+        Arguments:
+            name (string)   : name of the node
+            log_dir (string): where to save log files
+        """            
+        if self.isNode(name):
+            self.updateNode(name, log_enabled=True, log_dir=log_dir)
+        else:
+            raise Exception('"{}" does not exists.'.format(name))
+
+    def disableLog(self, name):
+        """
+        Disable log for node (also for the task scheduler).
+
+        Arguments:
+            name (string): name of the node
+        """            
+        if self.isNode(name):
+            self.updateNode(name, log_enabled=False)
+        else:
+            raise Exception('"{}" does not exists.'.format(name))
+
+    def enableLogAll(self, log_dir='./log'):
+        """
+        Enable log for all the nodes (also for the task schedulers).
+
+        Arguments:
+            log_dir (string): where to save log files
+        """
+        for node in self.nodes():
+            self.enableLog(node, log_dir=log_dir)
+
+    def disableLogAll(self):
+        """
+        Disable log for all the nodes (also for the task schedulers).
+        """
+        for node in self.nodes():
+            self.disableLog(node)
+
     def enableScheduler(self, name, path='/tmp'):
         """
         Enable the task scheduler server for the node.
@@ -1867,48 +1915,6 @@ class NetworkAPI(Topo):
         """
         for switch in self.p4switches():
             self.disableDebugger(switch)
-
-    def enableLog(self, name, log_dir='./log'):
-        """
-        Enable log for switch.
-
-        Arguments:
-            name (string)   : name of the P4 switch
-            log_dir (string): where to save log files
-        """            
-        if self.isP4Switch(name):
-            self.updateNode(name, log_enabled=True, log_dir=log_dir)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def disableLog(self, name):
-        """
-        Disable log for switch.
-
-        Arguments:
-            name (string): name of the P4 switch
-        """            
-        if self.isP4Switch(name):
-            self.updateNode(name, log_enabled=False)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def enableLogAll(self, log_dir='./log'):
-        """
-        Enable log for all the switches.
-
-        Arguments:
-            log_dir (string): where to save log files
-        """
-        for switch in self.p4switches():
-            self.enableLog(switch, log_dir=log_dir)
-
-    def disableLogAll(self):
-        """
-        Disable log for all the switches.
-        """
-        for switch in self.p4switches():
-            self.disableLog(switch)
 
     def enablePcapDump(self, name, pcap_dir='./pcap'):
         """

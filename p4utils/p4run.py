@@ -298,14 +298,24 @@ class AppRunner(NetworkAPI):
                 "socket_path": <dir to socket file> (*)
                 "defaultRoute": "via <gateway ip>" (*)
                 "dhcp": <true|false> (*)
+                "log_enabled" : <true|false> (bool), (*)
+                "log_dir": <log path for switch binary> (string), (*)
             },
             ...
         }
 
         (*) None of these parameters is mandatory.
         """
+        default_params = {
+                            'log_enabled': self.log_enabled,
+                            'log_dir': self.log_dir
+                         }
         for host, custom_params in unparsed_hosts.items():
-            self.addHost(host, **custom_params)
+            # Set general default switch options
+            params = deepcopy(default_params)
+            # Update default parameters with custom ones
+            params.update(custom_params)
+            self.addHost(host, **params)
     
     def parse_switches(self, unparsed_switches):
         """

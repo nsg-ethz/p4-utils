@@ -8,6 +8,7 @@ import socket
 import signal
 import shutil as sh
 import threading as th
+import traceback as tbk
 import subprocess as sp
 import multiprocessing as mp
 
@@ -115,6 +116,17 @@ class Task:
         # Run the thread in non-blocking mode
         self.thread = th.Thread(target=self._run, daemon=True)
         self.thread.start()
+        # Log started command
+        print()
+        print('Started new task!')
+        print('time:\t{}'.format(time.time()))
+        print('start:\t{}'.format(self.start))
+        print('duration:\t{}'.format(self.duration))
+        print('args:\t{}'.format(self.args))
+        print('kwargs:\t{}'.format(self.kwargs))
+        print('thread:\t{}'.format(self.thread.name))
+        print()
+        sys.stdout.flush()
 
 class TaskScheduler:
     """
@@ -175,14 +187,25 @@ class TaskScheduler:
 
             # Iterate over tasks
             for args, kwargs in tasks_list:
+                # Log received command
+                print()
+                print('Received new task!')
+                print('time:\t{}'.format(time.time()))
+                print('args:\t{}'.format(args))
+                print('kwargs:\t{}'.format(kwargs))
+                print()
+                sys.stdout.flush()
                 # Avoid server failure with wrong commands
                 try:
                     # Initialize a new task
                     task = Task(*args, **kwargs)
+                    # Enqueue task
+                    self.queue.put(task)
                 except:
-                    pass
-                # Enqueue task
-                self.queue.put(task)
+                    # Print exception to stderr
+                    sys.stderr.write('Exception in thread server_loop\n')
+                    tbk.print_exc()
+                    sys.stderr.flush()
 
     def scheduler_loop(self):
         """
@@ -219,6 +242,9 @@ class TaskScheduler:
                 # Remove old stopped tasks from the list
                 for task in stopped_tasks:
                     self.tasks.remove(task)
+
+                # Flush stderr
+                sys.stderr.flush()
 
     def start(self):
         """
