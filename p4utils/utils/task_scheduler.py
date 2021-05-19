@@ -59,6 +59,8 @@ class Task:
             alive = True if self.proc.poll() is None else False
         elif isinstance(self.proc, mp.Process):
             alive = self.proc.is_alive()
+        else:
+            alive = False
         return alive
 
     def _start(self):
