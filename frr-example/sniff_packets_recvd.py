@@ -36,7 +36,7 @@ def get_pkt():
         #sniff(filter = "ip src {} or ip src {}".format(list_of_ips[0],list_of_ips[1]), iface=str(intf), prn = lambda x : x.show())
     
     else:
-        sniff(filter = "icmp",iface=str(intf), prn = lambda x : x.show())
+        sniff(iface=str(intf), prn = lambda x : x.show())
         #sniff(filter = "ip dst {} or ip dst {}".format("10.1.0.1", "10.2.0.1"), iface=str(intf), prn = lambda x : x.show())
 
 def main():

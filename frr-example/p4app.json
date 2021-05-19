@@ -5,7 +5,8 @@
   "enable_log": false,
   "topology": {
     "assignment_strategy": "manual-frr",
-    "links": [["h1", "s1"], ["h2", "s2"], ["h3", "s3"], ["s1", "s2"], ["s2","s3"], ["s3", "s1"], ["s1", "r1"], ["s2", "r2"], ["s3","r3"]],
+    "links": [["h1", "s1"], ["h2", "s2"], ["h3", "s3"], ["s1", "s2"], ["s2","s3"], ["s3", "s1"], ["s1", "r1"], ["s2", "r2"], ["s3","r3"],
+              ["h4", "s4"], ["h5", "s5"], ["h6", "s6"], ["s4", "s5"], ["s5","s6"], ["s6", "s4"], ["s4", "r4"], ["s5", "r5"], ["s6","r6"]],
     "hosts": {
       "h1": {
         "ip": "10.1.0.1/24",
@@ -18,6 +19,18 @@
       "h3": {
         "ip": "10.3.0.1/24",
         "defaultRoute": "via 10.3.0.2"
+      },
+      "h4": {
+        "ip": "22.4.0.1/24",
+        "defaultRoute": "via 22.4.0.2"
+      },
+      "h5": {
+        "ip": "22.5.0.1/24",
+        "defaultRoute": "via 22.5.0.2"
+      },
+      "h6": {
+        "ip": "22.6.0.1/24",
+        "defaultRoute": "via 22.6.0.2"
       }
     }
     ,
@@ -30,6 +43,15 @@
       },
       "s3": {
         "cli_input": "s3-commands.txt"
+      },
+      "s4": {
+        "cli_input": "s4-commands.txt"
+      },
+      "s5": {
+        "cli_input": "s5-commands.txt"
+      },
+      "s6": {
+        "cli_input": "s6-commands.txt"
       }
     }
     ,
@@ -52,6 +74,31 @@
         "fake_interfaces" :{}        
       },
       "r3" :{
+        "conf_path": "./routers_conf/", 
+        "daemons" : {
+          "zebra": {},
+          "ospfd": {}
+        },
+        "fake_interfaces" :{}        
+      },
+      "r4" :{
+        "conf_path": "./routers_conf/", 
+        "daemons" : {
+        "zebra": {},
+        "ospfd": {}
+       },
+       "fake_interfaces" :{}
+      }
+      ,
+      "r5" :{
+        "conf_path": "./routers_conf/", 
+        "daemons" : {
+          "zebra": {},
+          "ospfd": {}
+        },
+        "fake_interfaces" :{}        
+      },
+      "r6" :{
         "conf_path": "./routers_conf/", 
         "daemons" : {
           "zebra": {},
