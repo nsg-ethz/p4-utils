@@ -33,7 +33,7 @@ class Task:
         else:
             raise Exception('cannot have negative Unix time.')
 
-        if duration > 0:
+        if duration >= 0:
             self.duration = duration
         else:
             raise Exception('cannot have negative duration!')
@@ -175,8 +175,12 @@ class TaskScheduler:
 
             # Iterate over tasks
             for args, kwargs in tasks_list:
-                # Initialize a new task
-                task = Task(*args, **kwargs)
+                # Avoid server failure with wrong commands
+                try:
+                    # Initialize a new task
+                    task = Task(*args, **kwargs)
+                except:
+                    pass
                 # Enqueue task
                 self.queue.put(task)
 
