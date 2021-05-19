@@ -90,12 +90,11 @@ def send_udp_flow(dst="10.0.0.2", sport=5000, dport=5001, tos=0, rate='10M', dur
         s.close()
 
 
-def recv_udp_flow(src, dport):
-    """Receiving function. It blocks reciving packets and store the first
-       4 bytes into out file
+def recv_udp_flow(dport):
+    """
+    Receiving function.
 
     Args:
-        src ([str]): source ip address to listen
         dport ([int]): port to listen
     """
     dport = int(dport)
