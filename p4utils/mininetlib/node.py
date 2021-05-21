@@ -296,8 +296,6 @@ class FRRouter(Node):
     def __init__(self, name,
                  bin_dir='/usr/local/sbin',
                  socket_dir='/var/run',
-                 daemons=None,
-
                  int_conf=None,
                  conf_dir='./routers',
                  zebra=True,
