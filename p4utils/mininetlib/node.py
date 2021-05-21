@@ -293,7 +293,6 @@ class FRRouter(Node):
 
     def __init__(self, name,
                  bin_dir='/usr/local/sbin',
-                 socket_dir='/var/run',
                  int_conf=None,
                  conf_dir='./routers',
                  zebra=True,
@@ -322,13 +321,6 @@ class FRRouter(Node):
         self.bin_dir = bin_dir
         self.conf_dir = conf_dir
         self.int_conf = int_conf
-        self.socket_dir = socket_dir
-        
-        if not os.path.isdir(self.socket_dir):
-            if os.path.exists(self.socket_dir):
-                raise NotADirectoryError("'{}' exists and is not a directory.".format(self.conf_dir))
-            else:
-                os.mkdir(self.socket_dir)
 
         # Make sure that the provided conf dir exists and is a directory,
         # if not, create a new one
@@ -359,8 +351,16 @@ class FRRouter(Node):
                 self.daemons.setdefault(key, {})
 
     def start(self):
-        # Enable IPv4 frowarding
-        self.cmd("sysctl -w net.ipv4.ip_forward=1")
+        # Enable IPv4 forwarding
+        self.cmd('sysctl -w net.ipv4.ip_forward=1')
+        # Enable MPLS forwarding
+        self.cmd('modprobe mpls_router')
+        self.cmd('modprobe mpls_iptunnel')
+
+        # Enable MPLS Label processing on all interfaces
+        for intf_name in self.nameToIntf.keys():
+            self.cmd('sysctl -w net.mpls.conf.{}.input=1'.format(intf_name))
+        self.cmd('sysctl -w net.mpls.platform_labels=100000')
 
         # Delete ip from loopback interface because 127.0.0.1 is automatically
         # assigned by Mininet while we want that the IPs are assigned according to
@@ -377,23 +377,24 @@ class FRRouter(Node):
         if len(self.daemons.keys()) == 0:
             error('Nothing to start in router {}'.format(self.name))
 
-        # Create socket directory
-        os.mkdir(os.path.join(self.socket_dir,self.name))
-
         # Integrated configuration
         if self.int_conf is not None:
             for daemon in self.daemons.keys():
                 if daemon == 'zebra':
                     self.start_daemon(daemon, '-d',
-                                      u='root', 
+                                      u='root',
+                                      g='root',
+                                      N=self.name,
                                       M='fpm',
                                       i='/tmp/{}-{}.pid'.format(self.name, daemon),
-                                      vty_socket=os.path.join(self.socket_dir,self.name))
+                                      log='file:/tmp/{}-{}.log'.format(self.name, daemon))
                 else:
                     self.start_daemon(daemon, '-d',
                                       u='root',
+                                      g='root',
+                                      N=self.name,
                                       i='/tmp/{}-{}.pid'.format(self.name, daemon),
-                                      vty_socket=os.path.join(self.socket_dir,self.name))
+                                      log='file:/tmp/{}-{}.log'.format(self.name, daemon))
             # Integrated configuration
             self.cmd('vtysh -N "{}" -f "{}"'.format(self.name, self.int_conf))
         # Per daemon configuration
@@ -402,16 +403,20 @@ class FRRouter(Node):
                 if daemon == 'zebra':
                     self.start_daemon(daemon, '-d',
                                       f=os.path.join(self.conf_dir, self.name, daemon)+'.conf',
-                                      u='root', 
+                                      u='root',
+                                      g='root',
+                                      N=self.name,
                                       M='fpm',
                                       i='/tmp/{}-{}.pid'.format(self.name, daemon),
-                                      vty_socket=os.path.join(self.socket_dir,self.name))
+                                      log='file:/tmp/{}-{}.log'.format(self.name, daemon))
                 else:
                     self.start_daemon(daemon, '-d',
                                       f=os.path.join(self.conf_dir, self.name, daemon)+'.conf',
                                       u='root',
+                                      g='root',
+                                      N=self.name,
                                       i='/tmp/{}-{}.pid'.format(self.name, daemon),
-                                      vty_socket=os.path.join(self.socket_dir,self.name))
+                                      log='file:/tmp/{}-{}.log'.format(self.name, daemon))
 
     def stop(self):
         """Terminate FRRouter."""
@@ -423,7 +428,7 @@ class FRRouter(Node):
                       '"/tmp/{name}-{daemon}.out" '
                       '"/tmp/{name}-{daemon}.log"'.format(name=self.name, daemon=daemon))
         # Remove socket directory
-        os.system('rm -rf {}/{}'.format(self.socket_dir, self.name))
+        os.system('rm -rf /var/run/{}'.format(self.name))
         super().stop()
 
     def start_daemon(self, daemon, *args, **kwargs):
@@ -447,8 +452,10 @@ class FRRouter(Node):
             else:
                 cmd += ' --{} "{}"'.format(key, value)
 
+        cmd += ' --log-level debugging'
+
         cmd += ' > "/tmp/{}-{}.out" 2>&1'.format(self.name, daemon)
-        debug(cmd)
+        debug(cmd+'\n')
 
         # Execute command
         self.cmd(cmd)
