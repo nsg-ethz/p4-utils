@@ -203,13 +203,11 @@ class P4Switch(Switch):
     def stop_p4switch(self):
         """Just stops simple switch without deleting interfaces."""
         info('Stopping P4 switch {}.\n'.format(self.name))
-        self.cmd('kill %' + self.sw_bin)
-        self.cmd('wait')
+        self.cmd('kill -9 {}'.format(self.simple_switch_pid))
 
     def stop(self):
         """Terminate P4 switch."""
-        self.cmd('kill %' + self.sw_bin)
-        self.cmd('wait')
+        self.cmd('kill -9 {}'.format(self.simple_switch_pid))
         self.deleteIntfs()
 
     def attach(self, intf):
@@ -355,10 +353,10 @@ class FRRouter(Node):
         kwargs.setdefault('staticd', True)
 
         # Parse daemons
-        self.daemons = []
+        self.daemons = {}
         for key, value in kwargs.items():
             if key in FRRouter.DAEMONS and value:
-                self.daemons.append(key)
+                self.daemons.setdefault(key, {})
 
     def start(self):
         # Enable IPv4 frowarding
@@ -376,7 +374,7 @@ class FRRouter(Node):
             error("Binaries path {} does not contain daemons!".format(self.bin_dir))
             exit(0)
 
-        if len(self.daemons) == 0:
+        if len(self.daemons.keys()) == 0:
             error('Nothing to start in router {}'.format(self.name))
 
         # Create socket directory
@@ -384,7 +382,7 @@ class FRRouter(Node):
 
         # Integrated configuration
         if self.int_conf is not None:
-            for daemon in self.daemons:
+            for daemon in self.daemons.keys():
                 if daemon == 'zebra':
                     self.start_daemon(daemon, '-d',
                                       u='root', 
@@ -400,7 +398,7 @@ class FRRouter(Node):
             self.cmd('vtysh -N "{}" -f "{}"'.format(self.name, self.int_conf))
         # Per daemon configuration
         else:
-            for daemon in self.daemons:
+            for daemon in self.daemons.keys():
                 if daemon == 'zebra':
                     self.start_daemon(daemon, '-d',
                                       f=os.path.join(self.conf_dir, self.name, daemon)+'.conf',
@@ -416,21 +414,30 @@ class FRRouter(Node):
                                       vty_socket=os.path.join(self.socket_dir,self.name))
 
     def stop(self):
-        super().stop()
-        # Remove socket directory
-        os.system('rm -rf {}/{}'.format(self.socket_dir, self.name))
-
-        for daemon in self.daemons:
+        """Terminate FRRouter."""
+        for daemon, value in self.daemons.items():
+            # Kill daemons
+            self.cmd('kill -9 {}'.format(value.get('pid')))
             # Remove pid, out and log files
             os.system('rm -f "/tmp/{name}-{daemon}.pid" '
                       '"/tmp/{name}-{daemon}.out" '
                       '"/tmp/{name}-{daemon}.log"'.format(name=self.name, daemon=daemon))
+        # Remove socket directory
+        os.system('rm -rf {}/{}'.format(self.socket_dir, self.name))
+        super().stop()
 
     def start_daemon(self, daemon, *args, **kwargs):
         """Start FRR on a given router."""
+        # Get PID file
+        pid_file = kwargs.get('i')
+        if pid_file is None:
+            pid_file = kwargs.get('pid_file')
+            if pid_file is None:
+                raise Exception('PID file not specified!')
 
+        # Construct command
         cmd = os.path.join(self.bin_dir, daemon)
-        
+
         for arg in args:
             cmd += ' "{}"'.format(arg)
 
@@ -442,5 +449,10 @@ class FRRouter(Node):
 
         cmd += ' > "/tmp/{}-{}.out" 2>&1'.format(self.name, daemon)
         debug(cmd)
-        
+
+        # Execute command
         self.cmd(cmd)
+
+        # Retrieve PID
+        with open(pid_file, 'r') as f:
+            self.daemons[daemon].update(pid=int(f.read()))
