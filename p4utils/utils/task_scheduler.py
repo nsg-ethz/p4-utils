@@ -116,7 +116,7 @@ class Task:
         # Run the thread in non-blocking mode
         self.thread = th.Thread(target=self._run, daemon=True)
         self.thread.start()
-        # Log started command
+        # Log started task
         print()
         print('Started new task!')
         print('time:\t{}'.format(time.time()))
@@ -187,7 +187,7 @@ class TaskScheduler:
 
             # Iterate over tasks
             for args, kwargs in tasks_list:
-                # Log received command
+                # Log received task
                 print()
                 print('Received new task!')
                 print('time:\t{}'.format(time.time()))
