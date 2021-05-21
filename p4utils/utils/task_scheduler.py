@@ -126,7 +126,6 @@ class Task:
         print('kwargs:\t{}'.format(self.kwargs))
         print('thread:\t{}'.format(self.thread.name))
         print()
-        sys.stdout.flush()
 
 class TaskScheduler:
     """
@@ -194,7 +193,6 @@ class TaskScheduler:
                 print('args:\t{}'.format(args))
                 print('kwargs:\t{}'.format(kwargs))
                 print()
-                sys.stdout.flush()
                 # Avoid server failure with wrong commands
                 try:
                     # Initialize a new task
@@ -205,20 +203,15 @@ class TaskScheduler:
                     # Print exception to stderr
                     sys.stderr.write('Exception in thread server_loop\n')
                     tbk.print_exc()
-                    sys.stderr.flush()
 
     def scheduler_loop(self):
         """
         Start the tasks and stop them when it is required.
         """
         while True:
-                # Try to get task from the queue and wait
-                # for a minute 
-                try:
-                    task = self.queue.get(60)
-                    self.tasks.append(task)
-                except queue.Empty:
-                    pass
+                # Get task from the queue 
+                task = self.queue.get()
+                self.tasks.append(task)
 
                 # List of stopped tasks to remove
                 stopped_tasks = []
@@ -239,12 +232,19 @@ class TaskScheduler:
                     if task.stopped:
                         stopped_tasks.append(task)
                 
-                # Remove old stopped tasks from the list
+                # Remove stopped tasks from the list
                 for task in stopped_tasks:
                     self.tasks.remove(task)
-
-                # Flush stderr
-                sys.stderr.flush()
+                     # Log deleted task
+                    print()
+                    print('Deleted task!')
+                    print('time:\t{}'.format(time.time()))
+                    print('start:\t{}'.format(task.start))
+                    print('duration:\t{}'.format(task.duration))
+                    print('args:\t{}'.format(task.args))
+                    print('kwargs:\t{}'.format(task.kwargs))
+                    print('thread:\t{}'.format(task.thread.name))
+                    print()
 
     def start(self):
         """

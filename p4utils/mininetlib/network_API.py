@@ -347,9 +347,9 @@ class NetworkAPI(Topo):
             log_enabled = node_info.get('log_enabled', False)
             log_dir = node_info.get('log_dir')
             if log_enabled:
-                self.net[node].cmd('python3 -m p4utils.utils.task_scheduler "{}" > "{}/{}_scheduler.log" 2>&1 &'.format(unix_socket, log_dir, node))
+                self.net[node].cmd('python3 -u -m p4utils.utils.task_scheduler "{}" > "{}/{}_scheduler.log" 2>&1 &'.format(unix_socket, log_dir, node))
             else:
-                self.net[node].cmd('python3 -m p4utils.utils.task_scheduler "{}" > /dev/null 2>&1 &'.format(unix_socket))
+                self.net[node].cmd('python3 -u -m p4utils.utils.task_scheduler "{}" > /dev/null 2>&1 &'.format(unix_socket))
 
     def start_schedulers(self):
         """
