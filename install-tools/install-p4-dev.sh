@@ -8,16 +8,18 @@ BUILD_DIR=~/p4-tools
 SCRIPT_DIR=$(pwd)
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
 DEBUG_FLAGS=true
-ENABLE_P4_RUNTIME=true
-SYSREPO=false
-# Sysrepo prevents simple_switch_grpc from starting correctly
+P4_RUNTIME=true
+SYSREPO=false   # Sysrepo prevents simple_switch_grpc from starting correctly
+FRROUTING=true
 
 # Software versions
 PI_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713"    # Feb 4 2021
 BMV2_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # Feb 11 2021
 P4C_COMMIT="451b208a5f1a54d9b5ac7975e496ca0a5dee6deb"   # Feb 23 2021
+FRROUTING_COMMIT="18f209926fb659790926b82dd4e30727311d22aa" # Mar 25 2021
 PROTOBUF_COMMIT="v3.6.1"
 GRPC_COMMIT="tags/v1.17.2"
+LIBYANG_COMMIT="v1.0.225"
 
 # Print commands and exit on errors
 set -xe
@@ -280,7 +282,12 @@ function do_sysrepo_libyang {
     git checkout v0.16-r1
 
     # Build libyang
-    mkdir build
+    if [ ! -d build ]; then
+        mkdir build
+    else
+        rm -R build
+        mkdir build
+    fi
     cd build
     cmake ..
     make
@@ -302,6 +309,46 @@ function do_sysrepo_libyang {
     make
     sudo make install
     sudo ldconfig
+}
+
+# Install libyang necessary for FRRouting
+function do_libyang {
+    # Install dependencies
+    do_sysrepo_libyang_deps
+
+    # Clone source libyang
+    cd ${BUILD_DIR}
+    if [ ! -d libyang ]; then
+        git clone https://github.com/CESNET/libyang.git libyang
+    fi
+    cd libyang
+    git checkout ${LIBYANG_COMMIT}
+
+    # Build libyang
+    if [ ! -d build ]; then
+        mkdir build
+    else
+        rm -R build
+        mkdir build
+    fi
+    cd build
+    cmake -DENABLE_LYD_PRIV=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+        -D CMAKE_BUILD_TYPE:String="Release" ..
+    make
+    sudo make install
+}
+
+# Install FRRouting dependencies
+function do_frrouting_deps{
+    # Install dependencies
+    do_libyang
+
+    sudo apt-get install \
+    git autoconf automake libtool make libreadline-dev texinfo \
+    pkg-config libpam0g-dev libjson-c-dev bison flex python3-pytest \
+    libc-ares-dev python3-dev libsystemd-dev python-ipaddress python3-sphinx \
+    install-info build-essential libsystemd-dev libsnmp-dev perl libcap-dev \
+    libelf-dev
 }
 
 # Install PI
@@ -342,7 +389,7 @@ function do_PI {
 # Install behavioral model
 function do_bmv2 {
     # Install dependencies
-    if [ "$ENABLE_P4_RUNTIME" = false ]; then
+    if [ "$P4_RUNTIME" = false ]; then
         do_bmv2_deps
     fi
 
@@ -356,11 +403,11 @@ function do_bmv2 {
 
     # Build behavioral-model
     ./autogen.sh
-    if [ "$DEBUG_FLAGS" = true ] && [ "$ENABLE_P4_RUNTIME" = true ]; then
+    if [ "$DEBUG_FLAGS" = true ] && [ "$P4_RUNTIME" = true ]; then
         ./configure --with-pi --with-thrift --with-nanomsg --enable-debugger --disable-elogger "CXXFLAGS=-O0 -g"
-    elif [ "$DEBUG_FLAGS" = true ] && [ "$ENABLE_P4_RUNTIME" = false ]; then
+    elif [ "$DEBUG_FLAGS" = true ] && [ "$P4_RUNTIME" = false ]; then
         ./configure --with-thrift --with-nanomsg --enable-debugger --enable-elogger "CXXFLAGS=-O0 -g"
-    elif [ "$DEBUG_FLAGS" = false ] && [ "$ENABLE_P4_RUNTIME" = true ]; then
+    elif [ "$DEBUG_FLAGS" = false ] && [ "$P4_RUNTIME" = true ]; then
         ./configure --with-pi --without-nanomsg --disable-elogger --disable-logging-macros 'CFLAGS=-g -O2' 'CXXFLAGS=-g -O2'
     else
         ./configure --without-nanomsg --disable-elogger --disable-logging-macros 'CFLAGS=-g -O2' 'CXXFLAGS=-g -O2'
@@ -370,7 +417,7 @@ function do_bmv2 {
     sudo ldconfig
 
     # Build simple_switch_grpc
-    if [ "$ENABLE_P4_RUNTIME" = true ]; then
+    if [ "$P4_RUNTIME" = true ]; then
         cd targets/simple_switch_grpc
         ./autogen.sh
         if [ "$DEBUG_FLAGS" = true ]; then
@@ -447,6 +494,27 @@ function do_mininet {
     sudo PYTHON=python3 ./util/install.sh -nwv
 }
 
+# Install FRRouting
+function do_frrouting {
+    # Install dependencies
+    do_frrouting_deps
+
+    # Clone source
+    cd ${BUILD_DIR}
+    if [ ! -d frr ]; then
+        git clone https://github.com/FRRouting/frr.git frr
+    fi
+    git checkout ${FRROUTING_COMMIT}
+    cd frr
+
+    # Build FRRouting
+    ./bootstrap.sh
+    ./configure --enable-fpm --enable-protobuf --enable-multipath=8
+    make
+    sudo make install
+    sudo ldconfig
+}
+
 # Install p4-utils
 function do_p4-utils {
     # Clone source
@@ -473,7 +541,7 @@ function do_p4-learning {
 }
 
 do_protobuf
-if [ "$ENABLE_P4_RUNTIME" = true ]; then
+if [ "$P4_RUNTIME" = true ]; then
     do_grpc
     do_bmv2_deps
     if [ "$SYSREPO" = true ]; then
@@ -491,6 +559,10 @@ do_mininet
 # This sets again Python3 as the system default binary.
 sudo ln -sf $(which python3) /usr/bin/python
 sudo ln -sf $(which pip3) /usr/bin/pip
+
+if [ "$FRROUTING" = true ]; then
+    do_frrouting
+fi
 
 do_p4-utils
 do_p4-learning

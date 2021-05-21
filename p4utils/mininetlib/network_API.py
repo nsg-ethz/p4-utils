@@ -721,18 +721,18 @@ class NetworkAPI(Topo):
             # Port numbers
             port1 = info.get('port1')
             if port1 is None:
-                if self.isSwitch(node1):
-                    port1 = self.auto_port_num(node1, base=1)
-                else:
+                if self.isHost(node1):
                     port1 = self.auto_port_num(node1)
+                else:
+                    port1 = self.auto_port_num(node1, base=1)
                 self.setIntfPort(node1, node2, port1, key=key)
 
             port2 = info.get('port2')
             if port2 is None:
-                if self.isSwitch(node2):
-                    port2 = self.auto_port_num(node2, base=1)
-                else:
+                if self.isHost(node2):
                     port2 = self.auto_port_num(node2)
+                else:
+                    port2 = self.auto_port_num(node2, base=1)
                 self.setIntfPort(node2, node1, port2, key=key)
 
             # Interface names
@@ -758,7 +758,7 @@ class NetworkAPI(Topo):
                 self.setIntfMac(node2, node1, addr2, key=key)
 
             # IPs
-            if not self.isSwitch(node1):
+            if self.isHost(node1):
                 params1 = info.get('params1')
                 if params1 is None:
                     ip1 = self.auto_ip_address()
@@ -769,7 +769,7 @@ class NetworkAPI(Topo):
                         ip1 = self.auto_ip_address()
                         self.setIntfIp(node1, node2, ip1, key=key)
 
-            if not self.isSwitch(node2):
+            if self.isHost(node2):
                 params2 = info.get('params2')
                 if params2 is None:
                     ip2 = self.auto_ip_address()
@@ -1363,6 +1363,22 @@ class NetworkAPI(Topo):
         opts.update(isP4RuntimeSwitch = True)
         return self.addP4Switch(name, **opts)
 
+    def addRouter(self, name, **opts):
+        """
+        Add router node to Mininet topology.
+        If the node is already present, overwrite it.
+
+        Arguments:
+            name (string): switch name
+            opts (kwargs): switch options
+
+        Returns:
+            router name (string)
+        """
+        opts.setdefault('cls', FRRouter)
+        opts.update(isRouter = True)
+        return self.addNode(name, **opts)
+
 ## Node getter
     def getNode(self, name):
         """
@@ -1500,6 +1516,18 @@ class NetworkAPI(Topo):
         """
         return self.g.node[node].get('isP4RuntimeSwitch', False)
 
+    def isRouter(self, node):
+        """
+        Check if node is a router.
+
+        Arguments:
+            node (string): node name
+
+        Returns:
+            True if node is a router, else False (bool)
+        """
+        return self.g.node[node].get('isRouter', False)
+
     def hasCpuPort(self, node):
         """
         Check if node has a CPU port.
@@ -1592,6 +1620,22 @@ class NetworkAPI(Topo):
             return [n for n in self.nodes(sort=sort, withInfo=True) if self.isP4RuntimeSwitch(n[0])]
         else:
             return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4RuntimeSwitch(n)]
+
+    def routers(self, sort=True, withInfo=False):
+        """
+        Return routers.
+
+        Arguments:
+            sort (bool)    : sort routers alphabetically
+            withInfo (bool): retrieve node information
+
+        Returns:
+            list of routers
+        """
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isRouter(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isRouter(n)]
 
 ## Nodes
     def enableLog(self, name, log_dir='./log'):

@@ -17,9 +17,9 @@ import os
 import tempfile
 import socket
 from time import sleep
-from mininet.log import debug, info, warning
+from mininet.log import debug, info, warning, error
 from mininet.clean import sh
-from mininet.node import Switch, Host
+from mininet.node import Node, Host, Switch
 from mininet.moduledeps import pathCheck
 
 from p4utils.utils.helper import *
@@ -226,7 +226,7 @@ class P4Switch(Switch):
 
 
 class P4RuntimeSwitch(P4Switch):
-    "BMv2 switch with gRPC support"
+    """BMv2 switch with gRPC support"""
 
     def __init__(self, *args,
                  sw_bin='simple_switch_grpc',
@@ -269,3 +269,180 @@ class P4RuntimeSwitch(P4Switch):
         """Describe P4RuntimeSwitch."""
         super().describe()
         print('{} -> gRPC port: {}'.format(self.name, self.grpc_port))
+
+class FRRouter(Node):
+    """FRRouter built as Mininet node"""
+
+    DAEMONS = [
+        'zebra',
+        'bgpd',
+        'ospfd',
+        'ospf6d',
+        'ripd',
+        'ripngd',
+        'isisd',
+        'pimd',
+        'ldpd',
+        'nhrpd',
+        'eigrpd',
+        'babeld',
+        'sharpd',
+        'staticd',
+        'pbrd',
+        'bfdd',
+        'fabricd'
+    ]
+
+    def __init__(self, name,
+                 bin_dir='/usr/local/sbin',
+                 socket_dir='/var/run',
+                 daemons=None,
+
+                 int_conf=None,
+                 conf_dir='./routers',
+                 zebra=True,
+                 bgpd=True,
+                 ospfd=True,
+                 staticd=True,
+                 **kwargs):
+        """
+        Attributes:
+            name (string)       : name of the router
+            bin_dir             : directory that contains the daemons binaries
+            int_conf (string)   : path to the router integrated configuration file 
+            conf_dir (string)   : path to the directory which contains the folder with
+                                  the configuration files for all the daemons (the folder
+                                  is named after the router)
+
+        Notice:
+            If int_conf is set, the content conf_dir is not considered except for 
+            vtysh.conf which is always taken into account.
+
+            If conf_dir is not specified, then conf_dir is assumed to be './routers', and the
+            folder which contains the configuration files is then './routers/<name>'.
+        """
+        super().__init__(name, **kwargs)
+
+        self.bin_dir = bin_dir
+        self.conf_dir = conf_dir
+        self.int_conf = int_conf
+        self.socket_dir = socket_dir
+        
+        if not os.path.isdir(self.socket_dir):
+            if os.path.exists(self.socket_dir):
+                raise NotADirectoryError("'{}' exists and is not a directory.".format(self.conf_dir))
+            else:
+                os.mkdir(self.socket_dir)
+
+        # Make sure that the provided conf dir exists and is a directory,
+        # if not, create a new one
+        if not os.path.isdir(self.conf_dir):
+            if os.path.exists(self.conf_dir):
+                raise NotADirectoryError("'{}' exists and is not a directory.".format(self.conf_dir))
+            else:
+                os.mkdir(self.conf_dir)
+
+        if self.int_conf is not None:
+            # Make sure that the provided ffr conf is pointing to a file
+            if not os.path.isfile(self.int_conf):
+                if os.path.exists(self.int_conf):
+                    raise IsADirectoryError("'{}' exists and is a directory.".format(self.int_conf))
+                else:
+                    raise FileNotFoundError("'{}' does not exist.".format(self.int_conf))  
+
+        # Default daemons
+        kwargs.setdefault('zebra', True)
+        kwargs.setdefault('bgpd', True)
+        kwargs.setdefault('ospfd', True)
+        kwargs.setdefault('staticd', True)
+
+        # Parse daemons
+        self.daemons = []
+        for key, value in kwargs.items():
+            if key in FRRouter.DAEMONS and value:
+                self.daemons.append(key)
+
+    def start(self):
+        # Enable IPv4 frowarding
+        self.cmd("sysctl -w net.ipv4.ip_forward=1")
+
+        # Delete ip from loopback interface because 127.0.0.1 is automatically
+        # assigned by Mininet while we want that the IPs are assigned according to
+        # FRR configuration.
+        # (see https://github.com/mininet/mininet/blob/master/mininet/link.py#L54)
+        self.cmd('ifconfig lo up')
+        self.cmd('ifconfig lo 0.0.0.0')
+
+        # Check binaries
+        if not os.path.isfile(self.bin_dir + "/" + "zebra"):
+            error("Binaries path {} does not contain daemons!".format(self.bin_dir))
+            exit(0)
+
+        if len(self.daemons) == 0:
+            error('Nothing to start in router {}'.format(self.name))
+
+        # Create socket directory
+        os.mkdir(os.path.join(self.socket_dir,self.name))
+
+        # Integrated configuration
+        if self.int_conf is not None:
+            for daemon in self.daemons:
+                if daemon == 'zebra':
+                    self.start_daemon(daemon, '-d',
+                                      u='root', 
+                                      M='fpm',
+                                      i='/tmp/{}-{}.pid'.format(self.name, daemon),
+                                      vty_socket=os.path.join(self.socket_dir,self.name))
+                else:
+                    self.start_daemon(daemon, '-d',
+                                      u='root',
+                                      i='/tmp/{}-{}.pid'.format(self.name, daemon),
+                                      vty_socket=os.path.join(self.socket_dir,self.name))
+            # Integrated configuration
+            self.cmd('vtysh -N "{}" -f "{}"'.format(self.name, self.int_conf))
+        # Per daemon configuration
+        else:
+            for daemon in self.daemons:
+                if daemon == 'zebra':
+                    self.start_daemon(daemon, '-d',
+                                      f=os.path.join(self.conf_dir, self.name, daemon)+'.conf',
+                                      u='root', 
+                                      M='fpm',
+                                      i='/tmp/{}-{}.pid'.format(self.name, daemon),
+                                      vty_socket=os.path.join(self.socket_dir,self.name))
+                else:
+                    self.start_daemon(daemon, '-d',
+                                      f=os.path.join(self.conf_dir, self.name, daemon)+'.conf',
+                                      u='root',
+                                      i='/tmp/{}-{}.pid'.format(self.name, daemon),
+                                      vty_socket=os.path.join(self.socket_dir,self.name))
+
+    def stop(self):
+        super().stop()
+        # Remove socket directory
+        os.system('rm -rf {}/{}'.format(self.socket_dir, self.name))
+
+        for daemon in self.daemons:
+            # Remove pid, out and log files
+            os.system('rm -f "/tmp/{name}-{daemon}.pid" '
+                      '"/tmp/{name}-{daemon}.out" '
+                      '"/tmp/{name}-{daemon}.log"'.format(name=self.name, daemon=daemon))
+
+    def start_daemon(self, daemon, *args, **kwargs):
+        """Start FRR on a given router."""
+
+        cmd = os.path.join(self.bin_dir, daemon)
+        
+        for arg in args:
+            cmd += ' "{}"'.format(arg)
+
+        for key, value in kwargs.items():
+            if len(key) == 1:
+                cmd += ' -{} "{}"'.format(key, value)
+            else:
+                cmd += ' --{} "{}"'.format(key, value)
+
+        cmd += ' > "/tmp/{}-{}.out" 2>&1'.format(self.name, daemon)
+        debug(cmd)
+        
+        self.cmd(cmd)
