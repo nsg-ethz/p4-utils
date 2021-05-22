@@ -34,6 +34,7 @@ net.addLink("s1", "s3")
 net.mixed()
 
 # Nodes general options
+net.addTaskFile('tasks.txt')
 net.enablePcapDumpAll()
 net.enableLogAll()
 net.enableCli()
