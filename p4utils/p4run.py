@@ -30,6 +30,7 @@ from p4utils.utils.helper import *
 from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
 from p4utils.utils.client import ThriftClient as DEFAULT_CLIENT
 from p4utils.mininetlib.node import P4Switch as DEFAULT_SWITCH
+from p4utils.mininetlib.node import FRRouter as DEFAULT_ROUTER
 from p4utils.mininetlib.node import P4Switch, P4RuntimeSwitch
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
 from p4utils.mininetlib.net import P4Mininet as DEFAULT_NET
@@ -65,7 +66,6 @@ class AppRunner(NetworkAPI):
             clients (list)      : list of clients (one per client-capable switch) to populate tables
             compilers (list)    : list of compilers (one per P4 source provided) to compile P4 code
             conf (dict)         : parsed configuration from conf_file.
-            topo (Topo object)  : the mininet topology instance.
             net (Mininet object): the mininet instance.
             *_module (dict/obj) : module dict used to import the specified module (see below)
             *_node (dict/obj)   : node dict uset to import the specified Mininet node (see below)
@@ -76,7 +76,6 @@ class AppRunner(NetworkAPI):
             - "compiler_module" loads the compiler for P4 codes,
             - "host_node" loads the host node to be used with Mininet,
             - "client_module" loads the client to program switches from files.
-            - "topo_module" loads Mininet topology module
             - "mininet_module" loads the network module
 
         Example of JSON structure of conf_file:
@@ -85,6 +84,7 @@ class AppRunner(NetworkAPI):
             "cli": <true|false> (bool),
             "pcap_dump": <true|false> (bool),
             "enable_log": <true|false> (bool),
+            "tasks_file": <path to the tasks file> (string)
             "host_node":
             {
                 "file_path": <path to module> (string),
@@ -97,6 +97,12 @@ class AppRunner(NetworkAPI):
                 "module_name": <module file name> (string),
                 "object_name": <module object> (string)
             },
+            "router_node":
+            {
+                "file_path": <path to module> (string),
+                "module_name": <module file name> (string),
+                "object_name": <module object> (string)
+            }
             "compiler_module":
             {
                 "file_path": <path to module> (string),
@@ -110,12 +116,6 @@ class AppRunner(NetworkAPI):
                 "module_name": <module file name> (string),
                 "object_name": <module object> (string),
                 "options": <options passed to init> (dict)
-            },
-            "topo_module":
-            {
-                "file_path": <path to module> (string),
-                "module_name": <module file name> (string),
-                "object_name": <module object> (string)
             },
             "mininet_module":
             {
@@ -144,10 +144,15 @@ class AppRunner(NetworkAPI):
                 ],
                 "hosts": 
                 {
-                    "h1":{}
+                    <see parse_hosts>
                 },
-                "switches": {
+                "switches": 
+                {
                     <see parse_switch>
+                },
+                "routers": 
+                {
+                    <see parse_routers>
                 }
             }
         }
@@ -200,17 +205,27 @@ class AppRunner(NetworkAPI):
                     os.mkdir(self.pcap_dir)
 
         ## Mininet nodes
+        # Load default router node
+        self.router_node = {}
+        router_node = self.conf.get('router_node')
+        if router_node is not None:
+            self.router_node = load_custom_object(router_node)
+        else:
+            self.router_node = DEFAULT_ROUTER
+
         # Load default switch node
         self.switch_node = {}
-        if self.conf.get('switch_node') is not None:
-            self.switch_node = load_custom_object(self.conf['switch_node'])
+        switch_node = self.conf.get('switch_node')
+        if switch_node is not None:
+            self.switch_node = load_custom_object(switch_node)
         else:
             self.switch_node = DEFAULT_SWITCH
 
         # Load default host node
         self.host_node = {}
-        if self.conf.get('host_node') is not None:
-            self.host_node = load_custom_object(self.conf['host_node'])
+        host_node = self.conf.get('host_node')
+        if host_node is not None:
+            self.host_node = load_custom_object(host_node)
         else:
             self.host_node = DEFAULT_HOST
 
@@ -222,13 +237,14 @@ class AppRunner(NetworkAPI):
                             'p4rt': False
                           }
         compiler = DEFAULT_COMPILER
-        if self.conf.get('compiler_module') is not None:
-            if self.conf['compiler_module'].get('object_name'):
-                compiler = load_custom_object(self.conf['compiler_module'])
+        compiler_module = self.conf.get('compiler_module')
+        if compiler_module is not None:
+            if compiler_module.get('object_name'):
+                compiler = load_custom_object(compiler_module)
             else:
                 compiler = DEFAULT_COMPILER
-            # Load default compiler module arguments
-            compiler_kwargs = self.conf['compiler_module'].get('options', {})
+            # Load compiler module default arguments
+            compiler_kwargs = compiler_module.get('options', {})
         self.setCompiler(compiler, **compiler_kwargs)
 
         # Load default client module
@@ -238,18 +254,20 @@ class AppRunner(NetworkAPI):
                             'log_dir': self.log_dir
                         }
         client = DEFAULT_CLIENT
-        if self.conf.get('client_module') is not None:
-            if self.conf['client_module'].get('object_name'):
-                client = load_custom_object(self.conf['client_module'])
+        client_module = self.conf.get('client_module')
+        if client_module is not None:
+            if client_module.get('object_name'):
+                client = load_custom_object(client_module)
             else:
                 client = DEFAULT_CLI
-            # Load default client module arguments
-            compiler_kwargs = self.conf['client_module'].get('options', {})
+            # Load client module default arguments
+            compiler_kwargs = client_module.get('options', {})
         self.setSwitchClient(client, **client_kwargs)
 
         # Load default Mininet network
-        if self.conf.get('mininet_module') is not None:
-            mininet = load_custom_object(self.conf['mininet_module'])
+        mininet_module = self.conf.get('mininet_module')
+        if mininet_module is not None:
+            mininet = load_custom_object(mininet_module)
         else:
             mininet = DEFAULT_NET
         self.setNet(mininet)
@@ -260,26 +278,44 @@ class AppRunner(NetworkAPI):
             raise Exception('no topology defined in {}.'.format(self.conf))
 
         # Import topology components
-        self.parse_hosts(topology['hosts'])
-        self.parse_switches(topology['switches'])
-        self.parse_links(topology['links'])
+        unparsed_hosts = topology.get('hosts')
+        if unparsed_hosts is not None:
+            self.parse_hosts(unparsed_hosts)
+        unparsed_switches = topology.get('switches')
+        if unparsed_switches is not None:
+            self.parse_switches(unparsed_switches)
+        unparsed_routers = topology.get('routers')
+        if unparsed_routers is not None:
+            self.parse_routers(unparsed_routers)
+        unparsed_links = topology.get('links')
+        if unparsed_links is not None:
+            self.parse_links(unparsed_links)
 
         # Execute scripts
         self._exec_scripts()
 
         # Set assignment strategy
-        assignment_strategy = topology.get('assignment_strategy', 'l2')
-        if assignment_strategy == 'l2':
-            self.l2()
-        elif assignment_strategy == 'l3':
-            self.l3()
-        elif assignment_strategy == 'mixed':
-            self.mixed()
+        assignment_strategy = topology.get('assignment_strategy')
+        if assignment_strategy is not None:
+            if assignment_strategy == 'l2':
+                self.l2()
+            elif assignment_strategy == 'l3':
+                self.l3()
+            elif assignment_strategy == 'mixed':
+                self.mixed()
+            else:
+                warning('Unknown assignment strategy "{}".\n'.format(assignment_strategy))
 
+        # Enable/disable Mininet client
         if self.cli_enabled:
             self.enableCli()
         else:
             self.disableCli()
+
+        tasks_file = self.conf.get('tasks_file')
+        if tasks_file is not None:
+            # Add tasks file
+            self.addTaskFile(tasks_file)
 
         # Start the network
         self.startNetwork()
@@ -292,14 +328,13 @@ class AppRunner(NetworkAPI):
         {
             host_name:
             {
-                "auto_arp_tables": <true|false> (*),
-                "auto_gw_arp": <true|false> (*),
                 "scheduler": <true|false> (*)
                 "socket_path": <dir to socket file> (*)
                 "defaultRoute": "via <gateway ip>" (*)
                 "dhcp": <true|false> (*)
                 "log_enabled" : <true|false> (bool), (*)
                 "log_dir": <log path for switch binary> (string), (*)
+                "host_node": custom_switch_node (dict) (*)
             },
             ...
         }
@@ -308,18 +343,32 @@ class AppRunner(NetworkAPI):
         """
         default_params = {
                             'log_enabled': self.log_enabled,
-                            'log_dir': self.log_dir
+                            'log_dir': self.log_dir,
+                            'host_node': deepcopy(self.host_node),
                          }
         for host, custom_params in unparsed_hosts.items():
-            # Set general default switch options
+            # Set general default host options
             params = deepcopy(default_params)
+
+            ## Parse Host node type
+            # Set non default node type (the module JSON is converted into a Host object)
+            if 'host_node' in custom_params:
+                custom_params['cls'] = load_custom_object(custom_params['host_node'])
+                # This field is not propagated further
+                del custom_params['host_node']
+            else:
+                params['cls'] = params['host_node']
+            # This field is not propagated further
+            del params['host_node']
+
             # Update default parameters with custom ones
             params.update(custom_params)
             self.addHost(host, **params)
     
     def parse_switches(self, unparsed_switches):
         """
-        A switch should have the following structure inside the topology object
+        Parse switches and add them to the network. A switch has 
+        the following structure inside the topology object
         "switches":
         {
             switch_name:
@@ -327,7 +376,7 @@ class AppRunner(NetworkAPI):
                 "p4_src": path_to_p4_program (string),
                 "cpu_port": <true|false> (bool),
                 "cli_input": <path to cli input file> (string),
-                "switch_node": custom_switch_node (dict),
+                "switch_node": custom_switch_node (dict) (*),
                 "log_enabled" : <true|false> (bool), (*)
                 "log_dir": <log path for switch binary> (string), (*)
                 "pcap_dump": <true|false> (bool), (*)
@@ -381,7 +430,57 @@ class AppRunner(NetworkAPI):
                     self.enableCpuPort(switch)
             else:
                 self.addSwitch(switch, **params)
-            
+
+    def parse_routers(self, unparsed_routers):
+        """
+        Parse hosts and add them to the network. Hosts have
+        the following structure:
+        "routers":
+        {
+            router_name:
+            {
+                "int_conf": <path to the router's integrate configuration file>
+                "conf_dir": <path to the directory which contains the folder 
+                             (named after the router) with the configuration 
+                             files for all the daemons>
+                daemon1_name: <true|false> (bool) (*),
+                daemon2_name: <true|false> (bool) (*),
+                ...
+            },
+            ...
+        }
+
+        Notice that if int_conf is specified, then conf_dir is ignored.
+
+        (*) None of these parameters is mandatory.
+        """
+        default_params = {
+                            'router_node': deepcopy(self.router_node),
+                            'zebra': True,
+                            'ospfd': True,
+                            'staticd': True,
+                            'bgpd': True
+                         }
+        
+        for router, custom_params in unparsed_routers.items():
+            # Set general default router options
+            params = deepcopy(default_params)
+
+            ## Parse Router node type
+            # Set non default node type (the module JSON is converted into a Router object)
+            if 'router_node' in custom_params:
+                custom_params['cls'] = load_custom_object(custom_params['router_node'])
+                # This field is not propagated further
+                del custom_params['router_node']
+            else:
+                params['cls'] = params['router_node']
+            # This field is not propagated further
+            del params['router_node']
+
+            # Update default parameters with custom ones
+            params.update(custom_params)
+            self.addRouter(router, **params)
+
     def parse_links(self, unparsed_links):
         """
         Load a list of links descriptions of the form 
