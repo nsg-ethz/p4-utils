@@ -362,13 +362,6 @@ class FRRouter(Node):
             self.cmd('sysctl -w net.mpls.conf.{}.input=1'.format(intf_name))
         self.cmd('sysctl -w net.mpls.platform_labels=100000')
 
-        # Delete ip from loopback interface because 127.0.0.1 is automatically
-        # assigned by Mininet while we want that the IPs are assigned according to
-        # FRR configuration.
-        # (see https://github.com/mininet/mininet/blob/master/mininet/link.py#L54)
-        self.cmd('ifconfig lo up')
-        self.cmd('ifconfig lo 0.0.0.0')
-
         # Check binaries
         if not os.path.isfile(self.bin_dir + "/" + "zebra"):
             error("Binaries path {} does not contain daemons!".format(self.bin_dir))
