@@ -1,8 +1,26 @@
 import os
+import traceback as tbk
+from functools import wraps
 from mininet.cli import CLI
 from mininet.log import info, output, error, warn, debug
 
 from p4utils.utils.helper import *
+
+
+def exception_handler(f):
+    """
+    Prevent exceptions from terminating the client but still
+    print them."""
+    @wraps(f)
+    def handle(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except:
+            print()
+            tbk.print_exc()
+            print()
+            return False
+    return handle
 
 
 class P4CLI(CLI):
@@ -55,6 +73,7 @@ class P4CLI(CLI):
             else:
                 return node
 
+    @exception_handler
     def do_p4switch_stop(self, line=""):
         """Stop simple switch from switch namespace."""
         switch_name = parse_line(line)
@@ -74,6 +93,7 @@ class P4CLI(CLI):
         
         p4switch.stop_p4switch()
 
+    @exception_handler
     def do_p4switch_start(self, line=""):
         """Start again simple switch from namespace."""
         args = parse_line(line)
@@ -168,6 +188,7 @@ class P4CLI(CLI):
                 error('No client module provided!\n')
                 return False
 
+    @exception_handler
     def do_p4switch_reboot(self, line=""):
         """Reboot a P4 switch with a new program."""
         if not line or len(parse_line(line)) > 5:
@@ -178,6 +199,7 @@ class P4CLI(CLI):
             self.do_p4switch_stop(line=switch_name)
             self.do_p4switch_start(line=line)
 
+    @exception_handler
     def do_p4switches_reboot(self, line=""):
         """
         Reboot all P4 switches with new program.
@@ -203,6 +225,7 @@ class P4CLI(CLI):
                         info("Exec Script: {}\n".format(script["cmd"]))
                         run_command(script["cmd"])
 
+    @exception_handler
     def do_test_p4(self, line=""):
         """Tests start stop functionalities."""
         self.do_p4switch_stop("s1")
@@ -210,17 +233,20 @@ class P4CLI(CLI):
         self.do_p4switch_reboot("s1")
         self.do_p4switches_reboot()
 
+    @exception_handler
     def do_printSwitches(self, line=""):
         """Print names of all switches."""
         for sw in self.mn.p4switches:
             print(sw.name)
 
+    @exception_handler
     def do_pingset(self ,line=""):
         """Ping between the hosts in the set."""
         hosts_names = line.strip().split()
         hosts = [x for x in self.mn.hosts if x.name in hosts_names]
         self.mn.ping(hosts=hosts, timeout=1)
 
+    @exception_handler
     def do_task(self, line=""):
         """
         Execute a task on the given host. The starting
@@ -241,6 +267,7 @@ class P4CLI(CLI):
             error('Node {} does not exist!\n'.format(node))
             return False
 
+    @exception_handler
     def do_enable_scheduler(self, line=""):
         """
         Enable the TaskScheduler on a node.

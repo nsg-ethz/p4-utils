@@ -325,10 +325,10 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
             args.append(parsed_cmd[i])
         # Parse start
         elif i == 1:
-            kwargs['start'] = int(parsed_cmd[i])
+            kwargs['start'] = float(parsed_cmd[i])
         # Parse duration
         elif i == 2:
-            kwargs['duration'] = int(parsed_cmd[i])
+            kwargs['duration'] = float(parsed_cmd[i])
         # Parse exe (index 1 in args)
         elif i == 3:
             args.append(parsed_cmd[i])
@@ -338,19 +338,9 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
             if len(parsed_cmd[i]) > 2 and parsed_cmd[i][:2] == '--':
                 # Parse module
                 if parsed_cmd[i] == '--mod':
-                    try:
-                        mod = importlib.import_module(parsed_cmd[i+1])
-                    except Exception as e:
-                        error(str(e)+'\n')
-                        error("Cannot parse '{}' correctly.\n".format(line))
-                        break
+                    mod = importlib.import_module(parsed_cmd[i+1])
                 else:
-                    try:
-                        kwargs[parsed_cmd[i][2:]] = parsed_cmd[i+1]
-                    except Exception as e:
-                        error(str(e)+'\n')
-                        error("Cannot parse '{}' correctly.\n".format(line))
-                        break
+                    kwargs[parsed_cmd[i][2:]] = parsed_cmd[i+1]
                 skip_next = True
             # Parse args
             else:

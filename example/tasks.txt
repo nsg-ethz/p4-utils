@@ -1,3 +1,3 @@
-h2 10 30 "ping 10.0.3.3"
-h1 20 40 recv_udp_flow --dport 5051
-h3 20 40 send_udp_flow --dst 10.0.1.1 --dport 5051 --rate 1M
+h2 10.5 30 "ping 10.0.3.3"
+h1 20 41 recv_udp_flow --dport 5051
+h3 20.9 40 send_udp_flow --dst 10.0.1.1 --dport 5051 --rate 1M

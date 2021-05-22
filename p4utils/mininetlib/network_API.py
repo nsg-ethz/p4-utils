@@ -375,7 +375,12 @@ class NetworkAPI(Topo):
             A mininet instance is stored as self.net.
             self.net.start() has been called.
         """
+        # Get current time
+        current_time = time.time()
         for node, tasks in self.tasks.items():
+            # Update start with current time
+            for task in tasks:
+                task[1]['start'] += current_time
             unix_path = self.getNode(node).get('unix_path', '/tmp')
             unix_socket = unix_path + '/' + node + '_socket'
             info('Tasks for node {} distributed to socket {}.\n'.format(node, unix_socket))
@@ -1760,8 +1765,8 @@ class NetworkAPI(Topo):
             exe                   : executable to run (either a shell string 
                                     command or a python function)
             args                  : positional arguments for the passed function
-            start (float)         : task starting time with respect to the current
-                                    time in seconds.
+            start (float)         : task delay in seconds with respect to the
+                                    network staring time.
             duration (float)      : task duration time in seconds (if duration is 
                                     lower than or equal to 0, then the task has no 
                                     time limitation)
@@ -1776,7 +1781,7 @@ class NetworkAPI(Topo):
                 raise Exception('"{}" does not have a scheduler.'. format(node))
             self.tasks.setdefault(node, [])
             # Parse execution parameters to pass to the server
-            kwargs.update(start=start+time.time(), duration=duration)
+            kwargs.update(start=start, duration=duration)
             args = list(args)
             args.insert(0, exe)
             params = (args, kwargs)
