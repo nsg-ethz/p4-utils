@@ -23,4 +23,4 @@ or
 sudo python network.py
 ```
 
-Please notice that *OSPF*, *LDP* and *BGP* take some time to converge, so at the beginning the network can still be partitioned.
+Please notice that *OSPF*, *LDP* and *BGP* take some time to converge so, at the beginning, the network can still be partitioned.
