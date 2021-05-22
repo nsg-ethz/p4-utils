@@ -295,10 +295,6 @@ class FRRouter(Node):
                  bin_dir='/usr/local/sbin',
                  int_conf=None,
                  conf_dir='./routers',
-                 zebra=True,
-                 bgpd=True,
-                 ospfd=True,
-                 staticd=True,
                  **kwargs):
         """
         Attributes:
@@ -308,6 +304,11 @@ class FRRouter(Node):
             conf_dir (string)   : path to the directory which contains the folder with
                                   the configuration files for all the daemons (the folder
                                   is named after the router)
+
+            Additional configuration parameters involve the daemon selections. The daemons
+            'zebra', 'ospfd', 'bgpd', 'staticd' are enabled by default. To disable them pass
+            to the router the keyword argument <daemon>=False. To enable other non-default 
+            daemons, pass <daemon>=True.
 
         Notice:
             If int_conf is set, the content conf_dir is not considered except for 

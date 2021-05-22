@@ -290,7 +290,7 @@ function do_sysrepo_libyang {
     fi
     cd build
     cmake ..
-    make
+    make -j${NUM_CORES}
     sudo make install
     sudo ldconfig
 
@@ -306,7 +306,7 @@ function do_sysrepo_libyang {
     mkdir build
     cd build
     cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=Off -DCALL_TARGET_BINS_DIRECTLY=Off ..
-    make
+    make -j${NUM_CORES}
     sudo make install
     sudo ldconfig
 }
@@ -334,16 +334,17 @@ function do_libyang {
     cd build
     cmake -DENABLE_LYD_PRIV=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr \
         -D CMAKE_BUILD_TYPE:String="Release" ..
-    make
+    make -j${NUM_CORES}
     sudo make install
+    sudo ldconfig
 }
 
 # Install FRRouting dependencies
-function do_frrouting_deps{
+function do_frrouting_deps {
     # Install dependencies
     do_libyang
 
-    sudo apt-get install \
+    sudo apt-get install -y \
     git autoconf automake libtool make libreadline-dev texinfo \
     pkg-config libpam0g-dev libjson-c-dev bison flex python3-pytest \
     libc-ares-dev python3-dev libsystemd-dev python-ipaddress python3-sphinx \
@@ -504,13 +505,13 @@ function do_frrouting {
     if [ ! -d frr ]; then
         git clone https://github.com/FRRouting/frr.git frr
     fi
-    git checkout ${FRROUTING_COMMIT}
     cd frr
+    git checkout ${FRROUTING_COMMIT}
 
     # Build FRRouting
     ./bootstrap.sh
     ./configure --enable-fpm --enable-protobuf --enable-multipath=8
-    make
+    make -j${NUM_CORES}
     sudo make install
     sudo ldconfig
 }

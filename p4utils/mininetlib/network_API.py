@@ -1739,9 +1739,9 @@ class NetworkAPI(Topo):
             def_mod (string) : default module where to look for exe functions
 
         Notice:
-            The file has to be a set of lines, where each has
-            the following syntax.
-            <node> <start> <duration> <exe> [--mod <module>] [<arg1>] ... [<argN>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
+            The file has to be a set of lines, where each has the following syntax.
+            A non-default module can be specified in the command with '--mod <module>'.
+            <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
         """
         with open(filepath, 'r') as f:
             lines = f.readlines()
