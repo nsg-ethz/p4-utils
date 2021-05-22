@@ -10,7 +10,7 @@ The objective of this example is to provide an overview of the capabilities of *
 - *L2 learning* for P4 switches, in order to have L2 connectivity within each network segment;
 - *OSPF* for routers, in order to have connectivity within the same AS;
 - *BGP* for routers, in order to have connectivity among different ASes;
-- *LDP* for routers, in order to make the core of AS 1 (R3) *BGP*-free and still having full connectivity.
+- *LDP* for routers, in order to make the core of AS 1 (R3) *BGP*-free and still have full connectivity.
 
 ## Execution
 
