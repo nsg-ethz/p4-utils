@@ -1,46 +1,24 @@
-# Implementing Basic Forwarding
+# Fundamental network operations
 
-```
-                   +--+
-                   |h4|
-                   ++-+
-                    |
-                    |
-+--+      +--+     ++-+     +--+
-|h1+------+s1+-----+s3+-----+h3|
-+--+      +-++     +--+     +--+
-            |
-            |
-          +-++
-          |s2|
-          +-++
-            |
-            |
-          +-++
-          |h2|
-          +--+
-```
+![Network topology](images/ffr_example_topo.png "Network topology")
 
 ## Introduction
 
-The objective of this exercise is to write a P4 program that
-implements basic forwarding. To keep things simple, we will just
-implement forwarding for IPv4.
+The objective of this example is to provide an overview of the capabilities of **p4-utils**. According to the topology above, we have 2 ASes. AS 1 is responsible for the prefix `1.0.0.0/8`, while AS 2 `2.0.0.0/8`. In each one of them we have serveral hosts, routers and P4 switches. The goal is using all the main protocols and technologies to gain full connectivity among the hosts. In particular, this involves the following:
+- *L2 learning* for P4 switches, in order to have L2 connectivity within each network segment;
+- *OSPF* for routers, in order to have connectivity within the same AS;
+- *BGP* for routers, in order to have connectivity among different ASes;
+- *LDP* for routers, in order to make the core of AS 1 (R3) *BGP*-free and still having full connectivity.
 
-With IPv4 forwarding, the switch must perform the following actions
-for every packet: (i) update the source and destination MAC addresses,
-(ii) decrement the time-to-live (TTL) in the IP header, and (iii)
-forward the packet out the appropriate port.
- 
-Your switch will have a single table, which the control plane will
-populate with static rules. Each rule will map an IP address to the
-MAC address and output port for the next hop. We have already defined
-the control plane rules, so you only need to implement the data plane
-logic of your P4 program.
+## Execution
 
+The scenario can be executed with both the following commands:
+```
+sudo p4run
+```
+or
+```
+sudo python network.py
+```
 
-# Parser
-
-The parser describes a state machine with one `start` state and two possible final states: `accept` 
-or `reject`. Explain the basic state machine used to parse ethernet and ipv4, and explain that this 
-can be used later to access those headers fields.
+Please notice that *OSPF*, *LDP* and *BGP* take some time to converge, so at the beginning the network can still be partitioned.
