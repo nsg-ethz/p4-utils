@@ -1,7 +1,7 @@
 # Fundamental network operations
 
 <p align="center">
-<img src="images/rr_example_topo.png" title="Network Topology">
+<img src="images/frr_example_topo.png" title="Network Topology">
 <p/>
 
 ## Introduction
