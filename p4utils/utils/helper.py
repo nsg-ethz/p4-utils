@@ -302,9 +302,9 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
         def_mod (str): default module where to look for exe functions
 
     Notice:
-        The file has to be a set of lines, where each has
-        the following syntax.
-        <node> <start> <duration> <exe> [--mod <module>] [<arg1>] ... [<argN>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
+        The file has to be a set of lines, where each has the following syntax.
+        A non-default module can be specified in the command with '--mod <module>'.
+        <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
 
     Return:
         (args, kwargs)
@@ -315,7 +315,7 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
     mod = importlib.import_module(def_mod) 
     parsed_cmd = parse_line(line)
     if len(parsed_cmd) < 4:
-        error('usage: <node> <start> <duration> <exe> [--mod <module>] [<arg1>] ... [<argN>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]\n')
+        error('usage: <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]\n')
     for i in range(len(parsed_cmd)):
         if skip_next:
             skip_next = False
@@ -340,14 +340,16 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
                 if parsed_cmd[i] == '--mod':
                     try:
                         mod = importlib.import_module(parsed_cmd[i+1])
-                    except IndexError:
-                        error("cannot parse '{}' correctly.\n".format(line))
+                    except Exception as e:
+                        error(str(e)+'\n')
+                        error("Cannot parse '{}' correctly.\n".format(line))
                         break
                 else:
                     try:
                         kwargs[parsed_cmd[i][2:]] = parsed_cmd[i+1]
-                    except IndexError:
-                        error("cannot parse '{}' correctly.\n".format(line))
+                    except Exception as e:
+                        error(str(e)+'\n')
+                        error("Cannot parse '{}' correctly.\n".format(line))
                         break
                 skip_next = True
             # Parse args
