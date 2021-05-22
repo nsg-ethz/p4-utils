@@ -1,6 +1,8 @@
 # Fundamental network operations
 
-![Network topology](./images/ffr_example_topo.png "Network topology")
+<p align="center">
+<img src="images/rr_example_topo.png" title="Network Topology">
+<p/>
 
 ## Introduction
 
