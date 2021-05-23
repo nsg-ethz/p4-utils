@@ -270,6 +270,8 @@ configure the hosts, and switches without knowing what will switches do.
       * `program`: path to the p4 program that will be loaded onto the switch. If not specified, the global `program` path is used.
       * `<direct_neighbor>:` when using the manual IP assignment you can indicate the IP of the interface facing a neighboring node.
 
+You should name your switch like `s_{switch_id}_xxxx` for it will use the first consecutive numbers as your switch's `device_id` and two different switch with same id may cause some problem. 
+
 You can find a configuration example, that uses all the fields [here](./p4app_example.json)
 
 ### Topology Object
