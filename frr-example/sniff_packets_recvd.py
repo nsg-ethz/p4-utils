@@ -39,6 +39,7 @@ def get_pkt():
         sniff(iface=str(intf), prn = lambda x : x.show())
         #sniff(filter = "ip dst {} or ip dst {}".format("10.1.0.1", "10.2.0.1"), iface=str(intf), prn = lambda x : x.show())
 
+
 def main():
 
     if len(sys.argv)<1:
@@ -47,5 +48,6 @@ def main():
 
     get_pkt()
 
+    
 if __name__ == '__main__':
     main()

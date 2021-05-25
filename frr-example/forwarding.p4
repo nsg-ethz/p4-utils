@@ -151,6 +151,7 @@ control MyIngress(inout headers hdr,
                   inout standard_metadata_t standard_metadata) {
 
     register<bit<8>>(REGISTER_LENGTH) OSPF_type_register;
+    register<bit<16>>(REGISTER_LENGTH) BGP_register;
 
     action drop() {
         mark_to_drop(standard_metadata);
@@ -192,6 +193,17 @@ control MyIngress(inout headers hdr,
 
     }
 
+    // Forward OSPF packets (hello, DD, LSU, LSR, LSAck)
+    action bgp_forward(egressSpec_t port) {
+
+        //set the output port from the table
+        standard_metadata.egress_spec = port;
+
+        //decrease ttl by 1
+        //hdr.ipv4.ttl = hdr.ipv4.ttl -1;
+
+    }
+
     // IPv4 forwarding between hosts and switches
     action set_nhop(macAddr_t dstAddr, egressSpec_t port) {
 
@@ -205,7 +217,7 @@ control MyIngress(inout headers hdr,
         standard_metadata.egress_spec = port;
 
         //decrease ttl by 1
-        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+        //hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
     table arp{
@@ -233,6 +245,21 @@ control MyIngress(inout headers hdr,
         size = 1024;
         default_action = NoAction();
     }
+
+
+    table bgp_update{
+        key = {
+            standard_metadata.ingress_port: exact;
+        }
+        actions = {
+            bgp_forward;
+            drop;
+            NoAction;
+        }
+        size = 1024;
+        default_action = NoAction();
+    }
+
 
 
     table ecmp_to_nhop {
@@ -286,9 +313,14 @@ control MyIngress(inout headers hdr,
                         
                         OSPF_type_register.write((bit<32>)hdr.ospf.type, hdr.ospf.type);
                     }
+
                 
                 }
-                else if (hdr.ipv4.protocol != 89){
+                
+                
+                // Do not use ipv4_lpm on internal BGP packets
+
+                else if (hdr.ipv4.protocol != 89 && hdr.tcp.dstPort != 179){
 
                     // Apply IPv4 forwarding for non OSPF packets, from host to host
                     // If multipath is possible, per flow ECMP is carried out on TCP packets
@@ -300,6 +332,13 @@ control MyIngress(inout headers hdr,
 
                     }
 
+                }
+
+                // If packet is an BGP packet, then we know BGP uses a TCP port 179.
+                if (hdr.tcp.isValid()){
+                        
+                        BGP_register.write((bit<32>)0, hdr.tcp.dstPort);
+                        bgp_update.apply();
                 }
                     
             }
@@ -325,7 +364,7 @@ control MyEgress(inout headers hdr,
 *************************************************************************/
 
 control MyComputeChecksum(inout headers hdr, inout metadata meta) {
-     apply {
+    apply {
 	update_checksum(
 	    hdr.ipv4.isValid(),
             { hdr.ipv4.version,
@@ -341,6 +380,7 @@ control MyComputeChecksum(inout headers hdr, inout metadata meta) {
               hdr.ipv4.dstAddr },
             hdr.ipv4.hdrChecksum,
             HashAlgorithm.csum16);
+
     }
 }
 

@@ -12,6 +12,12 @@ table_add ospf_hello ospf_hello_forward 2 => 100
 table_add ospf_hello ospf_hello_forward 101 => 3
 table_add ospf_hello ospf_hello_forward 3 => 101
 
+table_add bgp_update bgp_forward 100 => 2
+table_add bgp_update bgp_forward 2 => 100
+
+table_add bgp_update bgp_forward 101 => 3
+table_add bgp_update bgp_forward 3 => 101
+
 
 
 
