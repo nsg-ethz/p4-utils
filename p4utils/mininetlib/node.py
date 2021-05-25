@@ -363,6 +363,9 @@ class FRRouter(Node):
             self.cmd('sysctl -w net.mpls.conf.{}.input=1'.format(intf_name))
         self.cmd('sysctl -w net.mpls.platform_labels=100000')
 
+        # Enable reverse path loose mode filtering
+        self.cmd('sysctl -w net.ipv4.conf.all.rp_filter=2')
+
         # Check binaries
         if not os.path.isfile(self.bin_dir + "/" + "zebra"):
             error("Binaries path {} does not contain daemons!".format(self.bin_dir))
