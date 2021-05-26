@@ -55,7 +55,7 @@ class AppRunner(NetworkAPI):
             cli_enabled (bool): enable mininet CLI.
             log_dir (string): directory for mininet log files.
             pcap_dir (string): directory where to store pcap files.
-            verbosity (string): see https://github.com/mininet/mininet/blob/master/mininet/log.py#L14
+            verbosity (string): see https://github.com/mininet/mininet/blob/57294d013e780cccc6b4b9af151906b382c4d8a7/mininet/log.py#L14
 
         The following attributes are initialized during the execution and are
         not specified in the constructor:

@@ -1140,7 +1140,7 @@ class NetworkAPI(Topo):
                         warning('Node "{}": IP {} has been already assigned.\n'.format(node2, ip2))
 
         # Modified version of the mininet addLink. Built-in port numbering removed.
-        # (see https://github.com/mininet/mininet/blob/master/mininet/topo.py#L151)
+        # (see https://github.com/mininet/mininet/blob/57294d013e780cccc6b4b9af151906b382c4d8a7/mininet/topo.py#L151)
         if not opts and self.lopts:
             opts = self.lopts
         opts = dict(opts)
