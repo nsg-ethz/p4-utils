@@ -333,7 +333,7 @@ You may also use <self>.set(<f>='<value>')
         # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-match-format)
         # don't care matches have to be unset in the message.
         mf = self._parse_mf(value, field_info)
-        if mf:
+        if mf is not None:
             self._mk[name] = mf
             print(self._mk[name])
 
@@ -384,6 +384,8 @@ You may also use <self>.set(<f>='<value>')
             # Allow for don't care matches (e.g. 0.0.0.0/0). Indeed, by P4Runtime spec
             # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-match-format)
             # don't care matches have to be unset in the message.
+            print("LPM value was transformed to conform to the P4Runtime spec "
+                  "(don't care matches must be unset)")
             return None
             # raise UserError(
             #     "Ignoring LPM don't care match (prefix length of 0) as per P4Runtime spec")
@@ -434,6 +436,8 @@ You may also use <self>.set(<f>='<value>')
             # Allow for don't care matches (e.g. 0.0.0.0/0). Indeed, by P4Runtime spec
             # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-match-format)
             # don't care matches have to be unset in the message.
+            print("Ternary value was transformed to conform to the P4Runtime spec "
+                  "(don't care matches must be unset)")
             return None
             # raise UserError("Ignoring ternary don't care match (mask of 0s) as per P4Runtime spec")
 
@@ -478,6 +482,8 @@ You may also use <self>.set(<f>='<value>')
             # Allow for don't care matches (e.g. 0.0.0.0/0). Indeed, by P4Runtime spec
             # (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-match-format)
             # don't care matches have to be unset in the message.
+            print("Range value was transformed to conform to the P4Runtime spec "
+                  "(don't care matches must be unset)")
             return None
             # raise UserError(
             #     "Ignoring range don't care match (all possible values) as per P4Runtime spec")
