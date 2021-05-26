@@ -18,7 +18,3 @@ table_add bgp_update bgp_forward 2 => 100
 table_add bgp_update bgp_forward 101 => 3
 table_add bgp_update bgp_forward 3 => 101
 
-
-
-
-

@@ -9,6 +9,7 @@ from threading import *
 
 from scapy.all import *
 
+rtr = sys.argv[1]
 sw = sys.argv[1]
 
 if sw.endswith('1'):
@@ -55,10 +56,16 @@ def main():
         print('pass 1 argument: router name')
         exit(1)
 
-    Thread(target = get_pkt_from_fake_1).start()
+    #Thread(target = get_pkt_from_fake_1).start()
     #Thread(target = get_pkt_from_fake_2).start()
     
-    Thread(target = get_pkt_from_real).start()
+    #Thread(target = get_pkt_from_real).start()
+
+    iface = str(rtr) + "-" +str(sys.argv[2])
+    for _ in range(1000):
+        pkt = Ether(src=get_if_hwaddr(iface), dst='ff:ff:ff:ff:ff:ff')
+        pkt = pkt /IP(dst='192.168.100.123') / TCP(dport=random.randint(5000,60000), sport=random.randint(49152,65535))
+        sendp(pkt, iface=iface, verbose=False)
     
 
 if __name__ == '__main__':

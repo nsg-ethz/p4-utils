@@ -186,6 +186,10 @@ class P4Switch(Switch):
         args.extend(['-i', str(100) + '@' + self.name+"-dum100"])
         args.extend(['-i', str(101) + '@' + self.name+"-dum101"])
         args.extend(['-i', str(102) + '@' + self.name+"-dum102"])
+
+        if self.name.endswith("2") or self.name.endswith("4"):
+            args.extend(['-i', str(103) + '@' + self.name+"-dum103"])
+
         
         if self.pcap_dump:
             if self.pcap_dir:

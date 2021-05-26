@@ -178,7 +178,7 @@ class Controller(object):
 
 
 
-    HOSTS = ['10.0.0.1', '10.0.0.2', '10.0.0.3']
+    HOSTS = ['10.0.0.1', '10.0.0.2', '10.0.0.3','22.0.0.4', '22.0.0.5', '22.0.0.6']
     PORT = 2621
 
     # For kernel learnt routes
@@ -241,8 +241,10 @@ class Controller(object):
         file_name = path_save
         
         f = open(file_name,"a")
-        f.write(str(msg['attrs'])+"\n")
+        f.write(str(msg)+"\n")
         f.close()
+
+        
 
         attrs = msg['attrs']
         hdr = msg['header']
