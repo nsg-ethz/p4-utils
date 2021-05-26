@@ -151,7 +151,9 @@ control MyIngress(inout headers hdr,
                   inout standard_metadata_t standard_metadata) {
 
     register<bit<8>>(REGISTER_LENGTH) OSPF_type_register;
-    register<bit<16>>(REGISTER_LENGTH) BGP_register;
+    register<bit<16>>(REGISTER_LENGTH) BGP_register_port;
+    register<bit<1>>(REGISTER_LENGTH) BGP_register_flag;
+
 
     action drop() {
         mark_to_drop(standard_metadata);
@@ -217,7 +219,7 @@ control MyIngress(inout headers hdr,
         standard_metadata.egress_spec = port;
 
         //decrease ttl by 1
-        //hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
     table arp{
@@ -337,7 +339,10 @@ control MyIngress(inout headers hdr,
                 // If packet is an BGP packet, then we know BGP uses a TCP port 179.
                 if (hdr.tcp.isValid()){
                         
-                        BGP_register.write((bit<32>)0, hdr.tcp.dstPort);
+                        BGP_register_port.write((bit<32>)0, hdr.tcp.dstPort);
+                        BGP_register_flag.write((bit<32>)0, hdr.tcp.syn);
+                        BGP_register_flag.write((bit<32>)1, hdr.tcp.ack);
+                        BGP_register_flag.write((bit<32>)2, hdr.tcp.psh);
                         bgp_update.apply();
                 }
                     
