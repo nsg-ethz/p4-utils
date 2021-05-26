@@ -2287,7 +2287,7 @@ class NetworkAPI(Topo):
         IPv4 network (10.0.0.0/16).
 
         Assumptions:
-            Each host is connected to one switch only.
+            Each host is connected to exactly one switch.
             Only switches and hosts are allowed.
             Parallel links are not allowed.
         """
@@ -2365,7 +2365,7 @@ class NetworkAPI(Topo):
         together) are placed in different subnetworks.
 
         Assumptions:
-            Each host is connected to one switch only.
+            Each host is connected to exactly one switch.
             Only switches and hosts are allowed.
             Parallel links are not allowed.
         """
@@ -2510,7 +2510,7 @@ class NetworkAPI(Topo):
         with the fake IP address of the switch port they are connected to.
 
         Assumptions:
-            Each host is connected to one switch only.
+            Each host is connected to exactly one switch.
             Only switches and hosts are allowed.
             Parallel links are not allowed.
         """
