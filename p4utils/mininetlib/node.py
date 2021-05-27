@@ -416,12 +416,12 @@ class Router( Switch ):
         os.system(" rm -rf {}/{}".format(Router.VTY_SOCKET_PATH, self.name))
 
         for item in self.fake_interfaces.keys():
-            cmd0 = ("ip link set dev {} down".format(item))
-            cmd1 = ("tunctl -d {}-{}".format(self.name, item))
+            cmd0 = ("ip link set dev {}-{} down".format(self.name, item))
+            #cmd1 = ("tunctl -d {}-{}".format(self.name, item))
             self.cmd(cmd0)
             self.waitOutput()
-            self.cmd(cmd1)
-            self.waitOutput()
+            #self.cmd(cmd1)
+            #self.waitOutput()
 
 
 
