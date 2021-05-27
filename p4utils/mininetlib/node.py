@@ -370,7 +370,7 @@ class Router( Switch ):
 
         for index, item in enumerate(self.fake_interfaces.keys()):
 
-            sw_name = "s"+self.name[1]
+            sw_name = "s"+self.name[1:]
             sw_intf = "dum"+str(index+100)
             print(sw_name, sw_intf)
             #print(sw_name.pid)
@@ -415,8 +415,14 @@ class Router( Switch ):
         os.system("killall -9 {}".format(' '.join(self.daemons.keys())))  
         os.system(" rm -rf {}/{}".format(Router.VTY_SOCKET_PATH, self.name))
 
-        for item in self.fake_interfaces.keys():
-            cmd0 = ("ip link set dev {}-{} down".format(self.name, item))
+        for index, item in enumerate(self.fake_interfaces.keys()):
+            cmd0 = ("ip link delete {}-{}".format(self.name, item))
+
+            sw_name = "s"+self.name[1:]
+            sw_intf = "dum"+str(index+100)
+
+            os.system("ip link delete {}-{}".format(sw_name, sw_intf))
+
             #cmd1 = ("tunctl -d {}-{}".format(self.name, item))
             self.cmd(cmd0)
             self.waitOutput()
