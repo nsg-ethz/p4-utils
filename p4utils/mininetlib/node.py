@@ -15,10 +15,8 @@
 
 import os
 import tempfile
-import socket
 from time import sleep
-from mininet.log import debug, info, warning, error
-from mininet.clean import sh
+from mininet.log import debug, info, output, warning, error
 from mininet.node import Node, Host, Switch
 from mininet.moduledeps import pathCheck
 

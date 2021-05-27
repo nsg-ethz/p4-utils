@@ -1,13 +1,12 @@
 import os
 import re
 import sys
+import json
 import random
 import psutil
 import mininet
 import hashlib
 import importlib
-import json
-import subprocess
 from networkx.readwrite.json_graph import node_link_graph
 from mininet.log import info, output, error, warn, debug
 

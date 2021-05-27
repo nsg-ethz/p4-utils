@@ -1,8 +1,10 @@
+from itertools import groupby
 from mininet.net import Mininet
-from itertools import chain, groupby
-from mininet.log import info, error, debug, output, warn
+from mininet.node import Controller
+from mininet.log import debug, info, output, warning, error
 
 from p4utils.mininetlib.node import FRRouter
+
 
 class P4Mininet(Mininet):
     """P4Mininet is the Mininet Class extended with P4 switches."""

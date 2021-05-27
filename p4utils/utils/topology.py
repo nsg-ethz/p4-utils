@@ -295,7 +295,7 @@ class NetworkGraph(nx.Graph):
     def checkIntf(self, node1, node2):
         """Check if interface exists, else raise a IntfDoesNotExist error."""
         if not self.isIntf(node1, node2):
-            raise NodeDoesNotExist(node)
+            raise IntfDoesNotExist(node1, node2)
 
     def isHost(self, node):
         """Return True if the node is a host."""

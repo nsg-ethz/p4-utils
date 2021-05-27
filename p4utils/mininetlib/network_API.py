@@ -1,13 +1,12 @@
 import os
 import time
 from ipaddress import ip_interface, IPv4Network
-from networkx import MultiGraph, Graph
+from networkx import MultiGraph
 from networkx.readwrite.json_graph import node_link_data
-from mininet.link import TCIntf
+from mininet.link import TCLink
 from mininet.nodelib import LinuxBridge
 from mininet.topo import Topo
-from mininet.cli import CLI
-from mininet.log import setLogLevel, info, output, debug, warning
+from mininet.log import setLogLevel, debug, info, output, warning, error
 
 from p4utils.utils.helper import *
 from p4utils.utils.client import ThriftClient
@@ -1146,7 +1145,7 @@ class NetworkAPI(Topo):
         opts = dict(opts)
 
         # Set default options
-        opts.setdefault('intf', TCIntf)
+        opts.setdefault('cls', TCLink)
         opts.setdefault('weight', 1)
 
         opts.update(node1=node1, node2=node2, port1=port1, port2=port2)
@@ -1733,7 +1732,7 @@ class NetworkAPI(Topo):
         Disable the task scheduler server for all the nodes.
         """
         for node in self.nodes():
-            self.disableScheduler(node, path)
+            self.disableScheduler(node)
 
     def addTaskFile(self, filepath, def_mod='p4utils.utils.traffic_utils'):
         """
@@ -1788,7 +1787,7 @@ class NetworkAPI(Topo):
             # Append task to tasks
             self.tasks[node].append(params)
         else:
-            raise Exception('"{}" does not exists.'.format(name))
+            raise Exception('"{}" does not exists.'.format(node))
 
     def setDefaultRoute(self, name, default_route):
         """
@@ -2032,7 +2031,7 @@ class NetworkAPI(Topo):
             name (string): name of the P4 switch
         """
         if self.isP4Switch(name):
-            self.popLink(name, sw)
+            self.popLink(name, 'sw-cpu')
             self.updateNode(name, cpu_port=False)
             delete_cpu_bridge = True
             for node in self.nodes():
@@ -2062,8 +2061,8 @@ class NetworkAPI(Topo):
         Disable CPU port on all the P4 switches.
         """
         for switch in self.p4switches():
-            self.popLink(name, sw)
-            self.updateNode(name, cpu_port=False)
+            self.popLink(switch, 'sw-cpu')
+            self.updateNode(switch, cpu_port=False)
         self.popNode(self.cpu_bridge)
         self.cpu_bridge = None
 

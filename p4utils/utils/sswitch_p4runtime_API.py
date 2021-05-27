@@ -5,7 +5,7 @@ from functools import wraps
 
 import p4utils
 import p4utils.utils.p4runtime_API.api as api
-import p4utils.utils.p4runtime_API.context as ctx
+
 
 @enum.unique
 class CounterType(enum.Enum):

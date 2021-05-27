@@ -23,7 +23,7 @@
 
 import argparse
 from copy import deepcopy
-from mininet.log import info, output, debug, warning
+from mininet.log import debug, info, output, warning, error
 from mininet.clean import sh
 
 from p4utils.utils.helper import *
@@ -259,7 +259,7 @@ class AppRunner(NetworkAPI):
             if client_module.get('object_name'):
                 client = load_custom_object(client_module)
             else:
-                client = DEFAULT_CLI
+                client = DEFAULT_CLIENT
             # Load client module default arguments
             compiler_kwargs = client_module.get('options', {})
         self.setSwitchClient(client, **client_kwargs)

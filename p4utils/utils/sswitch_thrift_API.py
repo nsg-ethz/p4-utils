@@ -27,7 +27,6 @@ from sswitch_runtime import SimpleSwitch
 from sswitch_runtime.ttypes import *
 
 import p4utils.utils.thrift_API as thrift_API
-from p4utils.utils.thrift_API import UIn_Error
 
 
 def handle_bad_input(f):
