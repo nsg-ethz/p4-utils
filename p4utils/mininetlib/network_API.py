@@ -7,6 +7,7 @@ from mininet.link import TCLink
 from mininet.nodelib import LinuxBridge
 from mininet.topo import Topo
 from mininet.log import setLogLevel, debug, info, output, warning, error
+from mininet.clean import cleanup, sh
 
 from p4utils.utils.helper import *
 from p4utils.utils.client import ThriftClient
@@ -81,6 +82,10 @@ class NetworkAPI(Topo):
         """
         # Mininet cleanup
         cleanup()
+        bridges = sh("brctl show | awk 'FNR > 1 {print $1}'").splitlines()
+        for bridge in bridges:
+            sh("ifconfig {} down".format(bridge))
+            sh("brctl delbr {}".format(bridge))
 
     def is_multigraph(self):
         """

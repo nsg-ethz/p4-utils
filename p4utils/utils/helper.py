@@ -4,7 +4,6 @@ import sys
 import json
 import random
 import psutil
-import mininet
 import hashlib
 import importlib
 from networkx.readwrite.json_graph import node_link_graph
@@ -126,14 +125,6 @@ def check_listening_on_port(port):
 def cksum(filename):
     """Returns the md5 checksum of a file."""
     return hashlib.md5(open(filename,'rb').read()).hexdigest()
-
-
-def cleanup():
-    mininet.clean.cleanup()
-    bridges = mininet.clean.sh("brctl show | awk 'FNR > 1 {print $1}'").splitlines()
-    for bridge in bridges:
-        mininet.clean.sh("ifconfig {} down".format(bridge))
-        mininet.clean.sh("brctl delbr {}".format(bridge))
 
 
 def get_node_attr(node, attr_name, default=None):

@@ -24,7 +24,7 @@
 import argparse
 from copy import deepcopy
 from mininet.log import debug, info, output, warning, error
-from mininet.clean import sh
+from mininet.clean import cleanup, sh
 
 from p4utils.utils.helper import *
 from p4utils.utils.compiler import P4C as DEFAULT_COMPILER
@@ -600,25 +600,29 @@ def main():
 
     args = get_args()
 
-    # clean
+    # Cleanup
     cleanup()
+    bridges = sh("brctl show | awk 'FNR > 1 {print $1}'").splitlines()
+    for bridge in bridges:
+        sh("ifconfig {} down".format(bridge))
+        sh("brctl delbr {}".format(bridge))
 
-    # remove cli logs
+    # Remove cli logs
     sh('find -type f -regex ".*cli_output.*" | xargs rm')
 
     if args.clean or args.clean_dir:
-        # removes first level pcap and log dirs
+        # Removes first level pcap and log dirs
         sh("rm -rf %s" % args.pcap_dir)
         sh("rm -rf %s" % args.log_dir)
-        # tries to recursively remove all pcap and log dirs if they are named 'log' and 'pcap'
+        # Tries to recursively remove all pcap and log dirs if they are named 'log' and 'pcap'
         sh('find -type d -regex ".*pcap" | xargs rm -rf')
         sh('find -type d -regex ".*log" | xargs rm -rf')
-        # removes topologies files
+        # Removes topologies files
         sh('find -type f -regex ".*db" | xargs rm')
-        # remove compiler outputs
+        # Remove compiler outputs
         sh('find -type f -regex ".*\(p4i\|p4rt\)" | xargs rm')
 
-        # remove all the jsons that come from a p4
+        # Remove all the jsons that come from a p4
         out = sh('find -type f -regex ".*p4"')
         p4_files = [x.split("/")[-1].strip() for x in out.split("\n") if x]
         for p4_file in p4_files:
