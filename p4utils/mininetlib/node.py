@@ -377,11 +377,13 @@ class Router( Switch ):
 
             '''if item == "eth1":
                 continue'''
+            
+            # create interface pair for router to switch (dumb)
             cmd0 = ("ip link add {}-{} type veth peer name {}-{}".format(self.name, item, sw_name, sw_intf))
 
-            #cmd00 = ("ip netns exec {} ip link set {}-{} netns {}".format(self.pid, self.name, item, self.name[1]))
+            # moving from main namspace to router
             cmd00 = ("ip link set {}-{} netns {}".format(self.name, item, self.pid))
-            
+          
             cmd1 = ("ip link set dev {} up".format(item))
             cmd2 = ("ip link set dev {}-{} up".format(sw_name, sw_intf))
             
@@ -389,6 +391,11 @@ class Router( Switch ):
             os.system(cmd00)
             
             self.cmd(cmd1)
+            # removes checksum offloading which makes bgp deamons work
+            #print("TEST CMD", "ethtool -K {}-{} rx off tx off sg off".format(self.name, item))
+
+            self.cmd("ethtool -K {}-{} rx off tx off sg off".format(self.name, item))
+
             self.waitOutput()
             os.system(cmd2)
 

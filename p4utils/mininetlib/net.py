@@ -87,6 +87,8 @@ class P4Mininet(Mininet):
             router.start()
 
         super().start()
+
+        
         
         #import ipdb; ipdb.set_trace()
             
@@ -98,12 +100,9 @@ class P4Mininet(Mininet):
         #remove Ipv6 for all the interfaces
         for link in self.links:
 
-            
             if isinstance(link, NullLink) == False:
-
                 "only real links are configured here"
-
-                cmd1 = "/sbin/ethtool -k {0} rx off tx off sg off"
+                cmd1 = "/sbin/ethtool -K {0} rx off tx off sg off"
                 cmd2 = "sysctl net.ipv6.conf.{0}.disable_ipv6=1"
                 cmd3 = "ip link set {} mtu {}"
 
