@@ -14,7 +14,7 @@ class ThriftClient:
     @classmethod
     def set_binary(self, cli_bin):
         """Set class default binary"""
-        ThriftController.cli_bin = cli_bin
+        ThriftClient.cli_bin = cli_bin
 
     def __init__(self, thrift_port,
                  sw_name,
