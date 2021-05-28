@@ -16,7 +16,7 @@ from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.node import *
 from p4utils.mininetlib.net import P4Mininet
 from p4utils.mininetlib.cli import P4CLI
-from p4utils.utils.task_client import TaskClient
+from p4utils.utils.task_scheduler import TaskClient
 
 
 class NetworkAPI(Topo):
@@ -1760,9 +1760,9 @@ class NetworkAPI(Topo):
 
     def addTask(self, node, exe, *args, start=0, duration=0, enableScheduler=True, **kwargs):
         """
-        Add a task to the node. It can automatically enable the TaskScheduler
+        Add a task to the node. It can automatically enable the TaskServer
         on that node with the socket lacated in the default path, if no
-        TaskScheduler has been previously enabled.
+        TaskServer has been previously enabled.
 
         Arguments:
             node (string)         : name of the node
@@ -1774,11 +1774,11 @@ class NetworkAPI(Topo):
             duration (float)      : task duration time in seconds (if duration is 
                                     lower than or equal to 0, then the task has no 
                                     time limitation)
-            enableScheduler (bool): whether to automatically enable the TaskScheduler or not
+            enableScheduler (bool): whether to automatically enable the TaskServer or not
             kwargs                : key-word arguments for the passed function
         """
         if self.isNode(node):
-            # If the TaskScheduler is not enabled, enable it.
+            # If the TaskServer is not enabled, enable it.
             if not self.hasScheduler(node) and enableScheduler:
                 self.enableScheduler(node)
             elif not self.hasScheduler(node) and not enableScheduler:

@@ -270,7 +270,7 @@ class P4CLI(CLI):
     @exception_handler
     def do_enable_scheduler(self, line=""):
         """
-        Enable the TaskScheduler on a node.
+        Enable the TaskServer on a node.
         """
         args = parse_line(line)
         node = args[0]

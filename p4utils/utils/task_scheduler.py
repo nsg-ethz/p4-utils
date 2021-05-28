@@ -15,7 +15,7 @@ import multiprocessing as mp
 
 class Task:
     """
-    Abstraction of a Task executed by the TaskScheduler.
+    Abstraction of a Task executed by the TaskServer.
     """
     def __init__(self, exe, *args, start=0, duration=0, **kwargs):
         """
@@ -127,7 +127,63 @@ class Task:
         print('thread:\t{}'.format(self.thread.name))
         print()
 
-class TaskScheduler:
+
+class TaskClient:
+    """
+    Task scheduler client which communicates with servers.
+    """
+    def __init__(self, unix_socket_file):
+        """
+        Attributes:
+            unix_socket_file (string): path to the file used by the Unix socket
+        """
+        # Unix socket file
+        self.unix_socket_file = unix_socket_file
+        # Blocking server socket
+        self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        self.socket.setblocking(True)
+    
+    def send(self, obj, retry=False):
+        """
+        Send an object to the server and close connection.
+
+        Arguments:
+            obj         : serializable object to send to the server
+                          using Pickle
+            retry (bool): whether to attempt a reconnection upon failure
+        """
+        self._send(obj, retry=retry)
+        self._close()
+
+    def _send(self, obj, retry=False):
+        """
+        Send an object to the server.
+
+        Arguments:
+            obj : serializable object to send to the server
+                  using Pickle
+        """
+        # Serialize object
+        bin_data = pickle.dumps(obj)
+        # Connect socket
+        while True:
+            try:
+                self.socket.connect(self.unix_socket_file)
+                break
+            except Exception as e:
+                if not retry:
+                    raise e
+                      
+        self.socket.sendall(bin_data)      
+        
+    def _close(self):
+        """
+        Close the socket.
+        """
+        self.socket.close()
+
+
+class TaskServer:
     """
     Task scheduler server which runs on the Mininet nodes.
     """
@@ -262,4 +318,4 @@ if __name__ == '__main__':
     if len(sys.argv) != 2:
         raise Exception('wrong execution call.')
 
-    ts = TaskScheduler(sys.argv[1])
+    ts = TaskServer(sys.argv[1])
