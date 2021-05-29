@@ -1422,6 +1422,8 @@ class NetworkAPI(Topo):
             node_setter = self.addP4Switch
         elif self.isSwitch(name):
             node_setter = self.addSwitch
+        elif self.isRouter(name):
+            node_setter = self.addRouter
         else:
             node_setter = self.addNode
 
