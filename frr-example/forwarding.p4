@@ -71,6 +71,12 @@ header tcp_t{
     bit<16> urgentPtr;
 }
 
+header bgp_t {
+    bit<128>  marker;
+    bit<16>   len;
+    bit<8>    type;
+}
+
 struct metadata {
     bit<14> ecmp_hash;
     bit<14> ecmp_group_id;
@@ -82,6 +88,7 @@ struct headers {
     ipv4_t       ipv4;
     ospf_t       ospf;
     tcp_t        tcp;
+    bgp_t        bgp;
 }
 
 /*************************************************************************
@@ -125,10 +132,17 @@ parser MyParser(packet_in packet,
     // parse the TCP header
     state parse_tcp {
         packet.extract(hdr.tcp);
-        transition accept;
+        transition select(hdr.tcp.dstPort){
+        179 : parse_bgp;
+        default : accept;
+        }
     }
 
-
+    // parse the BGP header
+    state parse_bgp {
+        packet.extract(hdr.bgp);
+        transition accept;
+    }
 
 }
 
@@ -336,8 +350,9 @@ control MyIngress(inout headers hdr,
 
                 }
 
-                // If packet is an BGP packet, then we know BGP uses a TCP port 179.
-                if (hdr.tcp.isValid()){
+                // If packet is a BGP packet, then we know BGP uses a TCP port 179.
+                // Keep the BGP peering alive by sending notification and keep alive messages
+                if (hdr.tcp.isValid() || hdr.bgp.type != 0){
                         
                         BGP_register_port.write((bit<32>)0, hdr.tcp.dstPort);
                         BGP_register_flag.write((bit<32>)0, hdr.tcp.syn);
@@ -402,6 +417,7 @@ control MyDeparser(packet_out packet, in headers hdr) {
         packet.emit(hdr.ipv4);
         packet.emit(hdr.ospf);
         packet.emit(hdr.tcp);
+        packet.emit(hdr.bgp);
 
     }
 }
