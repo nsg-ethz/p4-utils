@@ -2045,8 +2045,9 @@ class NetworkAPI(Topo):
                 if self.hasCpuPort(node):
                     delete_cpu_bridge = False
                     break
-            if delete_cpu_bridge:
-                self.popNode(self.cpu_bridge)
+            if delete_cpu_bridge and self.cpu_bridge is not None:
+                if self.isNode(self.cpu_bridge):
+                    self.popNode(self.cpu_bridge)
                 self.cpu_bridge = None
         else:
             raise Exception('"{}" is not a P4 switch.'.format(name))
