@@ -410,7 +410,6 @@ class SimpleSwitchP4RuntimeAPI:
         if pkts:
             if entry._direct_counter:
                 direct_counter_type = entry._direct_counter.spec.unit
-                print(direct_counter_type)
                 if direct_counter_type in [CounterType.packets.value, CounterType.both.value]:
                     entry.counter_data.packet_count = pkts
             else:
