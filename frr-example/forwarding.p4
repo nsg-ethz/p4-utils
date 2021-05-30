@@ -185,6 +185,8 @@ control MyIngress(inout headers hdr,
           hdr.ipv4.protocol},
 	    num_nhops);
 
+        //meta.ecmp_group_id = ecmp_group_id;
+
     }
 
     // Forward ARP lookup for OSPF messages
