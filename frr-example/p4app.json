@@ -3,6 +3,7 @@
     "cli": true,
     "pcap_dump": true,
     "enable_log": true,
+    "tasks_file": "tasks.txt",
     "exec_scripts": [
         {
             "cmd": "python l2_learning_controller.py s1 digest &",
@@ -20,7 +21,8 @@
     "topology": {
       "default":{
         "auto_arp_tables": false,
-        "auto_gw_arp": false
+        "auto_gw_arp": false,
+        "bw": 5
       },
       "links": [
           ["h1", "s1",

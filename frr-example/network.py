@@ -7,6 +7,9 @@ net.setLogLevel('info')
 net.execScript('python l2_learning_controller.py s1 digest &', reboot=True)
 net.execScript('python l2_learning_controller.py s2 digest &', reboot=True)
 net.execScript('python l2_learning_controller.py s3 digest &', reboot=True)
+net.enableCli()
+net.disableArpTables()
+net.disableGwArp()
 
 # Network definition
 
@@ -76,10 +79,13 @@ net.addLink('h6', 's3')
 net.setIntfIp('h6', 's3', '2.0.0.3/24')
 net.addLink('s3', 'r5', intfName2='port_S3')
 
+# Links general options
+net.setBwAll(5)
+
 # Nodes general options
-net.disableArpTables()
-net.disableGwArp()
+net.addTaskFile('tasks.txt')
 net.enablePcapDumpAll()
 net.enableLogAll()
-net.enableCli()
+
+# Start the network
 net.startNetwork()

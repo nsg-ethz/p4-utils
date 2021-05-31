@@ -1755,7 +1755,8 @@ class NetworkAPI(Topo):
             <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
         """
         with open(filepath, 'r') as f:
-            lines = f.readlines()
+            lines = [line for line in f.readlines() if line.strip()!='']
+            lines = [line for line in lines if not (line.startswith('//') or line.startswith('#'))]
             for line in lines:
                 args, kwargs = parse_task_line(line, def_mod=def_mod)
                 self.addTask(*args, **kwargs)
