@@ -353,8 +353,8 @@ control MyIngress(inout headers hdr,
                 }
 
                 // If packet is a BGP packet, then we know BGP uses a TCP port 179.
-                // Keep the BGP peering alive by sending notification and keep alive messages
-                if (hdr.tcp.isValid() || hdr.bgp.type != 0){
+                // Reigster to check type of BGP messages, capture all types
+                if (hdr.tcp.isValid() && hdr.tcp.dstPort == 179 && hdr.bgp.type != 0){
                         
                         BGP_register_port.write((bit<32>)0, hdr.tcp.dstPort);
                         BGP_register_flag.write((bit<32>)0, hdr.tcp.syn);
