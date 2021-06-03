@@ -443,21 +443,38 @@ class Controller(object):
         with open(intf_file) as f:
             content = f.readlines()
 
-        content = [x.strip() for x in content] 
+        # Length describes the number of interfaces for the CP-router
+        number_of_total_CP_interfaces = [x.strip() for x in content] 
 
-        # This will determine the mapping to the largest interface of the switch, which connects to the host
-        # All other interface values for the switches are +1 for the router interface values
+        # We have to follow a naming convention so that the mapping always works
+        # We do this by first defining all interfaces which conenct to switches inside the AS.
+        # These interfaces will have the same port number for the p4 switch and CP router interfaces.
+        # Only problem is switches which connect to other AS.
+        # For that, we skip one port number as after all ports are defined within an AS
+        # The next port connects to the CP router (the real link)
+        # All ports after that connect to other ASes, so we add +1 to the port number.
+        # We define out topology this way too, first connection to hosts, then connection to
+        # switches in the same AS, then connection to CP routers, then connection to other AS.
+        # It works for any topology, just the order in which we add should be fixed, else it becomes 
+        # extremely random and it will not work universally.
+
+        # To check how many switches inside an AS.
         num_switches_in_AS = 3
         
         #Read the mappings generated from the files
-        for item in content:
+        for item in number_of_total_CP_interfaces:
             items = item.split(",")
             #print(items[0],items[1], items[0][-2], int(items[1]))
-
-            if int(items[0][-2]) == num_switches_in_AS:
-                Controller.port_mapping[int(items[1])] = int(items[0][-2]) - 2
-            else:
+                        
+            # If lenth > num_switches, means it is a switch which connects to another AS.
+            # Check if interface number exceeds  the number of switches inside the AS.
+            # For those interfaces only, add +1 as we need to skip one port.
+            if int(items[0][-2]) >= len(number_of_total_CP_interfaces) and len(number_of_total_CP_interfaces) > num_switches_in_AS:
                 Controller.port_mapping[int(items[1])] = int(items[0][-2]) + 1
+            else:
+                Controller.port_mapping[int(items[1])] = int(items[0][-2])
+
+        #print(Controller.port_mapping)
 
         """ 
                 Key to understand :
