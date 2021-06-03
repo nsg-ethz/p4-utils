@@ -486,24 +486,28 @@ class Controller(object):
                 position 3,4,.... in FIB selects the port to forward on in case of multipath tuple of the form ('RTA_OIF', PORT)"""
 
         for sw_name, controller in self.controllers.items():
-
+            
+            # Check for connected switches to the given switch
             connected_switches = self.topo.get_p4switches_connected_to(sw_name)
 
             for host in self.topo.get_hosts_connected_to(sw_name):
-
+                
+                # Host IP from p4-utils method
                 host_ip = self.topo.get_host_ip(host) + "/24"
                 host_mac = self.topo.get_host_mac(host)
                 
-                # If there is a route in the FIB from FPM
+                # If there is a route in the FIB from FPM (queue is not empty)
                 if temp_fib:
                 
                     for entry in temp_fib:
                         
+                        # Check the HOST IP from the FIB now
                         host_ip_match_from_fib = entry[1][1] + "/"+str(entry[0])
 
+                        # Port to forward from the FIB (one of the bad interface values which needed to be mapped)
                         port_toforward_from_fib = entry[2][1]
-                        #print(host_ip_match_from_fib, port_toforward_from_fib)
 
+                        # Actual port to forward traffic on
                         sw_port = Controller.port_mapping[port_toforward_from_fib]
                         print(host_ip_match_from_fib, sw_port)
 
@@ -514,53 +518,62 @@ class Controller(object):
                             self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(host_mac), str(sw_port)])
 
                         else:
+                            #Check for multipath (no multipath for external AS routes with /8 prefix)
 
-                            for switch in connected_switches:
-                            
-                                if len(entry) <= 4 or entry[0]==8:
+                            # According to the key, in every entry, postion 0 is prefix, position 1 is dst_addr
+                            # position 2,3,.... are output ports (length <=3 means only one output port)
+                            if len(entry) <= 3 or entry[0]==8:
 
-                                
+                                for switch in connected_switches:
 
                                     # Reference port from topology to map switch needed
                                     # The switch knows the port from the FPM route but not the destination MAC.
-                                    # To find the destination MAC, the switch checks  for which switch, the port number
+                                    # To find the destination MAC, the switch checks for which switch, the port number
                                     # matches the port given by the FPM route and finds the MAC for that switch
 
                                     ref_port = self.topo.node_to_node_port_num(sw_name,switch)
-                
-                                    if ref_port == sw_port:
 
+                                    # If port number for a connected switch, matches port to forward on
+                                    if ref_port == sw_port:
+                                        
+                                        # Find destiantion MAC address
                                         dst_sw_mac = self.topo.node_to_node_mac(switch, sw_name)
                                         print(switch, dst_sw_mac)
 
                                         print ("table_add at {}:".format(sw_name))
                                         self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(dst_sw_mac), str(sw_port)])
-                            
-                                elif len(entry) > 10:
+
+                            # Now multipath is possible, for internal AS routes only (/24 prefix)
+                            elif len(entry) > 3:
 
                                     n_hops = len(entry) - 2
 
+                                    # Populate table for ECMP 
                                     print ("table_add at {}:".format(sw_name))
                                     self.controllers[sw_name].table_add("ipv4_lpm", "ecmp_forward", [str(host_ip_match_from_fib)], [str(n_hops)])
 
-                                    all_hops = entry[2:]
-                                    all_hops_from_fib = [x[1] for x in all_hops]
+                                    # Extract the ouput ports from the FIB ( they occur after position 2 in the FPM route)
+                                    all_hops_from_fib = [x[1] for x in entry[2:]]
 
+                                    # Map all ports to actual forwarding ports
                                     sw_ports = [Controller.port_mapping[item] for item in all_hops_from_fib]
 
-                                    for index, single_port in enumerate(sw_ports):
+                                    for switch in connected_switches:
+                                        
+                                        # As ECMP hashes on 5 tuple modulo num_ports, index gives the value of the hash
+                                        # Hash can have values from 0,1,2...num_ports-1
+                                        for index, single_port in enumerate(sw_ports):
 
-                                        ref_port = self.topo.node_to_node_port_num(sw_name,switch)
-                                        #print(index, switch, ref_port)
+                                            ref_port = self.topo.node_to_node_port_num(sw_name,switch)
 
-                                        if ref_port == single_port:
+                                            if ref_port == single_port:
 
-                                            dst_sw_mac = self.topo.node_to_node_mac(switch, sw_name)
-                                            print(switch, dst_sw_mac)
-                                            print(index,single_port)
+                                                dst_sw_mac = self.topo.node_to_node_mac(switch, sw_name)
+                                                print(switch, dst_sw_mac)
+                                                print(index,single_port)
 
-                                            print ("table_add at {}:".format(sw_name))
-                                            self.controllers[sw_name].table_add("ecmp_to_nhop", "set_nhop", [str(index)], [str(dst_sw_mac), str(single_port)])
+                                                print ("table_add at {}:".format(sw_name))
+                                                self.controllers[sw_name].table_add("ecmp_to_nhop", "set_nhop", [str(index)], [str(dst_sw_mac), str(single_port)])
 
 
     # Parse fpm message into useful form 
