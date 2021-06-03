@@ -356,12 +356,13 @@ control MyIngress(inout headers hdr,
                 // Reigster to check type of BGP messages, capture all types
                 if (hdr.tcp.isValid()){
 
-                        
+                        //if (hdr.tcp.dstPort == 179){
                         BGP_register_port.write((bit<32>)0, hdr.tcp.dstPort);
                         BGP_register_flag.write((bit<32>)0, hdr.tcp.syn);
                         BGP_register_flag.write((bit<32>)1, hdr.tcp.ack);
                         BGP_register_flag.write((bit<32>)2, hdr.tcp.psh);
                         bgp_update.apply();
+                        //}
                 }    
             }
 

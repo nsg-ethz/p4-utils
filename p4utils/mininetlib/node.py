@@ -21,6 +21,7 @@ from mininet.log import debug, info, warning
 from mininet.clean import sh
 from mininet.node import Switch, Host, Node
 from mininet.moduledeps import pathCheck
+import subprocess
 
 from mininet.util import ( quietRun, errRun, errFail, moveIntf, isShellBuiltin,
                            numCores, retry, mountCgroups, BaseString, decode,
@@ -323,6 +324,8 @@ class Router( Switch ):
     ID = 0 
     FRR_DIR = "/usr/local/sbin"
     VTY_SOCKET_PATH = "/var/run/"
+    INTF_Map_DIR = "MaptoIntf"
+    INTF_path = os.path.join(os.getcwd(), INTF_Map_DIR)
 
     def __init__(self, name, daemons=None, conf_path=None, fake_interfaces = None, **kwargs):
 
@@ -350,6 +353,7 @@ class Router( Switch ):
         os.system("mn -c >/dev/null 2>&1")
         os.system("killall -9 {} > /dev/null 2>&1"
                     .format(' '.join(os.listdir(Router.FRR_DIR)))) 
+        os.system("rm -r {}/*".format(Router.INTF_path))
 
     def defaultIntf(self, event=None):
         if hasattr(self, "controlIntf") and self.controlIntf:
@@ -383,14 +387,13 @@ class Router( Switch ):
 
             # moving from main namspace to router
             cmd00 = ("ip link set {}-{} netns {}".format(self.name, item, self.pid))
-          
+
             cmd1 = ("ip link set dev {} up".format(item))
             cmd2 = ("ip link set dev {}-{} up".format(sw_name, sw_intf))
             
             os.system(cmd0)
             os.system(cmd00)
-            
-            self.cmd(cmd1)
+
             # removes checksum offloading which makes bgp deamons work
             #print("TEST CMD", "ethtool -K {}-{} rx off tx off sg off".format(self.name, item))
 
@@ -398,11 +401,31 @@ class Router( Switch ):
 
             self.waitOutput()
             os.system(cmd2)
-
+            #self.cmd(cmd2)
+            #self.cmd("ip netns exec {} ip link set {}-{} netns {}".format(self.pid, sw_name, sw_intf, 1))
+            
             # Add fake IP address to the intf connected to switch
             cmd3 = ("ifconfig {}-eth0 {}.0.0.{} netmask 255.255.255.0".format(self.name, str(int(self.name[1])*15), str(2)))
             self.cmd(cmd3)
             self.waitOutput()
+
+            # Get the fake interface numnvers and save to a fil, in order to map later to real ports in the controller
+
+            var = int(subprocess.check_output("cat /sys/class/net/{}-{}/iflink".format(sw_name, sw_intf), shell=True))
+            var1 = int(subprocess.check_output("cat /sys/class/net/{}-{}/ifindex".format(sw_name, sw_intf), shell=True))
+            #print(var)
+
+            if not os.path.exists(Router.INTF_path):
+                os.system("mkdir -p {}/{}".format(os.getcwd(), Router.INTF_Map_DIR))
+
+            fname= self.name+"intf"+".txt"
+            path_save = os.path.join(Router.INTF_path, fname)
+            file_name = path_save
+
+            data = [item, var, sw_intf, var1]
+            f = open(file_name,"a")
+            f.write(str(data)+"\n")
+            f.close()
             
         
     def start(self):
