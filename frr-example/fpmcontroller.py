@@ -405,7 +405,7 @@ class Controller(object):
         if len(attrs) == 3 and isinstance(attrs[2][1], int):
             Controller.fib_for_forwarding_kernel_and_zebra.append((dst_pref,attrs[0],attrs[2]))
 
-            #Remove routes with IPs connecting the border routers as we export the AS prefix for BGP routing
+            #Remove routes with IPs connecting the border routers as we export the AS prefix for BGP routing (for us, IP range is 25.0.1.x/24)
             if attrs[0][1][0:2] != '25':
 
                 #Remove routes to IPv6 addresses and loopback addresses
@@ -453,16 +453,16 @@ class Controller(object):
         number_of_total_CP_interfaces = [x.strip() for x in content] 
 
         # We have to follow a naming convention so that the mapping always works
-        # We do this by first defining all interfaces which conenct to switches inside the AS.
-        # These interfaces will have the same port number for the p4 switch and CP router interfaces.
-        # Only problem is switches which connect to other AS.
-        # For that, we skip one port number as after all ports are defined within an AS
-        # The next port connects to the CP router (the real link)
-        # All ports after that connect to other ASes, so we add +1 to the port number.
-        # We define out topology this way too, first connection to hosts, then connection to
-        # switches in the same AS, then connection to CP routers, then connection to other AS.
-        # It works for any topology, just the order in which we add should be fixed, else it becomes 
-        # extremely random and it will not work universally.
+        # We configure our routers such that interface eth1 is always connected to the host.
+        # Interfaces eth2, eth3,... are CP interfaces "connected" to other CP interfaces.
+        # For the switch we have one additional real interface, which connects to the CP router (control interface) 
+        # We build our topology in a way that first we add host-switch connections, then we add switch-CP router connections
+        # Finally we add swich-switch connections in the same AS, followed by switch-switch connections in different AS.
+        # We follow numerical ordering while building the topology, example if we have s1, s2, s3, s4
+        # we first add all connections to s1 in increasing order of switch number i.e. s1-s2, then s1-s3, then s1-s4
+        # then we add for s2 in increasing order, then s3, and so on
+        # This naming convention ensures our controller will work for any topology.
+        # We need to do this as if we randomly name interfaces on the CP routers and switches in any order, there will be no way to map actual port numbers for forwarding.
 
         # To check how many switches inside an AS.
         num_switches_in_AS = 3
@@ -470,15 +470,18 @@ class Controller(object):
         #Read the mappings generated from the files
         for item in number_of_total_CP_interfaces:
             items = item.split(",")
-            #print(items[0],items[1], items[0][-2], int(items[1]))
+
+            #items[0] gives the interface number on the switch
                         
-            # If lenth > num_switches, means it is a switch which connects to another AS.
-            # Check if interface number exceeds  the number of switches inside the AS.
-            # For those interfaces only, add +1 as we need to skip one port.
-            if int(items[0][-2]) >= len(number_of_total_CP_interfaces) and len(number_of_total_CP_interfaces) > num_switches_in_AS:
-                Controller.port_mapping[int(items[1])] = int(items[0][-2]) + 1
-            else:
+            # If interface is eth1, then the port number on the router and switch is the same, both = 1
+            if int(items[0][-2]) == 1:
                 Controller.port_mapping[int(items[1])] = int(items[0][-2])
+                
+            # If interface is eth2,eth3, then the port number on the switch is +1 of the router port 
+            # This is because switch has an additional interface which connects to the CP router.
+            # This connection is always on eth2, in the naming convention of our topology (we add the CP router link before we add switches). 
+            else:
+                Controller.port_mapping[int(items[1])] = int(items[0][-2]) + 1
 
         #print(Controller.port_mapping)
 

@@ -188,6 +188,7 @@ class P4Switch(Switch):
         args.extend(['-i', str(101) + '@' + self.name+"-dum101"])
         args.extend(['-i', str(102) + '@' + self.name+"-dum102"])
 
+        # Switches connecting to other AS have more interfaces, hence we need to add more ports
         if self.name.endswith("2") or self.name.endswith("4"):
             args.extend(['-i', str(103) + '@' + self.name+"-dum103"])
 
@@ -218,8 +219,8 @@ class P4Switch(Switch):
         cmd = ' '.join(self.add_arguments())
         info(cmd + "\n")
 
-        # Add fake IP address to the intf connected to CP router
-        self.cmd("ifconfig {}-eth4 {}.0.0.{} netmask 255.255.255.0".format(self.name, str(int(self.name[1])*15), str(1)))
+        # Add fake IP address to the intf connected to CP router (in the way we build our topology, always connected to eth2 on the switch)
+        self.cmd("ifconfig {}-eth2 {}.0.0.{} netmask 255.255.255.0".format(self.name, str(int(self.name[1])*15), str(1)))
 
         self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
@@ -377,43 +378,35 @@ class Router( Switch ):
             sw_name = "s"+self.name[1:]
             sw_intf = "dum"+str(index+100)
             print(sw_name, sw_intf)
-            #print(sw_name.pid)
-
-            '''if item == "eth1":
-                continue'''
             
-            # create interface pair for router to switch (dumb)
+            # create interface pair for CP router to switch (dummy)
             cmd0 = ("ip link add {}-{} type veth peer name {}-{}".format(self.name, item, sw_name, sw_intf))
 
             # moving from main namspace to router
             cmd00 = ("ip link set {}-{} netns {}".format(self.name, item, self.pid))
 
+            # Set the interfaces up on the switch and the CP router.
             cmd1 = ("ip link set dev {} up".format(item))
             cmd2 = ("ip link set dev {}-{} up".format(sw_name, sw_intf))
             
             os.system(cmd0)
             os.system(cmd00)
 
-            # removes checksum offloading which makes bgp deamons work
-            #print("TEST CMD", "ethtool -K {}-{} rx off tx off sg off".format(self.name, item))
-
+            # removes checksum offloading which makes bgp daemons work
             self.cmd("ethtool -K {}-{} rx off tx off sg off".format(self.name, item))
 
             self.waitOutput()
             os.system(cmd2)
-            #self.cmd(cmd2)
-            #self.cmd("ip netns exec {} ip link set {}-{} netns {}".format(self.pid, sw_name, sw_intf, 1))
             
             # Add fake IP address to the intf connected to switch
             cmd3 = ("ifconfig {}-eth0 {}.0.0.{} netmask 255.255.255.0".format(self.name, str(int(self.name[1])*15), str(2)))
             self.cmd(cmd3)
             self.waitOutput()
 
-            # Get the fake interface numnvers and save to a fil, in order to map later to real ports in the controller
+            # Get the fake interface numnbers and save to a file, in order to map later to real ports in the controller
 
             var = int(subprocess.check_output("cat /sys/class/net/{}-{}/iflink".format(sw_name, sw_intf), shell=True))
             var1 = int(subprocess.check_output("cat /sys/class/net/{}-{}/ifindex".format(sw_name, sw_intf), shell=True))
-            #print(var)
 
             if not os.path.exists(Router.INTF_path):
                 os.system("mkdir -p {}/{}".format(os.getcwd(), Router.INTF_Map_DIR))
@@ -429,7 +422,6 @@ class Router( Switch ):
             
         
     def start(self):
-        #pass
         self.create_fake_interface()
         self.program_router()
 

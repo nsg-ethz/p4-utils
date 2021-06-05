@@ -1,28 +1,28 @@
 table_set_default ospf_hello drop
 
-table_add arp arp_forward 101 => 2
-table_add arp arp_forward 2 => 101
+table_add arp arp_forward 101 => 3
+table_add arp arp_forward 3 => 101
 
-table_add arp arp_forward 102 => 3
-table_add arp arp_forward 3 => 102
+table_add arp arp_forward 102 => 4
+table_add arp arp_forward 4 => 102
 
 table_add arp arp_forward 103 => 5
 table_add arp arp_forward 5 => 103
 
-table_add ospf_hello ospf_hello_forward 101 => 2
-table_add ospf_hello ospf_hello_forward 2 => 101
+table_add ospf_hello ospf_hello_forward 101 => 3
+table_add ospf_hello ospf_hello_forward 3 => 101
 
-table_add ospf_hello ospf_hello_forward 102 => 3
-table_add ospf_hello ospf_hello_forward 3 => 102
+table_add ospf_hello ospf_hello_forward 102 => 4
+table_add ospf_hello ospf_hello_forward 4 => 102
 
 table_add bgp_update bgp_forward 103 => 5
 table_add bgp_update bgp_forward 5 => 103
 
-table_add bgp_update bgp_forward 101 => 2
-table_add bgp_update bgp_forward 2 => 101
+table_add bgp_update bgp_forward 101 => 3
+table_add bgp_update bgp_forward 3 => 101
 
-table_add bgp_update bgp_forward 102 => 3
-table_add bgp_update bgp_forward 3 => 102
+table_add bgp_update bgp_forward 102 => 4
+table_add bgp_update bgp_forward 4 => 102
 
 
 
