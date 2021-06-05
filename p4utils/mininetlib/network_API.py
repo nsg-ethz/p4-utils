@@ -10,6 +10,7 @@ from mininet.log import setLogLevel, debug, info, output, warning, error
 from mininet.clean import cleanup, sh
 
 from p4utils.utils.helper import *
+from p4utils.utils.helper import _prefixLenMatchRegex
 from p4utils.utils.client import ThriftClient
 from p4utils.utils.compiler import *
 from p4utils.utils.topology import NetworkGraph
@@ -126,7 +127,9 @@ class NetworkAPI(Topo):
             
             for _, _, params in graph.edges(data=True):
                 
-                edge = graph[params['node1']][params['node2']]
+                node1 = params['node1']
+                node2 = params['node2']
+                edge = graph[node1][node2]
                 params1 = edge.pop('params1', {})
                 params2 = edge.pop('params2', {})
 
@@ -147,57 +150,23 @@ class NetworkAPI(Topo):
                     edge['ip2'] = edge['sw_ip2']
                     del edge['sw_ip2']
 
-            # If you want to retrieve informations directly from the network istead of trusting
-            # the information contained in the Mininet topology, use the following lines.
+                # Get addresses from the network
+                # This gathers also routers interfaces IPs!
+                port1 = edge['port1']
+                intf1 = self.net[node1].intfs[port1]
+                ip1, addr1 = intf1.updateAddr()
+                if ip1 is not None:
+                    subnet1 = _prefixLenMatchRegex.findall(intf1.ifconfig())[0]
+                    ip1 = ip_interface(ip1+'/'+subnet1).with_prefixlen
+                edge.update(ip1=ip1, addr1=addr1)
 
-            ## Add additional informations to the graph which are not loaded automatically
-            # Add links informations
-            # for _, _, params in graph.edges(data=True):
-            #     node1_name = params['node1']
-            #     node2_name = params['node2']
-            #     node1 = self.net[node1_name]
-            #     node2 = self.net[node2_name]
-            #     edge = graph[node1_name][node2_name]
-
-            #     # Get link
-            #     link = self.net.linksBetween(node1, node2)[0]
-
-            #     # Get interfaces
-            #     intf1 =  getattr(link, 'intf1')
-            #     intf2 =  getattr(link, 'intf2')
-
-            #     # Get interface names
-            #     edge['intfName1'] = getattr(intf1, 'name')
-            #     edge['intfName2'] = getattr(intf2, 'name')
-                
-            #     # Get interface addresses
-            #     try:
-            #         # Fake switch IP
-            #         edge['ip1'] = edge['sw_ip1']
-            #         del edge['sw_ip1']
-            #     except KeyError:
-            #         # Real IP
-            #         ip1, prefixLen1 = getattr(intf1, 'ip'), getattr(intf1, 'prefixLen')
-            #         if ip1 and prefixLen1:
-            #             edge['ip1'] = ip1 + '/' + prefixLen1
-
-            #     try:
-            #         # Fake switch IP
-            #         edge['ip2'] = edge['sw_ip2']
-            #         del edge['sw_ip2']
-            #     except KeyError:
-            #         # Real IP
-            #         ip2, prefixLen2 = getattr(intf2, 'ip'), getattr(intf2, 'prefixLen')
-            #         if ip2 and prefixLen2:
-            #             edge['ip2'] = ip2 + '/' + prefixLen2
-
-            #     mac1 = getattr(intf1, 'mac')
-            #     if mac1:
-            #         edge['addr1'] = mac1
-
-            #     mac2 = getattr(intf2, 'mac')
-            #     if mac1:
-            #         edge['addr2'] = mac2
+                port2 = edge['port2']
+                intf2 = self.net[node2].intfs[port2]
+                ip2, addr2 =  intf2.updateAddr()
+                if ip2 is not None:
+                    subnet2 = _prefixLenMatchRegex.findall(intf2.ifconfig())[0]
+                    ip2 = ip_interface(ip2+'/'+subnet2).with_prefixlen
+                edge.update(ip2=ip2, addr2=addr2)
 
         graph_dict = node_link_data(graph)
         with open(self.topoFile,'w') as f:

@@ -12,6 +12,9 @@ from mininet.log import info, output, error, warn, debug
 from p4utils.utils.topology import NetworkGraph
 
 
+_prefixLenMatchRegex = re.compile("netmask (\d+\.\d+\.\d+\.\d+)")
+
+
 def merge_dict(dst, src):
     """
     Merge dictionary src into dictionary dst (nested dictionaries
