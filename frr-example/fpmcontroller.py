@@ -418,12 +418,18 @@ class Controller(object):
         # Zebra OSPF multipath route for ECMP
         elif len(attrs) == 3 and attrs[2][0] == "RTA_MULTIPATH":
             Controller.fib_for_forwarding_zebra_multi.append((dst_pref,attrs[0], ('RTA_OIF',attrs[2][1][0]['oif']), ('RTA_OIF',attrs[2][1][1]['oif'])))
-            temp_fib.append((dst_pref,attrs[0], ('RTA_OIF',attrs[2][1][0]['oif']), ('RTA_OIF',attrs[2][1][1]['oif'])))     
+
+            #Remove routes to IPv6 addresses and loopback addresses
+            if attrs[0][1][5:6] == '0' and attrs[0][1][7:8] == "0":
+
+                temp_fib.append((dst_pref,attrs[0], ('RTA_OIF',attrs[2][1][0]['oif']), ('RTA_OIF',attrs[2][1][1]['oif'])))     
 
         #Zebra OSPF single route    
         elif len(attrs) == 4:
             Controller.fib_for_forwarding_kernel_and_zebra.append((dst_pref,attrs[0],attrs[3]))
-            if attrs[0][1][5:6] == '0':
+
+            #Remove routes to IPv6 addresses and loopback addresses
+            if attrs[0][1][5:6] == '0' and attrs[0][1][7:8] == "0":
                 temp_fib.append((dst_pref,attrs[0],attrs[3]))
 
         else:
