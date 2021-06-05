@@ -211,14 +211,11 @@ control MyIngress(inout headers hdr,
 
     }
 
-    // Forward OSPF packets (hello, DD, LSU, LSR, LSAck)
+    // Forward BGP packets to set up BGP peering
     action bgp_forward(egressSpec_t port) {
 
         //set the output port from the table
         standard_metadata.egress_spec = port;
-
-        //decrease ttl by 1
-        //hdr.ipv4.ttl = hdr.ipv4.ttl -1;
 
     }
 
@@ -356,13 +353,12 @@ control MyIngress(inout headers hdr,
                 // Reigster to check type of BGP messages, capture all types
                 if (hdr.tcp.isValid()){
 
-                        //if (hdr.tcp.dstPort == 179){
-                        BGP_register_port.write((bit<32>)0, hdr.tcp.dstPort);
-                        BGP_register_flag.write((bit<32>)0, hdr.tcp.syn);
-                        BGP_register_flag.write((bit<32>)1, hdr.tcp.ack);
-                        BGP_register_flag.write((bit<32>)2, hdr.tcp.psh);
-                        bgp_update.apply();
-                        //}
+                    BGP_register_port.write((bit<32>)0, hdr.tcp.dstPort);
+                    BGP_register_flag.write((bit<32>)0, hdr.tcp.syn);
+                    BGP_register_flag.write((bit<32>)1, hdr.tcp.ack);
+                    BGP_register_flag.write((bit<32>)2, hdr.tcp.psh);
+                    bgp_update.apply();
+                        
                 }    
             }
 
