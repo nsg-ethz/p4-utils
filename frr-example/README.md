@@ -23,21 +23,10 @@
 
 ## Introduction
 
-The objective of this exercise is to write a P4 program that
-implements basic forwarding. To keep things simple, we will just
-implement forwarding for IPv4.
+Super-Node based topologies for testing our integrated control plane and data plane node. Current topology comprises of 2 Autonomous Systems (AS), with the control plane routers 
+spread across 2 AS, while the P4 switches are in the same logical network.
 
-With IPv4 forwarding, the switch must perform the following actions
-for every packet: (i) update the source and destination MAC addresses,
-(ii) decrement the time-to-live (TTL) in the IP header, and (iii)
-forward the packet out the appropriate port.
- 
-Your switch will have a single table, which the control plane will
-populate with static rules. Each rule will map an IP address to the
-MAC address and output port for the next hop. We have already defined
-the control plane rules, so you only need to implement the data plane
-logic of your P4 program.
-
+<img width="964" alt = "java" src="/p4-utils/frr-example/images/BGP.png">
 
 # Parser
 
