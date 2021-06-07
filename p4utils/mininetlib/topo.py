@@ -753,37 +753,6 @@ class AppTopo(P4Topo):
             elif self.is_host_router_link(link):
                 pass
                 
-                '''host_name = link[self.get_host_position(link)]
-                router = link[self.get_router_position(link)]
-
-                #host_gw = None
-                host_mac = None
-
-                host_ops = self._hosts[host_name]
-                assert host_ops['ip'], 'Host does not have an IP assigned or "auto" assignment'
-
-                if host_ops['ip'] == 'auto':
-                    host_ops['ip'] = None
-                    host_ops['auto'] = True
-
-
-                if host_ops['ip'] and not '/' in host_ops['ip']:
-                    host_ops['ip'] += '/24'
-
-                # Get mac address from ip address
-                if host_ops['ip'] and not host_ops.get('mac', False):
-                    host_mac = ip_address_to_mac(host_ops['ip']) % (0)
-                    host_ops['mac'] = host_mac
-
-                self.addHost(host_name, **host_ops)
-
-                link_ops = link[2]
-                link_ops['addr1'] = host_mac
-
-                self.addLink(host_name, router, **link_ops)
-                plane_ip = host_ops['ip'].split("/")[0]
-                self.hosts_info[host_name] = {"router": router, "ip":  plane_ip, "mac": host_mac, "mask": 24}'''
-                
 
 
         self.add_cpu_port()

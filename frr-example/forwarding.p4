@@ -116,8 +116,8 @@ parser MyParser(packet_in packet,
 
         packet.extract(hdr.ipv4);
         transition select(hdr.ipv4.protocol){
-            89 : parse_ospf;
-            6 : parse_tcp;
+            89 : parse_ospf;  // 89 in IPv4 protocol is for OSPF
+            6 : parse_tcp;    // 6 in IPv4 protocol is for TCP
             default: accept;
         }
 
@@ -133,7 +133,7 @@ parser MyParser(packet_in packet,
     state parse_tcp {
         packet.extract(hdr.tcp);
         transition select(hdr.tcp.dstPort){
-        179 : parse_bgp;
+        179 : parse_bgp;  //TCP port 179 is used by BGP
         default : accept;
         }
     }
@@ -235,6 +235,7 @@ control MyIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
+    // Table to match action to forward ARP packets
     table arp{
         key = {
             standard_metadata.ingress_port: exact;
@@ -248,6 +249,7 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
+    // Table to match action to forward OSPF packets
     table ospf_hello{
         key = {
             standard_metadata.ingress_port: exact;
@@ -261,7 +263,7 @@ control MyIngress(inout headers hdr,
         default_action = NoAction();
     }
 
-
+    // Table to match action to set up a TCP connection for BGP
     table bgp_update{
         key = {
             standard_metadata.ingress_port: exact;
@@ -276,7 +278,7 @@ control MyIngress(inout headers hdr,
     }
 
 
-
+    // Table to set n_hop if ECMP is possible (equal multipaths exist)
     table ecmp_to_nhop {
         key = {
             meta.ecmp_group_id: exact;
@@ -289,7 +291,7 @@ control MyIngress(inout headers hdr,
         size = 1024;
     }
 
-
+    // Table for IPv4 forwarding
     table ipv4_lpm {
         key = {
             hdr.ipv4.dstAddr: lpm;

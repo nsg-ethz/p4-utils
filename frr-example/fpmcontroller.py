@@ -55,7 +55,7 @@ class Controller(object):
         for controller in self.controllers.values():
             controller.table_set_default("ipv4_lpm", "drop", [])
 
-
+    # Loopback addresses of all control plane routers
     HOSTS = ['10.0.0.1', '10.0.0.2', '10.0.0.3','22.0.0.4', '22.0.0.5', '22.0.0.6']
     PORT = 2621
 
@@ -105,6 +105,7 @@ class Controller(object):
         f = open(data, 'r')
         data = load_dump(f) 
 
+        # Decode the byte string FPM message into a readable route
         offset = 0
         inbox = []
         msg = met(data[offset:])
@@ -125,7 +126,13 @@ class Controller(object):
         f.write(str(msg)+"\n")
         f.close()
 
-        
+        """FPM message has the following structure
+            {'family': 2, 'dst_len': 32, 'src_len': 0, 'tos': 0, 'table': 254, 'proto': 2, 'scope': 0, 'type': 1,
+             'flags': 0, 'attrs': [('RTA_DST', '10.0.0.1'), ('RTA_PRIORITY', 0), ('RTA_OIF', 1)], 
+             'header': {'length': 52, 'type': 24, 'flags': 1025, 'sequence_number': 0, 'pid': 0}}
+
+            We pick the dst_len(prefix), and attrs from the FPM message
+        """
 
         attrs = msg['attrs']
         hdr = msg['header']
@@ -146,7 +153,7 @@ class Controller(object):
                     if int(attrs[0][1][0:2])%15 !=0:
                         temp_fib.append((dst_pref,attrs[0],attrs[2]))
         
-        # Zebra OSPF multipath route for ECMP
+        # Zebra OSPF, BGP multipath route for ECMP
         elif len(attrs) == 3 and attrs[2][0] == "RTA_MULTIPATH":
 
             #Remove routes to IPv6 addresses and loopback addresses
@@ -163,8 +170,6 @@ class Controller(object):
 
         else:
             pass
-            #print(attrs)
-            #Controller.fib_for_forwarding_zebra_multi.append((attrs[0],attrs[3]))
 
         
         #print(temp_fib)
@@ -256,7 +261,7 @@ class Controller(object):
                             self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(host_mac), str(sw_port)])
 
                         else:
-                            #Check for multipath (no multipath for external AS routes with /8 prefix)
+                            #Check for multipath (both for external AS routes with /8 prefix and internal with /24 prefix)
 
                             # According to the key, in every entry, postion 0 is prefix, position 1 is dst_addr
                             # position 2,3,.... are output ports (length <=3 means only one output port)
@@ -281,7 +286,7 @@ class Controller(object):
                                         print ("table_add at {}:".format(sw_name))
                                         self.controllers[sw_name].table_add("ipv4_lpm", "set_nhop", [str(host_ip_match_from_fib)], [str(dst_sw_mac), str(sw_port)])
 
-                            # Now multipath is possible, for internal AS routes only (/24 prefix)
+                            # Now multipath is possible for internal and external routes
                             elif len(entry) > 3:
 
                                     n_hops = len(entry) - 2
