@@ -1,32 +1,15 @@
-# Implementing Basic Forwarding
-
-```
-                   +--+
-                   |h4|
-                   ++-+
-                    |
-                    |
-+--+      +--+     ++-+     +--+
-|h1+------+s1+-----+s3+-----+h3|
-+--+      +-++     +--+     +--+
-            |
-            |
-          +-++
-          |s2|
-          +-++
-            |
-            |
-          +-++
-          |h2|
-          +--+
-```
+# Topology
+<p align ="center">
+<img src="images/BGP.png" title="Network Topology">
+<p/>
 
 ## Introduction
 
 Super-Node based topologies for testing our integrated control plane and data plane node. Current topology comprises of 2 Autonomous Systems (AS), with the control plane routers 
 spread across 2 AS, while the P4 switches are in the same logical network.
 
-<img width="964" alt = "java" src="/p4-utils/frr-example/images/BGP.png">
+
+
 
 # Parser
 
