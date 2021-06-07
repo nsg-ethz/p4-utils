@@ -260,7 +260,7 @@ class Controller(object):
 
                             # According to the key, in every entry, postion 0 is prefix, position 1 is dst_addr
                             # position 2,3,.... are output ports (length <=3 means only one output port)
-                            if len(entry) <= 3 or entry[0]==8:
+                            if len(entry) <= 3:
 
                                 for switch in connected_switches:
 
@@ -286,9 +286,14 @@ class Controller(object):
 
                                     n_hops = len(entry) - 2
 
+                                    # Select the /8 IP prefix as the ECMP group, as /8 prefix is different across different ASes.
+                                    # This ensures ECMP works within an AS and for routes to other ASes too.
+                                    ecmp_group = int(host_ip_match_from_fib[0:2])
+                                    print(ecmp_group)
+
                                     # Populate table for ECMP 
                                     print ("table_add at {}:".format(sw_name))
-                                    self.controllers[sw_name].table_add("ipv4_lpm", "ecmp_forward", [str(host_ip_match_from_fib)], [str(n_hops)])
+                                    self.controllers[sw_name].table_add("ipv4_lpm", "ecmp_forward", [str(host_ip_match_from_fib)], [str(ecmp_group), str(n_hops)])
 
                                     # Extract the ouput ports from the FIB ( they occur after position 2 in the FPM route)
                                     all_hops_from_fib = [x[1] for x in entry[2:]]
@@ -311,7 +316,7 @@ class Controller(object):
                                                 print(index,single_port)
 
                                                 print ("table_add at {}:".format(sw_name))
-                                                self.controllers[sw_name].table_add("ecmp_to_nhop", "set_nhop", [str(index)], [str(dst_sw_mac), str(single_port)])
+                                                self.controllers[sw_name].table_add("ecmp_to_nhop", "set_nhop", [str(ecmp_group), str(index)], [str(dst_sw_mac), str(single_port)])
 
 
     # Parse fpm message into useful form 

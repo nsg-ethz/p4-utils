@@ -174,7 +174,7 @@ control MyIngress(inout headers hdr,
     }
 
     // Create an ECMP group ID for a flow
-    action ecmp_forward(bit<16> num_nhops){
+    action ecmp_forward(bit<14> ecmp_group_id, bit<16> num_nhops){
         hash(meta.ecmp_hash,
 	    HashAlgorithm.crc16,
 	    (bit<1>)0,
@@ -185,11 +185,11 @@ control MyIngress(inout headers hdr,
           hdr.ipv4.protocol},
 	    num_nhops);
 
-        //meta.ecmp_group_id = ecmp_group_id;
+        meta.ecmp_group_id = ecmp_group_id;
 
     }
 
-    // Forward ARP lookup for OSPF messages
+    // Forward ARP lookup for OSPF,BGP messages
     action arp_forward(egressSpec_t port) {
 
         //set the output port from the table
@@ -279,6 +279,7 @@ control MyIngress(inout headers hdr,
 
     table ecmp_to_nhop {
         key = {
+            meta.ecmp_group_id: exact;
             meta.ecmp_hash: exact;
         }
         actions = {
