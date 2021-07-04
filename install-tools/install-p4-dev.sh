@@ -13,8 +13,13 @@ SYSREPO=false   # Sysrepo prevents simple_switch_grpc from starting correctly
 FRROUTING=true
 
 # Software versions
+
+# Newer versions of protobuf and grpc can be used but the
+# testing and development has been done with protobuf 3.6.1
+# and grpc 1.17.2.
 PROTOBUF_VER="3.6.1"
 GRPC_VER="1.17.2"
+
 LIBYANG_VER="1.0.225"
 PI_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713"    # Feb 4 2021
 BMV2_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # Feb 11 2021
@@ -241,10 +246,12 @@ function do_protobuf {
     unset CFLAGS CXXFLAGS LDFLAGS
 
     # Install protobuf Python
-    sudo pip install protobuf==${PROTOBUF_VER}
 
-    # We do not use the following source compiled method because it
-    # creates problems with other Python libraries.
+    # Google protobuf module is installed as p4-utils 
+    # requirement. We do not use the following source 
+    # compiled method because it creates problems with
+    # other Python libraries.
+
     # cd python
     # sudo python setup.py install --cpp_implementation
 }
@@ -271,8 +278,12 @@ function do_grpc {
     unset LDFLAGS
 
     # Install gprcio Python
-    sudo pip install -r requirements.txt
-    sudo pip install .
+
+    # Do not install grpcio here and postpone it to
+    # the installation of p4-utils.
+
+    # sudo pip install -r requirements.txt
+    # sudo pip install .
 }
 
 # Install sysrepo (tentative gNMI support with sysrepo)
