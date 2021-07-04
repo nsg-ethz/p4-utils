@@ -33,17 +33,15 @@ setup(
     keywords='networking p4 mininet',
     license='GPLv2',
     install_requires=[
-        'setuptools',
-        'networkx',
+        'googleapis-common-protos >= 1.52',
+        'ipaddr',
         'ipaddress',
-        'scapy',
+        'networkx',
+        'p4runtime',
+        'protobuf >= 3.6.1',
         'psutil',
-        "ipaddr==2.2.0",
-        "protobuf==3.14.0",
-        "grpcio==1.35.0",
-        "p4runtime==1.3.0",
+        'scapy',
+        'setuptools',
     ],
     extras_require={}
-    #tests_require=['pytest'],
-    #setup_requires=['pytest-runner']
 )

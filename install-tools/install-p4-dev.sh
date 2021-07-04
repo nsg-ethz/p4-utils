@@ -13,13 +13,16 @@ SYSREPO=false   # Sysrepo prevents simple_switch_grpc from starting correctly
 FRROUTING=true
 
 # Software versions
+PROTOBUF_VER="3.6.1"
+GRPC_VER="1.17.2"
+LIBYANG_VER="1.0.225"
 PI_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713"    # Feb 4 2021
 BMV2_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # Feb 11 2021
 P4C_COMMIT="451b208a5f1a54d9b5ac7975e496ca0a5dee6deb"   # Feb 23 2021
 FRROUTING_COMMIT="18f209926fb659790926b82dd4e30727311d22aa" # Mar 25 2021
-PROTOBUF_COMMIT="v3.6.1"
-GRPC_COMMIT="tags/v1.17.2"
-LIBYANG_COMMIT="v1.0.225"
+PROTOBUF_COMMIT="v${PROTOBUF_VER}"
+GRPC_COMMIT="tags/v${GRPC_VER}"
+LIBYANG_COMMIT="v${LIBYANG_VER}"
 
 # Print commands and exit on errors
 set -xe
@@ -237,9 +240,13 @@ function do_protobuf {
 
     unset CFLAGS CXXFLAGS LDFLAGS
 
-    # Build protobuf Python
-    cd python
-    sudo python setup.py install --cpp_implementation
+    # Install protobuf Python
+    sudo pip install protobuf==${PROTOBUF_VER}
+
+    # We do not use the following source compiled method because it
+    # creates problems with other Python libraries.
+    # cd python
+    # sudo python setup.py install --cpp_implementation
 }
 
 # Install grpc (needed for PI)
@@ -264,8 +271,11 @@ function do_grpc {
     unset LDFLAGS
 
     # Build gprcio
-    sudo pip install -r requirements.txt
-    sudo pip install .
+    sudo pip install grpcio==${GRPC_VER}
+    # We do not use the following source compiled method because it
+    # creates problems with other Python libraries.
+    # sudo pip install -r requirements.txt
+    # sudo pip install .
 }
 
 # Install sysrepo (tentative gNMI support with sysrepo)
@@ -541,6 +551,7 @@ function do_p4-learning {
     git checkout junota
 }
 
+# p4c depends on protobuf to compile p4runtime info files.
 do_protobuf
 if [ "$P4_RUNTIME" = true ]; then
     do_grpc
@@ -552,7 +563,6 @@ if [ "$P4_RUNTIME" = true ]; then
 fi
 do_bmv2
 do_p4c
-# ptf is Python2 only
 do_ptf
 do_mininet
 
