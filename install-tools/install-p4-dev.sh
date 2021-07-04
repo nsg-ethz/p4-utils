@@ -272,12 +272,7 @@ function do_grpc {
 
     # Install gprcio Python
     sudo pip install -r requirements.txt
-    sudo pip install grpcio==${GRPC_VER}
-
-    # We do not use the following source compiled method because it
-    # creates problems with other Python libraries.
-    # sudo pip install -r requirements.txt
-    # sudo pip install .
+    sudo pip install .
 }
 
 # Install sysrepo (tentative gNMI support with sysrepo)
