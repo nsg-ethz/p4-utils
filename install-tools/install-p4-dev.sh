@@ -5,7 +5,7 @@ KERNEL=$(uname -r)
 DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 USER_NAME=$(whoami)
 BUILD_DIR=~/p4-tools
-SCRIPT_DIR=$(pwd)
+SCRIPT_DIR=$(dirname "$0")
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
 DEBUG_FLAGS=true
 P4_RUNTIME=true
@@ -127,7 +127,7 @@ cp conf_files/tmux.conf ~/.tmux.conf
 # Fix site-packages issue 
 # Modified file from 
 # https://github.com/jafingerhut/p4-guide/blob/4111c7fa0a26ccdc40d3200040c767e9bba478ea/bin/install-p4dev-v4.sh#L244
-PY3LOCALPATH=`python ${SCRIPT_DIR}/py3localpath.py`
+PY3LOCALPATH=`python ${SCRIPT_DIR}/scripts/py3localpath.py`
 function site_packages_fix {
     local SRC_DIR
     local DST_DIR
@@ -145,6 +145,11 @@ function site_packages_fix {
     echo "Adding ${SRC_DIR} to Python3 path..."
     sudo su -c "echo '${SRC_DIR}' > ${DST_DIR}/p4-tools.pth"
     echo "Done!"
+}
+
+# Fix google module issue which creates problems with sphinx
+function google_module_fix {
+    sudo python $SCRIPT_DIR/scripts/protoinitfix.py
 }
 
 ## Module-specific dependencies
@@ -586,4 +591,5 @@ fi
 do_p4-utils
 do_p4-learning
 site_packages_fix
+google_module_fix
 echo "Installation complete!"
