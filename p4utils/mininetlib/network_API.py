@@ -658,6 +658,11 @@ class NetworkAPI(Topo):
         It also assigns unique device ids, grpc ports and thrift ports
         to the devices which require them. When a default interface is
         encountered, the respective device entry is updated.
+
+        It assignes unique IPs and MACs addresses to the hosts that were
+        not configured manually or through an assignment strategy.
+        It assignes unique MACs addresses to the every non-host node that
+        was not configured manually or through an assignment strategy.
         """
         # Set nodes' parameters automatically
         for node, info in self.nodes(sort=True, withInfo=True):
