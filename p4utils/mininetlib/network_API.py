@@ -133,7 +133,7 @@ class NetworkAPI(Topo):
                 params1 = edge.pop('params1', {})
                 params2 = edge.pop('params2', {})
 
-                # Move parameters in subdictionaries outside
+                # Move outside parameters in subdictionaries
                 # and append number to identify them.
                 for key in params1.keys():
                     edge[key+'1'] = params1[key]
@@ -2485,7 +2485,6 @@ class NetworkAPI(Topo):
             Parallel links are not allowed.
         """
         output('"l3" assignment strategy selected.\n')
-        reserved_ips = {}
         assigned_ips = set()
         sw_to_next_available_host_id = {}
         sw_to_id = {}
@@ -2531,13 +2530,11 @@ class NetworkAPI(Topo):
             else:
                 continue
 
-            # Reserve IPs for normal hosts
+            # Reserve host_num (from which the IP is generated) for normal hosts
             if self.check_host_valid_ip_from_name(host_name):
                 sw_id = sw_to_id[direct_sw]
                 host_num = int(host_name[1:])
                 assert host_num < 254
-                host_ip = '10.%d.%d.2' % (sw_id, host_num)
-                reserved_ips[host_name] = host_ip
                 sw_to_next_available_host_id[direct_sw].append(host_num)
 
         for node1, node2 in self.links():
