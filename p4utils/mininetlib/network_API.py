@@ -76,7 +76,7 @@ class NetworkAPI(Topo):
         # List of switch clients
         self.sw_clients = []
 
-## Utils
+### Utils
     def cleanup(self):
         """
         Removes old Mininet files and processes.
@@ -1009,8 +1009,7 @@ class NetworkAPI(Topo):
             self.net.stop()
             output('Network stopped!\n')
 
-### Links
-## Link setter
+## Links
     def addLink(self, node1, node2, port1=None, port2=None,
                 key=None, **opts):
         """
@@ -1130,7 +1129,6 @@ class NetworkAPI(Topo):
         opts.update(node1=node1, node2=node2, port1=port1, port2=port2)
         return self.g.add_edge(node1, node2, key, opts)
 
-## Link getter
     def getLink(self, node1, node2, key=None):
         """
         Return link metadata dict. If key is None, then the 
@@ -1147,7 +1145,6 @@ class NetworkAPI(Topo):
         entry, key = self._linkEntry(node1, node2, key=key)
         return entry[key], key
 
-## Link updater
     def updateLink(self, node1, node2, key=None, **opts):
         """
         Update link metadata dict. In fact, delete the node
@@ -1185,7 +1182,6 @@ class NetworkAPI(Topo):
         merge_dict(info, opts_new)
         return self.addLink(node1, node2, key=key, **info)
 
-## Link deleter
     def deleteLink(self, node1, node2, key=None):
         """
         Delete link.
@@ -1222,23 +1218,6 @@ class NetworkAPI(Topo):
         self.deleteLink(link['node1'], link['node2'], key=key)
         return link, key
 
-## Method to check neighbors
-    def areNeighbors(self, node1, node2):
-        """
-        Check whether two node are neighbors.
-
-        Arguments:
-            node1, node2 (string): names of the nodes
-
-        Returns:
-            True if node1 and node2 are neighbors, False else.
-        """
-        if node1 in self.g.edge.keys():
-            if node2 in self.g.edge[node1].keys():
-                return True
-        return False
-
-## List of links
     def links(self, sort=False, withKeys=False, withInfo=False):
         """
         Return links only preserving (src, dst) order, i.e. no duplicated 
@@ -1254,816 +1233,6 @@ class NetworkAPI(Topo):
         """
         return super().links(sort, withKeys, withInfo)
 
-### Nodes
-## Node setters
-    def addNode(self, name, **opts):
-        """
-        Add Node to graph.
-
-        Arguments:
-            name (string): name
-            opts (kwargs): node options
-
-        Returns:
-            node name
-        """
-        return super().addNode(name, **opts)
-
-    def addHost(self, name, **opts):
-        """
-        Add P4 host node to Mininet topology.
-        If the node is already present, overwrite it.
-
-        Arguments:
-            name (string): switch name
-            opts (kwargs): switch options (optional)
-
-        Returns:
-            P4 host name (string)
-        """
-        opts.setdefault('cls', P4Host)
-        opts.update(isHost = True)
-        return super().addHost(name, **opts)
-
-    def addSwitch(self, name, **opts):
-        """
-        Add switch node to Mininet topology.
-        If the node is already present, overwrite it.
-
-        Arguments:
-            name (string): switch name
-            opts (kwargs): switch options
-
-        Returns:
-            switch name (string)
-        """
-        dpid = opts.get('dpid')
-        if dpid is not None:
-            switch_id = int(dpid, 16)
-            if switch_id in self.switch_ids():
-                raise Exception('dpid {} already in use.'.format(dpid))
-
-        if not opts and self.sopts:
-            opts = self.sopts
-        opts.update(isSwitch = True)
-        return self.addNode(name, **opts)
-
-    def addP4Switch(self, name, **opts):
-        """
-        Add P4 switch node to Mininet topology.
-        If the node is already present, overwrite it.
-
-        Arguments:
-            name (string): switch name
-            opts (kwargs): switch options
-
-        Returns:
-            P4 switch name (string)
-        """
-        switch_id = opts.get('device_id')
-        if switch_id is not None:
-            if switch_id in self.switch_ids():
-                raise Exception('switch ID {} already in use.'.format(switch_id))
-
-        opts.setdefault('cls', P4Switch)
-        opts.update(isP4Switch = True)
-        return self.addSwitch(name, **opts)
-
-    def addP4RuntimeSwitch(self, name, **opts):
-        """
-        Add P4 runtime switch node to Mininet topology.
-        If the node is already present, overwrite it.
-
-        Arguments:
-            name (string): switch name
-            opts (kwargs): switch options
-
-        Returns:
-            P4 runtime switch name (string)
-        """
-
-        opts.setdefault('cls', P4RuntimeSwitch)
-        opts.update(isP4RuntimeSwitch = True)
-        return self.addP4Switch(name, **opts)
-
-    def addRouter(self, name, **opts):
-        """
-        Add router node to Mininet topology.
-        If the node is already present, overwrite it.
-
-        Arguments:
-            name (string): switch name
-            opts (kwargs): switch options
-
-        Returns:
-            router name (string)
-        """
-        opts.setdefault('cls', FRRouter)
-        opts.update(isRouter = True)
-        return self.addNode(name, **opts)
-
-## Node getter
-    def getNode(self, name):
-        """
-        Get node information.
-
-        Arguments:
-            node (string): Mininet node name
-
-        Returns:
-            node metadata dict
-        """
-        return self.nodeInfo(name)
-
-## Node updaters
-    def updateNode(self, name, **opts):
-        """
-        Update node metadata dict. In fact, delete the node
-        and create a new one with the updated information.
-
-        Arguments:
-            name (string): node name
-            opts         : node options to update (optional)
-        
-        Returns:
-            node name
-        """
-        if self.isHost(name):
-            node_setter = self.addHost
-        elif self.isP4RuntimeSwitch(name):
-            node_setter = self.addP4RuntimeSwitch
-        elif self.isP4Switch(name):
-            node_setter = self.addP4Switch
-        elif self.isSwitch(name):
-            node_setter = self.addSwitch
-        elif self.isRouter(name):
-            node_setter = self.addRouter
-        else:
-            node_setter = self.addNode
-
-        info = self.popNode(name, remove_links=False)
-        merge_dict(info, opts)
-        return node_setter(name, **info)
-
-## Node deleter
-    def deleteNode(self, node, remove_links=True):
-        """
-        Delete node.
-
-        Arguments:
-            node         (string): Mininet node name
-            remove_links (bool)  : whether to remove all the incident
-                                   links
-        """
-        # Delete incident links
-        if remove_links:
-            self.g.edge.pop(node, None)
-            for n in self.g.edge.keys():
-                self.g.edge[n].pop(node, None)
-
-        # Delete node
-        self.g.node.pop(node) 
-
-    def popNode(self, name, remove_links=True):
-        """
-        Pop node.
-
-        Arguments:
-            node1 (string)     : nodes to link together
-            remove_links (bool): whether to remove all the incident
-                                 links
-
-        Returns:
-            node metadata dict
-        """
-        node = self.getNode(name)
-        self.deleteNode(name, remove_links=remove_links)
-        return node
-
-## Methods to check the node type
-    def isNode(self, node):
-        """
-        Check if node exists.
-
-        Arguments:
-            node (string): node name
-
-        Returns:
-            True if node exists, else False (bool)
-        """
-        return node in self.g.nodes()
-
-    def isHost(self, node):
-        """
-        Check if node is a host.
-
-        Arguments:
-            node (string): node name
-
-        Returns:
-            True if node is a host, else False (bool)
-        """
-        return self.g.node[node].get('isHost', False)
-
-    def isSwitch(self, name):
-        """
-        Check if node is a switch.
-
-        Arguments:
-            node (string): Mininet node name
-
-        Returns:
-            True if node is a switch, else False (bool)
-        """
-        return super().isSwitch(name)
-
-    def isP4Switch(self, node):
-        """
-        Check if node is a P4 switch.
-
-        Arguments:
-            node (string): node name
-
-        Returns:
-            True if node is a P4 switch, else False (bool)
-        """
-        return self.g.node[node].get('isP4Switch', False)
-
-    def isP4RuntimeSwitch(self, node):
-        """
-        Check if node is a P4 runtime switch.
-
-        Arguments:
-            node (string): node name
-
-        Returns:
-            True if node is a P4 switch, else False (bool)
-        """
-        return self.g.node[node].get('isP4RuntimeSwitch', False)
-
-    def isRouter(self, node):
-        """
-        Check if node is a router.
-
-        Arguments:
-            node (string): node name
-
-        Returns:
-            True if node is a router, else False (bool)
-        """
-        return self.g.node[node].get('isRouter', False)
-
-    def hasCpuPort(self, node):
-        """
-        Check if node has a CPU port.
-
-        Arguments:
-            node (string): Mininet node name
-
-        Returns:
-            True if node has a CPU port, else False (bool)
-        """
-        return self.getNode(node).get('cpu_port', False)
-
-## Lists of node names by type
-    def nodes(self, sort=True, withInfo=False):
-        """
-        Return nodes in graph.
-
-        Arguments:
-            sort (bool)    : sort nodes alphabetically
-            withInfo (bool): retrieve node information
-        """
-        nodes = self.g.nodes(data=withInfo)
-        if not sort:
-            return nodes
-        else:
-            # Ignore info when sorting
-            tupleSize = 2
-            return sorted(nodes, key=(lambda l: naturalSeq(l[:tupleSize])))
-
-    def hosts(self, sort=True, withInfo=False):
-        """
-        Return hosts.
-        
-        Arguments:
-            sort (bool)    : sort hosts alphabetically
-            withInfo (bool): retrieve node information
-
-        Returns:
-            list of hosts
-        """
-        if withInfo:
-            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isHost(n[0])]
-        else:
-            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isHost(n)]
-
-    def switches(self, sort=True, withInfo=False):
-        """
-        Return switches.
-
-        Arguments:
-            sort (bool)    : sort switches alphabetically
-            withInfo (bool): retrieve node information
-           
-        Returns: 
-            list of switches
-        """
-        if withInfo:
-            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isSwitch(n[0])]
-        else:
-            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isSwitch(n)]
-
-    def p4switches(self, sort=True, withInfo=False):
-        """
-        Return P4 switches.
-
-        Arguments:
-            sort (bool)    : sort switches alphabetically
-            withInfo (bool): retrieve node information
-
-        Returns:
-            list of P4 switches
-        """
-        if withInfo:
-            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isP4Switch(n[0])]
-        else:
-            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4Switch(n)]
-
-    def p4rtswitches(self, sort=True, withInfo=False):
-        """
-        Return P4 runtime switches.
-
-        Arguments:
-            sort (bool)    : sort switches alphabetically
-            withInfo (bool): retrieve node information
-
-        Returns:
-            list of P4 runtime switches
-        """
-        if withInfo:
-            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isP4RuntimeSwitch(n[0])]
-        else:
-            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4RuntimeSwitch(n)]
-
-    def routers(self, sort=True, withInfo=False):
-        """
-        Return routers.
-
-        Arguments:
-            sort (bool)    : sort routers alphabetically
-            withInfo (bool): retrieve node information
-
-        Returns:
-            list of routers
-        """
-        if withInfo:
-            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isRouter(n[0])]
-        else:
-            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isRouter(n)]
-
-## Nodes
-    def enableLog(self, name, log_dir='./log'):
-        """
-        Enable log for node (also for the task scheduler).
-
-        Arguments:
-            name (string)   : name of the node
-            log_dir (string): where to save log files
-        """            
-        if self.isNode(name):
-            self.updateNode(name, log_enabled=True, log_dir=log_dir)
-        else:
-            raise Exception('"{}" does not exists.'.format(name))
-
-    def disableLog(self, name):
-        """
-        Disable log for node (also for the task scheduler).
-
-        Arguments:
-            name (string): name of the node
-        """            
-        if self.isNode(name):
-            self.updateNode(name, log_enabled=False)
-        else:
-            raise Exception('"{}" does not exists.'.format(name))
-
-    def enableLogAll(self, log_dir='./log'):
-        """
-        Enable log for all the nodes (also for the task schedulers).
-
-        Arguments:
-            log_dir (string): where to save log files
-        """
-        for node in self.nodes():
-            self.enableLog(node, log_dir=log_dir)
-
-    def disableLogAll(self):
-        """
-        Disable log for all the nodes (also for the task schedulers).
-        """
-        for node in self.nodes():
-            self.disableLog(node)
-
-    def enableScheduler(self, name, path='/tmp'):
-        """
-        Enable the task scheduler server for the node.
-
-        Arguments:
-            name (string): name of the node
-            path (string): name of the directory where the
-                           socket file will be placed
-        """
-        if self.isNode(name):
-            self.updateNode(name, scheduler=True, socket_path=path)
-        else:
-            raise Exception('"{}" does not exists.'.format(name))
-
-    def disableScheduler(self, name):
-        """
-        Disable the task scheduler server for the node.
-
-        Arguments:
-            name (string): name of the node
-        """
-        if self.isNode(name):
-            self.updateNode(name, scheduler=False)
-        else:
-            raise Exception('"{}" does not exists.'.format(name))
-
-    def hasScheduler(self, name):
-        """
-        Whether a host has an active scheduler or not.
-        """
-        return self.getNode(name).get('scheduler', False)
-
-    def enableSchedulerAll(self, path='/tmp'):
-        """
-        Enable the task scheduler server for all the nodes.
-
-        Arguments:
-            path (string): name of the directory where the
-                           socket file will be placed
-        """
-        for node in self.nodes():
-            self.enableScheduler(node, path)
-
-    def disableSchedulerAll(self):
-        """
-        Disable the task scheduler server for all the nodes.
-        """
-        for node in self.nodes():
-            self.disableScheduler(node)
-
-    def addTaskFile(self, filepath, def_mod='p4utils.utils.traffic_utils'):
-        """
-        Add the tasks to the node.
-
-        Arguments:
-            filepath (string): tasks file path
-            def_mod (string) : default module where to look for exe functions
-
-        Notice:
-            The file has to be a set of lines, where each has the following syntax.
-            A non-default module can be specified in the command with '--mod <module>'.
-            <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
-        """
-        with open(filepath, 'r') as f:
-            lines = [line for line in f.readlines() if line.strip()!='']
-            lines = [line for line in lines if not (line.startswith('//') or line.startswith('#'))]
-            for line in lines:
-                args, kwargs = parse_task_line(line, def_mod=def_mod)
-                self.addTask(*args, **kwargs)
-
-    def addTask(self, node, exe, *args, start=0, duration=0, enableScheduler=True, **kwargs):
-        """
-        Add a task to the node. It can automatically enable the TaskServer
-        on that node with the socket lacated in the default path, if no
-        TaskServer has been previously enabled.
-
-        Arguments:
-            node (string)         : name of the node
-            exe                   : executable to run (either a shell string 
-                                    command or a python function)
-            args                  : positional arguments for the passed function
-            start (float)         : task delay in seconds with respect to the
-                                    network staring time.
-            duration (float)      : task duration time in seconds (if duration is 
-                                    lower than or equal to 0, then the task has no 
-                                    time limitation)
-            enableScheduler (bool): whether to automatically enable the TaskServer or not
-            kwargs                : key-word arguments for the passed function
-        """
-        if self.isNode(node):
-            # If the TaskServer is not enabled, enable it.
-            if not self.hasScheduler(node) and enableScheduler:
-                self.enableScheduler(node)
-            elif not self.hasScheduler(node) and not enableScheduler:
-                raise Exception('"{}" does not have a scheduler.'. format(node))
-            self.tasks.setdefault(node, [])
-            # Parse execution parameters to pass to the server
-            kwargs.update(start=start, duration=duration)
-            args = list(args)
-            args.insert(0, exe)
-            params = (args, kwargs)
-            # Append task to tasks
-            self.tasks[node].append(params)
-        else:
-            raise Exception('"{}" does not exists.'.format(node))
-
-    def setDefaultRoute(self, name, default_route):
-        """
-        Set the node's default route.
-
-        Arguments:
-            name (string)         : name of the node
-            default_route (string): default route IP
-        """
-        if self.isNode(name):
-            self.updateNode(name, defaultRoute='via {}'.format(default_route))
-        else:
-            raise Exception('"{}" does not exists.'.format(name))
-
-## Hosts
-    def enableDhcp(self, name):
-        """
-        Enable DHCP server in hosts.
-        """
-        if self.isHost(name):
-            self.updateNode(name, dhcp=True)
-        else:
-            raise Exception('"{}" is not a host.'.format(name))
-
-    def disableDhcp(self, name):
-        """
-        Disable DHCP server in hosts.
-        """
-        if self.isHost(name):
-            self.updateNode(name, dhcp=False)
-        else:
-            raise Exception('"{}" is not a host.'.format(name))
-
-    def enableDhcpAll(self):
-        """
-        Enable DHCP for all the hosts.
-        """
-        for host in self.hosts():
-            self.enableDhcp(host)
-    
-    def disableDhcpAll(self):
-        """
-        Disable DHCP for all the hosts.
-        """
-        for host in self.hosts():
-            self.disableDhcp(host)
-
-    def disableDhcpAll(self):
-        """
-        Disable DHCP for all the hosts.
-        """
-        for host in self.hosts():
-            self.disableDhcp(host)
-
-## Switches
-    def setSwitchDpid(self, name, dpid):
-        """
-        Set Switch DPID. Only applies to non P4 switches
-        since their DPID is determined by their ID.
-
-        Arguments:
-            name (string): name of the P4 switch
-            dpid (string): switch DPID (16 hexadecimal characters)
-        """
-        if self.isSwitch(name):
-            if self.isP4Switch(name):
-                raise Exception('cannot set DPID to P4 switches.')
-            else:
-                self.updateNode(name, dpid=dpid)
-        else:
-            raise Exception('"{}" is not a switch.'.format(name))
-
-## P4 Switches
-    def setP4Source(self, name, p4_src):
-        """
-        Set the P4 source for the switch.
-
-        Arguments:
-            name (string)  : name of the P4 switch
-            p4_src (string): path to the P4 fil
-        """
-        if self.isP4Switch(name):
-            self.updateNode(name, p4_src=p4_src)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def setP4SourceAll(self, p4_src):
-        """
-        Set the same P4 source for all the P4 switches.
-
-        Arguments:
-            name (string)  : name of the P4 switch
-            p4_src (string): path to the P4 file
-        """
-        for p4switch in self.p4switches():
-            self.setP4Source(p4switch, p4_src)
-
-    def setP4CliInput(self, name, cli_input):
-        """
-        Set the path to the command line configuration file for
-        the Thrift capable switch.
-
-        Arguments:
-            name (string)     : name of the P4 switch
-            cli_input (string): path to the command line configuration
-                                file
-        """
-        if self.isP4Switch(name):
-            self.updateNode(name, cli_input=cli_input)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def setP4SwitchId(self, name, id):
-        """
-        Set P4 Switch ID.
-
-        Arguments:
-            name (string): name of the P4 switch
-            id (int)     : P4 switch ID
-        """
-        if self.isP4Switch(name):
-            self.updateNode(name, device_id=id)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def setThriftPort(self, name, port):
-        """
-        Set the thrift port number for the P4 switch.
-
-        Arguments:
-            name (string): name of the P4 switch
-            port (int)   : thrift port number
-        """
-        if self.isP4Switch(name):
-            self.updateNode(name, thrift_port=port)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def enableDebugger(self, name):
-        """
-        Enable debugger for switch.
-
-        Arguments:
-            name (string): name of the P4 switch
-        """
-        if self.isP4Switch(name):
-            self.updateNode(name, enable_debugger=True)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def disableDebugger(self, name):
-        """
-        Disable debugger for switch.
-
-        Arguments:
-            name (string): name of the P4 switch
-        """            
-        if self.isP4Switch(name):
-            self.updateNode(name, enable_debugger=False)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def enableDebuggerAll(self):
-        """
-        Enable debugger for all the switches.
-        """
-        for switch in self.p4switches():
-            self.enableDebugger(switch)
-
-    def disableDebuggerAll(self):
-        """
-        Disable debugger for all the switches.
-        """
-        for switch in self.p4switches():
-            self.disableDebugger(switch)
-
-    def enablePcapDump(self, name, pcap_dir='./pcap'):
-        """
-        Enable pcap dump for switch.
-
-        Arguments:
-            name (string)    : name of the P4 switch
-            pcap_dir (string): where to save pcap files
-        """            
-        if self.isP4Switch(name):
-            self.updateNode(name, pcap_dump=True, pcap_dir=pcap_dir)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def disablePcapDump(self, name):
-        """
-        Disable pcap dump for switch.
-
-        Arguments:
-            name (string): name of the P4 switch
-        """
-        if self.isP4Switch(name):
-            self.updateNode(name, pcap_dump=False)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def enablePcapDumpAll(self, pcap_dir='./pcap'):
-        """
-        Enable pcap dump for all the switches.
-
-        Arguments:
-            pcap_dir (string): where to save pcap files
-        """
-        for switch in self.p4switches():
-            self.enablePcapDump(switch, pcap_dir=pcap_dir)
-
-    def disablePcapDumpAll(self):
-        """
-        Disable pcap dump for all the switches.
-        """
-        for switch in self.p4switches():
-            self.disablePcapDump(switch)
-
-    def enableCpuPort(self, name):
-        """
-        Enable CPU port on switch.
-
-        Arguments:
-            name (string): name of the P4 switch
-        """
-        if self.isP4Switch(name):
-            # We use the bridge but at the same time we use the bug it has so the
-            # interfaces are not added to it, but at least we can clean easily thanks to that.
-            if self.cpu_bridge is None:
-                self.cpu_bridge = self.addSwitch('sw-cpu', cls=LinuxBridge, dpid='1000000000000000')
-            self.addLink(name, self.cpu_bridge, intfName1='{}-cpu-eth0'.format(name), intfName2= '{}-cpu-eth1'.format(name), deleteIntfs=True)
-            self.updateNode(name, cpu_port=True)
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def disableCpuPort(self, name):
-        """
-        Disable CPU port on switch.
-
-        Arguments:
-            name (string): name of the P4 switch
-        """
-        if self.isP4Switch(name):
-            self.popLink(name, 'sw-cpu')
-            self.updateNode(name, cpu_port=False)
-            delete_cpu_bridge = True
-            for node in self.nodes():
-                if self.hasCpuPort(node):
-                    delete_cpu_bridge = False
-                    break
-            if delete_cpu_bridge and self.cpu_bridge is not None:
-                if self.isNode(self.cpu_bridge):
-                    self.popNode(self.cpu_bridge)
-                self.cpu_bridge = None
-        else:
-            raise Exception('"{}" is not a P4 switch.'.format(name))
-
-    def enableCpuPortAll(self):
-        """
-        Enable CPU port on all the P4 switches.
-
-        Notice:
-            This applies only to already defined switches. If other
-            switches are added after this command, they won't have
-            any CPU port enabled.
-        """
-        for switch in self.p4switches():
-            self.enableCpuPort(switch)
-
-    def disableCpuPortAll(self):
-        """
-        Disable CPU port on all the P4 switches.
-        """
-        for switch in self.p4switches():
-            self.popLink(switch, 'sw-cpu')
-            self.updateNode(switch, cpu_port=False)
-        self.popNode(self.cpu_bridge)
-        self.cpu_bridge = None
-
-## P4 Runtime Switches
-    def setGrpcPort(self, name, port):
-        """
-        Set the grpc port number for the P4 runtime switch.
-
-        Arguments:
-            name (string): name of the P4 runtime switch
-            port (int)   : thrift port number
-        """
-        if self.isP4RuntimeSwitch(name):
-            self.updateNode(name, grpc_port=port)
-        else:
-            raise Exception('"{}" is not a P4 runtime switch.'.format(name))
-
-## Links
     def setBw(self, node1, node2, bw, key=None):
         """
         Set link bandwidth. If key is None, then the link with the lowest
@@ -2260,6 +1429,825 @@ class NetworkAPI(Topo):
         """
         for node1, node2, key in self.links(withKeys=True):
             self.setMaxQueueSize(node1, node2, max_queue_size, key=key)
+
+## Nodes
+# Generic nodes
+    def addNode(self, name, **opts):
+        """
+        Add Node to graph.
+
+        Arguments:
+            name (string): name
+            opts (kwargs): node options
+
+        Returns:
+            node name
+        """
+        return super().addNode(name, **opts)
+    
+    def getNode(self, name):
+        """
+        Get node information.
+
+        Arguments:
+            node (string): Mininet node name
+
+        Returns:
+            node metadata dict
+        """
+        return self.nodeInfo(name)
+
+    def updateNode(self, name, **opts):
+        """
+        Update node metadata dict. In fact, delete the node
+        and create a new one with the updated information.
+
+        Arguments:
+            name (string): node name
+            opts         : node options to update (optional)
+        
+        Returns:
+            node name
+        """
+        if self.isHost(name):
+            node_setter = self.addHost
+        elif self.isP4RuntimeSwitch(name):
+            node_setter = self.addP4RuntimeSwitch
+        elif self.isP4Switch(name):
+            node_setter = self.addP4Switch
+        elif self.isSwitch(name):
+            node_setter = self.addSwitch
+        elif self.isRouter(name):
+            node_setter = self.addRouter
+        else:
+            node_setter = self.addNode
+
+        info = self.popNode(name, remove_links=False)
+        merge_dict(info, opts)
+        return node_setter(name, **info)
+
+    def deleteNode(self, node, remove_links=True):
+        """
+        Delete node.
+
+        Arguments:
+            node         (string): Mininet node name
+            remove_links (bool)  : whether to remove all the incident
+                                   links
+        """
+        # Delete incident links
+        if remove_links:
+            self.g.edge.pop(node, None)
+            for n in self.g.edge.keys():
+                self.g.edge[n].pop(node, None)
+
+        # Delete node
+        self.g.node.pop(node) 
+
+    def popNode(self, name, remove_links=True):
+        """
+        Pop node.
+
+        Arguments:
+            node1 (string)     : nodes to link together
+            remove_links (bool): whether to remove all the incident
+                                 links
+
+        Returns:
+            node metadata dict
+        """
+        node = self.getNode(name)
+        self.deleteNode(name, remove_links=remove_links)
+        return node
+
+    def isNode(self, node):
+        """
+        Check if node exists.
+
+        Arguments:
+            node (string): node name
+
+        Returns:
+            True if node exists, else False (bool)
+        """
+        return node in self.g.nodes()
+
+    def nodes(self, sort=True, withInfo=False):
+        """
+        Return nodes in graph.
+
+        Arguments:
+            sort (bool)    : sort nodes alphabetically
+            withInfo (bool): retrieve node information
+        """
+        nodes = self.g.nodes(data=withInfo)
+        if not sort:
+            return nodes
+        else:
+            # Ignore info when sorting
+            tupleSize = 2
+            return sorted(nodes, key=(lambda l: naturalSeq(l[:tupleSize])))
+
+    def enableLog(self, name, log_dir='./log'):
+        """
+        Enable log for node (also for the task scheduler).
+
+        Arguments:
+            name (string)   : name of the node
+            log_dir (string): where to save log files
+        """            
+        if self.isNode(name):
+            self.updateNode(name, log_enabled=True, log_dir=log_dir)
+        else:
+            raise Exception('"{}" does not exists.'.format(name))
+
+    def disableLog(self, name):
+        """
+        Disable log for node (also for the task scheduler).
+
+        Arguments:
+            name (string): name of the node
+        """            
+        if self.isNode(name):
+            self.updateNode(name, log_enabled=False)
+        else:
+            raise Exception('"{}" does not exists.'.format(name))
+
+    def enableLogAll(self, log_dir='./log'):
+        """
+        Enable log for all the nodes (also for the task schedulers).
+
+        Arguments:
+            log_dir (string): where to save log files
+        """
+        for node in self.nodes():
+            self.enableLog(node, log_dir=log_dir)
+
+    def disableLogAll(self):
+        """
+        Disable log for all the nodes (also for the task schedulers).
+        """
+        for node in self.nodes():
+            self.disableLog(node)
+
+    def enableScheduler(self, name, path='/tmp'):
+        """
+        Enable the task scheduler server for the node.
+
+        Arguments:
+            name (string): name of the node
+            path (string): name of the directory where the
+                           socket file will be placed
+        """
+        if self.isNode(name):
+            self.updateNode(name, scheduler=True, socket_path=path)
+        else:
+            raise Exception('"{}" does not exists.'.format(name))
+
+    def disableScheduler(self, name):
+        """
+        Disable the task scheduler server for the node.
+
+        Arguments:
+            name (string): name of the node
+        """
+        if self.isNode(name):
+            self.updateNode(name, scheduler=False)
+        else:
+            raise Exception('"{}" does not exists.'.format(name))
+
+    def hasScheduler(self, name):
+        """
+        Whether a host has an active scheduler or not.
+        """
+        return self.getNode(name).get('scheduler', False)
+
+    def enableSchedulerAll(self, path='/tmp'):
+        """
+        Enable the task scheduler server for all the nodes.
+
+        Arguments:
+            path (string): name of the directory where the
+                           socket file will be placed
+        """
+        for node in self.nodes():
+            self.enableScheduler(node, path)
+
+    def disableSchedulerAll(self):
+        """
+        Disable the task scheduler server for all the nodes.
+        """
+        for node in self.nodes():
+            self.disableScheduler(node)
+
+    def addTaskFile(self, filepath, def_mod='p4utils.utils.traffic_utils'):
+        """
+        Add the tasks to the node.
+
+        Arguments:
+            filepath (string): tasks file path
+            def_mod (string) : default module where to look for exe functions
+
+        Notice:
+            The file has to be a set of lines, where each has the following syntax.
+            A non-default module can be specified in the command with '--mod <module>'.
+            <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
+        """
+        with open(filepath, 'r') as f:
+            lines = [line for line in f.readlines() if line.strip()!='']
+            lines = [line for line in lines if not (line.startswith('//') or line.startswith('#'))]
+            for line in lines:
+                args, kwargs = parse_task_line(line, def_mod=def_mod)
+                self.addTask(*args, **kwargs)
+
+    def addTask(self, node, exe, *args, start=0, duration=0, enableScheduler=True, **kwargs):
+        """
+        Add a task to the node. It can automatically enable the TaskServer
+        on that node with the socket lacated in the default path, if no
+        TaskServer has been previously enabled.
+
+        Arguments:
+            node (string)         : name of the node
+            exe                   : executable to run (either a shell string 
+                                    command or a python function)
+            args                  : positional arguments for the passed function
+            start (float)         : task delay in seconds with respect to the
+                                    network staring time.
+            duration (float)      : task duration time in seconds (if duration is 
+                                    lower than or equal to 0, then the task has no 
+                                    time limitation)
+            enableScheduler (bool): whether to automatically enable the TaskServer or not
+            kwargs                : key-word arguments for the passed function
+        """
+        if self.isNode(node):
+            # If the TaskServer is not enabled, enable it.
+            if not self.hasScheduler(node) and enableScheduler:
+                self.enableScheduler(node)
+            elif not self.hasScheduler(node) and not enableScheduler:
+                raise Exception('"{}" does not have a scheduler.'. format(node))
+            self.tasks.setdefault(node, [])
+            # Parse execution parameters to pass to the server
+            kwargs.update(start=start, duration=duration)
+            args = list(args)
+            args.insert(0, exe)
+            params = (args, kwargs)
+            # Append task to tasks
+            self.tasks[node].append(params)
+        else:
+            raise Exception('"{}" does not exists.'.format(node))
+
+    def setDefaultRoute(self, name, default_route):
+        """
+        Set the node's default route.
+
+        Arguments:
+            name (string)         : name of the node
+            default_route (string): default route IP
+        """
+        if self.isNode(name):
+            self.updateNode(name, defaultRoute='via {}'.format(default_route))
+        else:
+            raise Exception('"{}" does not exists.'.format(name))
+
+    def areNeighbors(self, node1, node2):
+        """
+        Check whether two node are neighbors.
+
+        Arguments:
+            node1, node2 (string): names of the nodes
+
+        Returns:
+            True if node1 and node2 are neighbors, False else.
+        """
+        if node1 in self.g.edge.keys():
+            if node2 in self.g.edge[node1].keys():
+                return True
+        return False
+
+# Hosts
+    def addHost(self, name, **opts):
+        """
+        Add P4 host node to Mininet topology.
+        If the node is already present, overwrite it.
+
+        Arguments:
+            name (string): switch name
+            opts (kwargs): switch options (optional)
+
+        Returns:
+            P4 host name (string)
+        """
+        opts.setdefault('cls', P4Host)
+        opts.update(isHost = True)
+        return super().addHost(name, **opts)
+
+    def isHost(self, node):
+        """
+        Check if node is a host.
+
+        Arguments:
+            node (string): node name
+
+        Returns:
+            True if node is a host, else False (bool)
+        """
+        return self.g.node[node].get('isHost', False)
+
+    def hosts(self, sort=True, withInfo=False):
+        """
+        Return hosts.
+        
+        Arguments:
+            sort (bool)    : sort hosts alphabetically
+            withInfo (bool): retrieve node information
+
+        Returns:
+            list of hosts
+        """
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isHost(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isHost(n)]
+
+    def enableDhcp(self, name):
+        """
+        Enable DHCP server in hosts.
+        """
+        if self.isHost(name):
+            self.updateNode(name, dhcp=True)
+        else:
+            raise Exception('"{}" is not a host.'.format(name))
+
+    def disableDhcp(self, name):
+        """
+        Disable DHCP server in hosts.
+        """
+        if self.isHost(name):
+            self.updateNode(name, dhcp=False)
+        else:
+            raise Exception('"{}" is not a host.'.format(name))
+
+    def enableDhcpAll(self):
+        """
+        Enable DHCP for all the hosts.
+        """
+        for host in self.hosts():
+            self.enableDhcp(host)
+    
+    def disableDhcpAll(self):
+        """
+        Disable DHCP for all the hosts.
+        """
+        for host in self.hosts():
+            self.disableDhcp(host)
+
+    def disableDhcpAll(self):
+        """
+        Disable DHCP for all the hosts.
+        """
+        for host in self.hosts():
+            self.disableDhcp(host)
+
+# Switches
+    def addSwitch(self, name, **opts):
+        """
+        Add switch node to Mininet topology.
+        If the node is already present, overwrite it.
+
+        Arguments:
+            name (string): switch name
+            opts (kwargs): switch options
+
+        Returns:
+            switch name (string)
+        """
+        dpid = opts.get('dpid')
+        if dpid is not None:
+            switch_id = int(dpid, 16)
+            if switch_id in self.switch_ids():
+                raise Exception('dpid {} already in use.'.format(dpid))
+
+        if not opts and self.sopts:
+            opts = self.sopts
+        opts.update(isSwitch = True)
+        return self.addNode(name, **opts)
+
+    def isSwitch(self, name):
+        """
+        Check if node is a switch.
+
+        Arguments:
+            node (string): Mininet node name
+
+        Returns:
+            True if node is a switch, else False (bool)
+        """
+        return super().isSwitch(name)
+    
+    def switches(self, sort=True, withInfo=False):
+        """
+        Return switches.
+
+        Arguments:
+            sort (bool)    : sort switches alphabetically
+            withInfo (bool): retrieve node information
+           
+        Returns: 
+            list of switches
+        """
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isSwitch(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isSwitch(n)]
+
+    def setSwitchDpid(self, name, dpid):
+        """
+        Set Switch DPID. Only applies to non P4 switches
+        since their DPID is determined by their ID.
+
+        Arguments:
+            name (string): name of the P4 switch
+            dpid (string): switch DPID (16 hexadecimal characters)
+        """
+        if self.isSwitch(name):
+            if self.isP4Switch(name):
+                raise Exception('cannot set DPID to P4 switches.')
+            else:
+                self.updateNode(name, dpid=dpid)
+        else:
+            raise Exception('"{}" is not a switch.'.format(name))
+
+# P4Switches
+    def addP4Switch(self, name, **opts):
+        """
+        Add P4 switch node to Mininet topology.
+        If the node is already present, overwrite it.
+
+        Arguments:
+            name (string): switch name
+            opts (kwargs): switch options
+
+        Returns:
+            P4 switch name (string)
+        """
+        switch_id = opts.get('device_id')
+        if switch_id is not None:
+            if switch_id in self.switch_ids():
+                raise Exception('switch ID {} already in use.'.format(switch_id))
+
+        opts.setdefault('cls', P4Switch)
+        opts.update(isP4Switch = True)
+        return self.addSwitch(name, **opts)
+
+    def isP4Switch(self, node):
+        """
+        Check if node is a P4 switch.
+
+        Arguments:
+            node (string): node name
+
+        Returns:
+            True if node is a P4 switch, else False (bool)
+        """
+        return self.g.node[node].get('isP4Switch', False)
+
+    def p4switches(self, sort=True, withInfo=False):
+        """
+        Return P4 switches.
+
+        Arguments:
+            sort (bool)    : sort switches alphabetically
+            withInfo (bool): retrieve node information
+
+        Returns:
+            list of P4 switches
+        """
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isP4Switch(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4Switch(n)]
+
+    def setP4Source(self, name, p4_src):
+        """
+        Set the P4 source for the switch.
+
+        Arguments:
+            name (string)  : name of the P4 switch
+            p4_src (string): path to the P4 fil
+        """
+        if self.isP4Switch(name):
+            self.updateNode(name, p4_src=p4_src)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
+    def setP4SourceAll(self, p4_src):
+        """
+        Set the same P4 source for all the P4 switches.
+
+        Arguments:
+            name (string)  : name of the P4 switch
+            p4_src (string): path to the P4 file
+        """
+        for p4switch in self.p4switches():
+            self.setP4Source(p4switch, p4_src)
+
+    def setP4CliInput(self, name, cli_input):
+        """
+        Set the path to the command line configuration file for
+        the Thrift capable switch.
+
+        Arguments:
+            name (string)     : name of the P4 switch
+            cli_input (string): path to the command line configuration
+                                file
+        """
+        if self.isP4Switch(name):
+            self.updateNode(name, cli_input=cli_input)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
+    def setP4SwitchId(self, name, id):
+        """
+        Set P4 Switch ID.
+
+        Arguments:
+            name (string): name of the P4 switch
+            id (int)     : P4 switch ID
+        """
+        if self.isP4Switch(name):
+            self.updateNode(name, device_id=id)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
+    def setThriftPort(self, name, port):
+        """
+        Set the thrift port number for the P4 switch.
+
+        Arguments:
+            name (string): name of the P4 switch
+            port (int)   : thrift port number
+        """
+        if self.isP4Switch(name):
+            self.updateNode(name, thrift_port=port)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
+    def enableDebugger(self, name):
+        """
+        Enable debugger for switch.
+
+        Arguments:
+            name (string): name of the P4 switch
+        """
+        if self.isP4Switch(name):
+            self.updateNode(name, enable_debugger=True)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
+    def disableDebugger(self, name):
+        """
+        Disable debugger for switch.
+
+        Arguments:
+            name (string): name of the P4 switch
+        """            
+        if self.isP4Switch(name):
+            self.updateNode(name, enable_debugger=False)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
+    def enableDebuggerAll(self):
+        """
+        Enable debugger for all the switches.
+        """
+        for switch in self.p4switches():
+            self.enableDebugger(switch)
+
+    def disableDebuggerAll(self):
+        """
+        Disable debugger for all the switches.
+        """
+        for switch in self.p4switches():
+            self.disableDebugger(switch)
+
+    def enablePcapDump(self, name, pcap_dir='./pcap'):
+        """
+        Enable pcap dump for switch.
+
+        Arguments:
+            name (string)    : name of the P4 switch
+            pcap_dir (string): where to save pcap files
+        """            
+        if self.isP4Switch(name):
+            self.updateNode(name, pcap_dump=True, pcap_dir=pcap_dir)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
+    def disablePcapDump(self, name):
+        """
+        Disable pcap dump for switch.
+
+        Arguments:
+            name (string): name of the P4 switch
+        """
+        if self.isP4Switch(name):
+            self.updateNode(name, pcap_dump=False)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
+    def enablePcapDumpAll(self, pcap_dir='./pcap'):
+        """
+        Enable pcap dump for all the switches.
+
+        Arguments:
+            pcap_dir (string): where to save pcap files
+        """
+        for switch in self.p4switches():
+            self.enablePcapDump(switch, pcap_dir=pcap_dir)
+
+    def disablePcapDumpAll(self):
+        """
+        Disable pcap dump for all the switches.
+        """
+        for switch in self.p4switches():
+            self.disablePcapDump(switch)
+
+    def hasCpuPort(self, node):
+        """
+        Check if node has a CPU port.
+
+        Arguments:
+            node (string): Mininet node name
+
+        Returns:
+            True if node has a CPU port, else False (bool)
+        """
+        if self.isP4Switch(node):
+            return self.getNode(node).get('cpu_port', False)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(node))
+
+    def enableCpuPort(self, name):
+        """
+        Enable CPU port on switch.
+
+        Arguments:
+            name (string): name of the P4 switch
+        """
+        if self.isP4Switch(name):
+            # We use the bridge but at the same time we use the bug it has so the
+            # interfaces are not added to it, but at least we can clean easily thanks to that.
+            if self.cpu_bridge is None:
+                self.cpu_bridge = self.addSwitch('sw-cpu', cls=LinuxBridge, dpid='1000000000000000')
+            self.addLink(name, self.cpu_bridge, intfName1='{}-cpu-eth0'.format(name), intfName2= '{}-cpu-eth1'.format(name), deleteIntfs=True)
+            self.updateNode(name, cpu_port=True)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
+    def disableCpuPort(self, name):
+        """
+        Disable CPU port on switch.
+
+        Arguments:
+            name (string): name of the P4 switch
+        """
+        if self.isP4Switch(name):
+            if self.hasCpuPort(name):
+                self.popLink(name, 'sw-cpu')
+                self.updateNode(name, cpu_port=False)
+                delete_cpu_bridge = True
+                for switch in self.p4switches():
+                    if self.hasCpuPort(switch):
+                        delete_cpu_bridge = False
+                        break
+                if delete_cpu_bridge and self.cpu_bridge is not None:
+                    if self.isNode(self.cpu_bridge):
+                        self.popNode(self.cpu_bridge)
+                    self.cpu_bridge = None
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
+    def enableCpuPortAll(self):
+        """
+        Enable CPU port on all the P4 switches.
+
+        Notice:
+            This applies only to already defined switches. If other
+            switches are added after this command, they won't have
+            any CPU port enabled.
+        """
+        for switch in self.p4switches():
+            self.enableCpuPort(switch)
+
+    def disableCpuPortAll(self):
+        """
+        Disable CPU port on all the P4 switches.
+        """
+        for switch in self.p4switches():
+            self.disableCpuPort(switch)
+
+# P4RuntimeSwitches
+    def addP4RuntimeSwitch(self, name, **opts):
+        """
+        Add P4 runtime switch node to Mininet topology.
+        If the node is already present, overwrite it.
+
+        Arguments:
+            name (string): switch name
+            opts (kwargs): switch options
+
+        Returns:
+            P4 runtime switch name (string)
+        """
+        opts.setdefault('cls', P4RuntimeSwitch)
+        opts.update(isP4RuntimeSwitch = True)
+        return self.addP4Switch(name, **opts)
+
+    def isP4RuntimeSwitch(self, node):
+        """
+        Check if node is a P4 runtime switch.
+
+        Arguments:
+            node (string): node name
+
+        Returns:
+            True if node is a P4 switch, else False (bool)
+        """
+        return self.g.node[node].get('isP4RuntimeSwitch', False)
+
+    def p4rtswitches(self, sort=True, withInfo=False):
+        """
+        Return P4 runtime switches.
+
+        Arguments:
+            sort (bool)    : sort switches alphabetically
+            withInfo (bool): retrieve node information
+
+        Returns:
+            list of P4 runtime switches
+        """
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isP4RuntimeSwitch(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isP4RuntimeSwitch(n)]
+
+    def setGrpcPort(self, name, port):
+        """
+        Set the grpc port number for the P4 runtime switch.
+
+        Arguments:
+            name (string): name of the P4 runtime switch
+            port (int)   : thrift port number
+        """
+        if self.isP4RuntimeSwitch(name):
+            self.updateNode(name, grpc_port=port)
+        else:
+            raise Exception('"{}" is not a P4 runtime switch.'.format(name))
+
+# Routers
+    def addRouter(self, name, **opts):
+        """
+        Add router node to Mininet topology.
+        If the node is already present, overwrite it.
+
+        Arguments:
+            name (string): switch name
+            opts (kwargs): switch options
+
+        Returns:
+            router name (string)
+        """
+        opts.setdefault('cls', FRRouter)
+        opts.update(isRouter = True)
+        return self.addNode(name, **opts)
+
+    def isRouter(self, node):
+        """
+        Check if node is a router.
+
+        Arguments:
+            node (string): node name
+
+        Returns:
+            True if node is a router, else False (bool)
+        """
+        return self.g.node[node].get('isRouter', False)
+
+    def routers(self, sort=True, withInfo=False):
+        """
+        Return routers.
+
+        Arguments:
+            sort (bool)    : sort routers alphabetically
+            withInfo (bool): retrieve node information
+
+        Returns:
+            list of routers
+        """
+        if withInfo:
+            return [n for n in self.nodes(sort=sort, withInfo=True) if self.isRouter(n[0])]
+        else:
+            return [n for n in self.nodes(sort=sort, withInfo=False) if self.isRouter(n)]   
 
 ## Assignment strategies
     def l2(self):
