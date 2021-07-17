@@ -1122,8 +1122,7 @@ class ThriftAPI(object):
 
         table = self.get_res("table", table_name, ResType.table)
         match_keys = list(map(str, match_keys))
-        key = tuple(parse_match_key(table, match_keys))
-
+        key = str(list(parse_match_key(table, match_keys)))
         entry_handle = self.table_entries_match_to_handle[table.name].get(key, None)
         if entry_handle is not None and pop:
             del self.table_entries_match_to_handle[table.name][key]
