@@ -1086,7 +1086,7 @@ class ThriftAPI(object):
         #for sub_table_name in self.table_multiple_names[table.name]:
         try:
             entry_handle = int(entry_handle)
-            self.table_entries_match_to_handle[table.name] = {str(match_keys) : entry_handle}
+            self.table_entries_match_to_handle[table.name][str(match_keys)] = entry_handle
         except:
             print("Could not add entry with handle {}".format(entry_handle))
             return entry_handle
@@ -1876,7 +1876,7 @@ class ThriftAPI(object):
             self.table_entries_match_to_handle[table_name].clear()
             switch_entries = self.client.bm_mt_get_entries(0, table.name)
             for entry in switch_entries:
-                self.table_entries_match_to_handle[table_name] = {str(entry.match_key) : entry.entry_handle}
+                self.table_entries_match_to_handle[table_name][str(entry.match_key)] = entry.entry_handle
 
     @handle_bad_input
     def table_dump(self, table_name):
