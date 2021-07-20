@@ -5,7 +5,7 @@ KERNEL=$(uname -r)
 DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 USER_NAME=$(whoami)
 BUILD_DIR=~/p4-tools
-SCRIPT_DIR=$(dirname "$0")
+SCRIPT_DIR=$(dirname $(realpath $0))
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
 DEBUG_FLAGS=true
 P4_RUNTIME=true
