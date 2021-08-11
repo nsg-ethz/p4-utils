@@ -40,45 +40,39 @@ from p4utils.mininetlib.network_API import NetworkAPI
 class AppRunner(NetworkAPI):
     """
     Class for running P4 applications.
-    """
 
-    def __init__(self, conf_file,
-                 cli_enabled=True,
-                 log_dir=None,
-                 pcap_dir=None,
-                 verbosity='info'):
-        """
-        Initializes some attributes and reads the topology json.
+    Initializes some attributes and reads the topology json.
 
-        Attributes:
-            conf_file (string): a JSON file which describes the mininet topology.
-            cli_enabled (bool): enable mininet CLI.
-            log_dir (string): directory for mininet log files.
-            pcap_dir (string): directory where to store pcap files.
-            verbosity (string): see https://github.com/mininet/mininet/blob/57294d013e780cccc6b4b9af151906b382c4d8a7/mininet/log.py#L14
+    Attributes:
+        conf_file (string): a JSON file which describes the mininet topology.
+        cli_enabled (bool): enable mininet CLI.
+        log_dir (string): directory for mininet log files.
+        pcap_dir (string): directory where to store pcap files.
+        verbosity (string): see https://github.com/mininet/mininet/blob/57294d013e780cccc6b4b9af151906b382c4d8a7/mininet/log.py#L14
 
-        The following attributes are initialized during the execution and are
-        not specified in the constructor:
-            pcap_dump (bool)    : determines if we generate pcap files for interfaces.
-            hosts (list)        : list of mininet host names.
-            switches (dict)     : mininet host names and their associated properties.
-            links (list)        : list of mininet link properties.
-            clients (list)      : list of clients (one per client-capable switch) to populate tables
-            compilers (list)    : list of compilers (one per P4 source provided) to compile P4 code
-            conf (dict)         : parsed configuration from conf_file.
-            net (Mininet object): the mininet instance.
-            *_module (dict/obj) : module dict used to import the specified module (see below)
-            *_node (dict/obj)   : node dict uset to import the specified Mininet node (see below)
-            
-        Modules and nodes available
-        Inside self.conf can be present several module configuration objects. These are the possible values:
-            - "switch_node" loads the switch node to be used with Mininet (see mininetlib/node.py),
-            - "compiler_module" loads the compiler for P4 codes,
-            - "host_node" loads the host node to be used with Mininet,
-            - "client_module" loads the client to program switches from files.
-            - "mininet_module" loads the network module
+    The following attributes are initialized during the execution and are
+    not specified in the constructor:
+        pcap_dump (bool)    : determines if we generate pcap files for interfaces.
+        hosts (list)        : list of mininet host names.
+        switches (dict)     : mininet host names and their associated properties.
+        links (list)        : list of mininet link properties.
+        clients (list)      : list of clients (one per client-capable switch) to populate tables
+        compilers (list)    : list of compilers (one per P4 source provided) to compile P4 code
+        conf (dict)         : parsed configuration from conf_file.
+        net (Mininet object): the mininet instance.
+        *_module (dict/obj) : module dict used to import the specified module (see below)
+        *_node (dict/obj)   : node dict uset to import the specified Mininet node (see below)
+        
+    Modules and nodes available
+    Inside self.conf can be present several module configuration objects. These are the possible values:
+        - "switch_node" loads the switch node to be used with Mininet (see mininetlib/node.py),
+        - "compiler_module" loads the compiler for P4 codes,
+        - "host_node" loads the host node to be used with Mininet,
+        - "client_module" loads the client to program switches from files.
+        - "mininet_module" loads the network module
 
-        Example of JSON structure of conf_file:
+    Example of JSON structure of conf_file::
+    
         {
             "p4_src": <path to gobal p4 source> (string),
             "cli": <true|false> (bool),
@@ -157,9 +151,15 @@ class AppRunner(NetworkAPI):
             }
         }
 
-        Notice: none of the modules or nodes are mandatory. In case they are not specified,
-        default settings will be used.
-        """
+    Notice: none of the modules or nodes are mandatory. In case they are not specified,
+    default settings will be used.
+    """
+
+    def __init__(self, conf_file,
+                 cli_enabled=True,
+                 log_dir=None,
+                 pcap_dir=None,
+                 verbosity='info'):
         
         super().__init__()
 
@@ -321,25 +321,30 @@ class AppRunner(NetworkAPI):
         self.startNetwork()
 
     def parse_hosts(self, unparsed_hosts):
-        """
-        Parse hosts and add them to the network. Hosts have
-        the following structure:
-        "hosts":
-        {
-            host_name:
-            {
-                "scheduler": <true|false> (*)
-                "socket_path": <dir to socket file> (*)
-                "defaultRoute": "via <gateway ip>" (*)
-                "dhcp": <true|false> (*)
-                "log_enabled" : <true|false> (bool), (*)
-                "log_dir": <log path for switch binary> (string), (*)
-                "host_node": custom_switch_node (dict) (*)
-            },
-            ...
-        }
+        """Parse hosts from the JSON configuration files and add 
+        them to the network initializer.
 
-        (*) None of these parameters is mandatory.
+        Example:
+            Hosts have the following description in the JSON network 
+            configuration file::
+
+                "hosts":
+                {
+                    host_name:
+                    {
+                        "scheduler": <true|false> (*)
+                        "socket_path": <dir to socket file> (*)
+                        "defaultRoute": "via <gateway ip>" (*)
+                        "dhcp": <true|false> (*)
+                        "log_enabled" : <true|false> (bool), (*)
+                        "log_dir": <log path for switch binary> (string), (*)
+                        "host_node": custom_switch_node (dict) (*)
+                    },
+                    ...
+                }
+
+            (*) None of these parameters is mandatory.
+
         """
         default_params = {
                             'log_enabled': self.log_enabled,

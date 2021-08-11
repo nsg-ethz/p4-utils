@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.mininetlib.cli &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">p4utils</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>p4utils.mininetlib.cli</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for p4utils.mininetlib.cli</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">traceback</span> <span class="k">as</span> <span class="nn">tbk</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">mininet.cli</span> <span class="kn">import</span> <span class="n">CLI</span>
+<span class="kn">from</span> <span class="nn">mininet.log</span> <span class="kn">import</span> <span class="n">debug</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span>
+
+<span class="kn">from</span> <span class="nn">p4utils.utils.helper</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="exception_handler"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.exception_handler">[docs]</a><span class="k">def</span> <span class="nf">exception_handler</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prevent exceptions from terminating the client but still</span>
+<span class="sd">    print them.&quot;&quot;&quot;</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">()</span>
+            <span class="n">tbk</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">handle</span></div>
+
+
+<div class="viewcode-block" id="P4CLI"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI">[docs]</a><span class="k">class</span> <span class="nc">P4CLI</span><span class="p">(</span><span class="n">CLI</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network_api</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            network_api: instance of NetworkAPI</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span> <span class="o">=</span> <span class="n">network_api</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">network_api</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># self.mn stores the Mininet network object according to the parent object</span>
+
+<div class="viewcode-block" id="P4CLI.getNode"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.getNode">[docs]</a>    <span class="k">def</span> <span class="nf">getNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the requested node.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            node_name (string): name of the P4 Switch</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            node (Mininet node object): requested node or None if no such object was found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check if the node is in Mininet</span>
+        <span class="k">if</span> <span class="n">node_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Node </span><span class="si">{}</span><span class="s1"> not found in the network.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_name</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">node</span></div>
+
+<div class="viewcode-block" id="P4CLI.getP4Switch"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.getP4Switch">[docs]</a>    <span class="k">def</span> <span class="nf">getP4Switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the requested P4 Switch.</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            node_name (string): name of the P4 Switch</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            p4switch (Mininet node object): requested node or None if no such object was found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">isP4Switch</span> <span class="o">=</span> <span class="n">get_node_attr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s1">&#39;isP4Switch&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">isP4Switch</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s1">&#39;P4 Switch </span><span class="si">{}</span><span class="s1"> not found in the network</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_name</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">node</span></div>
+
+<div class="viewcode-block" id="P4CLI.do_p4switch_stop"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_p4switch_stop">[docs]</a>    <span class="nd">@exception_handler</span>
+    <span class="k">def</span> <span class="nf">do_p4switch_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop simple switch from switch namespace.&quot;&quot;&quot;</span>
+        <span class="n">switch_name</span> <span class="o">=</span> <span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="c1"># Check args validity</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">switch_name</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">switch_name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Wrong syntax.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;usage: p4switch_stop &lt;p4switch name&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">switch_name</span> <span class="o">=</span> <span class="n">switch_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">p4switch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getP4Switch</span><span class="p">(</span><span class="n">switch_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">p4switch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;usage: p4switch_stop &lt;p4switch name&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="n">p4switch</span><span class="o">.</span><span class="n">stop_p4switch</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="P4CLI.do_p4switch_start"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_p4switch_start">[docs]</a>    <span class="nd">@exception_handler</span>
+    <span class="k">def</span> <span class="nf">do_p4switch_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Start again simple switch from namespace.&quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="c1"># Check args validity</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Wrong syntax.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;usage: p4switch_start &lt;p4switch name&gt; [--p4src &lt;path&gt;] [--cmds &lt;path&gt;]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">switch_name</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">p4switch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getP4Switch</span><span class="p">(</span><span class="n">switch_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">p4switch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;usage: p4switch_start &lt;p4switch name&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Check if switch is running</span>
+        <span class="k">if</span> <span class="n">p4switch</span><span class="o">.</span><span class="n">switch_started</span><span class="p">():</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;P4 Switch already running, stop it first: p4switch_stop </span><span class="si">{}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">switch_name</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Check if new P4 source file has been provided</span>
+        <span class="n">p4_src</span> <span class="o">=</span> <span class="n">get_node_attr</span><span class="p">(</span><span class="n">p4switch</span><span class="p">,</span> <span class="s1">&#39;p4_src&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;--p4src&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">p4_src</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;--p4src&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># Check if file exists</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">p4_src</span><span class="p">):</span>
+                <span class="n">error</span><span class="p">(</span><span class="s1">&#39;File Error: P4 source </span><span class="si">{}</span><span class="s1"> does not exist</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p4_src</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="c1"># Check if its not a file</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">p4_src</span><span class="p">):</span>
+                <span class="n">error</span><span class="p">(</span><span class="s1">&#39;File Error: p4source </span><span class="si">{}</span><span class="s1"> is not a file</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p4_src</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">p4_src</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">compiler</span> <span class="o">=</span> <span class="n">get_by_attr</span><span class="p">(</span><span class="s1">&#39;p4_src&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">p4_src</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">compilers</span><span class="p">)</span>
+            <span class="c1"># If a compiler for the same p4_src has been found</span>
+            <span class="k">if</span> <span class="n">compiler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># If new file has been provided</span>
+                <span class="k">if</span> <span class="n">compiler</span><span class="o">.</span><span class="n">new_source</span><span class="p">():</span>
+                    <span class="n">debug</span><span class="p">(</span><span class="s1">&#39;New p4 source file detected!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">debug</span><span class="p">(</span><span class="s1">&#39;P4 source already compiled!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="c1"># If this file is compiled for the first time</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;comp&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+                <span class="n">debug</span><span class="p">(</span><span class="s1">&#39;New p4 source file detected!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">compiler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;comp&#39;</span><span class="p">][</span><span class="s1">&#39;class&#39;</span><span class="p">](</span><span class="n">p4_src</span><span class="o">=</span><span class="n">p4_src</span><span class="p">,</span>
+                                                                 <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;comp&#39;</span><span class="p">][</span><span class="s1">&#39;kwargs&#39;</span><span class="p">])</span>
+                <span class="n">compiler</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">compilers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compiler</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s1">&#39;No compiler module provided!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Start switch</span>
+        <span class="n">p4switch</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        
+        <span class="n">cmd_path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Check if new cmd file has been provided</span>
+        <span class="k">if</span> <span class="s1">&#39;--cmds&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">cmd_path</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;--cmds&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># Check if file exists</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cmd_path</span><span class="p">):</span>
+                <span class="n">error</span><span class="p">(</span><span class="s1">&#39;File Error: command file </span><span class="si">{}</span><span class="s1"> does not exist</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd_path</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="c1"># Check if its not a file</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">cmd_path</span><span class="p">):</span>
+                <span class="n">error</span><span class="p">(</span><span class="s1">&#39;File Error: command file </span><span class="si">{}</span><span class="s1"> is not a file</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd_path</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">cmd_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">client</span> <span class="o">=</span> <span class="n">get_by_attr</span><span class="p">(</span><span class="s1">&#39;sw_name&#39;</span><span class="p">,</span> <span class="n">switch_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">sw_clients</span><span class="p">)</span>
+            <span class="c1"># If a client is present</span>
+            <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">client</span><span class="o">.</span><span class="n">set_conf</span><span class="p">(</span><span class="n">cmd_path</span><span class="p">)</span>
+                <span class="n">client</span><span class="o">.</span><span class="n">configure</span><span class="p">()</span>
+            <span class="c1"># If the switch has no client yet</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;sw_cli&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">thrift_port</span> <span class="o">=</span> <span class="n">get_node_attr</span><span class="p">(</span><span class="n">p4switch</span><span class="p">,</span> <span class="s1">&#39;thrift_port&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">thrift_port</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;sw_cli&#39;</span><span class="p">][</span><span class="s1">&#39;class&#39;</span><span class="p">](</span><span class="n">sw_name</span><span class="o">=</span><span class="n">switch_name</span><span class="p">,</span>
+                                                                     <span class="n">thrift_port</span><span class="o">=</span><span class="n">thrift_port</span><span class="p">,</span>
+                                                                     <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;sw_cli&#39;</span><span class="p">][</span><span class="s1">&#39;kwargs&#39;</span><span class="p">])</span>
+                    <span class="n">client</span><span class="o">.</span><span class="n">set_conf</span><span class="p">(</span><span class="n">cmd_path</span><span class="p">)</span>
+                    <span class="n">client</span><span class="o">.</span><span class="n">configure</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">sw_clients</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Switch </span><span class="si">{}</span><span class="s1"> has not thrift server enabled.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">switch_name</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s1">&#39;No client module provided!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="P4CLI.do_p4switch_reboot"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_p4switch_reboot">[docs]</a>    <span class="nd">@exception_handler</span>
+    <span class="k">def</span> <span class="nf">do_p4switch_reboot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reboot a P4 switch with a new program.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;usage: p4switch_reboot &lt;p4switch name&gt; [--p4src &lt;path&gt;] [--cmds &lt;path&gt;]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">switch_name</span> <span class="o">=</span> <span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_stop</span><span class="p">(</span><span class="n">line</span><span class="o">=</span><span class="n">switch_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_start</span><span class="p">(</span><span class="n">line</span><span class="o">=</span><span class="n">line</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="P4CLI.do_p4switches_reboot"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_p4switches_reboot">[docs]</a>    <span class="nd">@exception_handler</span>
+    <span class="k">def</span> <span class="nf">do_p4switches_reboot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reboot all P4 switches with new program.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            If you provide a P4 source code or cmd, all switches will have the same.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;usage: p4switches_reboot [--p4src &lt;path&gt;] [--cmds &lt;path&gt;]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">sw</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="o">.</span><span class="n">p4switches</span><span class="p">:</span>
+                <span class="n">switch_name</span> <span class="o">=</span> <span class="n">sw</span><span class="o">.</span><span class="n">name</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_stop</span><span class="p">(</span><span class="n">line</span><span class="o">=</span><span class="n">switch_name</span><span class="p">)</span>
+
+                <span class="n">tmp_line</span> <span class="o">=</span> <span class="n">switch_name</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span><span class="n">line</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_start</span><span class="p">(</span><span class="n">line</span><span class="o">=</span><span class="n">tmp_line</span><span class="p">)</span>
+
+            <span class="c1"># Run scripts</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">scripts</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">script</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">scripts</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">script</span><span class="p">[</span><span class="s2">&quot;reboot_run&quot;</span><span class="p">]:</span>
+                        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Exec Script: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">script</span><span class="p">[</span><span class="s2">&quot;cmd&quot;</span><span class="p">]))</span>
+                        <span class="n">run_command</span><span class="p">(</span><span class="n">script</span><span class="p">[</span><span class="s2">&quot;cmd&quot;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="P4CLI.do_test_p4"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_test_p4">[docs]</a>    <span class="nd">@exception_handler</span>
+    <span class="k">def</span> <span class="nf">do_test_p4</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests start stop functionalities.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_stop</span><span class="p">(</span><span class="s2">&quot;s1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_start</span><span class="p">(</span><span class="s2">&quot;s1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_reboot</span><span class="p">(</span><span class="s2">&quot;s1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switches_reboot</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="P4CLI.do_printSwitches"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_printSwitches">[docs]</a>    <span class="nd">@exception_handler</span>
+    <span class="k">def</span> <span class="nf">do_printSwitches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Print names of all switches.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">sw</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="o">.</span><span class="n">p4switches</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">sw</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="P4CLI.do_pingset"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_pingset">[docs]</a>    <span class="nd">@exception_handler</span>
+    <span class="k">def</span> <span class="nf">do_pingset</span><span class="p">(</span><span class="bp">self</span> <span class="p">,</span><span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Ping between the hosts in the set.&quot;&quot;&quot;</span>
+        <span class="n">hosts_names</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">hosts</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="o">.</span><span class="n">hosts</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">hosts_names</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="o">.</span><span class="n">ping</span><span class="p">(</span><span class="n">hosts</span><span class="o">=</span><span class="n">hosts</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="P4CLI.do_task"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_task">[docs]</a>    <span class="nd">@exception_handler</span>
+    <span class="k">def</span> <span class="nf">do_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute a task on the given host. The starting</span>
+<span class="sd">        delay is taken with respect to the current time.</span>
+
+<span class="sd">        For the details check the function parse_task_line</span>
+<span class="sd">        in p4utils.utils.helper.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">parse_task_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">hasScheduler</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">enableScheduler</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">start_scheduler</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">addTask</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">enableScheduler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">distribute_tasks</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Node </span><span class="si">{}</span><span class="s1"> does not exist!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="P4CLI.do_enable_scheduler"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_enable_scheduler">[docs]</a>    <span class="nd">@exception_handler</span>
+    <span class="k">def</span> <span class="nf">do_enable_scheduler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Enable the TaskServer on a node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s1">&#39;usage: enable_scheduler [&lt;node&gt;] [--path &lt;dir&gt;]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">hasScheduler</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">enableScheduler</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">start_scheduler</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                            <span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="kc">False</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">enableScheduler</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">net_api</span><span class="o">.</span><span class="n">start_scheduler</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                            <span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Node </span><span class="si">{}</span><span class="s1"> has already a task scheduler running.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Node </span><span class="si">{}</span><span class="s1"> does not exist!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,1170 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.utils.p4runtime_API package &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="p4utils.utils package" href="p4utils.utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">p4utils</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="p4utils.html">p4utils package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="p4utils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="p4utils.mininetlib.html">p4utils.mininetlib package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="p4utils.utils.html">p4utils.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="p4utils.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="p4utils.html#module-p4utils.logger">p4utils.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="p4utils.html#module-p4utils.p4run">p4utils.p4run module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="p4utils.html#module-p4utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">p4utils</a> &raquo;</li>
+        
+          <li><a href="p4utils.html">p4utils package</a> &raquo;</li>
+        
+          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
+        
+      <li>p4utils.utils.p4runtime_API package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/p4utils.utils.p4runtime_API.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="p4utils-utils-p4runtime-api-package">
+<h1>p4utils.utils.p4runtime_API package<a class="headerlink" href="#p4utils-utils-p4runtime-api-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-p4utils.utils.p4runtime_API.api">
+<span id="p4utils-utils-p4runtime-api-api-module"></span><h2>p4utils.utils.p4runtime_API.api module<a class="headerlink" href="#module-p4utils.utils.p4runtime_API.api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.api.APIVersion">
+<code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">APIVersion</code><span class="sig-paren">(</span><em>client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#APIVersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.APIVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the version of the P4Runtime API implemented by the server, using
+the Capabilities RPC.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.Action">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">Action</code><span class="sig-paren">(</span><em>context</em>, <em>action_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#Action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.Action.msg">
+<code class="descname">msg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#Action.msg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Action.msg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.Action.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#Action.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Action.set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.ActionProfileGroup">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">ActionProfileGroup</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>action_profile_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#ActionProfileGroup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.ActionProfileGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.ActionProfileGroup.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>member_id=None</em>, <em>weight=1</em>, <em>watch=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#ActionProfileGroup.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.ActionProfileGroup.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a member to the members list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.ActionProfileGroup.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#ActionProfileGroup.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.ActionProfileGroup.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empty members list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.ActionProfileGroup.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#ActionProfileGroup.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.ActionProfileGroup.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
+the appropriate fields unset).</p>
+<p>If function is None, returns an iterator. Iterate over it to get all the
+members (as ActionProfileGroup instances) returned by the
+server. Otherwise, function is applied to all the groups returned by the
+server.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.ActionProfileMember">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">ActionProfileMember</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>action_profile_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#ActionProfileMember"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.ActionProfileMember" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.ActionProfileMember.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#ActionProfileMember.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.ActionProfileMember.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
+the appropriate fields unset).</p>
+<p>If function is None, returns an iterator. Iterate over it to get all the
+members (as ActionProfileMember instances) returned by the
+server. Otherwise, function is applied to all the members returned
+by the server.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.CloneSessionEntry">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">CloneSessionEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>session_id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#CloneSessionEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CloneSessionEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._EntityBase</span></code></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.CloneSessionEntry.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>egress_port=None</em>, <em>instance=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#CloneSessionEntry.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CloneSessionEntry.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a replica to the clone session.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.CloneSessionEntry.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#CloneSessionEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CloneSessionEntry.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a P4Runtime Read RPC to read a single CloneSessionEntry
+(wildcard reads not supported).
+If function is None, return a CloneSessionEntry instance (or None if
+the provided group id does not exist). If function is not None, function
+is applied to the CloneSessionEntry instance (if any).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.CounterEntry">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">CounterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>counter_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#CounterEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CounterEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._CounterEntryBase</span></code></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.CounterEntry.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#CounterEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CounterEntry.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
+the index unset).
+If function is None, returns an iterator. Iterate over it to get all the
+counter entries (CounterEntry instances) returned by the
+server. Otherwise, function is applied to all the counter entries
+returned by the server.</p>
+<p>For example:
+for c in &lt;self&gt;.read():</p>
+<blockquote>
+<div>print(c)</div></blockquote>
+<p>The above code is equivalent to the following one-liner:
+&lt;self&gt;.read(lambda c: print(c))</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.DigestEntry">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">DigestEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>digest_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#DigestEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DigestEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
+<p>The DigestEntry P4Runtime entity is used to configure how the device must generate digest messages.</p>
+<p>The maximum server buffering delay in nanoseconds for an outstanding digest message
+can be set using &lt;self&gt;.max_timeout_ns = &lt;expr&gt;. By default, this is set to 0, i.e. the server
+should generate a DigestList message for every digest message generated by the data plane.</p>
+<p>The maximum digest list size — in number of digest messages — sent by the server to the client as a
+single DigestList Protobuf message can be set using &lt;self&gt;.max_list_size = &lt;expr&gt;. By default, this
+is set to 1, i.e. the server should generate a DigestList message for every digest message generated
+by the data plane.</p>
+<p>The timeout in nanoseconds that a server must wait for a digest list acknowledgement from the
+client before new digest messages can be generated for the same learned data can be set using
+&lt;self&gt;.ack_timeout_ns = &lt;expr&gt;. By default, this is set to 0, i.e. the cache of digests not
+yet acknowledged must always be an empty set.</p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.DigestEntry.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#DigestEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DigestEntry.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
+the appropriate fields unset).
+If function is None, returns an iterator, otherwise the function is applied
+to every entry in the iterator.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.DirectCounterEntry">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">DirectCounterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>direct_counter_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#DirectCounterEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectCounterEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._CounterEntryBase</span></code></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.DirectCounterEntry.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#DirectCounterEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectCounterEntry.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
+the index unset).
+If function is None, returns an iterator. Iterate over it to get all the
+direct counter entries (DirectCounterEntry instances) returned by the
+server. Otherwise, function is applied to all the direct counter entries
+returned by the server.</p>
+<p>For example:
+for c in &lt;self&gt;.read():</p>
+<blockquote>
+<div>print(c)</div></blockquote>
+<p>The above code is equivalent to the following one-liner:
+&lt;self&gt;.read(lambda c: print(c))</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.DirectMeterEntry">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">DirectMeterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>direct_meter_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#DirectMeterEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectMeterEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._MeterEntryBase</span></code></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.DirectMeterEntry.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#DirectMeterEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectMeterEntry.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
+the index unset).
+If function is None, returns an iterator. Iterate over it to get all the
+direct meter entries (DirectMeterEntry instances) returned by the
+server. Otherwise, function is applied to all the direct meter entries
+returned by the server.</p>
+<p>For example:
+for c in &lt;self&gt;.read():</p>
+<blockquote>
+<div>print(c)</div></blockquote>
+<p>The above code is equivalent to the following one-liner:
+&lt;self&gt;.read(lambda c: print(c))</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.FwdPipeConfig">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">FwdPipeConfig</code><span class="sig-paren">(</span><em>p4info</em>, <em>bin</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.FwdPipeConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a></p>
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.api.FwdPipeConfig.bin">
+<code class="descname">bin</code><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.FwdPipeConfig.bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.api.FwdPipeConfig.p4info">
+<code class="descname">p4info</code><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.FwdPipeConfig.p4info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.GroupMember">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">GroupMember</code><span class="sig-paren">(</span><em>member_id=None</em>, <em>weight=1</em>, <em>watch=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#GroupMember"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.GroupMember" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A member in an ActionProfileGroup.
+Construct with GroupMember(&lt;member_id&gt;, weight=&lt;weight&gt;, watch=&lt;watch&gt;).
+You can set / get attributes member_id (required), weight (default 1), watch (default 0).</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.MatchKey">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">MatchKey</code><span class="sig-paren">(</span><em>table_name</em>, <em>match_fields</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#MatchKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MatchKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.MatchKey.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#MatchKey.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MatchKey.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.MatchKey.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#MatchKey.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MatchKey.set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.MeterEntry">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">MeterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>meter_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#MeterEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MeterEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._MeterEntryBase</span></code></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.MeterEntry.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#MeterEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MeterEntry.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
+the index unset).
+If function is None, returns an iterator. Iterate over it to get all the
+meter entries (MeterEntry instances) returned by the
+server. Otherwise, function is applied to all the meter entries
+returned by the server.</p>
+<p>For example:
+for c in &lt;self&gt;.read():</p>
+<blockquote>
+<div>print(c)</div></blockquote>
+<p>The above code is equivalent to the following one-liner:
+&lt;self&gt;.read(lambda c: print(c))</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.MulticastGroupEntry">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">MulticastGroupEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>group_id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#MulticastGroupEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MulticastGroupEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._EntityBase</span></code></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.MulticastGroupEntry.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>egress_port=None</em>, <em>instance=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#MulticastGroupEntry.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MulticastGroupEntry.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a replica to the multicast group.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.MulticastGroupEntry.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#MulticastGroupEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MulticastGroupEntry.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a P4Runtime Read RPC to read a single MulticastGroupEntry
+(wildcard reads not supported).
+If function is None, return a MulticastGroupEntry instance (or None if
+the provided group id does not exist). If function is not None, function
+is applied to the MulticastGroupEntry instance (if any).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.api.NotSupportedYet">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">NotSupportedYet</code><span class="sig-paren">(</span><em>what</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#NotSupportedYet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.NotSupportedYet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.Oneshot">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">Oneshot</code><span class="sig-paren">(</span><em>context</em>, <em>table_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#Oneshot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Oneshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.Oneshot.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>action=None</em>, <em>weight=1</em>, <em>watch=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#Oneshot.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Oneshot.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an action to the oneshot action set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.Oneshot.msg">
+<code class="descname">msg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#Oneshot.msg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Oneshot.msg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.OneshotAction">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">OneshotAction</code><span class="sig-paren">(</span><em>action=None</em>, <em>weight=1</em>, <em>watch=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#OneshotAction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.OneshotAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>An action in a oneshot action set.
+Construct with OneshotAction(&lt;action (Action instance)&gt;, weight=&lt;weight&gt;, watch=&lt;watch&gt;).
+You can set / get attributes action (required), weight (default 1), watch (default 0).</p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.OneshotAction.msg">
+<code class="descname">msg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#OneshotAction.msg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.OneshotAction.msg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.P4Object">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">P4Object</code><span class="sig-paren">(</span><em>obj_type</em>, <em>obj</em>, <em>context</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#P4Object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.P4Object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.P4Object.actions">
+<code class="descname">actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#P4Object.actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.P4Object.actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print list of actions, only for tables and action profiles.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.P4Object.info">
+<code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#P4Object.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.P4Object.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.P4Object.msg">
+<code class="descname">msg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#P4Object.msg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.P4Object.msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Protobuf message object</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.P4Objects">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">P4Objects</code><span class="sig-paren">(</span><em>obj_type</em>, <em>context</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#P4Objects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.P4Objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.Replica">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">Replica</code><span class="sig-paren">(</span><em>egress_port=None</em>, <em>instance=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#Replica"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Replica" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A port “replica” (port number + instance id) used for multicast and clone session programming.
+Construct with Replica(egress_port, instance=&lt;instance&gt;).
+You can set / get attributes egress_port (required), instance (default 0).</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.api.TableEntry">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">TableEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>table_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#TableEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.TableEntry.clear_action">
+<code class="descname">clear_action</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#TableEntry.clear_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.clear_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the action spec for the TableEntry.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.TableEntry.clear_counter_data">
+<code class="descname">clear_counter_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#TableEntry.clear_counter_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.clear_counter_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear all counter data, same as &lt;self&gt;.counter_data = None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.TableEntry.clear_match">
+<code class="descname">clear_match</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#TableEntry.clear_match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.clear_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the match spec for the TableEntry.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.TableEntry.clear_meter_config">
+<code class="descname">clear_meter_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#TableEntry.clear_meter_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.clear_meter_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the meter config, same as &lt;self&gt;.meter_config = None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.api.TableEntry.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#TableEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
+the appropriate fields unset).
+If function is None, returns an iterator. Iterate over it to get all the
+table entries (TableEntry instances) returned by the server. Otherwise,
+function is applied to all the table entries returned by the server.</p>
+<p>For example:
+for te in &lt;self&gt;.read():</p>
+<blockquote>
+<div>print(te)</div></blockquote>
+<p>The above code is equivalent to the following one-liner:
+&lt;self&gt;.read(lambda te: print(te))</p>
+<p>To delete all the entries from a table, simply use:
+table_entry[‘&lt;table_name&gt;’].read(function=lambda x: x.delete())</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.api.UserUsageError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">UserUsageError</code><span class="sig-paren">(</span><em>usage</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#UserUsageError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.UserUsageError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.api.Write">
+<code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">Write</code><span class="sig-paren">(</span><em>input_</em>, <em>client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#Write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a WriteRequest from a file (text format) and sends it to the server.
+It rewrites the device id and election id appropriately.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.api.setup">
+<code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">setup</code><span class="sig-paren">(</span><em>device_id=1</em>, <em>grpc_addr='localhost:9559'</em>, <em>election_id=(1</em>, <em>0)</em>, <em>config=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.api.teardown">
+<code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">teardown</code><span class="sig-paren">(</span><em>client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#teardown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.teardown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-p4utils.utils.p4runtime_API.bytes_utils">
+<span id="p4utils-utils-p4runtime-api-bytes-utils-module"></span><h2>p4utils.utils.p4runtime_API.bytes_utils module<a class="headerlink" href="#module-p4utils.utils.p4runtime_API.bytes_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.bytes_utils.UserBadIPv4Error">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">UserBadIPv4Error</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/bytes_utils.html#UserBadIPv4Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.UserBadIPv4Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.bytes_utils.UserBadIPv6Error">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">UserBadIPv6Error</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/bytes_utils.html#UserBadIPv6Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.UserBadIPv6Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.bytes_utils.UserBadMacError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">UserBadMacError</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/bytes_utils.html#UserBadMacError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.UserBadMacError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.bytes_utils.UserBadValueError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">UserBadValueError</code><span class="sig-paren">(</span><em>info=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/bytes_utils.html#UserBadValueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.UserBadValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.bytes_utils.ipv4Addr_to_bytes">
+<code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">ipv4Addr_to_bytes</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/bytes_utils.html#ipv4Addr_to_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.ipv4Addr_to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.bytes_utils.ipv6Addr_to_bytes">
+<code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">ipv6Addr_to_bytes</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/bytes_utils.html#ipv6Addr_to_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.ipv6Addr_to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.bytes_utils.macAddr_to_bytes">
+<code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">macAddr_to_bytes</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/bytes_utils.html#macAddr_to_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.macAddr_to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.bytes_utils.parse_value">
+<code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">parse_value</code><span class="sig-paren">(</span><em>value_str</em>, <em>bitwidth</em>, <em>base=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/bytes_utils.html#parse_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.parse_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-p4utils.utils.p4runtime_API.context">
+<span id="p4utils-utils-p4runtime-api-context-module"></span><h2>p4utils.utils.p4runtime_API.context module<a class="headerlink" href="#module-p4utils.utils.p4runtime_API.context" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.context.Context">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.context.</code><code class="descname">Context</code><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_action">
+<code class="descname">get_action</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_action_id">
+<code class="descname">get_action_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_action_profile">
+<code class="descname">get_action_profile</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_action_profile_id">
+<code class="descname">get_action_profile_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_profile_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_action_profiles">
+<code class="descname">get_action_profiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_profiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_actions">
+<code class="descname">get_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_counter">
+<code class="descname">get_counter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_counter_id">
+<code class="descname">get_counter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_counter_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_counters">
+<code class="descname">get_counters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_counters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_digest">
+<code class="descname">get_digest</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_digest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_digest_id">
+<code class="descname">get_digest_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_digest_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_digests">
+<code class="descname">get_digests</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_digests" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_counter">
+<code class="descname">get_direct_counter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_counter_id">
+<code class="descname">get_direct_counter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_counter_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_counters">
+<code class="descname">get_direct_counters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_counters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_meter">
+<code class="descname">get_direct_meter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_meter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_meter_id">
+<code class="descname">get_direct_meter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_meter_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_meters">
+<code class="descname">get_direct_meters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_meters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_meter">
+<code class="descname">get_meter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_meter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_meter_id">
+<code class="descname">get_meter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_meter_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_meters">
+<code class="descname">get_meters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_meters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_mf">
+<code class="descname">get_mf</code><span class="sig-paren">(</span><em>table_name</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_mf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_mf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_mf_id">
+<code class="descname">get_mf_id</code><span class="sig-paren">(</span><em>table_name</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_mf_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_mf_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_mf_len">
+<code class="descname">get_mf_len</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_mf_len"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_mf_len" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_mf_name">
+<code class="descname">get_mf_name</code><span class="sig-paren">(</span><em>table_name</em>, <em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_mf_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_mf_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_name_from_id">
+<code class="descname">get_name_from_id</code><span class="sig-paren">(</span><em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_name_from_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_name_from_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_obj">
+<code class="descname">get_obj</code><span class="sig-paren">(</span><em>obj_type</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_obj" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_obj_by_id">
+<code class="descname">get_obj_by_id</code><span class="sig-paren">(</span><em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_obj_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_obj_by_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_obj_id">
+<code class="descname">get_obj_id</code><span class="sig-paren">(</span><em>obj_type</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_obj_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_obj_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_objs">
+<code class="descname">get_objs</code><span class="sig-paren">(</span><em>obj_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_objs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_objs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_param">
+<code class="descname">get_param</code><span class="sig-paren">(</span><em>action_name</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_param_id">
+<code class="descname">get_param_id</code><span class="sig-paren">(</span><em>action_name</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_param_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_param_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_param_len">
+<code class="descname">get_param_len</code><span class="sig-paren">(</span><em>action_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_param_len"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_param_len" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_param_name">
+<code class="descname">get_param_name</code><span class="sig-paren">(</span><em>action_name</em>, <em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.get_param_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_param_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_table">
+<code class="descname">get_table</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_table_id">
+<code class="descname">get_table_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_table_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.get_tables">
+<code class="descname">get_tables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_tables" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.context.Context.set_p4info">
+<code class="descname">set_p4info</code><span class="sig-paren">(</span><em>p4info</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#Context.set_p4info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.set_p4info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.context.</code><code class="descname">P4RuntimeEntity</code><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#P4RuntimeEntity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity.action_profile_group">
+<code class="descname">action_profile_group</code><em class="property"> = 3</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity.action_profile_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity.action_profile_member">
+<code class="descname">action_profile_member</code><em class="property"> = 2</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity.action_profile_member" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity.counter_entry">
+<code class="descname">counter_entry</code><em class="property"> = 6</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity.counter_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity.digest_entry">
+<code class="descname">digest_entry</code><em class="property"> = 9</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity.digest_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity.direct_counter_entry">
+<code class="descname">direct_counter_entry</code><em class="property"> = 7</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity.direct_counter_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity.direct_meter_entry">
+<code class="descname">direct_meter_entry</code><em class="property"> = 5</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity.direct_meter_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity.meter_entry">
+<code class="descname">meter_entry</code><em class="property"> = 4</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity.meter_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity.packet_replication_engine_entry">
+<code class="descname">packet_replication_engine_entry</code><em class="property"> = 8</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity.packet_replication_engine_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity.table_entry">
+<code class="descname">table_entry</code><em class="property"> = 1</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity.table_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.context.P4Type">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.context.</code><code class="descname">P4Type</code><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/context.html#P4Type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4Type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4Type.action">
+<code class="descname">action</code><em class="property"> = 2</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4Type.action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4Type.action_profile">
+<code class="descname">action_profile</code><em class="property"> = 3</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4Type.action_profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4Type.counter">
+<code class="descname">counter</code><em class="property"> = 4</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4Type.counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4Type.digest">
+<code class="descname">digest</code><em class="property"> = 8</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4Type.digest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4Type.direct_counter">
+<code class="descname">direct_counter</code><em class="property"> = 5</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4Type.direct_counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4Type.direct_meter">
+<code class="descname">direct_meter</code><em class="property"> = 7</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4Type.direct_meter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4Type.meter">
+<code class="descname">meter</code><em class="property"> = 6</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4Type.meter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.p4runtime_API.context.P4Type.table">
+<code class="descname">table</code><em class="property"> = 1</em><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4Type.table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-p4utils.utils.p4runtime_API.p4runtime">
+<span id="p4utils-utils-p4runtime-api-p4runtime-module"></span><h2>p4utils.utils.p4runtime_API.p4runtime module<a class="headerlink" href="#module-p4utils.utils.p4runtime_API.p4runtime" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">P4RuntimeClient</code><span class="sig-paren">(</span><em>device_id</em>, <em>grpc_addr</em>, <em>election_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.api_version">
+<code class="descname">api_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.api_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.api_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_digest_list">
+<code class="descname">get_digest_list</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.get_digest_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_digest_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve DigestList and send back acknowledgment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – time to wait for packet, if set to None,
+the function will wait indefinitely</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DigestList packet (protobuf message) or None if the timeout has
+expired and no packet has been received.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Notice:</dt>
+<dd>See <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543">https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543</a>
+for further details.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_p4info">
+<code class="descname">get_p4info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.get_p4info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_p4info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_stream_packet">
+<code class="descname">get_stream_packet</code><span class="sig-paren">(</span><em>type_</em>, <em>timeout=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.get_stream_packet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_stream_packet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve packet from the StreamChannel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of a field present in the packet</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – time to wait for packet, if set to None,
+the function will wait indefinitely</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">packet (protobuf message)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.handshake">
+<code class="descname">handshake</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.handshake"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.handshake" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.read_one">
+<code class="descname">read_one</code><span class="sig-paren">(</span><em>entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.read_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.read_one" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.set_fwd_pipe_config">
+<code class="descname">set_fwd_pipe_config</code><span class="sig-paren">(</span><em>p4info_path</em>, <em>bin_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.set_fwd_pipe_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.set_fwd_pipe_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.set_up_stream">
+<code class="descname">set_up_stream</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.set_up_stream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.set_up_stream" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.tear_down">
+<code class="descname">tear_down</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.tear_down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.tear_down" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>req</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.write_update">
+<code class="descname">write_update</code><span class="sig-paren">(</span><em>update</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeClient.write_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.write_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorFormatException">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">P4RuntimeErrorFormatException</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeErrorFormatException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorFormatException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorIterator">
+<em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">P4RuntimeErrorIterator</code><span class="sig-paren">(</span><em>grpc_error</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeErrorIterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorIterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeException">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">P4RuntimeException</code><span class="sig-paren">(</span><em>grpc_error</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeWriteException">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">P4RuntimeWriteException</code><span class="sig-paren">(</span><em>grpc_error</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#P4RuntimeWriteException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeWriteException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.parse_p4runtime_error">
+<code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">parse_p4runtime_error</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#parse_p4runtime_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.parse_p4runtime_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.p4runtime.parse_p4runtime_write_error">
+<code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">parse_p4runtime_write_error</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/p4runtime.html#parse_p4runtime_write_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.parse_p4runtime_write_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-p4utils.utils.p4runtime_API.utils">
+<span id="p4utils-utils-p4runtime-api-utils-module"></span><h2>p4utils.utils.p4runtime_API.utils module<a class="headerlink" href="#module-p4utils.utils.p4runtime_API.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.utils.InvalidP4InfoError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.utils.</code><code class="descname">InvalidP4InfoError</code><span class="sig-paren">(</span><em>info=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/utils.html#InvalidP4InfoError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.utils.InvalidP4InfoError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.p4runtime_API.utils.UserError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.utils.</code><code class="descname">UserError</code><span class="sig-paren">(</span><em>info=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/utils.html#UserError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.utils.UserError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.p4runtime_API.utils.my_partialmethod">
+<code class="descclassname">p4utils.utils.p4runtime_API.utils.</code><code class="descname">my_partialmethod</code><span class="sig-paren">(</span><em>func</em>, <em>*args1</em>, <em>**kwargs1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/utils.html#my_partialmethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.utils.my_partialmethod" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-p4utils.utils.p4runtime_API">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-p4utils.utils.p4runtime_API" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="p4utils.utils.html" class="btn btn-neutral float-left" title="p4utils.utils package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
