@@ -11,6 +11,7 @@ DEBUG_FLAGS=true
 P4_RUNTIME=true
 SYSREPO=false   # Sysrepo prevents simple_switch_grpc from starting correctly
 FRROUTING=true
+DOCUMENTATION=true
 
 # Software versions
 
@@ -564,6 +565,12 @@ function do_p4-learning {
     git checkout junota
 }
 
+# Install Sphinx and ReadtheDocs
+function do_sphinx {
+    sudo apt-get install python3-sphinx
+    sudo pip install sphinx-rtd-theme
+}
+
 # p4c depends on protobuf to compile p4runtime info files.
 do_protobuf
 if [ "$P4_RUNTIME" = true ]; then
@@ -592,4 +599,9 @@ do_p4-utils
 do_p4-learning
 site_packages_fix
 google_module_fix
+
+if [ "$DOCUMENTATION" = true ]; then
+    do_sphinx
+fi
+
 echo "Installation complete!"
