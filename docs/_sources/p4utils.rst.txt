@@ -12,14 +12,6 @@ Subpackages
 Submodules
 ----------
 
-p4utils\.logger module
-----------------------
-
-.. automodule:: p4utils.logger
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 p4utils\.p4run module
 ---------------------
 

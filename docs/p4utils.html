@@ -109,7 +109,6 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-p4utils.logger">p4utils.logger module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-p4utils.p4run">p4utils.p4run module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-p4utils">Module contents</a></li>
 </ul>
@@ -234,87 +233,136 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-p4utils.logger">
-<span id="p4utils-logger-module"></span><h2>p4utils.logger module<a class="headerlink" href="#module-p4utils.logger" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="p4utils.logger.debug_high">
-<code class="descclassname">p4utils.logger.</code><code class="descname">debug_high</code><span class="sig-paren">(</span><em>self</em>, <em>message</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/logger.html#debug_high"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.logger.debug_high" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="p4utils.logger.debug_medium">
-<code class="descclassname">p4utils.logger.</code><code class="descname">debug_medium</code><span class="sig-paren">(</span><em>self</em>, <em>message</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/logger.html#debug_medium"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.logger.debug_medium" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="p4utils.logger.debug_temporal">
-<code class="descclassname">p4utils.logger.</code><code class="descname">debug_temporal</code><span class="sig-paren">(</span><em>self</em>, <em>message</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/logger.html#debug_temporal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.logger.debug_temporal" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
 <div class="section" id="module-p4utils.p4run">
 <span id="p4utils-p4run-module"></span><h2>p4utils.p4run module<a class="headerlink" href="#module-p4utils.p4run" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="p4utils.p4run.AppRunner">
 <em class="property">class </em><code class="descclassname">p4utils.p4run.</code><code class="descname">AppRunner</code><span class="sig-paren">(</span><em>conf_file</em>, <em>cli_enabled=True</em>, <em>log_dir=None</em>, <em>pcap_dir=None</em>, <em>verbosity='info'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="p4utils.mininetlib.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.network_API.NetworkAPI</span></code></a></p>
-<p>Class for running P4 applications.</p>
-<p>Initializes some attributes and reads the topology json.</p>
-<dl class="attribute">
-<dt id="p4utils.p4run.AppRunner.conf_file">
-<code class="descname">conf_file</code><a class="headerlink" href="#p4utils.p4run.AppRunner.conf_file" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>string</em> – a JSON file which describes the mininet topology.</p>
-</dd></dl>
-
+<p>Class to run P4 applications from a JSON configuration file.</p>
+<p>The <code class="docutils literal"><span class="pre">AppRunner</span></code> creates a <em>Mininet</em> network reading information from the JSON
+configuration file. It also specifies whether logs and sniffed packets are to be
+saved on the disk at some location.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>conf_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – a JSON file which describes the <em>Mininet</em> topology.</li>
+<li><strong>cli_enabled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable <em>Mininet</em> CLI.</li>
+<li><strong>log_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – directory for <em>Mininet</em> log files.</li>
+<li><strong>pcap_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – directory where to store pcap files.</li>
+<li><strong>verbosity</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – amount of information shown during the execution.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Possible <strong>verbosity</strong> values, listed from the most to less verbose, are the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">debug</span></code></li>
+<li><code class="docutils literal"><span class="pre">info</span></code></li>
+<li><code class="docutils literal"><span class="pre">output</span></code></li>
+<li><code class="docutils literal"><span class="pre">warning</span></code></li>
+<li><code class="docutils literal"><span class="pre">warn</span></code></li>
+<li><code class="docutils literal"><span class="pre">error</span></code></li>
+<li><code class="docutils literal"><span class="pre">critical</span></code></li>
+</ul>
+</div></blockquote>
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.cli_enabled">
 <code class="descname">cli_enabled</code><a class="headerlink" href="#p4utils.p4run.AppRunner.cli_enabled" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool</em> – enable mininet CLI.</p>
+<dd><p><em>bool</em> – enable <em>Mininet</em> CLI.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.log_enabled">
+<code class="descname">log_enabled</code><a class="headerlink" href="#p4utils.p4run.AppRunner.log_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool</em> – enable logging or not</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.log_dir">
 <code class="descname">log_dir</code><a class="headerlink" href="#p4utils.p4run.AppRunner.log_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>string</em> – directory for mininet log files.</p>
+<dd><p><em>string</em> – directory for log files.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.pcap_dump">
+<code class="descname">pcap_dump</code><a class="headerlink" href="#p4utils.p4run.AppRunner.pcap_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool</em> – generate <code class="docutils literal"><span class="pre">.pcap</span></code> files for interfaces.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.pcap_dir">
 <code class="descname">pcap_dir</code><a class="headerlink" href="#p4utils.p4run.AppRunner.pcap_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>string</em> – directory where to store pcap files.</p>
+<dd><p><em>string</em> – directory where to store <code class="docutils literal"><span class="pre">.pcap</span></code> files.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="p4utils.p4run.AppRunner.verbosity">
-<code class="descname">verbosity</code><a class="headerlink" href="#p4utils.p4run.AppRunner.verbosity" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>string</em> – see <a class="reference external" href="https://github.com/mininet/mininet/blob/57294d013e780cccc6b4b9af151906b382c4d8a7/mininet/log.py#L14">https://github.com/mininet/mininet/blob/57294d013e780cccc6b4b9af151906b382c4d8a7/mininet/log.py#L14</a></p>
+<dt id="p4utils.p4run.AppRunner.hosts">
+<code class="descname">hosts</code><a class="headerlink" href="#p4utils.p4run.AppRunner.hosts" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict</em> – dictionary of host and their properties.</p>
 </dd></dl>
 
-<p>The following attributes are initialized during the execution and are
-not specified in the constructor:</p>
-<blockquote>
-<div>pcap_dump (bool)    : determines if we generate pcap files for interfaces.
-hosts (list)        : list of mininet host names.
-switches (dict)     : mininet host names and their associated properties.
-links (list)        : list of mininet link properties.
-clients (list)      : list of clients (one per client-capable switch) to populate tables
-compilers (list)    : list of compilers (one per P4 source provided) to compile P4 code
-conf (dict)         : parsed configuration from conf_file.
-net (Mininet object): the mininet instance.
-<a href="#id1"><span class="problematic" id="id2">*</span></a>_module (dict/obj) : module dict used to import the specified module (see below)
-<a href="#id3"><span class="problematic" id="id4">*</span></a>_node (dict/obj)   : node dict uset to import the specified Mininet node (see below)</div></blockquote>
-<p>Modules and nodes available
-Inside self.conf can be present several module configuration objects. These are the possible values:</p>
-<blockquote>
-<div><ul class="simple">
-<li>“switch_node” loads the switch node to be used with Mininet (see mininetlib/node.py),</li>
-<li>“compiler_module” loads the compiler for P4 codes,</li>
-<li>“host_node” loads the host node to be used with Mininet,</li>
-<li>“client_module” loads the client to program switches from files.</li>
-<li>“mininet_module” loads the network module</li>
-</ul>
-</div></blockquote>
-<p>Example of JSON structure of conf_file:</p>
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.switches">
+<code class="descname">switches</code><a class="headerlink" href="#p4utils.p4run.AppRunner.switches" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict</em> – dictionary of switches and their properties.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.routers">
+<code class="descname">routers</code><a class="headerlink" href="#p4utils.p4run.AppRunner.routers" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict</em> – dictionary of routers and their properties.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.links">
+<code class="descname">links</code><a class="headerlink" href="#p4utils.p4run.AppRunner.links" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict</em> – dictionary of mininet links and their properties.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.clients">
+<code class="descname">clients</code><a class="headerlink" href="#p4utils.p4run.AppRunner.clients" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> – list of <em>Thrift</em> clients (one per P4 switch) to populate tables.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.compilers">
+<code class="descname">compilers</code><a class="headerlink" href="#p4utils.p4run.AppRunner.compilers" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> – list of compiler instances (one per P4 source provided) to compile P4 code.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.conf">
+<code class="descname">conf</code><a class="headerlink" href="#p4utils.p4run.AppRunner.conf" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict</em> – parsed configuration from the JSON configuration file.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.net">
+<code class="descname">net</code><a class="headerlink" href="#p4utils.p4run.AppRunner.net" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>object</em> – <em>Mininet</em> network instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">*_module</code></dt>
+<dd><p><em>object</em> – module dict used to import the specified module (see below)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">*_node</code></dt>
+<dd><p><em>object</em> – node dict uset to import the specified Mininet node (see below)</p>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<p>The structure of the <strong>JSON</strong> network configuration file parsed by the <code class="docutils literal"><span class="pre">AppRunner</span></code> is
+the following:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;p4_src&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">gobal</span> <span class="n">p4</span> <span class="n">source</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
     <span class="s2">&quot;cli&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
@@ -338,7 +386,7 @@ Inside self.conf can be present several module configuration objects. These are 
         <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
         <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
         <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
-    <span class="p">}</span>
+    <span class="p">},</span>
     <span class="s2">&quot;compiler_module&quot;</span><span class="p">:</span>
     <span class="p">{</span>
         <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
@@ -394,8 +442,19 @@ Inside self.conf can be present several module configuration objects. These are 
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Notice: none of the modules or nodes are mandatory. In case they are not specified,
+<p>Inside self.conf can be present several module configuration objects. These are the possible values:</p>
+<ul class="simple">
+<li>“switch_node” loads the switch node to be used with Mininet (see mininetlib/node.py),</li>
+<li>“compiler_module” loads the compiler for P4 codes,</li>
+<li>“host_node” loads the host node to be used with Mininet,</li>
+<li>“client_module” loads the client to program switches from files.</li>
+<li>“mininet_module” loads the network module</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">None of the modules or nodes are mandatory. In case they are not specified,
 default settings will be used.</p>
+</div>
 <dl class="method">
 <dt id="p4utils.p4run.AppRunner.parse_hosts">
 <code class="descname">parse_hosts</code><span class="sig-paren">(</span><em>unparsed_hosts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner.parse_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner.parse_hosts" title="Permalink to this definition">¶</a></dt>

@@ -206,121 +206,139 @@
 
 
 <div class="viewcode-block" id="AppRunner"><a class="viewcode-back" href="../../p4utils.html#p4utils.p4run.AppRunner">[docs]</a><span class="k">class</span> <span class="nc">AppRunner</span><span class="p">(</span><span class="n">NetworkAPI</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class for running P4 applications.</span>
+    <span class="sd">&quot;&quot;&quot;Class to run P4 applications from a JSON configuration file.</span>
 
-<span class="sd">    Initializes some attributes and reads the topology json.</span>
+<span class="sd">    The ``AppRunner`` creates a *Mininet* network reading information from the JSON</span>
+<span class="sd">    configuration file. It also specifies whether logs and sniffed packets are to be</span>
+<span class="sd">    saved on the disk at some location.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        conf_file (string): a JSON file which describes the *Mininet* topology.</span>
+<span class="sd">        cli_enabled (bool): enable *Mininet* CLI.</span>
+<span class="sd">        log_dir (string): directory for *Mininet* log files.</span>
+<span class="sd">        pcap_dir (string): directory where to store pcap files.</span>
+<span class="sd">        verbosity (string): amount of information shown during the execution.</span>
+<span class="sd">        </span>
+<span class="sd">    Possible **verbosity** values, listed from the most to less verbose, are the following:</span>
+
+<span class="sd">        - ``debug``</span>
+<span class="sd">        - ``info``</span>
+<span class="sd">        - ``output``</span>
+<span class="sd">        - ``warning``</span>
+<span class="sd">        - ``warn``</span>
+<span class="sd">        - ``error``</span>
+<span class="sd">        - ``critical``</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        conf_file (string): a JSON file which describes the mininet topology.</span>
-<span class="sd">        cli_enabled (bool): enable mininet CLI.</span>
-<span class="sd">        log_dir (string): directory for mininet log files.</span>
-<span class="sd">        pcap_dir (string): directory where to store pcap files.</span>
-<span class="sd">        verbosity (string): see https://github.com/mininet/mininet/blob/57294d013e780cccc6b4b9af151906b382c4d8a7/mininet/log.py#L14</span>
+<span class="sd">        cli_enabled (bool)  : enable *Mininet* CLI.</span>
+<span class="sd">        log_enabled (bool)  : enable logging or not</span>
+<span class="sd">        log_dir (string)    : directory for log files.</span>
+<span class="sd">        pcap_dump (bool)    : generate ``.pcap`` files for interfaces.</span>
+<span class="sd">        pcap_dir (string)   : directory where to store ``.pcap`` files.</span>
+<span class="sd">        hosts (dict)        : dictionary of host and their properties.</span>
+<span class="sd">        switches (dict)     : dictionary of switches and their properties.</span>
+<span class="sd">        routers (dict)      : dictionary of routers and their properties.</span>
+<span class="sd">        links (dict)        : dictionary of mininet links and their properties.</span>
+<span class="sd">        clients (list)      : list of *Thrift* clients (one per P4 switch) to populate tables.</span>
+<span class="sd">        compilers (list)    : list of compiler instances (one per P4 source provided) to compile P4 code.</span>
+<span class="sd">        conf (dict)         : parsed configuration from the JSON configuration file.</span>
+<span class="sd">        net (object)        : *Mininet* network instance.</span>
+<span class="sd">        *_module (object)   : module dict used to import the specified module (see below)</span>
+<span class="sd">        *_node (object)     : node dict uset to import the specified Mininet node (see below)    </span>
 
-<span class="sd">    The following attributes are initialized during the execution and are</span>
-<span class="sd">    not specified in the constructor:</span>
-<span class="sd">        pcap_dump (bool)    : determines if we generate pcap files for interfaces.</span>
-<span class="sd">        hosts (list)        : list of mininet host names.</span>
-<span class="sd">        switches (dict)     : mininet host names and their associated properties.</span>
-<span class="sd">        links (list)        : list of mininet link properties.</span>
-<span class="sd">        clients (list)      : list of clients (one per client-capable switch) to populate tables</span>
-<span class="sd">        compilers (list)    : list of compilers (one per P4 source provided) to compile P4 code</span>
-<span class="sd">        conf (dict)         : parsed configuration from conf_file.</span>
-<span class="sd">        net (Mininet object): the mininet instance.</span>
-<span class="sd">        *_module (dict/obj) : module dict used to import the specified module (see below)</span>
-<span class="sd">        *_node (dict/obj)   : node dict uset to import the specified Mininet node (see below)</span>
+<span class="sd">    Example:</span>
+<span class="sd">        The structure of the **JSON** network configuration file parsed by the ``AppRunner`` is</span>
+<span class="sd">        the following::</span>
+
+<span class="sd">            {</span>
+<span class="sd">                &quot;p4_src&quot;: &lt;path to gobal p4 source&gt; (string),</span>
+<span class="sd">                &quot;cli&quot;: &lt;true|false&gt; (bool),</span>
+<span class="sd">                &quot;pcap_dump&quot;: &lt;true|false&gt; (bool),</span>
+<span class="sd">                &quot;enable_log&quot;: &lt;true|false&gt; (bool),</span>
+<span class="sd">                &quot;tasks_file&quot;: &lt;path to the tasks file&gt; (string)</span>
+<span class="sd">                &quot;host_node&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;switch_node&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;router_node&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;compiler_module&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string),</span>
+<span class="sd">                    &quot;options&quot;: &lt;options passed to init&gt; (dict)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;client_module&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string),</span>
+<span class="sd">                    &quot;options&quot;: &lt;options passed to init&gt; (dict)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;mininet_module&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;exec_scripts&quot;: </span>
+<span class="sd">                [</span>
+<span class="sd">                    {</span>
+<span class="sd">                        &quot;cmd&quot;: &lt;path to script&gt; (string),</span>
+<span class="sd">                        &quot;reboot_run&quot;: &lt;true|false&gt; (bool)</span>
+<span class="sd">                    },</span>
+<span class="sd">                    ...</span>
+<span class="sd">                ],</span>
+<span class="sd">                &quot;topology&quot;: </span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;assignment_strategy&quot;: assignment_strategy,</span>
+<span class="sd">                    &quot;default&quot;:</span>
+<span class="sd">                    {</span>
+<span class="sd">                        &lt;default links and hosts configurations, see parse_links and parse_hosts&gt;</span>
+<span class="sd">                    }</span>
+<span class="sd">                    &quot;links&quot;: </span>
+<span class="sd">                    [</span>
+<span class="sd">                        &lt;see parse_links&gt;</span>
+<span class="sd">                    ],</span>
+<span class="sd">                    &quot;hosts&quot;: </span>
+<span class="sd">                    {</span>
+<span class="sd">                        &lt;see parse_hosts&gt;</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &quot;switches&quot;: </span>
+<span class="sd">                    {</span>
+<span class="sd">                        &lt;see parse_switch&gt;</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &quot;routers&quot;: </span>
+<span class="sd">                    {</span>
+<span class="sd">                        &lt;see parse_routers&gt;</span>
+<span class="sd">                    }</span>
+<span class="sd">                }</span>
+<span class="sd">            }</span>
+
+<span class="sd">        Inside self.conf can be present several module configuration objects. These are the possible values:</span>
 <span class="sd">        </span>
-<span class="sd">    Modules and nodes available</span>
-<span class="sd">    Inside self.conf can be present several module configuration objects. These are the possible values:</span>
 <span class="sd">        - &quot;switch_node&quot; loads the switch node to be used with Mininet (see mininetlib/node.py),</span>
 <span class="sd">        - &quot;compiler_module&quot; loads the compiler for P4 codes,</span>
 <span class="sd">        - &quot;host_node&quot; loads the host node to be used with Mininet,</span>
 <span class="sd">        - &quot;client_module&quot; loads the client to program switches from files.</span>
 <span class="sd">        - &quot;mininet_module&quot; loads the network module</span>
 
-<span class="sd">    Example of JSON structure of conf_file::</span>
-<span class="sd">    </span>
-<span class="sd">        {</span>
-<span class="sd">            &quot;p4_src&quot;: &lt;path to gobal p4 source&gt; (string),</span>
-<span class="sd">            &quot;cli&quot;: &lt;true|false&gt; (bool),</span>
-<span class="sd">            &quot;pcap_dump&quot;: &lt;true|false&gt; (bool),</span>
-<span class="sd">            &quot;enable_log&quot;: &lt;true|false&gt; (bool),</span>
-<span class="sd">            &quot;tasks_file&quot;: &lt;path to the tasks file&gt; (string)</span>
-<span class="sd">            &quot;host_node&quot;:</span>
-<span class="sd">            {</span>
-<span class="sd">                &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
-<span class="sd">                &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                &quot;object_name&quot;: &lt;module object&gt; (string)</span>
-<span class="sd">            },</span>
-<span class="sd">            &quot;switch_node&quot;:</span>
-<span class="sd">            {</span>
-<span class="sd">                &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
-<span class="sd">                &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                &quot;object_name&quot;: &lt;module object&gt; (string)</span>
-<span class="sd">            },</span>
-<span class="sd">            &quot;router_node&quot;:</span>
-<span class="sd">            {</span>
-<span class="sd">                &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
-<span class="sd">                &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                &quot;object_name&quot;: &lt;module object&gt; (string)</span>
-<span class="sd">            }</span>
-<span class="sd">            &quot;compiler_module&quot;:</span>
-<span class="sd">            {</span>
-<span class="sd">                &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
-<span class="sd">                &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                &quot;object_name&quot;: &lt;module object&gt; (string),</span>
-<span class="sd">                &quot;options&quot;: &lt;options passed to init&gt; (dict)</span>
-<span class="sd">            },</span>
-<span class="sd">            &quot;client_module&quot;:</span>
-<span class="sd">            {</span>
-<span class="sd">                &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
-<span class="sd">                &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                &quot;object_name&quot;: &lt;module object&gt; (string),</span>
-<span class="sd">                &quot;options&quot;: &lt;options passed to init&gt; (dict)</span>
-<span class="sd">            },</span>
-<span class="sd">            &quot;mininet_module&quot;:</span>
-<span class="sd">            {</span>
-<span class="sd">                &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
-<span class="sd">                &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                &quot;object_name&quot;: &lt;module object&gt; (string)</span>
-<span class="sd">            },</span>
-<span class="sd">            &quot;exec_scripts&quot;: </span>
-<span class="sd">            [</span>
-<span class="sd">                {</span>
-<span class="sd">                    &quot;cmd&quot;: &lt;path to script&gt; (string),</span>
-<span class="sd">                    &quot;reboot_run&quot;: &lt;true|false&gt; (bool)</span>
-<span class="sd">                },</span>
-<span class="sd">                ...</span>
-<span class="sd">            ],</span>
-<span class="sd">            &quot;topology&quot;: </span>
-<span class="sd">            {</span>
-<span class="sd">                &quot;assignment_strategy&quot;: assignment_strategy,</span>
-<span class="sd">                &quot;default&quot;:</span>
-<span class="sd">                {</span>
-<span class="sd">                    &lt;default links and hosts configurations, see parse_links and parse_hosts&gt;</span>
-<span class="sd">                }</span>
-<span class="sd">                &quot;links&quot;: </span>
-<span class="sd">                [</span>
-<span class="sd">                    &lt;see parse_links&gt;</span>
-<span class="sd">                ],</span>
-<span class="sd">                &quot;hosts&quot;: </span>
-<span class="sd">                {</span>
-<span class="sd">                    &lt;see parse_hosts&gt;</span>
-<span class="sd">                },</span>
-<span class="sd">                &quot;switches&quot;: </span>
-<span class="sd">                {</span>
-<span class="sd">                    &lt;see parse_switch&gt;</span>
-<span class="sd">                },</span>
-<span class="sd">                &quot;routers&quot;: </span>
-<span class="sd">                {</span>
-<span class="sd">                    &lt;see parse_routers&gt;</span>
-<span class="sd">                }</span>
-<span class="sd">            }</span>
-<span class="sd">        }</span>
-
-<span class="sd">    Notice: none of the modules or nodes are mandatory. In case they are not specified,</span>
-<span class="sd">    default settings will be used.</span>
+<span class="sd">    Note: </span>
+<span class="sd">        None of the modules or nodes are mandatory. In case they are not specified,</span>
+<span class="sd">        default settings will be used.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf_file</span><span class="p">,</span>
@@ -334,13 +352,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="n">verbosity</span><span class="p">)</span>
 
         <span class="c1"># Read JSON configuration file</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conf_file</span> <span class="o">=</span> <span class="n">conf_file</span>
-
         <span class="n">info</span><span class="p">(</span><span class="s1">&#39;Reading JSON configuration file...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Opening file </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conf_file</span><span class="p">))</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conf_file</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not in the directory!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conf_file</span><span class="p">)))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conf</span> <span class="o">=</span> <span class="n">load_conf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conf_file</span><span class="p">)</span>
+        <span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Opening file </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">conf_file</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">conf_file</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not in the directory!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">conf_file</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conf</span> <span class="o">=</span> <span class="n">load_conf</span><span class="p">(</span><span class="n">conf_file</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cli_enabled</span> <span class="o">=</span> <span class="n">cli_enabled</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pcap_dir</span> <span class="o">=</span> <span class="n">pcap_dir</span>

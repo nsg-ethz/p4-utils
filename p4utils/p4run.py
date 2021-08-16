@@ -38,121 +38,139 @@ from p4utils.mininetlib.network_API import NetworkAPI
 
 
 class AppRunner(NetworkAPI):
-    """
-    Class for running P4 applications.
+    """Class to run P4 applications from a JSON configuration file.
 
-    Initializes some attributes and reads the topology json.
+    The ``AppRunner`` creates a *Mininet* network reading information from the JSON
+    configuration file. It also specifies whether logs and sniffed packets are to be
+    saved on the disk at some location.
+
+    Args:
+        conf_file (string): a JSON file which describes the *Mininet* topology.
+        cli_enabled (bool): enable *Mininet* CLI.
+        log_dir (string): directory for *Mininet* log files.
+        pcap_dir (string): directory where to store pcap files.
+        verbosity (string): amount of information shown during the execution.
+        
+    Possible **verbosity** values, listed from the most to less verbose, are the following:
+
+        - ``debug``
+        - ``info``
+        - ``output``
+        - ``warning``
+        - ``warn``
+        - ``error``
+        - ``critical``
 
     Attributes:
-        conf_file (string): a JSON file which describes the mininet topology.
-        cli_enabled (bool): enable mininet CLI.
-        log_dir (string): directory for mininet log files.
-        pcap_dir (string): directory where to store pcap files.
-        verbosity (string): see https://github.com/mininet/mininet/blob/57294d013e780cccc6b4b9af151906b382c4d8a7/mininet/log.py#L14
+        cli_enabled (bool)  : enable *Mininet* CLI.
+        log_enabled (bool)  : enable logging or not
+        log_dir (string)    : directory for log files.
+        pcap_dump (bool)    : generate ``.pcap`` files for interfaces.
+        pcap_dir (string)   : directory where to store ``.pcap`` files.
+        hosts (dict)        : dictionary of host and their properties.
+        switches (dict)     : dictionary of switches and their properties.
+        routers (dict)      : dictionary of routers and their properties.
+        links (dict)        : dictionary of mininet links and their properties.
+        clients (list)      : list of *Thrift* clients (one per P4 switch) to populate tables.
+        compilers (list)    : list of compiler instances (one per P4 source provided) to compile P4 code.
+        conf (dict)         : parsed configuration from the JSON configuration file.
+        net (object)        : *Mininet* network instance.
+        *_module (object)   : module dict used to import the specified module (see below)
+        *_node (object)     : node dict uset to import the specified Mininet node (see below)    
 
-    The following attributes are initialized during the execution and are
-    not specified in the constructor:
-        pcap_dump (bool)    : determines if we generate pcap files for interfaces.
-        hosts (list)        : list of mininet host names.
-        switches (dict)     : mininet host names and their associated properties.
-        links (list)        : list of mininet link properties.
-        clients (list)      : list of clients (one per client-capable switch) to populate tables
-        compilers (list)    : list of compilers (one per P4 source provided) to compile P4 code
-        conf (dict)         : parsed configuration from conf_file.
-        net (Mininet object): the mininet instance.
-        *_module (dict/obj) : module dict used to import the specified module (see below)
-        *_node (dict/obj)   : node dict uset to import the specified Mininet node (see below)
+    Example:
+        The structure of the **JSON** network configuration file parsed by the ``AppRunner`` is
+        the following::
+
+            {
+                "p4_src": <path to gobal p4 source> (string),
+                "cli": <true|false> (bool),
+                "pcap_dump": <true|false> (bool),
+                "enable_log": <true|false> (bool),
+                "tasks_file": <path to the tasks file> (string)
+                "host_node":
+                {
+                    "file_path": <path to module> (string),
+                    "module_name": <module file name> (string),
+                    "object_name": <module object> (string)
+                },
+                "switch_node":
+                {
+                    "file_path": <path to module> (string),
+                    "module_name": <module file name> (string),
+                    "object_name": <module object> (string)
+                },
+                "router_node":
+                {
+                    "file_path": <path to module> (string),
+                    "module_name": <module file name> (string),
+                    "object_name": <module object> (string)
+                },
+                "compiler_module":
+                {
+                    "file_path": <path to module> (string),
+                    "module_name": <module file name> (string),
+                    "object_name": <module object> (string),
+                    "options": <options passed to init> (dict)
+                },
+                "client_module":
+                {
+                    "file_path": <path to module> (string),
+                    "module_name": <module file name> (string),
+                    "object_name": <module object> (string),
+                    "options": <options passed to init> (dict)
+                },
+                "mininet_module":
+                {
+                    "file_path": <path to module> (string),
+                    "module_name": <module file name> (string),
+                    "object_name": <module object> (string)
+                },
+                "exec_scripts": 
+                [
+                    {
+                        "cmd": <path to script> (string),
+                        "reboot_run": <true|false> (bool)
+                    },
+                    ...
+                ],
+                "topology": 
+                {
+                    "assignment_strategy": assignment_strategy,
+                    "default":
+                    {
+                        <default links and hosts configurations, see parse_links and parse_hosts>
+                    }
+                    "links": 
+                    [
+                        <see parse_links>
+                    ],
+                    "hosts": 
+                    {
+                        <see parse_hosts>
+                    },
+                    "switches": 
+                    {
+                        <see parse_switch>
+                    },
+                    "routers": 
+                    {
+                        <see parse_routers>
+                    }
+                }
+            }
+
+        Inside self.conf can be present several module configuration objects. These are the possible values:
         
-    Modules and nodes available
-    Inside self.conf can be present several module configuration objects. These are the possible values:
         - "switch_node" loads the switch node to be used with Mininet (see mininetlib/node.py),
         - "compiler_module" loads the compiler for P4 codes,
         - "host_node" loads the host node to be used with Mininet,
         - "client_module" loads the client to program switches from files.
         - "mininet_module" loads the network module
 
-    Example of JSON structure of conf_file::
-    
-        {
-            "p4_src": <path to gobal p4 source> (string),
-            "cli": <true|false> (bool),
-            "pcap_dump": <true|false> (bool),
-            "enable_log": <true|false> (bool),
-            "tasks_file": <path to the tasks file> (string)
-            "host_node":
-            {
-                "file_path": <path to module> (string),
-                "module_name": <module file name> (string),
-                "object_name": <module object> (string)
-            },
-            "switch_node":
-            {
-                "file_path": <path to module> (string),
-                "module_name": <module file name> (string),
-                "object_name": <module object> (string)
-            },
-            "router_node":
-            {
-                "file_path": <path to module> (string),
-                "module_name": <module file name> (string),
-                "object_name": <module object> (string)
-            }
-            "compiler_module":
-            {
-                "file_path": <path to module> (string),
-                "module_name": <module file name> (string),
-                "object_name": <module object> (string),
-                "options": <options passed to init> (dict)
-            },
-            "client_module":
-            {
-                "file_path": <path to module> (string),
-                "module_name": <module file name> (string),
-                "object_name": <module object> (string),
-                "options": <options passed to init> (dict)
-            },
-            "mininet_module":
-            {
-                "file_path": <path to module> (string),
-                "module_name": <module file name> (string),
-                "object_name": <module object> (string)
-            },
-            "exec_scripts": 
-            [
-                {
-                    "cmd": <path to script> (string),
-                    "reboot_run": <true|false> (bool)
-                },
-                ...
-            ],
-            "topology": 
-            {
-                "assignment_strategy": assignment_strategy,
-                "default":
-                {
-                    <default links and hosts configurations, see parse_links and parse_hosts>
-                }
-                "links": 
-                [
-                    <see parse_links>
-                ],
-                "hosts": 
-                {
-                    <see parse_hosts>
-                },
-                "switches": 
-                {
-                    <see parse_switch>
-                },
-                "routers": 
-                {
-                    <see parse_routers>
-                }
-            }
-        }
-
-    Notice: none of the modules or nodes are mandatory. In case they are not specified,
-    default settings will be used.
+    Note: 
+        None of the modules or nodes are mandatory. In case they are not specified,
+        default settings will be used.
     """
 
     def __init__(self, conf_file,
@@ -166,13 +184,11 @@ class AppRunner(NetworkAPI):
         self.setLogLevel(verbosity)
 
         # Read JSON configuration file
-        self.conf_file = conf_file
-
         info('Reading JSON configuration file...\n')
-        debug('Opening file {}\n'.format(self.conf_file))
-        if not os.path.isfile(self.conf_file):
-            raise FileNotFoundError("{} is not in the directory!".format(os.path.realpath(self.conf_file)))
-        self.conf = load_conf(self.conf_file)
+        debug('Opening file {}\n'.format(conf_file))
+        if not os.path.isfile(conf_file):
+            raise FileNotFoundError("{} is not in the directory!".format(os.path.realpath(conf_file)))
+        self.conf = load_conf(conf_file)
 
         self.cli_enabled = cli_enabled
         self.pcap_dir = pcap_dir
