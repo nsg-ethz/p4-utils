@@ -206,45 +206,28 @@
 
 
 <div class="viewcode-block" id="AppRunner"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner">[docs]</a><span class="k">class</span> <span class="nc">AppRunner</span><span class="p">(</span><span class="n">NetworkAPI</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Class to run P4 applications from a JSON configuration file.</span>
+    <span class="sd">&quot;&quot;&quot;Class used to run P4 applications from a JSON configuration file.</span>
 
 <span class="sd">    The ``AppRunner`` creates a *Mininet* network reading information from the JSON</span>
 <span class="sd">    configuration file. It also specifies whether logs and sniffed packets are to be</span>
 <span class="sd">    saved on the disk at some location.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        conf_file (string): a JSON file which describes the *Mininet* topology.</span>
+<span class="sd">        conf_file (str): a JSON file which describes the *Mininet* topology.</span>
 <span class="sd">        cli_enabled (bool): enable *Mininet* CLI.</span>
-<span class="sd">        log_dir (string): directory for *Mininet* log files.</span>
-<span class="sd">        pcap_dir (string): directory where to store pcap files.</span>
-<span class="sd">        verbosity (string): amount of information shown during the execution.</span>
+<span class="sd">        log_dir (str): directory for *Mininet* log files.</span>
+<span class="sd">        pcap_dir (str): directory where to store pcap files.</span>
+<span class="sd">        verbosity (str): amount of information shown during the execution.</span>
 <span class="sd">        </span>
 <span class="sd">    Possible **verbosity** values, listed from the most to less verbose, are the following:</span>
 
-<span class="sd">        - ``debug``</span>
-<span class="sd">        - ``info``</span>
-<span class="sd">        - ``output``</span>
-<span class="sd">        - ``warning``</span>
-<span class="sd">        - ``warn``</span>
-<span class="sd">        - ``error``</span>
-<span class="sd">        - ``critical``</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        cli_enabled (bool)  : enable *Mininet* CLI.</span>
-<span class="sd">        log_enabled (bool)  : enable logging or not</span>
-<span class="sd">        log_dir (string)    : directory for log files.</span>
-<span class="sd">        pcap_dump (bool)    : generate ``.pcap`` files for interfaces.</span>
-<span class="sd">        pcap_dir (string)   : directory where to store ``.pcap`` files.</span>
-<span class="sd">        hosts (dict)        : dictionary of host and their properties.</span>
-<span class="sd">        switches (dict)     : dictionary of switches and their properties.</span>
-<span class="sd">        routers (dict)      : dictionary of routers and their properties.</span>
-<span class="sd">        links (dict)        : dictionary of mininet links and their properties.</span>
-<span class="sd">        clients (list)      : list of *Thrift* clients (one per P4 switch) to populate tables.</span>
-<span class="sd">        compilers (list)    : list of compiler instances (one per P4 source provided) to compile P4 code.</span>
-<span class="sd">        conf (dict)         : parsed configuration from the JSON configuration file.</span>
-<span class="sd">        net (object)        : *Mininet* network instance.</span>
-<span class="sd">        *_module (object)   : module dict used to import the specified module (see below)</span>
-<span class="sd">        *_node (object)     : node dict uset to import the specified Mininet node (see below)    </span>
+<span class="sd">    - ``debug``</span>
+<span class="sd">    - ``info``</span>
+<span class="sd">    - ``output``</span>
+<span class="sd">    - ``warning``</span>
+<span class="sd">    - ``warn``</span>
+<span class="sd">    - ``error``</span>
+<span class="sd">    - ``critical``</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        The structure of the **JSON** network configuration file parsed by the ``AppRunner`` is</span>
@@ -328,17 +311,56 @@
 <span class="sd">                }</span>
 <span class="sd">            }</span>
 
-<span class="sd">        Inside self.conf can be present several module configuration objects. These are the possible values:</span>
+<span class="sd">        Inside the network configuration file, several modules and nodes</span>
+<span class="sd">        JSON objects can be present. These are the possible values:</span>
 <span class="sd">        </span>
-<span class="sd">        - &quot;switch_node&quot; loads the switch node to be used with Mininet (see mininetlib/node.py),</span>
-<span class="sd">        - &quot;compiler_module&quot; loads the compiler for P4 codes,</span>
-<span class="sd">        - &quot;host_node&quot; loads the host node to be used with Mininet,</span>
-<span class="sd">        - &quot;client_module&quot; loads the client to program switches from files.</span>
-<span class="sd">        - &quot;mininet_module&quot; loads the network module</span>
+<span class="sd">        - __ #p4utils.p4run.AppRunner.host_node</span>
+
+<span class="sd">          ``host_node`` loads an extension to *Mininet* node class into the `homonymous </span>
+<span class="sd">          attribute`__. </span>
+<span class="sd">        - __ #p4utils.p4run.AppRunner.switch_node</span>
+
+<span class="sd">          ``switch_node`` loads an extension to *Mininet* switch node class into the </span>
+<span class="sd">          `homonymous attribute`__.</span>
+<span class="sd">        - __ #p4utils.p4run.AppRunner.router_node</span>
+
+<span class="sd">          ``router_node`` loads an extension to *Mininet* node class </span>
+<span class="sd">          into the `homonymous attribute`__.</span>
+<span class="sd">        - __ #p4utils.p4run.AppRunner.mininet_module</span>
+
+<span class="sd">          ``mininet_module`` loads an extension to *Mininet* network class into the</span>
+<span class="sd">          `homonymous attribute`__.</span>
+<span class="sd">        - __ #p4utils.p4run.AppRunner.compiler_module</span>
+
+<span class="sd">          ``compiler_module`` loads a compiler class into the `homonymous attribute`__.</span>
+<span class="sd">        - __ #p4utils.p4run.AppRunner.client_module</span>
+
+<span class="sd">          ``client_module`` loads a *Thrift* client into the `homonymous attribute`__.</span>
 
 <span class="sd">    Note: </span>
 <span class="sd">        None of the modules or nodes are mandatory. In case they are not specified,</span>
 <span class="sd">        default settings will be used.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        cli_enabled (bool)      : enable an extension to *Mininet* CLI after the network starts.</span>
+<span class="sd">        log_enabled (bool)      : enable saving log files to the disk.</span>
+<span class="sd">        log_dir (string)        : directory used to store log files.</span>
+<span class="sd">        pcap_dump (bool)        : generate ``.pcap`` files for interfaces.</span>
+<span class="sd">        pcap_dir (string)       : directory where to store ``.pcap`` files.</span>
+<span class="sd">        hosts (dict)            : dictionary of host and their properties.</span>
+<span class="sd">        switches (dict)         : dictionary of switches and their properties.</span>
+<span class="sd">        routers (dict)          : dictionary of routers and their properties.</span>
+<span class="sd">        links (dict)            : dictionary of mininet links and their properties.</span>
+<span class="sd">        clients (list)          : list of *Thrift* clients (one per P4 switch) to populate tables.</span>
+<span class="sd">        compilers (list)        : list of compiler instances (one per P4 source provided) to compile P4 code.</span>
+<span class="sd">        conf (dict)             : parsed configuration from the JSON configuration file.</span>
+<span class="sd">        net (object)            : network instance implemented using an extension to *Mininet* network class.</span>
+<span class="sd">        host_node (class)       : extension to *Mininet* node class used as default host class.</span>
+<span class="sd">        switch_node (class)     : extension to *Mininet* switch node class used as default switch class.</span>
+<span class="sd">        router_node (class)     : extension to *Mininet* node class used as default router class.</span>
+<span class="sd">        mininet_module (class)  : extension to *Mininet* network class used to orchestrate the virtual network.</span>
+<span class="sd">        compiler_module (class) : compiler class used for P4 sources compilation.</span>
+<span class="sd">        client_module (class)   : *Thrift* client to program switches from command text files.    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf_file</span><span class="p">,</span>
@@ -505,8 +527,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">startNetwork</span><span class="p">()</span>
 
 <div class="viewcode-block" id="AppRunner.parse_hosts"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner.parse_hosts">[docs]</a>    <span class="k">def</span> <span class="nf">parse_hosts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unparsed_hosts</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Parse hosts from the JSON configuration files and add </span>
+        <span class="sd">&quot;&quot;&quot;Parses hosts from the JSON configuration files and add </span>
 <span class="sd">        them to the network initializer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            unparsed_host (dict): dictionary of hosts and properties retrieved from</span>
+<span class="sd">                                  the JSON network configuration file.</span>
 
 <span class="sd">        Example:</span>
 <span class="sd">            Hosts have the following description in the JSON network </span>
@@ -522,13 +548,14 @@
 <span class="sd">                        &quot;dhcp&quot;: &lt;true|false&gt; (*)</span>
 <span class="sd">                        &quot;log_enabled&quot; : &lt;true|false&gt; (bool), (*)</span>
 <span class="sd">                        &quot;log_dir&quot;: &lt;log path for switch binary&gt; (string), (*)</span>
-<span class="sd">                        &quot;host_node&quot;: custom_switch_node (dict) (*)</span>
+<span class="sd">                        &quot;host_node&quot;: &lt;custom switch node&gt; (dict) (*)</span>
 <span class="sd">                    },</span>
 <span class="sd">                    ...</span>
 <span class="sd">                }</span>
 
-<span class="sd">            (*) None of these parameters is mandatory.</span>
-
+<span class="sd">        Note:</span>
+<span class="sd">            None of the fields marked with ``(*)`` is mandatory. If they are not specified</span>
+<span class="sd">            default values will be used.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">default_params</span> <span class="o">=</span> <span class="p">{</span>
                             <span class="s1">&#39;log_enabled&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_enabled</span><span class="p">,</span>
@@ -555,32 +582,38 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
     
 <div class="viewcode-block" id="AppRunner.parse_switches"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner.parse_switches">[docs]</a>    <span class="k">def</span> <span class="nf">parse_switches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unparsed_switches</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parse switches and add them to the network. A switch has </span>
-<span class="sd">        the following structure inside the topology object</span>
-<span class="sd">        &quot;switches&quot;:</span>
-<span class="sd">        {</span>
-<span class="sd">            switch_name:</span>
-<span class="sd">            {</span>
-<span class="sd">                &quot;p4_src&quot;: path_to_p4_program (string),</span>
-<span class="sd">                &quot;cpu_port&quot;: &lt;true|false&gt; (bool),</span>
-<span class="sd">                &quot;cli_input&quot;: &lt;path to cli input file&gt; (string),</span>
-<span class="sd">                &quot;switch_node&quot;: custom_switch_node (dict) (*),</span>
-<span class="sd">                &quot;log_enabled&quot; : &lt;true|false&gt; (bool), (*)</span>
-<span class="sd">                &quot;log_dir&quot;: &lt;log path for switch binary&gt; (string), (*)</span>
-<span class="sd">                &quot;pcap_dump&quot;: &lt;true|false&gt; (bool), (*)</span>
-<span class="sd">                &quot;pcap_dir&quot;: &lt;path for pcap files&gt; (string), (*)</span>
-<span class="sd">                &quot;sw_bin&quot;: switch_binary (string), (*)</span>
-<span class="sd">                &quot;thrift_port&quot;: thrift_port (int), (*)</span>
-<span class="sd">                &quot;grpc_port&quot;: grpc_port (int) (*)</span>
-<span class="sd">            },</span>
-<span class="sd">            ...</span>
-<span class="sd">        }</span>
+        <span class="sd">&quot;&quot;&quot;Parses the switches and adds them to the network.</span>
 
-<span class="sd">        (*) Parameters used to initialize the actual Mininet node (see p4utils.mininetlib.node).</span>
-<span class="sd">        The other parameters are needed for other application features and functions and can be retrieved</span>
-<span class="sd">        under getattr(mininetlib.net[&#39;node_name&#39;],&#39;params&#39;) dictionary.</span>
-<span class="sd">        These settings override the default ones. None of these fields is mandatory.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            unparsed_switches (dict): dictionary of switches and properties retrieved from</span>
+<span class="sd">                                      the JSON network configuration file.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Switches have the following description in the JSON network </span>
+<span class="sd">            configuration file::</span>
+<span class="sd">        </span>
+<span class="sd">                &quot;switches&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    switch_name:</span>
+<span class="sd">                    {</span>
+<span class="sd">                        &quot;p4_src&quot;: &lt;path to p4 program&gt; (string),</span>
+<span class="sd">                        &quot;cpu_port&quot;: &lt;true|false&gt; (bool),</span>
+<span class="sd">                        &quot;cli_input&quot;: &lt;path to cli input file&gt; (string),</span>
+<span class="sd">                        &quot;switch_node&quot;: &lt;custom switch node&gt; (dict) (*),</span>
+<span class="sd">                        &quot;log_enabled&quot; : &lt;true|false&gt; (bool), (*)</span>
+<span class="sd">                        &quot;log_dir&quot;: &lt;log path for switch binary&gt; (string), (*)</span>
+<span class="sd">                        &quot;pcap_dump&quot;: &lt;true|false&gt; (bool), (*)</span>
+<span class="sd">                        &quot;pcap_dir&quot;: &lt;path for pcap files&gt; (string), (*)</span>
+<span class="sd">                        &quot;sw_bin&quot;: &lt;switch binary&gt; (string), (*)</span>
+<span class="sd">                        &quot;thrift_port&quot;: &lt;thrift port&gt; (int), (*)</span>
+<span class="sd">                        &quot;grpc_port&quot;: &lt;grpc port&gt; (int) (*)</span>
+<span class="sd">                    },</span>
+<span class="sd">                    ...</span>
+<span class="sd">                }</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            None of the fields marked with ``(*)`` is mandatory. If they are not specified</span>
+<span class="sd">            default values will be used.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">default_params</span> <span class="o">=</span> <span class="p">{</span>
                             <span class="s1">&#39;p4_src&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;p4_src&#39;</span><span class="p">),</span>
@@ -621,27 +654,50 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">addSwitch</span><span class="p">(</span><span class="n">switch</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AppRunner.parse_routers"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner.parse_routers">[docs]</a>    <span class="k">def</span> <span class="nf">parse_routers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unparsed_routers</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parse hosts and add them to the network. Hosts have</span>
+        <span class="sd">&quot;&quot;&quot;Parse hosts and add them to the network. Hosts have</span>
 <span class="sd">        the following structure:</span>
-<span class="sd">        &quot;routers&quot;:</span>
-<span class="sd">        {</span>
-<span class="sd">            router_name:</span>
-<span class="sd">            {</span>
-<span class="sd">                &quot;int_conf&quot;: &lt;path to the router&#39;s integrate configuration file&gt;</span>
-<span class="sd">                &quot;conf_dir&quot;: &lt;path to the directory which contains the folder </span>
-<span class="sd">                             (named after the router) with the configuration </span>
-<span class="sd">                             files for all the daemons&gt;</span>
-<span class="sd">                daemon1_name: &lt;true|false&gt; (bool) (*),</span>
-<span class="sd">                daemon2_name: &lt;true|false&gt; (bool) (*),</span>
-<span class="sd">                ...</span>
-<span class="sd">            },</span>
-<span class="sd">            ...</span>
-<span class="sd">        }</span>
 
-<span class="sd">        Notice that if int_conf is specified, then conf_dir is ignored.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            unparsed_routers (dict): dictionary of routers and properties retrieved from</span>
+<span class="sd">                                     the JSON network configuration file.</span>
 
-<span class="sd">        (*) None of these parameters is mandatory.</span>
+<span class="sd">        Example:</span>
+<span class="sd">            Routers have the following description in the JSON network </span>
+<span class="sd">            configuration file::</span>
+
+<span class="sd">                &quot;routers&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    router_name:</span>
+<span class="sd">                    {</span>
+<span class="sd">                        &quot;int_conf&quot;: &lt;path to the router&#39;s integrate configuration file&gt; (string)</span>
+<span class="sd">                        &quot;conf_dir&quot;: &lt;path to the directory which contains the folder </span>
+<span class="sd">                                    (named after the router) with the configuration </span>
+<span class="sd">                                    files for all the daemons&gt; (string)</span>
+<span class="sd">                        &quot;zebra&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;bgpd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;ospfd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;ospf6d&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;ripd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;ripngd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;isisd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;pimd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;ldpd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;nhrpd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;eigrpd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;babeld&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;sharpd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;staticd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;pbrd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;bfdd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;fabricd&quot; : &lt;true|false&gt; (bool) (*)</span>
+<span class="sd">                    },</span>
+<span class="sd">                    ...</span>
+<span class="sd">                }</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            None of the fields marked with ``(*)`` is mandatory. If they are not specified</span>
+<span class="sd">            default values will be used. Moreover, if ``int_conf`` is specified,</span>
+<span class="sd">            then ``conf_dir`` is ignored.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">default_params</span> <span class="o">=</span> <span class="p">{</span>
                             <span class="s1">&#39;router_node&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">router_node</span><span class="p">),</span>
@@ -671,57 +727,66 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">addRouter</span><span class="p">(</span><span class="n">router</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AppRunner.parse_links"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner.parse_links">[docs]</a>    <span class="k">def</span> <span class="nf">parse_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unparsed_links</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Load a list of links descriptions of the form </span>
-<span class="sd">        &quot;links&quot;:</span>
-<span class="sd">        [</span>
-<span class="sd">            [</span>
-<span class="sd">                node1,</span>
-<span class="sd">                node2, </span>
-<span class="sd">                { </span>
-<span class="sd">                    &quot;weight&quot;: weight,</span>
-<span class="sd">                    &quot;port1&quot;: port1,</span>
-<span class="sd">                    &quot;port2&quot;: port2,</span>
-<span class="sd">                    &quot;intfName1&quot;: intfName1,</span>
-<span class="sd">                    &quot;intfName2&quot;: intfName2,</span>
-<span class="sd">                    &quot;addr1&quot;: addr1,</span>
-<span class="sd">                    &quot;addr2&quot;: addr2,</span>
-<span class="sd">                    &quot;params1&quot;: { parameters_for_interface1 },</span>
-<span class="sd">                    &quot;params2&quot;: { parameters_for_interface2 },</span>
-<span class="sd">                    &quot;bw&quot;: bandwidth,</span>
-<span class="sd">                    &quot;delay&quot;: transmit_delay,</span>
-<span class="sd">                    &quot;loss&quot;: loss,</span>
-<span class="sd">                    &quot;max_queue_size&quot;: max_queue_size</span>
-<span class="sd">                }</span>
-<span class="sd">            ],</span>
-<span class="sd">            ...</span>
-<span class="sd">        ]</span>
-<span class="sd">        where the only mandatory fields are node1 and node2 and complete missing with</span>
-<span class="sd">        default values and store them as self.links.</span>
-
-<span class="sd">        For what concernes the Mininet classes used, we have that:</span>
-<span class="sd">            &quot;weight&quot; is used by Networkx,</span>
-<span class="sd">            &quot;port*&quot; are used by mininet.Topo and are propagated to mininet.Link.</span>
-<span class="sd">            &quot;intfName*&quot; are propagated to mininet.Link and used by each mininet.link.Intf of the mininter.Link.</span>
-<span class="sd">            &quot;addr*&quot; are propagated to mininet.Link and used by each mininet.link.Intf of the mininet.Link.</span>
-<span class="sd">            &quot;params*&quot; are propagated to mininet.Link and used by each mininet.link.Intf of the link.</span>
-<span class="sd">            &quot;bw&quot;, &quot;delay&quot;, &quot;loss&quot; and &quot;max_queue_size&quot; are propagated to mininet.Link and used by both mininet.link.Intf of the mininet.Link.</span>
-<span class="sd">        </span>
-<span class="sd">        &quot;weight&quot;, &quot;bw&quot;, &quot;delay&quot;, &quot;loss&quot;, &quot;max_queue_size&quot; default value can be set by</span>
-<span class="sd">        putting inside &quot;topology&quot; the following object:</span>
-<span class="sd">        &quot;default&quot;:</span>
-<span class="sd">        {</span>
-<span class="sd">            &quot;weight&quot;: weight,</span>
-<span class="sd">            &quot;bw&quot;: bandwidth,</span>
-<span class="sd">            &quot;delay&quot;: transmit_delay,</span>
-<span class="sd">            &quot;loss&quot;: loss,</span>
-<span class="sd">            &quot;max_queue_size&quot;: max_queue_size,</span>
-<span class="sd">            &quot;auto_arp_tables&quot;: &lt;true|false&gt;,</span>
-<span class="sd">            &quot;auto_gw_arp&quot;: &lt;true|false&gt;</span>
-<span class="sd">        }</span>
+        <span class="sd">&quot;&quot;&quot;Load a list of links descriptions of the form.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            uparsed_links (array): unparsed links from topology json</span>
+<span class="sd">            uparsed_links (list): list of links and properties retrieved from</span>
+<span class="sd">                                  the JSON network configuration file.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Links have the following description in the JSON network </span>
+<span class="sd">            configuration file::</span>
+
+<span class="sd">                &quot;links&quot;:</span>
+<span class="sd">                [</span>
+<span class="sd">                    [</span>
+<span class="sd">                        node1,</span>
+<span class="sd">                        node2, </span>
+<span class="sd">                        { </span>
+<span class="sd">                            &quot;weight&quot;: &lt;link weight&gt; (int) (*),</span>
+<span class="sd">                            &quot;port1&quot;: &lt;number of port1&gt; (int) (*),</span>
+<span class="sd">                            &quot;port2&quot;: &lt;number of port2&gt; (int) (*),</span>
+<span class="sd">                            &quot;intfName1&quot;: &lt;name of the interface1&gt; (string) (*),</span>
+<span class="sd">                            &quot;intfName2&quot;: &lt;name of the interface2&gt; (string) (*),</span>
+<span class="sd">                            &quot;addr1&quot;: &lt;mac address of interface1&gt; (string) (*),</span>
+<span class="sd">                            &quot;addr2&quot;: &lt;mac address of interface2&gt; (string) (*),</span>
+<span class="sd">                            &quot;params1&quot;: &lt;parameters for interface1&gt; (dict) (*),</span>
+<span class="sd">                            &quot;params2&quot;: &lt;parameters for interface2&gt; (dict) (*),</span>
+<span class="sd">                            &quot;bw&quot;: &lt;bandwidth weight&gt; (int) (*),</span>
+<span class="sd">                            &quot;delay&quot;: &lt;transmit delay&gt; (int) (*),</span>
+<span class="sd">                            &quot;loss&quot;: &lt;link data loss&gt; (float) (*),</span>
+<span class="sd">                            &quot;max_queue_size&quot;: &lt;max queue size&gt; (int) (*)</span>
+<span class="sd">                        }</span>
+<span class="sd">                    ],</span>
+<span class="sd">                    ...</span>
+<span class="sd">                ]</span>
+
+<span class="sd">        For what concernes the Mininet classes used, we have that:</span>
+
+<span class="sd">        - &quot;weight&quot; is used by Networkx,</span>
+<span class="sd">        - &quot;port*&quot; are used by mininet.Topo and are propagated to mininet.Link.</span>
+<span class="sd">        - &quot;intfName*&quot; are propagated to mininet.Link and used by each mininet.link.Intf of the mininter.Link.</span>
+<span class="sd">        - &quot;addr*&quot; are propagated to mininet.Link and used by each mininet.link.Intf of the mininet.Link.</span>
+<span class="sd">        - &quot;params*&quot; are propagated to mininet.Link and used by each mininet.link.Intf of the link.</span>
+<span class="sd">        - &quot;bw&quot;, &quot;delay&quot;, &quot;loss&quot; and &quot;max_queue_size&quot; are propagated to mininet.Link and used by both mininet.link.Intf of the mininet.Link.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;weight&quot;, &quot;bw&quot;, &quot;delay&quot;, &quot;loss&quot;, &quot;max_queue_size&quot; default value can be set by</span>
+<span class="sd">        putting inside &quot;topology&quot; the following object::</span>
+
+<span class="sd">            &quot;default&quot;:</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;weight&quot;: weight,</span>
+<span class="sd">                &quot;bw&quot;: bandwidth,</span>
+<span class="sd">                &quot;delay&quot;: transmit_delay,</span>
+<span class="sd">                &quot;loss&quot;: loss,</span>
+<span class="sd">                &quot;max_queue_size&quot;: max_queue_size,</span>
+<span class="sd">                &quot;auto_arp_tables&quot;: &lt;true|false&gt;,</span>
+<span class="sd">                &quot;auto_gw_arp&quot;: &lt;true|false&gt;</span>
+<span class="sd">            }</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            None of the fields marked with ``(*)`` is mandatory. If they are not specified</span>
+<span class="sd">            default values will be used.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">default_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;topology&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">{})</span>
 
@@ -754,8 +819,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">addLink</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_exec_scripts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Executes the script present in the &quot;exec_scripts&quot; field of self.conf.</span>
+        <span class="sd">&quot;&quot;&quot;Executes the script present in the &quot;exec_scripts&quot; field of self.conf.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exec_scripts&#39;</span><span class="p">),</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">script</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exec_scripts&#39;</span><span class="p">):</span>
@@ -763,6 +827,8 @@
 
 
 <div class="viewcode-block" id="get_args"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.get_args">[docs]</a><span class="k">def</span> <span class="nf">get_args</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Parses command line options.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
     <span class="n">default_log</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">)</span>
     <span class="n">default_pcap</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;pcap&#39;</span><span class="p">)</span>
@@ -786,6 +852,8 @@
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Cleans up files created by old executions and starts the virtual network.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">()</span>
 

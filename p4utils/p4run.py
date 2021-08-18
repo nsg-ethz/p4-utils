@@ -38,7 +38,7 @@ from p4utils.mininetlib.network_API import NetworkAPI
 
 
 class AppRunner(NetworkAPI):
-    """Class to run P4 applications from a JSON configuration file.
+    """Class used to run P4 applications from a JSON configuration file.
 
     The ``AppRunner`` creates a *Mininet* network reading information from the JSON
     configuration file. It also specifies whether logs and sniffed packets are to be
@@ -53,13 +53,13 @@ class AppRunner(NetworkAPI):
         
     Possible **verbosity** values, listed from the most to less verbose, are the following:
 
-        - ``debug``
-        - ``info``
-        - ``output``
-        - ``warning``
-        - ``warn``
-        - ``error``
-        - ``critical``
+    - ``debug``
+    - ``info``
+    - ``output``
+    - ``warning``
+    - ``warn``
+    - ``error``
+    - ``critical``
 
     Example:
         The structure of the **JSON** network configuration file parsed by the ``AppRunner`` is
@@ -143,20 +143,31 @@ class AppRunner(NetworkAPI):
                 }
             }
 
-        Inside the network configuration file, several modules and nodes configuration
+        Inside the network configuration file, several modules and nodes
         JSON objects can be present. These are the possible values:
         
-        - ``host_node`` loads an extension to *Mininet* node class into the `homonymous 
-          attribute`__.
-        __ #p4utils.p4run.AppRunner.host_node
-        - ``switch_node`` loads an extension to *Mininet* switch node class into the 
-          homonymous attribute.
-        - ``router_node`` loads an extension to *Mininet* node class 
-          into the homonymous attribute.
-        - ``mininet_module`` loads an extension to *Mininet* network class into the
-          homonymous attribute.
-        - ``compiler_module`` loads a compiler class into the homonymous attribute.
-        - ``client_module`` loads a *Thrift* client into the homonymous attribute.
+        - __ #p4utils.p4run.AppRunner.host_node
+
+          ``host_node`` loads an extension to *Mininet* node class into the `homonymous 
+          attribute`__. 
+        - __ #p4utils.p4run.AppRunner.switch_node
+
+          ``switch_node`` loads an extension to *Mininet* switch node class into the 
+          `homonymous attribute`__.
+        - __ #p4utils.p4run.AppRunner.router_node
+
+          ``router_node`` loads an extension to *Mininet* node class 
+          into the `homonymous attribute`__.
+        - __ #p4utils.p4run.AppRunner.mininet_module
+
+          ``mininet_module`` loads an extension to *Mininet* network class into the
+          `homonymous attribute`__.
+        - __ #p4utils.p4run.AppRunner.compiler_module
+
+          ``compiler_module`` loads a compiler class into the `homonymous attribute`__.
+        - __ #p4utils.p4run.AppRunner.client_module
+
+          ``client_module`` loads a *Thrift* client into the `homonymous attribute`__.
 
     Note: 
         None of the modules or nodes are mandatory. In case they are not specified,
@@ -348,8 +359,12 @@ class AppRunner(NetworkAPI):
         self.startNetwork()
 
     def parse_hosts(self, unparsed_hosts):
-        """Parse hosts from the JSON configuration files and add 
+        """Parses hosts from the JSON configuration files and add 
         them to the network initializer.
+
+        Args:
+            unparsed_host (dict): dictionary of hosts and properties retrieved from
+                                  the JSON network configuration file.
 
         Example:
             Hosts have the following description in the JSON network 
@@ -365,13 +380,14 @@ class AppRunner(NetworkAPI):
                         "dhcp": <true|false> (*)
                         "log_enabled" : <true|false> (bool), (*)
                         "log_dir": <log path for switch binary> (string), (*)
-                        "host_node": custom_switch_node (dict) (*)
+                        "host_node": <custom switch node> (dict) (*)
                     },
                     ...
                 }
 
-            (*) None of these parameters is mandatory.
-
+        Note:
+            None of the fields marked with ``(*)`` is mandatory. If they are not specified
+            default values will be used.
         """
         default_params = {
                             'log_enabled': self.log_enabled,
@@ -398,32 +414,38 @@ class AppRunner(NetworkAPI):
             self.addHost(host, **params)
     
     def parse_switches(self, unparsed_switches):
-        """
-        Parse switches and add them to the network. A switch has 
-        the following structure inside the topology object
-        "switches":
-        {
-            switch_name:
-            {
-                "p4_src": path_to_p4_program (string),
-                "cpu_port": <true|false> (bool),
-                "cli_input": <path to cli input file> (string),
-                "switch_node": custom_switch_node (dict) (*),
-                "log_enabled" : <true|false> (bool), (*)
-                "log_dir": <log path for switch binary> (string), (*)
-                "pcap_dump": <true|false> (bool), (*)
-                "pcap_dir": <path for pcap files> (string), (*)
-                "sw_bin": switch_binary (string), (*)
-                "thrift_port": thrift_port (int), (*)
-                "grpc_port": grpc_port (int) (*)
-            },
-            ...
-        }
+        """Parses the switches and adds them to the network.
 
-        (*) Parameters used to initialize the actual Mininet node (see p4utils.mininetlib.node).
-        The other parameters are needed for other application features and functions and can be retrieved
-        under getattr(mininetlib.net['node_name'],'params') dictionary.
-        These settings override the default ones. None of these fields is mandatory.
+        Args:
+            unparsed_switches (dict): dictionary of switches and properties retrieved from
+                                      the JSON network configuration file.
+
+        Example:
+            Switches have the following description in the JSON network 
+            configuration file::
+        
+                "switches":
+                {
+                    switch_name:
+                    {
+                        "p4_src": <path to p4 program> (string),
+                        "cpu_port": <true|false> (bool),
+                        "cli_input": <path to cli input file> (string),
+                        "switch_node": <custom switch node> (dict) (*),
+                        "log_enabled" : <true|false> (bool), (*)
+                        "log_dir": <log path for switch binary> (string), (*)
+                        "pcap_dump": <true|false> (bool), (*)
+                        "pcap_dir": <path for pcap files> (string), (*)
+                        "sw_bin": <switch binary> (string), (*)
+                        "thrift_port": <thrift port> (int), (*)
+                        "grpc_port": <grpc port> (int) (*)
+                    },
+                    ...
+                }
+
+        Note:
+            None of the fields marked with ``(*)`` is mandatory. If they are not specified
+            default values will be used.
         """
         default_params = {
                             'p4_src': self.conf.get('p4_src'),
@@ -464,27 +486,50 @@ class AppRunner(NetworkAPI):
                 self.addSwitch(switch, **params)
 
     def parse_routers(self, unparsed_routers):
-        """
-        Parse hosts and add them to the network. Hosts have
+        """Parse hosts and add them to the network. Hosts have
         the following structure:
-        "routers":
-        {
-            router_name:
-            {
-                "int_conf": <path to the router's integrate configuration file>
-                "conf_dir": <path to the directory which contains the folder 
-                             (named after the router) with the configuration 
-                             files for all the daemons>
-                daemon1_name: <true|false> (bool) (*),
-                daemon2_name: <true|false> (bool) (*),
-                ...
-            },
-            ...
-        }
 
-        Notice that if int_conf is specified, then conf_dir is ignored.
+        Args:
+            unparsed_routers (dict): dictionary of routers and properties retrieved from
+                                     the JSON network configuration file.
 
-        (*) None of these parameters is mandatory.
+        Example:
+            Routers have the following description in the JSON network 
+            configuration file::
+
+                "routers":
+                {
+                    router_name:
+                    {
+                        "int_conf": <path to the router's integrate configuration file> (string)
+                        "conf_dir": <path to the directory which contains the folder 
+                                    (named after the router) with the configuration 
+                                    files for all the daemons> (string)
+                        "zebra": <true|false> (bool) (*),
+                        "bgpd": <true|false> (bool) (*),
+                        "ospfd": <true|false> (bool) (*),
+                        "ospf6d": <true|false> (bool) (*),
+                        "ripd": <true|false> (bool) (*),
+                        "ripngd": <true|false> (bool) (*),
+                        "isisd": <true|false> (bool) (*),
+                        "pimd": <true|false> (bool) (*),
+                        "ldpd": <true|false> (bool) (*),
+                        "nhrpd": <true|false> (bool) (*),
+                        "eigrpd": <true|false> (bool) (*),
+                        "babeld": <true|false> (bool) (*),
+                        "sharpd": <true|false> (bool) (*),
+                        "staticd": <true|false> (bool) (*),
+                        "pbrd": <true|false> (bool) (*),
+                        "bfdd": <true|false> (bool) (*),
+                        "fabricd" : <true|false> (bool) (*)
+                    },
+                    ...
+                }
+
+        Note:
+            None of the fields marked with ``(*)`` is mandatory. If they are not specified
+            default values will be used. Moreover, if ``int_conf`` is specified,
+            then ``conf_dir`` is ignored.
         """
         default_params = {
                             'router_node': deepcopy(self.router_node),
@@ -514,57 +559,66 @@ class AppRunner(NetworkAPI):
             self.addRouter(router, **params)
 
     def parse_links(self, unparsed_links):
-        """
-        Load a list of links descriptions of the form 
-        "links":
-        [
-            [
-                node1,
-                node2, 
-                { 
-                    "weight": weight,
-                    "port1": port1,
-                    "port2": port2,
-                    "intfName1": intfName1,
-                    "intfName2": intfName2,
-                    "addr1": addr1,
-                    "addr2": addr2,
-                    "params1": { parameters_for_interface1 },
-                    "params2": { parameters_for_interface2 },
-                    "bw": bandwidth,
-                    "delay": transmit_delay,
-                    "loss": loss,
-                    "max_queue_size": max_queue_size
-                }
-            ],
-            ...
-        ]
-        where the only mandatory fields are node1 and node2 and complete missing with
-        default values and store them as self.links.
-
-        For what concernes the Mininet classes used, we have that:
-            "weight" is used by Networkx,
-            "port*" are used by mininet.Topo and are propagated to mininet.Link.
-            "intfName*" are propagated to mininet.Link and used by each mininet.link.Intf of the mininter.Link.
-            "addr*" are propagated to mininet.Link and used by each mininet.link.Intf of the mininet.Link.
-            "params*" are propagated to mininet.Link and used by each mininet.link.Intf of the link.
-            "bw", "delay", "loss" and "max_queue_size" are propagated to mininet.Link and used by both mininet.link.Intf of the mininet.Link.
-        
-        "weight", "bw", "delay", "loss", "max_queue_size" default value can be set by
-        putting inside "topology" the following object:
-        "default":
-        {
-            "weight": weight,
-            "bw": bandwidth,
-            "delay": transmit_delay,
-            "loss": loss,
-            "max_queue_size": max_queue_size,
-            "auto_arp_tables": <true|false>,
-            "auto_gw_arp": <true|false>
-        }
+        """Load a list of links descriptions of the form.
 
         Args:
-            uparsed_links (array): unparsed links from topology json
+            uparsed_links (list): list of links and properties retrieved from
+                                  the JSON network configuration file.
+
+        Example:
+            Links have the following description in the JSON network 
+            configuration file::
+
+                "links":
+                [
+                    [
+                        node1,
+                        node2, 
+                        { 
+                            "weight": <link weight> (int) (*),
+                            "port1": <number of port1> (int) (*),
+                            "port2": <number of port2> (int) (*),
+                            "intfName1": <name of the interface1> (string) (*),
+                            "intfName2": <name of the interface2> (string) (*),
+                            "addr1": <mac address of interface1> (string) (*),
+                            "addr2": <mac address of interface2> (string) (*),
+                            "params1": <parameters for interface1> (dict) (*),
+                            "params2": <parameters for interface2> (dict) (*),
+                            "bw": <bandwidth weight> (int) (*),
+                            "delay": <transmit delay> (int) (*),
+                            "loss": <link data loss> (float) (*),
+                            "max_queue_size": <max queue size> (int) (*)
+                        }
+                    ],
+                    ...
+                ]
+
+        For what concernes the Mininet classes used, we have that:
+
+        - "weight" is used by Networkx,
+        - "port*" are used by mininet.Topo and are propagated to mininet.Link.
+        - "intfName*" are propagated to mininet.Link and used by each mininet.link.Intf of the mininter.Link.
+        - "addr*" are propagated to mininet.Link and used by each mininet.link.Intf of the mininet.Link.
+        - "params*" are propagated to mininet.Link and used by each mininet.link.Intf of the link.
+        - "bw", "delay", "loss" and "max_queue_size" are propagated to mininet.Link and used by both mininet.link.Intf of the mininet.Link.
+        
+        "weight", "bw", "delay", "loss", "max_queue_size" default value can be set by
+        putting inside "topology" the following object::
+
+            "default":
+            {
+                "weight": weight,
+                "bw": bandwidth,
+                "delay": transmit_delay,
+                "loss": loss,
+                "max_queue_size": max_queue_size,
+                "auto_arp_tables": <true|false>,
+                "auto_gw_arp": <true|false>
+            }
+
+        Note:
+            None of the fields marked with ``(*)`` is mandatory. If they are not specified
+            default values will be used.
         """
         default_params = self.conf['topology'].get('default', {})
 
@@ -597,8 +651,7 @@ class AppRunner(NetworkAPI):
             self.addLink(node1, node2, **params)
 
     def _exec_scripts(self):
-        """
-        Executes the script present in the "exec_scripts" field of self.conf.
+        """Executes the script present in the "exec_scripts" field of self.conf.
         """
         if isinstance(self.conf.get('exec_scripts'), list):
             for script in self.conf.get('exec_scripts'):
@@ -606,6 +659,8 @@ class AppRunner(NetworkAPI):
 
 
 def get_args():
+    """Parses command line options.
+    """
     cwd = os.getcwd()
     default_log = os.path.join(cwd, 'log')
     default_pcap = os.path.join(cwd, 'pcap')
@@ -629,6 +684,8 @@ def get_args():
 
 
 def main():
+    """Cleans up files created by old executions and starts the virtual network.
+    """
 
     args = get_args()
 
