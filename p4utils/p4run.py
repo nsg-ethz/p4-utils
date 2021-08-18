@@ -45,11 +45,11 @@ class AppRunner(NetworkAPI):
     saved on the disk at some location.
 
     Args:
-        conf_file (string): a JSON file which describes the *Mininet* topology.
+        conf_file (str): a JSON file which describes the *Mininet* topology.
         cli_enabled (bool): enable *Mininet* CLI.
-        log_dir (string): directory for *Mininet* log files.
-        pcap_dir (string): directory where to store pcap files.
-        verbosity (string): amount of information shown during the execution.
+        log_dir (str): directory for *Mininet* log files.
+        pcap_dir (str): directory where to store pcap files.
+        verbosity (str): amount of information shown during the execution.
         
     Possible **verbosity** values, listed from the most to less verbose, are the following:
 
@@ -60,23 +60,6 @@ class AppRunner(NetworkAPI):
         - ``warn``
         - ``error``
         - ``critical``
-
-    Attributes:
-        cli_enabled (bool)  : enable *Mininet* CLI.
-        log_enabled (bool)  : enable logging or not
-        log_dir (string)    : directory for log files.
-        pcap_dump (bool)    : generate ``.pcap`` files for interfaces.
-        pcap_dir (string)   : directory where to store ``.pcap`` files.
-        hosts (dict)        : dictionary of host and their properties.
-        switches (dict)     : dictionary of switches and their properties.
-        routers (dict)      : dictionary of routers and their properties.
-        links (dict)        : dictionary of mininet links and their properties.
-        clients (list)      : list of *Thrift* clients (one per P4 switch) to populate tables.
-        compilers (list)    : list of compiler instances (one per P4 source provided) to compile P4 code.
-        conf (dict)         : parsed configuration from the JSON configuration file.
-        net (object)        : *Mininet* network instance.
-        *_module (object)   : module dict used to import the specified module (see below)
-        *_node (object)     : node dict uset to import the specified Mininet node (see below)    
 
     Example:
         The structure of the **JSON** network configuration file parsed by the ``AppRunner`` is
@@ -160,17 +143,45 @@ class AppRunner(NetworkAPI):
                 }
             }
 
-        Inside self.conf can be present several module configuration objects. These are the possible values:
+        Inside the network configuration file, several modules and nodes configuration
+        JSON objects can be present. These are the possible values:
         
-        - "switch_node" loads the switch node to be used with Mininet (see mininetlib/node.py),
-        - "compiler_module" loads the compiler for P4 codes,
-        - "host_node" loads the host node to be used with Mininet,
-        - "client_module" loads the client to program switches from files.
-        - "mininet_module" loads the network module
+        - ``host_node`` loads an extension to *Mininet* node class into the `homonymous 
+          attribute`__.
+        __ #p4utils.p4run.AppRunner.host_node
+        - ``switch_node`` loads an extension to *Mininet* switch node class into the 
+          homonymous attribute.
+        - ``router_node`` loads an extension to *Mininet* node class 
+          into the homonymous attribute.
+        - ``mininet_module`` loads an extension to *Mininet* network class into the
+          homonymous attribute.
+        - ``compiler_module`` loads a compiler class into the homonymous attribute.
+        - ``client_module`` loads a *Thrift* client into the homonymous attribute.
 
     Note: 
         None of the modules or nodes are mandatory. In case they are not specified,
         default settings will be used.
+
+    Attributes:
+        cli_enabled (bool)      : enable an extension to *Mininet* CLI after the network starts.
+        log_enabled (bool)      : enable saving log files to the disk.
+        log_dir (string)        : directory used to store log files.
+        pcap_dump (bool)        : generate ``.pcap`` files for interfaces.
+        pcap_dir (string)       : directory where to store ``.pcap`` files.
+        hosts (dict)            : dictionary of host and their properties.
+        switches (dict)         : dictionary of switches and their properties.
+        routers (dict)          : dictionary of routers and their properties.
+        links (dict)            : dictionary of mininet links and their properties.
+        clients (list)          : list of *Thrift* clients (one per P4 switch) to populate tables.
+        compilers (list)        : list of compiler instances (one per P4 source provided) to compile P4 code.
+        conf (dict)             : parsed configuration from the JSON configuration file.
+        net (object)            : network instance implemented using an extension to *Mininet* network class.
+        host_node (class)       : extension to *Mininet* node class used as default host class.
+        switch_node (class)     : extension to *Mininet* switch node class used as default switch class.
+        router_node (class)     : extension to *Mininet* node class used as default router class.
+        mininet_module (class)  : extension to *Mininet* network class used to orchestrate the virtual network.
+        compiler_module (class) : compiler class used for P4 sources compilation.
+        client_module (class)   : *Thrift* client to program switches from command text files.    
     """
 
     def __init__(self, conf_file,
