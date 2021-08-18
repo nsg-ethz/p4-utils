@@ -169,7 +169,7 @@
 <span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">from</span> <span class="nn">ipaddress</span> <span class="kn">import</span> <span class="n">ip_interface</span>
 
-<div class="viewcode-block" id="InvalidHostIP"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.InvalidHostIP">[docs]</a><span class="k">class</span> <span class="nc">InvalidHostIP</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="InvalidHostIP"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.InvalidHostIP">[docs]</a><span class="k">class</span> <span class="nc">InvalidHostIP</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
@@ -178,7 +178,7 @@
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span></div>
 
-<div class="viewcode-block" id="NodeDoesNotExist"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NodeDoesNotExist">[docs]</a><span class="k">class</span> <span class="nc">NodeDoesNotExist</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="NodeDoesNotExist"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NodeDoesNotExist">[docs]</a><span class="k">class</span> <span class="nc">NodeDoesNotExist</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Node &lt;</span><span class="si">{}</span><span class="s1">&gt; does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
@@ -187,7 +187,7 @@
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span></div>
 
-<div class="viewcode-block" id="IntfDoesNotExist"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.IntfDoesNotExist">[docs]</a><span class="k">class</span> <span class="nc">IntfDoesNotExist</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="IntfDoesNotExist"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.IntfDoesNotExist">[docs]</a><span class="k">class</span> <span class="nc">IntfDoesNotExist</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intf</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Interface &lt;</span><span class="si">{}</span><span class="s1">&gt; does not exist on node &lt;</span><span class="si">{}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">intf</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
@@ -196,7 +196,7 @@
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span></div>
 
-<div class="viewcode-block" id="NetworkGraph"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph">[docs]</a><span class="k">class</span> <span class="nc">NetworkGraph</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph">[docs]</a><span class="k">class</span> <span class="nc">NetworkGraph</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An extension to networkx.classes.Graph which allows querying</span>
 <span class="sd">    network information and loads the topology from the JSON file</span>
@@ -260,7 +260,7 @@
                     <span class="n">intf</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;_neigh&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="n">intf</span>
 
-<div class="viewcode-block" id="NetworkGraph.get_intfs"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_intfs">[docs]</a>    <span class="k">def</span> <span class="nf">get_intfs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="NetworkGraph.get_intfs"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_intfs">[docs]</a>    <span class="k">def</span> <span class="nf">get_intfs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Alias of self.edge_to_intf useful for rapid access.</span>
 <span class="sd">        A dict of dicts which stores the interface of &#39;node1&#39; which faces &#39;node2&#39;: self.get_intfs()[&#39;node1&#39;][&#39;node2&#39;].</span>
@@ -283,7 +283,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_to_intf</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_node_intfs"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_node_intfs">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_intfs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="NetworkGraph.get_node_intfs"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_node_intfs">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_intfs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Alias of self.node_to_intf useful for rapid access.</span>
 <span class="sd">        A dict of dicts which stores the interface of &#39;node&#39; which has the name &#39;intf&#39;: self.get_node_intfs()[&#39;node&#39;][&#39;intf&#39;].</span>
@@ -306,7 +306,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_to_intf</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_nodes"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="NetworkGraph.get_nodes"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A dict containing all the nodes.</span>
 <span class="sd">        If fields (list of strings) is specified, the method returns a dict (nodes)</span>
@@ -327,7 +327,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">nodes</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_switches"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_switches">[docs]</a>    <span class="k">def</span> <span class="nf">get_switches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="NetworkGraph.get_switches"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_switches">[docs]</a>    <span class="k">def</span> <span class="nf">get_switches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A dict containing all the switches.</span>
 <span class="sd">        If fields (list of strings) is specified, the method returns a dict (switches)</span>
@@ -349,7 +349,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">switches</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_p4switches"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_p4switches">[docs]</a>    <span class="k">def</span> <span class="nf">get_p4switches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="NetworkGraph.get_p4switches"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_p4switches">[docs]</a>    <span class="k">def</span> <span class="nf">get_p4switches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A dict containing all the P4 switches.</span>
 <span class="sd">        If fields (list of strings) is specified, the method returns a dict (p4switches)</span>
@@ -371,7 +371,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">p4switches</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_p4rtswitches"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_p4rtswitches">[docs]</a>    <span class="k">def</span> <span class="nf">get_p4rtswitches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="NetworkGraph.get_p4rtswitches"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_p4rtswitches">[docs]</a>    <span class="k">def</span> <span class="nf">get_p4rtswitches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A dict containing all the P4 runtime switches.</span>
 <span class="sd">        If fields (list of strings) is specified, the method returns a dict (p4rtswitches)</span>
@@ -393,7 +393,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">p4rtswitches</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_hosts"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_hosts">[docs]</a>    <span class="k">def</span> <span class="nf">get_hosts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="NetworkGraph.get_hosts"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_hosts">[docs]</a>    <span class="k">def</span> <span class="nf">get_hosts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A dict containing all the hosts.</span>
 <span class="sd">        If fields (list of strings) is specified, the method returns a dict (hosts)</span>
@@ -415,7 +415,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">hosts</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_routers"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_routers">[docs]</a>    <span class="k">def</span> <span class="nf">get_routers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="NetworkGraph.get_routers"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_routers">[docs]</a>    <span class="k">def</span> <span class="nf">get_routers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A dict containing all the routers.</span>
 <span class="sd">        If fields (list of strings) is specified, the method returns a dict (routers)</span>
@@ -437,22 +437,22 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">routers</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_neighbors"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_neighbors">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_neighbors"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_neighbors">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list containing all the names of the neighbors of node n.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_intfs</span><span class="p">()[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.isNode"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.isNode">[docs]</a>    <span class="k">def</span> <span class="nf">isNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.isNode"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.isNode">[docs]</a>    <span class="k">def</span> <span class="nf">isNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return True if the node exists.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.checkNode"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.checkNode">[docs]</a>    <span class="k">def</span> <span class="nf">checkNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.checkNode"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.checkNode">[docs]</a>    <span class="k">def</span> <span class="nf">checkNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if node exists, else raise a NodeDoesNotExist error.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isNode</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">NodeDoesNotExist</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.isIntf"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.isIntf">[docs]</a>    <span class="k">def</span> <span class="nf">isIntf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.isIntf"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.isIntf">[docs]</a>    <span class="k">def</span> <span class="nf">isIntf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return True if the intf exists by specifying its edge.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">node1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_to_intf</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -460,37 +460,37 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.checkIntf"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.checkIntf">[docs]</a>    <span class="k">def</span> <span class="nf">checkIntf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.checkIntf"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.checkIntf">[docs]</a>    <span class="k">def</span> <span class="nf">checkIntf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if interface exists, else raise a IntfDoesNotExist error.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isIntf</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">IntfDoesNotExist</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.isHost"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.isHost">[docs]</a>    <span class="k">def</span> <span class="nf">isHost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.isHost"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.isHost">[docs]</a>    <span class="k">def</span> <span class="nf">isHost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return True if the node is a host.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkNode</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;isHost&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.isSwitch"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.isSwitch">[docs]</a>    <span class="k">def</span> <span class="nf">isSwitch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.isSwitch"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.isSwitch">[docs]</a>    <span class="k">def</span> <span class="nf">isSwitch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return True if the node is a switch.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkNode</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;isSwitch&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.isP4Switch"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.isP4Switch">[docs]</a>    <span class="k">def</span> <span class="nf">isP4Switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.isP4Switch"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.isP4Switch">[docs]</a>    <span class="k">def</span> <span class="nf">isP4Switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return True if the node is a P4 switch.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkNode</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;isP4Switch&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.isP4RuntimeSwitch"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.isP4RuntimeSwitch">[docs]</a>    <span class="k">def</span> <span class="nf">isP4RuntimeSwitch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.isP4RuntimeSwitch"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.isP4RuntimeSwitch">[docs]</a>    <span class="k">def</span> <span class="nf">isP4RuntimeSwitch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return True if the node is a P4 runtime switch.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkNode</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;isP4RuntimeSwitch&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.isRouter"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.isRouter">[docs]</a>    <span class="k">def</span> <span class="nf">isRouter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.isRouter"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.isRouter">[docs]</a>    <span class="k">def</span> <span class="nf">isRouter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return True if the node is a router.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkNode</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;isRouter&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.isType"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.isType">[docs]</a>    <span class="k">def</span> <span class="nf">isType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">node_type</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.isType"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.isType">[docs]</a>    <span class="k">def</span> <span class="nf">isType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">node_type</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check custom node type. Possible values are:</span>
 <span class="sd">            host</span>
@@ -523,12 +523,12 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">IntfDoesNotExist</span><span class="p">(</span><span class="n">intf</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
 
-<div class="viewcode-block" id="NetworkGraph.node_to_node_interface_ip"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.node_to_node_interface_ip">[docs]</a>    <span class="k">def</span> <span class="nf">node_to_node_interface_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.node_to_node_interface_ip"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.node_to_node_interface_ip">[docs]</a>    <span class="k">def</span> <span class="nf">node_to_node_interface_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the ip_interface for node1 facing node2.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkIntf</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_intfs</span><span class="p">()[</span><span class="n">node1</span><span class="p">][</span><span class="n">node2</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ip&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.node_to_node_interface_bw"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.node_to_node_interface_bw">[docs]</a>    <span class="k">def</span> <span class="nf">node_to_node_interface_bw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.node_to_node_interface_bw"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.node_to_node_interface_bw">[docs]</a>    <span class="k">def</span> <span class="nf">node_to_node_interface_bw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the bandwidth capacity of the interface on node1 facing node2.</span>
 <span class="sd">        If it is unlimited, return -1.</span>
@@ -539,7 +539,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_intfs</span><span class="p">()[</span><span class="n">node1</span><span class="p">][</span><span class="n">node2</span><span class="p">][</span><span class="s1">&#39;bw&#39;</span><span class="p">]</span></div>
     
-<div class="viewcode-block" id="NetworkGraph.node_interface_ip"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.node_interface_ip">[docs]</a>    <span class="k">def</span> <span class="nf">node_interface_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.node_interface_ip"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.node_interface_ip">[docs]</a>    <span class="k">def</span> <span class="nf">node_interface_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the IP address of a given interface and node.&quot;&quot;&quot;</span>
         <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_interface</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ip&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -547,14 +547,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.node_interface_bw"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.node_interface_bw">[docs]</a>    <span class="k">def</span> <span class="nf">node_interface_bw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.node_interface_bw"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.node_interface_bw">[docs]</a>    <span class="k">def</span> <span class="nf">node_interface_bw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the bw of a given interface and node.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_interface</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bw&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_interface</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">)[</span><span class="s1">&#39;bw&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.subnet"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.subnet">[docs]</a>    <span class="k">def</span> <span class="nf">subnet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.subnet"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.subnet">[docs]</a>    <span class="k">def</span> <span class="nf">subnet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the subnet linking node1 and node2 (from the point of view of node1).&quot;&quot;&quot;</span>
         <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_to_node_interface_ip</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -562,12 +562,12 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_interfaces"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_interfaces">[docs]</a>    <span class="k">def</span> <span class="nf">get_interfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_interfaces"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_interfaces">[docs]</a>    <span class="k">def</span> <span class="nf">get_interfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns node&#39;s interfaces names.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkNode</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_to_intf</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_cpu_port_intf"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_cpu_port_intf">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpu_port_intf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_cpu_port_intf"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_cpu_port_intf">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpu_port_intf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the P4 switch&#39;s CPU interface</span>
 
@@ -584,7 +584,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Switch </span><span class="si">{}</span><span class="s1"> has no cpu port.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p4switch</span><span class="p">))</span>
             <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_cpu_port_index"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_cpu_port_index">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpu_port_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_cpu_port_index"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_cpu_port_index">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpu_port_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the port number of P4 switch&#39;s CPU port</span>
 
@@ -602,14 +602,14 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Switch </span><span class="si">{}</span><span class="s1"> has no cpu port.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p4switch</span><span class="p">))</span>
             <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_thrift_port"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_thrift_port">[docs]</a>    <span class="k">def</span> <span class="nf">get_thrift_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_thrift_port"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_thrift_port">[docs]</a>    <span class="k">def</span> <span class="nf">get_thrift_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the Thrift port used to communicate with the P4 switch.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">p4switch</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">p4switch</span><span class="p">][</span><span class="s1">&#39;thrift_port&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a P4 switch.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p4switch</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_thrift_ip"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_thrift_ip">[docs]</a>    <span class="k">def</span> <span class="nf">get_thrift_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_thrift_ip"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_thrift_ip">[docs]</a>    <span class="k">def</span> <span class="nf">get_thrift_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the Thrift ip used to communicate with the P4 switch.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">p4switch</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This method is not yet fully implemented, all switches listen on 0.0.0.0.&#39;</span><span class="p">)</span>
@@ -618,14 +618,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a P4 switch.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p4switch</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_grpc_port"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_grpc_port">[docs]</a>    <span class="k">def</span> <span class="nf">get_grpc_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4rtswitch</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_grpc_port"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_grpc_port">[docs]</a>    <span class="k">def</span> <span class="nf">get_grpc_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4rtswitch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the grpc port used to communicate with the P4 runtime switch.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4RuntimeSwitch</span><span class="p">(</span><span class="n">p4rtswitch</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">p4rtswitch</span><span class="p">][</span><span class="s1">&#39;grpc_port&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a P4 runtime switch.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p4rtswitch</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_grpc_ip"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_grpc_ip">[docs]</a>    <span class="k">def</span> <span class="nf">get_grpc_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4rtswitch</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_grpc_ip"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_grpc_ip">[docs]</a>    <span class="k">def</span> <span class="nf">get_grpc_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4rtswitch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the grpc ip used to communicate with the P4 runtime switch.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4RuntimeSwitch</span><span class="p">(</span><span class="n">p4rtswitch</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This method is not yet fully implemented, all switches listen on 0.0.0.0.&#39;</span><span class="p">)</span>
@@ -634,14 +634,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a P4 switch.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p4rtswitch</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_ctl_cpu_intf"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_ctl_cpu_intf">[docs]</a>    <span class="k">def</span> <span class="nf">get_ctl_cpu_intf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_ctl_cpu_intf"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_ctl_cpu_intf">[docs]</a>    <span class="k">def</span> <span class="nf">get_ctl_cpu_intf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the controller side cpu interface used to listen for cpu packets.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">p4switch</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">p4switch</span><span class="p">][</span><span class="s1">&#39;cpu_port&#39;</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_intfs</span><span class="p">()[</span><span class="s1">&#39;sw-cpu&#39;</span><span class="p">][</span><span class="n">p4switch</span><span class="p">][</span><span class="s1">&#39;intfName&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Switch </span><span class="si">{}</span><span class="s1"> has no cpu port.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p4switch</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_host_name"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_host_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_host_name"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_host_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the host name to an IP address.</span>
 
@@ -657,7 +657,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidHostIP</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="NetworkGraph.get_host_first_interface"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_host_first_interface">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_first_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_host_first_interface"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_host_first_interface">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_first_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the first interface from a host. Assume it&#39;s single-homed.</span>
 
@@ -672,14 +672,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a host.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">host</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_host_gateway_name"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_host_gateway_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_gateway_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_host_gateway_name"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_host_gateway_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_gateway_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get host gateway name.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isHost</span><span class="p">(</span><span class="n">host</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_interface</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_host_first_interface</span><span class="p">(</span><span class="n">host</span><span class="p">))[</span><span class="s1">&#39;node_neigh&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a host.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">host</span><span class="p">))</span></div>
         
-<div class="viewcode-block" id="NetworkGraph.get_host_ip"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_host_ip">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_host_ip"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_host_ip">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the IP to a host name.</span>
 
 <span class="sd">        Args:</span>
@@ -694,7 +694,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a host.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">host</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_host_mac"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_host_mac">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_mac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_host_mac"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_host_mac">[docs]</a>    <span class="k">def</span> <span class="nf">get_host_mac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the mac to a host name.</span>
 
@@ -705,7 +705,7 @@
         <span class="n">intf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_host_first_interface</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_interface</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">intf</span><span class="p">)[</span><span class="s1">&#39;addr&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_p4switch_id"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_p4switch_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_p4switch_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_p4switch_id"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_p4switch_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_p4switch_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4switch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the ID of a P4 switch.</span>
 
@@ -723,7 +723,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a P4 switch.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p4switch</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.are_neighbors"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.are_neighbors">[docs]</a>    <span class="k">def</span> <span class="nf">are_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.are_neighbors"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.are_neighbors">[docs]</a>    <span class="k">def</span> <span class="nf">are_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns if two nodes are direct neighbors.</span>
 
@@ -738,7 +738,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">checkNode</span><span class="p">(</span><span class="n">node2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">node1</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">node2</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="NetworkGraph.get_hosts_connected_to"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_hosts_connected_to">[docs]</a>    <span class="k">def</span> <span class="nf">get_hosts_connected_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_hosts_connected_to"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_hosts_connected_to">[docs]</a>    <span class="k">def</span> <span class="nf">get_hosts_connected_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the hosts directly connected to the node.</span>
 
@@ -751,7 +751,7 @@
         <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">host</span> <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isHost</span><span class="p">(</span><span class="n">host</span><span class="p">)]</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_switches_connected_to"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_switches_connected_to">[docs]</a>    <span class="k">def</span> <span class="nf">get_switches_connected_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_switches_connected_to"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_switches_connected_to">[docs]</a>    <span class="k">def</span> <span class="nf">get_switches_connected_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the switches directly connected to the node.</span>
 
@@ -764,7 +764,7 @@
         <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">switch</span> <span class="k">for</span> <span class="n">switch</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSwitch</span><span class="p">(</span><span class="n">switch</span><span class="p">)]</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_p4switches_connected_to"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_p4switches_connected_to">[docs]</a>    <span class="k">def</span> <span class="nf">get_p4switches_connected_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_p4switches_connected_to"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_p4switches_connected_to">[docs]</a>    <span class="k">def</span> <span class="nf">get_p4switches_connected_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the P4 switches directly connected to the node.</span>
 
@@ -777,7 +777,7 @@
         <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">switch</span> <span class="k">for</span> <span class="n">switch</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">switch</span><span class="p">)]</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_routers_connected_to"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_routers_connected_to">[docs]</a>    <span class="k">def</span> <span class="nf">get_routers_connected_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_routers_connected_to"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_routers_connected_to">[docs]</a>    <span class="k">def</span> <span class="nf">get_routers_connected_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the routers directly connected to the node.</span>
 
@@ -790,7 +790,7 @@
         <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">router</span> <span class="k">for</span> <span class="n">router</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isRouter</span><span class="p">(</span><span class="n">router</span><span class="p">)]</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_direct_host_networks_from_switch"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_direct_host_networks_from_switch">[docs]</a>    <span class="k">def</span> <span class="nf">get_direct_host_networks_from_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">switch</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_direct_host_networks_from_switch"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_direct_host_networks_from_switch">[docs]</a>    <span class="k">def</span> <span class="nf">get_direct_host_networks_from_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">switch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns all the subnetworks a switch can reach directly.</span>
 
@@ -806,7 +806,7 @@
             <span class="n">networks</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">subnet</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">switch</span><span class="p">)]</span>
         <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">networks</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_interfaces_to_node"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_interfaces_to_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_interfaces_to_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_interfaces_to_node"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_interfaces_to_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_interfaces_to_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns dictionary with all interface_name -&gt; neighbor node.</span>
 
@@ -819,7 +819,7 @@
             <span class="n">intfs</span><span class="p">[</span><span class="n">intf</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;node_neigh&#39;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">intfs</span></div>
     
-<div class="viewcode-block" id="NetworkGraph.interface_to_node"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.interface_to_node">[docs]</a>    <span class="k">def</span> <span class="nf">interface_to_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.interface_to_node"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.interface_to_node">[docs]</a>    <span class="k">def</span> <span class="nf">interface_to_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns name of the neigbor at interface &#39;intf&#39; of node &#39;node&#39;.</span>
 
@@ -829,7 +829,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_interface</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">)[</span><span class="s1">&#39;node_neigh&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.interface_to_port"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.interface_to_port">[docs]</a>    <span class="k">def</span> <span class="nf">interface_to_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.interface_to_port"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.interface_to_port">[docs]</a>    <span class="k">def</span> <span class="nf">interface_to_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns port number of the interface &#39;intf&#39; of node &#39;node&#39;.</span>
 
@@ -839,7 +839,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_interface</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">intf</span><span class="p">)[</span><span class="s1">&#39;port&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.node_to_node_port_num"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.node_to_node_port_num">[docs]</a>    <span class="k">def</span> <span class="nf">node_to_node_port_num</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.node_to_node_port_num"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.node_to_node_port_num">[docs]</a>    <span class="k">def</span> <span class="nf">node_to_node_port_num</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the port number from node1 point of view that connects to node2.</span>
 
@@ -850,7 +850,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">checkIntf</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_intfs</span><span class="p">()[</span><span class="n">node1</span><span class="p">][</span><span class="n">node2</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;port&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.node_to_node_mac"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.node_to_node_mac">[docs]</a>    <span class="k">def</span> <span class="nf">node_to_node_mac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.node_to_node_mac"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.node_to_node_mac">[docs]</a>    <span class="k">def</span> <span class="nf">node_to_node_mac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns mac address of node1&#39;s interface facing node2.</span>
 
@@ -861,7 +861,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">checkIntf</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_intfs</span><span class="p">()[</span><span class="n">node1</span><span class="p">][</span><span class="n">node2</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;addr&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.total_number_of_paths"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.total_number_of_paths">[docs]</a>    <span class="k">def</span> <span class="nf">total_number_of_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.total_number_of_paths"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.total_number_of_paths">[docs]</a>    <span class="k">def</span> <span class="nf">total_number_of_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the total number of shortests paths between all host pairs in the network.&quot;&quot;&quot;</span>
         <span class="n">total_paths</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_hosts</span><span class="p">():</span>
@@ -873,7 +873,7 @@
                 <span class="n">total_paths</span> <span class="o">+=</span> <span class="n">npaths</span>
         <span class="k">return</span> <span class="n">total_paths</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_shortest_paths_between_nodes"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_shortest_paths_between_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_shortest_paths_between_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_shortest_paths_between_nodes"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_shortest_paths_between_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_shortest_paths_between_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns all the shortest paths between node1 and node2.</span>
 
@@ -889,7 +889,7 @@
         <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">paths</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.get_all_paths_between_nodes"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.get_all_paths_between_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_paths_between_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.get_all_paths_between_nodes"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.get_all_paths_between_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_paths_between_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns all the simple (i.e. with no repeated nodes) paths </span>
 <span class="sd">        between node1 and node2.</span>
@@ -906,28 +906,28 @@
         <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">paths</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.keep_only_switches"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.keep_only_switches">[docs]</a>    <span class="k">def</span> <span class="nf">keep_only_switches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.keep_only_switches"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.keep_only_switches">[docs]</a>    <span class="k">def</span> <span class="nf">keep_only_switches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns a networkx subgraph including only switch nodes.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_switches</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.keep_only_p4switches"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.keep_only_p4switches">[docs]</a>    <span class="k">def</span> <span class="nf">keep_only_p4switches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.keep_only_p4switches"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.keep_only_p4switches">[docs]</a>    <span class="k">def</span> <span class="nf">keep_only_p4switches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns a networkx subgraph including only P4 switch nodes.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_p4switches</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.keep_only_p4switches_and_hosts"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.keep_only_p4switches_and_hosts">[docs]</a>    <span class="k">def</span> <span class="nf">keep_only_p4switches_and_hosts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.keep_only_p4switches_and_hosts"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.keep_only_p4switches_and_hosts">[docs]</a>    <span class="k">def</span> <span class="nf">keep_only_p4switches_and_hosts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns a networkx subgraph including only hosts and P4 switch nodes.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_p4switches</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_hosts</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
     <span class="c1"># Drawing</span>
-<div class="viewcode-block" id="NetworkGraph.set_node_shape"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.set_node_shape">[docs]</a>    <span class="k">def</span> <span class="nf">set_node_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.set_node_shape"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.set_node_shape">[docs]</a>    <span class="k">def</span> <span class="nf">set_node_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sets node&#39;s shape. Used when plotting the network.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">node</span><span class="p">][</span><span class="s1">&#39;node_shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shape</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.set_node_color"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.set_node_color">[docs]</a>    <span class="k">def</span> <span class="nf">set_node_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.set_node_color"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.set_node_color">[docs]</a>    <span class="k">def</span> <span class="nf">set_node_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sets node&#39;s color. Used when plotting the network.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">node</span><span class="p">][</span><span class="s1">&#39;node_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.set_node_type_shape"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.set_node_type_shape">[docs]</a>    <span class="k">def</span> <span class="nf">set_node_type_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.set_node_type_shape"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.set_node_type_shape">[docs]</a>    <span class="k">def</span> <span class="nf">set_node_type_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets the shape of the nodes filtered by type.</span>
 
@@ -944,7 +944,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()[</span><span class="n">node</span><span class="p">],</span> <span class="n">node_type</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_node_shape</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NetworkGraph.set_node_type_color"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.topology.NetworkGraph.set_node_type_color">[docs]</a>    <span class="k">def</span> <span class="nf">set_node_type_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkGraph.set_node_type_color"><a class="viewcode-back" href="../../../p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph.set_node_type_color">[docs]</a>    <span class="k">def</span> <span class="nf">set_node_type_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets the color of the nodes filtered by type.</span>
 

@@ -175,7 +175,7 @@
 <span class="kn">import</span> <span class="nn">p4utils.utils.p4runtime_API.api</span> <span class="k">as</span> <span class="nn">api</span>
 
 
-<div class="viewcode-block" id="CounterType"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.CounterType">[docs]</a><span class="nd">@enum</span><span class="o">.</span><span class="n">unique</span>
+<div class="viewcode-block" id="CounterType"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.CounterType">[docs]</a><span class="nd">@enum</span><span class="o">.</span><span class="n">unique</span>
 <span class="k">class</span> <span class="nc">CounterType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Counter type according to P4 Runtime Specification.</span>
@@ -186,7 +186,7 @@
     <span class="n">packets</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">both</span> <span class="o">=</span> <span class="mi">3</span></div>
 
-<div class="viewcode-block" id="handle_bad_input"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.handle_bad_input">[docs]</a><span class="k">def</span> <span class="nf">handle_bad_input</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="handle_bad_input"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.handle_bad_input">[docs]</a><span class="k">def</span> <span class="nf">handle_bad_input</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Handle bad input and return True if the function was correctly executed,</span>
 <span class="sd">    and False if it was not.</span>
@@ -201,7 +201,7 @@
             <span class="k">return</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="n">handle</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI">[docs]</a><span class="k">class</span> <span class="nc">SimpleSwitchP4RuntimeAPI</span><span class="p">:</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI">[docs]</a><span class="k">class</span> <span class="nc">SimpleSwitchP4RuntimeAPI</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    For a better documentation of the primitives and the assumptions used,</span>
 <span class="sd">    please take a look at:</span>
@@ -241,19 +241,19 @@
                                                   <span class="n">config</span><span class="o">=</span><span class="n">api</span><span class="o">.</span><span class="n">FwdPipeConfig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4rt_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_path</span><span class="p">))</span>
 
     <span class="c1">## Utils</span>
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.parse_match_key"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_match_key">[docs]</a>    <span class="k">def</span> <span class="nf">parse_match_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">key_fields</span><span class="p">):</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.parse_match_key"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_match_key">[docs]</a>    <span class="k">def</span> <span class="nf">parse_match_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">key_fields</span><span class="p">):</span>
         <span class="n">match_keys_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">key_fields</span><span class="p">)):</span>
             <span class="n">match_keys_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_name</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">key_fields</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">match_keys_dict</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.parse_action_param"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_action_param">[docs]</a>    <span class="k">def</span> <span class="nf">parse_action_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="p">):</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.parse_action_param"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_action_param">[docs]</a>    <span class="k">def</span> <span class="nf">parse_action_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="p">):</span>
         <span class="n">params_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">action_params</span><span class="p">)):</span>
             <span class="n">params_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_param_name</span><span class="p">(</span><span class="n">action_name</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">action_params</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">params_dict</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.reset_state"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state">[docs]</a>    <span class="k">def</span> <span class="nf">reset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.reset_state"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state">[docs]</a>    <span class="k">def</span> <span class="nf">reset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reset the grpc server of switch by establishing a new ForwardingPipelineConfig.</span>
 <span class="sd">        This method is buggy, please read the following warnings.</span>
@@ -285,13 +285,13 @@
                                               <span class="n">grpc_addr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_ip</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_port</span><span class="p">),</span>
                                               <span class="n">config</span><span class="o">=</span><span class="n">api</span><span class="o">.</span><span class="n">FwdPipeConfig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4rt_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_path</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.teardown"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.teardown">[docs]</a>    <span class="k">def</span> <span class="nf">teardown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.teardown"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.teardown">[docs]</a>    <span class="k">def</span> <span class="nf">teardown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Tear down grpc connection with the switch server.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">api</span><span class="o">.</span><span class="n">teardown</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.get_digest_list"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_digest_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.get_digest_list"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_digest_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Alias for P4RuntimeClient.get_digest_list in p4runtime.py</span>
 <span class="sd">        Retrieve DigestList and send back acknowledgment.</span>
@@ -311,7 +311,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_digest_list</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span></div>
 
     <span class="c1">## Tables</span>
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_add"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_add">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_add"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_add">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[],</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add entry to a match table.</span>
@@ -419,7 +419,7 @@
 
         <span class="n">entry</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_set_default"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_set_default">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_set_default"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_set_default">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_set_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set default action for a match table.</span>
@@ -450,7 +450,7 @@
                                                                               <span class="nb">len</span><span class="p">(</span><span class="n">action_params</span><span class="p">)))</span>
         <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_reset_default"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_reset_default">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_reset_default"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_reset_default">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_reset_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reset default action for a match table.</span>
@@ -467,7 +467,7 @@
         <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">TableEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)(</span><span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_delete_match"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_delete_match">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_delete_match"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_delete_match">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_delete_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Delete an existing entry in a table.</span>
@@ -494,7 +494,7 @@
             <span class="n">entry</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">prio</span>
         <span class="n">entry</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_modify_match"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_modify_match">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_modify_match"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_modify_match">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_modify_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[],</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Modify entry in a table.</span>
@@ -593,7 +593,7 @@
 
         <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_clear"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_clear">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_clear"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_clear">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Clear all entries in a match table (direct or indirect), but not the default entry.</span>
@@ -605,7 +605,7 @@
         <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">TableEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">delete</span><span class="p">())</span></div>
 
     <span class="c1">## DirectCounters</span>
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_counter_read"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_read">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_counter_read"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_read">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">direct_counter_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read direct counter values.</span>
@@ -645,7 +645,7 @@
         <span class="n">entry</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">byte_count</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">packet_count</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_counter_write"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_write">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_counter_write"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_write">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">direct_counter_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write direct counter values. If no values are specified, the counter is reset.</span>
@@ -689,7 +689,7 @@
             <span class="n">entry</span><span class="o">.</span><span class="n">byte_count</span> <span class="o">=</span> <span class="n">byts</span>
         <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_counter_reset"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_reset">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_counter_reset"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_reset">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">direct_counter_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reset all the direct counters values.</span>
@@ -708,7 +708,7 @@
             <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
         
     <span class="c1">## DirectMeters</span>
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_meter_array_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_array_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_meter_array_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_array_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">direct_meter_array_set_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="p">,</span> <span class="n">rates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure rates for an entire direct meter array.</span>
@@ -742,7 +742,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>        </div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_meter_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_meter_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">direct_meter_set_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure rates for a single direct meter entry.</span>
@@ -795,7 +795,7 @@
 
         <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_meter_get_rates"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_get_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_meter_get_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_get_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">direct_meter_get_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve rates for a direct meter.</span>
@@ -835,7 +835,7 @@
         <span class="k">return</span> <span class="p">[(</span><span class="n">entry</span><span class="o">.</span><span class="n">cir</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">cburst</span><span class="p">),</span> <span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">pir</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">pburst</span><span class="p">)]</span></div>
 
     <span class="c1">## Counters</span>
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.counter_read"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_read">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.counter_read"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_read">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">counter_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read counter value.</span>
@@ -862,7 +862,7 @@
         <span class="n">entry</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">byte_count</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">packet_count</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.counter_write"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_write">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.counter_write"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_write">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">counter_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write counter values. If no values are specified, the counter is reset.</span>
@@ -892,7 +892,7 @@
             <span class="n">entry</span><span class="o">.</span><span class="n">byte_count</span> <span class="o">=</span> <span class="n">byts</span>
         <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.counter_reset"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_reset">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.counter_reset"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_reset">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">counter_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reset all the counters values.</span>
@@ -912,7 +912,7 @@
             <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
     <span class="c1">## Meters</span>
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.meter_array_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_array_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.meter_array_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_array_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">meter_array_set_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">rates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure rates for an entire meter array.</span>
@@ -946,7 +946,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>        </div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.meter_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.meter_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">meter_set_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">rates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure rates for a single  meter entry.</span>
@@ -985,7 +985,7 @@
 
         <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.meter_get_rates"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_get_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.meter_get_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_get_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">meter_get_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve rates for a meter.</span>
@@ -1012,7 +1012,7 @@
         <span class="k">return</span> <span class="p">[(</span><span class="n">entry</span><span class="o">.</span><span class="n">cir</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">cburst</span><span class="p">),</span> <span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">pir</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">pburst</span><span class="p">)]</span></div>
 
     <span class="c1">## MulticastGroups</span>
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_mgrp_create"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_create">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_mgrp_create"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_create">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">mc_mgrp_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[],</span> <span class="n">instances</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create multicast group.</span>
@@ -1051,7 +1051,7 @@
 
         <span class="n">entry</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span></div>
     
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_mgrp_destroy"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_destroy">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_mgrp_destroy"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_destroy">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">mc_mgrp_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Destroy multicast group.</span>
@@ -1066,7 +1066,7 @@
         <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">MulticastGroupEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">)</span>
         <span class="n">entry</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_set_replicas"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_set_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_set_replicas"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_set_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">mc_set_replicas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[],</span> <span class="n">instances</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set replicas for multicast group.</span>
@@ -1105,7 +1105,7 @@
 
         <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_get_replicas"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_get_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_get_replicas"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_get_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">mc_get_replicas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get replicas which belog to a multicast group.</span>
@@ -1143,7 +1143,7 @@
         <span class="k">return</span> <span class="n">ports</span><span class="p">,</span> <span class="n">instances</span></div>
 
     <span class="c1">## CloseSession</span>
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cs_create"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_create">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cs_create"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_create">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">cs_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[],</span> <span class="n">instances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">packet_length</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a packet cloning session.</span>
@@ -1188,7 +1188,7 @@
 
         <span class="n">entry</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cs_destroy"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_destroy">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cs_destroy"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_destroy">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">cs_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove a packet cloning session.</span>
@@ -1200,7 +1200,7 @@
         <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">CloneSessionEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">session_id</span><span class="p">)</span>
         <span class="n">entry</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cs_set_replicas"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_set_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cs_set_replicas"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_set_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">cs_set_replicas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[],</span> <span class="n">instances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">packet_length</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure a packet cloning session.</span>
@@ -1245,7 +1245,7 @@
 
         <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cd_get_replicas"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cd_get_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cd_get_replicas"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cd_get_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">cd_get_replicas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get replicas which belog to a clone session.</span>
@@ -1281,7 +1281,7 @@
         <span class="k">return</span> <span class="n">ports</span><span class="p">,</span> <span class="n">instances</span></div>
 
     <span class="c1">## Digests</span>
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.digest_enable"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_enable">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.digest_enable"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_enable">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">digest_enable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">,</span> <span class="n">max_timeout_ns</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_list_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ack_timeout_ns</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Enable and configure the digests generation of the switch.</span>
@@ -1317,7 +1317,7 @@
 
         <span class="n">entry</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.digest_set_conf"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_set_conf">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.digest_set_conf"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_set_conf">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">digest_set_conf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">,</span> <span class="n">max_timeout_ns</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_list_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ack_timeout_ns</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure the digests generation of the switch.</span>
@@ -1353,7 +1353,7 @@
 
         <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.digest_get_conf"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_get_conf">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.digest_get_conf"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_get_conf">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">digest_get_conf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Enable and configure the digests generation of the switch.</span>

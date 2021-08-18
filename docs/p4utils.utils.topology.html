@@ -1,0 +1,889 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.utils.topology module &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="p4utils.utils.traffic_utils module" href="p4utils.utils.traffic_utils.html" />
+    <link rel="prev" title="p4utils.utils.thrift_API module" href="p4utils.utils.thrift_API.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">p4utils</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="p4utils.html">p4utils package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="p4utils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="p4utils.mininetlib.html">p4utils.mininetlib package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="p4utils.utils.html">p4utils.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="p4utils.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="p4utils.html#module-p4utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">p4utils</a> &raquo;</li>
+        
+          <li><a href="p4utils.html">p4utils package</a> &raquo;</li>
+        
+          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
+        
+      <li>p4utils.utils.topology module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/p4utils.utils.topology.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-p4utils.utils.topology">
+<span id="p4utils-utils-topology-module"></span><h1>p4utils.utils.topology module<a class="headerlink" href="#module-p4utils.utils.topology" title="Permalink to this headline">¶</a></h1>
+<dl class="exception">
+<dt id="p4utils.utils.topology.IntfDoesNotExist">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.topology.</code><code class="descname">IntfDoesNotExist</code><span class="sig-paren">(</span><em>intf</em>, <em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#IntfDoesNotExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.IntfDoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.topology.InvalidHostIP">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.topology.</code><code class="descname">InvalidHostIP</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#InvalidHostIP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.InvalidHostIP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.topology.NetworkGraph">
+<em class="property">class </em><code class="descclassname">p4utils.utils.topology.</code><code class="descname">NetworkGraph</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">networkx.classes.graph.Graph</span></code></p>
+<p>An extension to networkx.classes.Graph which allows querying
+network information and loads the topology from the JSON file
+generated during the execution of p4run. The basic methods
+used to manage nodes are available on the NetworkX documentation
+webpage (<a class="reference external" href="https://networkx.org/documentation/stable/index.html">https://networkx.org/documentation/stable/index.html</a>)
+since this class inherits from it.</p>
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.are_neighbors">
+<code class="descname">are_neighbors</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.are_neighbors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.are_neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if two nodes are direct neighbors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>node1</strong> – first node</li>
+<li><strong>node2</strong> – second node</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if node1 and node2 are neighbors</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.checkIntf">
+<code class="descname">checkIntf</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.checkIntf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.checkIntf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if interface exists, else raise a IntfDoesNotExist error.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.checkNode">
+<code class="descname">checkNode</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.checkNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.checkNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if node exists, else raise a NodeDoesNotExist error.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_all_paths_between_nodes">
+<code class="descname">get_all_paths_between_nodes</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_all_paths_between_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_all_paths_between_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all the simple (i.e. with no repeated nodes) paths
+between node1 and node2.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node1</strong> – src node</li>
+<li><strong>node2</strong> – dst node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: List of shortests paths</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_cpu_port_index">
+<code class="descname">get_cpu_port_index</code><span class="sig-paren">(</span><em>p4switch</em>, <em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_cpu_port_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_cpu_port_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the port number of P4 switch’s CPU port</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p4switch</strong> – name of the P4 switch</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Port number of the P4 switch</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_cpu_port_intf">
+<code class="descname">get_cpu_port_intf</code><span class="sig-paren">(</span><em>p4switch</em>, <em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_cpu_port_intf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_cpu_port_intf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the P4 switch’s CPU interface</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p4switch</strong> – name of the P4 switch</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">CPU interface of the P4 switch</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_ctl_cpu_intf">
+<code class="descname">get_ctl_cpu_intf</code><span class="sig-paren">(</span><em>p4switch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_ctl_cpu_intf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_ctl_cpu_intf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the controller side cpu interface used to listen for cpu packets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_direct_host_networks_from_switch">
+<code class="descname">get_direct_host_networks_from_switch</code><span class="sig-paren">(</span><em>switch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_direct_host_networks_from_switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_direct_host_networks_from_switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all the subnetworks a switch can reach directly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>switch</strong> – switch name</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: Returns set of networks</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_grpc_ip">
+<code class="descname">get_grpc_ip</code><span class="sig-paren">(</span><em>p4rtswitch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_grpc_ip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_grpc_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the grpc ip used to communicate with the P4 runtime switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_grpc_port">
+<code class="descname">get_grpc_port</code><span class="sig-paren">(</span><em>p4rtswitch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_grpc_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_grpc_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the grpc port used to communicate with the P4 runtime switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_host_first_interface">
+<code class="descname">get_host_first_interface</code><span class="sig-paren">(</span><em>host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_host_first_interface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_host_first_interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the first interface from a host. Assume it’s single-homed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>host</strong> – host name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">interface name (str)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_host_gateway_name">
+<code class="descname">get_host_gateway_name</code><span class="sig-paren">(</span><em>host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_host_gateway_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_host_gateway_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get host gateway name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_host_ip">
+<code class="descname">get_host_ip</code><span class="sig-paren">(</span><em>host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_host_ip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_host_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the IP to a host name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – host’s name</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_host_mac">
+<code class="descname">get_host_mac</code><span class="sig-paren">(</span><em>host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_host_mac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_host_mac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the mac to a host name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – host’s name</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_host_name">
+<code class="descname">get_host_name</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_host_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_host_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the host name to an IP address.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ip</strong> – host’s ip w/o subnet</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">name of the host whose ip corresponds to the one provided</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_hosts">
+<code class="descname">get_hosts</code><span class="sig-paren">(</span><em>fields=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_hosts" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict containing all the hosts.
+If fields (list of strings) is specified, the method returns a dict (hosts)
+of tuples (one per hosts) containing all the specified fields’ values in
+the given order (or the single value if only one field is specified).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_hosts_connected_to">
+<code class="descname">get_hosts_connected_to</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_hosts_connected_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_hosts_connected_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the hosts directly connected to the node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – </td>
+</tr>
+</tbody>
+</table>
+<p>Returns: list of hosts</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_interfaces">
+<code class="descname">get_interfaces</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_interfaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_interfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns node’s interfaces names.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_interfaces_to_node">
+<code class="descname">get_interfaces_to_node</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_interfaces_to_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_interfaces_to_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns dictionary with all interface_name -&gt; neighbor node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – node’s name</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_intfs">
+<code class="descname">get_intfs</code><span class="sig-paren">(</span><em>fields=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_intfs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_intfs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias of self.edge_to_intf useful for rapid access.
+A dict of dicts which stores the interface of ‘node1’ which faces ‘node2’: self.get_intfs()[‘node1’][‘node2’].
+If fields (list of strings) is specified, the method returns a dict (node1) of dicts (node2)
+of tuples (one per interface) containing all the specified fields’ values in
+the given order (or the single value if only one field is specified).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_neighbors">
+<code class="descname">get_neighbors</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_neighbors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing all the names of the neighbors of node n.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_node_intfs">
+<code class="descname">get_node_intfs</code><span class="sig-paren">(</span><em>fields=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_node_intfs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_node_intfs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias of self.node_to_intf useful for rapid access.
+A dict of dicts which stores the interface of ‘node’ which has the name ‘intf’: self.get_node_intfs()[‘node’][‘intf’].
+If fields (list of strings) is specified, the method returns a dict (nodes) of dicts (interfaces)
+of tuples (one per interface) containing all the specified fields’ values in
+the given order (or the single value if only one field is specified).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_nodes">
+<code class="descname">get_nodes</code><span class="sig-paren">(</span><em>fields=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict containing all the nodes.
+If fields (list of strings) is specified, the method returns a dict (nodes)
+of tuples (one per node) containing all the specified fields’ values in
+the given order (or the single value if only one field is specified).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_p4rtswitches">
+<code class="descname">get_p4rtswitches</code><span class="sig-paren">(</span><em>fields=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_p4rtswitches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_p4rtswitches" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict containing all the P4 runtime switches.
+If fields (list of strings) is specified, the method returns a dict (p4rtswitches)
+of tuples (one per P4 runtime switch) containing all the specified fields’ values in
+the given order (or the single value if only one field is specified).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_p4switch_id">
+<code class="descname">get_p4switch_id</code><span class="sig-paren">(</span><em>p4switch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_p4switch_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_p4switch_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the ID of a P4 switch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p4switch</strong> – P4 switch name in the topology</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">TypeError if sw_name is not a P4 switch</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">ID of P4 switch as a string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_p4switches">
+<code class="descname">get_p4switches</code><span class="sig-paren">(</span><em>fields=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_p4switches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_p4switches" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict containing all the P4 switches.
+If fields (list of strings) is specified, the method returns a dict (p4switches)
+of tuples (one per P4 switch) containing all the specified fields’ values in
+the given order (or the single value if only one field is specified).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_p4switches_connected_to">
+<code class="descname">get_p4switches_connected_to</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_p4switches_connected_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_p4switches_connected_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the P4 switches directly connected to the node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – </td>
+</tr>
+</tbody>
+</table>
+<p>Returns: list of switches</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_routers">
+<code class="descname">get_routers</code><span class="sig-paren">(</span><em>fields=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_routers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_routers" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict containing all the routers.
+If fields (list of strings) is specified, the method returns a dict (routers)
+of tuples (one per router) containing all the specified fields’ values in
+the given order (or the single value if only one field is specified).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_routers_connected_to">
+<code class="descname">get_routers_connected_to</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_routers_connected_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_routers_connected_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the routers directly connected to the node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – </td>
+</tr>
+</tbody>
+</table>
+<p>Returns: list of routers</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_shortest_paths_between_nodes">
+<code class="descname">get_shortest_paths_between_nodes</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_shortest_paths_between_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_shortest_paths_between_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all the shortest paths between node1 and node2.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node1</strong> – src node</li>
+<li><strong>node2</strong> – dst node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: List of shortests paths</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_switches">
+<code class="descname">get_switches</code><span class="sig-paren">(</span><em>fields=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_switches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_switches" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict containing all the switches.
+If fields (list of strings) is specified, the method returns a dict (switches)
+of tuples (one per switch) containing all the specified fields’ values in
+the given order (or the single value if only one field is specified).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_switches_connected_to">
+<code class="descname">get_switches_connected_to</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_switches_connected_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_switches_connected_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the switches directly connected to the node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – </td>
+</tr>
+</tbody>
+</table>
+<p>Returns: list of switches</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_thrift_ip">
+<code class="descname">get_thrift_ip</code><span class="sig-paren">(</span><em>p4switch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_thrift_ip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_thrift_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Thrift ip used to communicate with the P4 switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.get_thrift_port">
+<code class="descname">get_thrift_port</code><span class="sig-paren">(</span><em>p4switch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.get_thrift_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_thrift_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Thrift port used to communicate with the P4 switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.interface_to_node">
+<code class="descname">interface_to_node</code><span class="sig-paren">(</span><em>node</em>, <em>intf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.interface_to_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.interface_to_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns name of the neigbor at interface ‘intf’ of node ‘node’.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> – node we are quering</li>
+<li><strong>intf</strong> – name of the interface</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.interface_to_port">
+<code class="descname">interface_to_port</code><span class="sig-paren">(</span><em>node</em>, <em>intf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.interface_to_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.interface_to_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns port number of the interface ‘intf’ of node ‘node’.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> – node we are quering</li>
+<li><strong>intf</strong> – name of the interface</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.isHost">
+<code class="descname">isHost</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.isHost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.isHost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the node is a host.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.isIntf">
+<code class="descname">isIntf</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.isIntf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.isIntf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the intf exists by specifying its edge.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.isNode">
+<code class="descname">isNode</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.isNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.isNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the node exists.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.isP4RuntimeSwitch">
+<code class="descname">isP4RuntimeSwitch</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.isP4RuntimeSwitch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.isP4RuntimeSwitch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the node is a P4 runtime switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.isP4Switch">
+<code class="descname">isP4Switch</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.isP4Switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.isP4Switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the node is a P4 switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.isRouter">
+<code class="descname">isRouter</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.isRouter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.isRouter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the node is a router.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.isSwitch">
+<code class="descname">isSwitch</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.isSwitch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.isSwitch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the node is a switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.isType">
+<code class="descname">isType</code><span class="sig-paren">(</span><em>node</em>, <em>node_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.isType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.isType" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Check custom node type. Possible values are:</dt>
+<dd>host
+switch
+p4switch
+p4runtimeswitch
+router</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.keep_only_p4switches">
+<code class="descname">keep_only_p4switches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.keep_only_p4switches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.keep_only_p4switches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a networkx subgraph including only P4 switch nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.keep_only_p4switches_and_hosts">
+<code class="descname">keep_only_p4switches_and_hosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.keep_only_p4switches_and_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.keep_only_p4switches_and_hosts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a networkx subgraph including only hosts and P4 switch nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.keep_only_switches">
+<code class="descname">keep_only_switches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.keep_only_switches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.keep_only_switches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a networkx subgraph including only switch nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.node_interface_bw">
+<code class="descname">node_interface_bw</code><span class="sig-paren">(</span><em>node</em>, <em>intf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.node_interface_bw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.node_interface_bw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the bw of a given interface and node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.node_interface_ip">
+<code class="descname">node_interface_ip</code><span class="sig-paren">(</span><em>node</em>, <em>intf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.node_interface_ip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.node_interface_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the IP address of a given interface and node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.node_to_node_interface_bw">
+<code class="descname">node_to_node_interface_bw</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.node_to_node_interface_bw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.node_to_node_interface_bw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bandwidth capacity of the interface on node1 facing node2.
+If it is unlimited, return -1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.node_to_node_interface_ip">
+<code class="descname">node_to_node_interface_ip</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.node_to_node_interface_ip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.node_to_node_interface_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ip_interface for node1 facing node2.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.node_to_node_mac">
+<code class="descname">node_to_node_mac</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.node_to_node_mac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.node_to_node_mac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns mac address of node1’s interface facing node2.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node1</strong> – src node</li>
+<li><strong>node2</strong> – dst node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.node_to_node_port_num">
+<code class="descname">node_to_node_port_num</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.node_to_node_port_num"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.node_to_node_port_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the port number from node1 point of view that connects to node2.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node1</strong> – src node</li>
+<li><strong>node2</strong> – dst node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.set_node_color">
+<code class="descname">set_node_color</code><span class="sig-paren">(</span><em>node</em>, <em>color</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.set_node_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets node’s color. Used when plotting the network.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.set_node_shape">
+<code class="descname">set_node_shape</code><span class="sig-paren">(</span><em>node</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.set_node_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets node’s shape. Used when plotting the network.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.set_node_type_color">
+<code class="descname">set_node_type_color</code><span class="sig-paren">(</span><em>node_type</em>, <em>color</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.set_node_type_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_type_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the color of the nodes filtered by type.</p>
+<dl class="docutils">
+<dt>Possible node types:</dt>
+<dd>host
+switch
+p4switch
+p4runtimeswitch
+router</dd>
+</dl>
+<p>Used when plotting the network.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.set_node_type_shape">
+<code class="descname">set_node_type_shape</code><span class="sig-paren">(</span><em>node_type</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.set_node_type_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_type_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the shape of the nodes filtered by type.</p>
+<dl class="docutils">
+<dt>Possible node types:</dt>
+<dd>host
+switch
+p4switch
+p4runtimeswitch
+router</dd>
+</dl>
+<p>Used when plotting the network.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.subnet">
+<code class="descname">subnet</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.subnet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.subnet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the subnet linking node1 and node2 (from the point of view of node1).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.total_number_of_paths">
+<code class="descname">total_number_of_paths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NetworkGraph.total_number_of_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.total_number_of_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the total number of shortests paths between all host pairs in the network.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.topology.NodeDoesNotExist">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.topology.</code><code class="descname">NodeDoesNotExist</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/topology.html#NodeDoesNotExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NodeDoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="p4utils.utils.traffic_utils.html" class="btn btn-neutral float-right" title="p4utils.utils.traffic_utils module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="p4utils.utils.thrift_API.html" class="btn btn-neutral float-left" title="p4utils.utils.thrift_API module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -200,7 +200,7 @@
 <span class="kn">from</span> <span class="nn">p4utils.utils.p4runtime_API.utils</span> <span class="kn">import</span> <span class="n">UserError</span><span class="p">,</span> <span class="n">InvalidP4InfoError</span>
 
 
-<div class="viewcode-block" id="UserUsageError"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.UserUsageError">[docs]</a><span class="k">class</span> <span class="nc">UserUsageError</span><span class="p">(</span><span class="n">UserError</span><span class="p">):</span>
+<div class="viewcode-block" id="UserUsageError"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.UserUsageError">[docs]</a><span class="k">class</span> <span class="nc">UserUsageError</span><span class="p">(</span><span class="n">UserError</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">usage</span> <span class="o">=</span> <span class="n">usage</span>
 
@@ -208,7 +208,7 @@
         <span class="k">return</span> <span class="s2">&quot;Usage: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">usage</span></div>
 
 
-<div class="viewcode-block" id="NotSupportedYet"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.NotSupportedYet">[docs]</a><span class="k">class</span> <span class="nc">NotSupportedYet</span><span class="p">(</span><span class="n">UserError</span><span class="p">):</span>
+<div class="viewcode-block" id="NotSupportedYet"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.NotSupportedYet">[docs]</a><span class="k">class</span> <span class="nc">NotSupportedYet</span><span class="p">(</span><span class="n">UserError</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">what</span> <span class="o">=</span> <span class="n">what</span>
 
@@ -355,7 +355,7 @@
     <span class="k">return</span> <span class="n">_repr_pretty_proto</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="P4Object"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.P4Object">[docs]</a><span class="k">class</span> <span class="nc">P4Object</span><span class="p">:</span>
+<div class="viewcode-block" id="P4Object"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.P4Object">[docs]</a><span class="k">class</span> <span class="nc">P4Object</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">preamble</span><span class="o">.</span><span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">preamble</span><span class="o">.</span><span class="n">id</span>
@@ -388,14 +388,14 @@
     <span class="k">def</span> <span class="nf">__settattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">UserError</span><span class="p">(</span><span class="s2">&quot;Operation not supported&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="P4Object.msg"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.P4Object.msg">[docs]</a>    <span class="k">def</span> <span class="nf">msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="P4Object.msg"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.P4Object.msg">[docs]</a>    <span class="k">def</span> <span class="nf">msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get Protobuf message object&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span></div>
 
-<div class="viewcode-block" id="P4Object.info"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.P4Object.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="P4Object.info"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.P4Object.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">_repr_pretty_p4info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="P4Object.actions"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.P4Object.actions">[docs]</a>    <span class="k">def</span> <span class="nf">actions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="P4Object.actions"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.P4Object.actions">[docs]</a>    <span class="k">def</span> <span class="nf">actions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print list of actions, only for tables and action profiles.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj_type</span> <span class="o">==</span> <span class="n">P4Type</span><span class="o">.</span><span class="n">table</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">action_refs</span><span class="p">:</span>
@@ -410,7 +410,7 @@
             <span class="k">raise</span> <span class="n">UserError</span><span class="p">(</span><span class="s2">&quot;&#39;actions&#39; is only available for tables and action profiles&quot;</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="P4Objects"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.P4Objects">[docs]</a><span class="k">class</span> <span class="nc">P4Objects</span><span class="p">:</span>
+<div class="viewcode-block" id="P4Objects"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.P4Objects">[docs]</a><span class="k">class</span> <span class="nc">P4Objects</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_obj_type</span> <span class="o">=</span> <span class="n">obj_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
@@ -453,7 +453,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="MatchKey"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.MatchKey">[docs]</a><span class="k">class</span> <span class="nc">MatchKey</span><span class="p">:</span>
+<div class="viewcode-block" id="MatchKey"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.MatchKey">[docs]</a><span class="k">class</span> <span class="nc">MatchKey</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">match_fields</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_table_name</span> <span class="o">=</span> <span class="n">table_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fields</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
@@ -686,18 +686,18 @@
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">mf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mk</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mf</span><span class="p">))</span>
 
-<div class="viewcode-block" id="MatchKey.set"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.MatchKey.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="MatchKey.set"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.MatchKey.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
 
-<div class="viewcode-block" id="MatchKey.clear"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.MatchKey.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MatchKey.clear"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.MatchKey.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mk</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mk</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Action"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.Action">[docs]</a><span class="k">class</span> <span class="nc">Action</span><span class="p">:</span>
+<div class="viewcode-block" id="Action"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.Action">[docs]</a><span class="k">class</span> <span class="nc">Action</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">action_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">action_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -763,7 +763,7 @@
         <span class="n">p</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">v</span>
         <span class="k">return</span> <span class="n">p</span>
 
-<div class="viewcode-block" id="Action.msg"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.Action.msg">[docs]</a>    <span class="k">def</span> <span class="nf">msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Action.msg"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.Action.msg">[docs]</a>    <span class="k">def</span> <span class="nf">msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">Action</span><span class="p">()</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">action_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_action_id</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_param_values</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
@@ -782,7 +782,7 @@
     <span class="k">def</span> <span class="nf">_repr_pretty_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
         <span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">()))</span>
 
-<div class="viewcode-block" id="Action.set"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.Action.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Action.set"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.Action.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div></div>
 
@@ -922,7 +922,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span>
 
 
-<div class="viewcode-block" id="ActionProfileMember"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.ActionProfileMember">[docs]</a><span class="k">class</span> <span class="nc">ActionProfileMember</span><span class="p">(</span><span class="n">_P4EntityBase</span><span class="p">):</span>
+<div class="viewcode-block" id="ActionProfileMember"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.ActionProfileMember">[docs]</a><span class="k">class</span> <span class="nc">ActionProfileMember</span><span class="p">(</span><span class="n">_P4EntityBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">action_profile_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4Type</span><span class="o">.</span><span class="n">action_profile</span><span class="p">,</span> <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">action_profile_member</span><span class="p">,</span>
@@ -1004,7 +1004,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">action_name</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">_from_msg</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ActionProfileMember.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.ActionProfileMember.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ActionProfileMember.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.ActionProfileMember.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
 <span class="sd">        the appropriate fields unset).</span>
 
@@ -1016,7 +1016,7 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="GroupMember"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.GroupMember">[docs]</a><span class="k">class</span> <span class="nc">GroupMember</span><span class="p">:</span>
+<div class="viewcode-block" id="GroupMember"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.GroupMember">[docs]</a><span class="k">class</span> <span class="nc">GroupMember</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A member in an ActionProfileGroup.</span>
 <span class="sd">    Construct with GroupMember(&lt;member_id&gt;, weight=&lt;weight&gt;, watch=&lt;watch&gt;).</span>
@@ -1070,7 +1070,7 @@
         <span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="ActionProfileGroup"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.ActionProfileGroup">[docs]</a><span class="k">class</span> <span class="nc">ActionProfileGroup</span><span class="p">(</span><span class="n">_P4EntityBase</span><span class="p">):</span>
+<div class="viewcode-block" id="ActionProfileGroup"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.ActionProfileGroup">[docs]</a><span class="k">class</span> <span class="nc">ActionProfileGroup</span><span class="p">(</span><span class="n">_P4EntityBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">action_profile_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4Type</span><span class="o">.</span><span class="n">action_profile</span><span class="p">,</span> <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">action_profile_group</span><span class="p">,</span>
@@ -1124,12 +1124,12 @@
                     <span class="k">raise</span> <span class="n">UserError</span><span class="p">(</span><span class="s2">&quot;members must be a list of GroupMember objects&quot;</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ActionProfileGroup.add"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.ActionProfileGroup.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">member_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">watch</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="ActionProfileGroup.add"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.ActionProfileGroup.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">member_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">watch</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a member to the members list.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GroupMember</span><span class="p">(</span><span class="n">member_id</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">watch</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="ActionProfileGroup.clear"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.ActionProfileGroup.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ActionProfileGroup.clear"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.ActionProfileGroup.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Empty members list.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="p">[]</span></div>
 
@@ -1151,7 +1151,7 @@
         <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">members</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">member_id</span><span class="p">,</span> <span class="n">member</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">member</span><span class="o">.</span><span class="n">watch</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ActionProfileGroup.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.ActionProfileGroup.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ActionProfileGroup.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.ActionProfileGroup.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
 <span class="sd">        the appropriate fields unset).</span>
 
@@ -1180,7 +1180,7 @@
     <span class="k">return</span> <span class="n">ap</span>
 
 
-<div class="viewcode-block" id="OneshotAction"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.OneshotAction">[docs]</a><span class="k">class</span> <span class="nc">OneshotAction</span><span class="p">:</span>
+<div class="viewcode-block" id="OneshotAction"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.OneshotAction">[docs]</a><span class="k">class</span> <span class="nc">OneshotAction</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An action in a oneshot action set.</span>
 <span class="sd">    Construct with OneshotAction(&lt;action (Action instance)&gt;, weight=&lt;weight&gt;, watch=&lt;watch&gt;).</span>
@@ -1211,7 +1211,7 @@
                 <span class="k">raise</span> <span class="n">UserError</span><span class="p">(</span><span class="s2">&quot;watch must be an integer&quot;</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-<div class="viewcode-block" id="OneshotAction.msg"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.OneshotAction.msg">[docs]</a>    <span class="k">def</span> <span class="nf">msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OneshotAction.msg"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.OneshotAction.msg">[docs]</a>    <span class="k">def</span> <span class="nf">msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">ActionProfileAction</span><span class="p">()</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">CopyFrom</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">msg</span><span class="p">())</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span>
@@ -1225,7 +1225,7 @@
         <span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">()))</span></div>
 
 
-<div class="viewcode-block" id="Oneshot"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.Oneshot">[docs]</a><span class="k">class</span> <span class="nc">Oneshot</span><span class="p">:</span>
+<div class="viewcode-block" id="Oneshot"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.Oneshot">[docs]</a><span class="k">class</span> <span class="nc">Oneshot</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">table_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1275,12 +1275,12 @@
                 <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="Oneshot.add"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.Oneshot.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">watch</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Oneshot.add"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.Oneshot.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">watch</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add an action to the oneshot action set.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">OneshotAction</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">watch</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="Oneshot.msg"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.Oneshot.msg">[docs]</a>    <span class="k">def</span> <span class="nf">msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Oneshot.msg"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.Oneshot.msg">[docs]</a>    <span class="k">def</span> <span class="nf">msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">ActionProfileActionSet</span><span class="p">()</span>
         <span class="n">msg</span><span class="o">.</span><span class="n">action_profile_actions</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">action</span><span class="o">.</span><span class="n">msg</span><span class="p">()</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">msg</span></div>
@@ -1427,7 +1427,7 @@
         <span class="k">return</span> <span class="n">d</span><span class="p">,</span> <span class="n">r</span>
 
 
-<div class="viewcode-block" id="TableEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.TableEntry">[docs]</a><span class="k">class</span> <span class="nc">TableEntry</span><span class="p">(</span><span class="n">_P4EntityBase</span><span class="p">):</span>
+<div class="viewcode-block" id="TableEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.TableEntry">[docs]</a><span class="k">class</span> <span class="nc">TableEntry</span><span class="p">(</span><span class="n">_P4EntityBase</span><span class="p">):</span>
     <span class="nd">@enum</span><span class="o">.</span><span class="n">unique</span>
     <span class="k">class</span> <span class="nc">_ActionSpecType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
         <span class="n">NONE</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1751,7 +1751,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_meter_config</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="TableEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.TableEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="TableEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.TableEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
 <span class="sd">        the appropriate fields unset).</span>
 <span class="sd">        If function is None, returns an iterator. Iterate over it to get all the</span>
@@ -1800,20 +1800,20 @@
                 <span class="s2">&quot;Match key must be empty for default entry, use &lt;self&gt;.is_default = False &quot;</span>
                 <span class="s2">&quot;or &lt;self&gt;.match.clear (whichever one is appropriate)&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TableEntry.clear_action"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.TableEntry.clear_action">[docs]</a>    <span class="k">def</span> <span class="nf">clear_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TableEntry.clear_action"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.TableEntry.clear_action">[docs]</a>    <span class="k">def</span> <span class="nf">clear_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Clears the action spec for the TableEntry.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="s2">&quot;_action_spec_type&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ActionSpecType</span><span class="o">.</span><span class="n">NONE</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="s2">&quot;_action_spec&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TableEntry.clear_match"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.TableEntry.clear_match">[docs]</a>    <span class="k">def</span> <span class="nf">clear_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TableEntry.clear_match"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.TableEntry.clear_match">[docs]</a>    <span class="k">def</span> <span class="nf">clear_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Clears the match spec for the TableEntry.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">match</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TableEntry.clear_counter_data"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.TableEntry.clear_counter_data">[docs]</a>    <span class="k">def</span> <span class="nf">clear_counter_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TableEntry.clear_counter_data"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.TableEntry.clear_counter_data">[docs]</a>    <span class="k">def</span> <span class="nf">clear_counter_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Clear all counter data, same as &lt;self&gt;.counter_data = None&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_counter_data</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="TableEntry.clear_meter_config"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.TableEntry.clear_meter_config">[docs]</a>    <span class="k">def</span> <span class="nf">clear_meter_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TableEntry.clear_meter_config"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.TableEntry.clear_meter_config">[docs]</a>    <span class="k">def</span> <span class="nf">clear_meter_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Clear the meter config, same as &lt;self&gt;.meter_config = None&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_meter_config</span> <span class="o">=</span> <span class="kc">None</span></div></div>
 
@@ -1880,7 +1880,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="CounterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.CounterEntry">[docs]</a><span class="k">class</span> <span class="nc">CounterEntry</span><span class="p">(</span><span class="n">_CounterEntryBase</span><span class="p">):</span>
+<div class="viewcode-block" id="CounterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.CounterEntry">[docs]</a><span class="k">class</span> <span class="nc">CounterEntry</span><span class="p">(</span><span class="n">_CounterEntryBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">counter_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4Type</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">counter_entry</span><span class="p">,</span>
@@ -1921,7 +1921,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entry</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">index</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-<div class="viewcode-block" id="CounterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.CounterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CounterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.CounterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
 <span class="sd">        the index unset).</span>
 <span class="sd">        If function is None, returns an iterator. Iterate over it to get all the</span>
@@ -1938,7 +1938,7 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="DirectCounterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.DirectCounterEntry">[docs]</a><span class="k">class</span> <span class="nc">DirectCounterEntry</span><span class="p">(</span><span class="n">_CounterEntryBase</span><span class="p">):</span>
+<div class="viewcode-block" id="DirectCounterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.DirectCounterEntry">[docs]</a><span class="k">class</span> <span class="nc">DirectCounterEntry</span><span class="p">(</span><span class="n">_CounterEntryBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4Type</span><span class="o">.</span><span class="n">direct_counter</span><span class="p">,</span> <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">direct_counter_entry</span><span class="p">,</span>
@@ -2008,7 +2008,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_table_entry</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="DirectCounterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.DirectCounterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DirectCounterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.DirectCounterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
 <span class="sd">        the index unset).</span>
 <span class="sd">        If function is None, returns an iterator. Iterate over it to get all the</span>
@@ -2086,7 +2086,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="MeterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.MeterEntry">[docs]</a><span class="k">class</span> <span class="nc">MeterEntry</span><span class="p">(</span><span class="n">_MeterEntryBase</span><span class="p">):</span>
+<div class="viewcode-block" id="MeterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.MeterEntry">[docs]</a><span class="k">class</span> <span class="nc">MeterEntry</span><span class="p">(</span><span class="n">_MeterEntryBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">meter_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4Type</span><span class="o">.</span><span class="n">meter</span><span class="p">,</span> <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">meter_entry</span><span class="p">,</span>
@@ -2131,7 +2131,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entry</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">index</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MeterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.MeterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MeterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.MeterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
 <span class="sd">        the index unset).</span>
 <span class="sd">        If function is None, returns an iterator. Iterate over it to get all the</span>
@@ -2148,7 +2148,7 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="DirectMeterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.DirectMeterEntry">[docs]</a><span class="k">class</span> <span class="nc">DirectMeterEntry</span><span class="p">(</span><span class="n">_MeterEntryBase</span><span class="p">):</span>
+<div class="viewcode-block" id="DirectMeterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.DirectMeterEntry">[docs]</a><span class="k">class</span> <span class="nc">DirectMeterEntry</span><span class="p">(</span><span class="n">_MeterEntryBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4Type</span><span class="o">.</span><span class="n">direct_meter</span><span class="p">,</span> <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">direct_meter_entry</span><span class="p">,</span>
@@ -2222,7 +2222,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_table_entry</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="DirectMeterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.DirectMeterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DirectMeterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.DirectMeterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
 <span class="sd">        the index unset).</span>
 <span class="sd">        If function is None, returns an iterator. Iterate over it to get all the</span>
@@ -2239,7 +2239,7 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Replica"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.Replica">[docs]</a><span class="k">class</span> <span class="nc">Replica</span><span class="p">:</span>
+<div class="viewcode-block" id="Replica"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.Replica">[docs]</a><span class="k">class</span> <span class="nc">Replica</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A port &quot;replica&quot; (port number + instance id) used for multicast and clone session programming.</span>
 <span class="sd">    Construct with Replica(egress_port, instance=&lt;instance&gt;).</span>
@@ -2285,7 +2285,7 @@
         <span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="MulticastGroupEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.MulticastGroupEntry">[docs]</a><span class="k">class</span> <span class="nc">MulticastGroupEntry</span><span class="p">(</span><span class="n">_EntityBase</span><span class="p">):</span>
+<div class="viewcode-block" id="MulticastGroupEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.MulticastGroupEntry">[docs]</a><span class="k">class</span> <span class="nc">MulticastGroupEntry</span><span class="p">(</span><span class="n">_EntityBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">group_id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">packet_replication_engine_entry</span><span class="p">,</span>
@@ -2322,7 +2322,7 @@
         <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">multicast_group_entry</span><span class="o">.</span><span class="n">replicas</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">egress_port</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MulticastGroupEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.MulticastGroupEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MulticastGroupEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.MulticastGroupEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC to read a single MulticastGroupEntry</span>
 <span class="sd">        (wildcard reads not supported).</span>
 <span class="sd">        If function is None, return a MulticastGroupEntry instance (or None if</span>
@@ -2347,7 +2347,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">UserError</span><span class="p">(</span><span class="s2">&quot;0 is not a valid group_id for MulticastGroupEntry&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MulticastGroupEntry.add"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.MulticastGroupEntry.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">egress_port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="MulticastGroupEntry.add"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.MulticastGroupEntry.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">egress_port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a replica to the multicast group.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">replicas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Replica</span><span class="p">(</span><span class="n">egress_port</span><span class="p">,</span> <span class="n">instance</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span></div></div>
@@ -2357,7 +2357,7 @@
 <span class="c1"># in the behavioral-model. Indeed this kind of entry is designed for PSA target</span>
 <span class="c1"># according to PSA Specification (see https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-clone)</span>
 
-<div class="viewcode-block" id="CloneSessionEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.CloneSessionEntry">[docs]</a><span class="k">class</span> <span class="nc">CloneSessionEntry</span><span class="p">(</span><span class="n">_EntityBase</span><span class="p">):</span>
+<div class="viewcode-block" id="CloneSessionEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.CloneSessionEntry">[docs]</a><span class="k">class</span> <span class="nc">CloneSessionEntry</span><span class="p">(</span><span class="n">_EntityBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">packet_replication_engine_entry</span><span class="p">,</span>
@@ -2406,7 +2406,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cos</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">clone_session_entry</span><span class="o">.</span><span class="n">class_of_service</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">packet_length_bytes</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">clone_session_entry</span><span class="o">.</span><span class="n">packet_length_bytes</span>
 
-<div class="viewcode-block" id="CloneSessionEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.CloneSessionEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CloneSessionEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.CloneSessionEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC to read a single CloneSessionEntry</span>
 <span class="sd">        (wildcard reads not supported).</span>
 <span class="sd">        If function is None, return a CloneSessionEntry instance (or None if</span>
@@ -2429,13 +2429,13 @@
         <span class="n">cs_entry</span><span class="o">.</span><span class="n">packet_length_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">packet_length_bytes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_entry</span> <span class="o">=</span> <span class="n">entry</span>
 
-<div class="viewcode-block" id="CloneSessionEntry.add"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.CloneSessionEntry.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">egress_port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="CloneSessionEntry.add"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.CloneSessionEntry.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">egress_port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a replica to the clone session.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">replicas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Replica</span><span class="p">(</span><span class="n">egress_port</span><span class="p">,</span> <span class="n">instance</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span></div></div>
 
 
-<div class="viewcode-block" id="DigestEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.DigestEntry">[docs]</a><span class="k">class</span> <span class="nc">DigestEntry</span><span class="p">(</span><span class="n">_P4EntityBase</span><span class="p">):</span>
+<div class="viewcode-block" id="DigestEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.DigestEntry">[docs]</a><span class="k">class</span> <span class="nc">DigestEntry</span><span class="p">(</span><span class="n">_P4EntityBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The DigestEntry P4Runtime entity is used to configure how the device must generate digest messages.</span>
 <span class="sd">    </span>
@@ -2488,7 +2488,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">max_list_size</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">max_list_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ack_timeout_ns</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">ack_timeout_ns</span>
 
-<div class="viewcode-block" id="DigestEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.DigestEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DigestEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.DigestEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
 <span class="sd">        the appropriate fields unset).</span>
@@ -2506,7 +2506,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_entry</span> <span class="o">=</span> <span class="n">entry</span></div>
 
 
-<div class="viewcode-block" id="Write"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.Write">[docs]</a><span class="k">def</span> <span class="nf">Write</span><span class="p">(</span><span class="n">input_</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
+<div class="viewcode-block" id="Write"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.Write">[docs]</a><span class="k">def</span> <span class="nf">Write</span><span class="p">(</span><span class="n">input_</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a WriteRequest from a file (text format) and sends it to the server.</span>
 <span class="sd">    It rewrites the device id and election id appropriately.</span>
@@ -2522,7 +2522,7 @@
                 <span class="n">input_</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="APIVersion"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.APIVersion">[docs]</a><span class="k">def</span> <span class="nf">APIVersion</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+<div class="viewcode-block" id="APIVersion"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.APIVersion">[docs]</a><span class="k">def</span> <span class="nf">APIVersion</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the version of the P4Runtime API implemented by the server, using</span>
 <span class="sd">    the Capabilities RPC.</span>
@@ -2533,7 +2533,7 @@
 <span class="n">FwdPipeConfig</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;FwdPipeConfig&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;p4info&#39;</span><span class="p">,</span> <span class="s1">&#39;bin&#39;</span><span class="p">])</span>
 
 
-<div class="viewcode-block" id="setup"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.setup">[docs]</a><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">device_id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">grpc_addr</span><span class="o">=</span><span class="s1">&#39;localhost:9559&#39;</span><span class="p">,</span> <span class="n">election_id</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="setup"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.setup">[docs]</a><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">device_id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">grpc_addr</span><span class="o">=</span><span class="s1">&#39;localhost:9559&#39;</span><span class="p">,</span> <span class="n">election_id</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating P4Runtime client&quot;</span><span class="p">)</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">P4RuntimeClient</span><span class="p">(</span><span class="n">device_id</span><span class="p">,</span> <span class="n">grpc_addr</span><span class="p">,</span> <span class="n">election_id</span><span class="p">)</span>
 
@@ -2569,7 +2569,7 @@
     <span class="k">return</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span></div>
 
 
-<div class="viewcode-block" id="teardown"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.api.teardown">[docs]</a><span class="k">def</span> <span class="nf">teardown</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+<div class="viewcode-block" id="teardown"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.teardown">[docs]</a><span class="k">def</span> <span class="nf">teardown</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Tearing down P4Runtime client&quot;</span><span class="p">)</span>
     <span class="n">client</span><span class="o">.</span><span class="n">tear_down</span><span class="p">()</span></div>
 </pre></div>

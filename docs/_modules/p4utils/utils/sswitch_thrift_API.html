@@ -197,7 +197,7 @@
 <span class="kn">import</span> <span class="nn">p4utils.utils.thrift_API</span> <span class="k">as</span> <span class="nn">thrift_API</span>
 
 
-<div class="viewcode-block" id="handle_bad_input"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.handle_bad_input">[docs]</a><span class="k">def</span> <span class="nf">handle_bad_input</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="handle_bad_input"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.handle_bad_input">[docs]</a><span class="k">def</span> <span class="nf">handle_bad_input</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     <span class="nd">@thrift_API</span><span class="o">.</span><span class="n">handle_bad_input</span>
     <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -209,8 +209,8 @@
     <span class="k">return</span> <span class="n">handle</span></div>
 
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI">[docs]</a><span class="k">class</span> <span class="nc">SimpleSwitchThriftAPI</span><span class="p">(</span><span class="n">thrift_API</span><span class="o">.</span><span class="n">ThriftAPI</span><span class="p">):</span>
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.get_thrift_services"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_thrift_services">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI">[docs]</a><span class="k">class</span> <span class="nc">SimpleSwitchThriftAPI</span><span class="p">(</span><span class="n">thrift_API</span><span class="o">.</span><span class="n">ThriftAPI</span><span class="p">):</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.get_thrift_services"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_thrift_services">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_thrift_services</span><span class="p">():</span>
         <span class="k">return</span> <span class="p">[(</span><span class="s2">&quot;simple_switch&quot;</span><span class="p">,</span> <span class="n">SimpleSwitch</span><span class="o">.</span><span class="n">Client</span><span class="p">)]</span></div>
 
@@ -229,13 +229,13 @@
                                                         <span class="n">thrift_port</span><span class="p">,</span>
                                                         <span class="n">SimpleSwitchThriftAPI</span><span class="o">.</span><span class="n">get_thrift_services</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.parse_int"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.parse_int">[docs]</a>    <span class="k">def</span> <span class="nf">parse_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.parse_int"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.parse_int">[docs]</a>    <span class="k">def</span> <span class="nf">parse_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">thrift_API</span><span class="o">.</span><span class="n">UIn_Error</span><span class="p">(</span><span class="s2">&quot;Bad format for </span><span class="si">{}</span><span class="s2">, expected integer&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.set_queue_depth"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_depth">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.set_queue_depth"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_depth">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">set_queue_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue_depth</span><span class="p">,</span> <span class="n">egress_port</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Set depth of one / all egress queue(s): set_queue_depth &lt;nb_pkts&gt; [&lt;egress_port&gt;]&quot;</span>
 
@@ -246,7 +246,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">set_all_egress_queue_depths</span><span class="p">(</span><span class="n">depth</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.set_queue_rate"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_rate">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.set_queue_rate"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_rate">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">set_queue_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">egress_port</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Set rate of one / all egress queue(s): set_queue_rate &lt;rate_pps&gt; [&lt;egress_port&gt;]&quot;</span>
 
@@ -257,46 +257,46 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">set_all_egress_queue_rates</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.mirroring_add"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.mirroring_add"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">mirroring_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mirror_id</span><span class="p">,</span> <span class="n">egress_port</span><span class="p">):</span>
         <span class="s2">&quot;Add mirroring mapping: mirroring_add &lt;mirror_id&gt; &lt;egress_port&gt;&quot;</span>
         <span class="n">mirror_id</span><span class="p">,</span> <span class="n">egress_port</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="s2">&quot;mirror_id&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">egress_port</span><span class="p">,</span> <span class="s2">&quot;egress_port&quot;</span><span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">MirroringSessionConfig</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="n">egress_port</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">mirroring_session_add</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.mirroring_add_mc"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_mc">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.mirroring_add_mc"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_mc">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">mirroring_add_mc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mirror_id</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">):</span>
         <span class="s2">&quot;Add mirroring session to multicast group: mirroring_add_mc &lt;mirror_id&gt; &lt;mgrp&gt;&quot;</span>
         <span class="n">mirror_id</span><span class="p">,</span> <span class="n">mgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="s2">&quot;mirror_id&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mgrp</span><span class="p">,</span> <span class="s2">&quot;mgrp&quot;</span><span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">MirroringSessionConfig</span><span class="p">(</span><span class="n">mgid</span><span class="o">=</span><span class="n">mgrp</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">mirroring_session_add</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.mirroring_add_port_and_mgrp"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_port_and_mgrp">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.mirroring_add_port_and_mgrp"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_port_and_mgrp">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">mirroring_add_port_and_mgrp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mirror_id</span><span class="p">,</span> <span class="n">egress_port</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">):</span>
         <span class="s2">&quot;Add mirroring session to multicast group: mirroring_add_mc &lt;mirror_id&gt; &lt;mgrp&gt;&quot;</span>
         <span class="n">mirror_id</span><span class="p">,</span> <span class="n">egress_port</span><span class="p">,</span> <span class="n">mgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="s2">&quot;mirror_id&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">egress_port</span><span class="p">,</span> <span class="s2">&quot;egress_port&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mgrp</span><span class="p">,</span> <span class="s2">&quot;mgrp&quot;</span><span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">MirroringSessionConfig</span><span class="p">(</span><span class="n">mgid</span><span class="o">=</span><span class="n">mgrp</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">egress_port</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">mirroring_session_add</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.mirroring_delete"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_delete">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.mirroring_delete"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_delete">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">mirroring_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mirror_id</span><span class="p">):</span>
         <span class="s2">&quot;Delete mirroring mapping: mirroring_delete &lt;mirror_id&gt;&quot;</span>
         <span class="n">mirror_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="s2">&quot;mirror_id&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">mirroring_session_delete</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.mirroring_get"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_get">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.mirroring_get"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_get">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">mirroring_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mirror_id</span><span class="p">):</span>
         <span class="s2">&quot;Display mirroring session: mirroring_get &lt;mirror_id&gt;&quot;</span>
         <span class="n">mirror_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="s2">&quot;mirror_id&quot;</span><span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">mirroring_session_get</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.get_time_elapsed"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_elapsed">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.get_time_elapsed"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_elapsed">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">get_time_elapsed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Get time elapsed (in microseconds) since the switch started: get_time_elapsed&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">get_time_elapsed_us</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="SimpleSwitchThriftAPI.get_time_since_epoch"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_since_epoch">[docs]</a>    <span class="nd">@handle_bad_input</span>
+<div class="viewcode-block" id="SimpleSwitchThriftAPI.get_time_since_epoch"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_since_epoch">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">get_time_since_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Get time elapsed (in microseconds) since the switch clock&#39;s epoch: get_time_since_epoch&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">get_time_since_epoch_us</span><span class="p">())</span></div></div>

@@ -183,7 +183,7 @@
 <span class="n">_prefixLenMatchRegex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;netmask (\d+\.\d+\.\d+\.\d+)&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="merge_dict"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.merge_dict">[docs]</a><span class="k">def</span> <span class="nf">merge_dict</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span><span class="p">):</span>
+<div class="viewcode-block" id="merge_dict"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.merge_dict">[docs]</a><span class="k">def</span> <span class="nf">merge_dict</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merge dictionary src into dictionary dst (nested dictionaries</span>
 <span class="sd">    are updated).</span>
@@ -201,7 +201,7 @@
                     <span class="n">current_dst</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_src</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="next_element"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.next_element">[docs]</a><span class="k">def</span> <span class="nf">next_element</span><span class="p">(</span><span class="n">elems</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="next_element"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.next_element">[docs]</a><span class="k">def</span> <span class="nf">next_element</span><span class="p">(</span><span class="n">elems</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a list of integers, return the next number not</span>
 <span class="sd">    already present in the set starting from minimum and</span>
@@ -237,7 +237,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;too many elements in the list.&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="natural"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.natural">[docs]</a><span class="k">def</span> <span class="nf">natural</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<div class="viewcode-block" id="natural"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.natural">[docs]</a><span class="k">def</span> <span class="nf">natural</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    To sort sanely/alphabetically: sorted(l, key=natural).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -249,14 +249,14 @@
     <span class="k">return</span> <span class="p">[</span><span class="n">num</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\d+)&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">))]</span></div>
 
 
-<div class="viewcode-block" id="naturalSeq"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.naturalSeq">[docs]</a><span class="k">def</span> <span class="nf">naturalSeq</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+<div class="viewcode-block" id="naturalSeq"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.naturalSeq">[docs]</a><span class="k">def</span> <span class="nf">naturalSeq</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Natural sort key function for sequences.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">[</span> <span class="n">natural</span><span class="p">(</span> <span class="n">x</span> <span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">t</span> <span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="rand_mac"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.rand_mac">[docs]</a><span class="k">def</span> <span class="nf">rand_mac</span><span class="p">():</span>
+<div class="viewcode-block" id="rand_mac"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.rand_mac">[docs]</a><span class="k">def</span> <span class="nf">rand_mac</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a random, non-multicast MAC address.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -272,7 +272,7 @@
     <span class="k">return</span> <span class="n">mac_str</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="dpidToStr"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.dpidToStr">[docs]</a><span class="k">def</span> <span class="nf">dpidToStr</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+<div class="viewcode-block" id="dpidToStr"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.dpidToStr">[docs]</a><span class="k">def</span> <span class="nf">dpidToStr</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute a string dpid from an integer id.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -282,7 +282,7 @@
     <span class="k">return</span> <span class="n">strDpid</span></div>
 
 
-<div class="viewcode-block" id="check_listening_on_port"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.check_listening_on_port">[docs]</a><span class="k">def</span> <span class="nf">check_listening_on_port</span><span class="p">(</span><span class="n">port</span><span class="p">):</span>
+<div class="viewcode-block" id="check_listening_on_port"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.check_listening_on_port">[docs]</a><span class="k">def</span> <span class="nf">check_listening_on_port</span><span class="p">(</span><span class="n">port</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if the given port is listening in the main</span>
 <span class="sd">    namespace.</span>
@@ -293,12 +293,12 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="cksum"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.cksum">[docs]</a><span class="k">def</span> <span class="nf">cksum</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="cksum"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.cksum">[docs]</a><span class="k">def</span> <span class="nf">cksum</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns the md5 checksum of a file.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="get_node_attr"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.get_node_attr">[docs]</a><span class="k">def</span> <span class="nf">get_node_attr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="get_node_attr"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.get_node_attr">[docs]</a><span class="k">def</span> <span class="nf">get_node_attr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finds the value of the attribute &#39;attr_name&#39; of the Mininet node</span>
 <span class="sd">    by looking also inside node.params (for unparsed attributes).</span>
@@ -323,7 +323,7 @@
             <span class="k">return</span> <span class="n">default</span></div>
 
 
-<div class="viewcode-block" id="get_by_attr"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.get_by_attr">[docs]</a><span class="k">def</span> <span class="nf">get_by_attr</span><span class="p">(</span><span class="n">attr_name</span><span class="p">,</span> <span class="n">attr_value</span><span class="p">,</span> <span class="n">obj_list</span><span class="p">):</span>
+<div class="viewcode-block" id="get_by_attr"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.get_by_attr">[docs]</a><span class="k">def</span> <span class="nf">get_by_attr</span><span class="p">(</span><span class="n">attr_name</span><span class="p">,</span> <span class="n">attr_value</span><span class="p">,</span> <span class="n">obj_list</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the first object in the list that has the attribute &#39;attr_name&#39;</span>
 <span class="sd">    value equal to attr_value.</span>
@@ -343,7 +343,7 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="ip_address_to_mac"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.ip_address_to_mac">[docs]</a><span class="k">def</span> <span class="nf">ip_address_to_mac</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+<div class="viewcode-block" id="ip_address_to_mac"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.ip_address_to_mac">[docs]</a><span class="k">def</span> <span class="nf">ip_address_to_mac</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generate MAC from IP address.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">ip</span><span class="p">:</span>
         <span class="n">ip</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -353,7 +353,7 @@
     <span class="k">return</span> <span class="n">mac_address</span></div>
 
 
-<div class="viewcode-block" id="is_compiled"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.is_compiled">[docs]</a><span class="k">def</span> <span class="nf">is_compiled</span><span class="p">(</span><span class="n">p4_src</span><span class="p">,</span> <span class="n">compilers</span><span class="p">):</span>
+<div class="viewcode-block" id="is_compiled"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.is_compiled">[docs]</a><span class="k">def</span> <span class="nf">is_compiled</span><span class="p">(</span><span class="n">p4_src</span><span class="p">,</span> <span class="n">compilers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if a file has been already compiled by at least</span>
 <span class="sd">    one compiler in the list.</span>
@@ -372,7 +372,7 @@
         <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="load_conf"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.load_conf">[docs]</a><span class="k">def</span> <span class="nf">load_conf</span><span class="p">(</span><span class="n">conf_file</span><span class="p">):</span>
+<div class="viewcode-block" id="load_conf"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.load_conf">[docs]</a><span class="k">def</span> <span class="nf">load_conf</span><span class="p">(</span><span class="n">conf_file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load JSON application configuration file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -381,7 +381,7 @@
     <span class="k">return</span> <span class="n">config</span></div>
 
 
-<div class="viewcode-block" id="load_topo"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.load_topo">[docs]</a><span class="k">def</span> <span class="nf">load_topo</span><span class="p">(</span><span class="n">json_path</span><span class="p">):</span>
+<div class="viewcode-block" id="load_topo"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.load_topo">[docs]</a><span class="k">def</span> <span class="nf">load_topo</span><span class="p">(</span><span class="n">json_path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load the topology from the json_path provided</span>
 
@@ -397,7 +397,7 @@
     <span class="k">return</span> <span class="n">NetworkGraph</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="load_custom_object"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.load_custom_object">[docs]</a><span class="k">def</span> <span class="nf">load_custom_object</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<div class="viewcode-block" id="load_custom_object"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.load_custom_object">[docs]</a><span class="k">def</span> <span class="nf">load_custom_object</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load object from module</span>
 <span class="sd">    </span>
@@ -424,7 +424,7 @@
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">object_name</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="run_command"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.run_command">[docs]</a><span class="k">def</span> <span class="nf">run_command</span><span class="p">(</span><span class="n">command</span><span class="p">):</span>
+<div class="viewcode-block" id="run_command"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.run_command">[docs]</a><span class="k">def</span> <span class="nf">run_command</span><span class="p">(</span><span class="n">command</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Execute command in the main namespace.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -432,7 +432,7 @@
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">WEXITSTATUS</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">command</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="parse_line"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.parse_line">[docs]</a><span class="k">def</span> <span class="nf">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_line"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.parse_line">[docs]</a><span class="k">def</span> <span class="nf">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse text line returning a list of substrings.</span>
 <span class="sd">    Example:</span>
@@ -453,7 +453,7 @@
     <span class="k">return</span> <span class="n">args2</span></div>
 
 
-<div class="viewcode-block" id="parse_task_line"><a class="viewcode-back" href="../../../p4utils.utils.html#p4utils.utils.helper.parse_task_line">[docs]</a><span class="k">def</span> <span class="nf">parse_task_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">def_mod</span><span class="o">=</span><span class="s1">&#39;p4utils.utils.traffic_utils&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_task_line"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.parse_task_line">[docs]</a><span class="k">def</span> <span class="nf">parse_task_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">def_mod</span><span class="o">=</span><span class="s1">&#39;p4utils.utils.traffic_utils&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse text line and return all the parameters needed</span>
 <span class="sd">    to create a task with NetworkAPI.addTask().</span>

@@ -174,7 +174,7 @@
 <span class="kn">from</span> <span class="nn">p4utils.mininetlib.node</span> <span class="kn">import</span> <span class="n">FRRouter</span>
 
 
-<div class="viewcode-block" id="P4Mininet"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.net.P4Mininet">[docs]</a><span class="k">class</span> <span class="nc">P4Mininet</span><span class="p">(</span><span class="n">Mininet</span><span class="p">):</span>
+<div class="viewcode-block" id="P4Mininet"><a class="viewcode-back" href="../../../p4utils.mininetlib.net.html#p4utils.mininetlib.net.P4Mininet">[docs]</a><span class="k">class</span> <span class="nc">P4Mininet</span><span class="p">(</span><span class="n">Mininet</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;P4Mininet is the Mininet Class extended with P4 switches.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">router</span><span class="o">=</span><span class="n">FRRouter</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -184,7 +184,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">routers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="P4Mininet.build"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.net.P4Mininet.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="P4Mininet.build"><a class="viewcode-back" href="../../../p4utils.mininetlib.net.html#p4utils.mininetlib.net.P4Mininet.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Build P4Mininet.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
@@ -193,7 +193,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">topo</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">p4switches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">switch</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="P4Mininet.addRouter"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.net.P4Mininet.addRouter">[docs]</a>    <span class="k">def</span> <span class="nf">addRouter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="P4Mininet.addRouter"><a class="viewcode-back" href="../../../p4utils.mininetlib.net.html#p4utils.mininetlib.net.P4Mininet.addRouter">[docs]</a>    <span class="k">def</span> <span class="nf">addRouter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a router to the network.</span>
 
@@ -213,7 +213,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">nameToNode</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span>
         <span class="k">return</span> <span class="n">r</span>                </div>
 
-<div class="viewcode-block" id="P4Mininet.buildFromTopo"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.net.P4Mininet.buildFromTopo">[docs]</a>    <span class="k">def</span> <span class="nf">buildFromTopo</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">topo</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+<div class="viewcode-block" id="P4Mininet.buildFromTopo"><a class="viewcode-back" href="../../../p4utils.mininetlib.net.html#p4utils.mininetlib.net.P4Mininet.buildFromTopo">[docs]</a>    <span class="k">def</span> <span class="nf">buildFromTopo</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">topo</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build mininet from a topology object. At the end of this </span>
 <span class="sd">        function, everything should be connected and up.</span>
@@ -267,7 +267,7 @@
 
         <span class="n">info</span><span class="p">(</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="p">)</span></div>
 
-<div class="viewcode-block" id="P4Mininet.start"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.net.P4Mininet.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="P4Mininet.start"><a class="viewcode-back" href="../../../p4utils.mininetlib.net.html#p4utils.mininetlib.net.P4Mininet.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
         <span class="c1"># start routers</span>
@@ -308,7 +308,7 @@
             <span class="n">link</span><span class="o">.</span><span class="n">intf1</span><span class="o">.</span><span class="n">cmd</span><span class="p">(</span><span class="n">cmd3</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">intf1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mtu</span><span class="p">))</span>
             <span class="n">link</span><span class="o">.</span><span class="n">intf2</span><span class="o">.</span><span class="n">cmd</span><span class="p">(</span><span class="n">cmd3</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">intf2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mtu</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="P4Mininet.stop"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.net.P4Mininet.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span> <span class="bp">self</span> <span class="p">):</span>
+<div class="viewcode-block" id="P4Mininet.stop"><a class="viewcode-back" href="../../../p4utils.mininetlib.net.html#p4utils.mininetlib.net.P4Mininet.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span> <span class="bp">self</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stop the controller(s), switches and hosts&quot;&quot;&quot;</span>
         <span class="n">info</span><span class="p">(</span> <span class="s1">&#39;*** Stopping </span><span class="si">%i</span><span class="s1"> controllers</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">controllers</span> <span class="p">)</span> <span class="p">)</span>
         <span class="k">for</span> <span class="n">controller</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">controllers</span><span class="p">:</span>

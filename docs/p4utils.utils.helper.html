@@ -1,0 +1,462 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.utils.helper module &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="p4utils.utils.monitor module" href="p4utils.utils.monitor.html" />
+    <link rel="prev" title="p4utils.utils.compiler module" href="p4utils.utils.compiler.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">p4utils</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="p4utils.html">p4utils package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="p4utils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="p4utils.mininetlib.html">p4utils.mininetlib package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="p4utils.utils.html">p4utils.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="p4utils.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="p4utils.html#module-p4utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">p4utils</a> &raquo;</li>
+        
+          <li><a href="p4utils.html">p4utils package</a> &raquo;</li>
+        
+          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
+        
+      <li>p4utils.utils.helper module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/p4utils.utils.helper.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-p4utils.utils.helper">
+<span id="p4utils-utils-helper-module"></span><h1>p4utils.utils.helper module<a class="headerlink" href="#module-p4utils.utils.helper" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="p4utils.utils.helper.check_listening_on_port">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">check_listening_on_port</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#check_listening_on_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.check_listening_on_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the given port is listening in the main
+namespace.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.cksum">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">cksum</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#cksum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.cksum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the md5 checksum of a file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.dpidToStr">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">dpidToStr</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#dpidToStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.dpidToStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a string dpid from an integer id.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.get_by_attr">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">get_by_attr</code><span class="sig-paren">(</span><em>attr_name</em>, <em>attr_value</em>, <em>obj_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#get_by_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.get_by_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the first object in the list that has the attribute ‘attr_name’
+value equal to attr_value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>attr_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – attribute name</li>
+<li><strong>attr_value</strong> – attrubute value</li>
+<li><strong>obj_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of objects</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the requested object or None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">obj</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.get_node_attr">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">get_node_attr</code><span class="sig-paren">(</span><em>node</em>, <em>attr_name</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#get_node_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.get_node_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the value of the attribute ‘attr_name’ of the Mininet node
+by looking also inside node.params (for unparsed attributes).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>node</strong> – Mininet node object</li>
+<li><strong>attr_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – attribute to looking for (also inside unparsed ones)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the value of the requested attribute.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.ip_address_to_mac">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">ip_address_to_mac</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#ip_address_to_mac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.ip_address_to_mac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate MAC from IP address.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.is_compiled">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">is_compiled</code><span class="sig-paren">(</span><em>p4_src</em>, <em>compilers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#is_compiled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.is_compiled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a file has been already compiled by at least
+one compiler in the list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – P4 file path</li>
+<li><strong>compilers</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of P4 compiler objects (see compiler.py)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True/False depending on whether the file has been already compiled.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.load_conf">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">load_conf</code><span class="sig-paren">(</span><em>conf_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#load_conf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.load_conf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load JSON application configuration file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.load_custom_object">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">load_custom_object</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#load_custom_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.load_custom_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load object from module</p>
+<p>Arguments:</p>
+<p>This function takes as input a module object
+{</p>
+<blockquote>
+<div>“file_path”: path_to_module,
+“module_name”: module_file_name,
+“object_name”: module_object,</div></blockquote>
+<p>}</p>
+<p>‘file_path’ is optional and has to be used if the module is not present in sys.path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.load_topo">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">load_topo</code><span class="sig-paren">(</span><em>json_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#load_topo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.load_topo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the topology from the json_path provided</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>json_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – path of the JSON file to load</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">p4utils.utils.topology.NetworkGraph object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.merge_dict">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">merge_dict</code><span class="sig-paren">(</span><em>dst</em>, <em>src</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#merge_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.merge_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge dictionary src into dictionary dst (nested dictionaries
+are updated).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.natural">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">natural</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#natural"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.natural" title="Permalink to this definition">¶</a></dt>
+<dd><p>To sort sanely/alphabetically: sorted(l, key=natural).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.naturalSeq">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">naturalSeq</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#naturalSeq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.naturalSeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Natural sort key function for sequences.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.next_element">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">next_element</code><span class="sig-paren">(</span><em>elems</em>, <em>minimum=None</em>, <em>maximum=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#next_element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.next_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a list of integers, return the next number not
+already present in the set starting from minimum and
+ending in maximum.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.parse_line">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">parse_line</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#parse_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.parse_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse text line returning a list of substrings.
+.. rubric:: Example</p>
+<p>ahjdjf djdfkfo1 –jdke hdjejeek –dfjfj “vneovn rijvtg”</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[“ahjdjf”, “djdfkfo1”, “–jdke”, “hdjejeek”, “–dfjfj”, “vneovn rijvtg”]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.parse_task_line">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">parse_task_line</code><span class="sig-paren">(</span><em>line</em>, <em>def_mod='p4utils.utils.traffic_utils'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#parse_task_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.parse_task_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse text line and return all the parameters needed
+to create a task with NetworkAPI.addTask().</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>line</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – string containing all the task information</li>
+<li><strong>def_mod</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – default module where to look for exe functions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Notice:</dt>
+<dd>The file has to be a set of lines, where each has the following syntax.
+A non-default module can be specified in the command with ‘–mod &lt;module&gt;’.
+&lt;node&gt; &lt;start&gt; &lt;duration&gt; &lt;exe&gt; [&lt;arg1&gt;] … [&lt;argN&gt;] [–mod &lt;module&gt;] [–&lt;key1&gt; &lt;kwarg1&gt;] … [–&lt;keyM&gt; &lt;kwargM&gt;]</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(args, kwargs)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.rand_mac">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">rand_mac</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#rand_mac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.rand_mac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a random, non-multicast MAC address.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.helper.run_command">
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">run_command</code><span class="sig-paren">(</span><em>command</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#run_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.run_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute command in the main namespace.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="p4utils.utils.monitor.html" class="btn btn-neutral float-right" title="p4utils.utils.monitor module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="p4utils.utils.compiler.html" class="btn btn-neutral float-left" title="p4utils.utils.compiler module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

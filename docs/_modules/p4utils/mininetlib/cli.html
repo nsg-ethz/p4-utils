@@ -175,7 +175,7 @@
 <span class="kn">from</span> <span class="nn">p4utils.utils.helper</span> <span class="kn">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="exception_handler"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.exception_handler">[docs]</a><span class="k">def</span> <span class="nf">exception_handler</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="exception_handler"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.exception_handler">[docs]</a><span class="k">def</span> <span class="nf">exception_handler</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Prevent exceptions from terminating the client but still</span>
 <span class="sd">    print them.&quot;&quot;&quot;</span>
@@ -191,7 +191,7 @@
     <span class="k">return</span> <span class="n">handle</span></div>
 
 
-<div class="viewcode-block" id="P4CLI"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI">[docs]</a><span class="k">class</span> <span class="nc">P4CLI</span><span class="p">(</span><span class="n">CLI</span><span class="p">):</span>
+<div class="viewcode-block" id="P4CLI"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI">[docs]</a><span class="k">class</span> <span class="nc">P4CLI</span><span class="p">(</span><span class="n">CLI</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network_api</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -202,7 +202,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">network_api</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># self.mn stores the Mininet network object according to the parent object</span>
 
-<div class="viewcode-block" id="P4CLI.getNode"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.getNode">[docs]</a>    <span class="k">def</span> <span class="nf">getNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
+<div class="viewcode-block" id="P4CLI.getNode"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.getNode">[docs]</a>    <span class="k">def</span> <span class="nf">getNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the requested node.</span>
 
@@ -219,7 +219,7 @@
         <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">node</span></div>
 
-<div class="viewcode-block" id="P4CLI.getP4Switch"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.getP4Switch">[docs]</a>    <span class="k">def</span> <span class="nf">getP4Switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
+<div class="viewcode-block" id="P4CLI.getP4Switch"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.getP4Switch">[docs]</a>    <span class="k">def</span> <span class="nf">getP4Switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the requested P4 Switch.</span>
 <span class="sd">        </span>
@@ -241,7 +241,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">node</span></div>
 
-<div class="viewcode-block" id="P4CLI.do_p4switch_stop"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_p4switch_stop">[docs]</a>    <span class="nd">@exception_handler</span>
+<div class="viewcode-block" id="P4CLI.do_p4switch_stop"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.do_p4switch_stop">[docs]</a>    <span class="nd">@exception_handler</span>
     <span class="k">def</span> <span class="nf">do_p4switch_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stop simple switch from switch namespace.&quot;&quot;&quot;</span>
         <span class="n">switch_name</span> <span class="o">=</span> <span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -261,7 +261,7 @@
         
         <span class="n">p4switch</span><span class="o">.</span><span class="n">stop_p4switch</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="P4CLI.do_p4switch_start"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_p4switch_start">[docs]</a>    <span class="nd">@exception_handler</span>
+<div class="viewcode-block" id="P4CLI.do_p4switch_start"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.do_p4switch_start">[docs]</a>    <span class="nd">@exception_handler</span>
     <span class="k">def</span> <span class="nf">do_p4switch_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Start again simple switch from namespace.&quot;&quot;&quot;</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -356,7 +356,7 @@
                 <span class="n">error</span><span class="p">(</span><span class="s1">&#39;No client module provided!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="P4CLI.do_p4switch_reboot"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_p4switch_reboot">[docs]</a>    <span class="nd">@exception_handler</span>
+<div class="viewcode-block" id="P4CLI.do_p4switch_reboot"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.do_p4switch_reboot">[docs]</a>    <span class="nd">@exception_handler</span>
     <span class="k">def</span> <span class="nf">do_p4switch_reboot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reboot a P4 switch with a new program.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
@@ -367,7 +367,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_stop</span><span class="p">(</span><span class="n">line</span><span class="o">=</span><span class="n">switch_name</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_start</span><span class="p">(</span><span class="n">line</span><span class="o">=</span><span class="n">line</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="P4CLI.do_p4switches_reboot"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_p4switches_reboot">[docs]</a>    <span class="nd">@exception_handler</span>
+<div class="viewcode-block" id="P4CLI.do_p4switches_reboot"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.do_p4switches_reboot">[docs]</a>    <span class="nd">@exception_handler</span>
     <span class="k">def</span> <span class="nf">do_p4switches_reboot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reboot all P4 switches with new program.</span>
@@ -393,7 +393,7 @@
                         <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Exec Script: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">script</span><span class="p">[</span><span class="s2">&quot;cmd&quot;</span><span class="p">]))</span>
                         <span class="n">run_command</span><span class="p">(</span><span class="n">script</span><span class="p">[</span><span class="s2">&quot;cmd&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="P4CLI.do_test_p4"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_test_p4">[docs]</a>    <span class="nd">@exception_handler</span>
+<div class="viewcode-block" id="P4CLI.do_test_p4"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.do_test_p4">[docs]</a>    <span class="nd">@exception_handler</span>
     <span class="k">def</span> <span class="nf">do_test_p4</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Tests start stop functionalities.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_stop</span><span class="p">(</span><span class="s2">&quot;s1&quot;</span><span class="p">)</span>
@@ -401,20 +401,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_reboot</span><span class="p">(</span><span class="s2">&quot;s1&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switches_reboot</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="P4CLI.do_printSwitches"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_printSwitches">[docs]</a>    <span class="nd">@exception_handler</span>
+<div class="viewcode-block" id="P4CLI.do_printSwitches"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.do_printSwitches">[docs]</a>    <span class="nd">@exception_handler</span>
     <span class="k">def</span> <span class="nf">do_printSwitches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print names of all switches.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">sw</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="o">.</span><span class="n">p4switches</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">sw</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="P4CLI.do_pingset"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_pingset">[docs]</a>    <span class="nd">@exception_handler</span>
+<div class="viewcode-block" id="P4CLI.do_pingset"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.do_pingset">[docs]</a>    <span class="nd">@exception_handler</span>
     <span class="k">def</span> <span class="nf">do_pingset</span><span class="p">(</span><span class="bp">self</span> <span class="p">,</span><span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Ping between the hosts in the set.&quot;&quot;&quot;</span>
         <span class="n">hosts_names</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="n">hosts</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="o">.</span><span class="n">hosts</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">hosts_names</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="o">.</span><span class="n">ping</span><span class="p">(</span><span class="n">hosts</span><span class="o">=</span><span class="n">hosts</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="P4CLI.do_task"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_task">[docs]</a>    <span class="nd">@exception_handler</span>
+<div class="viewcode-block" id="P4CLI.do_task"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.do_task">[docs]</a>    <span class="nd">@exception_handler</span>
     <span class="k">def</span> <span class="nf">do_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute a task on the given host. The starting</span>
@@ -435,7 +435,7 @@
             <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Node </span><span class="si">{}</span><span class="s1"> does not exist!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="P4CLI.do_enable_scheduler"><a class="viewcode-back" href="../../../p4utils.mininetlib.html#p4utils.mininetlib.cli.P4CLI.do_enable_scheduler">[docs]</a>    <span class="nd">@exception_handler</span>
+<div class="viewcode-block" id="P4CLI.do_enable_scheduler"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.do_enable_scheduler">[docs]</a>    <span class="nd">@exception_handler</span>
     <span class="k">def</span> <span class="nf">do_enable_scheduler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Enable the TaskServer on a node.</span>

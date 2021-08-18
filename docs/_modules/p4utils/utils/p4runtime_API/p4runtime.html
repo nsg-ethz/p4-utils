@@ -195,13 +195,13 @@
 <span class="kn">from</span> <span class="nn">p4.v1</span> <span class="kn">import</span> <span class="n">p4runtime_pb2_grpc</span>
 
 
-<div class="viewcode-block" id="P4RuntimeErrorFormatException"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorFormatException">[docs]</a><span class="k">class</span> <span class="nc">P4RuntimeErrorFormatException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="P4RuntimeErrorFormatException"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorFormatException">[docs]</a><span class="k">class</span> <span class="nc">P4RuntimeErrorFormatException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
 <span class="c1"># Used to iterate over the p4.Error messages in a gRPC error Status object</span>
-<div class="viewcode-block" id="P4RuntimeErrorIterator"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorIterator">[docs]</a><span class="k">class</span> <span class="nc">P4RuntimeErrorIterator</span><span class="p">:</span>
+<div class="viewcode-block" id="P4RuntimeErrorIterator"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorIterator">[docs]</a><span class="k">class</span> <span class="nc">P4RuntimeErrorIterator</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grpc_error</span><span class="p">):</span>
         <span class="k">assert</span><span class="p">(</span><span class="n">grpc_error</span><span class="o">.</span><span class="n">code</span><span class="p">()</span> <span class="o">==</span> <span class="n">grpc</span><span class="o">.</span><span class="n">StatusCode</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grpc_error</span> <span class="o">=</span> <span class="n">grpc_error</span>
@@ -248,7 +248,7 @@
 <span class="c1"># class, we extract the nested error message (one for each operation included in</span>
 <span class="c1"># the batch) in order to print error code + user-facing message.  See P4 Runtime</span>
 <span class="c1"># documentation for more details on error-reporting.</span>
-<div class="viewcode-block" id="P4RuntimeWriteException"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeWriteException">[docs]</a><span class="k">class</span> <span class="nc">P4RuntimeWriteException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="P4RuntimeWriteException"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeWriteException">[docs]</a><span class="k">class</span> <span class="nc">P4RuntimeWriteException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grpc_error</span><span class="p">):</span>
         <span class="k">assert</span><span class="p">(</span><span class="n">grpc_error</span><span class="o">.</span><span class="n">code</span><span class="p">()</span> <span class="o">==</span> <span class="n">grpc</span><span class="o">.</span><span class="n">StatusCode</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -270,7 +270,7 @@
         <span class="k">return</span> <span class="n">message</span></div>
 
 
-<div class="viewcode-block" id="P4RuntimeException"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeException">[docs]</a><span class="k">class</span> <span class="nc">P4RuntimeException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="P4RuntimeException"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeException">[docs]</a><span class="k">class</span> <span class="nc">P4RuntimeException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grpc_error</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grpc_error</span> <span class="o">=</span> <span class="n">grpc_error</span>
@@ -281,7 +281,7 @@
         <span class="k">return</span> <span class="n">message</span></div>
 
 
-<div class="viewcode-block" id="parse_p4runtime_write_error"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.parse_p4runtime_write_error">[docs]</a><span class="k">def</span> <span class="nf">parse_p4runtime_write_error</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_p4runtime_write_error"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.parse_p4runtime_write_error">[docs]</a><span class="k">def</span> <span class="nf">parse_p4runtime_write_error</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
@@ -293,7 +293,7 @@
     <span class="k">return</span> <span class="n">handle</span></div>
 
 
-<div class="viewcode-block" id="parse_p4runtime_error"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.parse_p4runtime_error">[docs]</a><span class="k">def</span> <span class="nf">parse_p4runtime_error</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_p4runtime_error"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.parse_p4runtime_error">[docs]</a><span class="k">def</span> <span class="nf">parse_p4runtime_error</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
@@ -303,7 +303,7 @@
     <span class="k">return</span> <span class="n">handle</span></div>
 
 
-<div class="viewcode-block" id="P4RuntimeClient"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient">[docs]</a><span class="k">class</span> <span class="nc">P4RuntimeClient</span><span class="p">:</span>
+<div class="viewcode-block" id="P4RuntimeClient"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient">[docs]</a><span class="k">class</span> <span class="nc">P4RuntimeClient</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">grpc_addr</span><span class="p">,</span> <span class="n">election_id</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="n">device_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">election_id</span> <span class="o">=</span> <span class="n">election_id</span>
@@ -316,7 +316,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">stub</span> <span class="o">=</span> <span class="n">p4runtime_pb2_grpc</span><span class="o">.</span><span class="n">P4RuntimeStub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_up_stream</span><span class="p">()</span>
 
-<div class="viewcode-block" id="P4RuntimeClient.set_up_stream"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.set_up_stream">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="P4RuntimeClient.set_up_stream"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.set_up_stream">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream_out_q</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream_in_q</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
 
@@ -347,7 +347,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">handshake</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="P4RuntimeClient.handshake"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.handshake">[docs]</a>    <span class="k">def</span> <span class="nf">handshake</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="P4RuntimeClient.handshake"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.handshake">[docs]</a>    <span class="k">def</span> <span class="nf">handshake</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">StreamMessageRequest</span><span class="p">()</span>
         <span class="n">arbitration</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">arbitration</span>
         <span class="n">arbitration</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
@@ -366,7 +366,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_primary</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You are not the primary client, you only have read access to the server&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="P4RuntimeClient.get_stream_packet"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_stream_packet">[docs]</a>    <span class="k">def</span> <span class="nf">get_stream_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="P4RuntimeClient.get_stream_packet"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_stream_packet">[docs]</a>    <span class="k">def</span> <span class="nf">get_stream_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve packet from the StreamChannel.</span>
 
@@ -397,7 +397,7 @@
             <span class="k">pass</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="P4RuntimeClient.get_digest_list"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_digest_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_digest_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="P4RuntimeClient.get_digest_list"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_digest_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_digest_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve DigestList and send back acknowledgment.</span>
 
@@ -436,7 +436,7 @@
         <span class="c1"># Return DigestList</span>
         <span class="k">return</span> <span class="n">dig_list</span></div>
 
-<div class="viewcode-block" id="P4RuntimeClient.get_p4info"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_p4info">[docs]</a>    <span class="nd">@parse_p4runtime_error</span>
+<div class="viewcode-block" id="P4RuntimeClient.get_p4info"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.get_p4info">[docs]</a>    <span class="nd">@parse_p4runtime_error</span>
     <span class="k">def</span> <span class="nf">get_p4info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Retrieving P4Info file&quot;</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">GetForwardingPipelineConfigRequest</span><span class="p">()</span>
@@ -445,7 +445,7 @@
         <span class="n">rep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stub</span><span class="o">.</span><span class="n">GetForwardingPipelineConfig</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rep</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">p4info</span></div>
 
-<div class="viewcode-block" id="P4RuntimeClient.set_fwd_pipe_config"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.set_fwd_pipe_config">[docs]</a>    <span class="nd">@parse_p4runtime_error</span>
+<div class="viewcode-block" id="P4RuntimeClient.set_fwd_pipe_config"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.set_fwd_pipe_config">[docs]</a>    <span class="nd">@parse_p4runtime_error</span>
     <span class="k">def</span> <span class="nf">set_fwd_pipe_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4info_path</span><span class="p">,</span> <span class="n">bin_path</span><span class="p">):</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting forwarding pipeline config&quot;</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">SetForwardingPipelineConfigRequest</span><span class="p">()</span>
@@ -464,7 +464,7 @@
                 <span class="n">req</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">p4_device_config</span> <span class="o">=</span> <span class="n">f2</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stub</span><span class="o">.</span><span class="n">SetForwardingPipelineConfig</span><span class="p">(</span><span class="n">req</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="P4RuntimeClient.tear_down"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.tear_down">[docs]</a>    <span class="k">def</span> <span class="nf">tear_down</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="P4RuntimeClient.tear_down"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.tear_down">[docs]</a>    <span class="k">def</span> <span class="nf">tear_down</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream_out_q</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Cleaning up stream&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stream_out_q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
@@ -472,7 +472,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span>  <span class="c1"># avoid a race condition if channel deleted when process terminates</span></div>
 
-<div class="viewcode-block" id="P4RuntimeClient.write"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.write">[docs]</a>    <span class="nd">@parse_p4runtime_write_error</span>
+<div class="viewcode-block" id="P4RuntimeClient.write"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.write">[docs]</a>    <span class="nd">@parse_p4runtime_write_error</span>
     <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
         <span class="n">req</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
         <span class="n">election_id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">election_id</span>
@@ -480,7 +480,7 @@
         <span class="n">election_id</span><span class="o">.</span><span class="n">low</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">election_id</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stub</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="n">req</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="P4RuntimeClient.write_update"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.write_update">[docs]</a>    <span class="nd">@parse_p4runtime_write_error</span>
+<div class="viewcode-block" id="P4RuntimeClient.write_update"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.write_update">[docs]</a>    <span class="nd">@parse_p4runtime_write_error</span>
     <span class="k">def</span> <span class="nf">write_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update</span><span class="p">):</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">WriteRequest</span><span class="p">()</span>
         <span class="n">req</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
@@ -492,14 +492,14 @@
 
     <span class="c1"># Decorator is useless here: in case of server error, the exception is raised during the</span>
     <span class="c1"># iteration (when next() is called).</span>
-<div class="viewcode-block" id="P4RuntimeClient.read_one"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.read_one">[docs]</a>    <span class="nd">@parse_p4runtime_error</span>
+<div class="viewcode-block" id="P4RuntimeClient.read_one"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.read_one">[docs]</a>    <span class="nd">@parse_p4runtime_error</span>
     <span class="k">def</span> <span class="nf">read_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">ReadRequest</span><span class="p">()</span>
         <span class="n">req</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
         <span class="n">req</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">entity</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stub</span><span class="o">.</span><span class="n">Read</span><span class="p">(</span><span class="n">req</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="P4RuntimeClient.api_version"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.api_version">[docs]</a>    <span class="nd">@parse_p4runtime_error</span>
+<div class="viewcode-block" id="P4RuntimeClient.api_version"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.api_version">[docs]</a>    <span class="nd">@parse_p4runtime_error</span>
     <span class="k">def</span> <span class="nf">api_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">CapabilitiesRequest</span><span class="p">()</span>
         <span class="n">rep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stub</span><span class="o">.</span><span class="n">Capabilities</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>

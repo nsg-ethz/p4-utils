@@ -12,14 +12,9 @@ Subpackages
 Submodules
 ----------
 
-p4utils\.p4run module
----------------------
+.. toctree::
 
-.. automodule:: p4utils.p4run
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   p4utils.p4run
 
 Module contents
 ---------------

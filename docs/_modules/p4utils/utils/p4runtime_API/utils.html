@@ -167,13 +167,13 @@
             
   <h1>Source code for p4utils.utils.p4runtime_API.utils</h1><div class="highlight"><pre>
 <span></span><span class="c1"># See https://stackoverflow.com/a/32997046</span>
-<div class="viewcode-block" id="my_partialmethod"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.utils.my_partialmethod">[docs]</a><span class="k">def</span> <span class="nf">my_partialmethod</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs1</span><span class="p">):</span>
+<div class="viewcode-block" id="my_partialmethod"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.my_partialmethod">[docs]</a><span class="k">def</span> <span class="nf">my_partialmethod</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs1</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs2</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args1</span><span class="p">,</span> <span class="o">*</span><span class="n">args2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">method</span></div>
 
 
-<div class="viewcode-block" id="UserError"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.utils.UserError">[docs]</a><span class="k">class</span> <span class="nc">UserError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="UserError"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError">[docs]</a><span class="k">class</span> <span class="nc">UserError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">info</span>
 
@@ -185,7 +185,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)]</span></div>
 
 
-<div class="viewcode-block" id="InvalidP4InfoError"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.html#p4utils.utils.p4runtime_API.utils.InvalidP4InfoError">[docs]</a><span class="k">class</span> <span class="nc">InvalidP4InfoError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="InvalidP4InfoError"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.InvalidP4InfoError">[docs]</a><span class="k">class</span> <span class="nc">InvalidP4InfoError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">info</span>
 
