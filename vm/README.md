@@ -21,18 +21,14 @@ The VM is based on a Ubuntu 16.04.05 and after building it contains:
 In order to build the VM you need to install the following software:
 
 - [Packer](https://www.packer.io/downloads)
-- [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+- [VirtualBox](https://www.virtualbox.org/wiki/Downloads) if you want to build the OVA image.
+- [QEMU](https://www.qemu.org/download/) if you want to build the QCOW2 image.
 
-Add Vagrant guest additions plugin for better guest/host support.
-```bash
-vagrant plugin install vagrant-vbguest
-```
+> **From now on, things still need to be updated!**
 
 ## Settings
 
-The VM is configured to have 4 GB of RAM, 3 CPUS, and 64 GB of dynamic hard disk. To modify that you can edit the
-[Vagrantfile](Vagrantfile) before building. If needed (hopefully not), you can add more disk space to you virtual machine by following the steps
- shown in this [Tutorial](https://tuhrig.de/resizing-vagrant-box-disk-space/).
+The VM is configured to have 4 GB of RAM, 4 CPUS, and 25 GB of hard disk. To modify that you can edit the [Vagrantfile](Vagrantfile) before building. If needed (hopefully not), you can add more disk space to you virtual machine by following the steps shown in this [Tutorial](https://tuhrig.de/resizing-vagrant-box-disk-space/).
 
 ### Building
 
