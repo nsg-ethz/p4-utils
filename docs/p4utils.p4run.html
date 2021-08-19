@@ -208,7 +208,7 @@ saved on the disk at some location.</p>
 </tr>
 </tbody>
 </table>
-<p>Possible <strong>verbosity</strong> values, listed from the most to less verbose, are the following:</p>
+<p id="verbosity">Possible <strong>verbosity</strong> values, listed from the most to less verbose, are the following:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">debug</span></code></li>
 <li><code class="docutils literal"><span class="pre">info</span></code></li>
@@ -278,7 +278,7 @@ the following:</p>
         <span class="s2">&quot;assignment_strategy&quot;</span><span class="p">:</span> <span class="n">assignment_strategy</span><span class="p">,</span>
         <span class="s2">&quot;default&quot;</span><span class="p">:</span>
         <span class="p">{</span>
-            <span class="o">&lt;</span><span class="n">default</span> <span class="n">links</span> <span class="ow">and</span> <span class="n">hosts</span> <span class="n">configurations</span><span class="p">,</span> <span class="n">see</span> <span class="n">parse_links</span> <span class="ow">and</span> <span class="n">parse_hosts</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">default</span> <span class="n">links</span> <span class="ow">and</span> <span class="n">hosts</span> <span class="n">configurations</span><span class="p">,</span> <span class="n">see</span> <span class="n">parse_links</span><span class="o">&gt;</span>
         <span class="p">}</span>
         <span class="s2">&quot;links&quot;</span><span class="p">:</span>
         <span class="p">[</span>
@@ -434,6 +434,12 @@ default settings will be used.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="p4utils.p4run.AppRunner.execute_scripts">
+<code class="descname">execute_scripts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner.execute_scripts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner.execute_scripts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the script listed in the JSON network configuration file.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="p4utils.p4run.AppRunner.parse_hosts">
 <code class="descname">parse_hosts</code><span class="sig-paren">(</span><em>unparsed_hosts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner.parse_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner.parse_hosts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses hosts from the JSON configuration files and add
@@ -448,8 +454,8 @@ the JSON network configuration file.</td>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<p>Hosts have the following description in the JSON network
-configuration file:</p>
+<p>Hosts have the following description in the <code class="docutils literal"><span class="pre">topology</span></code> field of the
+JSON network configuration file:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;hosts&quot;</span><span class="p">:</span>
 <span class="p">{</span>
     <span class="n">host_name</span><span class="p">:</span>
@@ -487,8 +493,8 @@ the JSON network configuration file.</td>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<p>Links have the following description in the JSON network
-configuration file:</p>
+<p>Links have the following description in the <code class="docutils literal"><span class="pre">topology</span></code> field of the
+JSON network configuration file:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;links&quot;</span><span class="p">:</span>
 <span class="p">[</span>
     <span class="p">[</span>
@@ -514,17 +520,9 @@ configuration file:</p>
 <span class="p">]</span>
 </pre></div>
 </div>
-<p>For what concernes the Mininet classes used, we have that:</p>
-<ul class="simple">
-<li>“weight” is used by Networkx,</li>
-<li>“port*” are used by mininet.Topo and are propagated to mininet.Link.</li>
-<li>“intfName*” are propagated to mininet.Link and used by each mininet.link.Intf of the mininter.Link.</li>
-<li>“addr*” are propagated to mininet.Link and used by each mininet.link.Intf of the mininet.Link.</li>
-<li>“params*” are propagated to mininet.Link and used by each mininet.link.Intf of the link.</li>
-<li>“bw”, “delay”, “loss” and “max_queue_size” are propagated to mininet.Link and used by both mininet.link.Intf of the mininet.Link.</li>
-</ul>
-<p>“weight”, “bw”, “delay”, “loss”, “max_queue_size” default value can be set by
-putting inside “topology” the following object:</p>
+<p>One can also specify default values for some links and hosts configuration parameters.
+In particular, this can be done by putting the following structure in the <code class="docutils literal"><span class="pre">topology</span></code> field of the
+JSON network configuration file:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;default&quot;</span><span class="p">:</span>
 <span class="p">{</span>
     <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="n">weight</span><span class="p">,</span>
@@ -559,8 +557,8 @@ the JSON network configuration file.</td>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<p>Routers have the following description in the JSON network
-configuration file:</p>
+<p>Routers have the following description in the <code class="docutils literal"><span class="pre">topology</span></code> field of the
+JSON network configuration file:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;routers&quot;</span><span class="p">:</span>
 <span class="p">{</span>
     <span class="n">router_name</span><span class="p">:</span>
@@ -613,15 +611,15 @@ the JSON network configuration file.</td>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<p>Switches have the following description in the JSON network
-configuration file:</p>
+<p>Switches have the following description in the <code class="docutils literal"><span class="pre">topology</span></code> field of the
+JSON network configuration file:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;switches&quot;</span><span class="p">:</span>
 <span class="p">{</span>
     <span class="n">switch_name</span><span class="p">:</span>
     <span class="p">{</span>
-        <span class="s2">&quot;p4_src&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">p4</span> <span class="n">program</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
-        <span class="s2">&quot;cpu_port&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
-        <span class="s2">&quot;cli_input&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">cli</span> <span class="nb">input</span> <span class="n">file</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;p4_src&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">p4</span> <span class="n">program</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;cpu_port&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;cli_input&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">cli</span> <span class="nb">input</span> <span class="n">file</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
         <span class="s2">&quot;switch_node&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">custom</span> <span class="n">switch</span> <span class="n">node</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
         <span class="s2">&quot;log_enabled&quot;</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">),</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span>
         <span class="s2">&quot;log_dir&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">log</span> <span class="n">path</span> <span class="k">for</span> <span class="n">switch</span> <span class="n">binary</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span>
@@ -648,6 +646,20 @@ default values will be used.</p>
 <dt id="p4utils.p4run.get_args">
 <code class="descclassname">p4utils.p4run.</code><code class="descname">get_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#get_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.get_args" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses command line options.</p>
+<p>Here is a complete list of the command line invocation options available with <code class="docutils literal"><span class="pre">p4run</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">--config</span></code> is the path to configuration (if it is not specified,
+it is assumed to be <code class="docutils literal"><span class="pre">./p4app.json</span></code>).</li>
+<li><code class="docutils literal"><span class="pre">--log-dir</span></code> is the path to log files (if it is not specified,
+it is assumed to be <code class="docutils literal"><span class="pre">./log</span></code>).</li>
+<li><code class="docutils literal"><span class="pre">--pcap-dir</span></code> is the path to the <code class="docutils literal"><span class="pre">.pcap</span></code> files generated for each switch interface
+(if it is not specified, it is assumed to be <code class="docutils literal"><span class="pre">./pcap</span></code>).</li>
+<li><code class="docutils literal"><span class="pre">--verbosity</span></code> specifies the desired verbosity of the output (if it is not specified,
+it is assumed to be set to <code class="docutils literal"><span class="pre">info</span></code>). Valid verbosity values are listed <a class="reference internal" href="#verbosity">here</a>.</li>
+<li><code class="docutils literal"><span class="pre">--no-cli</span></code> disables the <em>Mininet</em> client (it is enabled by default).</li>
+<li><code class="docutils literal"><span class="pre">--clean</span></code> cleans old log files, if specified.</li>
+<li><code class="docutils literal"><span class="pre">--clean-dir</span></code> cleans old log files and closes, if specified.</li>
+</ul>
 </dd></dl>
 
 <dl class="function">

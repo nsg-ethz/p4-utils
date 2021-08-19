@@ -218,7 +218,9 @@
 <span class="sd">        log_dir (str): directory for *Mininet* log files.</span>
 <span class="sd">        pcap_dir (str): directory where to store pcap files.</span>
 <span class="sd">        verbosity (str): amount of information shown during the execution.</span>
-<span class="sd">        </span>
+
+<span class="sd">    .. _verbosity:</span>
+
 <span class="sd">    Possible **verbosity** values, listed from the most to less verbose, are the following:</span>
 
 <span class="sd">    - ``debug``</span>
@@ -290,7 +292,7 @@
 <span class="sd">                    &quot;assignment_strategy&quot;: assignment_strategy,</span>
 <span class="sd">                    &quot;default&quot;:</span>
 <span class="sd">                    {</span>
-<span class="sd">                        &lt;default links and hosts configurations, see parse_links and parse_hosts&gt;</span>
+<span class="sd">                        &lt;default links and hosts configurations, see parse_links&gt;</span>
 <span class="sd">                    }</span>
 <span class="sd">                    &quot;links&quot;: </span>
 <span class="sd">                    [</span>
@@ -498,7 +500,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">parse_links</span><span class="p">(</span><span class="n">unparsed_links</span><span class="p">)</span>
 
         <span class="c1"># Execute scripts</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_exec_scripts</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_scripts</span><span class="p">()</span>
 
         <span class="c1"># Set assignment strategy</span>
         <span class="n">assignment_strategy</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;assignment_strategy&#39;</span><span class="p">)</span>
@@ -535,8 +537,8 @@
 <span class="sd">                                  the JSON network configuration file.</span>
 
 <span class="sd">        Example:</span>
-<span class="sd">            Hosts have the following description in the JSON network </span>
-<span class="sd">            configuration file::</span>
+<span class="sd">            Hosts have the following description in the ``topology`` field of the </span>
+<span class="sd">            JSON network configuration file::</span>
 
 <span class="sd">                &quot;hosts&quot;:</span>
 <span class="sd">                {</span>
@@ -589,16 +591,16 @@
 <span class="sd">                                      the JSON network configuration file.</span>
 
 <span class="sd">        Example:</span>
-<span class="sd">            Switches have the following description in the JSON network </span>
-<span class="sd">            configuration file::</span>
+<span class="sd">            Switches have the following description in the ``topology`` field of the </span>
+<span class="sd">            JSON network configuration file::</span>
 <span class="sd">        </span>
 <span class="sd">                &quot;switches&quot;:</span>
 <span class="sd">                {</span>
 <span class="sd">                    switch_name:</span>
 <span class="sd">                    {</span>
-<span class="sd">                        &quot;p4_src&quot;: &lt;path to p4 program&gt; (string),</span>
-<span class="sd">                        &quot;cpu_port&quot;: &lt;true|false&gt; (bool),</span>
-<span class="sd">                        &quot;cli_input&quot;: &lt;path to cli input file&gt; (string),</span>
+<span class="sd">                        &quot;p4_src&quot;: &lt;path to p4 program&gt; (string) (*),</span>
+<span class="sd">                        &quot;cpu_port&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;cli_input&quot;: &lt;path to cli input file&gt; (string) (*),</span>
 <span class="sd">                        &quot;switch_node&quot;: &lt;custom switch node&gt; (dict) (*),</span>
 <span class="sd">                        &quot;log_enabled&quot; : &lt;true|false&gt; (bool), (*)</span>
 <span class="sd">                        &quot;log_dir&quot;: &lt;log path for switch binary&gt; (string), (*)</span>
@@ -662,8 +664,8 @@
 <span class="sd">                                     the JSON network configuration file.</span>
 
 <span class="sd">        Example:</span>
-<span class="sd">            Routers have the following description in the JSON network </span>
-<span class="sd">            configuration file::</span>
+<span class="sd">            Routers have the following description in the ``topology`` field of the </span>
+<span class="sd">            JSON network configuration file::</span>
 
 <span class="sd">                &quot;routers&quot;:</span>
 <span class="sd">                {</span>
@@ -734,8 +736,8 @@
 <span class="sd">                                  the JSON network configuration file.</span>
 
 <span class="sd">        Example:</span>
-<span class="sd">            Links have the following description in the JSON network </span>
-<span class="sd">            configuration file::</span>
+<span class="sd">            Links have the following description in the ``topology`` field of the </span>
+<span class="sd">            JSON network configuration file::</span>
 
 <span class="sd">                &quot;links&quot;:</span>
 <span class="sd">                [</span>
@@ -761,17 +763,9 @@
 <span class="sd">                    ...</span>
 <span class="sd">                ]</span>
 
-<span class="sd">        For what concernes the Mininet classes used, we have that:</span>
-
-<span class="sd">        - &quot;weight&quot; is used by Networkx,</span>
-<span class="sd">        - &quot;port*&quot; are used by mininet.Topo and are propagated to mininet.Link.</span>
-<span class="sd">        - &quot;intfName*&quot; are propagated to mininet.Link and used by each mininet.link.Intf of the mininter.Link.</span>
-<span class="sd">        - &quot;addr*&quot; are propagated to mininet.Link and used by each mininet.link.Intf of the mininet.Link.</span>
-<span class="sd">        - &quot;params*&quot; are propagated to mininet.Link and used by each mininet.link.Intf of the link.</span>
-<span class="sd">        - &quot;bw&quot;, &quot;delay&quot;, &quot;loss&quot; and &quot;max_queue_size&quot; are propagated to mininet.Link and used by both mininet.link.Intf of the mininet.Link.</span>
-<span class="sd">        </span>
-<span class="sd">        &quot;weight&quot;, &quot;bw&quot;, &quot;delay&quot;, &quot;loss&quot;, &quot;max_queue_size&quot; default value can be set by</span>
-<span class="sd">        putting inside &quot;topology&quot; the following object::</span>
+<span class="sd">        One can also specify default values for some links and hosts configuration parameters.</span>
+<span class="sd">        In particular, this can be done by putting the following structure in the ``topology`` field of the </span>
+<span class="sd">        JSON network configuration file::</span>
 
 <span class="sd">            &quot;default&quot;:</span>
 <span class="sd">            {</span>
@@ -818,42 +812,58 @@
                 <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">addLink</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_exec_scripts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Executes the script present in the &quot;exec_scripts&quot; field of self.conf.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="AppRunner.execute_scripts"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner.execute_scripts">[docs]</a>    <span class="k">def</span> <span class="nf">execute_scripts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Executes the script listed in the JSON network configuration file.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exec_scripts&#39;</span><span class="p">),</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">script</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exec_scripts&#39;</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">execScript</span><span class="p">(</span><span class="n">script</span><span class="p">[</span><span class="s1">&#39;cmd&#39;</span><span class="p">],</span> <span class="n">reboot</span><span class="o">=</span><span class="n">script</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reboot_run&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">execScript</span><span class="p">(</span><span class="n">script</span><span class="p">[</span><span class="s1">&#39;cmd&#39;</span><span class="p">],</span> <span class="n">reboot</span><span class="o">=</span><span class="n">script</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reboot_run&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span></div></div>
 
 
 <div class="viewcode-block" id="get_args"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.get_args">[docs]</a><span class="k">def</span> <span class="nf">get_args</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Parses command line options.</span>
+
+<span class="sd">    Here is a complete list of the command line invocation options available with ``p4run``:</span>
+
+<span class="sd">    - ``--config`` is the path to configuration (if it is not specified,</span>
+<span class="sd">      it is assumed to be ``./p4app.json``).</span>
+<span class="sd">    - ``--log-dir`` is the path to log files (if it is not specified,</span>
+<span class="sd">      it is assumed to be ``./log``).</span>
+<span class="sd">    - ``--pcap-dir`` is the path to the ``.pcap`` files generated for each switch interface</span>
+<span class="sd">      (if it is not specified, it is assumed to be ``./pcap``).</span>
+<span class="sd">    - __ verbosity_</span>
+<span class="sd">    </span>
+<span class="sd">      ``--verbosity`` specifies the desired verbosity of the output (if it is not specified,</span>
+<span class="sd">      it is assumed to be set to ``info``). Valid verbosity values are listed `here`__.</span>
+<span class="sd">    - ``--no-cli`` disables the *Mininet* client (it is enabled by default).</span>
+<span class="sd">    - ``--clean`` cleans old log files, if specified.</span>
+<span class="sd">    - ``--clean-dir`` cleans old log files and closes, if specified.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
     <span class="n">default_log</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">)</span>
     <span class="n">default_pcap</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;pcap&#39;</span><span class="p">)</span>
 
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--config&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Path to configuration&#39;</span><span class="p">,</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--config&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Path to configuration.&#39;</span><span class="p">,</span>
                         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;./p4app.json&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--log-dir&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default_log</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--pcap-dir&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Generate pcap files for interfaces.&#39;</span><span class="p">,</span>
-                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default_pcap</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--cli&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Run mininet CLI.&#39;</span><span class="p">,</span>
-                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--log-dir&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Generate logs in the specified folder.&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default_log</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--pcap-dir&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Generate .pcap files for interfaces.&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default_pcap</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--verbosity&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Set messages verbosity.&#39;</span><span class="p">,</span>
-                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;info&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--clean&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Cleans previous log files&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;info&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--no-cli&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Do not run the Mininet CLI.&#39;</span><span class="p">,</span>
                         <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--clean-dir&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Cleans previous log files and closes&#39;</span><span class="p">,</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--clean&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Cleans old log files.&#39;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--clean-dir&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Cleans old log files and closes.&#39;</span><span class="p">,</span>
                         <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>             
 
     <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Cleans up files created by old executions and starts the virtual network.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Cleans up files created by old executions and starts the virtual network.&quot;&quot;&quot;</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">()</span>
 
@@ -891,7 +901,7 @@
             <span class="k">return</span>
 
     <span class="n">app</span> <span class="o">=</span> <span class="n">AppRunner</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
-                    <span class="n">cli_enabled</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">cli</span><span class="p">,</span>
+                    <span class="n">cli_enabled</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_cli</span><span class="p">),</span>
                     <span class="n">log_dir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">log_dir</span><span class="p">,</span>
                     <span class="n">pcap_dir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">pcap_dir</span><span class="p">,</span>
                     <span class="n">verbosity</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">verbosity</span><span class="p">)</span></div>

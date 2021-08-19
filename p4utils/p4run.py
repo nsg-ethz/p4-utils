@@ -50,7 +50,9 @@ class AppRunner(NetworkAPI):
         log_dir (str): directory for *Mininet* log files.
         pcap_dir (str): directory where to store pcap files.
         verbosity (str): amount of information shown during the execution.
-        
+
+    .. _verbosity:
+
     Possible **verbosity** values, listed from the most to less verbose, are the following:
 
     - ``debug``
@@ -122,7 +124,7 @@ class AppRunner(NetworkAPI):
                     "assignment_strategy": assignment_strategy,
                     "default":
                     {
-                        <default links and hosts configurations, see parse_links and parse_hosts>
+                        <default links and hosts configurations, see parse_links>
                     }
                     "links": 
                     [
@@ -330,7 +332,7 @@ class AppRunner(NetworkAPI):
             self.parse_links(unparsed_links)
 
         # Execute scripts
-        self._exec_scripts()
+        self.execute_scripts()
 
         # Set assignment strategy
         assignment_strategy = topology.get('assignment_strategy')
@@ -367,8 +369,8 @@ class AppRunner(NetworkAPI):
                                   the JSON network configuration file.
 
         Example:
-            Hosts have the following description in the JSON network 
-            configuration file::
+            Hosts have the following description in the ``topology`` field of the 
+            JSON network configuration file::
 
                 "hosts":
                 {
@@ -421,16 +423,16 @@ class AppRunner(NetworkAPI):
                                       the JSON network configuration file.
 
         Example:
-            Switches have the following description in the JSON network 
-            configuration file::
+            Switches have the following description in the ``topology`` field of the 
+            JSON network configuration file::
         
                 "switches":
                 {
                     switch_name:
                     {
-                        "p4_src": <path to p4 program> (string),
-                        "cpu_port": <true|false> (bool),
-                        "cli_input": <path to cli input file> (string),
+                        "p4_src": <path to p4 program> (string) (*),
+                        "cpu_port": <true|false> (bool) (*),
+                        "cli_input": <path to cli input file> (string) (*),
                         "switch_node": <custom switch node> (dict) (*),
                         "log_enabled" : <true|false> (bool), (*)
                         "log_dir": <log path for switch binary> (string), (*)
@@ -494,8 +496,8 @@ class AppRunner(NetworkAPI):
                                      the JSON network configuration file.
 
         Example:
-            Routers have the following description in the JSON network 
-            configuration file::
+            Routers have the following description in the ``topology`` field of the 
+            JSON network configuration file::
 
                 "routers":
                 {
@@ -566,8 +568,8 @@ class AppRunner(NetworkAPI):
                                   the JSON network configuration file.
 
         Example:
-            Links have the following description in the JSON network 
-            configuration file::
+            Links have the following description in the ``topology`` field of the 
+            JSON network configuration file::
 
                 "links":
                 [
@@ -593,17 +595,9 @@ class AppRunner(NetworkAPI):
                     ...
                 ]
 
-        For what concernes the Mininet classes used, we have that:
-
-        - "weight" is used by Networkx,
-        - "port*" are used by mininet.Topo and are propagated to mininet.Link.
-        - "intfName*" are propagated to mininet.Link and used by each mininet.link.Intf of the mininter.Link.
-        - "addr*" are propagated to mininet.Link and used by each mininet.link.Intf of the mininet.Link.
-        - "params*" are propagated to mininet.Link and used by each mininet.link.Intf of the link.
-        - "bw", "delay", "loss" and "max_queue_size" are propagated to mininet.Link and used by both mininet.link.Intf of the mininet.Link.
-        
-        "weight", "bw", "delay", "loss", "max_queue_size" default value can be set by
-        putting inside "topology" the following object::
+        One can also specify default values for some links and hosts configuration parameters.
+        In particular, this can be done by putting the following structure in the ``topology`` field of the 
+        JSON network configuration file::
 
             "default":
             {
@@ -650,9 +644,8 @@ class AppRunner(NetworkAPI):
                 params.update(link[2])
             self.addLink(node1, node2, **params)
 
-    def _exec_scripts(self):
-        """Executes the script present in the "exec_scripts" field of self.conf.
-        """
+    def execute_scripts(self):
+        """Executes the script listed in the JSON network configuration file."""
         if isinstance(self.conf.get('exec_scripts'), list):
             for script in self.conf.get('exec_scripts'):
                 self.execScript(script['cmd'], reboot=script.get('reboot_run', False))
@@ -660,32 +653,49 @@ class AppRunner(NetworkAPI):
 
 def get_args():
     """Parses command line options.
+
+    Here is a complete list of the command line invocation options available with ``p4run``:
+
+    - ``--config`` is the path to configuration (if it is not specified,
+      it is assumed to be ``./p4app.json``).
+    - ``--log-dir`` is the path to log files (if it is not specified,
+      it is assumed to be ``./log``).
+    - ``--pcap-dir`` is the path to the ``.pcap`` files generated for each switch interface
+      (if it is not specified, it is assumed to be ``./pcap``).
+    - __ verbosity_
+    
+      ``--verbosity`` specifies the desired verbosity of the output (if it is not specified,
+      it is assumed to be set to ``info``). Valid verbosity values are listed `here`__.
+    - ``--no-cli`` disables the *Mininet* client (it is enabled by default).
+    - ``--clean`` cleans old log files, if specified.
+    - ``--clean-dir`` cleans old log files and closes, if specified.
     """
     cwd = os.getcwd()
     default_log = os.path.join(cwd, 'log')
     default_pcap = os.path.join(cwd, 'pcap')
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', help='Path to configuration',
+
+    parser.add_argument('--config', help='Path to configuration.',
                         type=str, required=False, default='./p4app.json')
-    parser.add_argument('--log-dir', type=str, required=False, default=default_log)
-    parser.add_argument('--pcap-dir', help='Generate pcap files for interfaces.',
-                        action='store_true', required=False, default=default_pcap)
-    parser.add_argument('--cli', help='Run mininet CLI.',
-                        action='store_true', required=False, default=True)
+    parser.add_argument('--log-dir', help='Generate logs in the specified folder.',
+                        type=str, required=False, default=default_log)
+    parser.add_argument('--pcap-dir', help='Generate .pcap files for interfaces.',
+                        type=str, required=False, default=default_pcap)
     parser.add_argument('--verbosity', help='Set messages verbosity.',
-                        action='store_true', required=False, default='info')
-    parser.add_argument('--clean', help='Cleans previous log files',
+                        type=str, required=False, default='info')
+    parser.add_argument('--no-cli', help='Do not run the Mininet CLI.',
                         action='store_true', required=False, default=False)
-    parser.add_argument('--clean-dir', help='Cleans previous log files and closes',
+    parser.add_argument('--clean', help='Cleans old log files.',
+                        action='store_true', required=False, default=False)
+    parser.add_argument('--clean-dir', help='Cleans old log files and closes.',
                         action='store_true', required=False, default=False)             
 
     return parser.parse_args()
 
 
 def main():
-    """Cleans up files created by old executions and starts the virtual network.
-    """
+    """Cleans up files created by old executions and starts the virtual network."""
 
     args = get_args()
 
@@ -723,7 +733,7 @@ def main():
             return
 
     app = AppRunner(args.config,
-                    cli_enabled=args.cli,
+                    cli_enabled=(not args.no_cli),
                     log_dir=args.log_dir,
                     pcap_dir=args.pcap_dir,
                     verbosity=args.verbosity)
