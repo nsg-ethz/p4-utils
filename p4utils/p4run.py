@@ -45,11 +45,11 @@ class AppRunner(NetworkAPI):
     saved on the disk at some location.
 
     Args:
-        conf_file (str): a JSON file which describes the *Mininet* topology.
-        cli_enabled (bool): enable *Mininet* CLI.
-        log_dir (str): directory for *Mininet* log files.
-        pcap_dir (str): directory where to store pcap files.
-        verbosity (str): amount of information shown during the execution.
+        conf_file (str): a JSON file which describes the *Mininet* topology
+        cli_enabled (bool): enable *Mininet* CLI
+        log_dir (str): directory for *Mininet* log files
+        pcap_dir (str): directory where to store pcap files
+        verbosity (str): amount of information shown during the execution
 
     .. _verbosity:
 
@@ -366,7 +366,7 @@ class AppRunner(NetworkAPI):
 
         Args:
             unparsed_host (dict): dictionary of hosts and properties retrieved from
-                                  the JSON network configuration file.
+                                  the JSON network configuration file
 
         Example:
             Hosts have the following description in the ``topology`` field of the 
@@ -420,7 +420,7 @@ class AppRunner(NetworkAPI):
 
         Args:
             unparsed_switches (dict): dictionary of switches and properties retrieved from
-                                      the JSON network configuration file.
+                                      the JSON network configuration file
 
         Example:
             Switches have the following description in the ``topology`` field of the 
@@ -493,7 +493,7 @@ class AppRunner(NetworkAPI):
 
         Args:
             unparsed_routers (dict): dictionary of routers and properties retrieved from
-                                     the JSON network configuration file.
+                                     the JSON network configuration file
 
         Example:
             Routers have the following description in the ``topology`` field of the 
@@ -565,7 +565,7 @@ class AppRunner(NetworkAPI):
 
         Args:
             uparsed_links (list): list of links and properties retrieved from
-                                  the JSON network configuration file.
+                                  the JSON network configuration file
 
         Example:
             Links have the following description in the ``topology`` field of the 
