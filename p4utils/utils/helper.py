@@ -16,9 +16,11 @@ _prefixLenMatchRegex = re.compile("netmask (\d+\.\d+\.\d+\.\d+)")
 
 
 def merge_dict(dst, src):
-    """
-    Merge dictionary src into dictionary dst (nested dictionaries
-    are updated).
+    """Merge source dictionary fields and subfields into destionation dictionary.
+
+    Args:
+        dst (dict): destination dictionary
+        src (dict): source dictionary
     """
     stack = [(dst, src)]
     while stack:
@@ -34,10 +36,16 @@ def merge_dict(dst, src):
 
 
 def next_element(elems, minimum=None, maximum=None):
-    """
-    Given a list of integers, return the next number not
-    already present in the set starting from minimum and
-    ending in maximum.
+    """Given a list of integers, return the lowest number not already
+    present in the set, starting from minimum and ending in maximum.
+
+    Args:
+        elem (list)  : list of integers
+        minimum (int): minimum value allowed for elements
+        maximum (int): maximum value allowed for elements
+
+    Returns:
+        int: the lowest number not already present in the set
     """
     elements = set(elems)
     if len(elems) != len(elements):
@@ -70,28 +78,20 @@ def next_element(elems, minimum=None, maximum=None):
 
 
 def natural(text):
-    """
-    To sort sanely/alphabetically: sorted(l, key=natural).
-    """
+    """To sort sanely/alphabetically: ``sorted(l, key=natural)``."""
     def num(s):
-        """
-        Convert text segment to int if necessary.
-        """
+        """Convert text segment to int if necessary."""
         return int(s) if s.isdigit() else s
     return [num(s) for s in re.split(r'(\d+)', str(text))]
 
 
 def naturalSeq(t):
-    """
-    Natural sort key function for sequences.
-    """
+    """Natural sort key function for sequences."""
     return [ natural( x ) for x in t ]
 
 
 def rand_mac():
-    """
-    Return a random, non-multicast MAC address.
-    """
+    """Return a random, non-multicast MAC address."""
     hex_str = hex(random.randint(1, 2**48-1) & 0xfeffffffffff | 0x020000000000)[2:]
     hex_str = '0'*(12-len(hex_str)) + hex_str
     mac_str = ''
@@ -105,8 +105,13 @@ def rand_mac():
 
 
 def dpidToStr(id):
-    """
-    Compute a string dpid from an integer id.
+    """Compute a string ``dpid`` from an integer ``id``.
+    
+    Args:
+        id (int): integer device id
+
+    Returns:
+        str: device dpid
     """
     strDpid = hex(id)[2:]
     if len(strDpid) < 16:
@@ -115,10 +120,7 @@ def dpidToStr(id):
 
 
 def check_listening_on_port(port):
-    """
-    Check if the given port is listening in the main
-    namespace.
-    """
+    """Check if the given port is listening in the main namespace."""
     for c in psutil.net_connections(kind='inet'):
         if c.status == 'LISTEN' and c.laddr[1] == port:
             return True
@@ -131,13 +133,12 @@ def cksum(filename):
 
 
 def get_node_attr(node, attr_name, default=None):
-    """
-    Finds the value of the attribute 'attr_name' of the Mininet node
-    by looking also inside node.params (for unparsed attributes).
+    """Finds the value of the specified attribute of a *Mininet* node
+    by looking also inside its unparsed parameters.
 
-    Arguments:
-        node                : Mininet node object
-        attr_name (string)  : attribute to looking for (also inside unparsed ones)
+    Args:
+        node (obj)          : *Mininet* node object
+        attr_name (string)  : attribute to look for
     
     Returns:
         the value of the requested attribute.
@@ -156,17 +157,16 @@ def get_node_attr(node, attr_name, default=None):
 
 
 def get_by_attr(attr_name, attr_value, obj_list):
-    """
-    Return the first object in the list that has the attribute 'attr_name'
-    value equal to attr_value.
+    """Return the first object in the list that has an attribute matching with
+    the attribute name and value provided.
 
-    Arguments:
+    Args:
         attr_name (string)  : attribute name
         attr_value          : attrubute value
         obj_list (list)     : list of objects
 
     Returns:
-        obj : the requested object or None
+        the requested object or **None**.
     """
     for obj in obj_list:
         if attr_value == getattr(obj, attr_name):
@@ -186,16 +186,14 @@ def ip_address_to_mac(ip):
 
 
 def is_compiled(p4_src, compilers):
-    """
-    Check if a file has been already compiled by at least
-    one compiler in the list.
+    """Check if a file has been already compiled by at least one compiler in the list.
 
     Arguments:
         p4_src (string) : P4 file path
         compilers (list): list of P4 compiler objects (see compiler.py)
     
     Returns:
-        True/False depending on whether the file has been already compiled.
+        bool: True if the file has been already compiled, False otherwise.
     """
     for compiler in compilers:
         if getattr(compiler, 'compiled') and getattr(compiler, 'p4_src') == p4_src:
@@ -205,23 +203,20 @@ def is_compiled(p4_src, compilers):
 
 
 def load_conf(conf_file):
-    """
-    Load JSON application configuration file.
-    """
+    """Load JSON application configuration file."""
     with open(conf_file, 'r') as f:
         config = json.load(f)
     return config
 
 
 def load_topo(json_path):
-    """
-    Load the topology from the json_path provided
+    """Load the topology from the json_path provided.
 
-    Arguments:
+    Args:
         json_path (string): path of the JSON file to load
 
     Returns:
-        p4utils.utils.topology.NetworkGraph object
+        p4utils.utils.topology.NetworkGraph: the topology graph.
     """
     with open(json_path,'r') as f:
         graph_dict = json.load(f)
@@ -230,18 +225,19 @@ def load_topo(json_path):
 
 
 def load_custom_object(obj):
-    """
-    Load object from module
+    """Load object from module
     
-    Arguments:
+    Args:
+        obj: object to load
         
-    
-    This function takes as input a module object
-    {
-        "file_path": path_to_module,
-        "module_name": module_file_name,
-        "object_name": module_object,
-    }
+    Example:
+        This function takes as input a module JSON object::
+
+            {
+                "file_path": path_to_module,
+                "module_name": module_file_name,
+                "object_name": module_object,
+            }
 
     'file_path' is optional and has to be used if the module is not present in sys.path.
     """
@@ -257,16 +253,13 @@ def load_custom_object(obj):
 
 
 def run_command(command):
-    """
-    Execute command in the main namespace.
-    """
+    """Execute command in the main namespace."""
     debug(command+'\n')
     return os.WEXITSTATUS(os.system(command))
 
 
 def parse_line(line):
-    """
-    Parse text line returning a list of substrings.
+    """Parse text line returning a list of substrings.
     Example:
         ahjdjf djdfkfo1 --jdke hdjejeek --dfjfj "vneovn rijvtg"
     Return:
@@ -286,20 +279,19 @@ def parse_line(line):
 
 
 def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
-    """
-    Parse text line and return all the parameters needed
+    """Parse text line and return all the parameters needed
     to create a task with NetworkAPI.addTask().
 
-    Arguments:
+    Args:
         line (str)   : string containing all the task information
         def_mod (str): default module where to look for exe functions
 
-    Notice:
+    Note:
         The file has to be a set of lines, where each has the following syntax.
         A non-default module can be specified in the command with '--mod <module>'.
         <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
 
-    Return:
+    Returns:
         (args, kwargs)
     """
     args = []
