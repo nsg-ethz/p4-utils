@@ -1260,6 +1260,60 @@ class _MeterConfig:
 
 
 class TableEntry(_P4EntityBase):
+    """An entry for a P4 table.
+
+    **Usage**:
+
+    - Use ``<self>.info`` to display the P4Info entry for this table.
+    - To set the *match key*, use ``<self>.match['<field name>'] = <expr>``.
+    - To set the *action specification* (this is a direct table): ``<self>.action = <instance of type Action>``.
+    - To set the value of *action parameters*, use ``<self>.action['<param name>'] = <expr>``.
+    - To set the *priority*, use ``<self>.priority = <expr>``.
+    - To mark the entry as *default*, use ``<self>.is_default = True``.
+    - If a *direct counter* is set to this table, then:
+
+        - To set the counter spec, use ``<self>.counter_data.byte_count`` and/or ``<self>.counter_data.packet_count``.
+        - To unset it, use ``<self>.counter_data = None`` or ``<self>.clear_counter_data()``.
+    - If a *direct meter* is set to this table, then:
+
+        - To access the meter config, use ``<self>.meter_config.<cir|cburst|pir|pburst>``.
+        - To unset it, use ``<self>.meter_config = None`` or ``<self>.clear_meter_config()``.
+    - Access the *member_id* with ``<self>.member_id``.
+    - Access the *group_id* with ``<self>.group_id``.
+    - To add *metadata* to the entry, use ``<self>.metadata = <expr>``.
+
+    Example:
+        Typical usage to insert a table entry::
+
+            t = table_entry['<table_name>'](action='<action_name>')
+            t.match['<f1>'] = ...
+            ...
+            t.match['<fN>'] = ...
+            # OR t.match.set(f1=..., ..., fN=...)
+            t.action['<p1>'] = ...
+            ...
+            t.action['<pM>'] = ...
+            # OR t.action.set(p1=..., ..., pM=...)
+            t.insert
+
+        Typical usage to set the default entry::
+
+            t = table_entry['<table_name>'](is_default=True)
+            t.action['<p1>'] = ...
+            ...
+            t.action['<pM>'] = ...
+            # OR t.action.set(p1=..., ..., pM=...)
+            t.modify
+
+        Typical usage to insert a table entry if you know the *member_id*::
+
+            t = table_entry['<table_name>']
+            t.match['<f1>'] = ...
+            ...
+            t.match['<fN>'] = ...
+            # OR t.match.set(f1=..., ..., fN=...)
+            t.member_id = <expr>
+    """
     @enum.unique
     class _ActionSpecType(enum.Enum):
         NONE = 0
@@ -1304,82 +1358,6 @@ class TableEntry(_P4EntityBase):
         self._counter_data = None
         self._meter_config = None
         self.metadata = b""
-        self.__doc__ = """
-An entry for table '{}'
-
-Use <self>.info to display the P4Info entry for this table.
-
-To set the match key, use <self>.match['<field name>'] = <expr>.
-Type <self>.match? for more details.
-""".format(table_name)
-        if self._direct_counter is not None:
-            self.__doc__ += """
-To set the counter spec, use <self>.counter_data.byte_count and/or <self>.counter_data.packet_count.
-To unset it, use <self>.counter_data = None or <self>.clear_counter_data().
-"""
-        if self._direct_meter is not None:
-            self.__doc__ += """
-To access the meter config, use <self>.meter_config.<cir|cburst|pir|pburst>.
-To unset it, use <self>.meter_config = None or <self>.clear_meter_config().
-"""
-        if ap is None:
-            self.__doc__ += """
-To set the action specification (this is a direct table):
-<self>.action = <instance of type Action>.
-To set the value of action parameters, use <self>.action['<param name>'] = <expr>.
-Type <self>.action? for more details.
-"""
-        if self._support_members:
-            self.__doc__ += """
-Access the member_id with <self>.member_id.
-"""
-        if self._support_groups:
-            self.__doc__ += """
-Or access the group_id with <self>.group_id.
-"""
-        self.__doc__ += """
-To set the priority, use <self>.priority = <expr>.
-
-To mark the entry as default, use <self>.is_default = True.
-
-To add metadata to the entry, use <self>.metadata = <expr>.
-"""
-        if ap is None:
-            self.__doc__ += """
-Typical usage to insert a table entry:
-t = table_entry['<table_name>'](action='<action_name>')
-t.match['<f1>'] = ...
-...
-t.match['<fN>'] = ...
-# OR t.match.set(f1=..., ..., fN=...)
-t.action['<p1>'] = ...
-...
-t.action['<pM>'] = ...
-# OR t.action.set(p1=..., ..., pM=...)
-t.insert
-
-Typical usage to set the default entry:
-t = table_entry['<table_name>'](is_default=True)
-t.action['<p1>'] = ...
-...
-t.action['<pM>'] = ...
-# OR t.action.set(p1=..., ..., pM=...)
-t.modify
-"""
-        else:
-            self.__doc__ += """
-Typical usage to insert a table entry:
-t = table_entry['<table_name>']
-t.match['<f1>'] = ...
-...
-t.match['<fN>'] = ...
-# OR t.match.set(f1=..., ..., fN=...)
-t.member_id = <expr>
-"""
-        self.__doc__ += """
-For information about how to read table entries, use <self>.read?
-"""
-
         self._init = True
 
     def __dir__(self):
@@ -1585,19 +1563,24 @@ For information about how to read table entries, use <self>.read?
 
     def read(self, function=None):
         """Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-        the appropriate fields unset).
-        If function is None, returns an iterator. Iterate over it to get all the
-        table entries (TableEntry instances) returned by the server. Otherwise,
-        function is applied to all the table entries returned by the server.
+        the appropriate fields unset). If function is **None**, returns an iterator.
+        Iterate over it to get all the table entries (``TableEntry`` instances)
+        returned by the server. Otherwise, function is applied to all the table
+        entries returned by the server.
 
-        For example:
-        for te in <self>.read():
-            print(te)
-        The above code is equivalent to the following one-liner:
-        <self>.read(lambda te: print(te))
+        Example:
+            ::
 
-        To delete all the entries from a table, simply use:
-        table_entry['<table_name>'].read(function=lambda x: x.delete())
+                for te in <self>.read():
+                    print(te)
+
+            The above code is equivalent to the following one-liner::
+
+                <self>.read(lambda te: print(te))
+
+            To delete all the entries from a table, simply use::
+
+                table_entry['<table_name>'].read(function=lambda x: x.delete())
         """
         return super().read(function)
 
@@ -1713,25 +1696,24 @@ class _CounterEntryBase(_P4EntityBase):
 
 
 class CounterEntry(_CounterEntryBase):
+    """An entry for a P4 counter.
+
+    **Usage**:
+
+    - Use ``<self>.info`` to display the P4Info entry for this counter.  
+    - Set the index with ``<self>.index = <expr>``. To reset it 
+      (e.g. for wildcard read), set it to **None**.
+    - Access byte count and packet count with ``<self>.byte_count`` / 
+      ``<self>.packet_count``.
+    - To read from the counter, use ``<self>.read()``.
+    - To write to the counter, use ``<self>.modify()``.
+    """
     def __init__(self, client, context, counter_name=None):
         super().__init__(
             P4Type.counter, P4RuntimeEntity.counter_entry,
             p4runtime_pb2.CounterEntry, client, context, counter_name,
             modify_only=True)
         self._entry.counter_id = self.id
-        self.__doc__ = """
-An entry for counter '{}'
-
-Use <self>.info to display the P4Info entry for this counter.
-
-Set the index with <self>.index = <expr>.
-To reset it (e.g. for wildcard read), set it to None.
-
-Access byte count and packet count with <self>.byte_count / <self>.packet_count.
-
-To read from the counter, use <self>.read()
-To write to the counter, use <self>.modify()
-""".format(counter_name)
         self._init = True
 
     def __dir__(self):
@@ -1755,22 +1737,40 @@ To write to the counter, use <self>.modify()
 
     def read(self, function=None):
         """Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-        the index unset).
-        If function is None, returns an iterator. Iterate over it to get all the
-        counter entries (CounterEntry instances) returned by the
-        server. Otherwise, function is applied to all the counter entries
-        returned by the server.
+        the index unset). If function is **None**, returns an iterator. 
+        Iterate over it to get all the counter entries (``CounterEntry`` instances)
+        returned by the server. Otherwise, function is applied to all the counter 
+        entries returned by the server.
 
-        For example:
-        for c in <self>.read():
-            print(c)
-        The above code is equivalent to the following one-liner:
-        <self>.read(lambda c: print(c))
+        Example:
+            ::
+
+                for c in <self>.read():
+                    print(c)
+
+            The above code is equivalent to the following one-liner::
+
+                <self>.read(lambda c: print(c))
         """
         return super().read(function)
 
 
 class DirectCounterEntry(_CounterEntryBase):
+    """An entry for a P4 direct counter.
+
+    **Usage**:
+
+    - Use ``<self>.info`` to display the P4Info entry for this direct counter.
+    - Set the table_entry with ``<self>.table_entry = <TableEntry instance>``. 
+      To reset it (e.g. for wildcard read), set it to **None**. It is the same as:
+      ``<self>.table_entry = TableEntry({})``.
+    - Access byte count and packet count with ``<self>.byte_count`` / ``<self>.packet_count``.
+    - To read from the counter, use ``<self>.read``
+    - To write to the counter, use ``<self>.modify``
+
+    Note:
+        The :py:class:`p4utils.utils.p4runtime_API.api.TableEntry` instance must be for the table to which the direct counter is attached.
+    """
     def __init__(self, client, context, direct_counter_name=None):
         super().__init__(
             P4Type.direct_counter, P4RuntimeEntity.direct_counter_entry,
@@ -1783,21 +1783,6 @@ class DirectCounterEntry(_CounterEntryBase):
             raise InvalidP4InfoError("direct_table_id {} is not a valid table id".format(
                 self._direct_table_id))
         self._table_entry = TableEntry(client, context, self._direct_table_name)
-        self.__doc__ = """
-An entry for direct counter '{}'
-
-Use <self>.info to display the P4Info entry for this direct counter.
-
-Set the table_entry with <self>.table_entry = <TableEntry instance>.
-The TableEntry instance must be for the table to which the direct counter is attached.
-To reset it (e.g. for wildcard read), set it to None. It is the same as:
-<self>.table_entry = TableEntry({})
-
-Access byte count and packet count with <self>.byte_count / <self>.packet_count.
-
-To read from the counter, use <self>.read
-To write to the counter, use <self>.modify
-""".format(direct_counter_name, self._direct_table_name)
         self._init = True
 
     def __dir__(self):
@@ -1842,17 +1827,20 @@ To write to the counter, use <self>.modify
 
     def read(self, function=None):
         """Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-        the index unset).
-        If function is None, returns an iterator. Iterate over it to get all the
-        direct counter entries (DirectCounterEntry instances) returned by the
-        server. Otherwise, function is applied to all the direct counter entries
-        returned by the server.
+        the index unset). If function is **None**, returns an iterator. 
+        Iterate over it to get all the direct counter entries (``DirectCounterEntry``
+        instances) returned by the server. Otherwise, function is applied to 
+        all the direct counter entries returned by the server.
 
-        For example:
-        for c in <self>.read():
-            print(c)
-        The above code is equivalent to the following one-liner:
-        <self>.read(lambda c: print(c))
+        Example:
+            ::
+
+                for c in <self>.read():
+                    print(c)
+
+            The above code is equivalent to the following one-liner::
+
+                <self>.read(lambda c: print(c))
         """
         return super().read(function)
 
@@ -1919,29 +1907,28 @@ class _MeterEntryBase(_P4EntityBase):
 
 
 class MeterEntry(_MeterEntryBase):
+    """An entry for a P4 meter.
+
+    **Usage**:
+
+    - Use ``<self>.info`` to display the P4Info entry for this meter.
+    - Set the index with ``<self>.index = <expr>``. To reset it (e.g. 
+      for wildcard read), set it to **None**.
+    - Access meter rates and burst sizes with:
+
+        - ``<self>.cir``
+        - ``<self>.cburst``
+        - ``<self>.pir``
+        - ``<self>.pburst``
+    - To read from the meter, use ``<self>.read``.
+    - To write to the meter, use ``<self>.modify``.
+    """
     def __init__(self, client, context, meter_name=None):
         super().__init__(
             P4Type.meter, P4RuntimeEntity.meter_entry,
             p4runtime_pb2.MeterEntry, client, context, meter_name,
             modify_only=True)
         self._entry.meter_id = self.id
-        self.__doc__ = """
-An entry for meter '{}'
-
-Use <self>.info to display the P4Info entry for this meter.
-
-Set the index with <self>.index = <expr>.
-To reset it (e.g. for wildcard read), set it to None.
-
-Access meter rates and burst sizes with:
-<self>.cir
-<self>.cburst
-<self>.pir
-<self>.pburst
-
-To read from the meter, use <self>.read
-To write to the meter, use <self>.modify
-""".format(meter_name)
         self._init = True
 
     def __dir__(self):
@@ -1965,22 +1952,45 @@ To write to the meter, use <self>.modify
 
     def read(self, function=None):
         """Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-        the index unset).
-        If function is None, returns an iterator. Iterate over it to get all the
-        meter entries (MeterEntry instances) returned by the
-        server. Otherwise, function is applied to all the meter entries
-        returned by the server.
+        the index unset). If function is **None**, returns an iterator. 
+        Iterate over it to get all the meter entries (``MeterEntry`` instances)
+        returned by the server. Otherwise, function is applied to all the
+        meter entries returned by the server.
 
-        For example:
-        for c in <self>.read():
-            print(c)
-        The above code is equivalent to the following one-liner:
-        <self>.read(lambda c: print(c))
+        Example:
+            ::
+
+                for c in <self>.read():
+                    print(c)
+
+            The above code is equivalent to the following one-liner::
+
+                <self>.read(lambda c: print(c))
         """
         return super().read(function)
 
 
 class DirectMeterEntry(_MeterEntryBase):
+    """An entry for a P4 direct meter.
+
+    **Usage**:
+
+    - Use ``<self>.info`` to display the P4Info entry for this direct meter.
+    - Set the table_entry with ``<self>.table_entry = <TableEntry instance>``. 
+      To reset it (e.g. for wildcard read), set it to **None**. It is the same as: 
+      ``<self>.table_entry = TableEntry({})``
+    - Access meter rates and burst sizes with:
+
+        - ``<self>.cir``
+        - ``<self>.cburst``
+        - ``<self>.pir``
+        - ``<self>.pburst``
+    - To read from the meter, use ``<self>.read``.
+    - To write to the meter, use ``<self>.modify``.
+
+    Note:
+        The :py:class:`p4utils.utils.p4runtime_API.api.TableEntry` instance must be for the table to which the direct meter is attached.
+    """
     def __init__(self, client, context, direct_meter_name=None):
         super().__init__(
             P4Type.direct_meter, P4RuntimeEntity.direct_meter_entry,
@@ -1993,25 +2003,6 @@ class DirectMeterEntry(_MeterEntryBase):
             raise InvalidP4InfoError("direct_table_id {} is not a valid table id".format(
                 self._direct_table_id))
         self._table_entry = TableEntry(client, context, self._direct_table_name)
-        self.__doc__ = """
-An entry for direct meter '{}'
-
-Use <self>.info to display the P4Info entry for this direct meter.
-
-Set the table_entry with <self>.table_entry = <TableEntry instance>.
-The TableEntry instance must be for the table to which the direct meter is attached.
-To reset it (e.g. for wildcard read), set it to None. It is the same as:
-<self>.table_entry = TableEntry({})
-
-Access meter rates and burst sizes with:
-<self>.cir
-<self>.cburst
-<self>.pir
-<self>.pburst
-
-To read from the meter, use <self>.read
-To write to the meter, use <self>.modify
-""".format(direct_meter_name, self._direct_table_name)
         self._init = True
 
     def __dir__(self):
@@ -2056,17 +2047,20 @@ To write to the meter, use <self>.modify
 
     def read(self, function=None):
         """Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-        the index unset).
-        If function is None, returns an iterator. Iterate over it to get all the
-        direct meter entries (DirectMeterEntry instances) returned by the
-        server. Otherwise, function is applied to all the direct meter entries
-        returned by the server.
+        the index unset). If function is **None**, returns an iterator. 
+        Iterate over it to get all the direct meter entries (``DirectMeterEntry``
+        instances) returned by the server. Otherwise, function is applied to
+        all the direct meter entries returned by the server.
 
-        For example:
-        for c in <self>.read():
-            print(c)
-        The above code is equivalent to the following one-liner:
-        <self>.read(lambda c: print(c))
+        Example:
+            ::
+
+                for c in <self>.read():
+                    print(c)
+
+            The above code is equivalent to the following one-liner::
+
+                <self>.read(lambda c: print(c))
         """
         return super().read(function)
 

@@ -1428,6 +1428,60 @@
 
 
 <div class="viewcode-block" id="TableEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.TableEntry">[docs]</a><span class="k">class</span> <span class="nc">TableEntry</span><span class="p">(</span><span class="n">_P4EntityBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An entry for a P4 table.</span>
+
+<span class="sd">    **Usage**:</span>
+
+<span class="sd">    - Use ``&lt;self&gt;.info`` to display the P4Info entry for this table.</span>
+<span class="sd">    - To set the *match key*, use ``&lt;self&gt;.match[&#39;&lt;field name&gt;&#39;] = &lt;expr&gt;``.</span>
+<span class="sd">    - To set the *action specification* (this is a direct table): ``&lt;self&gt;.action = &lt;instance of type Action&gt;``.</span>
+<span class="sd">    - To set the value of *action parameters*, use ``&lt;self&gt;.action[&#39;&lt;param name&gt;&#39;] = &lt;expr&gt;``.</span>
+<span class="sd">    - To set the *priority*, use ``&lt;self&gt;.priority = &lt;expr&gt;``.</span>
+<span class="sd">    - To mark the entry as *default*, use ``&lt;self&gt;.is_default = True``.</span>
+<span class="sd">    - If a *direct counter* is set to this table, then:</span>
+
+<span class="sd">        - To set the counter spec, use ``&lt;self&gt;.counter_data.byte_count`` and/or ``&lt;self&gt;.counter_data.packet_count``.</span>
+<span class="sd">        - To unset it, use ``&lt;self&gt;.counter_data = None`` or ``&lt;self&gt;.clear_counter_data()``.</span>
+<span class="sd">    - If a *direct meter* is set to this table, then:</span>
+
+<span class="sd">        - To access the meter config, use ``&lt;self&gt;.meter_config.&lt;cir|cburst|pir|pburst&gt;``.</span>
+<span class="sd">        - To unset it, use ``&lt;self&gt;.meter_config = None`` or ``&lt;self&gt;.clear_meter_config()``.</span>
+<span class="sd">    - Access the *member_id* with ``&lt;self&gt;.member_id``.</span>
+<span class="sd">    - Access the *group_id* with ``&lt;self&gt;.group_id``.</span>
+<span class="sd">    - To add *metadata* to the entry, use ``&lt;self&gt;.metadata = &lt;expr&gt;``.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Typical usage to insert a table entry::</span>
+
+<span class="sd">            t = table_entry[&#39;&lt;table_name&gt;&#39;](action=&#39;&lt;action_name&gt;&#39;)</span>
+<span class="sd">            t.match[&#39;&lt;f1&gt;&#39;] = ...</span>
+<span class="sd">            ...</span>
+<span class="sd">            t.match[&#39;&lt;fN&gt;&#39;] = ...</span>
+<span class="sd">            # OR t.match.set(f1=..., ..., fN=...)</span>
+<span class="sd">            t.action[&#39;&lt;p1&gt;&#39;] = ...</span>
+<span class="sd">            ...</span>
+<span class="sd">            t.action[&#39;&lt;pM&gt;&#39;] = ...</span>
+<span class="sd">            # OR t.action.set(p1=..., ..., pM=...)</span>
+<span class="sd">            t.insert</span>
+
+<span class="sd">        Typical usage to set the default entry::</span>
+
+<span class="sd">            t = table_entry[&#39;&lt;table_name&gt;&#39;](is_default=True)</span>
+<span class="sd">            t.action[&#39;&lt;p1&gt;&#39;] = ...</span>
+<span class="sd">            ...</span>
+<span class="sd">            t.action[&#39;&lt;pM&gt;&#39;] = ...</span>
+<span class="sd">            # OR t.action.set(p1=..., ..., pM=...)</span>
+<span class="sd">            t.modify</span>
+
+<span class="sd">        Typical usage to insert a table entry if you know the *member_id*::</span>
+
+<span class="sd">            t = table_entry[&#39;&lt;table_name&gt;&#39;]</span>
+<span class="sd">            t.match[&#39;&lt;f1&gt;&#39;] = ...</span>
+<span class="sd">            ...</span>
+<span class="sd">            t.match[&#39;&lt;fN&gt;&#39;] = ...</span>
+<span class="sd">            # OR t.match.set(f1=..., ..., fN=...)</span>
+<span class="sd">            t.member_id = &lt;expr&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="nd">@enum</span><span class="o">.</span><span class="n">unique</span>
     <span class="k">class</span> <span class="nc">_ActionSpecType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
         <span class="n">NONE</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1472,82 +1526,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_counter_data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_meter_config</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">An entry for table &#39;</span><span class="si">{}</span><span class="s2">&#39;</span>
-
-<span class="s2">Use &lt;self&gt;.info to display the P4Info entry for this table.</span>
-
-<span class="s2">To set the match key, use &lt;self&gt;.match[&#39;&lt;field name&gt;&#39;] = &lt;expr&gt;.</span>
-<span class="s2">Type &lt;self&gt;.match? for more details.</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direct_counter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">To set the counter spec, use &lt;self&gt;.counter_data.byte_count and/or &lt;self&gt;.counter_data.packet_count.</span>
-<span class="s2">To unset it, use &lt;self&gt;.counter_data = None or &lt;self&gt;.clear_counter_data().</span>
-<span class="s2">&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direct_meter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">To access the meter config, use &lt;self&gt;.meter_config.&lt;cir|cburst|pir|pburst&gt;.</span>
-<span class="s2">To unset it, use &lt;self&gt;.meter_config = None or &lt;self&gt;.clear_meter_config().</span>
-<span class="s2">&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">ap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">To set the action specification (this is a direct table):</span>
-<span class="s2">&lt;self&gt;.action = &lt;instance of type Action&gt;.</span>
-<span class="s2">To set the value of action parameters, use &lt;self&gt;.action[&#39;&lt;param name&gt;&#39;] = &lt;expr&gt;.</span>
-<span class="s2">Type &lt;self&gt;.action? for more details.</span>
-<span class="s2">&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_support_members</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">Access the member_id with &lt;self&gt;.member_id.</span>
-<span class="s2">&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_support_groups</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">Or access the group_id with &lt;self&gt;.group_id.</span>
-<span class="s2">&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">To set the priority, use &lt;self&gt;.priority = &lt;expr&gt;.</span>
-
-<span class="s2">To mark the entry as default, use &lt;self&gt;.is_default = True.</span>
-
-<span class="s2">To add metadata to the entry, use &lt;self&gt;.metadata = &lt;expr&gt;.</span>
-<span class="s2">&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">ap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">Typical usage to insert a table entry:</span>
-<span class="s2">t = table_entry[&#39;&lt;table_name&gt;&#39;](action=&#39;&lt;action_name&gt;&#39;)</span>
-<span class="s2">t.match[&#39;&lt;f1&gt;&#39;] = ...</span>
-<span class="s2">...</span>
-<span class="s2">t.match[&#39;&lt;fN&gt;&#39;] = ...</span>
-<span class="s2"># OR t.match.set(f1=..., ..., fN=...)</span>
-<span class="s2">t.action[&#39;&lt;p1&gt;&#39;] = ...</span>
-<span class="s2">...</span>
-<span class="s2">t.action[&#39;&lt;pM&gt;&#39;] = ...</span>
-<span class="s2"># OR t.action.set(p1=..., ..., pM=...)</span>
-<span class="s2">t.insert</span>
-
-<span class="s2">Typical usage to set the default entry:</span>
-<span class="s2">t = table_entry[&#39;&lt;table_name&gt;&#39;](is_default=True)</span>
-<span class="s2">t.action[&#39;&lt;p1&gt;&#39;] = ...</span>
-<span class="s2">...</span>
-<span class="s2">t.action[&#39;&lt;pM&gt;&#39;] = ...</span>
-<span class="s2"># OR t.action.set(p1=..., ..., pM=...)</span>
-<span class="s2">t.modify</span>
-<span class="s2">&quot;&quot;&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">Typical usage to insert a table entry:</span>
-<span class="s2">t = table_entry[&#39;&lt;table_name&gt;&#39;]</span>
-<span class="s2">t.match[&#39;&lt;f1&gt;&#39;] = ...</span>
-<span class="s2">...</span>
-<span class="s2">t.match[&#39;&lt;fN&gt;&#39;] = ...</span>
-<span class="s2"># OR t.match.set(f1=..., ..., fN=...)</span>
-<span class="s2">t.member_id = &lt;expr&gt;</span>
-<span class="s2">&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">For information about how to read table entries, use &lt;self&gt;.read?</span>
-<span class="s2">&quot;&quot;&quot;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">_init</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1753,19 +1731,24 @@
 
 <div class="viewcode-block" id="TableEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.TableEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
-<span class="sd">        the appropriate fields unset).</span>
-<span class="sd">        If function is None, returns an iterator. Iterate over it to get all the</span>
-<span class="sd">        table entries (TableEntry instances) returned by the server. Otherwise,</span>
-<span class="sd">        function is applied to all the table entries returned by the server.</span>
+<span class="sd">        the appropriate fields unset). If function is **None**, returns an iterator.</span>
+<span class="sd">        Iterate over it to get all the table entries (``TableEntry`` instances)</span>
+<span class="sd">        returned by the server. Otherwise, function is applied to all the table</span>
+<span class="sd">        entries returned by the server.</span>
 
-<span class="sd">        For example:</span>
-<span class="sd">        for te in &lt;self&gt;.read():</span>
-<span class="sd">            print(te)</span>
-<span class="sd">        The above code is equivalent to the following one-liner:</span>
-<span class="sd">        &lt;self&gt;.read(lambda te: print(te))</span>
+<span class="sd">        Example:</span>
+<span class="sd">            ::</span>
 
-<span class="sd">        To delete all the entries from a table, simply use:</span>
-<span class="sd">        table_entry[&#39;&lt;table_name&gt;&#39;].read(function=lambda x: x.delete())</span>
+<span class="sd">                for te in &lt;self&gt;.read():</span>
+<span class="sd">                    print(te)</span>
+
+<span class="sd">            The above code is equivalent to the following one-liner::</span>
+
+<span class="sd">                &lt;self&gt;.read(lambda te: print(te))</span>
+
+<span class="sd">            To delete all the entries from a table, simply use::</span>
+
+<span class="sd">                table_entry[&#39;&lt;table_name&gt;&#39;].read(function=lambda x: x.delete())</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="p">)</span></div>
 
@@ -1881,25 +1864,24 @@
 
 
 <div class="viewcode-block" id="CounterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.CounterEntry">[docs]</a><span class="k">class</span> <span class="nc">CounterEntry</span><span class="p">(</span><span class="n">_CounterEntryBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An entry for a P4 counter.</span>
+
+<span class="sd">    **Usage**:</span>
+
+<span class="sd">    - Use ``&lt;self&gt;.info`` to display the P4Info entry for this counter.  </span>
+<span class="sd">    - Set the index with ``&lt;self&gt;.index = &lt;expr&gt;``. To reset it </span>
+<span class="sd">      (e.g. for wildcard read), set it to **None**.</span>
+<span class="sd">    - Access byte count and packet count with ``&lt;self&gt;.byte_count`` / </span>
+<span class="sd">      ``&lt;self&gt;.packet_count``.</span>
+<span class="sd">    - To read from the counter, use ``&lt;self&gt;.read()``.</span>
+<span class="sd">    - To write to the counter, use ``&lt;self&gt;.modify()``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">counter_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4Type</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">counter_entry</span><span class="p">,</span>
             <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">CounterEntry</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span>
             <span class="n">modify_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_entry</span><span class="o">.</span><span class="n">counter_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">An entry for counter &#39;</span><span class="si">{}</span><span class="s2">&#39;</span>
-
-<span class="s2">Use &lt;self&gt;.info to display the P4Info entry for this counter.</span>
-
-<span class="s2">Set the index with &lt;self&gt;.index = &lt;expr&gt;.</span>
-<span class="s2">To reset it (e.g. for wildcard read), set it to None.</span>
-
-<span class="s2">Access byte count and packet count with &lt;self&gt;.byte_count / &lt;self&gt;.packet_count.</span>
-
-<span class="s2">To read from the counter, use &lt;self&gt;.read()</span>
-<span class="s2">To write to the counter, use &lt;self&gt;.modify()</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">counter_name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1923,22 +1905,40 @@
 
 <div class="viewcode-block" id="CounterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.CounterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
-<span class="sd">        the index unset).</span>
-<span class="sd">        If function is None, returns an iterator. Iterate over it to get all the</span>
-<span class="sd">        counter entries (CounterEntry instances) returned by the</span>
-<span class="sd">        server. Otherwise, function is applied to all the counter entries</span>
-<span class="sd">        returned by the server.</span>
+<span class="sd">        the index unset). If function is **None**, returns an iterator. </span>
+<span class="sd">        Iterate over it to get all the counter entries (``CounterEntry`` instances)</span>
+<span class="sd">        returned by the server. Otherwise, function is applied to all the counter </span>
+<span class="sd">        entries returned by the server.</span>
 
-<span class="sd">        For example:</span>
-<span class="sd">        for c in &lt;self&gt;.read():</span>
-<span class="sd">            print(c)</span>
-<span class="sd">        The above code is equivalent to the following one-liner:</span>
-<span class="sd">        &lt;self&gt;.read(lambda c: print(c))</span>
+<span class="sd">        Example:</span>
+<span class="sd">            ::</span>
+
+<span class="sd">                for c in &lt;self&gt;.read():</span>
+<span class="sd">                    print(c)</span>
+
+<span class="sd">            The above code is equivalent to the following one-liner::</span>
+
+<span class="sd">                &lt;self&gt;.read(lambda c: print(c))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="DirectCounterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.DirectCounterEntry">[docs]</a><span class="k">class</span> <span class="nc">DirectCounterEntry</span><span class="p">(</span><span class="n">_CounterEntryBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An entry for a P4 direct counter.</span>
+
+<span class="sd">    **Usage**:</span>
+
+<span class="sd">    - Use ``&lt;self&gt;.info`` to display the P4Info entry for this direct counter.</span>
+<span class="sd">    - Set the table_entry with ``&lt;self&gt;.table_entry = &lt;TableEntry instance&gt;``. </span>
+<span class="sd">      To reset it (e.g. for wildcard read), set it to **None**. It is the same as:</span>
+<span class="sd">      ``&lt;self&gt;.table_entry = TableEntry({})``.</span>
+<span class="sd">    - Access byte count and packet count with ``&lt;self&gt;.byte_count`` / ``&lt;self&gt;.packet_count``.</span>
+<span class="sd">    - To read from the counter, use ``&lt;self&gt;.read``</span>
+<span class="sd">    - To write to the counter, use ``&lt;self&gt;.modify``</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        The :py:class:`p4utils.utils.p4runtime_API.api.TableEntry` instance must be for the table to which the direct counter is attached.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4Type</span><span class="o">.</span><span class="n">direct_counter</span><span class="p">,</span> <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">direct_counter_entry</span><span class="p">,</span>
@@ -1951,21 +1951,6 @@
             <span class="k">raise</span> <span class="n">InvalidP4InfoError</span><span class="p">(</span><span class="s2">&quot;direct_table_id </span><span class="si">{}</span><span class="s2"> is not a valid table id&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_direct_table_id</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_table_entry</span> <span class="o">=</span> <span class="n">TableEntry</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direct_table_name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">An entry for direct counter &#39;</span><span class="si">{}</span><span class="s2">&#39;</span>
-
-<span class="s2">Use &lt;self&gt;.info to display the P4Info entry for this direct counter.</span>
-
-<span class="s2">Set the table_entry with &lt;self&gt;.table_entry = &lt;TableEntry instance&gt;.</span>
-<span class="s2">The TableEntry instance must be for the table to which the direct counter is attached.</span>
-<span class="s2">To reset it (e.g. for wildcard read), set it to None. It is the same as:</span>
-<span class="s2">&lt;self&gt;.table_entry = TableEntry(</span><span class="si">{}</span><span class="s2">)</span>
-
-<span class="s2">Access byte count and packet count with &lt;self&gt;.byte_count / &lt;self&gt;.packet_count.</span>
-
-<span class="s2">To read from the counter, use &lt;self&gt;.read</span>
-<span class="s2">To write to the counter, use &lt;self&gt;.modify</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_counter_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direct_table_name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2010,17 +1995,20 @@
 
 <div class="viewcode-block" id="DirectCounterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.DirectCounterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
-<span class="sd">        the index unset).</span>
-<span class="sd">        If function is None, returns an iterator. Iterate over it to get all the</span>
-<span class="sd">        direct counter entries (DirectCounterEntry instances) returned by the</span>
-<span class="sd">        server. Otherwise, function is applied to all the direct counter entries</span>
-<span class="sd">        returned by the server.</span>
+<span class="sd">        the index unset). If function is **None**, returns an iterator. </span>
+<span class="sd">        Iterate over it to get all the direct counter entries (``DirectCounterEntry``</span>
+<span class="sd">        instances) returned by the server. Otherwise, function is applied to </span>
+<span class="sd">        all the direct counter entries returned by the server.</span>
 
-<span class="sd">        For example:</span>
-<span class="sd">        for c in &lt;self&gt;.read():</span>
-<span class="sd">            print(c)</span>
-<span class="sd">        The above code is equivalent to the following one-liner:</span>
-<span class="sd">        &lt;self&gt;.read(lambda c: print(c))</span>
+<span class="sd">        Example:</span>
+<span class="sd">            ::</span>
+
+<span class="sd">                for c in &lt;self&gt;.read():</span>
+<span class="sd">                    print(c)</span>
+
+<span class="sd">            The above code is equivalent to the following one-liner::</span>
+
+<span class="sd">                &lt;self&gt;.read(lambda c: print(c))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="p">)</span></div></div>
 
@@ -2087,29 +2075,28 @@
 
 
 <div class="viewcode-block" id="MeterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.MeterEntry">[docs]</a><span class="k">class</span> <span class="nc">MeterEntry</span><span class="p">(</span><span class="n">_MeterEntryBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An entry for a P4 meter.</span>
+
+<span class="sd">    **Usage**:</span>
+
+<span class="sd">    - Use ``&lt;self&gt;.info`` to display the P4Info entry for this meter.</span>
+<span class="sd">    - Set the index with ``&lt;self&gt;.index = &lt;expr&gt;``. To reset it (e.g. </span>
+<span class="sd">      for wildcard read), set it to **None**.</span>
+<span class="sd">    - Access meter rates and burst sizes with:</span>
+
+<span class="sd">        - ``&lt;self&gt;.cir``</span>
+<span class="sd">        - ``&lt;self&gt;.cburst``</span>
+<span class="sd">        - ``&lt;self&gt;.pir``</span>
+<span class="sd">        - ``&lt;self&gt;.pburst``</span>
+<span class="sd">    - To read from the meter, use ``&lt;self&gt;.read``.</span>
+<span class="sd">    - To write to the meter, use ``&lt;self&gt;.modify``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">meter_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4Type</span><span class="o">.</span><span class="n">meter</span><span class="p">,</span> <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">meter_entry</span><span class="p">,</span>
             <span class="n">p4runtime_pb2</span><span class="o">.</span><span class="n">MeterEntry</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span>
             <span class="n">modify_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_entry</span><span class="o">.</span><span class="n">meter_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">An entry for meter &#39;</span><span class="si">{}</span><span class="s2">&#39;</span>
-
-<span class="s2">Use &lt;self&gt;.info to display the P4Info entry for this meter.</span>
-
-<span class="s2">Set the index with &lt;self&gt;.index = &lt;expr&gt;.</span>
-<span class="s2">To reset it (e.g. for wildcard read), set it to None.</span>
-
-<span class="s2">Access meter rates and burst sizes with:</span>
-<span class="s2">&lt;self&gt;.cir</span>
-<span class="s2">&lt;self&gt;.cburst</span>
-<span class="s2">&lt;self&gt;.pir</span>
-<span class="s2">&lt;self&gt;.pburst</span>
-
-<span class="s2">To read from the meter, use &lt;self&gt;.read</span>
-<span class="s2">To write to the meter, use &lt;self&gt;.modify</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">meter_name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2133,22 +2120,45 @@
 
 <div class="viewcode-block" id="MeterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.MeterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
-<span class="sd">        the index unset).</span>
-<span class="sd">        If function is None, returns an iterator. Iterate over it to get all the</span>
-<span class="sd">        meter entries (MeterEntry instances) returned by the</span>
-<span class="sd">        server. Otherwise, function is applied to all the meter entries</span>
-<span class="sd">        returned by the server.</span>
+<span class="sd">        the index unset). If function is **None**, returns an iterator. </span>
+<span class="sd">        Iterate over it to get all the meter entries (``MeterEntry`` instances)</span>
+<span class="sd">        returned by the server. Otherwise, function is applied to all the</span>
+<span class="sd">        meter entries returned by the server.</span>
 
-<span class="sd">        For example:</span>
-<span class="sd">        for c in &lt;self&gt;.read():</span>
-<span class="sd">            print(c)</span>
-<span class="sd">        The above code is equivalent to the following one-liner:</span>
-<span class="sd">        &lt;self&gt;.read(lambda c: print(c))</span>
+<span class="sd">        Example:</span>
+<span class="sd">            ::</span>
+
+<span class="sd">                for c in &lt;self&gt;.read():</span>
+<span class="sd">                    print(c)</span>
+
+<span class="sd">            The above code is equivalent to the following one-liner::</span>
+
+<span class="sd">                &lt;self&gt;.read(lambda c: print(c))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="DirectMeterEntry"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.DirectMeterEntry">[docs]</a><span class="k">class</span> <span class="nc">DirectMeterEntry</span><span class="p">(</span><span class="n">_MeterEntryBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An entry for a P4 direct meter.</span>
+
+<span class="sd">    **Usage**:</span>
+
+<span class="sd">    - Use ``&lt;self&gt;.info`` to display the P4Info entry for this direct meter.</span>
+<span class="sd">    - Set the table_entry with ``&lt;self&gt;.table_entry = &lt;TableEntry instance&gt;``. </span>
+<span class="sd">      To reset it (e.g. for wildcard read), set it to **None**. It is the same as: </span>
+<span class="sd">      ``&lt;self&gt;.table_entry = TableEntry({})``</span>
+<span class="sd">    - Access meter rates and burst sizes with:</span>
+
+<span class="sd">        - ``&lt;self&gt;.cir``</span>
+<span class="sd">        - ``&lt;self&gt;.cburst``</span>
+<span class="sd">        - ``&lt;self&gt;.pir``</span>
+<span class="sd">        - ``&lt;self&gt;.pburst``</span>
+<span class="sd">    - To read from the meter, use ``&lt;self&gt;.read``.</span>
+<span class="sd">    - To write to the meter, use ``&lt;self&gt;.modify``.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        The :py:class:`p4utils.utils.p4runtime_API.api.TableEntry` instance must be for the table to which the direct meter is attached.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">P4Type</span><span class="o">.</span><span class="n">direct_meter</span><span class="p">,</span> <span class="n">P4RuntimeEntity</span><span class="o">.</span><span class="n">direct_meter_entry</span><span class="p">,</span>
@@ -2161,25 +2171,6 @@
             <span class="k">raise</span> <span class="n">InvalidP4InfoError</span><span class="p">(</span><span class="s2">&quot;direct_table_id </span><span class="si">{}</span><span class="s2"> is not a valid table id&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_direct_table_id</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_table_entry</span> <span class="o">=</span> <span class="n">TableEntry</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direct_table_name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">An entry for direct meter &#39;</span><span class="si">{}</span><span class="s2">&#39;</span>
-
-<span class="s2">Use &lt;self&gt;.info to display the P4Info entry for this direct meter.</span>
-
-<span class="s2">Set the table_entry with &lt;self&gt;.table_entry = &lt;TableEntry instance&gt;.</span>
-<span class="s2">The TableEntry instance must be for the table to which the direct meter is attached.</span>
-<span class="s2">To reset it (e.g. for wildcard read), set it to None. It is the same as:</span>
-<span class="s2">&lt;self&gt;.table_entry = TableEntry(</span><span class="si">{}</span><span class="s2">)</span>
-
-<span class="s2">Access meter rates and burst sizes with:</span>
-<span class="s2">&lt;self&gt;.cir</span>
-<span class="s2">&lt;self&gt;.cburst</span>
-<span class="s2">&lt;self&gt;.pir</span>
-<span class="s2">&lt;self&gt;.pburst</span>
-
-<span class="s2">To read from the meter, use &lt;self&gt;.read</span>
-<span class="s2">To write to the meter, use &lt;self&gt;.modify</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_meter_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direct_table_name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2224,17 +2215,20 @@
 
 <div class="viewcode-block" id="DirectMeterEntry.read"><a class="viewcode-back" href="../../../../p4utils.utils.p4runtime_API.api.html#p4utils.utils.p4runtime_API.api.DirectMeterEntry.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a P4Runtime Read RPC. Supports wildcard reads (just leave</span>
-<span class="sd">        the index unset).</span>
-<span class="sd">        If function is None, returns an iterator. Iterate over it to get all the</span>
-<span class="sd">        direct meter entries (DirectMeterEntry instances) returned by the</span>
-<span class="sd">        server. Otherwise, function is applied to all the direct meter entries</span>
-<span class="sd">        returned by the server.</span>
+<span class="sd">        the index unset). If function is **None**, returns an iterator. </span>
+<span class="sd">        Iterate over it to get all the direct meter entries (``DirectMeterEntry``</span>
+<span class="sd">        instances) returned by the server. Otherwise, function is applied to</span>
+<span class="sd">        all the direct meter entries returned by the server.</span>
 
-<span class="sd">        For example:</span>
-<span class="sd">        for c in &lt;self&gt;.read():</span>
-<span class="sd">            print(c)</span>
-<span class="sd">        The above code is equivalent to the following one-liner:</span>
-<span class="sd">        &lt;self&gt;.read(lambda c: print(c))</span>
+<span class="sd">        Example:</span>
+<span class="sd">            ::</span>
+
+<span class="sd">                for c in &lt;self&gt;.read():</span>
+<span class="sd">                    print(c)</span>
+
+<span class="sd">            The above code is equivalent to the following one-liner::</span>
+
+<span class="sd">                &lt;self&gt;.read(lambda c: print(c))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="p">)</span></div></div>
 

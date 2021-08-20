@@ -286,21 +286,34 @@ is applied to the CloneSessionEntry instance (if any).</p>
 <dt id="p4utils.utils.p4runtime_API.api.CounterEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">CounterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>counter_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#CounterEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CounterEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._CounterEntryBase</span></code></p>
+<p>An entry for a P4 counter.</p>
+<p><strong>Usage</strong>:</p>
+<ul class="simple">
+<li>Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this counter.</li>
+<li>Set the index with <code class="docutils literal"><span class="pre">&lt;self&gt;.index</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. To reset it
+(e.g. for wildcard read), set it to <strong>None</strong>.</li>
+<li>Access byte count and packet count with <code class="docutils literal"><span class="pre">&lt;self&gt;.byte_count</span></code> /
+<code class="docutils literal"><span class="pre">&lt;self&gt;.packet_count</span></code>.</li>
+<li>To read from the counter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.read()</span></code>.</li>
+<li>To write to the counter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.modify()</span></code>.</li>
+</ul>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.CounterEntry.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#CounterEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CounterEntry.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-the index unset).
-If function is None, returns an iterator. Iterate over it to get all the
-counter entries (CounterEntry instances) returned by the
-server. Otherwise, function is applied to all the counter entries
-returned by the server.</p>
-<p>For example:
-for c in &lt;self&gt;.read():</p>
-<blockquote>
-<div>print(c)</div></blockquote>
-<p>The above code is equivalent to the following one-liner:
-&lt;self&gt;.read(lambda c: print(c))</p>
+the index unset). If function is <strong>None</strong>, returns an iterator.
+Iterate over it to get all the counter entries (<code class="docutils literal"><span class="pre">CounterEntry</span></code> instances)
+returned by the server. Otherwise, function is applied to all the counter
+entries returned by the server.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code is equivalent to the following one-liner:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -336,21 +349,38 @@ to every entry in the iterator.</p>
 <dt id="p4utils.utils.p4runtime_API.api.DirectCounterEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">DirectCounterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>direct_counter_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#DirectCounterEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectCounterEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._CounterEntryBase</span></code></p>
+<p>An entry for a P4 direct counter.</p>
+<p><strong>Usage</strong>:</p>
+<ul class="simple">
+<li>Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this direct counter.</li>
+<li>Set the table_entry with <code class="docutils literal"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">&lt;TableEntry</span> <span class="pre">instance&gt;</span></code>.
+To reset it (e.g. for wildcard read), set it to <strong>None</strong>. It is the same as:
+<code class="docutils literal"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">TableEntry({})</span></code>.</li>
+<li>Access byte count and packet count with <code class="docutils literal"><span class="pre">&lt;self&gt;.byte_count</span></code> / <code class="docutils literal"><span class="pre">&lt;self&gt;.packet_count</span></code>.</li>
+<li>To read from the counter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.read</span></code></li>
+<li>To write to the counter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.modify</span></code></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#p4utils.utils.p4runtime_API.api.TableEntry" title="p4utils.utils.p4runtime_API.api.TableEntry"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api.TableEntry</span></code></a> instance must be for the table to which the direct counter is attached.</p>
+</div>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.DirectCounterEntry.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#DirectCounterEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectCounterEntry.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-the index unset).
-If function is None, returns an iterator. Iterate over it to get all the
-direct counter entries (DirectCounterEntry instances) returned by the
-server. Otherwise, function is applied to all the direct counter entries
-returned by the server.</p>
-<p>For example:
-for c in &lt;self&gt;.read():</p>
-<blockquote>
-<div>print(c)</div></blockquote>
-<p>The above code is equivalent to the following one-liner:
-&lt;self&gt;.read(lambda c: print(c))</p>
+the index unset). If function is <strong>None</strong>, returns an iterator.
+Iterate over it to get all the direct counter entries (<code class="docutils literal"><span class="pre">DirectCounterEntry</span></code>
+instances) returned by the server. Otherwise, function is applied to
+all the direct counter entries returned by the server.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code is equivalent to the following one-liner:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -359,21 +389,51 @@ for c in &lt;self&gt;.read():</p>
 <dt id="p4utils.utils.p4runtime_API.api.DirectMeterEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">DirectMeterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>direct_meter_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#DirectMeterEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectMeterEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._MeterEntryBase</span></code></p>
+<p>An entry for a P4 direct meter.</p>
+<p><strong>Usage</strong>:</p>
+<ul>
+<li><p class="first">Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this direct meter.</p>
+</li>
+<li><p class="first">Set the table_entry with <code class="docutils literal"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">&lt;TableEntry</span> <span class="pre">instance&gt;</span></code>.
+To reset it (e.g. for wildcard read), set it to <strong>None</strong>. It is the same as:
+<code class="docutils literal"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">TableEntry({})</span></code></p>
+</li>
+<li><p class="first">Access meter rates and burst sizes with:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">&lt;self&gt;.cir</span></code></li>
+<li><code class="docutils literal"><span class="pre">&lt;self&gt;.cburst</span></code></li>
+<li><code class="docutils literal"><span class="pre">&lt;self&gt;.pir</span></code></li>
+<li><code class="docutils literal"><span class="pre">&lt;self&gt;.pburst</span></code></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">To read from the meter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.read</span></code>.</p>
+</li>
+<li><p class="first">To write to the meter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.modify</span></code>.</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#p4utils.utils.p4runtime_API.api.TableEntry" title="p4utils.utils.p4runtime_API.api.TableEntry"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api.TableEntry</span></code></a> instance must be for the table to which the direct meter is attached.</p>
+</div>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.DirectMeterEntry.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#DirectMeterEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectMeterEntry.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-the index unset).
-If function is None, returns an iterator. Iterate over it to get all the
-direct meter entries (DirectMeterEntry instances) returned by the
-server. Otherwise, function is applied to all the direct meter entries
-returned by the server.</p>
-<p>For example:
-for c in &lt;self&gt;.read():</p>
-<blockquote>
-<div>print(c)</div></blockquote>
-<p>The above code is equivalent to the following one-liner:
-&lt;self&gt;.read(lambda c: print(c))</p>
+the index unset). If function is <strong>None</strong>, returns an iterator.
+Iterate over it to get all the direct meter entries (<code class="docutils literal"><span class="pre">DirectMeterEntry</span></code>
+instances) returned by the server. Otherwise, function is applied to
+all the direct meter entries returned by the server.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code is equivalent to the following one-liner:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -425,21 +485,46 @@ You can set / get attributes member_id (required), weight (default 1), watch (de
 <dt id="p4utils.utils.p4runtime_API.api.MeterEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">MeterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>meter_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#MeterEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MeterEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._MeterEntryBase</span></code></p>
+<p>An entry for a P4 meter.</p>
+<p><strong>Usage</strong>:</p>
+<ul>
+<li><p class="first">Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this meter.</p>
+</li>
+<li><p class="first">Set the index with <code class="docutils literal"><span class="pre">&lt;self&gt;.index</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. To reset it (e.g.
+for wildcard read), set it to <strong>None</strong>.</p>
+</li>
+<li><p class="first">Access meter rates and burst sizes with:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">&lt;self&gt;.cir</span></code></li>
+<li><code class="docutils literal"><span class="pre">&lt;self&gt;.cburst</span></code></li>
+<li><code class="docutils literal"><span class="pre">&lt;self&gt;.pir</span></code></li>
+<li><code class="docutils literal"><span class="pre">&lt;self&gt;.pburst</span></code></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">To read from the meter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.read</span></code>.</p>
+</li>
+<li><p class="first">To write to the meter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.modify</span></code>.</p>
+</li>
+</ul>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.MeterEntry.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#MeterEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MeterEntry.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-the index unset).
-If function is None, returns an iterator. Iterate over it to get all the
-meter entries (MeterEntry instances) returned by the
-server. Otherwise, function is applied to all the meter entries
-returned by the server.</p>
-<p>For example:
-for c in &lt;self&gt;.read():</p>
-<blockquote>
-<div>print(c)</div></blockquote>
-<p>The above code is equivalent to the following one-liner:
-&lt;self&gt;.read(lambda c: print(c))</p>
+the index unset). If function is <strong>None</strong>, returns an iterator.
+Iterate over it to get all the meter entries (<code class="docutils literal"><span class="pre">MeterEntry</span></code> instances)
+returned by the server. Otherwise, function is applied to all the
+meter entries returned by the server.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code is equivalent to the following one-liner:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -545,6 +630,76 @@ You can set / get attributes egress_port (required), instance (default 0).</p>
 <dt id="p4utils.utils.p4runtime_API.api.TableEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">TableEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>table_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#TableEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
+<p>An entry for a P4 table.</p>
+<p><strong>Usage</strong>:</p>
+<ul>
+<li><p class="first">Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this table.</p>
+</li>
+<li><p class="first">To set the <em>match key</em>, use <code class="docutils literal"><span class="pre">&lt;self&gt;.match['&lt;field</span> <span class="pre">name&gt;']</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
+</li>
+<li><p class="first">To set the <em>action specification</em> (this is a direct table): <code class="docutils literal"><span class="pre">&lt;self&gt;.action</span> <span class="pre">=</span> <span class="pre">&lt;instance</span> <span class="pre">of</span> <span class="pre">type</span> <span class="pre">Action&gt;</span></code>.</p>
+</li>
+<li><p class="first">To set the value of <em>action parameters</em>, use <code class="docutils literal"><span class="pre">&lt;self&gt;.action['&lt;param</span> <span class="pre">name&gt;']</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
+</li>
+<li><p class="first">To set the <em>priority</em>, use <code class="docutils literal"><span class="pre">&lt;self&gt;.priority</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
+</li>
+<li><p class="first">To mark the entry as <em>default</em>, use <code class="docutils literal"><span class="pre">&lt;self&gt;.is_default</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
+</li>
+<li><p class="first">If a <em>direct counter</em> is set to this table, then:</p>
+<blockquote>
+<div><ul class="simple">
+<li>To set the counter spec, use <code class="docutils literal"><span class="pre">&lt;self&gt;.counter_data.byte_count</span></code> and/or <code class="docutils literal"><span class="pre">&lt;self&gt;.counter_data.packet_count</span></code>.</li>
+<li>To unset it, use <code class="docutils literal"><span class="pre">&lt;self&gt;.counter_data</span> <span class="pre">=</span> <span class="pre">None</span></code> or <code class="docutils literal"><span class="pre">&lt;self&gt;.clear_counter_data()</span></code>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">If a <em>direct meter</em> is set to this table, then:</p>
+<blockquote>
+<div><ul class="simple">
+<li>To access the meter config, use <code class="docutils literal"><span class="pre">&lt;self&gt;.meter_config.&lt;cir|cburst|pir|pburst&gt;</span></code>.</li>
+<li>To unset it, use <code class="docutils literal"><span class="pre">&lt;self&gt;.meter_config</span> <span class="pre">=</span> <span class="pre">None</span></code> or <code class="docutils literal"><span class="pre">&lt;self&gt;.clear_meter_config()</span></code>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Access the <em>member_id</em> with <code class="docutils literal"><span class="pre">&lt;self&gt;.member_id</span></code>.</p>
+</li>
+<li><p class="first">Access the <em>group_id</em> with <code class="docutils literal"><span class="pre">&lt;self&gt;.group_id</span></code>.</p>
+</li>
+<li><p class="first">To add <em>metadata</em> to the entry, use <code class="docutils literal"><span class="pre">&lt;self&gt;.metadata</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
+</li>
+</ul>
+<p class="rubric">Example</p>
+<p>Typical usage to insert a table entry:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">](</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;&lt;action_name&gt;&#39;</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;&lt;f1&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="o">...</span>
+<span class="n">t</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;&lt;fN&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="c1"># OR t.match.set(f1=..., ..., fN=...)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;&lt;p1&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="o">...</span>
+<span class="n">t</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;&lt;pM&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="c1"># OR t.action.set(p1=..., ..., pM=...)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">insert</span>
+</pre></div>
+</div>
+<p>Typical usage to set the default entry:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">](</span><span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;&lt;p1&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="o">...</span>
+<span class="n">t</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;&lt;pM&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="c1"># OR t.action.set(p1=..., ..., pM=...)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">modify</span>
+</pre></div>
+</div>
+<p>Typical usage to insert a table entry if you know the <em>member_id</em>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">]</span>
+<span class="n">t</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;&lt;f1&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="o">...</span>
+<span class="n">t</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;&lt;fN&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<span class="c1"># OR t.match.set(f1=..., ..., fN=...)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">member_id</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">expr</span><span class="o">&gt;</span>
+</pre></div>
+</div>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.TableEntry.clear_action">
 <code class="descname">clear_action</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#TableEntry.clear_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.clear_action" title="Permalink to this definition">¶</a></dt>
@@ -573,18 +728,23 @@ You can set / get attributes egress_port (required), instance (default 0).</p>
 <dt id="p4utils.utils.p4runtime_API.api.TableEntry.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/p4runtime_API/api.html#TableEntry.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-the appropriate fields unset).
-If function is None, returns an iterator. Iterate over it to get all the
-table entries (TableEntry instances) returned by the server. Otherwise,
-function is applied to all the table entries returned by the server.</p>
-<p>For example:
-for te in &lt;self&gt;.read():</p>
-<blockquote>
-<div>print(te)</div></blockquote>
-<p>The above code is equivalent to the following one-liner:
-&lt;self&gt;.read(lambda te: print(te))</p>
-<p>To delete all the entries from a table, simply use:
-table_entry[‘&lt;table_name&gt;’].read(function=lambda x: x.delete())</p>
+the appropriate fields unset). If function is <strong>None</strong>, returns an iterator.
+Iterate over it to get all the table entries (<code class="docutils literal"><span class="pre">TableEntry</span></code> instances)
+returned by the server. Otherwise, function is applied to all the table
+entries returned by the server.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">te</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">te</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code is equivalent to the following one-liner:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">te</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">te</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>To delete all the entries from a table, simply use:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">delete</span><span class="p">())</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
