@@ -1,3 +1,8 @@
+"""This module includes all the functions that are frequently used 
+in different parts of the code. These functions usually perform low level
+operations on data.
+"""
+
 import os
 import re
 import sys
@@ -40,7 +45,7 @@ def next_element(elems, minimum=None, maximum=None):
     present in the set, starting from minimum and ending in maximum.
 
     Args:
-        elem (list)  : list of integers
+        elems (list)  : list of integers
         minimum (int): minimum value allowed for elements
         maximum (int): maximum value allowed for elements
 
@@ -78,20 +83,33 @@ def next_element(elems, minimum=None, maximum=None):
 
 
 def natural(text):
-    """To sort sanely/alphabetically: ``sorted(l, key=natural)``."""
+    """Key function to sort nodes names sanely/alphabetically.
+
+    Args:
+        text (str): name of the node
+
+    Returns:
+        list: list used to sort the elements with :py:func:`sorted`
+
+    Example:
+        To sort sanely/alphabetically a list ``l`` of nodes names use::
+
+            sorted(l, key=natural)
+    """
+
     def num(s):
         """Convert text segment to int if necessary."""
         return int(s) if s.isdigit() else s
+
     return [num(s) for s in re.split(r'(\d+)', str(text))]
 
 
-def naturalSeq(t):
-    """Natural sort key function for sequences."""
-    return [ natural( x ) for x in t ]
-
-
 def rand_mac():
-    """Return a random, non-multicast MAC address."""
+    """Generate a random, non-multicas MAC address.
+
+    Returns:
+        str: MAC address
+    """
     hex_str = hex(random.randint(1, 2**48-1) & 0xfeffffffffff | 0x020000000000)[2:]
     hex_str = '0'*(12-len(hex_str)) + hex_str
     mac_str = ''
@@ -105,7 +123,7 @@ def rand_mac():
 
 
 def dpidToStr(id):
-    """Compute a string ``dpid`` from an integer ``id``.
+    """Compute a string **dpid** from an integer **id**.
     
     Args:
         id (int): integer device id
@@ -120,7 +138,14 @@ def dpidToStr(id):
 
 
 def check_listening_on_port(port):
-    """Check if the given port is listening in the main namespace."""
+    """Checks if the given port is listening in the main namespace.
+    
+    Args:
+        port (int): port number
+
+    Returns:
+        bool: **True** if the port is listening, **False** otherwise
+    """
     for c in psutil.net_connections(kind='inet'):
         if c.status == 'LISTEN' and c.laddr[1] == port:
             return True
@@ -128,7 +153,14 @@ def check_listening_on_port(port):
 
 
 def cksum(filename):
-    """Returns the md5 checksum of a file."""
+    """Returns the md5 checksum of a file.
+    
+    Args:
+        filename (str): path to the file
+
+    Returns:
+        str: md5 checksum of the file
+    """
     return hashlib.md5(open(filename,'rb').read()).hexdigest()
 
 
@@ -137,11 +169,11 @@ def get_node_attr(node, attr_name, default=None):
     by looking also inside its unparsed parameters.
 
     Args:
-        node (obj)          : *Mininet* node object
+        node (object)          : *Mininet* node object
         attr_name (string)  : attribute to look for
     
     Returns:
-        the value of the requested attribute.
+        the value of the requested attribute
     """
     try:
         return getattr(node, attr_name)
@@ -166,7 +198,7 @@ def get_by_attr(attr_name, attr_value, obj_list):
         obj_list (list)     : list of objects
 
     Returns:
-        the requested object or **None**.
+        object: the requested object or **None**
     """
     for obj in obj_list:
         if attr_value == getattr(obj, attr_name):
@@ -176,7 +208,14 @@ def get_by_attr(attr_name, attr_value, obj_list):
 
 
 def ip_address_to_mac(ip):
-    """Generate MAC from IP address."""
+    """Generate MAC from IP address.
+    
+    Args:
+        ip (str): IPv4 address
+
+    Returns:
+        str: MAC address obtained from the IPv4 value
+    """
     if "/" in ip:
         ip = ip.split("/")[0]
 
@@ -193,7 +232,7 @@ def is_compiled(p4_src, compilers):
         compilers (list): list of P4 compiler objects (see compiler.py)
     
     Returns:
-        bool: True if the file has been already compiled, False otherwise.
+        bool: **True** if the file has been already compiled, **False** otherwise
     """
     for compiler in compilers:
         if getattr(compiler, 'compiled') and getattr(compiler, 'p4_src') == p4_src:
@@ -203,7 +242,14 @@ def is_compiled(p4_src, compilers):
 
 
 def load_conf(conf_file):
-    """Load JSON application configuration file."""
+    """Load JSON application configuration file.
+    
+    Args:
+        conf_file (str): path to the JSON network configuration file
+
+    Returns:
+        dict: network configuration dictionary
+    """
     with open(conf_file, 'r') as f:
         config = json.load(f)
     return config
@@ -216,7 +262,7 @@ def load_topo(json_path):
         json_path (string): path of the JSON file to load
 
     Returns:
-        p4utils.utils.topology.NetworkGraph: the topology graph.
+        p4utils.utils.topology.NetworkGraph: the topology graph
     """
     with open(json_path,'r') as f:
         graph_dict = json.load(f)
@@ -225,21 +271,26 @@ def load_topo(json_path):
 
 
 def load_custom_object(obj):
-    """Load object from module
+    """Loads object from module.
     
     Args:
-        obj: object to load
-        
+        dict: JSON object to load
+    
+    Returns:
+        object: Python object retrieved from the module
+
     Example:
         This function takes as input a module JSON object::
 
             {
-                "file_path": path_to_module,
-                "module_name": module_file_name,
-                "object_name": module_object,
+                "file_path": <path to module> (string) (*),
+                "module_name": <module file_name> (string),
+                "object_name": <module object name> (string),
             }
 
-    'file_path' is optional and has to be used if the module is not present in sys.path.
+    Note:
+        None of the fields marked with ``(*)`` is mandatory. The ``file_path`` field 
+        is optional and has to be used if the module is not present in ``sys.path``.
     """
 
     file_path = obj.get("file_path", ".")
@@ -253,17 +304,35 @@ def load_custom_object(obj):
 
 
 def run_command(command):
-    """Execute command in the main namespace."""
+    """Execute command in the main namespace.
+    
+    Args:
+        command (str): command to execute
+
+    Returns:
+        int: an integer value used by a process
+    """
     debug(command+'\n')
     return os.WEXITSTATUS(os.system(command))
 
 
 def parse_line(line):
     """Parse text line returning a list of substrings.
+
+    Args:
+        line (str): line to parse
+
+    Returns:
+        list: list of args obtained from the parsing
+
     Example:
-        ahjdjf djdfkfo1 --jdke hdjejeek --dfjfj "vneovn rijvtg"
-    Return:
-        ["ahjdjf", "djdfkfo1", "--jdke", "hdjejeek", "--dfjfj", "vneovn rijvtg"]
+        As an example, consider the following string::
+
+            'ahjdjf djdfkfo1 --jdke hdjejeek --dfjfj "vneovn rijvtg"'
+   
+        The function will parse it and give as output the following list::
+
+            ["ahjdjf", "djdfkfo1", "--jdke", "hdjejeek", "--dfjfj", "vneovn rijvtg"]
     """
     # Isolate "" terms
     args1 = line.split('"')
@@ -280,19 +349,23 @@ def parse_line(line):
 
 def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
     """Parse text line and return all the parameters needed
-    to create a task with NetworkAPI.addTask().
+    to create a task with :py:func:`p4utils.mininetlib.network_API.NetworkAPI.addTask()`.
 
     Args:
         line (str)   : string containing all the task information
         def_mod (str): default module where to look for exe functions
 
-    Note:
-        The file has to be a set of lines, where each has the following syntax.
-        A non-default module can be specified in the command with '--mod <module>'.
-        <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
-
     Returns:
-        (args, kwargs)
+        tuple: a tuple (**args**, **kwargs**) where **args** is a list of arguments and **kwargs** 
+        is a dictionary of key-word pairs
+
+    Example:
+        The file has to be a set of lines, where each has the following syntax::
+
+            <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
+
+    Note:
+        A non-default module can be specified in the command with ``--mod <module>``.
     """
     args = []
     kwargs = {}

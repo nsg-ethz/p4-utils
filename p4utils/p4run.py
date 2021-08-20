@@ -21,6 +21,11 @@
 # Further work: Fabian Schleiss (fabian.schleiss@alumni.ethz.ch)
 # Further work: Jurij Nota (junota@student.ethz.ch)
 
+"""This module is responsible for the legacy network configuration method that makes
+use of JSON files. Indeed, it uses the information contained within it to start and
+configure all the components of the virtualized network.
+"""
+
 import argparse
 from copy import deepcopy
 from mininet.log import debug, info, output, warning, error
@@ -77,39 +82,39 @@ class AppRunner(NetworkAPI):
                 {
                     "file_path": <path to module> (string),
                     "module_name": <module file name> (string),
-                    "object_name": <module object> (string)
+                    "object_name": <module object name> (string)
                 },
                 "switch_node":
                 {
                     "file_path": <path to module> (string),
                     "module_name": <module file name> (string),
-                    "object_name": <module object> (string)
+                    "object_name": <module object name> (string)
                 },
                 "router_node":
                 {
                     "file_path": <path to module> (string),
                     "module_name": <module file name> (string),
-                    "object_name": <module object> (string)
+                    "object_name": <module object name> (string)
                 },
                 "compiler_module":
                 {
                     "file_path": <path to module> (string),
                     "module_name": <module file name> (string),
-                    "object_name": <module object> (string),
+                    "object_name": <module object name> (string),
                     "options": <options passed to init> (dict)
                 },
                 "client_module":
                 {
                     "file_path": <path to module> (string),
                     "module_name": <module file name> (string),
-                    "object_name": <module object> (string),
+                    "object_name": <module object name> (string),
                     "options": <options passed to init> (dict)
                 },
                 "mininet_module":
                 {
                     "file_path": <path to module> (string),
                     "module_name": <module file name> (string),
-                    "object_name": <module object> (string)
+                    "object_name": <module object name> (string)
                 },
                 "exec_scripts": 
                 [
@@ -172,8 +177,11 @@ class AppRunner(NetworkAPI):
           ``client_module`` loads a *Thrift* client into the `homonymous attribute`__.
 
     Note: 
+        __ p4utils.utils.helper.html#p4utils.utils.helper.load_custom_object
+        
         None of the modules or nodes are mandatory. In case they are not specified,
-        default settings will be used.
+        default settings will be used. For further information about how these modules
+        are imported and the related JSON syntax, please check out `this`__ helper function.
 
     Attributes:
         cli_enabled (bool)      : enable an extension to *Mininet* CLI after the network starts.
@@ -503,10 +511,11 @@ class AppRunner(NetworkAPI):
                 {
                     router_name:
                     {
-                        "int_conf": <path to the router's integrate configuration file> (string)
+                        "int_conf": <path to the router's integrate configuration file> (string),
                         "conf_dir": <path to the directory which contains the folder 
                                     (named after the router) with the configuration 
-                                    files for all the daemons> (string)
+                                    files for all the daemons> (string),
+                        "router_node": <custom router node> (dict) (*),
                         "zebra": <true|false> (bool) (*),
                         "bgpd": <true|false> (bool) (*),
                         "ospfd": <true|false> (bool) (*),
@@ -654,6 +663,9 @@ class AppRunner(NetworkAPI):
 def get_args():
     """Parses command line options.
 
+    Returns:
+        argparse.Namespace: namespace containing all the argument parsed
+
     Here is a complete list of the command line invocation options available with ``p4run``:
 
     - ``--config`` is the path to configuration (if it is not specified,
@@ -670,6 +682,7 @@ def get_args():
     - ``--clean`` cleans old log files, if specified.
     - ``--clean-dir`` cleans old log files and closes, if specified.
     """
+
     cwd = os.getcwd()
     default_log = os.path.join(cwd, 'log')
     default_pcap = os.path.join(cwd, 'pcap')

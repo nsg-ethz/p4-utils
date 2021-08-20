@@ -189,6 +189,11 @@
 <span class="c1"># Further work: Fabian Schleiss (fabian.schleiss@alumni.ethz.ch)</span>
 <span class="c1"># Further work: Jurij Nota (junota@student.ethz.ch)</span>
 
+<span class="sd">&quot;&quot;&quot;This module is responsible for the legacy network configuration method that makes</span>
+<span class="sd">use of JSON files. Indeed, it uses the information contained within it to start and</span>
+<span class="sd">configure all the components of the virtualized network.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">mininet.log</span> <span class="kn">import</span> <span class="n">debug</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span>
@@ -245,39 +250,39 @@
 <span class="sd">                {</span>
 <span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
 <span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string)</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string)</span>
 <span class="sd">                },</span>
 <span class="sd">                &quot;switch_node&quot;:</span>
 <span class="sd">                {</span>
 <span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
 <span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string)</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string)</span>
 <span class="sd">                },</span>
 <span class="sd">                &quot;router_node&quot;:</span>
 <span class="sd">                {</span>
 <span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
 <span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string)</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string)</span>
 <span class="sd">                },</span>
 <span class="sd">                &quot;compiler_module&quot;:</span>
 <span class="sd">                {</span>
 <span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
 <span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string),</span>
 <span class="sd">                    &quot;options&quot;: &lt;options passed to init&gt; (dict)</span>
 <span class="sd">                },</span>
 <span class="sd">                &quot;client_module&quot;:</span>
 <span class="sd">                {</span>
 <span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
 <span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string),</span>
 <span class="sd">                    &quot;options&quot;: &lt;options passed to init&gt; (dict)</span>
 <span class="sd">                },</span>
 <span class="sd">                &quot;mininet_module&quot;:</span>
 <span class="sd">                {</span>
 <span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
 <span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
-<span class="sd">                    &quot;object_name&quot;: &lt;module object&gt; (string)</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string)</span>
 <span class="sd">                },</span>
 <span class="sd">                &quot;exec_scripts&quot;: </span>
 <span class="sd">                [</span>
@@ -340,8 +345,11 @@
 <span class="sd">          ``client_module`` loads a *Thrift* client into the `homonymous attribute`__.</span>
 
 <span class="sd">    Note: </span>
+<span class="sd">        __ p4utils.utils.helper.html#p4utils.utils.helper.load_custom_object</span>
+<span class="sd">        </span>
 <span class="sd">        None of the modules or nodes are mandatory. In case they are not specified,</span>
-<span class="sd">        default settings will be used.</span>
+<span class="sd">        default settings will be used. For further information about how these modules</span>
+<span class="sd">        are imported and the related JSON syntax, please check out `this`__ helper function.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        cli_enabled (bool)      : enable an extension to *Mininet* CLI after the network starts.</span>
@@ -671,10 +679,11 @@
 <span class="sd">                {</span>
 <span class="sd">                    router_name:</span>
 <span class="sd">                    {</span>
-<span class="sd">                        &quot;int_conf&quot;: &lt;path to the router&#39;s integrate configuration file&gt; (string)</span>
+<span class="sd">                        &quot;int_conf&quot;: &lt;path to the router&#39;s integrate configuration file&gt; (string),</span>
 <span class="sd">                        &quot;conf_dir&quot;: &lt;path to the directory which contains the folder </span>
 <span class="sd">                                    (named after the router) with the configuration </span>
-<span class="sd">                                    files for all the daemons&gt; (string)</span>
+<span class="sd">                                    files for all the daemons&gt; (string),</span>
+<span class="sd">                        &quot;router_node&quot;: &lt;custom router node&gt; (dict) (*),</span>
 <span class="sd">                        &quot;zebra&quot;: &lt;true|false&gt; (bool) (*),</span>
 <span class="sd">                        &quot;bgpd&quot;: &lt;true|false&gt; (bool) (*),</span>
 <span class="sd">                        &quot;ospfd&quot;: &lt;true|false&gt; (bool) (*),</span>
@@ -822,6 +831,9 @@
 <div class="viewcode-block" id="get_args"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.get_args">[docs]</a><span class="k">def</span> <span class="nf">get_args</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Parses command line options.</span>
 
+<span class="sd">    Returns:</span>
+<span class="sd">        argparse.Namespace: namespace containing all the argument parsed</span>
+
 <span class="sd">    Here is a complete list of the command line invocation options available with ``p4run``:</span>
 
 <span class="sd">    - ``--config`` is the path to configuration (if it is not specified,</span>
@@ -838,6 +850,7 @@
 <span class="sd">    - ``--clean`` cleans old log files, if specified.</span>
 <span class="sd">    - ``--clean-dir`` cleans old log files and closes, if specified.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
     <span class="n">default_log</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">)</span>
     <span class="n">default_pcap</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;pcap&#39;</span><span class="p">)</span>

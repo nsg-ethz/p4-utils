@@ -878,7 +878,7 @@ class NetworkAPI(Topo):
         """
         output('Port mapping:\n')
         node_ports = self.node_ports()
-        for node1 in sorted(node_ports.keys()):
+        for node1 in sorted(node_ports.keys(), key=natural):
             output('{}:  '.format(node1))
             for port1, intf in sorted(node_ports[node1].items(), key=lambda x: x[0]):
                 output('{}:{}\t '.format(port1, intf[1]))
@@ -1545,8 +1545,7 @@ class NetworkAPI(Topo):
             return nodes
         else:
             # Ignore info when sorting
-            tupleSize = 2
-            return sorted(nodes, key=(lambda l: naturalSeq(l[:tupleSize])))
+            return sorted(nodes, key=lambda l: natural(l[:1]))
 
     def enableLog(self, name, log_dir='./log'):
         """

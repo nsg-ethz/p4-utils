@@ -185,6 +185,9 @@
             
   <div class="section" id="module-p4utils.p4run">
 <span id="p4utils-p4run-module"></span><h1>p4utils.p4run module<a class="headerlink" href="#module-p4utils.p4run" title="Permalink to this headline">¶</a></h1>
+<p>This module is responsible for the legacy network configuration method that makes
+use of JSON files. Indeed, it uses the information contained within it to start and
+configure all the components of the virtualized network.</p>
 <dl class="class">
 <dt id="p4utils.p4run.AppRunner">
 <em class="property">class </em><code class="descclassname">p4utils.p4run.</code><code class="descname">AppRunner</code><span class="sig-paren">(</span><em>conf_file</em>, <em>cli_enabled=True</em>, <em>log_dir=None</em>, <em>pcap_dir=None</em>, <em>verbosity='info'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner" title="Permalink to this definition">¶</a></dt>
@@ -231,39 +234,39 @@ the following:</p>
     <span class="p">{</span>
         <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
         <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
-        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
     <span class="p">},</span>
     <span class="s2">&quot;switch_node&quot;</span><span class="p">:</span>
     <span class="p">{</span>
         <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
         <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
-        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
     <span class="p">},</span>
     <span class="s2">&quot;router_node&quot;</span><span class="p">:</span>
     <span class="p">{</span>
         <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
         <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
-        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
     <span class="p">},</span>
     <span class="s2">&quot;compiler_module&quot;</span><span class="p">:</span>
     <span class="p">{</span>
         <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
         <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
-        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
         <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">options</span> <span class="n">passed</span> <span class="n">to</span> <span class="n">init</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
     <span class="p">},</span>
     <span class="s2">&quot;client_module&quot;</span><span class="p">:</span>
     <span class="p">{</span>
         <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
         <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
-        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
         <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">options</span> <span class="n">passed</span> <span class="n">to</span> <span class="n">init</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
     <span class="p">},</span>
     <span class="s2">&quot;mininet_module&quot;</span><span class="p">:</span>
     <span class="p">{</span>
         <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
         <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
-        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
     <span class="p">},</span>
     <span class="s2">&quot;exec_scripts&quot;</span><span class="p">:</span>
     <span class="p">[</span>
@@ -317,7 +320,8 @@ into the <a class="reference external" href="#p4utils.p4run.AppRunner.router_nod
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">None of the modules or nodes are mandatory. In case they are not specified,
-default settings will be used.</p>
+default settings will be used. For further information about how these modules
+are imported and the related JSON syntax, please check out <a class="reference external" href="p4utils.utils.helper.html#p4utils.utils.helper.load_custom_object">this</a> helper function.</p>
 </div>
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.cli_enabled">
@@ -563,10 +567,11 @@ JSON network configuration file:</p>
 <span class="p">{</span>
     <span class="n">router_name</span><span class="p">:</span>
     <span class="p">{</span>
-        <span class="s2">&quot;int_conf&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">router</span><span class="s1">&#39;s integrate configuration file&gt; (string)</span>
+        <span class="s2">&quot;int_conf&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">router</span><span class="s1">&#39;s integrate configuration file&gt; (string),</span>
         <span class="s2">&quot;conf_dir&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">directory</span> <span class="n">which</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">folder</span>
                     <span class="p">(</span><span class="n">named</span> <span class="n">after</span> <span class="n">the</span> <span class="n">router</span><span class="p">)</span> <span class="k">with</span> <span class="n">the</span> <span class="n">configuration</span>
-                    <span class="n">files</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">daemons</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+                    <span class="n">files</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">daemons</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;router_node&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">custom</span> <span class="n">router</span> <span class="n">node</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
         <span class="s2">&quot;zebra&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
         <span class="s2">&quot;bgpd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
         <span class="s2">&quot;ospfd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
@@ -646,6 +651,16 @@ default values will be used.</p>
 <dt id="p4utils.p4run.get_args">
 <code class="descclassname">p4utils.p4run.</code><code class="descname">get_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#get_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.get_args" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses command line options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">namespace containing all the argument parsed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.9)">argparse.Namespace</a></td>
+</tr>
+</tbody>
+</table>
 <p>Here is a complete list of the command line invocation options available with <code class="docutils literal"><span class="pre">p4run</span></code>:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">--config</span></code> is the path to configuration (if it is not specified,
