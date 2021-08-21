@@ -177,5 +177,7 @@ texinfo_documents = [
 
 
 
-# Refer to the Python standard library and to NetworkX
-intersphinx_mapping = {'https://docs.python.org/': None, 'https://networkx.org/documentation/stable/': None}
+# Refer to the Python standard library, NetworkX and Google Protobuf
+intersphinx_mapping = {'https://docs.python.org/': None,
+                       'https://networkx.org/documentation/stable/': None,
+                       'https://googleapis.dev/python/protobuf/latest/': None}

@@ -11,10 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# This is a modified version of shell.py which allows to specify the
-# context and the client for each method and class that uses them without
-# falling back to the global ones.
+
+"""__ https://github.com/p4lang/p4runtime-shell/blob/main/p4runtime_sh/shell.py
+
+This module is a modified version of p4runtime_sh.shell__ that performs low lever
+P4Runtime operations with the server running on a capable switch. It allows to specify the
+context and the client for each method and class that uses them without falling back to the global ones.
+Indeed, some changes were needed to manage multiple switches at the same time.
+"""
 
 from collections import Counter, namedtuple, OrderedDict
 import enum
@@ -122,7 +126,7 @@ def _gen_pretty_print_proto_field(substitutions, pcontext):
 
 
 def _repr_pretty_proto(msg, substitutions, context):
-    """A custom version of google.protobuf.text_format.MessageToString which represents Protobuf
+    """A custom version of :py:class:`google.protobuf.text_format.MessageToString` which represents Protobuf
     messages with a more user-friendly string. In particular, P4Runtime ids are supplemented with
     the P4 name and binary strings are displayed in hexadecimal format."""
     pcontext = _PrintContext(context)
@@ -188,19 +192,21 @@ def _repr_pretty_p4runtime(msg, context):
 
 
 class P4Object:
+    """A wrapper around the P4Info Protobuf message for P4 objects.
+
+    **Usage**
+
+    - You can access any field from the message with ``<self>.<field name>``.
+    - You can access the *name* directly with ``<self>.name``.
+    - You can access the *id* directly with ``<self>.id``.
+    - If you need the underlying Protobuf message, you can access it with ``msg()``.
+    """
     def __init__(self, obj_type, obj, context):
         self.name = obj.preamble.name
         self.id = obj.preamble.id
         self._obj_type = obj_type
         self._obj = obj
         self.context = context
-        self.__doc__ = """
-A wrapper around the P4Info Protobuf message for {} '{}'.
-You can access any field from the message with <self>.<field name>.
-You can access the name directly with <self>.name.
-You can access the id directly with <self>.id.
-If you need the underlying Protobuf message, you can access it with msg().
-""".format(obj_type.pretty_name, self.name)
 
     def __dir__(self):
         d = ["info", "msg", "name", "id"]
@@ -221,7 +227,7 @@ If you need the underlying Protobuf message, you can access it with msg().
         return UserError("Operation not supported")
 
     def msg(self):
-        """Get Protobuf message object"""
+        """Get Protobuf message object."""
         return self._obj
 
     def info(self):
@@ -243,18 +249,23 @@ If you need the underlying Protobuf message, you can access it with msg().
 
 
 class P4Objects:
+    """All the P4 objects in the P4 program.
+
+    **Usage**
+
+    To access a specific object, use ``<self>['<name>']``.
+
+    Example:
+        You can use this class to iterate over all P4 object instances::
+
+            for x in <self>:
+                print(x.id)
+    """
     def __init__(self, obj_type, context):
         self._obj_type = obj_type
         self.context = context
         self._names = sorted([name for name, _ in self.context.get_objs(obj_type)])
         self._iter = None
-        self.__doc__ = """
-All the {pnames} in the P4 program.
-To access a specific {pname}, use {p4info}['<name>'].
-You can use this class to iterate over all {pname} instances:
-\tfor x in {p4info}:
-\t\tprint(x.id)
-""".format(pname=obj_type.pretty_name, pnames=obj_type.pretty_names, p4info=obj_type.p4info_name)
 
     def __call__(self):
         for name in self._names:
@@ -286,6 +297,23 @@ You can use this class to iterate over all {pname} instances:
 
 
 class MatchKey:
+    """Match key fields for P4 table.
+    
+    **Usage**
+
+    Set a field value with ``<self>['<field_name>'] = '...'``:
+
+    - For *exact* match: ``<self>['<f>'] = '<value>'``.
+    - For *ternary* match: ``<self>['<f>'] = '<value>&&&<mask>'``.
+    - For *LPM* match: ``<self>['<f>'] = '<value>/<mask>'``.
+    - For *range* match: ``<self>['<f>'] = '<start>..<end>'``.
+
+    Note:
+        If it's inconvenient to use the whole field name, you can use a unique suffix.
+
+    Example:
+        You may also use ``<self>.set(<f>='<value>')`` but ``<f>`` must not include a ``.`` in this case.
+    """
     def __init__(self, table_name, match_fields):
         self._table_name = table_name
         self._fields = OrderedDict()
@@ -293,24 +321,6 @@ class MatchKey:
         for mf in match_fields:
             self._add_field(mf)
         self._mk = OrderedDict()
-        self._set_docstring()
-
-    def _set_docstring(self):
-        self.__doc__ = "Match key fields for table '{}':\n\n".format(self._table_name)
-        for name, info in self._fields.items():
-            self.__doc__ += str(info)
-        self.__doc__ += """
-Set a field value with <self>['<field_name>'] = '...'
-  * For exact match: <self>['<f>'] = '<value>'
-  * For ternary match: <self>['<f>'] = '<value>&&&<mask>'
-  * For LPM match: <self>['<f>'] = '<value>/<mask>'
-  * For range match: <self>['<f>'] = '<start>..<end>'
-
-If it's inconvenient to use the whole field name, you can use a unique suffix.
-
-You may also use <self>.set(<f>='<value>')
-\t(<f> must not include a '.' in this case, but remember that you can use a unique suffix)
-"""
 
     def _ipython_key_completions_(self):
         return self._fields.keys()
@@ -530,6 +540,13 @@ You may also use <self>.set(<f>='<value>')
 
 
 class Action:
+    """Action parameters for P4 actions.
+
+    **Usage**
+
+    - Set a param value with ``<self>['<param_name>'] = '<value>'``.
+    - You may also use ``<self>.set(<param_name>='<value>')``.
+    """
     def __init__(self, context, action_name=None):
         self._init = False
         if action_name is None:
@@ -545,16 +562,7 @@ class Action:
             self._params[param.name] = param
         self._action_info = action_info
         self._param_values = OrderedDict()
-        self._set_docstring()
         self._init = True
-
-    def _set_docstring(self):
-        self.__doc__ = "Action parameters for action '{}':\n\n".format(self.action_name)
-        for name, info in self._params.items():
-            self.__doc__ += str(info)
-        self.__doc__ += "\n\n"
-        self.__doc__ += "Set a param value with <self>['<param_name>'] = '<value>'\n"
-        self.__doc__ += "You may also use <self>.set(<param_name>='<value>')\n"
 
     def _ipython_key_completions_(self):
         return self._params.keys()
@@ -636,7 +644,7 @@ class _EntityBase:
             d.extend(["insert", "modify", "delete"])
         return d
 
-    # to be called before issueing a P4Runtime request
+    # To be called before issuing a P4Runtime request
     # enforces checks that cannot be performed when setting individual fields
     def _validate_msg(self):
         return True
@@ -755,6 +763,25 @@ class _P4EntityBase(_EntityBase):
 
 
 class ActionProfileMember(_P4EntityBase):
+    """An action profile member.
+
+    **Usage**
+
+    - Use ``<self>.info`` to display the P4Info entry for the action profile.
+    - Set the *member id* with ``<self>.member_id = <expr>``.
+    - To set the action specification ``<self>.action = <instance of type Action>``.
+    - To set the value of action parameters, use ``<self>.action['<param name>'] = <expr>``.
+
+    Example:
+        Typical usage to insert an action profile member::
+
+            m = action_profile_member['<action_profile_name>'](action='<action_name>', member_id=1)
+            m.action['<p1>'] = ...
+            ...
+            m.action['<pM>'] = ...
+            # OR m.action.set(p1=..., ..., pM=...)
+            m.insert
+    """
     def __init__(self, client, context, action_profile_name=None):
         super().__init__(
             P4Type.action_profile, P4RuntimeEntity.action_profile_member,
@@ -762,28 +789,6 @@ class ActionProfileMember(_P4EntityBase):
         self.member_id = 0
         self.action = None
         self._valid_action_ids = self._get_action_set()
-        self.__doc__ = """
-An action profile member for '{}'
-
-Use <self>.info to display the P4Info entry for the action profile.
-
-Set the member id with <self>.member_id = <expr>.
-
-To set the action specification <self>.action = <instance of type Action>.
-To set the value of action parameters, use <self>.action['<param name>'] = <expr>.
-Type <self>.action? for more details.
-
-
-Typical usage to insert an action profile member:
-m = action_profile_member['<action_profile_name>'](action='<action_name>', member_id=1)
-m.action['<p1>'] = ...
-...
-m.action['<pM>'] = ...
-# OR m.action.set(p1=..., ..., pM=...)
-m.insert
-
-For information about how to read members, use <self>.read?
-""".format(action_profile_name)
         self._init = True
 
     def __dir__(self):
@@ -838,21 +843,21 @@ For information about how to read members, use <self>.read?
 
     def read(self, function=None):
         """Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-        the appropriate fields unset).
-
-        If function is None, returns an iterator. Iterate over it to get all the
-        members (as ActionProfileMember instances) returned by the
-        server. Otherwise, function is applied to all the members returned
-        by the server.
+        the appropriate fields unset). If function is **None**, returns an iterator.
+        Iterate over it to get all the members (as ``ActionProfileMember`` instances) 
+        returned by the server. Otherwise, function is applied to all the members
+        returned by the server.
         """
         return super().read(function)
 
 
 class GroupMember:
-    """
-    A member in an ActionProfileGroup.
-    Construct with GroupMember(<member_id>, weight=<weight>, watch=<watch>).
-    You can set / get attributes member_id (required), weight (default 1), watch (default 0).
+    """A member in an :py:class:`ActionProfileGroup`.
+
+    Args:
+        member_id (int): member id (required)
+        weight (int)   : member weigth
+        watch (int)    : member watch
     """
     def __init__(self, member_id=None, weight=1, watch=0):
         if member_id is None:
@@ -903,6 +908,24 @@ class GroupMember:
 
 
 class ActionProfileGroup(_P4EntityBase):
+    """An action profile group.
+
+    **Usage**
+
+    - Use ``<self>.info`` to display the P4Info entry for the action profile.
+    - Set the group id with ``<self>.group_id = <expr>``. Default is ``0``.
+    - Set the max size with ``<self>.max_size = <expr>``. Default is ``0``.
+    - Add members to the group with ``<self>.add(<member_id>, weight=<weight>, watch=<watch>)``.
+      ``weight`` and ``watch`` are optional (default to ``1`` and ``0`` respectively).
+
+    Example:
+        Typical usage to insert an action profile group::
+
+            g = action_profile_group['<action_profile_name>'](group_id=1)
+            g.add(<member id 1>)
+            g.add(<member id 2>)
+            # OR g.add(<member id 1>).add(<member id 2>)
+    """
     def __init__(self, client, context, action_profile_name=None):
         super().__init__(
             P4Type.action_profile, P4RuntimeEntity.action_profile_group,
@@ -910,25 +933,6 @@ class ActionProfileGroup(_P4EntityBase):
         self.group_id = 0
         self.max_size = 0
         self.members = []
-        self.__doc__ = """
-An action profile group for '{}'
-
-Use <self>.info to display the P4Info entry for the action profile.
-
-Set the group id with <self>.group_id = <expr>. Default is 0.
-Set the max size with <self>.max_size = <expr>. Default is 0.
-
-Add members to the group with <self>.add(<member_id>, weight=<weight>, watch=<watch>).
-weight and watch are optional (default to 1 and 0 respectively).
-
-Typical usage to insert an action profile group:
-g = action_profile_group['<action_profile_name>'](group_id=1)
-g.add(<member id 1>)
-g.add(<member id 2>)
-# OR g.add(<member id 1>).add(<member id 2>)
-
-For information about how to read groups, use <self>.read?
-""".format(action_profile_name)
         self._init = True
 
     def __dir__(self):
@@ -985,12 +989,10 @@ For information about how to read groups, use <self>.read?
 
     def read(self, function=None):
         """Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-        the appropriate fields unset).
-
-        If function is None, returns an iterator. Iterate over it to get all the
-        members (as ActionProfileGroup instances) returned by the
-        server. Otherwise, function is applied to all the groups returned by the
-        server.
+        the appropriate fields unset). If function is **None**, returns an iterator.
+        Iterate over it to get all the members (as ``ActionProfileGroup`` instances) 
+        returned by the server. Otherwise, function is applied to all the groups
+        returned by the server.
         """
         return super().read(function)
 
@@ -1013,10 +1015,12 @@ def _get_action_profile(table_name, context):
 
 
 class OneshotAction:
-    """
-    An action in a oneshot action set.
-    Construct with OneshotAction(<action (Action instance)>, weight=<weight>, watch=<watch>).
-    You can set / get attributes action (required), weight (default 1), watch (default 0).
+    """An action in a oneshot action set.
+
+    Args:
+        action (p4utils.utils.p4runtime_API.api.Action): action instance (required)
+        weight (int)                                   : action weight
+        watch (int)                                    : action watch
     """
     def __init__(self, action=None, weight=1, watch=0):
         if action is None:
@@ -1058,6 +1062,13 @@ class OneshotAction:
 
 
 class Oneshot:
+    """A *oneshot* action set for P4 table.
+
+    **Usage**
+
+    - To add an action to the set, use ``<self>.add(<Action instance>)``.
+    - You can also access the set of actions with ``<self>.actions`` (which is a Python :py:class:`list`).
+    """
     def __init__(self, context, table_name=None):
         self._init = False
         if table_name is None:
@@ -1073,12 +1084,6 @@ class Oneshot:
             raise UserError(
                 "Cannot create Oneshot instance for a table with an action profile "
                 "without selector")
-        self.__doc__ = """
-A "oneshot" action set for table '{}'.
-
-To add an action to the set, use <self>.add(<Action instance>).
-You can also access the set of actions with <self>.actions (which is a Python list).
-""".format(self.table_name)
         self._init = True
 
     def __dir__(self):
@@ -1262,7 +1267,7 @@ class _MeterConfig:
 class TableEntry(_P4EntityBase):
     """An entry for a P4 table.
 
-    **Usage**:
+    **Usage**
 
     - Use ``<self>.info`` to display the P4Info entry for this table.
     - To set the *match key*, use ``<self>.match['<field name>'] = <expr>``.
@@ -1616,20 +1621,20 @@ class TableEntry(_P4EntityBase):
                 "or <self>.match.clear (whichever one is appropriate)")
 
     def clear_action(self):
-        """Clears the action spec for the TableEntry."""
+        """Clears the action spec for the ``TableEntry``."""
         super().__setattr__("_action_spec_type", self._ActionSpecType.NONE)
         super().__setattr__("_action_spec", None)
 
     def clear_match(self):
-        """Clears the match spec for the TableEntry."""
+        """Clears the match spec for the ``TableEntry``."""
         self.match.clear()
 
     def clear_counter_data(self):
-        """Clear all counter data, same as <self>.counter_data = None"""
+        """Clear all counter data, same as ``<self>.counter_data = None``."""
         self._counter_data = None
 
     def clear_meter_config(self):
-        """Clear the meter config, same as <self>.meter_config = None"""
+        """Clear the meter config, same as ``<self>.meter_config = None``."""
         self._meter_config = None
 
 
@@ -1691,14 +1696,14 @@ class _CounterEntryBase(_P4EntityBase):
             self._entry.data.CopyFrom(self._data.msg())
 
     def clear_data(self):
-        """Clear all counter data, same as <self>.data = None"""
+        """Clear all counter data, same as ``<self>.data = None``."""
         self._data = None
 
 
 class CounterEntry(_CounterEntryBase):
     """An entry for a P4 counter.
 
-    **Usage**:
+    **Usage**
 
     - Use ``<self>.info`` to display the P4Info entry for this counter.  
     - Set the index with ``<self>.index = <expr>``. To reset it 
@@ -1758,7 +1763,7 @@ class CounterEntry(_CounterEntryBase):
 class DirectCounterEntry(_CounterEntryBase):
     """An entry for a P4 direct counter.
 
-    **Usage**:
+    **Usage**
 
     - Use ``<self>.info`` to display the P4Info entry for this direct counter.
     - Set the table_entry with ``<self>.table_entry = <TableEntry instance>``. 
@@ -1769,7 +1774,7 @@ class DirectCounterEntry(_CounterEntryBase):
     - To write to the counter, use ``<self>.modify``
 
     Note:
-        The :py:class:`p4utils.utils.p4runtime_API.api.TableEntry` instance must be for the table to which the direct counter is attached.
+        The :py:class:`TableEntry` instance must be for the table to which the direct counter is attached.
     """
     def __init__(self, client, context, direct_counter_name=None):
         super().__init__(
@@ -1902,14 +1907,14 @@ class _MeterEntryBase(_P4EntityBase):
             self._entry.config.CopyFrom(self._config.msg())
 
     def clear_config(self):
-        """Clear the meter config, same as <self>.config = None"""
+        """Clear the meter config, same as ``<self>.config = None``."""
         self._config = None
 
 
 class MeterEntry(_MeterEntryBase):
     """An entry for a P4 meter.
 
-    **Usage**:
+    **Usage**
 
     - Use ``<self>.info`` to display the P4Info entry for this meter.
     - Set the index with ``<self>.index = <expr>``. To reset it (e.g. 
@@ -1973,7 +1978,7 @@ class MeterEntry(_MeterEntryBase):
 class DirectMeterEntry(_MeterEntryBase):
     """An entry for a P4 direct meter.
 
-    **Usage**:
+    **Usage**
 
     - Use ``<self>.info`` to display the P4Info entry for this direct meter.
     - Set the table_entry with ``<self>.table_entry = <TableEntry instance>``. 
@@ -1989,7 +1994,7 @@ class DirectMeterEntry(_MeterEntryBase):
     - To write to the meter, use ``<self>.modify``.
 
     Note:
-        The :py:class:`p4utils.utils.p4runtime_API.api.TableEntry` instance must be for the table to which the direct meter is attached.
+        The :py:class:`TableEntry` instance must be for the table to which the direct meter is attached.
     """
     def __init__(self, client, context, direct_meter_name=None):
         super().__init__(
@@ -2066,10 +2071,12 @@ class DirectMeterEntry(_MeterEntryBase):
 
 
 class Replica:
-    """
-    A port "replica" (port number + instance id) used for multicast and clone session programming.
-    Construct with Replica(egress_port, instance=<instance>).
-    You can set / get attributes egress_port (required), instance (default 0).
+    """A replica is the pair ``(<port number>, <instance id>)``.
+    It is used for multicast and clone session programming.
+
+    Args:
+        egress_port (int): outboud packets port
+        instance (int)   : instance of the packet replication
     """
     def __init__(self, egress_port=None, instance=0):
         if egress_port is None:
@@ -2112,17 +2119,21 @@ class Replica:
 
 
 class MulticastGroupEntry(_EntityBase):
+    """Multicast group entry.
+
+    Args:
+        group_id (int): multicast group id
+
+    **Usage**
+
+    Add replicas with ``<self>.add(<eg_port_1>, <instance_1>).add(<eg_port_2>, <instance_2>)...``
+    """
     def __init__(self, client, context, group_id=0):
         super().__init__(
             P4RuntimeEntity.packet_replication_engine_entry,
             p4runtime_pb2.PacketReplicationEngineEntry, client, context)
         self.group_id = group_id
         self.replicas = []
-        self.__doc__ = """
-Multicast group entry.
-Create an instance with MulticastGroupEntry(<group_id>).
-Add replicas with <self>.add(<eg_port_1>, <instance_1>).add(<eg_port_2>, <instance_2>)...
-"""
         self._init = True
 
     def __dir__(self):
@@ -2149,11 +2160,11 @@ Add replicas with <self>.add(<eg_port_1>, <instance_1>).add(<eg_port_2>, <instan
             self.add(r.egress_port, r.instance)
 
     def read(self, function=None):
-        """Generate a P4Runtime Read RPC to read a single MulticastGroupEntry
-        (wildcard reads not supported).
-        If function is None, return a MulticastGroupEntry instance (or None if
-        the provided group id does not exist). If function is not None, function
-        is applied to the MulticastGroupEntry instance (if any).
+        """Generate a P4Runtime Read RPC to read a single ``MulticastGroupEntry``
+        (wildcard reads not supported). If function is **None**, return a 
+        ``MulticastGroupEntry`` instance (or **None** if the provided group id 
+        does not exist). If function is not **None**, function is applied to the
+        ``MulticastGroupEntry`` instance (if any).
         """
         if function is None:
             return next(super().read())
@@ -2179,11 +2190,18 @@ Add replicas with <self>.add(<eg_port_1>, <instance_1>).add(<eg_port_2>, <instan
         return self
 
 
-# This entry is not allowed for simple_switch target since it is not included
-# in the behavioral-model. Indeed this kind of entry is designed for PSA target
-# according to PSA Specification (see https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-clone)
-
 class CloneSessionEntry(_EntityBase):
+    """Clone session entry.
+
+    Args:
+        session_id (int): clone session id
+
+    **Usage**
+
+    - Add replicas with ``<self>.add(<eg_port_1>, <instance_1>).add(<eg_port_2>, <instance_2>)...``
+    - Access class of service with ``<self>.cos``.
+    - Access truncation length with ``<self>.packet_length_bytes``.
+    """
     def __init__(self, client, context, session_id=0):
         super().__init__(
             P4RuntimeEntity.packet_replication_engine_entry,
@@ -2192,13 +2210,6 @@ class CloneSessionEntry(_EntityBase):
         self.replicas = []
         self.cos = 0
         self.packet_length_bytes = 0
-        self.__doc__ = """
-Clone session entry.
-Create an instance with clone_session_entry(<session_id>).
-Add replicas with <self>.add(<eg_port_1>, <instance_1>).add(<eg_port_2>, <instance_2>)...
-Access class of service with <self>.cos.
-Access truncation length with <self>.packet_length_bytes.
-"""
         self._init = True
 
     def __dir__(self):
@@ -2233,11 +2244,11 @@ Access truncation length with <self>.packet_length_bytes.
         self.packet_length_bytes = msg.clone_session_entry.packet_length_bytes
 
     def read(self, function=None):
-        """Generate a P4Runtime Read RPC to read a single CloneSessionEntry
-        (wildcard reads not supported).
-        If function is None, return a CloneSessionEntry instance (or None if
-        the provided group id does not exist). If function is not None, function
-        is applied to the CloneSessionEntry instance (if any).
+        """Generate a P4Runtime Read RPC to read a single ``CloneSessionEntry``
+        (wildcard reads not supported). If function is **None**, return a
+        ``CloneSessionEntry`` instance (or **None** if the provided group id does
+        not exist). If function is not **None**, function is applied to the 
+        ``CloneSessionEntry`` instance (if any).
         """
         if function is None:
             return next(super().read())
@@ -2262,22 +2273,23 @@ Access truncation length with <self>.packet_length_bytes.
 
 
 class DigestEntry(_P4EntityBase):
-    """
-    The DigestEntry P4Runtime entity is used to configure how the device must generate digest messages.
+    """A P4Runtime digest entry.
     
-    The maximum server buffering delay in nanoseconds for an outstanding digest message
-    can be set using <self>.max_timeout_ns = <expr>. By default, this is set to 0, i.e. the server
-    should generate a DigestList message for every digest message generated by the data plane.
+    It is used to configure how the device must generate digest messages.
+    
+    **Usage**
 
-    The maximum digest list size — in number of digest messages — sent by the server to the client as a 
-    single DigestList Protobuf message can be set using <self>.max_list_size = <expr>. By default, this
-    is set to 1, i.e. the server should generate a DigestList message for every digest message generated
-    by the data plane.
-    
-    The timeout in nanoseconds that a server must wait for a digest list acknowledgement from the 
-    client before new digest messages can be generated for the same learned data can be set using
-    <self>.ack_timeout_ns = <expr>. By default, this is set to 0, i.e. the cache of digests not 
-    yet acknowledged must always be an empty set.
+    - The maximum server buffering delay in nanoseconds for an outstanding digest message
+      can be set using ``<self>.max_timeout_ns = <expr>``. By default, this is set to ``0``, i.e. the server
+      should generate a ``DigestList`` message for every digest message generated by the data plane.
+    - The maximum digest list size — in number of digest messages — sent by the server to the client as a 
+      single ``DigestList`` message can be set using ``<self>.max_list_size = <expr>``. By default, this
+      is set to ``1``, i.e. the server should generate a ``DigestList`` message for every digest message generated
+      by the data plane.
+    - The timeout in nanoseconds that a server must wait for a digest list acknowledgement from the 
+      client before new digest messages can be generated for the same learned data can be set using
+      ``<self>.ack_timeout_ns = <expr>``. By default, this is set to ``0``, i.e. the cache of digests not 
+      yet acknowledged must always be an empty set.
     """
     
     def __init__(self, client, context, digest_name):
@@ -2315,11 +2327,9 @@ class DigestEntry(_P4EntityBase):
         self.ack_timeout_ns = msg.config.ack_timeout_ns
 
     def read(self, function=None):
-        """
-        Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
-        the appropriate fields unset).
-        If function is None, returns an iterator, otherwise the function is applied
-        to every entry in the iterator.
+        """Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
+        the appropriate fields unset). If function is **None**, returns an iterator,
+        otherwise the function is applied to every entry in the iterator.
         """
         return super().read(function)
 
@@ -2333,8 +2343,7 @@ class DigestEntry(_P4EntityBase):
 
 
 def Write(input_, client):
-    """
-    Reads a WriteRequest from a file (text format) and sends it to the server.
+    """Reads a ``WriteRequest`` from a file (text format) and sends it to the server.
     It rewrites the device id and election id appropriately.
     """
     req = p4runtime_pb2.WriteRequest()
@@ -2349,8 +2358,7 @@ def Write(input_, client):
 
 
 def APIVersion(client):
-    """
-    Returns the version of the P4Runtime API implemented by the server, using
+    """Returns the version of the **P4Runtime API** implemented by the server, using
     the Capabilities RPC.
     """
     return client.api_version()
@@ -2360,6 +2368,7 @@ FwdPipeConfig = namedtuple('FwdPipeConfig', ['p4info', 'bin'])
 
 
 def setup(device_id=1, grpc_addr='localhost:9559', election_id=(1, 0), config=None):
+    """Establishes the connection to the P4Runtime server."""
     logging.debug("Creating P4Runtime client")
     client = P4RuntimeClient(device_id, grpc_addr, election_id)
 
@@ -2396,5 +2405,6 @@ def setup(device_id=1, grpc_addr='localhost:9559', election_id=(1, 0), config=No
 
 
 def teardown(client):
+    """Tears down the connection to the P4Runtime server."""
     logging.debug("Tearing down P4Runtime client")
     client.tear_down()
