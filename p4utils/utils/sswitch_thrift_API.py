@@ -19,7 +19,6 @@
 #
 # Modified version of the sswitch_CLI.py from behavioural model
 # Edgar Costa (cedgar@ethz.ch)
-#
 
 from functools import wraps
 
