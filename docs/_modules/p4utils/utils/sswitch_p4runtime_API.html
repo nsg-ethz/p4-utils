@@ -177,19 +177,19 @@
 
 <div class="viewcode-block" id="CounterType"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.CounterType">[docs]</a><span class="nd">@enum</span><span class="o">.</span><span class="n">unique</span>
 <span class="k">class</span> <span class="nc">CounterType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Counter type according to P4 Runtime Specification.</span>
-<span class="sd">    See  https://github.com/p4lang/p4runtime/blob/57bb925a30df02b5c492c2a16c29b0014b98fa7a/proto/p4/config/v1/p4info.proto#L278</span>
+    <span class="sd">&quot;&quot;&quot;Counter type according to *P4 Runtime Specification*. See `here`__ for details.</span>
+
+<span class="sd">    __ https://github.com/p4lang/p4runtime/blob/57bb925a30df02b5c492c2a16c29b0014b98fa7a/proto/p4/config/v1/p4info.proto#L278</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">unspecified</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="nb">bytes</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">packets</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">both</span> <span class="o">=</span> <span class="mi">3</span></div>
 
+
 <div class="viewcode-block" id="handle_bad_input"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.handle_bad_input">[docs]</a><span class="k">def</span> <span class="nf">handle_bad_input</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Handle bad input and return True if the function was correctly executed,</span>
-<span class="sd">    and False if it was not.</span>
+    <span class="sd">&quot;&quot;&quot;Handles bad input and returns **True** if the function was </span>
+<span class="sd">    correctly executed, and **False** if it was not.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -201,19 +201,40 @@
             <span class="k">return</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="n">handle</span></div>
 
+
 <div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI">[docs]</a><span class="k">class</span> <span class="nc">SimpleSwitchP4RuntimeAPI</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    For a better documentation of the primitives and the assumptions used,</span>
+    <span class="sd">&quot;&quot;&quot;For a better documentation of the primitives and the assumptions used,</span>
 <span class="sd">    please take a look at:</span>
-<span class="sd">    - P4Runtime Client repository</span>
-<span class="sd">    - P4 Runtime Specification (https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html)</span>
+
+<span class="sd">    - __ p4utils.utils.p4runtime_API.html</span>
+<span class="sd">    </span>
+<span class="sd">      `P4Runtime API subpackage`__</span>
+
+<span class="sd">    - __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html</span>
+
+<span class="sd">      `P4Runtime specification`__</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        device_id (int): switch *id*</span>
+<span class="sd">        grpc_port (int): grpc port the switch is listening on</span>
+<span class="sd">        grpc_ip (int)  : grpc IP the switch is listening on</span>
+<span class="sd">        p4rt_path (str): path to the P4Runtime Info file</span>
+<span class="sd">        json_path (str): path to the P4 JSON compiled file</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        FileNotFoundError: if ``p4rt_path`` or ``json_path`` are not specified, or invalid and</span>
+<span class="sd">                           the client cannot retrieve the relevant informations from the</span>
+<span class="sd">                           P4Runtime server.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        client (:py:class:`p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient`)  : P4Runtime client instance.</span>
+<span class="sd">        context (:py:class:`p4utils.utils.p4runtime_API.context.Context`)           : P4Runtime context containing the information about all the P4 objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span>
                  <span class="n">grpc_port</span><span class="p">,</span>
                  <span class="n">grpc_ip</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span>
                  <span class="n">p4rt_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">json_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                 <span class="n">json_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     
         <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="n">device_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grpc_port</span> <span class="o">=</span> <span class="n">grpc_port</span>
@@ -254,23 +275,29 @@
         <span class="k">return</span> <span class="n">params_dict</span></div>
 
 <div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.reset_state"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state">[docs]</a>    <span class="k">def</span> <span class="nf">reset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Reset the grpc server of switch by establishing a new ForwardingPipelineConfig.</span>
+        <span class="sd">&quot;&quot;&quot;Resets the gRPC server of switch by establishing a new ``ForwardingPipelineConfig``.</span>
+
+<span class="sd">        __ https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668</span>
+<span class="sd">            </span>
+<span class="sd">        For further details about this method, please check `this`__. Indeed, </span>
+<span class="sd">        this method sends to the server a ``SetForwardingPipelineConfigRequest`` with</span>
+<span class="sd">        action ``VERIFY_AND_COMMIT``.</span>
+
 <span class="sd">        This method is buggy, please read the following warnings.</span>
 
-<span class="sd">        Notice:</span>
-<span class="sd">            Due to some bug in the implementation of the grpc server, this command</span>
-<span class="sd">            does not fully erase all the forwarding state of the switch, but only resets its</span>
-<span class="sd">            grpc server. Therefore, it is recommended to use TriftAPI.reset_state() </span>
-<span class="sd">            to reset the forwarding states. Moreover, please notice that if you only use</span>
-<span class="sd">            the ThriftAPI to reset the switch, the grpc server will not be reset.</span>
-<span class="sd">            So in order, to do the things properly both methods need to be called </span>
-<span class="sd">            (the one from ThriftAPI and the one from SimpleSwitchP4RuntimeAPI).</span>
-
-<span class="sd">            For further details about this method, please check</span>
-<span class="sd">            https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668</span>
-<span class="sd">            Indeed, this method sends to the server a SetForwardingPipelineConfigRequest with</span>
-<span class="sd">            action VERIFY_AND_COMMIT.</span>
+<span class="sd">        Note:</span>
+<span class="sd">            - Due to some bug in the implementation of the gRPC server, this command</span>
+<span class="sd">              does not fully erase all the forwarding state of the switch, but only resets the</span>
+<span class="sd">              server. </span>
+<span class="sd">            </span>
+<span class="sd">            - It is recommended to use :py:meth:`p4utils.utils.thrift_API.ThriftAPI.reset_state()` </span>
+<span class="sd">              to reset the forwarding states. Moreover, if you only use</span>
+<span class="sd">              the :py:class:`p4utils.utils.thrift_API.ThriftAPI` to reset the switch, </span>
+<span class="sd">              the gRPC server will not be reset.</span>
+<span class="sd">            </span>
+<span class="sd">            - To do things properly, both methods need to be called </span>
+<span class="sd">              (the one from :py:class:`p4utils.utils.thrift_API.ThriftAPI` and the one from </span>
+<span class="sd">              :py:class:`SimpleSwitchP4RuntimeAPI`).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4rt_path</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;No P4 runtime information file provided.&#39;</span><span class="p">)</span>
@@ -286,72 +313,75 @@
                                               <span class="n">config</span><span class="o">=</span><span class="n">api</span><span class="o">.</span><span class="n">FwdPipeConfig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4rt_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_path</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.teardown"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.teardown">[docs]</a>    <span class="k">def</span> <span class="nf">teardown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Tear down grpc connection with the switch server.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Tear down grpc connection with the switch server.&quot;&quot;&quot;</span>
         <span class="n">api</span><span class="o">.</span><span class="n">teardown</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">)</span></div>
     
 <div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.get_digest_list"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_digest_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Alias for P4RuntimeClient.get_digest_list in p4runtime.py</span>
-<span class="sd">        Retrieve DigestList and send back acknowledgment.</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve ``DigestList`` and send back acknowledgment.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            timeout (int or None): time to wait for packet, if set to None,</span>
+<span class="sd">            timeout (int or None): time to wait for packet, if set to **None**,</span>
 <span class="sd">                                   the function will wait indefinitely</span>
 
 <span class="sd">        Return:</span>
-<span class="sd">            DigestList packet (protobuf message) or None if the timeout has</span>
-<span class="sd">            expired and no packet has been received.</span>
+<span class="sd">            ``DigestList`` Protobuf Message or **None** if the timeout has expired and </span>
+<span class="sd">            no packet has been received.</span>
 <span class="sd">        </span>
-<span class="sd">        Notice:</span>
-<span class="sd">            See https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543</span>
-<span class="sd">            for further details.</span>
+<span class="sd">        Note:</span>
+<span class="sd">            __ https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543</span>
+
+<span class="sd">            See `here`__ for further details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_digest_list</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span></div>
 
     <span class="c1">## Tables</span>
 <div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_add"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_add">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[],</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Add entry to a match table.</span>
+        <span class="sd">&quot;&quot;&quot;Add entry to a match table.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            table_name (string)             : name of the table</span>
-<span class="sd">            action_name (string)            : action to execute on hit</span>
-<span class="sd">            match_keys (list of strings)    : values to match</span>
-<span class="sd">            action_params (list of strings) : parameters passed to action</span>
+<span class="sd">            table_name (str)             : name of the table</span>
+<span class="sd">            action_name (str)            : action to execute on hit</span>
+<span class="sd">            match_keys (list)               : values to match (each value is a :py:class:`str`)</span>
+<span class="sd">            action_params (list)            : parameters passed to action (each parameter is a :py:class:`str`)</span>
 <span class="sd">            prio (int)                      : priority in ternary match</span>
-<span class="sd">        </span>
-<span class="sd">        If a direct meter is attached to the table</span>
-<span class="sd">            rates (list)                    : [(cir, cburst), (pir, pburst)] (if None, the meter</span>
+<span class="sd">            rates (list)                    : ``[(cir, cburst), (pir, pburst)]`` (if **None**, the meter</span>
 <span class="sd">                                              is set to its default behavior, i.e. marks</span>
-<span class="sd">                                              all packets as GREEN)</span>
-
-<span class="sd">        If a direct counter is attached to the table</span>
-<span class="sd">            pkts (int)                      : number of packets to write (if None, the count</span>
+<span class="sd">                                              all packets as **GREEN**)</span>
+<span class="sd">            pkts (int)                      : number of packets to write (if **None**, the count</span>
 <span class="sd">                                              is not changed)</span>
-<span class="sd">            byts (int)                      : number of bytes to write (if None, the count</span>
+<span class="sd">            byts (int)                      : number of bytes to write (if **None**, the count</span>
 <span class="sd">                                              is not changed)</span>
 <span class="sd">        </span>
-<span class="sd">        Different kinds of matches:</span>
-<span class="sd">            * For exact match: &#39;&lt;value&gt;&#39;</span>
-<span class="sd">            * For ternary match: &#39;&lt;value&gt;&amp;&amp;&amp;&lt;mask&gt;&#39;</span>
-<span class="sd">            * For LPM match: &#39;&lt;value&gt;/&lt;mask&gt;&#39;</span>
-<span class="sd">            * For range match: &#39;&lt;start&gt;..&lt;end&gt;&#39;</span>
+<span class="sd">        There are different kinds of matches:</span>
 
-<span class="sd">        Notice:</span>
-<span class="sd">            The priority field must be set to a non-zero value if the match key includes </span>
-<span class="sd">            a ternary match (i.e. in the case of PSA if the P4Info entry for the table </span>
-<span class="sd">            indicates that one or more of its match fields has an OPTIONAL, TERNARY or </span>
-<span class="sd">            RANGE match type) or to zero otherwise. A higher priority number indicates </span>
-<span class="sd">            that the entry must be given higher priority when performing a table lookup. </span>
-<span class="sd">            (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry)</span>
+<span class="sd">        - For *exact* match: ``&lt;value&gt;``</span>
+<span class="sd">        - For *ternary* match: ``&lt;value&gt;&amp;&amp;&amp;&lt;mask&gt;``</span>
+<span class="sd">        - For *LPM* match: ``&lt;value&gt;/&lt;mask&gt;``</span>
+<span class="sd">        - For *range* match: ``&lt;start&gt;..&lt;end&gt;``</span>
 
-<span class="sd">            There are three types of counters:</span>
-<span class="sd">            - BYTES, only the field &#39;byts&#39; is written and the value of &#39;pkts&#39; is ignored</span>
-<span class="sd">            - PACKETS, only the field &#39;pkts&#39; is written and the value of &#39;byts&#39; is ignored</span>
-<span class="sd">            - PACKETS_AND_BYTES, both &#39;byts&#39; and &#39;pkts&#39; are written</span>
+<span class="sd">        There are three types of *counters*:</span>
+
+<span class="sd">        - **BYTES**, only the field ``byts`` is written and the value of ``pkts`` is ignored.</span>
+<span class="sd">        - **PACKETS**, only the field ``pkts`` is written and the value of ``byts`` is ignored.</span>
+<span class="sd">        - **PACKETS_AND_BYTES**, both ``byts`` and ``pkts`` are written.</span>
+
+<span class="sd">        There are two types of *meters*:</span>
+
+<span class="sd">        - **BYTES**, ``rates`` must be expressed in number of bytes per second.</span>
+<span class="sd">        - **PACKETS**, ``rates`` must be expressed in number of packets per second.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            - The ``rates`` field only applies if there is a direct meter attached</span>
+<span class="sd">              to the table.</span>
+<span class="sd">            - The ``pkts`` and ``byts`` fields only apply if there is a direct counter</span>
+<span class="sd">              attached to the table.</span>
+<span class="sd">            - The ``prio`` field must be set to a non-zero value if the match key includes </span>
+<span class="sd">              a ternary match or to zero otherwise.</span>
+<span class="sd">            - __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry</span>
+
+<span class="sd">              A higher ``prio`` number indicates that the entry must be given higher</span>
+<span class="sd">              priority when performing a table lookup (see `here`__ for details).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Adding entry to: &#39;</span><span class="o">+</span><span class="n">table_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_keys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -421,21 +451,22 @@
 
 <div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_set_default"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_set_default">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_set_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set default action for a match table.</span>
+        <span class="sd">&quot;&quot;&quot;Set default action for a match table.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
-<span class="sd">            table_name (string)             : name of the table</span>
-<span class="sd">            action_name (string)            : action to execute on hit</span>
-<span class="sd">            action_params (list of strings) : parameters passed to action</span>
+<span class="sd">            table_name (str)             : name of the table</span>
+<span class="sd">            action_name (str)            : action to execute on hit</span>
+<span class="sd">            action_params (list)         : parameters passed to action </span>
+<span class="sd">                                           (each parameter is a :py:class:`str`)</span>
 
-<span class="sd">        Notice:</span>
-<span class="sd">            When setting the default entry, the configurations for</span>
-<span class="sd">            its direct resources will be reset to their defaults</span>
-<span class="sd">            (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources).</span>
+<span class="sd">        Note:</span>
+<span class="sd">            __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources</span>
 <span class="sd">            </span>
-<span class="sd">            However, for the current implementation the specification is not followed and</span>
-<span class="sd">            direct resources are not reset when modifying a table entry.</span>
+<span class="sd">            - When setting the default entry, the configurations for</span>
+<span class="sd">              its direct resources will be reset to their defaults, according to `this`__.</span>
+<span class="sd">            </span>
+<span class="sd">            - However, for the current implementation, the specification is not followed and</span>
+<span class="sd">              direct resources are not reset when modifying a table entry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Adding default action to: &#39;</span><span class="o">+</span><span class="n">table_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_params</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -452,13 +483,12 @@
 
 <div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_reset_default"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_reset_default">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_reset_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Reset default action for a match table.</span>
+        <span class="sd">&quot;&quot;&quot;Reset default action for a match table.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
-<span class="sd">            table_name (string)             : name of the table</span>
+<span class="sd">            table_name (str): name of the table</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            When resetting the default entry, the configurations for</span>
 <span class="sd">            its direct resources will be reset to their defaults</span>
 <span class="sd">            (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-default-entry).</span>
@@ -469,11 +499,10 @@
 
 <div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_delete_match"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_delete_match">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_delete_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Delete an existing entry in a table.</span>
+        <span class="sd">&quot;&quot;&quot;Delete an existing entry in a table.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            table_name (string)             : name of the table</span>
+<span class="sd">            table_name (str)             : name of the table</span>
 <span class="sd">            match_keys (list of strings)    : values to match</span>
 <span class="sd">            prio (int)                      : priority in ternary match</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -496,12 +525,11 @@
 
 <div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_modify_match"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_modify_match">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_modify_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[],</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Modify entry in a table.</span>
+        <span class="sd">&quot;&quot;&quot;Modify entry in a table.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            table_name (string)             : name of the table</span>
-<span class="sd">            action_name (string)            : action to execute on hit</span>
+<span class="sd">            table_name (str)             : name of the table</span>
+<span class="sd">            action_name (str)            : action to execute on hit</span>
 <span class="sd">            match_keys (list of strings)    : values to match</span>
 <span class="sd">            action_params (list of strings) : parameters passed to action</span>
 <span class="sd">            prio (int)                      : priority in ternary match</span>
@@ -517,7 +545,7 @@
 <span class="sd">            byts (int)                      : number of bytes to write (if None, the count</span>
 <span class="sd">                                              is not changed)</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            When modifying the default entry, the configurations for</span>
 <span class="sd">            its direct resources will be reset to their defaults</span>
 <span class="sd">            (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources).</span>
@@ -599,7 +627,7 @@
 <span class="sd">        Clear all entries in a match table (direct or indirect), but not the default entry.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
-<span class="sd">            table_name (string)             : name of the table</span>
+<span class="sd">            table_name (str)             : name of the table</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Deleting all entries of: &#39;</span><span class="o">+</span><span class="n">table_name</span><span class="p">)</span>
         <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">TableEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">delete</span><span class="p">())</span></div>
@@ -611,7 +639,7 @@
 <span class="sd">        Read direct counter values.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            direct_counter_name (string): name of the direct counter</span>
+<span class="sd">            direct_counter_name (str): name of the direct counter</span>
 <span class="sd">            match_keys (list of strings): values to match (used to identify the table</span>
 <span class="sd">                                          entry to which the direct counter is attached)</span>
 <span class="sd">            prio (int)                  : priority in ternary match (used to identify the table</span>
@@ -621,7 +649,7 @@
 <span class="sd">            byte_count (int)            : number of bytes counted</span>
 <span class="sd">            packet_count (int)          : number of packets counted</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            P4Runtime does not distinguish between the different PSA counter types, i.e. counters are</span>
 <span class="sd">            always considered of PACKETS_AND_BYTES and both values are returned. It is user&#39;s responsability</span>
 <span class="sd">            to use only the correct value (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry).</span>
@@ -651,7 +679,7 @@
 <span class="sd">        Write direct counter values. If no values are specified, the counter is reset.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            direct_counter_name (string): name of the direct counter</span>
+<span class="sd">            direct_counter_name (str): name of the direct counter</span>
 <span class="sd">            match_keys (list of strings): values to match (used to identify the table</span>
 <span class="sd">                                          entry to which the direct counter is attached)</span>
 <span class="sd">            prio (int)                  : priority in ternary match (used to identify the table</span>
@@ -659,7 +687,7 @@
 <span class="sd">            pkts (int)                  : number of packets to write (default: 0)</span>
 <span class="sd">            byts (int)                  : number of bytes to write (default: 0)</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            There are three types of counters:</span>
 <span class="sd">            - BYTES, only the field &#39;byts&#39; is written and the value of &#39;pkts&#39; is ignored</span>
 <span class="sd">            - PACKETS, only the field &#39;pkts&#39; is written and the value of &#39;byts&#39; is ignored</span>
@@ -695,7 +723,7 @@
 <span class="sd">        Reset all the direct counters values.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            direct_counter_name (string): name of the direct counter</span>
+<span class="sd">            direct_counter_name (str): name of the direct counter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resetting direct counter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_counter_name</span><span class="p">))</span>
         <span class="n">entries</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DirectCounterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -714,10 +742,10 @@
 <span class="sd">        Configure rates for an entire direct meter array.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            direct_meter_name (string): name of the direct meter</span>
+<span class="sd">            direct_meter_name (str): name of the direct meter</span>
 <span class="sd">            rates (list)              : [(cir, cburst), (pir, pburst)]</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,</span>
 <span class="sd">            depending on the meter type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -748,7 +776,7 @@
 <span class="sd">        Configure rates for a single direct meter entry.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            direct_meter_name (string)  : name of the direct meter</span>
+<span class="sd">            direct_meter_name (str)  : name of the direct meter</span>
 <span class="sd">            match_keys (list of strings): values to match (used to identify the table</span>
 <span class="sd">                                          entry to which the direct meter is attached)</span>
 <span class="sd">            prio (int)                  : priority in ternary match (used to identify the table</span>
@@ -756,7 +784,7 @@
 <span class="sd">            rates (list)                : [(cir, cburst), (pir, pburst)] (default: None, i.e.</span>
 <span class="sd">                                          all packets are marked as green)</span>
 <span class="sd">        </span>
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,</span>
 <span class="sd">            depending on the meter type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -801,7 +829,7 @@
 <span class="sd">        Retrieve rates for a direct meter.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            direct_meter_name (string)    : name of the direct meter</span>
+<span class="sd">            direct_meter_name (str)    : name of the direct meter</span>
 <span class="sd">            match_keys (list of strings)  : values to match (used to identify the table</span>
 <span class="sd">                                            entry to which the direct meter is attached)</span>
 <span class="sd">            prio (int)                    : priority in ternary match (used to identify the table</span>
@@ -809,7 +837,7 @@
 <span class="sd">        Return:</span>
 <span class="sd">            [(cir, cburst), (pir, pburst)] if meter is configured, None if meter is not configured</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,</span>
 <span class="sd">            depending on the meter type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -841,14 +869,14 @@
 <span class="sd">        Read counter value.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            counter_name (string): name of the counter</span>
+<span class="sd">            counter_name (str): name of the counter</span>
 <span class="sd">            index (int)          : index of the counter to read (first element is at 0)</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            byte_count (int)            : number of bytes counted</span>
 <span class="sd">            packet_count (int)          : number of packets counted</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            P4Runtime does not distinguish between the different PSA counter types, i.e. counters are</span>
 <span class="sd">            always considered of PACKETS_AND_BYTES and both values are returned. It is user&#39;s responsability</span>
 <span class="sd">            to use only the correct value (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry).</span>
@@ -868,12 +896,12 @@
 <span class="sd">        Write counter values. If no values are specified, the counter is reset.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            counter_name (string): name of the counter</span>
+<span class="sd">            counter_name (str): name of the counter</span>
 <span class="sd">            index (int)          : index of the counter to write (first element is at 0)</span>
 <span class="sd">            pkts (int)           : number of packets to write (default: 0)</span>
 <span class="sd">            byts (int)           : number of bytes to write (default: 0)</span>
 <span class="sd">        </span>
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            There are three types of counters:</span>
 <span class="sd">            - BYTES, only the field &#39;byts&#39; is written and the value of &#39;pkts&#39; is ignored</span>
 <span class="sd">            - PACKETS, only the field &#39;pkts&#39; is written and the value of &#39;byts&#39; is ignored</span>
@@ -898,7 +926,7 @@
 <span class="sd">        Reset all the counters values.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            counter_name (string): name of the counter</span>
+<span class="sd">            counter_name (str): name of the counter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resetting counter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">counter_name</span><span class="p">))</span>
         <span class="n">entries</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">CounterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -918,10 +946,10 @@
 <span class="sd">        Configure rates for an entire meter array.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            meter_name (string): name of the meter</span>
+<span class="sd">            meter_name (str): name of the meter</span>
 <span class="sd">            rates (list)       : [(cir, cburst), (pir, pburst)]</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,</span>
 <span class="sd">            depending on the meter type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -952,12 +980,12 @@
 <span class="sd">        Configure rates for a single  meter entry.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            meter_name (string): name of the meter</span>
+<span class="sd">            meter_name (str): name of the meter</span>
 <span class="sd">            rates (list)       : [(cir, cburst), (pir, pburst)] (default: None, i.e.</span>
 <span class="sd">                                 all packets are marked as green)</span>
 <span class="sd">            index (int)        : index of the meter to set (first element is at 0)</span>
 <span class="sd">        </span>
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,</span>
 <span class="sd">            depending on the meter type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -991,13 +1019,13 @@
 <span class="sd">        Retrieve rates for a meter.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            meter_name (string): name of the meter</span>
+<span class="sd">            meter_name (str): name of the meter</span>
 <span class="sd">            index (int)        : index of the meter to read (first element is at 0)</span>
 <span class="sd">        </span>
 <span class="sd">        Return:</span>
 <span class="sd">            [(cir, cburst), (pir, pburst)] if meter is configured, None if meter is not configured</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,</span>
 <span class="sd">            depending on the meter type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1022,7 +1050,7 @@
 <span class="sd">            ports (list of int)    : list of port numbers to add to the multicast group</span>
 <span class="sd">            instances (list of int): list of instances of the corresponding ports</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            mgrp must be greater than 0.</span>
 
 <span class="sd">            A replica is a tuple (port, instance) which has to be unique within the </span>
@@ -1059,7 +1087,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            mgrp (int): multicast group id</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            mgrp must be greater than 0.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Destroying multicast group: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mgrp</span><span class="p">))</span>
@@ -1076,7 +1104,7 @@
 <span class="sd">            ports (list of int)    : list of port numbers to add to the multicast group</span>
 <span class="sd">            instances (list of int): list of instances of the corresponding ports</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            mgrp must be greater than 0.</span>
 
 <span class="sd">            A replica is a tuple (port, instance) which has to be unique within the </span>
@@ -1117,7 +1145,7 @@
 <span class="sd">            ports (list of int)    : list of port numbers of the multicast group</span>
 <span class="sd">            instances (list of int): list of instances of the corresponding ports</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            mgrp must be greater than 0.</span>
 
 <span class="sd">            A replica is a tuple (port, instance) which has to be unique within the </span>
@@ -1155,7 +1183,7 @@
 <span class="sd">            cos (int)              : Class of Service (see https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress)</span>
 <span class="sd">            packet_lentgth (int)   : maximal packet length in bytes (after which, packets are truncated)</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            A replica is a tuple (port, instance) which has to be unique within the </span>
 <span class="sd">            same multicast group. Instances can be explicitly assigned to ports by </span>
 <span class="sd">            passing the list instances to this function. If the list instances is not</span>
@@ -1212,7 +1240,7 @@
 <span class="sd">            cos (int)              : Class of Service (see https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress)</span>
 <span class="sd">            packet_lentgth (int)   : maximal packet length in bytes (after which, packets are truncated)</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            A replica is a tuple (port, instance) which has to be unique within the </span>
 <span class="sd">            same multicast group. Instances can be explicitly assigned to ports by </span>
 <span class="sd">            passing the list instances to this function. If the list instances is not</span>
@@ -1257,7 +1285,7 @@
 <span class="sd">            ports (list of int)    : list of port numbers of the clone session</span>
 <span class="sd">            instances (list of int): list of instances of the corresponding ports</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            A replica is a tuple (port, instance) which has to be unique within the </span>
 <span class="sd">            same multicast group. Instances can be explicitly assigned to ports by </span>
 <span class="sd">            passing the list instances to this function. If the list instances is not</span>
@@ -1287,7 +1315,7 @@
 <span class="sd">        Enable and configure the digests generation of the switch.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            digest_name (string): name of the digest (the name is shown in the P4 runtime information file</span>
+<span class="sd">            digest_name (str): name of the digest (the name is shown in the P4 runtime information file</span>
 <span class="sd">                                  generated by the compiler)</span>
 <span class="sd">            max_timeout_ns (int): the maximum server buffering delay in nanoseconds for an outstanding digest message</span>
 <span class="sd">            max_list_size (int) : the maximum digest list size — in number of digest messages — sent by the server</span>
@@ -1295,7 +1323,7 @@
 <span class="sd">            ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement </span>
 <span class="sd">                                  from the client before new digest messages can be generated for the same learned data</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:</span>
 <span class="sd">            digest&lt;named_struct_type&gt;(1, {struct_field_1, struct_field_2, ...}) where &#39;named_struct_type&#39; must </span>
 <span class="sd">            be explicited and previously defined. The name of the digest for the configuration&#39;s sake </span>
@@ -1323,7 +1351,7 @@
 <span class="sd">        Configure the digests generation of the switch.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            digest_name (string): name of the digest (the name is shown in the P4 runtime information file</span>
+<span class="sd">            digest_name (str): name of the digest (the name is shown in the P4 runtime information file</span>
 <span class="sd">                                  generated by the compiler)</span>
 <span class="sd">            max_timeout_ns (int): the maximum server buffering delay in nanoseconds for an outstanding digest message</span>
 <span class="sd">            max_list_size (int) : the maximum digest list size — in number of digest messages — sent by the server</span>
@@ -1331,7 +1359,7 @@
 <span class="sd">            ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement </span>
 <span class="sd">                                  from the client before new digest messages can be generated for the same learned data</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:</span>
 <span class="sd">            digest&lt;named_struct_type&gt;(1, {struct_field_1, struct_field_2, ...}) where &#39;named_struct_type&#39; must </span>
 <span class="sd">            be explicited and previously defined. The name of the digest for the configuration&#39;s sake </span>
@@ -1355,25 +1383,26 @@
 
 <div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.digest_get_conf"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_get_conf">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">digest_get_conf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Enable and configure the digests generation of the switch.</span>
+        <span class="sd">&quot;&quot;&quot;Enable and configure the digests generation of the switch.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            digest_name (string): name of the digest (the name is shown in the P4 runtime information file</span>
+<span class="sd">            digest_name (str): name of the digest (the name is shown in the P4 runtime information file</span>
 <span class="sd">                                  generated by the compiler)</span>
 
-<span class="sd">        Return:</span>
-<span class="sd">            max_timeout_ns (int): the maximum server buffering delay in nanoseconds for an outstanding digest message</span>
-<span class="sd">            max_list_size (int) : the maximum digest list size — in number of digest messages — sent by the server</span>
-<span class="sd">                                  to the client as a single DigestList Protobuf message</span>
-<span class="sd">            ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement </span>
-<span class="sd">                                  from the client before new digest messages can be generated for the same learned data</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: ``(max_timeout_ns, max_list_size, ack_timeout_ns)`` where:</span>
+<span class="sd">                   </span>
+<span class="sd">                   - ``max_timeout_ns`` is the maximum server buffering delay in nanoseconds for an outstanding digest message;</span>
+<span class="sd">                   - ``max_list_size`` is the maximum digest list size (in number of digest messages) sent by the server</span>
+<span class="sd">                     to the client as a single DigestList Protobuf message;</span>
+<span class="sd">                   - ``ack_timeout_ns`` is the timeout in nanoseconds that a server must wait for a digest list acknowledgement </span>
+<span class="sd">                     from the client before new digest messages can be generated for the same learned data.</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:</span>
-<span class="sd">            digest&lt;named_struct_type&gt;(1, {struct_field_1, struct_field_2, ...}) where &#39;named_struct_type&#39; must </span>
+<span class="sd">            ``digest&lt;named_struct_type&gt;(1, {struct_field_1, struct_field_2, ...})`` where ``named_struct_type`` must </span>
 <span class="sd">            be explicited and previously defined. The name of the digest for the configuration&#39;s sake </span>
-<span class="sd">            is the name of the struct type (i.e. &#39;named_struct_type&#39;).</span>
+<span class="sd">            is the name of the struct type (i.e. ``named_struct_type``).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enabling digest: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">digest_name</span><span class="p">))</span>
         <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DigestEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">)</span>

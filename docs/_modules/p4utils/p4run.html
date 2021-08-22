@@ -245,7 +245,7 @@
 <span class="sd">                &quot;cli&quot;: &lt;true|false&gt; (bool),</span>
 <span class="sd">                &quot;pcap_dump&quot;: &lt;true|false&gt; (bool),</span>
 <span class="sd">                &quot;enable_log&quot;: &lt;true|false&gt; (bool),</span>
-<span class="sd">                &quot;tasks_file&quot;: &lt;path to the tasks file&gt; (string)</span>
+<span class="sd">                &quot;tasks_file&quot;: &lt;path to the tasks file&gt; (string),</span>
 <span class="sd">                &quot;host_node&quot;:</span>
 <span class="sd">                {</span>
 <span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
@@ -298,7 +298,7 @@
 <span class="sd">                    &quot;default&quot;:</span>
 <span class="sd">                    {</span>
 <span class="sd">                        &lt;default links and hosts configurations, see parse_links&gt;</span>
-<span class="sd">                    }</span>
+<span class="sd">                    },</span>
 <span class="sd">                    &quot;links&quot;: </span>
 <span class="sd">                    [</span>
 <span class="sd">                        &lt;see parse_links&gt;</span>
@@ -352,25 +352,25 @@
 <span class="sd">        are imported and the related JSON syntax, please check out `this`__ helper function.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        cli_enabled (bool)      : enable an extension to *Mininet* CLI after the network starts.</span>
-<span class="sd">        log_enabled (bool)      : enable saving log files to the disk.</span>
-<span class="sd">        log_dir (string)        : directory used to store log files.</span>
-<span class="sd">        pcap_dump (bool)        : generate ``.pcap`` files for interfaces.</span>
-<span class="sd">        pcap_dir (string)       : directory where to store ``.pcap`` files.</span>
-<span class="sd">        hosts (dict)            : dictionary of host and their properties.</span>
-<span class="sd">        switches (dict)         : dictionary of switches and their properties.</span>
-<span class="sd">        routers (dict)          : dictionary of routers and their properties.</span>
-<span class="sd">        links (dict)            : dictionary of mininet links and their properties.</span>
-<span class="sd">        clients (list)          : list of *Thrift* clients (one per P4 switch) to populate tables.</span>
-<span class="sd">        compilers (list)        : list of compiler instances (one per P4 source provided) to compile P4 code.</span>
-<span class="sd">        conf (dict)             : parsed configuration from the JSON configuration file.</span>
-<span class="sd">        net (object)            : network instance implemented using an extension to *Mininet* network class.</span>
-<span class="sd">        host_node (class)       : extension to *Mininet* node class used as default host class.</span>
-<span class="sd">        switch_node (class)     : extension to *Mininet* switch node class used as default switch class.</span>
-<span class="sd">        router_node (class)     : extension to *Mininet* node class used as default router class.</span>
-<span class="sd">        mininet_module (class)  : extension to *Mininet* network class used to orchestrate the virtual network.</span>
-<span class="sd">        compiler_module (class) : compiler class used for P4 sources compilation.</span>
-<span class="sd">        client_module (class)   : *Thrift* client to program switches from command text files.    </span>
+<span class="sd">        cli_enabled (:py:class:`bool`)      : enable an extension to *Mininet* CLI after the network starts.</span>
+<span class="sd">        log_enabled (:py:class:`bool`)      : enable saving log files to the disk.</span>
+<span class="sd">        log_dir (:py:class:`str`)        : directory used to store log files.</span>
+<span class="sd">        pcap_dump (:py:class:`bool`)        : generate ``.pcap`` files for interfaces.</span>
+<span class="sd">        pcap_dir (:py:class:`str`)       : directory where to store ``.pcap`` files.</span>
+<span class="sd">        hosts (:py:class:`dict`)            : dictionary of host and their properties.</span>
+<span class="sd">        switches (:py:class:`dict`)         : dictionary of switches and their properties.</span>
+<span class="sd">        routers (:py:class:`dict`)          : dictionary of routers and their properties.</span>
+<span class="sd">        links (:py:class:`dict`)            : dictionary of mininet links and their properties.</span>
+<span class="sd">        clients (:py:class:`list`)          : list of *Thrift* clients (one per P4 switch) to populate tables.</span>
+<span class="sd">        compilers (:py:class:`list`)        : list of compiler instances (one per P4 source provided) to compile P4 code.</span>
+<span class="sd">        conf (:py:class:`dict`)             : parsed configuration from the JSON configuration file.</span>
+<span class="sd">        net (:py:class:`object`)            : network instance implemented using an extension to *Mininet* network class.</span>
+<span class="sd">        host_node (:py:obj:`class`)         : extension to *Mininet* node class used as default host class.</span>
+<span class="sd">        switch_node (:py:obj:`class`)       : extension to *Mininet* switch node class used as default switch class.</span>
+<span class="sd">        router_node (:py:obj:`class`)       : extension to *Mininet* node class used as default router class.</span>
+<span class="sd">        mininet_module (:py:obj:`class`)    : extension to *Mininet* network class used to orchestrate the virtual network.</span>
+<span class="sd">        compiler_module (:py:obj:`class`)   : compiler class used for P4 sources compilation.</span>
+<span class="sd">        client_module (:py:obj:`class`)     : *Thrift* client to program switches from command text files.    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf_file</span><span class="p">,</span>

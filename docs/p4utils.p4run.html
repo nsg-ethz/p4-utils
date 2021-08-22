@@ -229,7 +229,7 @@ the following:</p>
     <span class="s2">&quot;cli&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
     <span class="s2">&quot;pcap_dump&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
     <span class="s2">&quot;enable_log&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
-    <span class="s2">&quot;tasks_file&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">tasks</span> <span class="n">file</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="s2">&quot;tasks_file&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">tasks</span> <span class="n">file</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
     <span class="s2">&quot;host_node&quot;</span><span class="p">:</span>
     <span class="p">{</span>
         <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
@@ -282,7 +282,7 @@ the following:</p>
         <span class="s2">&quot;default&quot;</span><span class="p">:</span>
         <span class="p">{</span>
             <span class="o">&lt;</span><span class="n">default</span> <span class="n">links</span> <span class="ow">and</span> <span class="n">hosts</span> <span class="n">configurations</span><span class="p">,</span> <span class="n">see</span> <span class="n">parse_links</span><span class="o">&gt;</span>
-        <span class="p">}</span>
+        <span class="p">},</span>
         <span class="s2">&quot;links&quot;</span><span class="p">:</span>
         <span class="p">[</span>
             <span class="o">&lt;</span><span class="n">see</span> <span class="n">parse_links</span><span class="o">&gt;</span>
@@ -326,115 +326,115 @@ are imported and the related JSON syntax, please check out <a class="reference e
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.cli_enabled">
 <code class="descname">cli_enabled</code><a class="headerlink" href="#p4utils.p4run.AppRunner.cli_enabled" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool</em> – enable an extension to <em>Mininet</em> CLI after the network starts.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a> – enable an extension to <em>Mininet</em> CLI after the network starts.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.log_enabled">
 <code class="descname">log_enabled</code><a class="headerlink" href="#p4utils.p4run.AppRunner.log_enabled" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool</em> – enable saving log files to the disk.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a> – enable saving log files to the disk.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.log_dir">
 <code class="descname">log_dir</code><a class="headerlink" href="#p4utils.p4run.AppRunner.log_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>string</em> – directory used to store log files.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> – directory used to store log files.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.pcap_dump">
 <code class="descname">pcap_dump</code><a class="headerlink" href="#p4utils.p4run.AppRunner.pcap_dump" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool</em> – generate <code class="docutils literal"><span class="pre">.pcap</span></code> files for interfaces.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a> – generate <code class="docutils literal"><span class="pre">.pcap</span></code> files for interfaces.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.pcap_dir">
 <code class="descname">pcap_dir</code><a class="headerlink" href="#p4utils.p4run.AppRunner.pcap_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>string</em> – directory where to store <code class="docutils literal"><span class="pre">.pcap</span></code> files.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> – directory where to store <code class="docutils literal"><span class="pre">.pcap</span></code> files.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.hosts">
 <code class="descname">hosts</code><a class="headerlink" href="#p4utils.p4run.AppRunner.hosts" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>dict</em> – dictionary of host and their properties.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of host and their properties.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.switches">
 <code class="descname">switches</code><a class="headerlink" href="#p4utils.p4run.AppRunner.switches" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>dict</em> – dictionary of switches and their properties.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of switches and their properties.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.routers">
 <code class="descname">routers</code><a class="headerlink" href="#p4utils.p4run.AppRunner.routers" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>dict</em> – dictionary of routers and their properties.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of routers and their properties.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.links">
 <code class="descname">links</code><a class="headerlink" href="#p4utils.p4run.AppRunner.links" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>dict</em> – dictionary of mininet links and their properties.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of mininet links and their properties.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.clients">
 <code class="descname">clients</code><a class="headerlink" href="#p4utils.p4run.AppRunner.clients" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list</em> – list of <em>Thrift</em> clients (one per P4 switch) to populate tables.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> – list of <em>Thrift</em> clients (one per P4 switch) to populate tables.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.compilers">
 <code class="descname">compilers</code><a class="headerlink" href="#p4utils.p4run.AppRunner.compilers" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list</em> – list of compiler instances (one per P4 source provided) to compile P4 code.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> – list of compiler instances (one per P4 source provided) to compile P4 code.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.conf">
 <code class="descname">conf</code><a class="headerlink" href="#p4utils.p4run.AppRunner.conf" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>dict</em> – parsed configuration from the JSON configuration file.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – parsed configuration from the JSON configuration file.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.net">
 <code class="descname">net</code><a class="headerlink" href="#p4utils.p4run.AppRunner.net" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>object</em> – network instance implemented using an extension to <em>Mininet</em> network class.</p>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a> – network instance implemented using an extension to <em>Mininet</em> network class.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.host_node">
 <code class="descname">host_node</code><a class="headerlink" href="#p4utils.p4run.AppRunner.host_node" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>class</em> – extension to <em>Mininet</em> node class used as default host class.</p>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">class</span></code> – extension to <em>Mininet</em> node class used as default host class.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.switch_node">
 <code class="descname">switch_node</code><a class="headerlink" href="#p4utils.p4run.AppRunner.switch_node" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>class</em> – extension to <em>Mininet</em> switch node class used as default switch class.</p>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">class</span></code> – extension to <em>Mininet</em> switch node class used as default switch class.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.router_node">
 <code class="descname">router_node</code><a class="headerlink" href="#p4utils.p4run.AppRunner.router_node" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>class</em> – extension to <em>Mininet</em> node class used as default router class.</p>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">class</span></code> – extension to <em>Mininet</em> node class used as default router class.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.mininet_module">
 <code class="descname">mininet_module</code><a class="headerlink" href="#p4utils.p4run.AppRunner.mininet_module" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>class</em> – extension to <em>Mininet</em> network class used to orchestrate the virtual network.</p>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">class</span></code> – extension to <em>Mininet</em> network class used to orchestrate the virtual network.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.compiler_module">
 <code class="descname">compiler_module</code><a class="headerlink" href="#p4utils.p4run.AppRunner.compiler_module" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>class</em> – compiler class used for P4 sources compilation.</p>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">class</span></code> – compiler class used for P4 sources compilation.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.p4run.AppRunner.client_module">
 <code class="descname">client_module</code><a class="headerlink" href="#p4utils.p4run.AppRunner.client_module" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>class</em> – <em>Thrift</em> client to program switches from command text files.</p>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">class</span></code> – <em>Thrift</em> client to program switches from command text files.</p>
 </dd></dl>
 
 <dl class="method">

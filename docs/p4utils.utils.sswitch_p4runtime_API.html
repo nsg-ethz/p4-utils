@@ -193,8 +193,7 @@
 <dt id="p4utils.utils.sswitch_p4runtime_API.CounterType">
 <em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">CounterType</code><a class="reference internal" href="_modules/p4utils/utils/sswitch_p4runtime_API.html#CounterType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.CounterType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
-<p>Counter type according to P4 Runtime Specification.
-See  <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/57bb925a30df02b5c492c2a16c29b0014b98fa7a/proto/p4/config/v1/p4info.proto#L278">https://github.com/p4lang/p4runtime/blob/57bb925a30df02b5c492c2a16c29b0014b98fa7a/proto/p4/config/v1/p4info.proto#L278</a></p>
+<p>Counter type according to <em>P4 Runtime Specification</em>. See <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/57bb925a30df02b5c492c2a16c29b0014b98fa7a/proto/p4/config/v1/p4info.proto#L278">here</a> for details.</p>
 <dl class="attribute">
 <dt id="p4utils.utils.sswitch_p4runtime_API.CounterType.both">
 <code class="descname">both</code><em class="property"> = 3</em><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.CounterType.both" title="Permalink to this definition">¶</a></dt>
@@ -219,12 +218,46 @@ See  <a class="reference external" href="https://github.com/p4lang/p4runtime/blo
 
 <dl class="class">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI">
-<em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">SimpleSwitchP4RuntimeAPI</code><span class="sig-paren">(</span><em>device_id</em>, <em>grpc_port</em>, <em>grpc_ip='0.0.0.0'</em>, <em>p4rt_path=None</em>, <em>json_path=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_p4runtime_API.html#SimpleSwitchP4RuntimeAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">SimpleSwitchP4RuntimeAPI</code><span class="sig-paren">(</span><em>device_id</em>, <em>grpc_port</em>, <em>grpc_ip='0.0.0.0'</em>, <em>p4rt_path=None</em>, <em>json_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_p4runtime_API.html#SimpleSwitchP4RuntimeAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>For a better documentation of the primitives and the assumptions used,
-please take a look at:
-- P4Runtime Client repository
-- P4 Runtime Specification (<a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html">https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html</a>)</p>
+please take a look at:</p>
+<ul class="simple">
+<li><a class="reference external" href="p4utils.utils.p4runtime_API.html">P4Runtime API subpackage</a></li>
+<li><a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html">P4Runtime specification</a></li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>device_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – switch <em>id</em></li>
+<li><strong>grpc_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – grpc port the switch is listening on</li>
+<li><strong>grpc_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – grpc IP the switch is listening on</li>
+<li><strong>p4rt_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the P4Runtime Info file</li>
+<li><strong>json_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the P4 JSON compiled file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.9)"><code class="xref py py-exc docutils literal"><span class="pre">FileNotFoundError</span></code></a> – if <code class="docutils literal"><span class="pre">p4rt_path</span></code> or <code class="docutils literal"><span class="pre">json_path</span></code> are not specified, or invalid and
+the client cannot retrieve the relevant informations from the
+P4Runtime server.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.client">
+<code class="descname">client</code><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.client" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient" title="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient</span></code></a> – P4Runtime client instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.context">
+<code class="descname">context</code><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.context" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="p4utils.utils.p4runtime_API.context.html#p4utils.utils.p4runtime_API.context.Context" title="p4utils.utils.p4runtime_API.context.Context"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.context.Context</span></code></a> – P4Runtime context containing the information about all the P4 objects.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cd_get_replicas">
 <code class="descname">cd_get_replicas</code><span class="sig-paren">(</span><em>session_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_p4runtime_API.html#SimpleSwitchP4RuntimeAPI.cd_get_replicas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cd_get_replicas" title="Permalink to this definition">¶</a></dt>
@@ -242,13 +275,13 @@ instances (list of int): list of instances of the corresponding ports</td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>A replica is a tuple (port, instance) which has to be unique within the
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A replica is a tuple (port, instance) which has to be unique within the
 same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
-specified, then the instance number is set to 0 for all the replicas.</dd>
-</dl>
+specified, then the instance number is set to 0 for all the replicas.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -260,7 +293,7 @@ specified, then the instance number is set to 0 for all the replicas.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the counter</li>
+<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the counter</li>
 <li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index of the counter to read (first element is at 0)</li>
 </ul>
 </td>
@@ -274,12 +307,12 @@ packet_count (int)          : number of packets counted</p>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>P4Runtime does not distinguish between the different PSA counter types, i.e. counters are
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">P4Runtime does not distinguish between the different PSA counter types, i.e. counters are
 always considered of PACKETS_AND_BYTES and both values are returned. It is user’s responsability
-to use only the correct value (see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry">https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry</a>).</dd>
-</dl>
+to use only the correct value (see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry">https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry</a>).</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -290,7 +323,7 @@ to use only the correct value (see <a class="reference external" href="https://p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the counter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the counter</td>
 </tr>
 </tbody>
 </table>
@@ -305,7 +338,7 @@ to use only the correct value (see <a class="reference external" href="https://p
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the counter</li>
+<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the counter</li>
 <li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index of the counter to write (first element is at 0)</li>
 <li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of packets to write (default: 0)</li>
 <li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of bytes to write (default: 0)</li>
@@ -314,13 +347,13 @@ to use only the correct value (see <a class="reference external" href="https://p
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>There are three types of counters:
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are three types of counters:
 - BYTES, only the field ‘byts’ is written and the value of ‘pkts’ is ignored
 - PACKETS, only the field ‘pkts’ is written and the value of ‘byts’ is ignored
-- PACKETS_AND_BYTES, both ‘byts’ and ‘pkts’ are written</dd>
-</dl>
+- PACKETS_AND_BYTES, both ‘byts’ and ‘pkts’ are written</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -342,17 +375,16 @@ to use only the correct value (see <a class="reference external" href="https://p
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd><p class="first">A replica is a tuple (port, instance) which has to be unique within the
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>A replica is a tuple (port, instance) which has to be unique within the
 same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
 specified, then the instance number is set to 0 for all the replicas.</p>
 <p>By default, the packet_length is set to 0 i.e. no truncation happens and
 class of service is set to 0 (normal packet classification).</p>
 <p class="last">If ports is an empty list, then the packets are not cloned to any port.</p>
-</dd>
-</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -388,17 +420,16 @@ class of service is set to 0 (normal packet classification).</p>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd><p class="first">A replica is a tuple (port, instance) which has to be unique within the
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>A replica is a tuple (port, instance) which has to be unique within the
 same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
 specified, then the instance number is set to 0 for all the replicas.</p>
 <p>By default, the packet_length is set to 0 i.e. no truncation happens and
 class of service is set to 0 (normal packet classification).</p>
 <p class="last">If ports is an empty list, then the packets are not cloned to any port.</p>
-</dd>
-</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -410,7 +441,7 @@ class of service is set to 0 (normal packet classification).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the digest (the name is shown in the P4 runtime information file
+<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
 generated by the compiler)</li>
 <li><strong>max_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum server buffering delay in nanoseconds for an outstanding digest message</li>
 <li><strong>max_list_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum digest list size — in number of digest messages — sent by the server
@@ -422,9 +453,9 @@ from the client before new digest messages can be generated for the same learned
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd><p class="first">P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
 digest&lt;named_struct_type&gt;(1, {struct_field_1, struct_field_2, …}) where ‘named_struct_type’ must
 be explicited and previously defined. The name of the digest for the configuration’s sake
 is the name of the struct type (i.e. ‘named_struct_type’).</p>
@@ -434,8 +465,7 @@ By default, max_list_size is set to 1, i.e. the server should generate a DigestL
 message for every digest message generated by the data plane.
 By default, ack_timeout_ns is set to 0, i.e. the cache of digests not yet acknowledged must
 always be an empty set.</p>
-</dd>
-</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -446,29 +476,31 @@ always be an empty set.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the digest (the name is shown in the P4 runtime information file
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
 generated by the compiler)</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the maximum server buffering delay in nanoseconds for an outstanding digest message
-max_list_size (int) : the maximum digest list size — in number of digest messages — sent by the server<blockquote>
-<div>to the client as a single DigestList Protobuf message</div></blockquote>
-<dl class="docutils">
-<dt>ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement</dt>
-<dd>from the client before new digest messages can be generated for the same learned data</dd>
-</dl>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">(max_timeout_ns,</span> <span class="pre">max_list_size,</span> <span class="pre">ack_timeout_ns)</span></code> where:<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">max_timeout_ns</span></code> is the maximum server buffering delay in nanoseconds for an outstanding digest message;</li>
+<li><code class="docutils literal"><span class="pre">max_list_size</span></code> is the maximum digest list size (in number of digest messages) sent by the server
+to the client as a single DigestList Protobuf message;</li>
+<li><code class="docutils literal"><span class="pre">ack_timeout_ns</span></code> is the timeout in nanoseconds that a server must wait for a digest list acknowledgement
+from the client before new digest messages can be generated for the same learned data.</li>
+</ul>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">max_timeout_ns (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>)</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
-digest&lt;named_struct_type&gt;(1, {struct_field_1, struct_field_2, …}) where ‘named_struct_type’ must
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
+<code class="docutils literal"><span class="pre">digest&lt;named_struct_type&gt;(1,</span> <span class="pre">{struct_field_1,</span> <span class="pre">struct_field_2,</span> <span class="pre">...})</span></code> where <code class="docutils literal"><span class="pre">named_struct_type</span></code> must
 be explicited and previously defined. The name of the digest for the configuration’s sake
-is the name of the struct type (i.e. ‘named_struct_type’).</dd>
-</dl>
+is the name of the struct type (i.e. <code class="docutils literal"><span class="pre">named_struct_type</span></code>).</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -480,7 +512,7 @@ is the name of the struct type (i.e. ‘named_struct_type’).</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the digest (the name is shown in the P4 runtime information file
+<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
 generated by the compiler)</li>
 <li><strong>max_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum server buffering delay in nanoseconds for an outstanding digest message</li>
 <li><strong>max_list_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum digest list size — in number of digest messages — sent by the server
@@ -492,9 +524,9 @@ from the client before new digest messages can be generated for the same learned
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd><p class="first">P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
 digest&lt;named_struct_type&gt;(1, {struct_field_1, struct_field_2, …}) where ‘named_struct_type’ must
 be explicited and previously defined. The name of the digest for the configuration’s sake
 is the name of the struct type (i.e. ‘named_struct_type’).</p>
@@ -504,8 +536,7 @@ By default, max_list_size is set to 1, i.e. the server should generate a DigestL
 message for every digest message generated by the data plane.
 By default, ack_timeout_ns is set to 0, i.e. the cache of digests not yet acknowledged must
 always be an empty set.</p>
-</dd>
-</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -517,7 +548,7 @@ always be an empty set.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the direct counter</li>
+<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct counter</li>
 <li><strong>match_keys</strong> (<em>list of strings</em>) – values to match (used to identify the table
 entry to which the direct counter is attached)</li>
 <li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match (used to identify the table
@@ -534,12 +565,12 @@ packet_count (int)          : number of packets counted</p>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>P4Runtime does not distinguish between the different PSA counter types, i.e. counters are
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">P4Runtime does not distinguish between the different PSA counter types, i.e. counters are
 always considered of PACKETS_AND_BYTES and both values are returned. It is user’s responsability
-to use only the correct value (see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry">https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry</a>).</dd>
-</dl>
+to use only the correct value (see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry">https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry</a>).</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -550,7 +581,7 @@ to use only the correct value (see <a class="reference external" href="https://p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the direct counter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct counter</td>
 </tr>
 </tbody>
 </table>
@@ -565,7 +596,7 @@ to use only the correct value (see <a class="reference external" href="https://p
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the direct counter</li>
+<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct counter</li>
 <li><strong>match_keys</strong> (<em>list of strings</em>) – values to match (used to identify the table
 entry to which the direct counter is attached)</li>
 <li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match (used to identify the table
@@ -577,13 +608,13 @@ entry to which the direct counter is attached)</li>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>There are three types of counters:
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are three types of counters:
 - BYTES, only the field ‘byts’ is written and the value of ‘pkts’ is ignored
 - PACKETS, only the field ‘pkts’ is written and the value of ‘byts’ is ignored
-- PACKETS_AND_BYTES, both ‘byts’ and ‘pkts’ are written</dd>
-</dl>
+- PACKETS_AND_BYTES, both ‘byts’ and ‘pkts’ are written</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -595,18 +626,18 @@ entry to which the direct counter is attached)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the direct meter</li>
+<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct meter</li>
 <li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – [(cir, cburst), (pir, pburst)]</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
-depending on the meter type.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+depending on the meter type.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -618,7 +649,7 @@ depending on the meter type.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the direct meter</li>
+<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct meter</li>
 <li><strong>match_keys</strong> (<em>list of strings</em>) – values to match (used to identify the table
 entry to which the direct meter is attached)</li>
 <li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match (used to identify the table</li>
@@ -630,11 +661,11 @@ entry to which the direct meter is attached)</li>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
-depending on the meter type.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+depending on the meter type.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -646,7 +677,7 @@ depending on the meter type.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the direct meter</li>
+<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct meter</li>
 <li><strong>match_keys</strong> (<em>list of strings</em>) – values to match (used to identify the table
 entry to which the direct meter is attached)</li>
 <li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match (used to identify the table
@@ -658,35 +689,33 @@ all packets are marked as green)</li>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
-depending on the meter type.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+depending on the meter type.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list">
 <code class="descname">get_digest_list</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_p4runtime_API.html#SimpleSwitchP4RuntimeAPI.get_digest_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for P4RuntimeClient.get_digest_list in p4runtime.py
-Retrieve DigestList and send back acknowledgment.</p>
+<dd><p>Retrieve <code class="docutils literal"><span class="pre">DigestList</span></code> and send back acknowledgment.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – time to wait for packet, if set to None,
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – time to wait for packet, if set to <strong>None</strong>,
 the function will wait indefinitely</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DigestList packet (protobuf message) or None if the timeout has
-expired and no packet has been received.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">DigestList</span></code> Protobuf Message or <strong>None</strong> if the timeout has expired and
+no packet has been received.</td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>See <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543">https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543</a>
-for further details.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543">here</a> for further details.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -706,15 +735,14 @@ instances (list of int): list of instances of the corresponding ports</td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd><p class="first">mgrp must be greater than 0.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>mgrp must be greater than 0.</p>
 <p class="last">A replica is a tuple (port, instance) which has to be unique within the
 same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
 specified, then the instance number is set to 0 for all the replicas.</p>
-</dd>
-</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -734,16 +762,15 @@ specified, then the instance number is set to 0 for all the replicas.</p>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd><p class="first">mgrp must be greater than 0.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>mgrp must be greater than 0.</p>
 <p>A replica is a tuple (port, instance) which has to be unique within the
 same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
 specified, then the instance number is set to 0 for all the replicas.</p>
 <p class="last">If ports is an empty list, then the packets are not multicasted to any port.</p>
-</dd>
-</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -758,10 +785,10 @@ specified, then the instance number is set to 0 for all the replicas.</p>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>mgrp must be greater than 0.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">mgrp must be greater than 0.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -781,16 +808,15 @@ specified, then the instance number is set to 0 for all the replicas.</p>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd><p class="first">mgrp must be greater than 0.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>mgrp must be greater than 0.</p>
 <p>A replica is a tuple (port, instance) which has to be unique within the
 same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
 specified, then the instance number is set to 0 for all the replicas.</p>
 <p class="last">If ports is an empty list, then the packets are not multicasted to any port.</p>
-</dd>
-</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -802,18 +828,18 @@ specified, then the instance number is set to 0 for all the replicas.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the meter</li>
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the meter</li>
 <li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – [(cir, cburst), (pir, pburst)]</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
-depending on the meter type.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+depending on the meter type.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -825,7 +851,7 @@ depending on the meter type.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the meter</li>
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the meter</li>
 <li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index of the meter to read (first element is at 0)</li>
 </ul>
 </td>
@@ -835,11 +861,11 @@ depending on the meter type.</dd>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
-depending on the meter type.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+depending on the meter type.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -851,7 +877,7 @@ depending on the meter type.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the meter</li>
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the meter</li>
 <li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – [(cir, cburst), (pir, pburst)] (default: None, i.e.
 all packets are marked as green)</li>
 <li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index of the meter to set (first element is at 0)</li>
@@ -860,11 +886,11 @@ all packets are marked as green)</li>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
-depending on the meter type.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
+depending on the meter type.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -880,23 +906,26 @@ depending on the meter type.</dd>
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state">
 <code class="descname">reset_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_p4runtime_API.html#SimpleSwitchP4RuntimeAPI.reset_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reset the grpc server of switch by establishing a new ForwardingPipelineConfig.
-This method is buggy, please read the following warnings.</p>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd><p class="first">Due to some bug in the implementation of the grpc server, this command
-does not fully erase all the forwarding state of the switch, but only resets its
-grpc server. Therefore, it is recommended to use TriftAPI.reset_state()
-to reset the forwarding states. Moreover, please notice that if you only use
-the ThriftAPI to reset the switch, the grpc server will not be reset.
-So in order, to do the things properly both methods need to be called
-(the one from ThriftAPI and the one from SimpleSwitchP4RuntimeAPI).</p>
-<p class="last">For further details about this method, please check
-<a class="reference external" href="https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668">https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668</a>
-Indeed, this method sends to the server a SetForwardingPipelineConfigRequest with
-action VERIFY_AND_COMMIT.</p>
-</dd>
-</dl>
+<dd><p>Resets the gRPC server of switch by establishing a new <code class="docutils literal"><span class="pre">ForwardingPipelineConfig</span></code>.</p>
+<p>For further details about this method, please check <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668">this</a>. Indeed,
+this method sends to the server a <code class="docutils literal"><span class="pre">SetForwardingPipelineConfigRequest</span></code> with
+action <code class="docutils literal"><span class="pre">VERIFY_AND_COMMIT</span></code>.</p>
+<p>This method is buggy, please read the following warnings.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Due to some bug in the implementation of the gRPC server, this command
+does not fully erase all the forwarding state of the switch, but only resets the
+server.</li>
+<li>It is recommended to use <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.reset_state" title="p4utils.utils.thrift_API.ThriftAPI.reset_state"><code class="xref py py-meth docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI.reset_state()</span></code></a>
+to reset the forwarding states. Moreover, if you only use
+the <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI</span></code></a> to reset the switch,
+the gRPC server will not be reset.</li>
+<li>To do things properly, both methods need to be called
+(the one from <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI</span></code></a> and the one from
+<a class="reference internal" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchP4RuntimeAPI</span></code></a>).</li>
+</ul>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -908,53 +937,54 @@ action VERIFY_AND_COMMIT.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the table</li>
-<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – action to execute on hit</li>
-<li><strong>match_keys</strong> (<em>list of strings</em>) – values to match</li>
-<li><strong>action_params</strong> (<em>list of strings</em>) – parameters passed to action</li>
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – action to execute on hit</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – parameters passed to action (each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
 <li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (if <strong>None</strong>, the meter
+is set to its default behavior, i.e. marks
+all packets as <strong>GREEN</strong>)</li>
+<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of packets to write (if <strong>None</strong>, the count
+is not changed)</li>
+<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of bytes to write (if <strong>None</strong>, the count
+is not changed)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>If a direct meter is attached to the table</dt>
-<dd><dl class="first last docutils">
-<dt>rates (list) <span class="classifier-delimiter">:</span> <span class="classifier">[(cir, cburst), (pir, pburst)] (if None, the meter</span></dt>
-<dd>is set to its default behavior, i.e. marks
-all packets as GREEN)</dd>
-</dl>
-</dd>
-<dt>If a direct counter is attached to the table</dt>
-<dd><dl class="first last docutils">
-<dt>pkts (int) <span class="classifier-delimiter">:</span> <span class="classifier">number of packets to write (if None, the count</span></dt>
-<dd>is not changed)</dd>
-<dt>byts (int) <span class="classifier-delimiter">:</span> <span class="classifier">number of bytes to write (if None, the count</span></dt>
-<dd>is not changed)</dd>
-</dl>
-</dd>
-<dt>Different kinds of matches:</dt>
-<dd><ul class="first last simple">
-<li>For exact match: ‘&lt;value&gt;’</li>
-<li>For ternary match: ‘&lt;value&gt;&amp;&amp;&amp;&lt;mask&gt;’</li>
-<li>For LPM match: ‘&lt;value&gt;/&lt;mask&gt;’</li>
-<li>For range match: ‘&lt;start&gt;..&lt;end&gt;’</li>
+<p>There are different kinds of matches:</p>
+<ul class="simple">
+<li>For <em>exact</em> match: <code class="docutils literal"><span class="pre">&lt;value&gt;</span></code></li>
+<li>For <em>ternary</em> match: <code class="docutils literal"><span class="pre">&lt;value&gt;&amp;&amp;&amp;&lt;mask&gt;</span></code></li>
+<li>For <em>LPM</em> match: <code class="docutils literal"><span class="pre">&lt;value&gt;/&lt;mask&gt;</span></code></li>
+<li>For <em>range</em> match: <code class="docutils literal"><span class="pre">&lt;start&gt;..&lt;end&gt;</span></code></li>
 </ul>
-</dd>
-<dt>Notice:</dt>
-<dd><p class="first">The priority field must be set to a non-zero value if the match key includes
-a ternary match (i.e. in the case of PSA if the P4Info entry for the table
-indicates that one or more of its match fields has an OPTIONAL, TERNARY or
-RANGE match type) or to zero otherwise. A higher priority number indicates
-that the entry must be given higher priority when performing a table lookup.
-(see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry">https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry</a>)</p>
-<p class="last">There are three types of counters:
-- BYTES, only the field ‘byts’ is written and the value of ‘pkts’ is ignored
-- PACKETS, only the field ‘pkts’ is written and the value of ‘byts’ is ignored
-- PACKETS_AND_BYTES, both ‘byts’ and ‘pkts’ are written</p>
-</dd>
-</dl>
+<p>There are three types of <em>counters</em>:</p>
+<ul class="simple">
+<li><strong>BYTES</strong>, only the field <code class="docutils literal"><span class="pre">byts</span></code> is written and the value of <code class="docutils literal"><span class="pre">pkts</span></code> is ignored.</li>
+<li><strong>PACKETS</strong>, only the field <code class="docutils literal"><span class="pre">pkts</span></code> is written and the value of <code class="docutils literal"><span class="pre">byts</span></code> is ignored.</li>
+<li><strong>PACKETS_AND_BYTES</strong>, both <code class="docutils literal"><span class="pre">byts</span></code> and <code class="docutils literal"><span class="pre">pkts</span></code> are written.</li>
+</ul>
+<p>There are two types of <em>meters</em>:</p>
+<ul class="simple">
+<li><strong>BYTES</strong>, <code class="docutils literal"><span class="pre">rates</span></code> must be expressed in number of bytes per second.</li>
+<li><strong>PACKETS</strong>, <code class="docutils literal"><span class="pre">rates</span></code> must be expressed in number of packets per second.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>The <code class="docutils literal"><span class="pre">rates</span></code> field only applies if there is a direct meter attached
+to the table.</li>
+<li>The <code class="docutils literal"><span class="pre">pkts</span></code> and <code class="docutils literal"><span class="pre">byts</span></code> fields only apply if there is a direct counter
+attached to the table.</li>
+<li>The <code class="docutils literal"><span class="pre">prio</span></code> field must be set to a non-zero value if the match key includes
+a ternary match or to zero otherwise.</li>
+<li>A higher <code class="docutils literal"><span class="pre">prio</span></code> number indicates that the entry must be given higher
+priority when performing a table lookup (see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry">here</a> for details).</li>
+</ul>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -965,7 +995,7 @@ that the entry must be given higher priority when performing a table lookup.
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the table</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</td>
 </tr>
 </tbody>
 </table>
@@ -980,7 +1010,7 @@ that the entry must be given higher priority when performing a table lookup.
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the table</li>
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
 <li><strong>match_keys</strong> (<em>list of strings</em>) – values to match</li>
 <li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match</li>
 </ul>
@@ -999,8 +1029,8 @@ that the entry must be given higher priority when performing a table lookup.
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the table</li>
-<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – action to execute on hit</li>
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – action to execute on hit</li>
 <li><strong>match_keys</strong> (<em>list of strings</em>) – values to match</li>
 <li><strong>action_params</strong> (<em>list of strings</em>) – parameters passed to action</li>
 <li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match</li>
@@ -1025,16 +1055,17 @@ all packets as GREEN)</dd>
 <dd>is not changed)</dd>
 </dl>
 </dd>
-<dt>Notice:</dt>
-<dd><p class="first">When modifying the default entry, the configurations for
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>When modifying the default entry, the configurations for
 its direct resources will be reset to their defaults
 (see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources">https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources</a>).</p>
 <p class="last">There are three types of counters:
 - BYTES, only the field ‘byts’ is written and the value of ‘pkts’ is ignored
 - PACKETS, only the field ‘pkts’ is written and the value of ‘byts’ is ignored
 - PACKETS_AND_BYTES, both ‘byts’ and ‘pkts’ are written</p>
-</dd>
-</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1045,16 +1076,16 @@ its direct resources will be reset to their defaults
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the table</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>When resetting the default entry, the configurations for
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When resetting the default entry, the configurations for
 its direct resources will be reset to their defaults
-(see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-default-entry">https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-default-entry</a>).</dd>
-</dl>
+(see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-default-entry">https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-default-entry</a>).</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1066,23 +1097,24 @@ its direct resources will be reset to their defaults
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the table</li>
-<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – action to execute on hit</li>
-<li><strong>action_params</strong> (<em>list of strings</em>) – parameters passed to action</li>
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – action to execute on hit</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – parameters passed to action
+(each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd><p class="first">When setting the default entry, the configurations for
-its direct resources will be reset to their defaults
-(see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources">https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources</a>).</p>
-<p class="last">However, for the current implementation the specification is not followed and
-direct resources are not reset when modifying a table entry.</p>
-</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>When setting the default entry, the configurations for
+its direct resources will be reset to their defaults, according to <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources">this</a>.</li>
+<li>However, for the current implementation, the specification is not followed and
+direct resources are not reset when modifying a table entry.</li>
+</ul>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1096,8 +1128,8 @@ direct resources are not reset when modifying a table entry.</p>
 <dl class="function">
 <dt id="p4utils.utils.sswitch_p4runtime_API.handle_bad_input">
 <code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">handle_bad_input</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_p4runtime_API.html#handle_bad_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.handle_bad_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handle bad input and return True if the function was correctly executed,
-and False if it was not.</p>
+<dd><p>Handles bad input and returns <strong>True</strong> if the function was
+correctly executed, and <strong>False</strong> if it was not.</p>
 </dd></dl>
 
 </div>

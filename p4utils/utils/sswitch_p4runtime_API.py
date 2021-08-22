@@ -9,19 +9,19 @@ import p4utils.utils.p4runtime_API.api as api
 
 @enum.unique
 class CounterType(enum.Enum):
-    """
-    Counter type according to P4 Runtime Specification.
-    See  https://github.com/p4lang/p4runtime/blob/57bb925a30df02b5c492c2a16c29b0014b98fa7a/proto/p4/config/v1/p4info.proto#L278
+    """Counter type according to *P4 Runtime Specification*. See `here`__ for details.
+
+    __ https://github.com/p4lang/p4runtime/blob/57bb925a30df02b5c492c2a16c29b0014b98fa7a/proto/p4/config/v1/p4info.proto#L278
     """
     unspecified = 0
     bytes = 1
     packets = 2
     both = 3
 
+
 def handle_bad_input(f):
-    """
-    Handle bad input and return True if the function was correctly executed,
-    and False if it was not.
+    """Handles bad input and returns **True** if the function was 
+    correctly executed, and **False** if it was not.
     """
     @wraps(f)
     def handle(*args, **kwargs):
@@ -33,19 +33,40 @@ def handle_bad_input(f):
             return False
     return handle
 
+
 class SimpleSwitchP4RuntimeAPI:
-    """
-    For a better documentation of the primitives and the assumptions used,
+    """For a better documentation of the primitives and the assumptions used,
     please take a look at:
-    - P4Runtime Client repository
-    - P4 Runtime Specification (https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html)
+
+    - __ p4utils.utils.p4runtime_API.html
+    
+      `P4Runtime API subpackage`__
+
+    - __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html
+
+      `P4Runtime specification`__
+    
+    Args:
+        device_id (int): switch *id*
+        grpc_port (int): grpc port the switch is listening on
+        grpc_ip (int)  : grpc IP the switch is listening on
+        p4rt_path (str): path to the P4Runtime Info file
+        json_path (str): path to the P4 JSON compiled file
+    
+    Raises:
+        FileNotFoundError: if ``p4rt_path`` or ``json_path`` are not specified, or invalid and
+                           the client cannot retrieve the relevant informations from the
+                           P4Runtime server.
+
+    Attributes:
+        client (:py:class:`p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient`)  : P4Runtime client instance.
+        context (:py:class:`p4utils.utils.p4runtime_API.context.Context`)           : P4Runtime context containing the information about all the P4 objects.
     """
     def __init__(self, device_id,
                  grpc_port,
                  grpc_ip='0.0.0.0',
                  p4rt_path=None,
-                 json_path=None,
-                 **kwargs):
+                 json_path=None):
     
         self.device_id = device_id
         self.grpc_port = grpc_port
@@ -86,23 +107,29 @@ class SimpleSwitchP4RuntimeAPI:
         return params_dict
 
     def reset_state(self):
-        """
-        Reset the grpc server of switch by establishing a new ForwardingPipelineConfig.
+        """Resets the gRPC server of switch by establishing a new ``ForwardingPipelineConfig``.
+
+        __ https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668
+            
+        For further details about this method, please check `this`__. Indeed, 
+        this method sends to the server a ``SetForwardingPipelineConfigRequest`` with
+        action ``VERIFY_AND_COMMIT``.
+
         This method is buggy, please read the following warnings.
 
-        Notice:
-            Due to some bug in the implementation of the grpc server, this command
-            does not fully erase all the forwarding state of the switch, but only resets its
-            grpc server. Therefore, it is recommended to use TriftAPI.reset_state() 
-            to reset the forwarding states. Moreover, please notice that if you only use
-            the ThriftAPI to reset the switch, the grpc server will not be reset.
-            So in order, to do the things properly both methods need to be called 
-            (the one from ThriftAPI and the one from SimpleSwitchP4RuntimeAPI).
-
-            For further details about this method, please check
-            https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668
-            Indeed, this method sends to the server a SetForwardingPipelineConfigRequest with
-            action VERIFY_AND_COMMIT.
+        Note:
+            - Due to some bug in the implementation of the gRPC server, this command
+              does not fully erase all the forwarding state of the switch, but only resets the
+              server. 
+            
+            - It is recommended to use :py:meth:`p4utils.utils.thrift_API.ThriftAPI.reset_state()` 
+              to reset the forwarding states. Moreover, if you only use
+              the :py:class:`p4utils.utils.thrift_API.ThriftAPI` to reset the switch, 
+              the gRPC server will not be reset.
+            
+            - To do things properly, both methods need to be called 
+              (the one from :py:class:`p4utils.utils.thrift_API.ThriftAPI` and the one from 
+              :py:class:`SimpleSwitchP4RuntimeAPI`).
         """
         if not os.path.isfile(self.p4rt_path):
             raise FileNotFoundError('No P4 runtime information file provided.')
@@ -118,72 +145,75 @@ class SimpleSwitchP4RuntimeAPI:
                                               config=api.FwdPipeConfig(self.p4rt_path, self.json_path))
 
     def teardown(self):
-        """
-        Tear down grpc connection with the switch server.
-        """
+        """Tear down grpc connection with the switch server."""
         api.teardown(self.client)
     
     def get_digest_list(self, timeout=None):
-        """
-        Alias for P4RuntimeClient.get_digest_list in p4runtime.py
-        Retrieve DigestList and send back acknowledgment.
+        """Retrieve ``DigestList`` and send back acknowledgment.
 
         Args:
-            timeout (int or None): time to wait for packet, if set to None,
+            timeout (int or None): time to wait for packet, if set to **None**,
                                    the function will wait indefinitely
 
         Return:
-            DigestList packet (protobuf message) or None if the timeout has
-            expired and no packet has been received.
+            ``DigestList`` Protobuf Message or **None** if the timeout has expired and 
+            no packet has been received.
         
-        Notice:
-            See https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543
-            for further details.
+        Note:
+            __ https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543
+
+            See `here`__ for further details.
         """
         return self.client.get_digest_list(timeout)
 
     ## Tables
     @handle_bad_input
     def table_add(self, table_name, action_name, match_keys, action_params=[], prio=0, rates=None, pkts=None, byts=None):
-        """
-        Add entry to a match table.
+        """Add entry to a match table.
 
         Args:
-            table_name (string)             : name of the table
-            action_name (string)            : action to execute on hit
-            match_keys (list of strings)    : values to match
-            action_params (list of strings) : parameters passed to action
+            table_name (str)             : name of the table
+            action_name (str)            : action to execute on hit
+            match_keys (list)               : values to match (each value is a :py:class:`str`)
+            action_params (list)            : parameters passed to action (each parameter is a :py:class:`str`)
             prio (int)                      : priority in ternary match
-        
-        If a direct meter is attached to the table
-            rates (list)                    : [(cir, cburst), (pir, pburst)] (if None, the meter
+            rates (list)                    : ``[(cir, cburst), (pir, pburst)]`` (if **None**, the meter
                                               is set to its default behavior, i.e. marks
-                                              all packets as GREEN)
-
-        If a direct counter is attached to the table
-            pkts (int)                      : number of packets to write (if None, the count
+                                              all packets as **GREEN**)
+            pkts (int)                      : number of packets to write (if **None**, the count
                                               is not changed)
-            byts (int)                      : number of bytes to write (if None, the count
+            byts (int)                      : number of bytes to write (if **None**, the count
                                               is not changed)
         
-        Different kinds of matches:
-            * For exact match: '<value>'
-            * For ternary match: '<value>&&&<mask>'
-            * For LPM match: '<value>/<mask>'
-            * For range match: '<start>..<end>'
+        There are different kinds of matches:
 
-        Notice:
-            The priority field must be set to a non-zero value if the match key includes 
-            a ternary match (i.e. in the case of PSA if the P4Info entry for the table 
-            indicates that one or more of its match fields has an OPTIONAL, TERNARY or 
-            RANGE match type) or to zero otherwise. A higher priority number indicates 
-            that the entry must be given higher priority when performing a table lookup. 
-            (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry)
+        - For *exact* match: ``<value>``
+        - For *ternary* match: ``<value>&&&<mask>``
+        - For *LPM* match: ``<value>/<mask>``
+        - For *range* match: ``<start>..<end>``
 
-            There are three types of counters:
-            - BYTES, only the field 'byts' is written and the value of 'pkts' is ignored
-            - PACKETS, only the field 'pkts' is written and the value of 'byts' is ignored
-            - PACKETS_AND_BYTES, both 'byts' and 'pkts' are written
+        There are three types of *counters*:
+
+        - **BYTES**, only the field ``byts`` is written and the value of ``pkts`` is ignored.
+        - **PACKETS**, only the field ``pkts`` is written and the value of ``byts`` is ignored.
+        - **PACKETS_AND_BYTES**, both ``byts`` and ``pkts`` are written.
+
+        There are two types of *meters*:
+
+        - **BYTES**, ``rates`` must be expressed in number of bytes per second.
+        - **PACKETS**, ``rates`` must be expressed in number of packets per second.
+
+        Note:
+            - The ``rates`` field only applies if there is a direct meter attached
+              to the table.
+            - The ``pkts`` and ``byts`` fields only apply if there is a direct counter
+              attached to the table.
+            - The ``prio`` field must be set to a non-zero value if the match key includes 
+              a ternary match or to zero otherwise.
+            - __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry
+
+              A higher ``prio`` number indicates that the entry must be given higher
+              priority when performing a table lookup (see `here`__ for details).
         """
         print('Adding entry to: '+table_name)
         if not isinstance(match_keys, list):
@@ -253,21 +283,22 @@ class SimpleSwitchP4RuntimeAPI:
 
     @handle_bad_input
     def table_set_default(self, table_name, action_name, action_params=[]):
-        """
-        Set default action for a match table.
+        """Set default action for a match table.
         
         Args:
-            table_name (string)             : name of the table
-            action_name (string)            : action to execute on hit
-            action_params (list of strings) : parameters passed to action
+            table_name (str)             : name of the table
+            action_name (str)            : action to execute on hit
+            action_params (list)         : parameters passed to action 
+                                           (each parameter is a :py:class:`str`)
 
-        Notice:
-            When setting the default entry, the configurations for
-            its direct resources will be reset to their defaults
-            (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources).
+        Note:
+            __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources
             
-            However, for the current implementation the specification is not followed and
-            direct resources are not reset when modifying a table entry.
+            - When setting the default entry, the configurations for
+              its direct resources will be reset to their defaults, according to `this`__.
+            
+            - However, for the current implementation, the specification is not followed and
+              direct resources are not reset when modifying a table entry.
         """
         print('Adding default action to: '+table_name)
         if not isinstance(action_params, list):
@@ -284,13 +315,12 @@ class SimpleSwitchP4RuntimeAPI:
 
     @handle_bad_input
     def table_reset_default(self, table_name):
-        """
-        Reset default action for a match table.
+        """Reset default action for a match table.
         
         Args:
-            table_name (string)             : name of the table
+            table_name (str): name of the table
 
-        Notice:
+        Note:
             When resetting the default entry, the configurations for
             its direct resources will be reset to their defaults
             (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-default-entry).
@@ -301,11 +331,10 @@ class SimpleSwitchP4RuntimeAPI:
 
     @handle_bad_input
     def table_delete_match(self, table_name, match_keys, prio=None):
-        """
-        Delete an existing entry in a table.
+        """Delete an existing entry in a table.
 
         Args:
-            table_name (string)             : name of the table
+            table_name (str)             : name of the table
             match_keys (list of strings)    : values to match
             prio (int)                      : priority in ternary match
         """
@@ -328,12 +357,11 @@ class SimpleSwitchP4RuntimeAPI:
 
     @handle_bad_input
     def table_modify_match(self, table_name, action_name, match_keys, action_params=[], prio=0, rates=None, pkts=None, byts=None):
-        """
-        Modify entry in a table.
+        """Modify entry in a table.
 
         Args:
-            table_name (string)             : name of the table
-            action_name (string)            : action to execute on hit
+            table_name (str)             : name of the table
+            action_name (str)            : action to execute on hit
             match_keys (list of strings)    : values to match
             action_params (list of strings) : parameters passed to action
             prio (int)                      : priority in ternary match
@@ -349,7 +377,7 @@ class SimpleSwitchP4RuntimeAPI:
             byts (int)                      : number of bytes to write (if None, the count
                                               is not changed)
 
-        Notice:
+        Note:
             When modifying the default entry, the configurations for
             its direct resources will be reset to their defaults
             (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources).
@@ -431,7 +459,7 @@ class SimpleSwitchP4RuntimeAPI:
         Clear all entries in a match table (direct or indirect), but not the default entry.
         
         Args:
-            table_name (string)             : name of the table
+            table_name (str)             : name of the table
         """
         print('Deleting all entries of: '+table_name)
         entry = api.TableEntry(self.client, self.context, table_name).read(function=lambda x: x.delete())
@@ -443,7 +471,7 @@ class SimpleSwitchP4RuntimeAPI:
         Read direct counter values.
 
         Args:
-            direct_counter_name (string): name of the direct counter
+            direct_counter_name (str): name of the direct counter
             match_keys (list of strings): values to match (used to identify the table
                                           entry to which the direct counter is attached)
             prio (int)                  : priority in ternary match (used to identify the table
@@ -453,7 +481,7 @@ class SimpleSwitchP4RuntimeAPI:
             byte_count (int)            : number of bytes counted
             packet_count (int)          : number of packets counted
 
-        Notice:
+        Note:
             P4Runtime does not distinguish between the different PSA counter types, i.e. counters are
             always considered of PACKETS_AND_BYTES and both values are returned. It is user's responsability
             to use only the correct value (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry).
@@ -483,7 +511,7 @@ class SimpleSwitchP4RuntimeAPI:
         Write direct counter values. If no values are specified, the counter is reset.
 
         Args:
-            direct_counter_name (string): name of the direct counter
+            direct_counter_name (str): name of the direct counter
             match_keys (list of strings): values to match (used to identify the table
                                           entry to which the direct counter is attached)
             prio (int)                  : priority in ternary match (used to identify the table
@@ -491,7 +519,7 @@ class SimpleSwitchP4RuntimeAPI:
             pkts (int)                  : number of packets to write (default: 0)
             byts (int)                  : number of bytes to write (default: 0)
 
-        Notice:
+        Note:
             There are three types of counters:
             - BYTES, only the field 'byts' is written and the value of 'pkts' is ignored
             - PACKETS, only the field 'pkts' is written and the value of 'byts' is ignored
@@ -527,7 +555,7 @@ class SimpleSwitchP4RuntimeAPI:
         Reset all the direct counters values.
 
         Args:
-            direct_counter_name (string): name of the direct counter
+            direct_counter_name (str): name of the direct counter
         """
         print('Resetting direct counter: "{}"'.format(direct_counter_name))
         entries = api.DirectCounterEntry(self.client, self.context, direct_counter_name).read()
@@ -546,10 +574,10 @@ class SimpleSwitchP4RuntimeAPI:
         Configure rates for an entire direct meter array.
 
         Args:
-            direct_meter_name (string): name of the direct meter
+            direct_meter_name (str): name of the direct meter
             rates (list)              : [(cir, cburst), (pir, pburst)]
 
-        Notice:
+        Note:
             cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
             depending on the meter type.
         """
@@ -580,7 +608,7 @@ class SimpleSwitchP4RuntimeAPI:
         Configure rates for a single direct meter entry.
 
         Args:
-            direct_meter_name (string)  : name of the direct meter
+            direct_meter_name (str)  : name of the direct meter
             match_keys (list of strings): values to match (used to identify the table
                                           entry to which the direct meter is attached)
             prio (int)                  : priority in ternary match (used to identify the table
@@ -588,7 +616,7 @@ class SimpleSwitchP4RuntimeAPI:
             rates (list)                : [(cir, cburst), (pir, pburst)] (default: None, i.e.
                                           all packets are marked as green)
         
-        Notice:
+        Note:
             cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
             depending on the meter type.
         """
@@ -633,7 +661,7 @@ class SimpleSwitchP4RuntimeAPI:
         Retrieve rates for a direct meter.
 
         Args:
-            direct_meter_name (string)    : name of the direct meter
+            direct_meter_name (str)    : name of the direct meter
             match_keys (list of strings)  : values to match (used to identify the table
                                             entry to which the direct meter is attached)
             prio (int)                    : priority in ternary match (used to identify the table
@@ -641,7 +669,7 @@ class SimpleSwitchP4RuntimeAPI:
         Return:
             [(cir, cburst), (pir, pburst)] if meter is configured, None if meter is not configured
 
-        Notice:
+        Note:
             cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
             depending on the meter type.
         """
@@ -673,14 +701,14 @@ class SimpleSwitchP4RuntimeAPI:
         Read counter value.
 
         Args:
-            counter_name (string): name of the counter
+            counter_name (str): name of the counter
             index (int)          : index of the counter to read (first element is at 0)
 
         Returns:
             byte_count (int)            : number of bytes counted
             packet_count (int)          : number of packets counted
 
-        Notice:
+        Note:
             P4Runtime does not distinguish between the different PSA counter types, i.e. counters are
             always considered of PACKETS_AND_BYTES and both values are returned. It is user's responsability
             to use only the correct value (see https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry).
@@ -700,12 +728,12 @@ class SimpleSwitchP4RuntimeAPI:
         Write counter values. If no values are specified, the counter is reset.
 
         Args:
-            counter_name (string): name of the counter
+            counter_name (str): name of the counter
             index (int)          : index of the counter to write (first element is at 0)
             pkts (int)           : number of packets to write (default: 0)
             byts (int)           : number of bytes to write (default: 0)
         
-        Notice:
+        Note:
             There are three types of counters:
             - BYTES, only the field 'byts' is written and the value of 'pkts' is ignored
             - PACKETS, only the field 'pkts' is written and the value of 'byts' is ignored
@@ -730,7 +758,7 @@ class SimpleSwitchP4RuntimeAPI:
         Reset all the counters values.
 
         Args:
-            counter_name (string): name of the counter
+            counter_name (str): name of the counter
         """
         print('Resetting counter: "{}"'.format(counter_name))
         entries = api.CounterEntry(self.client, self.context, counter_name).read()
@@ -750,10 +778,10 @@ class SimpleSwitchP4RuntimeAPI:
         Configure rates for an entire meter array.
 
         Args:
-            meter_name (string): name of the meter
+            meter_name (str): name of the meter
             rates (list)       : [(cir, cburst), (pir, pburst)]
 
-        Notice:
+        Note:
             cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
             depending on the meter type.
         """
@@ -784,12 +812,12 @@ class SimpleSwitchP4RuntimeAPI:
         Configure rates for a single  meter entry.
 
         Args:
-            meter_name (string): name of the meter
+            meter_name (str): name of the meter
             rates (list)       : [(cir, cburst), (pir, pburst)] (default: None, i.e.
                                  all packets are marked as green)
             index (int)        : index of the meter to set (first element is at 0)
         
-        Notice:
+        Note:
             cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
             depending on the meter type.
         """
@@ -823,13 +851,13 @@ class SimpleSwitchP4RuntimeAPI:
         Retrieve rates for a meter.
 
         Args:
-            meter_name (string): name of the meter
+            meter_name (str): name of the meter
             index (int)        : index of the meter to read (first element is at 0)
         
         Return:
             [(cir, cburst), (pir, pburst)] if meter is configured, None if meter is not configured
 
-        Notice:
+        Note:
             cir and pir use units/second, cbursts and pburst use units where units is bytes or packets,
             depending on the meter type.
         """
@@ -854,7 +882,7 @@ class SimpleSwitchP4RuntimeAPI:
             ports (list of int)    : list of port numbers to add to the multicast group
             instances (list of int): list of instances of the corresponding ports
 
-        Notice:
+        Note:
             mgrp must be greater than 0.
 
             A replica is a tuple (port, instance) which has to be unique within the 
@@ -891,7 +919,7 @@ class SimpleSwitchP4RuntimeAPI:
         Args:
             mgrp (int): multicast group id
 
-        Notice:
+        Note:
             mgrp must be greater than 0.
         """
         print('Destroying multicast group: {}'.format(mgrp))
@@ -908,7 +936,7 @@ class SimpleSwitchP4RuntimeAPI:
             ports (list of int)    : list of port numbers to add to the multicast group
             instances (list of int): list of instances of the corresponding ports
 
-        Notice:
+        Note:
             mgrp must be greater than 0.
 
             A replica is a tuple (port, instance) which has to be unique within the 
@@ -949,7 +977,7 @@ class SimpleSwitchP4RuntimeAPI:
             ports (list of int)    : list of port numbers of the multicast group
             instances (list of int): list of instances of the corresponding ports
 
-        Notice:
+        Note:
             mgrp must be greater than 0.
 
             A replica is a tuple (port, instance) which has to be unique within the 
@@ -987,7 +1015,7 @@ class SimpleSwitchP4RuntimeAPI:
             cos (int)              : Class of Service (see https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress)
             packet_lentgth (int)   : maximal packet length in bytes (after which, packets are truncated)
 
-        Notice:
+        Note:
             A replica is a tuple (port, instance) which has to be unique within the 
             same multicast group. Instances can be explicitly assigned to ports by 
             passing the list instances to this function. If the list instances is not
@@ -1044,7 +1072,7 @@ class SimpleSwitchP4RuntimeAPI:
             cos (int)              : Class of Service (see https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress)
             packet_lentgth (int)   : maximal packet length in bytes (after which, packets are truncated)
 
-        Notice:
+        Note:
             A replica is a tuple (port, instance) which has to be unique within the 
             same multicast group. Instances can be explicitly assigned to ports by 
             passing the list instances to this function. If the list instances is not
@@ -1089,7 +1117,7 @@ class SimpleSwitchP4RuntimeAPI:
             ports (list of int)    : list of port numbers of the clone session
             instances (list of int): list of instances of the corresponding ports
 
-        Notice:
+        Note:
             A replica is a tuple (port, instance) which has to be unique within the 
             same multicast group. Instances can be explicitly assigned to ports by 
             passing the list instances to this function. If the list instances is not
@@ -1119,7 +1147,7 @@ class SimpleSwitchP4RuntimeAPI:
         Enable and configure the digests generation of the switch.
 
         Args:
-            digest_name (string): name of the digest (the name is shown in the P4 runtime information file
+            digest_name (str): name of the digest (the name is shown in the P4 runtime information file
                                   generated by the compiler)
             max_timeout_ns (int): the maximum server buffering delay in nanoseconds for an outstanding digest message
             max_list_size (int) : the maximum digest list size — in number of digest messages — sent by the server
@@ -1127,7 +1155,7 @@ class SimpleSwitchP4RuntimeAPI:
             ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement 
                                   from the client before new digest messages can be generated for the same learned data
 
-        Notice:
+        Note:
             P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
             digest<named_struct_type>(1, {struct_field_1, struct_field_2, ...}) where 'named_struct_type' must 
             be explicited and previously defined. The name of the digest for the configuration's sake 
@@ -1155,7 +1183,7 @@ class SimpleSwitchP4RuntimeAPI:
         Configure the digests generation of the switch.
 
         Args:
-            digest_name (string): name of the digest (the name is shown in the P4 runtime information file
+            digest_name (str): name of the digest (the name is shown in the P4 runtime information file
                                   generated by the compiler)
             max_timeout_ns (int): the maximum server buffering delay in nanoseconds for an outstanding digest message
             max_list_size (int) : the maximum digest list size — in number of digest messages — sent by the server
@@ -1163,7 +1191,7 @@ class SimpleSwitchP4RuntimeAPI:
             ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement 
                                   from the client before new digest messages can be generated for the same learned data
 
-        Notice:
+        Note:
             P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
             digest<named_struct_type>(1, {struct_field_1, struct_field_2, ...}) where 'named_struct_type' must 
             be explicited and previously defined. The name of the digest for the configuration's sake 
@@ -1187,25 +1215,26 @@ class SimpleSwitchP4RuntimeAPI:
 
     @handle_bad_input
     def digest_get_conf(self, digest_name):
-        """
-        Enable and configure the digests generation of the switch.
+        """Enable and configure the digests generation of the switch.
 
         Args:
-            digest_name (string): name of the digest (the name is shown in the P4 runtime information file
+            digest_name (str): name of the digest (the name is shown in the P4 runtime information file
                                   generated by the compiler)
 
-        Return:
-            max_timeout_ns (int): the maximum server buffering delay in nanoseconds for an outstanding digest message
-            max_list_size (int) : the maximum digest list size — in number of digest messages — sent by the server
-                                  to the client as a single DigestList Protobuf message
-            ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement 
-                                  from the client before new digest messages can be generated for the same learned data
+        Returns:
+            tuple: ``(max_timeout_ns, max_list_size, ack_timeout_ns)`` where:
+                   
+                   - ``max_timeout_ns`` is the maximum server buffering delay in nanoseconds for an outstanding digest message;
+                   - ``max_list_size`` is the maximum digest list size (in number of digest messages) sent by the server
+                     to the client as a single DigestList Protobuf message;
+                   - ``ack_timeout_ns`` is the timeout in nanoseconds that a server must wait for a digest list acknowledgement 
+                     from the client before new digest messages can be generated for the same learned data.
 
-        Notice:
+        Note:
             P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
-            digest<named_struct_type>(1, {struct_field_1, struct_field_2, ...}) where 'named_struct_type' must 
+            ``digest<named_struct_type>(1, {struct_field_1, struct_field_2, ...})`` where ``named_struct_type`` must 
             be explicited and previously defined. The name of the digest for the configuration's sake 
-            is the name of the struct type (i.e. 'named_struct_type').
+            is the name of the struct type (i.e. ``named_struct_type``).
         """
         print('Enabling digest: {}'.format(digest_name))
         entry = api.DigestEntry(self.client, self.context, digest_name)
