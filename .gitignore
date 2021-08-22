@@ -26,4 +26,4 @@ flows/
 *.csv
 
 # Docs hidden files
-docs/.*
+docs/.doctrees
