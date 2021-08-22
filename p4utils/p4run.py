@@ -77,7 +77,7 @@ class AppRunner(NetworkAPI):
                 "cli": <true|false> (bool),
                 "pcap_dump": <true|false> (bool),
                 "enable_log": <true|false> (bool),
-                "tasks_file": <path to the tasks file> (string)
+                "tasks_file": <path to the tasks file> (string),
                 "host_node":
                 {
                     "file_path": <path to module> (string),
@@ -130,7 +130,7 @@ class AppRunner(NetworkAPI):
                     "default":
                     {
                         <default links and hosts configurations, see parse_links>
-                    }
+                    },
                     "links": 
                     [
                         <see parse_links>
