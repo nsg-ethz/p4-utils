@@ -189,8 +189,17 @@
 
 
 <div class="viewcode-block" id="NetworkAPI"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI">[docs]</a><span class="k">class</span> <span class="nc">NetworkAPI</span><span class="p">(</span><span class="n">Topo</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Network definition and initialization API.</span>
+    <span class="sd">&quot;&quot;&quot;Network definition and initialization API.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        cli_enabled (:py:class:`bool`)              : enable an extension to *Mininet* CLI after the network starts.</span>
+<span class="sd">        hosts (:py:class:`dict`)                    : dictionary of host and their properties.</span>
+<span class="sd">        sw_clients (:py:class:`list`)               : list of *Thrift* clients (one per P4 switch) to populate tables.</span>
+<span class="sd">        compilers (:py:class:`list`)                : list of compiler instances (one per P4 source provided) to compile P4 code.</span>
+<span class="sd">        net (:py:class:`object`)                    : network instance implemented using an extension to *Mininet* network class.</span>
+<span class="sd">        modules (:py:class:`dict`)                  : dictionary of external modules used by the API.</span>
+<span class="sd">        ipv4_net (:py:class:`ipaddress.IPv4Network`): IPv4 network address generator (by default within the network ``10.0.0.0/8``).</span>
+<span class="sd">                                                      A different network can be specified using :py:meth:`setIpBase()`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
         <span class="c1"># Init superclass</span>
@@ -246,9 +255,7 @@
 
 <span class="c1">### Utils</span>
 <div class="viewcode-block" id="NetworkAPI.cleanup"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Removes old Mininet files and processes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Removes old Mininet files and processes.&quot;&quot;&quot;</span>
         <span class="c1"># Mininet cleanup</span>
         <span class="n">cleanup</span><span class="p">()</span>
         <span class="n">bridges</span> <span class="o">=</span> <span class="n">sh</span><span class="p">(</span><span class="s2">&quot;brctl show | awk &#39;FNR &gt; 1 {print $1}&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
@@ -257,8 +264,7 @@
             <span class="n">sh</span><span class="p">(</span><span class="s2">&quot;brctl delbr </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bridge</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.is_multigraph"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.is_multigraph">[docs]</a>    <span class="k">def</span> <span class="nf">is_multigraph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check whether the graph is a multigraph, i.e. it has multiple parallel</span>
+        <span class="sd">&quot;&quot;&quot;Check whether the graph is a multigraph, i.e. it has multiple parallel</span>
 <span class="sd">        links.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">multigraph</span> <span class="o">=</span> <span class="kc">False</span>
@@ -271,10 +277,10 @@
         <span class="k">return</span> <span class="n">multigraph</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.save_topology"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.save_topology">[docs]</a>    <span class="k">def</span> <span class="nf">save_topology</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Saves mininet topology to a JSON file.</span>
+        <span class="sd">&quot;&quot;&quot;Saves mininet topology to a JSON file.</span>
 
-<span class="sd">        Notice that multigraphs are not supported yet by p4utils.utils.Topology</span>
+<span class="sd">        Note:</span>
+<span class="sd">            Multigraphs are not supported yet by :py:class:`p4utils.utils.topology.NetworkGraph`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># This function return None for each not serializable</span>
         <span class="c1"># obect so that no TypeError is thrown.</span>
@@ -341,9 +347,7 @@
             <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">graph_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.compile"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.compile">[docs]</a>    <span class="k">def</span> <span class="nf">compile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compile all the required P4 files.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Compiles all the required P4 files.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">p4switch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4switches</span><span class="p">():</span>
             <span class="n">p4_src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">p4switch</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;p4_src&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">p4_src</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -362,13 +366,15 @@
                     <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.program_switches"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.program_switches">[docs]</a>    <span class="k">def</span> <span class="nf">program_switches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If any command files were provided for the switches, this method will start up the</span>
+        <span class="sd">&quot;&quot;&quot;If any command files were provided for the switches, this method will start up the</span>
 <span class="sd">        CLI on each switch and use the contents of the command files as input.</span>
 
-<span class="sd">        Assumes:</span>
-<span class="sd">            A mininet instance is stored as self.net.</span>
-<span class="sd">            self.net.start() has been called.</span>
+<span class="sd">        **Assumes**</span>
+
+<span class="sd">        - __ #p4utils.mininetlib.network_API.NetworkAPI.net</span>
+<span class="sd">        </span>
+<span class="sd">          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).</span>
+<span class="sd">        - :py:meth:`self.net.start()` has been called.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">p4switch</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4switches</span><span class="p">(</span><span class="n">withInfo</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="n">cli_input</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cli_input&#39;</span><span class="p">)</span>
@@ -379,16 +385,17 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">sw_clients</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sw_client</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.program_hosts"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.program_hosts">[docs]</a>    <span class="k">def</span> <span class="nf">program_hosts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Adds static and default routes ARP entries to each mininet host.</span>
-<span class="sd">        Multihomed hosts are allowed.</span>
+        <span class="sd">&quot;&quot;&quot;Adds static and default routes ARP entries to each mininet host.</span>
+<span class="sd">        Multihomed hosts are allowed. It also enables DHCP if requested.</span>
 
-<span class="sd">        Assumes:</span>
-<span class="sd">            Only switches and hosts are allowed.</span>
-<span class="sd">            No duplicated IP addresses exist in the Network (e.g. no NAT allowed</span>
-<span class="sd">            for the same subnet).</span>
-<span class="sd">            A mininet instance is stored as self.net.</span>
-<span class="sd">            self.net.start() has been called.</span>
+<span class="sd">        **Assumes**</span>
+
+<span class="sd">        - No duplicated IP addresses exist in the network (e.g. no NAT allowed</span>
+<span class="sd">          for the same subnet).</span>
+<span class="sd">        - __ #p4utils.mininetlib.network_API.NetworkAPI.net</span>
+<span class="sd">        </span>
+<span class="sd">          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).</span>
+<span class="sd">        - :py:meth:`self.net.start()` has been called.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">host1</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">(</span><span class="n">withInfo</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="c1"># Get mininet node</span>
@@ -462,23 +469,23 @@
                     <span class="n">h1</span><span class="o">.</span><span class="n">cmd</span><span class="p">(</span><span class="s1">&#39;dhclient </span><span class="si">{}</span><span class="s1"> &amp;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">intf1</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.exec_scripts"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.exec_scripts">[docs]</a>    <span class="k">def</span> <span class="nf">exec_scripts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Executes the scripts in the main namespace after network boot.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Executes the scripts in the main namespace after network boot.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">script</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scripts</span><span class="p">:</span>
             <span class="n">info</span><span class="p">(</span><span class="s1">&#39;Exec Script: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">script</span><span class="p">[</span><span class="s1">&#39;cmd&#39;</span><span class="p">]))</span>
             <span class="n">run_command</span><span class="p">(</span><span class="n">script</span><span class="p">[</span><span class="s1">&#39;cmd&#39;</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.start_scheduler"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.start_scheduler">[docs]</a>    <span class="k">def</span> <span class="nf">start_scheduler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Start the task scheduler on node if enabled.</span>
+        <span class="sd">&quot;&quot;&quot;Starts the task scheduler on node if enabled.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            node (string): name of the node</span>
+<span class="sd">        Args:</span>
+<span class="sd">            node (str): name of the node</span>
 
-<span class="sd">        Assumes:</span>
-<span class="sd">            A mininet instance is stored as self.net.</span>
-<span class="sd">            self.net.start() has been called.</span>
+<span class="sd">        **Assumes**</span>
+
+<span class="sd">        - __ #p4utils.mininetlib.network_API.NetworkAPI.net</span>
+<span class="sd">        </span>
+<span class="sd">          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).</span>
+<span class="sd">        - :py:meth:`self.net.start()` has been called.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasScheduler</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
             <span class="n">unix_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;unix_path&#39;</span><span class="p">,</span> <span class="s1">&#39;/tmp&#39;</span><span class="p">)</span>
@@ -493,12 +500,14 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">cmd</span><span class="p">(</span><span class="s1">&#39;python3 -u -m p4utils.utils.task_scheduler &quot;</span><span class="si">{}</span><span class="s1">&quot; &gt; /dev/null 2&gt;&amp;1 &amp;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unix_socket</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.start_schedulers"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.start_schedulers">[docs]</a>    <span class="k">def</span> <span class="nf">start_schedulers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Start all the required task schedulers.</span>
+        <span class="sd">&quot;&quot;&quot;Starts all the required task schedulers.</span>
 
-<span class="sd">        Assumes:</span>
-<span class="sd">            A mininet instance is stored as self.net.</span>
-<span class="sd">            self.net.start() has been called.</span>
+<span class="sd">        **Assumes**</span>
+
+<span class="sd">        - __ #p4utils.mininetlib.network_API.NetworkAPI.net</span>
+<span class="sd">        </span>
+<span class="sd">          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).</span>
+<span class="sd">        - :py:meth:`self.net.start()` has been called.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasScheduler</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
@@ -508,13 +517,15 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.distribute_tasks"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.distribute_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">distribute_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Distribute all the tasks to the schedulers.</span>
+        <span class="sd">&quot;&quot;&quot;Distributes all the tasks to the schedulers.</span>
 
-<span class="sd">        Assumes:</span>
-<span class="sd">            All the nodes in self.tasks have an active scheduler.</span>
-<span class="sd">            A mininet instance is stored as self.net.</span>
-<span class="sd">            self.net.start() has been called.</span>
+<span class="sd">        **Assumes**</span>
+
+<span class="sd">        - All the nodes in self.tasks have an active scheduler.</span>
+<span class="sd">        - __ #p4utils.mininetlib.network_API.NetworkAPI.net</span>
+<span class="sd">        </span>
+<span class="sd">          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).</span>
+<span class="sd">        - :py:meth:`self.net.start()` has been called.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Get current time</span>
         <span class="n">current_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -532,12 +543,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.start_net_cli"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.start_net_cli">[docs]</a>    <span class="k">def</span> <span class="nf">start_net_cli</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Starts up the mininet CLI and prints some helpful output.</span>
+        <span class="sd">&quot;&quot;&quot;Starts the *Mininet* CLI and prints some helpful output.</span>
 
-<span class="sd">        Assumes:</span>
-<span class="sd">            A mininet instance is stored as self.net.</span>
-<span class="sd">            self.net.start() has been called.</span>
+<span class="sd">        **Assumes**</span>
+
+<span class="sd">        - __ #p4utils.mininetlib.network_API.NetworkAPI.net</span>
+<span class="sd">        </span>
+<span class="sd">          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).</span>
+<span class="sd">        - :py:meth:`self.net.start()` has been called.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">switch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">switches</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">switch</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
@@ -571,18 +584,23 @@
         <span class="n">P4CLI</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.module"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.module">[docs]</a>    <span class="k">def</span> <span class="nf">module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mod_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create object from external modules configurations.</span>
+        <span class="sd">&quot;&quot;&quot;Creates object from external modules configurations.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            mod_name (string): module name (possible values are</span>
-<span class="sd">                               &#39;topo&#39;, &#39;comp&#39;, &#39;net&#39;, &#39;sw_cli&#39;)</span>
-<span class="sd">            args             : positional arguments to pass to the object</span>
-<span class="sd">            kwargs           : keyword arguments to pass to the object in addition to</span>
+<span class="sd">        Args:</span>
+<span class="sd">            mod_name (str): module name</span>
+<span class="sd">            *args            : positional arguments to pass to the object</span>
+<span class="sd">            **kwargs         : keyword arguments to pass to the object in addition to</span>
 <span class="sd">                               the default ones</span>
 <span class="sd">        </span>
+<span class="sd">        Possible values for **mod_name** are the following:</span>
+
+<span class="sd">        - ``topo`` for extentions of :py:class:`mininet.topo.Topo`</span>
+<span class="sd">        - ``comp`` for P4 compiler class</span>
+<span class="sd">        - ``net`` for extentions of :py:class:`mininet.net.Mininet`</span>
+<span class="sd">        - ``sw_cli`` for switch *Thrift* client class to configure control plane</span>
+
 <span class="sd">        Returns:</span>
-<span class="sd">            configured instance of the class of the module</span>
+<span class="sd">            object: configured instance of the class of the module</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">default_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">mod_name</span><span class="p">][</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span>
         <span class="n">default_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">mod_name</span><span class="p">][</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
@@ -591,9 +609,8 @@
         <span class="k">return</span> <span class="n">default_class</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.node_ports"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.node_ports">[docs]</a>    <span class="k">def</span> <span class="nf">node_ports</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Build a dictionary from the links and store the ports</span>
-<span class="sd">        of every node and its destination node.</span>
+        <span class="sd">&quot;&quot;&quot;Builds a :py:class:`dict` from the links, store the ports</span>
+<span class="sd">        of every node and its destination node and returns it.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ports</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">(</span><span class="n">withKeys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">withInfo</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -608,9 +625,8 @@
         <span class="k">return</span> <span class="n">ports</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.node_intfs"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.node_intfs">[docs]</a>    <span class="k">def</span> <span class="nf">node_intfs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Build a dictionary from the links and store the interfaces</span>
-<span class="sd">        of every node and its destination node.</span>
+        <span class="sd">&quot;&quot;&quot;Builds a :py:class:`dict` from the links, stores the interfaces</span>
+<span class="sd">        of every node and its destination node and returns it.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ports</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">(</span><span class="n">withKeys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">withInfo</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -625,9 +641,7 @@
         <span class="k">return</span> <span class="n">ports</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.switch_ids"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.switch_ids">[docs]</a>    <span class="k">def</span> <span class="nf">switch_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a set containing all the switch IDs.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns a :py:class:`set` containing all the *switches ids*.&quot;&quot;&quot;</span>
         <span class="n">ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">switch</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">switches</span><span class="p">(</span><span class="n">withInfo</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -643,9 +657,7 @@
         <span class="k">return</span> <span class="n">ids</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.thrift_ports"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.thrift_ports">[docs]</a>    <span class="k">def</span> <span class="nf">thrift_ports</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a set containing all the switches&#39; thrift ports.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns a :py:class:`set` containing all the switches&#39; Thrift ports.&quot;&quot;&quot;</span>
         <span class="n">thrift_ports</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">switch</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4switches</span><span class="p">(</span><span class="n">withInfo</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -656,9 +668,7 @@
         <span class="k">return</span> <span class="n">thrift_ports</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.grpc_ports"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.grpc_ports">[docs]</a>    <span class="k">def</span> <span class="nf">grpc_ports</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a set containing all the switches&#39; grpc ports.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns a :py:class:`set` containing all the switches&#39; gRPC ports.&quot;&quot;&quot;</span>
         <span class="n">grpc_ports</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">switch</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4rtswitches</span><span class="p">(</span><span class="n">withInfo</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -669,9 +679,7 @@
         <span class="k">return</span> <span class="n">grpc_ports</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.mac_addresses"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.mac_addresses">[docs]</a>    <span class="k">def</span> <span class="nf">mac_addresses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a set containing all the MAC addresses.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns a :py:class:`set` containing all the MAC addresses.&quot;&quot;&quot;</span>
         <span class="n">macs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">(</span><span class="n">withInfo</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -685,8 +693,7 @@
         <span class="k">return</span> <span class="n">macs</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.ip_addresses"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.ip_addresses">[docs]</a>    <span class="k">def</span> <span class="nf">ip_addresses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a set containing all the IPv4 addresses of L3 nodes,</span>
+        <span class="sd">&quot;&quot;&quot;Returns a :py:class:`set` containing all the IPv4 addresses of L3 nodes,</span>
 <span class="sd">        i.e. of all non-switch nodes. The fake IPs assigned to the</span>
 <span class="sd">        switches are not considered.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -710,11 +717,18 @@
         <span class="k">return</span> <span class="n">ips</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.check_host_valid_ip_from_name"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.check_host_valid_ip_from_name">[docs]</a>    <span class="k">def</span> <span class="nf">check_host_valid_ip_from_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Util for assignment strategies.</span>
+        <span class="sd">&quot;&quot;&quot;Util for assignment strategies that checks validity of</span>
+<span class="sd">        host names.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            host (string): name of the host</span>
+<span class="sd">        Args:</span>
+<span class="sd">            host (str): name of the host</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: **True** if the host name is valid, **False** otherwise.</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            A host name is valid if it is composed by ``h`` followed by a</span>
+<span class="sd">            number that represents the *host id* (e.g. ``h12``).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="n">host</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;h&#39;</span><span class="p">:</span>
@@ -728,67 +742,62 @@
         <span class="k">return</span> <span class="n">valid</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.intf_name"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.intf_name">[docs]</a>    <span class="k">def</span> <span class="nf">intf_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Construct a canonical interface name node-ethN for interface port.</span>
+        <span class="sd">&quot;&quot;&quot;Constructs a canonical interface name node-ethN for interface port.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the Mininet node</span>
-<span class="sd">            port (int)   : port number</span>
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): name of the Mininet node</span>
+<span class="sd">            port (int): port number</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            the chosen interface name (string)</span>
+<span class="sd">            str: the chosen interface name</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;-eth&#39;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">port</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.auto_switch_id"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.auto_switch_id">[docs]</a>    <span class="k">def</span> <span class="nf">auto_switch_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute an available switch id that can be assigned.</span>
+        <span class="sd">&quot;&quot;&quot;Computes an available *switch id* that can be assigned.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            base (int): starting switch id</span>
+<span class="sd">        Args:</span>
+<span class="sd">            base (int): starting *switch id*</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            the computed switch id (int)</span>
+<span class="sd">            int: the computed *switch id*</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">switch_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_ids</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_ports</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">next_element</span><span class="p">(</span><span class="n">switch_ids</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="n">base</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.auto_grpc_port"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.auto_grpc_port">[docs]</a>    <span class="k">def</span> <span class="nf">auto_grpc_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">9559</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute an available grpc port that can be assigned.</span>
+        <span class="sd">&quot;&quot;&quot;Computes an available gRPC port that can be assigned.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            base (int): starting grpc port</span>
+<span class="sd">        Args:</span>
+<span class="sd">            base (int): starting gRPC port</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            the computed grpc port (int)</span>
+<span class="sd">            int: the computed gRPC port</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">grpc_ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grpc_ports</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thrift_ports</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">next_element</span><span class="p">(</span><span class="n">grpc_ports</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="n">base</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.auto_thrift_port"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.auto_thrift_port">[docs]</a>    <span class="k">def</span> <span class="nf">auto_thrift_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">9090</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute an available thrift port that can be assigned.</span>
+        <span class="sd">&quot;&quot;&quot;Computes an available Thrift port that can be assigned.</span>
 
-<span class="sd">        Arguments:</span>
+<span class="sd">        Args:</span>
 <span class="sd">            base (int): starting thrift port</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            the computed thrift port (int)</span>
+<span class="sd">            int: the computed thrift port</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">thrift_ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_ports</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">next_element</span><span class="p">(</span><span class="n">thrift_ports</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="n">base</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.auto_port_num"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.auto_port_num">[docs]</a>    <span class="k">def</span> <span class="nf">auto_port_num</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute the next port number that can be used on the node.</span>
+        <span class="sd">&quot;&quot;&quot;Computes the next port number that can be used on the node.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            node (string)    : name of the node</span>
-<span class="sd">            base (int)       : starting port number</span>
+<span class="sd">        Args:</span>
+<span class="sd">            node (str): name of the node</span>
+<span class="sd">            base (int): starting port number</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            available port number (int)</span>
+<span class="sd">            int: available port number</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ports</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ports</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -798,8 +807,10 @@
             <span class="k">return</span> <span class="n">base</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.auto_mac_address"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.auto_mac_address">[docs]</a>    <span class="k">def</span> <span class="nf">auto_mac_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Generate a MAC address, different from anyone already generated.</span>
+        <span class="sd">&quot;&quot;&quot;Generates a MAC address, different from any other already in the network.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            str: MAC address</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mac</span> <span class="o">=</span> <span class="n">rand_mac</span><span class="p">()</span>
         <span class="n">mac_addresses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mac_addresses</span><span class="p">()</span>
@@ -808,8 +819,14 @@
         <span class="k">return</span> <span class="n">mac</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.auto_ip_address"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.auto_ip_address">[docs]</a>    <span class="k">def</span> <span class="nf">auto_ip_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Generate an IP address, different from anyone already generated.</span>
+        <span class="sd">&quot;&quot;&quot;Generates an IPv4 address, different from anyone already in the network.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: IP / subnet mask</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            The IPv4 will be generated within the network ``10.0.0.0/8``, if not </span>
+<span class="sd">            otherwise specified with :py:meth:`setIpBase`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ip_generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipv4_net</span><span class="o">.</span><span class="n">hosts</span><span class="p">()</span>
         <span class="n">ip</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">ip_generator</span><span class="p">))</span>
@@ -820,16 +837,18 @@
         <span class="k">return</span> <span class="n">ip</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">prefixLen</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.auto_assignment"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.auto_assignment">[docs]</a>    <span class="k">def</span> <span class="nf">auto_assignment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This function automatically assigns unique MACs, IPs, interface </span>
-<span class="sd">        names and port numbers to all the interfaces which require them.</span>
-<span class="sd">        It also assigns unique device ids, grpc ports and thrift ports</span>
-<span class="sd">        to the devices which require them. When a default interface is</span>
-<span class="sd">        encountered, the respective device entry is updated.</span>
+        <span class="sd">&quot;&quot;&quot;This function automatically assigns unique *MACs*, *IPs*, *interface </span>
+<span class="sd">        names* and *port numbers* to all the interfaces that require them.</span>
+<span class="sd">        </span>
+<span class="sd">        It also assigns unique *device ids*, *gRPC ports* and *Thrift ports*</span>
+<span class="sd">        to the devices that need them. When a *default interface* is</span>
+<span class="sd">        encountered, the device ``ip`` and ``mac`` parameters</span>
+<span class="sd">        are updated accordingly.</span>
 
-<span class="sd">        It assignes unique IPs and MACs addresses to the hosts that were</span>
+<span class="sd">        It assignes unique *IPs* and *MACs* addresses to the hosts that were</span>
 <span class="sd">        not configured manually or through an assignment strategy.</span>
-<span class="sd">        It assignes unique MACs addresses to the every non-host node that</span>
+<span class="sd">        </span>
+<span class="sd">        It assignes unique *MACs* addresses to the every non-host node that</span>
 <span class="sd">        was not configured manually or through an assignment strategy.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Set nodes&#39; parameters automatically</span>
@@ -947,9 +966,13 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">node2</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;params2&#39;</span><span class="p">][</span><span class="s1">&#39;ip&#39;</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.get_default_intf"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.get_default_intf">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_intf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the tuple (node1, node2, key) identifying the</span>
-<span class="sd">        default interface.</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves node&#39;s default interface.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node1 (str): node name</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: ``(node1, node2, key)`` identifying the default interface.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isNode</span><span class="p">(</span><span class="n">node1</span><span class="p">):</span>
             <span class="n">node_ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ports</span><span class="p">()</span>
@@ -957,24 +980,24 @@
             <span class="k">if</span> <span class="n">ports</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">ports</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">node_ports</span><span class="p">[</span><span class="n">node1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">warning</span><span class="p">(</span><span class="s1">&#39;node </span><span class="si">{}</span><span class="s1"> has no incident links.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node1</span><span class="p">))</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Node </span><span class="si">{}</span><span class="s1"> has no incident links.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node1</span><span class="p">))</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="si">{}</span><span class="s1">&quot; does not exist.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node1</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.is_default_intf"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.is_default_intf">[docs]</a>    <span class="k">def</span> <span class="nf">is_default_intf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check if the specified interface is the default one for node1.</span>
+        <span class="sd">&quot;&quot;&quot;Checks if the specified interface is the default one for **node1**.</span>
 <span class="sd">        </span>
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes linked together</span>
-<span class="sd">            key (int)            : id used to identify multiple edges which</span>
-<span class="sd">                                   link two same nodes (optional)</span>
+<span class="sd">            node1 (str): node that belongs the interface</span>
+<span class="sd">            node2 (str): node facing the other end of the link</span>
+<span class="sd">            key (int)  : id used to identify multiple edges that</span>
+<span class="sd">                         connect two same nodes (optional)</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            True if the interface is default, False else</span>
+<span class="sd">            bool: **True** if the interface is the default one, **False** else</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
 <span class="sd">            Since interfaces can be removed, the default interface</span>
 <span class="sd">            may change during the definition of the network. So this is</span>
 <span class="sd">            reliable only if no other interfaces are added/removed afterwards.</span>
@@ -993,7 +1016,7 @@
 <span class="sd">        Set the log level for the execution.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            logLevel (string): possible values are debug&#39;, &#39;info&#39;, &#39;output&#39;,</span>
+<span class="sd">            logLevel (str): possible values are debug&#39;, &#39;info&#39;, &#39;output&#39;,</span>
 <span class="sd">                               &#39;warning&#39;, &#39;error&#39;, &#39;critical&#39;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">setLogLevel</span><span class="p">(</span><span class="n">logLevel</span><span class="p">)</span></div>
@@ -1005,7 +1028,7 @@
 <span class="sd">        or manual assignment).</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            ipBase (string): IP address/mask (e.g. &#39;10.0.0.0/8&#39;)</span>
+<span class="sd">            ipBase (str): IP address/mask (e.g. &#39;10.0.0.0/8&#39;)</span>
 
 <span class="sd">        Notice:</span>
 <span class="sd">            Remember that setting the IP base won&#39;t automatically change</span>
@@ -1058,7 +1081,7 @@
 <span class="sd">        the network boot.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            cmd (string) : command to execute</span>
+<span class="sd">            cmd (str) : command to execute</span>
 <span class="sd">            reboot (bool): whether to rerun the script every time</span>
 <span class="sd">                           all the P4 switches are rebooted.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1185,15 +1208,15 @@
 <span class="sd">        ordinal number is used.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string)        : nodes to link together</span>
+<span class="sd">            node1, node2 (str)        : nodes to link together</span>
 <span class="sd">            port1, port2 (int)           : ports (optional)</span>
 <span class="sd">            key (int)                    : id used to identify multiple edges which</span>
 <span class="sd">                                           link two same nodes (optional)</span>
 <span class="sd">            opts                         : link options as listed below (optional)</span>
 <span class="sd">    </span>
 <span class="sd">        Link options:</span>
-<span class="sd">            intfName1, intfName2 (string): names of the interfaces (optional)</span>
-<span class="sd">            addr1, addr2 (string)        : MAC addresses (optional)</span>
+<span class="sd">            intfName1, intfName2 (str): names of the interfaces (optional)</span>
+<span class="sd">            addr1, addr2 (str)        : MAC addresses (optional)</span>
 <span class="sd">            </span>
 <span class="sd">            weight (int)                 : weight used to compute shortest paths</span>
 <span class="sd">        </span>
@@ -1303,7 +1326,7 @@
 <span class="sd">        link with the lowest key value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes linked together</span>
+<span class="sd">            node1, node2 (str): nodes linked together</span>
 <span class="sd">            key (int)        : id used to identify multiple edges which</span>
 <span class="sd">                               link two same nodes (optional)</span>
 
@@ -1321,7 +1344,7 @@
 <span class="sd">        value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes to link together</span>
+<span class="sd">            node1, node2 (str): nodes to link together</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
 <span class="sd">                                   link two same nodes (optional)</span>
 <span class="sd">            opts                 : link options to update (optional)</span>
@@ -1355,7 +1378,7 @@
 <span class="sd">        Delete link.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes to link together</span>
+<span class="sd">            node1, node2 (str): nodes to link together</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
 <span class="sd">                                   link two same nodes (optional)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1375,7 +1398,7 @@
 <span class="sd">        key value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes to link together</span>
+<span class="sd">            node1, node2 (str): nodes to link together</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
 <span class="sd">                                   link two same nodes (optional)</span>
 
@@ -1407,7 +1430,7 @@
 <span class="sd">        key value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes linked together</span>
+<span class="sd">            node1, node2 (str): nodes linked together</span>
 <span class="sd">            bw (float, int)      : bandwidth (in Mbps)</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
 <span class="sd">                                   link two same nodes (optional)</span>
@@ -1426,7 +1449,7 @@
 <span class="sd">        key value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes linked together</span>
+<span class="sd">            node1, node2 (str): nodes linked together</span>
 <span class="sd">            delay (int)          : transmission delay (in ms)</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
 <span class="sd">                                   link two same nodes (optional)</span>
@@ -1445,7 +1468,7 @@
 <span class="sd">        key value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes linked together</span>
+<span class="sd">            node1, node2 (str): nodes linked together</span>
 <span class="sd">            loss (float)         : packet loss rate (e.g. 0.5 means that 50% of</span>
 <span class="sd">                                   packets will exeperience a loss)</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
@@ -1469,7 +1492,7 @@
 <span class="sd">        key value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes linked together</span>
+<span class="sd">            node1, node2 (str): nodes linked together</span>
 <span class="sd">            max_queue_size (int) : maximum number of packets the qdisc may hold queued at a time.</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
 <span class="sd">                                   link two same nodes (optional)</span>
@@ -1488,8 +1511,8 @@
 <span class="sd">        then the link with lowest key value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes linked together</span>
-<span class="sd">            intfName (string)    : name of the interface</span>
+<span class="sd">            node1, node2 (str): nodes linked together</span>
+<span class="sd">            intfName (str)    : name of the interface</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
 <span class="sd">                                   link two same nodes (optional)</span>
 <span class="sd">        </span>
@@ -1507,7 +1530,7 @@
 <span class="sd">        if key is None, then the link with lowest key value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes linked together</span>
+<span class="sd">            node1, node2 (str): nodes linked together</span>
 <span class="sd">            port (int)           : name of the interface</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
 <span class="sd">                                   link two same nodes (optional)</span>
@@ -1526,8 +1549,8 @@
 <span class="sd">        then the link with the lowest key value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes linked together</span>
-<span class="sd">            ip (string)          : IP address/mask to configure</span>
+<span class="sd">            node1, node2 (str): nodes linked together</span>
+<span class="sd">            ip (str)          : IP address/mask to configure</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
 <span class="sd">                                   link two same nodes (optional)</span>
 <span class="sd">        </span>
@@ -1547,8 +1570,8 @@
 <span class="sd">        then the link with the lowest key value is considered.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): nodes linked together</span>
-<span class="sd">            mac (string)         : MAC address to configure</span>
+<span class="sd">            node1, node2 (str): nodes linked together</span>
+<span class="sd">            mac (str)         : MAC address to configure</span>
 <span class="sd">            key (int)            : id used to identify multiple edges which</span>
 <span class="sd">                                   link two same nodes (optional)</span>
 
@@ -1605,7 +1628,7 @@
 <span class="sd">        Add Node to graph.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name</span>
+<span class="sd">            name (str): name</span>
 <span class="sd">            opts (kwargs): node options</span>
 
 <span class="sd">        Returns:</span>
@@ -1618,7 +1641,7 @@
 <span class="sd">        Get node information.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node (string): Mininet node name</span>
+<span class="sd">            node (str): Mininet node name</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            node metadata dict</span>
@@ -1631,7 +1654,7 @@
 <span class="sd">        and create a new one with the updated information.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): node name</span>
+<span class="sd">            name (str): node name</span>
 <span class="sd">            opts         : node options to update (optional)</span>
 <span class="sd">        </span>
 <span class="sd">        Returns:</span>
@@ -1659,7 +1682,7 @@
 <span class="sd">        Delete node.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node         (string): Mininet node name</span>
+<span class="sd">            node         (str): Mininet node name</span>
 <span class="sd">            remove_links (bool)  : whether to remove all the incident</span>
 <span class="sd">                                   links</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1677,7 +1700,7 @@
 <span class="sd">        Pop node.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1 (string)     : nodes to link together</span>
+<span class="sd">            node1 (str)     : nodes to link together</span>
 <span class="sd">            remove_links (bool): whether to remove all the incident</span>
 <span class="sd">                                 links</span>
 
@@ -1693,7 +1716,7 @@
 <span class="sd">        Check if node exists.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node (string): node name</span>
+<span class="sd">            node (str): node name</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            True if node exists, else False (bool)</span>
@@ -1720,8 +1743,8 @@
 <span class="sd">        Enable log for node (also for the task scheduler).</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string)   : name of the node</span>
-<span class="sd">            log_dir (string): where to save log files</span>
+<span class="sd">            name (str)   : name of the node</span>
+<span class="sd">            log_dir (str): where to save log files</span>
 <span class="sd">        &quot;&quot;&quot;</span>            
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isNode</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">log_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_dir</span><span class="o">=</span><span class="n">log_dir</span><span class="p">)</span>
@@ -1733,7 +1756,7 @@
 <span class="sd">        Disable log for node (also for the task scheduler).</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the node</span>
+<span class="sd">            name (str): name of the node</span>
 <span class="sd">        &quot;&quot;&quot;</span>            
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isNode</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">log_enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1745,7 +1768,7 @@
 <span class="sd">        Enable log for all the nodes (also for the task schedulers).</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            log_dir (string): where to save log files</span>
+<span class="sd">            log_dir (str): where to save log files</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">enableLog</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">log_dir</span><span class="o">=</span><span class="n">log_dir</span><span class="p">)</span></div>
@@ -1762,8 +1785,8 @@
 <span class="sd">        Enable the task scheduler server for the node.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the node</span>
-<span class="sd">            path (string): name of the directory where the</span>
+<span class="sd">            name (str): name of the node</span>
+<span class="sd">            path (str): name of the directory where the</span>
 <span class="sd">                           socket file will be placed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isNode</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -1776,7 +1799,7 @@
 <span class="sd">        Disable the task scheduler server for the node.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the node</span>
+<span class="sd">            name (str): name of the node</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isNode</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1794,7 +1817,7 @@
 <span class="sd">        Enable the task scheduler server for all the nodes.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            path (string): name of the directory where the</span>
+<span class="sd">            path (str): name of the directory where the</span>
 <span class="sd">                           socket file will be placed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
@@ -1812,8 +1835,8 @@
 <span class="sd">        Add the tasks to the node.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            filepath (string): tasks file path</span>
-<span class="sd">            def_mod (string) : default module where to look for exe functions</span>
+<span class="sd">            filepath (str): tasks file path</span>
+<span class="sd">            def_mod (str) : default module where to look for exe functions</span>
 
 <span class="sd">        Notice:</span>
 <span class="sd">            The file has to be a set of lines, where each has the following syntax.</span>
@@ -1834,7 +1857,7 @@
 <span class="sd">        TaskServer has been previously enabled.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node (string)         : name of the node</span>
+<span class="sd">            node (str)         : name of the node</span>
 <span class="sd">            exe                   : executable to run (either a shell string </span>
 <span class="sd">                                    command or a python function)</span>
 <span class="sd">            args                  : positional arguments for the passed function</span>
@@ -1868,8 +1891,8 @@
 <span class="sd">        Set the node&#39;s default route.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string)         : name of the node</span>
-<span class="sd">            default_route (string): default route IP</span>
+<span class="sd">            name (str)         : name of the node</span>
+<span class="sd">            default_route (str): default route IP</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isNode</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">defaultRoute</span><span class="o">=</span><span class="s1">&#39;via </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">default_route</span><span class="p">))</span>
@@ -1881,7 +1904,7 @@
 <span class="sd">        Check whether two node are neighbors.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node1, node2 (string): names of the nodes</span>
+<span class="sd">            node1, node2 (str): names of the nodes</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            True if node1 and node2 are neighbors, False else.</span>
@@ -1898,11 +1921,11 @@
 <span class="sd">        If the node is already present, overwrite it.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): switch name</span>
+<span class="sd">            name (str): switch name</span>
 <span class="sd">            opts (kwargs): switch options (optional)</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            P4 host name (string)</span>
+<span class="sd">            P4 host name (str)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">opts</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;cls&#39;</span><span class="p">,</span> <span class="n">P4Host</span><span class="p">)</span>
         <span class="n">opts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">isHost</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
@@ -1913,7 +1936,7 @@
 <span class="sd">        Check if node is a host.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node (string): node name</span>
+<span class="sd">            node (str): node name</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            True if node is a host, else False (bool)</span>
@@ -1982,11 +2005,11 @@
 <span class="sd">        If the node is already present, overwrite it.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): switch name</span>
+<span class="sd">            name (str): switch name</span>
 <span class="sd">            opts (kwargs): switch options</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            switch name (string)</span>
+<span class="sd">            switch name (str)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dpid</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;dpid&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">dpid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2004,7 +2027,7 @@
 <span class="sd">        Check if node is a switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node (string): Mininet node name</span>
+<span class="sd">            node (str): Mininet node name</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            True if node is a switch, else False (bool)</span>
@@ -2033,8 +2056,8 @@
 <span class="sd">        since their DPID is determined by their ID.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the P4 switch</span>
-<span class="sd">            dpid (string): switch DPID (16 hexadecimal characters)</span>
+<span class="sd">            name (str): name of the P4 switch</span>
+<span class="sd">            dpid (str): switch DPID (16 hexadecimal characters)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSwitch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -2051,11 +2074,11 @@
 <span class="sd">        If the node is already present, overwrite it.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): switch name</span>
+<span class="sd">            name (str): switch name</span>
 <span class="sd">            opts (kwargs): switch options</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            P4 switch name (string)</span>
+<span class="sd">            P4 switch name (str)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">switch_id</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;device_id&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">switch_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -2071,7 +2094,7 @@
 <span class="sd">        Check if node is a P4 switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node (string): node name</span>
+<span class="sd">            node (str): node name</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            True if node is a P4 switch, else False (bool)</span>
@@ -2099,8 +2122,8 @@
 <span class="sd">        Set the P4 source for the switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string)  : name of the P4 switch</span>
-<span class="sd">            p4_src (string): path to the P4 fil</span>
+<span class="sd">            name (str)  : name of the P4 switch</span>
+<span class="sd">            p4_src (str): path to the P4 fil</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">p4_src</span><span class="o">=</span><span class="n">p4_src</span><span class="p">)</span>
@@ -2112,8 +2135,8 @@
 <span class="sd">        Set the same P4 source for all the P4 switches.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string)  : name of the P4 switch</span>
-<span class="sd">            p4_src (string): path to the P4 file</span>
+<span class="sd">            name (str)  : name of the P4 switch</span>
+<span class="sd">            p4_src (str): path to the P4 file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">p4switch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4switches</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">setP4Source</span><span class="p">(</span><span class="n">p4switch</span><span class="p">,</span> <span class="n">p4_src</span><span class="p">)</span></div>
@@ -2124,8 +2147,8 @@
 <span class="sd">        the Thrift capable switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string)     : name of the P4 switch</span>
-<span class="sd">            cli_input (string): path to the command line configuration</span>
+<span class="sd">            name (str)     : name of the P4 switch</span>
+<span class="sd">            cli_input (str): path to the command line configuration</span>
 <span class="sd">                                file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -2138,7 +2161,7 @@
 <span class="sd">        Set P4 Switch ID.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the P4 switch</span>
+<span class="sd">            name (str): name of the P4 switch</span>
 <span class="sd">            id (int)     : P4 switch ID</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -2151,7 +2174,7 @@
 <span class="sd">        Set the thrift port number for the P4 switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the P4 switch</span>
+<span class="sd">            name (str): name of the P4 switch</span>
 <span class="sd">            port (int)   : thrift port number</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -2164,7 +2187,7 @@
 <span class="sd">        Enable debugger for switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the P4 switch</span>
+<span class="sd">            name (str): name of the P4 switch</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">enable_debugger</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2176,7 +2199,7 @@
 <span class="sd">        Disable debugger for switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the P4 switch</span>
+<span class="sd">            name (str): name of the P4 switch</span>
 <span class="sd">        &quot;&quot;&quot;</span>            
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">enable_debugger</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -2202,8 +2225,8 @@
 <span class="sd">        Enable pcap dump for switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string)    : name of the P4 switch</span>
-<span class="sd">            pcap_dir (string): where to save pcap files</span>
+<span class="sd">            name (str)    : name of the P4 switch</span>
+<span class="sd">            pcap_dir (str): where to save pcap files</span>
 <span class="sd">        &quot;&quot;&quot;</span>            
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pcap_dump</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pcap_dir</span><span class="o">=</span><span class="n">pcap_dir</span><span class="p">)</span>
@@ -2215,7 +2238,7 @@
 <span class="sd">        Disable pcap dump for switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the P4 switch</span>
+<span class="sd">            name (str): name of the P4 switch</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pcap_dump</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -2227,7 +2250,7 @@
 <span class="sd">        Enable pcap dump for all the switches.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            pcap_dir (string): where to save pcap files</span>
+<span class="sd">            pcap_dir (str): where to save pcap files</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">switch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4switches</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">enablePcapDump</span><span class="p">(</span><span class="n">switch</span><span class="p">,</span> <span class="n">pcap_dir</span><span class="o">=</span><span class="n">pcap_dir</span><span class="p">)</span></div>
@@ -2244,7 +2267,7 @@
 <span class="sd">        Check if node has a CPU port.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node (string): Mininet node name</span>
+<span class="sd">            node (str): Mininet node name</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            True if node has a CPU port, else False (bool)</span>
@@ -2259,7 +2282,7 @@
 <span class="sd">        Enable CPU port on switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the P4 switch</span>
+<span class="sd">            name (str): name of the P4 switch</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="c1"># We use the bridge but at the same time we use the bug it has so the</span>
@@ -2276,7 +2299,7 @@
 <span class="sd">        Disable CPU port on switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the P4 switch</span>
+<span class="sd">            name (str): name of the P4 switch</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasCpuPort</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -2320,11 +2343,11 @@
 <span class="sd">        If the node is already present, overwrite it.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): switch name</span>
+<span class="sd">            name (str): switch name</span>
 <span class="sd">            opts (kwargs): switch options</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            P4 runtime switch name (string)</span>
+<span class="sd">            P4 runtime switch name (str)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">opts</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;cls&#39;</span><span class="p">,</span> <span class="n">P4RuntimeSwitch</span><span class="p">)</span>
         <span class="n">opts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">isP4RuntimeSwitch</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
@@ -2335,7 +2358,7 @@
 <span class="sd">        Check if node is a P4 runtime switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node (string): node name</span>
+<span class="sd">            node (str): node name</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            True if node is a P4 switch, else False (bool)</span>
@@ -2363,7 +2386,7 @@
 <span class="sd">        Set the grpc port number for the P4 runtime switch.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): name of the P4 runtime switch</span>
+<span class="sd">            name (str): name of the P4 runtime switch</span>
 <span class="sd">            port (int)   : thrift port number</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4RuntimeSwitch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -2378,25 +2401,24 @@
 <span class="sd">        If the node is already present, overwrite it.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            name (string): switch name</span>
+<span class="sd">            name (str): switch name</span>
 <span class="sd">            opts (kwargs): switch options</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            router name (string)</span>
+<span class="sd">            router name (str)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">opts</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;cls&#39;</span><span class="p">,</span> <span class="n">FRRouter</span><span class="p">)</span>
         <span class="n">opts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">isRouter</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">addNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.isRouter"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.isRouter">[docs]</a>    <span class="k">def</span> <span class="nf">isRouter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check if node is a router.</span>
+        <span class="sd">&quot;&quot;&quot;Check if node is a router.</span>
 
 <span class="sd">        Arguments:</span>
-<span class="sd">            node (string): node name</span>
+<span class="sd">            node (str): node name</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            True if node is a router, else False (bool)</span>
+<span class="sd">            bool: **True** if node is a router, else **False**</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;isRouter&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
 

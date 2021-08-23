@@ -194,6 +194,49 @@
 <em class="property">class </em><code class="descclassname">p4utils.mininetlib.network_API.</code><code class="descname">NetworkAPI</code><span class="sig-paren">(</span><em>*args</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.topo.Topo</span></code></p>
 <p>Network definition and initialization API.</p>
+<dl class="attribute">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.cli_enabled">
+<code class="descname">cli_enabled</code><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.cli_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a> – enable an extension to <em>Mininet</em> CLI after the network starts.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.hosts">
+<code class="descname">hosts</code><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.hosts" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of host and their properties.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.sw_clients">
+<code class="descname">sw_clients</code><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.sw_clients" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> – list of <em>Thrift</em> clients (one per P4 switch) to populate tables.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.compilers">
+<code class="descname">compilers</code><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.compilers" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> – list of compiler instances (one per P4 source provided) to compile P4 code.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.net">
+<code class="descname">net</code><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.net" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a> – network instance implemented using an extension to <em>Mininet</em> network class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.modules">
+<code class="descname">modules</code><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.modules" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of external modules used by the API.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.ipv4_net">
+<code class="descname">ipv4_net</code><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.ipv4_net" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Network" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">ipaddress.IPv4Network</span></code></a> – IPv4 network address generator (by default within the network <code class="docutils literal"><span class="pre">10.0.0.0/8</span></code>).
+A different network can be specified using <a class="reference internal" href="#p4utils.mininetlib.network_API.NetworkAPI.setIpBase" title="p4utils.mininetlib.network_API.NetworkAPI.setIpBase"><code class="xref py py-meth docutils literal"><span class="pre">setIpBase()</span></code></a>.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addHost">
 <code class="descname">addHost</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.addHost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addHost" title="Permalink to this definition">¶</a></dt>
@@ -204,12 +247,12 @@ If the node is already present, overwrite it.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – switch name</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – switch name</li>
 <li><strong>opts</strong> (<em>kwargs</em>) – switch options (optional)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">P4 host name (string)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">P4 host name (str)</p>
 </td>
 </tr>
 </tbody>
@@ -238,8 +281,8 @@ link two same nodes (optional)</li>
 </table>
 <dl class="docutils">
 <dt>Link options:</dt>
-<dd><p class="first">intfName1, intfName2 (string): names of the interfaces (optional)
-addr1, addr2 (string)        : MAC addresses (optional)</p>
+<dd><p class="first">intfName1, intfName2 (str): names of the interfaces (optional)
+addr1, addr2 (str)        : MAC addresses (optional)</p>
 <p class="last">weight (int)                 : weight used to compute shortest paths</p>
 </dd>
 </dl>
@@ -270,7 +313,7 @@ assignment uses it.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name</li>
 <li><strong>opts</strong> (<em>kwargs</em>) – node options</li>
 </ul>
 </td>
@@ -292,12 +335,12 @@ If the node is already present, overwrite it.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – switch name</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – switch name</li>
 <li><strong>opts</strong> (<em>kwargs</em>) – switch options</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">P4 runtime switch name (string)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">P4 runtime switch name (str)</p>
 </td>
 </tr>
 </tbody>
@@ -314,12 +357,12 @@ If the node is already present, overwrite it.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – switch name</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – switch name</li>
 <li><strong>opts</strong> (<em>kwargs</em>) – switch options</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">P4 switch name (string)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">P4 switch name (str)</p>
 </td>
 </tr>
 </tbody>
@@ -336,12 +379,12 @@ If the node is already present, overwrite it.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – switch name</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – switch name</li>
 <li><strong>opts</strong> (<em>kwargs</em>) – switch options</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">router name (string)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">router name (str)</p>
 </td>
 </tr>
 </tbody>
@@ -358,12 +401,12 @@ If the node is already present, overwrite it.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – switch name</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – switch name</li>
 <li><strong>opts</strong> (<em>kwargs</em>) – switch options</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">switch name (string)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">switch name (str)</p>
 </td>
 </tr>
 </tbody>
@@ -381,7 +424,7 @@ TaskServer has been previously enabled.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the node</li>
+<li><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the node</li>
 <li><strong>exe</strong> – executable to run (either a shell string
 command or a python function)</li>
 <li><strong>args</strong> – positional arguments for the passed function</li>
@@ -408,8 +451,8 @@ time limitation)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – tasks file path</li>
-<li><strong>def_mod</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – default module where to look for exe functions</li>
+<li><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – tasks file path</li>
+<li><strong>def_mod</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – default module where to look for exe functions</li>
 </ul>
 </td>
 </tr>
@@ -442,28 +485,31 @@ A non-default module can be specified in the command with ‘–mod &lt;module&g
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.auto_assignment">
 <code class="descname">auto_assignment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.auto_assignment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.auto_assignment" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function automatically assigns unique MACs, IPs, interface
-names and port numbers to all the interfaces which require them.
-It also assigns unique device ids, grpc ports and thrift ports
-to the devices which require them. When a default interface is
-encountered, the respective device entry is updated.</p>
-<p>It assignes unique IPs and MACs addresses to the hosts that were
-not configured manually or through an assignment strategy.
-It assignes unique MACs addresses to the every non-host node that
+<dd><p>This function automatically assigns unique <em>MACs</em>, <em>IPs</em>, <em>interface
+names</em> and <em>port numbers</em> to all the interfaces that require them.</p>
+<p>It also assigns unique <em>device ids</em>, <em>gRPC ports</em> and <em>Thrift ports</em>
+to the devices that need them. When a <em>default interface</em> is
+encountered, the device <code class="docutils literal"><span class="pre">ip</span></code> and <code class="docutils literal"><span class="pre">mac</span></code> parameters
+are updated accordingly.</p>
+<p>It assignes unique <em>IPs</em> and <em>MACs</em> addresses to the hosts that were
+not configured manually or through an assignment strategy.</p>
+<p>It assignes unique <em>MACs</em> addresses to the every non-host node that
 was not configured manually or through an assignment strategy.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.auto_grpc_port">
 <code class="descname">auto_grpc_port</code><span class="sig-paren">(</span><em>base=9559</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.auto_grpc_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.auto_grpc_port" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute an available grpc port that can be assigned.</p>
+<dd><p>Computes an available gRPC port that can be assigned.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – starting grpc port</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – starting gRPC port</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the computed grpc port (int)</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the computed gRPC port</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -472,30 +518,58 @@ was not configured manually or through an assignment strategy.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.auto_ip_address">
 <code class="descname">auto_ip_address</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.auto_ip_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.auto_ip_address" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate an IP address, different from anyone already generated.</p>
+<dd><p>Generates an IPv4 address, different from anyone already in the network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">IP / subnet mask</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The IPv4 will be generated within the network <code class="docutils literal"><span class="pre">10.0.0.0/8</span></code>, if not
+otherwise specified with <a class="reference internal" href="#p4utils.mininetlib.network_API.NetworkAPI.setIpBase" title="p4utils.mininetlib.network_API.NetworkAPI.setIpBase"><code class="xref py py-meth docutils literal"><span class="pre">setIpBase()</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.auto_mac_address">
 <code class="descname">auto_mac_address</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.auto_mac_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.auto_mac_address" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a MAC address, different from anyone already generated.</p>
+<dd><p>Generates a MAC address, different from any other already in the network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">MAC address</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.auto_port_num">
 <code class="descname">auto_port_num</code><span class="sig-paren">(</span><em>node</em>, <em>base=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.auto_port_num"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.auto_port_num" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the next port number that can be used on the node.</p>
+<dd><p>Computes the next port number that can be used on the node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the node</li>
+<li><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the node</li>
 <li><strong>base</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – starting port number</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">available port number (int)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">available port number</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
 </td>
 </tr>
 </tbody>
@@ -505,14 +579,16 @@ was not configured manually or through an assignment strategy.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.auto_switch_id">
 <code class="descname">auto_switch_id</code><span class="sig-paren">(</span><em>base=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.auto_switch_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.auto_switch_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute an available switch id that can be assigned.</p>
+<dd><p>Computes an available <em>switch id</em> that can be assigned.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – starting switch id</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – starting <em>switch id</em></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the computed switch id (int)</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the computed <em>switch id</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -521,14 +597,16 @@ was not configured manually or through an assignment strategy.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.auto_thrift_port">
 <code class="descname">auto_thrift_port</code><span class="sig-paren">(</span><em>base=9090</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.auto_thrift_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.auto_thrift_port" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute an available thrift port that can be assigned.</p>
+<dd><p>Computes an available Thrift port that can be assigned.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – starting thrift port</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the computed thrift port (int)</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the computed thrift port</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -537,15 +615,25 @@ was not configured manually or through an assignment strategy.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.check_host_valid_ip_from_name">
 <code class="descname">check_host_valid_ip_from_name</code><span class="sig-paren">(</span><em>host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.check_host_valid_ip_from_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.check_host_valid_ip_from_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Util for assignment strategies.</p>
+<dd><p>Util for assignment strategies that checks validity of
+host names.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>host</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the host</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>host</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the host</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if the host name is valid, <strong>False</strong> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A host name is valid if it is composed by <code class="docutils literal"><span class="pre">h</span></code> followed by a
+number that represents the <em>host id</em> (e.g. <code class="docutils literal"><span class="pre">h12</span></code>).</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -557,7 +645,7 @@ was not configured manually or through an assignment strategy.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.compile">
 <code class="descname">compile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.compile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.compile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compile all the required P4 files.</p>
+<dd><p>Compiles all the required P4 files.</p>
 </dd></dl>
 
 <dl class="method">
@@ -588,7 +676,7 @@ link two same nodes (optional)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – Mininet node name</li>
+<li><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Mininet node name</li>
 <li><strong>remove_links</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether to remove all the incident
 links</li>
 </ul>
@@ -625,7 +713,7 @@ same network.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</td>
 </tr>
 </tbody>
 </table>
@@ -645,7 +733,7 @@ same network.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</td>
 </tr>
 </tbody>
 </table>
@@ -684,7 +772,7 @@ for the gateway only.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the node</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the node</td>
 </tr>
 </tbody>
 </table>
@@ -704,7 +792,7 @@ for the gateway only.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</td>
 </tr>
 </tbody>
 </table>
@@ -724,7 +812,7 @@ for the gateway only.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the node</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the node</td>
 </tr>
 </tbody>
 </table>
@@ -739,13 +827,13 @@ for the gateway only.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.distribute_tasks">
 <code class="descname">distribute_tasks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.distribute_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.distribute_tasks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Distribute all the tasks to the schedulers.</p>
-<dl class="docutils">
-<dt>Assumes:</dt>
-<dd>All the nodes in self.tasks have an active scheduler.
-A mininet instance is stored as self.net.
-self.net.start() has been called.</dd>
-</dl>
+<dd><p>Distributes all the tasks to the schedulers.</p>
+<p><strong>Assumes</strong></p>
+<ul class="simple">
+<li>All the nodes in self.tasks have an active scheduler.</li>
+<li>A <em>Mininet</em> network instance is stored in the attribute <code class="docutils literal"><span class="pre">net</span></code> (see <a class="reference external" href="#p4utils.mininetlib.network_API.NetworkAPI.net">here</a>).</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">self.net.start()</span></code> has been called.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -769,7 +857,7 @@ same network.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</td>
 </tr>
 </tbody>
 </table>
@@ -795,7 +883,7 @@ any CPU port enabled.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</td>
 </tr>
 </tbody>
 </table>
@@ -835,8 +923,8 @@ for the gateway only.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the node</li>
-<li><strong>log_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – where to save log files</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the node</li>
+<li><strong>log_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – where to save log files</li>
 </ul>
 </td>
 </tr>
@@ -852,7 +940,7 @@ for the gateway only.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>log_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – where to save log files</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>log_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – where to save log files</td>
 </tr>
 </tbody>
 </table>
@@ -867,8 +955,8 @@ for the gateway only.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</li>
-<li><strong>pcap_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – where to save pcap files</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</li>
+<li><strong>pcap_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – where to save pcap files</li>
 </ul>
 </td>
 </tr>
@@ -884,7 +972,7 @@ for the gateway only.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pcap_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – where to save pcap files</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pcap_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – where to save pcap files</td>
 </tr>
 </tbody>
 </table>
@@ -899,8 +987,8 @@ for the gateway only.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the node</li>
-<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the directory where the
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the node</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the directory where the
 socket file will be placed</li>
 </ul>
 </td>
@@ -917,7 +1005,7 @@ socket file will be placed</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the directory where the
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the directory where the
 socket file will be placed</td>
 </tr>
 </tbody>
@@ -934,7 +1022,7 @@ the network boot.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cmd</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – command to execute</li>
+<li><strong>cmd</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – command to execute</li>
 <li><strong>reboot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether to rerun the script every time
 all the P4 switches are rebooted.</li>
 </ul>
@@ -981,7 +1069,7 @@ link two same nodes (optional)</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – Mininet node name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Mininet node name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">node metadata dict</td>
 </tr>
@@ -992,14 +1080,25 @@ link two same nodes (optional)</li>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.get_default_intf">
 <code class="descname">get_default_intf</code><span class="sig-paren">(</span><em>node1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.get_default_intf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.get_default_intf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the tuple (node1, node2, key) identifying the
-default interface.</p>
+<dd><p>Retrieves node’s default interface.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – node name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">(node1,</span> <span class="pre">node2,</span> <span class="pre">key)</span></code> identifying the default interface.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.grpc_ports">
 <code class="descname">grpc_ports</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.grpc_ports"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.grpc_ports" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a set containing all the switches’ grpc ports.</p>
+<dd><p>Returns a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> containing all the switches’ gRPC ports.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1010,7 +1109,7 @@ default interface.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – Mininet node name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Mininet node name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if node has a CPU port, else False (bool)</td>
 </tr>
@@ -1025,8 +1124,8 @@ default interface.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="p4utils.mininetlib.network_API.NetworkAPI.hosts">
-<code class="descname">hosts</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.hosts" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">hosts</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.hosts"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Return hosts.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1048,18 +1147,21 @@ default interface.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.intf_name">
 <code class="descname">intf_name</code><span class="sig-paren">(</span><em>name</em>, <em>port</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.intf_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.intf_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a canonical interface name node-ethN for interface port.</p>
+<dd><p>Constructs a canonical interface name node-ethN for interface port.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the Mininet node</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the Mininet node</li>
 <li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – port number</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the chosen interface name (string)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the chosen interface name</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
 </td>
 </tr>
 </tbody>
@@ -1069,7 +1171,7 @@ default interface.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.ip_addresses">
 <code class="descname">ip_addresses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.ip_addresses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.ip_addresses" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a set containing all the IPv4 addresses of L3 nodes,
+<dd><p>Returns a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> containing all the IPv4 addresses of L3 nodes,
 i.e. of all non-switch nodes. The fake IPs assigned to the
 switches are not considered.</p>
 </dd></dl>
@@ -1082,7 +1184,7 @@ switches are not considered.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – node name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – node name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if node is a host, else False (bool)</td>
 </tr>
@@ -1098,7 +1200,7 @@ switches are not considered.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – node name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – node name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if node exists, else False (bool)</td>
 </tr>
@@ -1114,7 +1216,7 @@ switches are not considered.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – node name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – node name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if node is a P4 switch, else False (bool)</td>
 </tr>
@@ -1130,7 +1232,7 @@ switches are not considered.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – node name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – node name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if node is a P4 switch, else False (bool)</td>
 </tr>
@@ -1146,9 +1248,11 @@ switches are not considered.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – node name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – node name</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if node is a router, else False (bool)</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if node is a router, else <strong>False</strong></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -1162,7 +1266,7 @@ switches are not considered.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – Mininet node name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Mininet node name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if node is a switch, else False (bool)</td>
 </tr>
@@ -1173,29 +1277,33 @@ switches are not considered.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.is_default_intf">
 <code class="descname">is_default_intf</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.is_default_intf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.is_default_intf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the specified interface is the default one for node1.</p>
+<dd><p>Checks if the specified interface is the default one for <strong>node1</strong>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>node2</strong> (<em>node1</em><em>,</em>) – nodes linked together</li>
-<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – id used to identify multiple edges which
-link two same nodes (optional)</li>
+<li><strong>node1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – node that belongs the interface</li>
+<li><strong>node2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – node facing the other end of the link</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – id used to identify multiple edges that
+connect two same nodes (optional)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the interface is default, False else</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> if the interface is the default one, <strong>False</strong> else</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>Since interfaces can be removed, the default interface
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Since interfaces can be removed, the default interface
 may change during the definition of the network. So this is
-reliable only if no other interfaces are added/removed afterwards.</dd>
-</dl>
+reliable only if no other interfaces are added/removed afterwards.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1259,7 +1367,7 @@ edges are listed.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.mac_addresses">
 <code class="descname">mac_addresses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.mac_addresses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.mac_addresses" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a set containing all the MAC addresses.</p>
+<dd><p>Returns a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> containing all the MAC addresses.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1280,22 +1388,35 @@ Parallel links are not allowed.</dd>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.module">
 <code class="descname">module</code><span class="sig-paren">(</span><em>mod_name</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.module"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create object from external modules configurations.</p>
+<dd><p>Creates object from external modules configurations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>mod_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – module name (possible values are
-‘topo’, ‘comp’, ‘net’, ‘sw_cli’)</li>
-<li><strong>args</strong> – positional arguments to pass to the object</li>
-<li><strong>kwargs</strong> – keyword arguments to pass to the object in addition to
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mod_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – module name</li>
+<li><strong>*args</strong> – positional arguments to pass to the object</li>
+<li><strong>**kwargs</strong> – keyword arguments to pass to the object in addition to
 the default ones</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">configured instance of the class of the module</p>
-</td>
+</tbody>
+</table>
+<p>Possible values for <strong>mod_name</strong> are the following:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">topo</span></code> for extentions of <code class="xref py py-class docutils literal"><span class="pre">mininet.topo.Topo</span></code></li>
+<li><code class="docutils literal"><span class="pre">comp</span></code> for P4 compiler class</li>
+<li><code class="docutils literal"><span class="pre">net</span></code> for extentions of <code class="xref py py-class docutils literal"><span class="pre">mininet.net.Mininet</span></code></li>
+<li><code class="docutils literal"><span class="pre">sw_cli</span></code> for switch <em>Thrift</em> client class to configure control plane</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">configured instance of the class of the module</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)">object</a></td>
 </tr>
 </tbody>
 </table>
@@ -1304,15 +1425,15 @@ the default ones</li>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.node_intfs">
 <code class="descname">node_intfs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.node_intfs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.node_intfs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build a dictionary from the links and store the interfaces
-of every node and its destination node.</p>
+<dd><p>Builds a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> from the links, stores the interfaces
+of every node and its destination node and returns it.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.node_ports">
 <code class="descname">node_ports</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.node_ports"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.node_ports" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build a dictionary from the links and store the ports
-of every node and its destination node.</p>
+<dd><p>Builds a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> from the links, store the ports
+of every node and its destination node and returns it.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1407,7 +1528,7 @@ link two same nodes (optional)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>node1</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – nodes to link together</li>
+<li><strong>node1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – nodes to link together</li>
 <li><strong>remove_links</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether to remove all the incident
 links</li>
 </ul>
@@ -1430,15 +1551,14 @@ links</li>
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.program_hosts">
 <code class="descname">program_hosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.program_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.program_hosts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds static and default routes ARP entries to each mininet host.
-Multihomed hosts are allowed.</p>
-<dl class="docutils">
-<dt>Assumes:</dt>
-<dd>Only switches and hosts are allowed.
-No duplicated IP addresses exist in the Network (e.g. no NAT allowed
-for the same subnet).
-A mininet instance is stored as self.net.
-self.net.start() has been called.</dd>
-</dl>
+Multihomed hosts are allowed. It also enables DHCP if requested.</p>
+<p><strong>Assumes</strong></p>
+<ul class="simple">
+<li>No duplicated IP addresses exist in the network (e.g. no NAT allowed
+for the same subnet).</li>
+<li>A <em>Mininet</em> network instance is stored in the attribute <code class="docutils literal"><span class="pre">net</span></code> (see <a class="reference external" href="#p4utils.mininetlib.network_API.NetworkAPI.net">here</a>).</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">self.net.start()</span></code> has been called.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1446,11 +1566,11 @@ self.net.start() has been called.</dd>
 <code class="descname">program_switches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.program_switches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.program_switches" title="Permalink to this definition">¶</a></dt>
 <dd><p>If any command files were provided for the switches, this method will start up the
 CLI on each switch and use the contents of the command files as input.</p>
-<dl class="docutils">
-<dt>Assumes:</dt>
-<dd>A mininet instance is stored as self.net.
-self.net.start() has been called.</dd>
-</dl>
+<p><strong>Assumes</strong></p>
+<ul class="simple">
+<li>A <em>Mininet</em> network instance is stored in the attribute <code class="docutils literal"><span class="pre">net</span></code> (see <a class="reference external" href="#p4utils.mininetlib.network_API.NetworkAPI.net">here</a>).</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">self.net.start()</span></code> has been called.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1478,7 +1598,10 @@ self.net.start() has been called.</dd>
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.save_topology">
 <code class="descname">save_topology</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.save_topology"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.save_topology" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves mininet topology to a JSON file.</p>
-<p>Notice that multigraphs are not supported yet by p4utils.utils.Topology</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Multigraphs are not supported yet by <a class="reference internal" href="p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph" title="p4utils.utils.topology.NetworkGraph"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.topology.NetworkGraph</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1534,8 +1657,8 @@ link two same nodes (optional)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the node</li>
-<li><strong>default_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – default route IP</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the node</li>
+<li><strong>default_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – default route IP</li>
 </ul>
 </td>
 </tr>
@@ -1590,7 +1713,7 @@ link two same nodes (optional)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 runtime switch</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 runtime switch</li>
 <li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – thrift port number</li>
 </ul>
 </td>
@@ -1610,7 +1733,7 @@ then the link with the lowest key value is considered.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>node2</strong> (<em>node1</em><em>,</em>) – nodes linked together</li>
-<li><strong>ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – IP address/mask to configure</li>
+<li><strong>ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – IP address/mask to configure</li>
 <li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – id used to identify multiple edges which
 link two same nodes (optional)</li>
 </ul>
@@ -1634,7 +1757,7 @@ then the link with the lowest key value is considered.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>node2</strong> (<em>node1</em><em>,</em>) – nodes linked together</li>
-<li><strong>mac</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – MAC address to configure</li>
+<li><strong>mac</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – MAC address to configure</li>
 <li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – id used to identify multiple edges which
 link two same nodes (optional)</li>
 </ul>
@@ -1658,7 +1781,7 @@ then the link with lowest key value is considered.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>node2</strong> (<em>node1</em><em>,</em>) – nodes linked together</li>
-<li><strong>intfName</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the interface</li>
+<li><strong>intfName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the interface</li>
 <li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – id used to identify multiple edges which
 link two same nodes (optional)</li>
 </ul>
@@ -1705,7 +1828,7 @@ or manual assignment).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ipBase</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – IP address/mask (e.g. ‘10.0.0.0/8’)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ipBase</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – IP address/mask (e.g. ‘10.0.0.0/8’)</td>
 </tr>
 </tbody>
 </table>
@@ -1726,7 +1849,7 @@ before any node is added to the network.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>logLevel</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – possible values are debug’, ‘info’, ‘output’,
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>logLevel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – possible values are debug’, ‘info’, ‘output’,
 ‘warning’, ‘error’, ‘critical’.</td>
 </tr>
 </tbody>
@@ -1827,8 +1950,8 @@ the Thrift capable switch.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</li>
-<li><strong>cli_input</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – path to the command line configuration
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</li>
+<li><strong>cli_input</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the command line configuration
 file</li>
 </ul>
 </td>
@@ -1846,8 +1969,8 @@ file</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</li>
-<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – path to the P4 fil</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</li>
+<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the P4 fil</li>
 </ul>
 </td>
 </tr>
@@ -1864,8 +1987,8 @@ file</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</li>
-<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – path to the P4 file</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</li>
+<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the P4 file</li>
 </ul>
 </td>
 </tr>
@@ -1882,7 +2005,7 @@ file</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</li>
 <li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – P4 switch ID</li>
 </ul>
 </td>
@@ -1907,8 +2030,8 @@ since their DPID is determined by their ID.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</li>
-<li><strong>dpid</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – switch DPID (16 hexadecimal characters)</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</li>
+<li><strong>dpid</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – switch DPID (16 hexadecimal characters)</li>
 </ul>
 </td>
 </tr>
@@ -1925,7 +2048,7 @@ since their DPID is determined by their ID.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the P4 switch</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the P4 switch</li>
 <li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – thrift port number</li>
 </ul>
 </td>
@@ -1951,48 +2074,48 @@ If enabled, start the client.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.start_net_cli">
 <code class="descname">start_net_cli</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.start_net_cli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.start_net_cli" title="Permalink to this definition">¶</a></dt>
-<dd><p>Starts up the mininet CLI and prints some helpful output.</p>
-<dl class="docutils">
-<dt>Assumes:</dt>
-<dd>A mininet instance is stored as self.net.
-self.net.start() has been called.</dd>
-</dl>
+<dd><p>Starts the <em>Mininet</em> CLI and prints some helpful output.</p>
+<p><strong>Assumes</strong></p>
+<ul class="simple">
+<li>A <em>Mininet</em> network instance is stored in the attribute <code class="docutils literal"><span class="pre">net</span></code> (see <a class="reference external" href="#p4utils.mininetlib.network_API.NetworkAPI.net">here</a>).</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">self.net.start()</span></code> has been called.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.start_scheduler">
 <code class="descname">start_scheduler</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.start_scheduler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.start_scheduler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start the task scheduler on node if enabled.</p>
+<dd><p>Starts the task scheduler on node if enabled.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the node</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the node</td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Assumes:</dt>
-<dd>A mininet instance is stored as self.net.
-self.net.start() has been called.</dd>
-</dl>
+<p><strong>Assumes</strong></p>
+<ul class="simple">
+<li>A <em>Mininet</em> network instance is stored in the attribute <code class="docutils literal"><span class="pre">net</span></code> (see <a class="reference external" href="#p4utils.mininetlib.network_API.NetworkAPI.net">here</a>).</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">self.net.start()</span></code> has been called.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.start_schedulers">
 <code class="descname">start_schedulers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.start_schedulers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.start_schedulers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start all the required task schedulers.</p>
-<dl class="docutils">
-<dt>Assumes:</dt>
-<dd>A mininet instance is stored as self.net.
-self.net.start() has been called.</dd>
-</dl>
+<dd><p>Starts all the required task schedulers.</p>
+<p><strong>Assumes</strong></p>
+<ul class="simple">
+<li>A <em>Mininet</em> network instance is stored in the attribute <code class="docutils literal"><span class="pre">net</span></code> (see <a class="reference external" href="#p4utils.mininetlib.network_API.NetworkAPI.net">here</a>).</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">self.net.start()</span></code> has been called.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.switch_ids">
 <code class="descname">switch_ids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.switch_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.switch_ids" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a set containing all the switch IDs.</p>
+<dd><p>Returns a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> containing all the <em>switches ids</em>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -2019,7 +2142,7 @@ self.net.start() has been called.</dd>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.thrift_ports">
 <code class="descname">thrift_ports</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.thrift_ports"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.thrift_ports" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a set containing all the switches’ thrift ports.</p>
+<dd><p>Returns a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> containing all the switches’ Thrift ports.</p>
 </dd></dl>
 
 <dl class="method">
@@ -2058,7 +2181,7 @@ and create a new one with the updated information.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – node name</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – node name</li>
 <li><strong>opts</strong> – node options to update (optional)</li>
 </ul>
 </td>

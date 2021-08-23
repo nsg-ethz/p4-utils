@@ -21,8 +21,17 @@ from p4utils.utils.task_scheduler import TaskClient
 
 
 class NetworkAPI(Topo):
-    """
-    Network definition and initialization API.
+    """Network definition and initialization API.
+    
+    Attributes:
+        cli_enabled (:py:class:`bool`)              : enable an extension to *Mininet* CLI after the network starts.
+        hosts (:py:class:`dict`)                    : dictionary of host and their properties.
+        sw_clients (:py:class:`list`)               : list of *Thrift* clients (one per P4 switch) to populate tables.
+        compilers (:py:class:`list`)                : list of compiler instances (one per P4 source provided) to compile P4 code.
+        net (:py:class:`object`)                    : network instance implemented using an extension to *Mininet* network class.
+        modules (:py:class:`dict`)                  : dictionary of external modules used by the API.
+        ipv4_net (:py:class:`ipaddress.IPv4Network`): IPv4 network address generator (by default within the network ``10.0.0.0/8``).
+                                                      A different network can be specified using :py:meth:`setIpBase()`.
     """
     def __init__(self, *args, **params):
         # Init superclass
@@ -78,9 +87,7 @@ class NetworkAPI(Topo):
 
 ### Utils
     def cleanup(self):
-        """
-        Removes old Mininet files and processes.
-        """
+        """Removes old Mininet files and processes."""
         # Mininet cleanup
         cleanup()
         bridges = sh("brctl show | awk 'FNR > 1 {print $1}'").splitlines()
@@ -89,8 +96,7 @@ class NetworkAPI(Topo):
             sh("brctl delbr {}".format(bridge))
 
     def is_multigraph(self):
-        """
-        Check whether the graph is a multigraph, i.e. it has multiple parallel
+        """Check whether the graph is a multigraph, i.e. it has multiple parallel
         links.
         """
         multigraph = False
@@ -103,10 +109,10 @@ class NetworkAPI(Topo):
         return multigraph
 
     def save_topology(self):
-        """
-        Saves mininet topology to a JSON file.
+        """Saves mininet topology to a JSON file.
 
-        Notice that multigraphs are not supported yet by p4utils.utils.Topology
+        Note:
+            Multigraphs are not supported yet by :py:class:`p4utils.utils.topology.NetworkGraph`.
         """
         # This function return None for each not serializable
         # obect so that no TypeError is thrown.
@@ -173,9 +179,7 @@ class NetworkAPI(Topo):
             json.dump(graph_dict, f, default=default)
 
     def compile(self):
-        """
-        Compile all the required P4 files.
-        """
+        """Compiles all the required P4 files."""
         for p4switch in self.p4switches():
             p4_src = self.getNode(p4switch).get('p4_src')
             if p4_src is not None:
@@ -194,13 +198,15 @@ class NetworkAPI(Topo):
                     pass
 
     def program_switches(self):
-        """
-        If any command files were provided for the switches, this method will start up the
+        """If any command files were provided for the switches, this method will start up the
         CLI on each switch and use the contents of the command files as input.
 
-        Assumes:
-            A mininet instance is stored as self.net.
-            self.net.start() has been called.
+        **Assumes**
+
+        - __ #p4utils.mininetlib.network_API.NetworkAPI.net
+        
+          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).
+        - :py:meth:`self.net.start()` has been called.
         """
         for p4switch, info in self.p4switches(withInfo=True):
             cli_input = info.get('cli_input')
@@ -211,16 +217,17 @@ class NetworkAPI(Topo):
                 self.sw_clients.append(sw_client)
 
     def program_hosts(self):
-        """
-        Adds static and default routes ARP entries to each mininet host.
-        Multihomed hosts are allowed.
+        """Adds static and default routes ARP entries to each mininet host.
+        Multihomed hosts are allowed. It also enables DHCP if requested.
 
-        Assumes:
-            Only switches and hosts are allowed.
-            No duplicated IP addresses exist in the Network (e.g. no NAT allowed
-            for the same subnet).
-            A mininet instance is stored as self.net.
-            self.net.start() has been called.
+        **Assumes**
+
+        - No duplicated IP addresses exist in the network (e.g. no NAT allowed
+          for the same subnet).
+        - __ #p4utils.mininetlib.network_API.NetworkAPI.net
+        
+          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).
+        - :py:meth:`self.net.start()` has been called.
         """
         for host1, info in self.hosts(withInfo=True):
             # Get mininet node
@@ -294,23 +301,23 @@ class NetworkAPI(Topo):
                     h1.cmd('dhclient {} &'.format(intf1.name))
 
     def exec_scripts(self):
-        """
-        Executes the scripts in the main namespace after network boot.
-        """
+        """Executes the scripts in the main namespace after network boot."""
         for script in self.scripts:
             info('Exec Script: {}\n'.format(script['cmd']))
             run_command(script['cmd'])
 
     def start_scheduler(self, node):
-        """
-        Start the task scheduler on node if enabled.
+        """Starts the task scheduler on node if enabled.
 
-        Arguments:
-            node (string): name of the node
+        Args:
+            node (str): name of the node
 
-        Assumes:
-            A mininet instance is stored as self.net.
-            self.net.start() has been called.
+        **Assumes**
+
+        - __ #p4utils.mininetlib.network_API.NetworkAPI.net
+        
+          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).
+        - :py:meth:`self.net.start()` has been called.
         """
         if self.hasScheduler(node):
             unix_path = self.getNode(node).get('unix_path', '/tmp')
@@ -325,12 +332,14 @@ class NetworkAPI(Topo):
                 self.net[node].cmd('python3 -u -m p4utils.utils.task_scheduler "{}" > /dev/null 2>&1 &'.format(unix_socket))
 
     def start_schedulers(self):
-        """
-        Start all the required task schedulers.
+        """Starts all the required task schedulers.
 
-        Assumes:
-            A mininet instance is stored as self.net.
-            self.net.start() has been called.
+        **Assumes**
+
+        - __ #p4utils.mininetlib.network_API.NetworkAPI.net
+        
+          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).
+        - :py:meth:`self.net.start()` has been called.
         """
         for node in self.nodes():
             if self.hasScheduler(node):
@@ -340,13 +349,15 @@ class NetworkAPI(Topo):
                 self.tasks.pop(node, None)
 
     def distribute_tasks(self):
-        """
-        Distribute all the tasks to the schedulers.
+        """Distributes all the tasks to the schedulers.
 
-        Assumes:
-            All the nodes in self.tasks have an active scheduler.
-            A mininet instance is stored as self.net.
-            self.net.start() has been called.
+        **Assumes**
+
+        - All the nodes in self.tasks have an active scheduler.
+        - __ #p4utils.mininetlib.network_API.NetworkAPI.net
+        
+          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).
+        - :py:meth:`self.net.start()` has been called.
         """
         # Get current time
         current_time = time.time()
@@ -364,12 +375,14 @@ class NetworkAPI(Topo):
         self.tasks = {}
 
     def start_net_cli(self):
-        """
-        Starts up the mininet CLI and prints some helpful output.
+        """Starts the *Mininet* CLI and prints some helpful output.
 
-        Assumes:
-            A mininet instance is stored as self.net.
-            self.net.start() has been called.
+        **Assumes**
+
+        - __ #p4utils.mininetlib.network_API.NetworkAPI.net
+        
+          A *Mininet* network instance is stored in the attribute ``net`` (see `here`__).
+        - :py:meth:`self.net.start()` has been called.
         """
         for switch in self.net.switches:
             if self.isP4Switch(switch.name):
@@ -403,18 +416,23 @@ class NetworkAPI(Topo):
         P4CLI(self)
 
     def module(self, mod_name, *args, **kwargs):
-        """
-        Create object from external modules configurations.
+        """Creates object from external modules configurations.
 
-        Arguments:
-            mod_name (string): module name (possible values are
-                               'topo', 'comp', 'net', 'sw_cli')
-            args             : positional arguments to pass to the object
-            kwargs           : keyword arguments to pass to the object in addition to
+        Args:
+            mod_name (str): module name
+            *args            : positional arguments to pass to the object
+            **kwargs         : keyword arguments to pass to the object in addition to
                                the default ones
         
+        Possible values for **mod_name** are the following:
+
+        - ``topo`` for extentions of :py:class:`mininet.topo.Topo`
+        - ``comp`` for P4 compiler class
+        - ``net`` for extentions of :py:class:`mininet.net.Mininet`
+        - ``sw_cli`` for switch *Thrift* client class to configure control plane
+
         Returns:
-            configured instance of the class of the module
+            object: configured instance of the class of the module
         """
         default_kwargs = self.modules[mod_name]['kwargs']
         default_class = self.modules[mod_name]['class']
@@ -423,9 +441,8 @@ class NetworkAPI(Topo):
         return default_class(*args, **kwargs)
 
     def node_ports(self):
-        """
-        Build a dictionary from the links and store the ports
-        of every node and its destination node.
+        """Builds a :py:class:`dict` from the links, store the ports
+        of every node and its destination node and returns it.
         """
         ports = {}
         for _, _, key, info in self.links(withKeys=True, withInfo=True):
@@ -440,9 +457,8 @@ class NetworkAPI(Topo):
         return ports
 
     def node_intfs(self):
-        """
-        Build a dictionary from the links and store the interfaces
-        of every node and its destination node.
+        """Builds a :py:class:`dict` from the links, stores the interfaces
+        of every node and its destination node and returns it.
         """
         ports = {}
         for _, _, key, info in self.links(withKeys=True, withInfo=True):
@@ -457,9 +473,7 @@ class NetworkAPI(Topo):
         return ports
 
     def switch_ids(self):
-        """
-        Return a set containing all the switch IDs.
-        """
+        """Returns a :py:class:`set` containing all the *switches ids*."""
         ids = set()
 
         for switch, info in self.switches(withInfo=True):
@@ -475,9 +489,7 @@ class NetworkAPI(Topo):
         return ids
 
     def thrift_ports(self):
-        """
-        Return a set containing all the switches' thrift ports.
-        """
+        """Returns a :py:class:`set` containing all the switches' Thrift ports."""
         thrift_ports = set()
 
         for switch, info in self.p4switches(withInfo=True):
@@ -488,9 +500,7 @@ class NetworkAPI(Topo):
         return thrift_ports
 
     def grpc_ports(self):
-        """
-        Return a set containing all the switches' grpc ports.
-        """
+        """Returns a :py:class:`set` containing all the switches' gRPC ports."""
         grpc_ports = set()
 
         for switch, info in self.p4rtswitches(withInfo=True):
@@ -501,9 +511,7 @@ class NetworkAPI(Topo):
         return grpc_ports
 
     def mac_addresses(self):
-        """
-        Return a set containing all the MAC addresses.
-        """
+        """Returns a :py:class:`set` containing all the MAC addresses."""
         macs = set()
 
         for node1, node2, info in self.links(withInfo=True):
@@ -517,8 +525,7 @@ class NetworkAPI(Topo):
         return macs
 
     def ip_addresses(self):
-        """
-        Return a set containing all the IPv4 addresses of L3 nodes,
+        """Returns a :py:class:`set` containing all the IPv4 addresses of L3 nodes,
         i.e. of all non-switch nodes. The fake IPs assigned to the
         switches are not considered.
         """
@@ -542,11 +549,18 @@ class NetworkAPI(Topo):
         return ips
 
     def check_host_valid_ip_from_name(self, host):
-        """
-        Util for assignment strategies.
+        """Util for assignment strategies that checks validity of
+        host names.
 
-        Arguments:
-            host (string): name of the host
+        Args:
+            host (str): name of the host
+
+        Returns:
+            bool: **True** if the host name is valid, **False** otherwise.
+        
+        Note:
+            A host name is valid if it is composed by ``h`` followed by a
+            number that represents the *host id* (e.g. ``h12``).
         """
         valid = True
         if host[0] == 'h':
@@ -560,67 +574,62 @@ class NetworkAPI(Topo):
         return valid
 
     def intf_name(self, name, port):
-        """
-        Construct a canonical interface name node-ethN for interface port.
+        """Constructs a canonical interface name node-ethN for interface port.
 
-        Arguments:
-            name (string): name of the Mininet node
-            port (int)   : port number
+        Args:
+            name (str): name of the Mininet node
+            port (int): port number
 
         Returns:
-            the chosen interface name (string)
+            str: the chosen interface name
         """
         return name + '-eth' + repr(port)
 
     def auto_switch_id(self, base=1):
-        """
-        Compute an available switch id that can be assigned.
+        """Computes an available *switch id* that can be assigned.
 
-        Arguments:
-            base (int): starting switch id
+        Args:
+            base (int): starting *switch id*
 
         Returns:
-            the computed switch id (int)
+            int: the computed *switch id*
         """
         switch_ids = self.switch_ids().union(self.grpc_ports())
         return next_element(switch_ids, minimum=base)
 
     def auto_grpc_port(self, base=9559):
-        """
-        Compute an available grpc port that can be assigned.
+        """Computes an available gRPC port that can be assigned.
 
-        Arguments:
-            base (int): starting grpc port
+        Args:
+            base (int): starting gRPC port
 
         Returns:
-            the computed grpc port (int)
+            int: the computed gRPC port
         """
         grpc_ports = self.grpc_ports().union(self.thrift_ports())
         return next_element(grpc_ports, minimum=base)
 
     def auto_thrift_port(self, base=9090):
-        """
-        Compute an available thrift port that can be assigned.
+        """Computes an available Thrift port that can be assigned.
 
-        Arguments:
+        Args:
             base (int): starting thrift port
 
         Returns:
-            the computed thrift port (int)
+            int: the computed thrift port
         """
         thrift_ports = self.thrift_ports()
         return next_element(thrift_ports, minimum=base)
 
     def auto_port_num(self, node, base=0):
-        """
-        Compute the next port number that can be used on the node.
+        """Computes the next port number that can be used on the node.
 
-        Arguments:
-            node (string)    : name of the node
-            base (int)       : starting port number
+        Args:
+            node (str): name of the node
+            base (int): starting port number
 
         Returns:
-            available port number (int)
+            int: available port number
         """
         ports = self.node_ports().get(node)
         if ports is not None:
@@ -630,8 +639,10 @@ class NetworkAPI(Topo):
             return base
 
     def auto_mac_address(self):
-        """
-        Generate a MAC address, different from anyone already generated.
+        """Generates a MAC address, different from any other already in the network.
+        
+        Returns:
+            str: MAC address
         """
         mac = rand_mac()
         mac_addresses = self.mac_addresses()
@@ -640,8 +651,14 @@ class NetworkAPI(Topo):
         return mac
 
     def auto_ip_address(self):
-        """
-        Generate an IP address, different from anyone already generated.
+        """Generates an IPv4 address, different from anyone already in the network.
+
+        Returns:
+            str: IP / subnet mask
+
+        Note:
+            The IPv4 will be generated within the network ``10.0.0.0/8``, if not 
+            otherwise specified with :py:meth:`setIpBase`.
         """
         ip_generator = self.ipv4_net.hosts()
         ip = str(next(ip_generator))
@@ -652,16 +669,18 @@ class NetworkAPI(Topo):
         return ip + '/' + prefixLen
 
     def auto_assignment(self):
-        """
-        This function automatically assigns unique MACs, IPs, interface 
-        names and port numbers to all the interfaces which require them.
-        It also assigns unique device ids, grpc ports and thrift ports
-        to the devices which require them. When a default interface is
-        encountered, the respective device entry is updated.
+        """This function automatically assigns unique *MACs*, *IPs*, *interface 
+        names* and *port numbers* to all the interfaces that require them.
+        
+        It also assigns unique *device ids*, *gRPC ports* and *Thrift ports*
+        to the devices that need them. When a *default interface* is
+        encountered, the device ``ip`` and ``mac`` parameters
+        are updated accordingly.
 
-        It assignes unique IPs and MACs addresses to the hosts that were
+        It assignes unique *IPs* and *MACs* addresses to the hosts that were
         not configured manually or through an assignment strategy.
-        It assignes unique MACs addresses to the every non-host node that
+        
+        It assignes unique *MACs* addresses to the every non-host node that
         was not configured manually or through an assignment strategy.
         """
         # Set nodes' parameters automatically
@@ -779,9 +798,13 @@ class NetworkAPI(Topo):
                     self.updateNode(node2, ip=info['params2']['ip'])
 
     def get_default_intf(self, node1):
-        """
-        Return the tuple (node1, node2, key) identifying the
-        default interface.
+        """Retrieves node's default interface.
+
+        Args:
+            node1 (str): node name
+
+        Returns:
+            tuple: ``(node1, node2, key)`` identifying the default interface.
         """
         if self.isNode(node1):
             node_ports = self.node_ports()
@@ -789,24 +812,24 @@ class NetworkAPI(Topo):
             if ports is not None:
                 return ports[min(node_ports[node1].keys())]
             else:
-                warning('node {} has no incident links.\n'.format(node1))
+                warning('Node {} has no incident links.\n'.format(node1))
                 return None, None, None
         else:
             raise Exception('"{}" does not exist.'.format(node1))
 
     def is_default_intf(self, node1, node2, key=None):
-        """
-        Check if the specified interface is the default one for node1.
+        """Checks if the specified interface is the default one for **node1**.
         
         Arguments:
-            node1, node2 (string): nodes linked together
-            key (int)            : id used to identify multiple edges which
-                                   link two same nodes (optional)
+            node1 (str): node that belongs the interface
+            node2 (str): node facing the other end of the link
+            key (int)  : id used to identify multiple edges that
+                         connect two same nodes (optional)
 
         Returns:
-            True if the interface is default, False else
+            bool: **True** if the interface is the default one, **False** else
 
-        Notice:
+        Note:
             Since interfaces can be removed, the default interface
             may change during the definition of the network. So this is
             reliable only if no other interfaces are added/removed afterwards.
@@ -825,7 +848,7 @@ class NetworkAPI(Topo):
         Set the log level for the execution.
 
         Arguments:
-            logLevel (string): possible values are debug', 'info', 'output',
+            logLevel (str): possible values are debug', 'info', 'output',
                                'warning', 'error', 'critical'.
         """
         setLogLevel(logLevel)
@@ -837,7 +860,7 @@ class NetworkAPI(Topo):
         or manual assignment).
 
         Arguments:
-            ipBase (string): IP address/mask (e.g. '10.0.0.0/8')
+            ipBase (str): IP address/mask (e.g. '10.0.0.0/8')
 
         Notice:
             Remember that setting the IP base won't automatically change
@@ -890,7 +913,7 @@ class NetworkAPI(Topo):
         the network boot.
 
         Arguments:
-            cmd (string) : command to execute
+            cmd (str) : command to execute
             reboot (bool): whether to rerun the script every time
                            all the P4 switches are rebooted.
         """
@@ -1017,15 +1040,15 @@ class NetworkAPI(Topo):
         ordinal number is used.
 
         Arguments:
-            node1, node2 (string)        : nodes to link together
+            node1, node2 (str)        : nodes to link together
             port1, port2 (int)           : ports (optional)
             key (int)                    : id used to identify multiple edges which
                                            link two same nodes (optional)
             opts                         : link options as listed below (optional)
     
         Link options:
-            intfName1, intfName2 (string): names of the interfaces (optional)
-            addr1, addr2 (string)        : MAC addresses (optional)
+            intfName1, intfName2 (str): names of the interfaces (optional)
+            addr1, addr2 (str)        : MAC addresses (optional)
             
             weight (int)                 : weight used to compute shortest paths
         
@@ -1135,7 +1158,7 @@ class NetworkAPI(Topo):
         link with the lowest key value is considered.
 
         Arguments:
-            node1, node2 (string): nodes linked together
+            node1, node2 (str): nodes linked together
             key (int)        : id used to identify multiple edges which
                                link two same nodes (optional)
 
@@ -1153,7 +1176,7 @@ class NetworkAPI(Topo):
         value is considered.
 
         Arguments:
-            node1, node2 (string): nodes to link together
+            node1, node2 (str): nodes to link together
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
             opts                 : link options to update (optional)
@@ -1187,7 +1210,7 @@ class NetworkAPI(Topo):
         Delete link.
 
         Arguments:
-            node1, node2 (string): nodes to link together
+            node1, node2 (str): nodes to link together
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
         """
@@ -1207,7 +1230,7 @@ class NetworkAPI(Topo):
         key value is considered.
 
         Arguments:
-            node1, node2 (string): nodes to link together
+            node1, node2 (str): nodes to link together
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
 
@@ -1239,7 +1262,7 @@ class NetworkAPI(Topo):
         key value is considered.
 
         Arguments:
-            node1, node2 (string): nodes linked together
+            node1, node2 (str): nodes linked together
             bw (float, int)      : bandwidth (in Mbps)
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
@@ -1258,7 +1281,7 @@ class NetworkAPI(Topo):
         key value is considered.
 
         Arguments:
-            node1, node2 (string): nodes linked together
+            node1, node2 (str): nodes linked together
             delay (int)          : transmission delay (in ms)
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
@@ -1277,7 +1300,7 @@ class NetworkAPI(Topo):
         key value is considered.
 
         Arguments:
-            node1, node2 (string): nodes linked together
+            node1, node2 (str): nodes linked together
             loss (float)         : packet loss rate (e.g. 0.5 means that 50% of
                                    packets will exeperience a loss)
             key (int)            : id used to identify multiple edges which
@@ -1301,7 +1324,7 @@ class NetworkAPI(Topo):
         key value is considered.
 
         Arguments:
-            node1, node2 (string): nodes linked together
+            node1, node2 (str): nodes linked together
             max_queue_size (int) : maximum number of packets the qdisc may hold queued at a time.
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
@@ -1320,8 +1343,8 @@ class NetworkAPI(Topo):
         then the link with lowest key value is considered.
 
         Arguments:
-            node1, node2 (string): nodes linked together
-            intfName (string)    : name of the interface
+            node1, node2 (str): nodes linked together
+            intfName (str)    : name of the interface
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
         
@@ -1339,7 +1362,7 @@ class NetworkAPI(Topo):
         if key is None, then the link with lowest key value is considered.
 
         Arguments:
-            node1, node2 (string): nodes linked together
+            node1, node2 (str): nodes linked together
             port (int)           : name of the interface
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
@@ -1358,8 +1381,8 @@ class NetworkAPI(Topo):
         then the link with the lowest key value is considered.
 
         Arguments:
-            node1, node2 (string): nodes linked together
-            ip (string)          : IP address/mask to configure
+            node1, node2 (str): nodes linked together
+            ip (str)          : IP address/mask to configure
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
         
@@ -1379,8 +1402,8 @@ class NetworkAPI(Topo):
         then the link with the lowest key value is considered.
 
         Arguments:
-            node1, node2 (string): nodes linked together
-            mac (string)         : MAC address to configure
+            node1, node2 (str): nodes linked together
+            mac (str)         : MAC address to configure
             key (int)            : id used to identify multiple edges which
                                    link two same nodes (optional)
 
@@ -1437,7 +1460,7 @@ class NetworkAPI(Topo):
         Add Node to graph.
 
         Arguments:
-            name (string): name
+            name (str): name
             opts (kwargs): node options
 
         Returns:
@@ -1450,7 +1473,7 @@ class NetworkAPI(Topo):
         Get node information.
 
         Arguments:
-            node (string): Mininet node name
+            node (str): Mininet node name
 
         Returns:
             node metadata dict
@@ -1463,7 +1486,7 @@ class NetworkAPI(Topo):
         and create a new one with the updated information.
 
         Arguments:
-            name (string): node name
+            name (str): node name
             opts         : node options to update (optional)
         
         Returns:
@@ -1491,7 +1514,7 @@ class NetworkAPI(Topo):
         Delete node.
 
         Arguments:
-            node         (string): Mininet node name
+            node         (str): Mininet node name
             remove_links (bool)  : whether to remove all the incident
                                    links
         """
@@ -1509,7 +1532,7 @@ class NetworkAPI(Topo):
         Pop node.
 
         Arguments:
-            node1 (string)     : nodes to link together
+            node1 (str)     : nodes to link together
             remove_links (bool): whether to remove all the incident
                                  links
 
@@ -1525,7 +1548,7 @@ class NetworkAPI(Topo):
         Check if node exists.
 
         Arguments:
-            node (string): node name
+            node (str): node name
 
         Returns:
             True if node exists, else False (bool)
@@ -1552,8 +1575,8 @@ class NetworkAPI(Topo):
         Enable log for node (also for the task scheduler).
 
         Arguments:
-            name (string)   : name of the node
-            log_dir (string): where to save log files
+            name (str)   : name of the node
+            log_dir (str): where to save log files
         """            
         if self.isNode(name):
             self.updateNode(name, log_enabled=True, log_dir=log_dir)
@@ -1565,7 +1588,7 @@ class NetworkAPI(Topo):
         Disable log for node (also for the task scheduler).
 
         Arguments:
-            name (string): name of the node
+            name (str): name of the node
         """            
         if self.isNode(name):
             self.updateNode(name, log_enabled=False)
@@ -1577,7 +1600,7 @@ class NetworkAPI(Topo):
         Enable log for all the nodes (also for the task schedulers).
 
         Arguments:
-            log_dir (string): where to save log files
+            log_dir (str): where to save log files
         """
         for node in self.nodes():
             self.enableLog(node, log_dir=log_dir)
@@ -1594,8 +1617,8 @@ class NetworkAPI(Topo):
         Enable the task scheduler server for the node.
 
         Arguments:
-            name (string): name of the node
-            path (string): name of the directory where the
+            name (str): name of the node
+            path (str): name of the directory where the
                            socket file will be placed
         """
         if self.isNode(name):
@@ -1608,7 +1631,7 @@ class NetworkAPI(Topo):
         Disable the task scheduler server for the node.
 
         Arguments:
-            name (string): name of the node
+            name (str): name of the node
         """
         if self.isNode(name):
             self.updateNode(name, scheduler=False)
@@ -1626,7 +1649,7 @@ class NetworkAPI(Topo):
         Enable the task scheduler server for all the nodes.
 
         Arguments:
-            path (string): name of the directory where the
+            path (str): name of the directory where the
                            socket file will be placed
         """
         for node in self.nodes():
@@ -1644,8 +1667,8 @@ class NetworkAPI(Topo):
         Add the tasks to the node.
 
         Arguments:
-            filepath (string): tasks file path
-            def_mod (string) : default module where to look for exe functions
+            filepath (str): tasks file path
+            def_mod (str) : default module where to look for exe functions
 
         Notice:
             The file has to be a set of lines, where each has the following syntax.
@@ -1666,7 +1689,7 @@ class NetworkAPI(Topo):
         TaskServer has been previously enabled.
 
         Arguments:
-            node (string)         : name of the node
+            node (str)         : name of the node
             exe                   : executable to run (either a shell string 
                                     command or a python function)
             args                  : positional arguments for the passed function
@@ -1700,8 +1723,8 @@ class NetworkAPI(Topo):
         Set the node's default route.
 
         Arguments:
-            name (string)         : name of the node
-            default_route (string): default route IP
+            name (str)         : name of the node
+            default_route (str): default route IP
         """
         if self.isNode(name):
             self.updateNode(name, defaultRoute='via {}'.format(default_route))
@@ -1713,7 +1736,7 @@ class NetworkAPI(Topo):
         Check whether two node are neighbors.
 
         Arguments:
-            node1, node2 (string): names of the nodes
+            node1, node2 (str): names of the nodes
 
         Returns:
             True if node1 and node2 are neighbors, False else.
@@ -1730,11 +1753,11 @@ class NetworkAPI(Topo):
         If the node is already present, overwrite it.
 
         Arguments:
-            name (string): switch name
+            name (str): switch name
             opts (kwargs): switch options (optional)
 
         Returns:
-            P4 host name (string)
+            P4 host name (str)
         """
         opts.setdefault('cls', P4Host)
         opts.update(isHost = True)
@@ -1745,7 +1768,7 @@ class NetworkAPI(Topo):
         Check if node is a host.
 
         Arguments:
-            node (string): node name
+            node (str): node name
 
         Returns:
             True if node is a host, else False (bool)
@@ -1814,11 +1837,11 @@ class NetworkAPI(Topo):
         If the node is already present, overwrite it.
 
         Arguments:
-            name (string): switch name
+            name (str): switch name
             opts (kwargs): switch options
 
         Returns:
-            switch name (string)
+            switch name (str)
         """
         dpid = opts.get('dpid')
         if dpid is not None:
@@ -1836,7 +1859,7 @@ class NetworkAPI(Topo):
         Check if node is a switch.
 
         Arguments:
-            node (string): Mininet node name
+            node (str): Mininet node name
 
         Returns:
             True if node is a switch, else False (bool)
@@ -1865,8 +1888,8 @@ class NetworkAPI(Topo):
         since their DPID is determined by their ID.
 
         Arguments:
-            name (string): name of the P4 switch
-            dpid (string): switch DPID (16 hexadecimal characters)
+            name (str): name of the P4 switch
+            dpid (str): switch DPID (16 hexadecimal characters)
         """
         if self.isSwitch(name):
             if self.isP4Switch(name):
@@ -1883,11 +1906,11 @@ class NetworkAPI(Topo):
         If the node is already present, overwrite it.
 
         Arguments:
-            name (string): switch name
+            name (str): switch name
             opts (kwargs): switch options
 
         Returns:
-            P4 switch name (string)
+            P4 switch name (str)
         """
         switch_id = opts.get('device_id')
         if switch_id is not None:
@@ -1903,7 +1926,7 @@ class NetworkAPI(Topo):
         Check if node is a P4 switch.
 
         Arguments:
-            node (string): node name
+            node (str): node name
 
         Returns:
             True if node is a P4 switch, else False (bool)
@@ -1931,8 +1954,8 @@ class NetworkAPI(Topo):
         Set the P4 source for the switch.
 
         Arguments:
-            name (string)  : name of the P4 switch
-            p4_src (string): path to the P4 fil
+            name (str)  : name of the P4 switch
+            p4_src (str): path to the P4 fil
         """
         if self.isP4Switch(name):
             self.updateNode(name, p4_src=p4_src)
@@ -1944,8 +1967,8 @@ class NetworkAPI(Topo):
         Set the same P4 source for all the P4 switches.
 
         Arguments:
-            name (string)  : name of the P4 switch
-            p4_src (string): path to the P4 file
+            name (str)  : name of the P4 switch
+            p4_src (str): path to the P4 file
         """
         for p4switch in self.p4switches():
             self.setP4Source(p4switch, p4_src)
@@ -1956,8 +1979,8 @@ class NetworkAPI(Topo):
         the Thrift capable switch.
 
         Arguments:
-            name (string)     : name of the P4 switch
-            cli_input (string): path to the command line configuration
+            name (str)     : name of the P4 switch
+            cli_input (str): path to the command line configuration
                                 file
         """
         if self.isP4Switch(name):
@@ -1970,7 +1993,7 @@ class NetworkAPI(Topo):
         Set P4 Switch ID.
 
         Arguments:
-            name (string): name of the P4 switch
+            name (str): name of the P4 switch
             id (int)     : P4 switch ID
         """
         if self.isP4Switch(name):
@@ -1983,7 +2006,7 @@ class NetworkAPI(Topo):
         Set the thrift port number for the P4 switch.
 
         Arguments:
-            name (string): name of the P4 switch
+            name (str): name of the P4 switch
             port (int)   : thrift port number
         """
         if self.isP4Switch(name):
@@ -1996,7 +2019,7 @@ class NetworkAPI(Topo):
         Enable debugger for switch.
 
         Arguments:
-            name (string): name of the P4 switch
+            name (str): name of the P4 switch
         """
         if self.isP4Switch(name):
             self.updateNode(name, enable_debugger=True)
@@ -2008,7 +2031,7 @@ class NetworkAPI(Topo):
         Disable debugger for switch.
 
         Arguments:
-            name (string): name of the P4 switch
+            name (str): name of the P4 switch
         """            
         if self.isP4Switch(name):
             self.updateNode(name, enable_debugger=False)
@@ -2034,8 +2057,8 @@ class NetworkAPI(Topo):
         Enable pcap dump for switch.
 
         Arguments:
-            name (string)    : name of the P4 switch
-            pcap_dir (string): where to save pcap files
+            name (str)    : name of the P4 switch
+            pcap_dir (str): where to save pcap files
         """            
         if self.isP4Switch(name):
             self.updateNode(name, pcap_dump=True, pcap_dir=pcap_dir)
@@ -2047,7 +2070,7 @@ class NetworkAPI(Topo):
         Disable pcap dump for switch.
 
         Arguments:
-            name (string): name of the P4 switch
+            name (str): name of the P4 switch
         """
         if self.isP4Switch(name):
             self.updateNode(name, pcap_dump=False)
@@ -2059,7 +2082,7 @@ class NetworkAPI(Topo):
         Enable pcap dump for all the switches.
 
         Arguments:
-            pcap_dir (string): where to save pcap files
+            pcap_dir (str): where to save pcap files
         """
         for switch in self.p4switches():
             self.enablePcapDump(switch, pcap_dir=pcap_dir)
@@ -2076,7 +2099,7 @@ class NetworkAPI(Topo):
         Check if node has a CPU port.
 
         Arguments:
-            node (string): Mininet node name
+            node (str): Mininet node name
 
         Returns:
             True if node has a CPU port, else False (bool)
@@ -2091,7 +2114,7 @@ class NetworkAPI(Topo):
         Enable CPU port on switch.
 
         Arguments:
-            name (string): name of the P4 switch
+            name (str): name of the P4 switch
         """
         if self.isP4Switch(name):
             # We use the bridge but at the same time we use the bug it has so the
@@ -2108,7 +2131,7 @@ class NetworkAPI(Topo):
         Disable CPU port on switch.
 
         Arguments:
-            name (string): name of the P4 switch
+            name (str): name of the P4 switch
         """
         if self.isP4Switch(name):
             if self.hasCpuPort(name):
@@ -2152,11 +2175,11 @@ class NetworkAPI(Topo):
         If the node is already present, overwrite it.
 
         Arguments:
-            name (string): switch name
+            name (str): switch name
             opts (kwargs): switch options
 
         Returns:
-            P4 runtime switch name (string)
+            P4 runtime switch name (str)
         """
         opts.setdefault('cls', P4RuntimeSwitch)
         opts.update(isP4RuntimeSwitch = True)
@@ -2167,7 +2190,7 @@ class NetworkAPI(Topo):
         Check if node is a P4 runtime switch.
 
         Arguments:
-            node (string): node name
+            node (str): node name
 
         Returns:
             True if node is a P4 switch, else False (bool)
@@ -2195,7 +2218,7 @@ class NetworkAPI(Topo):
         Set the grpc port number for the P4 runtime switch.
 
         Arguments:
-            name (string): name of the P4 runtime switch
+            name (str): name of the P4 runtime switch
             port (int)   : thrift port number
         """
         if self.isP4RuntimeSwitch(name):
@@ -2210,25 +2233,24 @@ class NetworkAPI(Topo):
         If the node is already present, overwrite it.
 
         Arguments:
-            name (string): switch name
+            name (str): switch name
             opts (kwargs): switch options
 
         Returns:
-            router name (string)
+            router name (str)
         """
         opts.setdefault('cls', FRRouter)
         opts.update(isRouter = True)
         return self.addNode(name, **opts)
 
     def isRouter(self, node):
-        """
-        Check if node is a router.
+        """Check if node is a router.
 
         Arguments:
-            node (string): node name
+            node (str): node name
 
         Returns:
-            True if node is a router, else False (bool)
+            bool: **True** if node is a router, else **False**
         """
         return self.g.node[node].get('isRouter', False)
 
