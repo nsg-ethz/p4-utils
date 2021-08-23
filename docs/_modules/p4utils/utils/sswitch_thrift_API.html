@@ -282,7 +282,7 @@
 
 <span class="sd">        Args: </span>
 <span class="sd">            queue_depth (int): number of packets</span>
-<span class="sd">            egress_port (int): optional egress port, otherwise all ports</span>
+<span class="sd">            egress_port (int): optional *egress port*, otherwise all ports</span>
 <span class="sd">                               are considered</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -299,7 +299,7 @@
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            rate (int)       : rate (packets per seconds)</span>
-<span class="sd">            egress_port (int): optional egress port, otherwise all ports</span>
+<span class="sd">            egress_port (int): optional *egress port*, otherwise all ports</span>
 <span class="sd">                               are considered</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -316,7 +316,7 @@
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            mirror_id (int)  : *mirror id* to use</span>
-<span class="sd">            egress_port (int): egress port to associate with the mirror</span>
+<span class="sd">            egress_port (int): *egress port* to associate with the mirror</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mirror_id</span><span class="p">,</span> <span class="n">egress_port</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="s2">&quot;mirror_id&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">egress_port</span><span class="p">,</span> <span class="s2">&quot;egress_port&quot;</span><span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">MirroringSessionConfig</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="n">egress_port</span><span class="p">)</span>
@@ -328,7 +328,7 @@
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            mirror_id (int): *mirror id* to associate</span>
-<span class="sd">            mgrp (int)     : multicast group</span>
+<span class="sd">            mgrp (int)     : *multicast group*</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mirror_id</span><span class="p">,</span> <span class="n">mgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="s2">&quot;mirror_id&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mgrp</span><span class="p">,</span> <span class="s2">&quot;mgrp&quot;</span><span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">MirroringSessionConfig</span><span class="p">(</span><span class="n">mgid</span><span class="o">=</span><span class="n">mgrp</span><span class="p">)</span>
@@ -340,8 +340,8 @@
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            mirror_id (int)  : *mirror id* to use</span>
-<span class="sd">            egress_port (int): egress port to associate with the mirror</span>
-<span class="sd">            mgrp (int)       : multicast group</span>
+<span class="sd">            egress_port (int): *egress port* to associate with the mirror</span>
+<span class="sd">            mgrp (int)       : *multicast group*</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mirror_id</span><span class="p">,</span> <span class="n">egress_port</span><span class="p">,</span> <span class="n">mgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="s2">&quot;mirror_id&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">egress_port</span><span class="p">,</span> <span class="s2">&quot;egress_port&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mgrp</span><span class="p">,</span> <span class="s2">&quot;mgrp&quot;</span><span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">MirroringSessionConfig</span><span class="p">(</span><span class="n">mgid</span><span class="o">=</span><span class="n">mgrp</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">egress_port</span><span class="p">)</span>
@@ -352,7 +352,7 @@
         <span class="sd">&quot;&quot;&quot;Deletes mirroring mapping.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
-<span class="sd">            mirror_id (int): id of the mirror to delete</span>
+<span class="sd">            mirror_id (int): *id* of the mirror to delete</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mirror_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="s2">&quot;mirror_id&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">mirroring_session_delete</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">)</span></div>
@@ -362,7 +362,7 @@
         <span class="sd">&quot;&quot;&quot;Prints mirroring session information</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
-<span class="sd">            mirror_id (int): id of the mirror to display</span>
+<span class="sd">            mirror_id (int): *id* of the mirror to display</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mirror_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_int</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">,</span> <span class="s2">&quot;mirror_id&quot;</span><span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sswitch_client</span><span class="o">.</span><span class="n">mirroring_session_get</span><span class="p">(</span><span class="n">mirror_id</span><span class="p">)</span>

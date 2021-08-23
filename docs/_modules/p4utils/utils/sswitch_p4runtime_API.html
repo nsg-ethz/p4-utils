@@ -355,18 +355,18 @@
         <span class="sd">&quot;&quot;&quot;Adds entry to a match table.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            table_name (str)             : name of the table</span>
-<span class="sd">            action_name (str)            : action to execute on hit</span>
-<span class="sd">            match_keys (list)               : values to match (each value is a :py:class:`str`)</span>
-<span class="sd">            action_params (list)            : parameters passed to action (each parameter is a :py:class:`str`)</span>
-<span class="sd">            prio (int)                      : priority in ternary match</span>
-<span class="sd">            rates (list)                    : ``[(cir, cburst), (pir, pburst)]`` (if **None**, the meter</span>
-<span class="sd">                                              is set to its default behavior, i.e. marks</span>
-<span class="sd">                                              all packets as **GREEN**)</span>
-<span class="sd">            pkts (int)                      : number of packets to write (if **None**, the count</span>
-<span class="sd">                                              is not changed)</span>
-<span class="sd">            byts (int)                      : number of bytes to write (if **None**, the count</span>
-<span class="sd">                                              is not changed)</span>
+<span class="sd">            table_name (str)    : name of the table</span>
+<span class="sd">            action_name (str)   : action to execute on hit</span>
+<span class="sd">            match_keys (list)   : values to match (each value is a :py:class:`str`)</span>
+<span class="sd">            action_params (list): parameters passed to action (each parameter is a :py:class:`str`)</span>
+<span class="sd">            prio (int)          : priority in ternary match</span>
+<span class="sd">            rates (list)        : ``[(cir, cburst), (pir, pburst)]`` (if **None**, the meter</span>
+<span class="sd">                                  is set to its default behavior, i.e. marks</span>
+<span class="sd">                                  all packets as **GREEN**)</span>
+<span class="sd">            pkts (int)          : number of packets to write (if **None**, the count</span>
+<span class="sd">                                  is not changed)</span>
+<span class="sd">            byts (int)          : number of bytes to write (if **None**, the count</span>
+<span class="sd">                                  is not changed)</span>
 <span class="sd">        </span>
 <span class="sd">        There are different kinds of matches:</span>
 

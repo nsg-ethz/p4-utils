@@ -114,7 +114,7 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
 
         Args: 
             queue_depth (int): number of packets
-            egress_port (int): optional egress port, otherwise all ports
+            egress_port (int): optional *egress port*, otherwise all ports
                                are considered
         """
 
@@ -131,7 +131,7 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
         
         Args:
             rate (int)       : rate (packets per seconds)
-            egress_port (int): optional egress port, otherwise all ports
+            egress_port (int): optional *egress port*, otherwise all ports
                                are considered
         """
 
@@ -148,7 +148,7 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
         
         Args:
             mirror_id (int)  : *mirror id* to use
-            egress_port (int): egress port to associate with the mirror
+            egress_port (int): *egress port* to associate with the mirror
         """
         mirror_id, egress_port = self.parse_int(mirror_id, "mirror_id"), self.parse_int(egress_port, "egress_port")
         config = MirroringSessionConfig(port=egress_port)
@@ -160,7 +160,7 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
         
         Args:
             mirror_id (int): *mirror id* to associate
-            mgrp (int)     : multicast group
+            mgrp (int)     : *multicast group*
         """
         mirror_id, mgrp = self.parse_int(mirror_id, "mirror_id"), self.parse_int(mgrp, "mgrp")
         config = MirroringSessionConfig(mgid=mgrp)
@@ -172,8 +172,8 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
         
         Args:
             mirror_id (int)  : *mirror id* to use
-            egress_port (int): egress port to associate with the mirror
-            mgrp (int)       : multicast group
+            egress_port (int): *egress port* to associate with the mirror
+            mgrp (int)       : *multicast group*
         """
         mirror_id, egress_port, mgrp = self.parse_int(mirror_id, "mirror_id"), self.parse_int(egress_port, "egress_port"), self.parse_int(mgrp, "mgrp")
         config = MirroringSessionConfig(mgid=mgrp, port=egress_port)
@@ -184,7 +184,7 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
         """Deletes mirroring mapping.
         
         Args:
-            mirror_id (int): id of the mirror to delete
+            mirror_id (int): *id* of the mirror to delete
         """
         mirror_id = self.parse_int(mirror_id, "mirror_id")
         self.sswitch_client.mirroring_session_delete(mirror_id)
@@ -194,7 +194,7 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
         """Prints mirroring session information
         
         Args:
-            mirror_id (int): id of the mirror to display
+            mirror_id (int): *id* of the mirror to display
         """
         mirror_id = self.parse_int(mirror_id, "mirror_id")
         config = self.sswitch_client.mirroring_session_get(mirror_id)

@@ -187,18 +187,18 @@ class SimpleSwitchP4RuntimeAPI:
         """Adds entry to a match table.
 
         Args:
-            table_name (str)             : name of the table
-            action_name (str)            : action to execute on hit
-            match_keys (list)               : values to match (each value is a :py:class:`str`)
-            action_params (list)            : parameters passed to action (each parameter is a :py:class:`str`)
-            prio (int)                      : priority in ternary match
-            rates (list)                    : ``[(cir, cburst), (pir, pburst)]`` (if **None**, the meter
-                                              is set to its default behavior, i.e. marks
-                                              all packets as **GREEN**)
-            pkts (int)                      : number of packets to write (if **None**, the count
-                                              is not changed)
-            byts (int)                      : number of bytes to write (if **None**, the count
-                                              is not changed)
+            table_name (str)    : name of the table
+            action_name (str)   : action to execute on hit
+            match_keys (list)   : values to match (each value is a :py:class:`str`)
+            action_params (list): parameters passed to action (each parameter is a :py:class:`str`)
+            prio (int)          : priority in ternary match
+            rates (list)        : ``[(cir, cburst), (pir, pburst)]`` (if **None**, the meter
+                                  is set to its default behavior, i.e. marks
+                                  all packets as **GREEN**)
+            pkts (int)          : number of packets to write (if **None**, the count
+                                  is not changed)
+            byts (int)          : number of bytes to write (if **None**, the count
+                                  is not changed)
         
         There are different kinds of matches:
 
