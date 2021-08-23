@@ -165,16 +165,9 @@ class AppRunner(NetworkAPI):
 
           ``router_node`` loads an extension to *Mininet* node class 
           into the `homonymous attribute`__.
-        - __ #p4utils.p4run.AppRunner.mininet_module
-
-          ``mininet_module`` loads an extension to *Mininet* network class into the
-          `homonymous attribute`__.
-        - __ #p4utils.p4run.AppRunner.compiler_module
-
-          ``compiler_module`` loads a compiler class into the `homonymous attribute`__.
-        - __ #p4utils.p4run.AppRunner.client_module
-
-          ``client_module`` loads a *Thrift* client into the `homonymous attribute`__.
+        - ``mininet_module`` loads an extension to *Mininet* network class.
+        - ``compiler_module`` loads the external P4 compiler class.
+        - ``client_module`` loads the external *Thrift* client class.
 
     Note: 
         __ p4utils.utils.helper.html#p4utils.utils.helper.load_custom_object
@@ -184,25 +177,22 @@ class AppRunner(NetworkAPI):
         are imported and the related JSON syntax, please check out `this`__ helper function.
 
     Attributes:
-        cli_enabled (:py:class:`bool`)      : enable an extension to *Mininet* CLI after the network starts.
-        log_enabled (:py:class:`bool`)      : enable saving log files to the disk.
-        log_dir (:py:class:`str`)           : directory used to store log files.
-        pcap_dump (:py:class:`bool`)        : generate ``.pcap`` files for interfaces.
-        pcap_dir (:py:class:`str`)          : directory where to store ``.pcap`` files.
-        hosts (:py:class:`dict`)            : dictionary of host and their properties.
-        switches (:py:class:`dict`)         : dictionary of switches and their properties.
-        routers (:py:class:`dict`)          : dictionary of routers and their properties.
-        links (:py:class:`dict`)            : dictionary of mininet links and their properties.
-        clients (:py:class:`list`)          : list of *Thrift* clients (one per P4 switch) to populate tables.
-        compilers (:py:class:`list`)        : list of compiler instances (one per P4 source provided) to compile P4 code.
-        conf (:py:class:`dict`)             : parsed configuration from the JSON configuration file.
-        net (:py:class:`object`)            : network instance implemented using an extension to *Mininet* network class.
-        host_node (:py:obj:`class`)         : extension to *Mininet* node class used as default host class.
-        switch_node (:py:obj:`class`)       : extension to *Mininet* switch node class used as default switch class.
-        router_node (:py:obj:`class`)       : extension to *Mininet* node class used as default router class.
-        mininet_module (:py:obj:`class`)    : extension to *Mininet* network class used to orchestrate the virtual network.
-        compiler_module (:py:obj:`class`)   : compiler class used for P4 sources compilation.
-        client_module (:py:obj:`class`)     : *Thrift* client to program switches from command text files.    
+        cli_enabled (:py:class:`bool`)       : enable an extension to *Mininet* CLI after the network starts.
+        log_enabled (:py:class:`bool`)       : enable saving log files to the disk.
+        log_dir (:py:class:`str`)            : directory used to store log files.
+        pcap_dump (:py:class:`bool`)         : generate ``.pcap`` files for interfaces.
+        pcap_dir (:py:class:`str`)           : directory where to store ``.pcap`` files.
+        hosts (:py:class:`dict`)             : dictionary of host and their properties.
+        switches (:py:class:`dict`)          : dictionary of switches and their properties.
+        routers (:py:class:`dict`)           : dictionary of routers and their properties.
+        links (:py:class:`dict`)             : dictionary of mininet links and their properties.
+        clients (:py:class:`list`)           : list of *Thrift* clients (one per P4 switch) to populate tables.
+        compilers (:py:class:`list`)         : list of compiler instances (one per P4 source provided) to compile P4 code.
+        conf (:py:class:`dict`)              : parsed configuration from the JSON configuration file.
+        net (:py:class:`mininet.net.Mininet`): network instance implemented using an extension to *Mininet* network class.
+        host_node (:py:obj:`class`)          : extension to *Mininet* node class used as default host class.
+        switch_node (:py:obj:`class`)        : extension to *Mininet* switch node class used as default switch class.
+        router_node (:py:obj:`class`)        : extension to *Mininet* node class used as default router class.
     """
 
     def __init__(self, conf_file,
