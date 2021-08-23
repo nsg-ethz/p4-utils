@@ -2,7 +2,7 @@
 
 """__ p4utils.utils.p4runtime_API.html
 
-This module provides a P4Runtime API for the *Simple Switch* target. It builds
+This module provides a *P4Runtime API* for the *Simple Switch* target. It builds
 on the generic `P4Runtime API`__. The methods listed here were designed to be as
 close as possible (in the naming and in the signature) to those used in the 
 :py:class:`p4utils.utils.thrift_API.ThriftAPI`, so that passing to one method to the

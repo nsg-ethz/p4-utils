@@ -186,9 +186,9 @@ class AppRunner(NetworkAPI):
     Attributes:
         cli_enabled (:py:class:`bool`)      : enable an extension to *Mininet* CLI after the network starts.
         log_enabled (:py:class:`bool`)      : enable saving log files to the disk.
-        log_dir (:py:class:`str`)        : directory used to store log files.
+        log_dir (:py:class:`str`)           : directory used to store log files.
         pcap_dump (:py:class:`bool`)        : generate ``.pcap`` files for interfaces.
-        pcap_dir (:py:class:`str`)       : directory where to store ``.pcap`` files.
+        pcap_dir (:py:class:`str`)          : directory where to store ``.pcap`` files.
         hosts (:py:class:`dict`)            : dictionary of host and their properties.
         switches (:py:class:`dict`)         : dictionary of switches and their properties.
         routers (:py:class:`dict`)          : dictionary of routers and their properties.
