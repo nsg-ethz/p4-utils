@@ -20,6 +20,15 @@
 # Modified version of the sswitch_CLI.py from behavioural model
 # Edgar Costa (cedgar@ethz.ch)
 
+"""__ p4utils.utils.thrift_API.html
+
+__ https://github.com/p4lang/behavioral-model/blob/main/targets/simple_switch/sswitch_CLI.py
+
+This module provides the *Simple Switch Thrift API*. It builds
+on the generic `Thrift API`__. It is a modified version of 
+`sswitch_CLI.py`__ from behavioral model.
+"""
+
 from functools import wraps
 
 from sswitch_runtime import SimpleSwitch
@@ -29,6 +38,14 @@ import p4utils.utils.thrift_API as thrift_API
 
 
 def handle_bad_input(f):
+    """Handles bad input.
+
+    Args:
+        f (func): function or method to handle
+    
+    Returns:
+        bool: **True** if the function was correctly executed, and **False** otherwise.
+    """
     @wraps(f)
     @thrift_API.handle_bad_input
     def handle(*args, **kwargs):
@@ -41,8 +58,20 @@ def handle_bad_input(f):
 
 
 class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
+    """ Simple Switch *Thrift* control plane API.
+    
+    Args:
+        thrift_port (int): port to connect to
+        thrift_ip (str)  : IP the *Thrift* server is listening on
+        json_path (str)  : optional JSON compiled P4 file to push to the switch
+
+    Attributes:
+        sswitch_client: *Thrift* client instance to communicate with the switch
+    """
+    
     @staticmethod
     def get_thrift_services():
+        """Get available *Thrift* services."""
         return [("simple_switch", SimpleSwitch.Client)]
 
     def __init__(self, thrift_port,
@@ -61,6 +90,19 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
                                                         SimpleSwitchThriftAPI.get_thrift_services())[0]
 
     def parse_int(self, arg, name):
+        """Tries to convert the argument to :py:class:`int`.
+
+        Args:
+            arg       : argument that can be converted to :py:class:`int`
+            name (str): name of the argument
+
+        Returns:
+            int: integer value of the argument
+        
+        Raises:
+            p4utils.utils.thrift_API.UIn_Error: if the argument cannot be transformed in
+                                                an integer.
+        """
         try:
             return int(arg)
         except:
@@ -68,7 +110,13 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
 
     @handle_bad_input
     def set_queue_depth(self, queue_depth, egress_port=None):
-        "Set depth of one / all egress queue(s): set_queue_depth <nb_pkts> [<egress_port>]"
+        """Sets depth of one / all egress queue(s).
+
+        Args: 
+            queue_depth (int): number of packets
+            egress_port (int): optional egress port, otherwise all ports
+                               are considered
+        """
 
         depth = self.parse_int(queue_depth, "queue_depth")
         if egress_port:
@@ -79,7 +127,13 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
 
     @handle_bad_input
     def set_queue_rate(self, rate, egress_port=None):
-        "Set rate of one / all egress queue(s): set_queue_rate <rate_pps> [<egress_port>]"
+        """Sets rate of one / all egress queue(s).
+        
+        Args:
+            rate (int)       : rate (packets per seconds)
+            egress_port (int): optional egress port, otherwise all ports
+                               are considered
+        """
 
         rate = self.parse_int(rate, "rate_pps")
         if egress_port:
@@ -90,46 +144,70 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
 
     @handle_bad_input
     def mirroring_add(self, mirror_id, egress_port):
-        "Add mirroring mapping: mirroring_add <mirror_id> <egress_port>"
+        """Adds mirroring mapping.
+        
+        Args:
+            mirror_id (int)  : *mirror id* to use
+            egress_port (int): egress port to associate with the mirror
+        """
         mirror_id, egress_port = self.parse_int(mirror_id, "mirror_id"), self.parse_int(egress_port, "egress_port")
         config = MirroringSessionConfig(port=egress_port)
         self.sswitch_client.mirroring_session_add(mirror_id, config)
 
     @handle_bad_input
     def mirroring_add_mc(self, mirror_id, mgrp):
-        "Add mirroring session to multicast group: mirroring_add_mc <mirror_id> <mgrp>"
+        """Adds mirroring session to multicast group.
+        
+        Args:
+            mirror_id (int): *mirror id* to associate
+            mgrp (int)     : multicast group
+        """
         mirror_id, mgrp = self.parse_int(mirror_id, "mirror_id"), self.parse_int(mgrp, "mgrp")
         config = MirroringSessionConfig(mgid=mgrp)
         self.sswitch_client.mirroring_session_add(mirror_id, config)
 
     @handle_bad_input
     def mirroring_add_port_and_mgrp(self, mirror_id, egress_port, mgrp):
-        "Add mirroring session to multicast group: mirroring_add_mc <mirror_id> <mgrp>"
+        """Adds mirroring session to multicast group.
+        
+        Args:
+            mirror_id (int)  : *mirror id* to use
+            egress_port (int): egress port to associate with the mirror
+            mgrp (int)       : multicast group
+        """
         mirror_id, egress_port, mgrp = self.parse_int(mirror_id, "mirror_id"), self.parse_int(egress_port, "egress_port"), self.parse_int(mgrp, "mgrp")
         config = MirroringSessionConfig(mgid=mgrp, port=egress_port)
         self.sswitch_client.mirroring_session_add(mirror_id, config)
 
     @handle_bad_input
     def mirroring_delete(self, mirror_id):
-        "Delete mirroring mapping: mirroring_delete <mirror_id>"
+        """Deletes mirroring mapping.
+        
+        Args:
+            mirror_id (int): id of the mirror to delete
+        """
         mirror_id = self.parse_int(mirror_id, "mirror_id")
         self.sswitch_client.mirroring_session_delete(mirror_id)
 
     @handle_bad_input
     def mirroring_get(self, mirror_id):
-        "Display mirroring session: mirroring_get <mirror_id>"
+        """Prints mirroring session information
+        
+        Args:
+            mirror_id (int): id of the mirror to display
+        """
         mirror_id = self.parse_int(mirror_id, "mirror_id")
         config = self.sswitch_client.mirroring_session_get(mirror_id)
         print(config)
 
     @handle_bad_input
     def get_time_elapsed(self):
-        "Get time elapsed (in microseconds) since the switch started: get_time_elapsed"
+        """Prints time elapsed (in microseconds) since the switch started."""
         print(self.sswitch_client.get_time_elapsed_us())
 
     @handle_bad_input
     def get_time_since_epoch(self):
-        "Get time elapsed (in microseconds) since the switch clock's epoch: get_time_since_epoch"
+        """Prints time elapsed (in microseconds) since the switch clock's epoch."""
         print(self.sswitch_client.get_time_since_epoch_us())
 
 
