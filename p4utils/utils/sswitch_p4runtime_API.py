@@ -553,9 +553,9 @@ class SimpleSwitchP4RuntimeAPI:
         Note:
             There are three types of counters:
 
-            - BYTES, only the field 'byts' is written and the value of 'pkts' is ignored
-            - PACKETS, only the field 'pkts' is written and the value of 'byts' is ignored
-            - PACKETS_AND_BYTES, both 'byts' and 'pkts' are written
+            - **BYTES**, only the field ``byts`` is written and the value of ``pkts`` is ignored.
+            - **PACKETS**, only the field ``pkts`` is written and the value of ``byts`` is ignored.
+            - **PACKETS_AND_BYTES**, both ``byts`` and ``pkts`` are written.
         """
         print('Writing to direct counter: "{}"'.format(direct_counter_name))
         if not isinstance(match_keys, list):

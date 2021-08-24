@@ -721,9 +721,9 @@
 <span class="sd">        Note:</span>
 <span class="sd">            There are three types of counters:</span>
 
-<span class="sd">            - BYTES, only the field &#39;byts&#39; is written and the value of &#39;pkts&#39; is ignored</span>
-<span class="sd">            - PACKETS, only the field &#39;pkts&#39; is written and the value of &#39;byts&#39; is ignored</span>
-<span class="sd">            - PACKETS_AND_BYTES, both &#39;byts&#39; and &#39;pkts&#39; are written</span>
+<span class="sd">            - **BYTES**, only the field ``byts`` is written and the value of ``pkts`` is ignored.</span>
+<span class="sd">            - **PACKETS**, only the field ``pkts`` is written and the value of ``byts`` is ignored.</span>
+<span class="sd">            - **PACKETS_AND_BYTES**, both ``byts`` and ``pkts`` are written.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Writing to direct counter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_counter_name</span><span class="p">))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_keys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
