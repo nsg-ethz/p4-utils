@@ -223,7 +223,7 @@
 <dl class="attribute">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.net">
 <code class="descname">net</code><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.net" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a> – network instance implemented using an extension to <em>Mininet</em> network class.</p>
+<dd><p><code class="xref py py-class docutils literal"><span class="pre">mininet.net.Mininet</span></code> – network instance implemented using an extension to <em>Mininet</em> network class.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -264,15 +264,14 @@ If the node is already present, overwrite it.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addLink">
 <code class="descname">addLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>port1=None</em>, <em>port2=None</em>, <em>key=None</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.addLink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addLink" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add link between two nodes. If key is None, then the next
-ordinal number is used.</p>
+<dd><p>Add link between two nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>node1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – first node of the link</li>
-<li><strong>node2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – second node of the link</li>
+<li><strong>node1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the first node</li>
+<li><strong>node2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the second node</li>
 <li><strong>port1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – port number on the first node (optional)</li>
 <li><strong>port2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – port number on the second node (optional)</li>
 <li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – id used to identify multiple edges which
@@ -285,26 +284,31 @@ link two same nodes (optional)</li>
 </table>
 <p>In particular, <strong>**opts</strong> can include the following:</p>
 <ul class="simple">
-<li>intfName1, intfName2 (str): names of the interfaces (optional)</li>
-<li>addr1, addr2 (str)        : MAC addresses (optional)</li>
-<li>weight (int)              : weight used to compute shortest paths</li>
+<li><strong>intfName1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>): name of the interface of the first node</li>
+<li><strong>intfName2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>): name of the interface of the second node</li>
+<li><strong>addr1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)    : MAC address of the interface of the first node</li>
+<li><strong>addr2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)    : MAC address of the interface of the second node</li>
+<li><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)   : weight used to compute shortest paths</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">key (int)</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>key</strong> of the link between <strong>node1</strong> and <strong>node2</strong>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>If not specified, all the optional fields are assigned automatically
-by the method self.auto_assignment before the network is started.
-The interface names must not be in the canonical format (i.e. ‘node-ethN’
-where N is the port number of the interface) because the automatic
-assignment uses it.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If <code class="docutils literal"><span class="pre">key</span></code> is <strong>None</strong>, then the next available number is used.
+If not specified, all the optional fields are assigned automatically
+by the method <a class="reference internal" href="#p4utils.mininetlib.network_API.NetworkAPI.auto_assignment" title="p4utils.mininetlib.network_API.NetworkAPI.auto_assignment"><code class="xref py py-meth docutils literal"><span class="pre">auto_assignment()</span></code></a> before the network is started.
+The interface names must not be in the canonical format (i.e. <code class="docutils literal"><span class="pre">node-ethN</span></code>
+where <code class="docutils literal"><span class="pre">N</span></code> is the port number of the interface) because the automatic
+assignment uses it.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -698,7 +702,7 @@ links</li>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableArpTables">
 <code class="descname">disableArpTables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.disableArpTables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableArpTables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Disable the static ARP entries for hosts in the
+<dd><p>Disables the static ARP entries for hosts in the
 same network.</p>
 </dd></dl>
 
@@ -763,7 +767,7 @@ same network.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableGwArp">
 <code class="descname">disableGwArp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.disableGwArp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableGwArp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Disable the static ARP entry in hosts
+<dd><p>Disables the static ARP entry in hosts
 for the gateway only.</p>
 </dd></dl>
 
@@ -921,7 +925,7 @@ any CPU port enabled.</dd>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableGwArp">
 <code class="descname">enableGwArp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.enableGwArp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableGwArp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable the static ARP entry in hosts
+<dd><p>Enables the static ARP entry in hosts
 for the gateway only.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>

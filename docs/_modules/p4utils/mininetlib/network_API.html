@@ -196,7 +196,7 @@
 <span class="sd">        hosts (:py:class:`dict`)                    : dictionary of host and their properties.</span>
 <span class="sd">        sw_clients (:py:class:`list`)               : list of *Thrift* clients (one per P4 switch) to populate tables.</span>
 <span class="sd">        compilers (:py:class:`list`)                : list of compiler instances (one per P4 source provided) to compile P4 code.</span>
-<span class="sd">        net (:py:class:`object`)                    : network instance implemented using an extension to *Mininet* network class.</span>
+<span class="sd">        net (:py:class:`mininet.net.Mininet`)       : network instance implemented using an extension to *Mininet* network class.</span>
 <span class="sd">        modules (:py:class:`dict`)                  : dictionary of external modules used by the API.</span>
 <span class="sd">        ipv4_net (:py:class:`ipaddress.IPv4Network`): IPv4 network address generator (by default within the network ``10.0.0.0/8``).</span>
 <span class="sd">                                                      A different network can be specified using :py:meth:`setIpBase()`.</span>
@@ -1162,13 +1162,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">auto_arp_tables</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.disableArpTables"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.disableArpTables">[docs]</a>    <span class="k">def</span> <span class="nf">disableArpTables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Disable the static ARP entries for hosts in the</span>
+        <span class="sd">&quot;&quot;&quot;Disables the static ARP entries for hosts in the</span>
 <span class="sd">        same network.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auto_arp_tables</span> <span class="o">=</span> <span class="kc">False</span></div>
     
 <div class="viewcode-block" id="NetworkAPI.enableGwArp"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.enableGwArp">[docs]</a>    <span class="k">def</span> <span class="nf">enableGwArp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Enable the static ARP entry in hosts</span>
+        <span class="sd">&quot;&quot;&quot;Enables the static ARP entry in hosts</span>
 <span class="sd">        for the gateway only.</span>
 
 <span class="sd">        Note:</span>
@@ -1177,8 +1177,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">auto_gw_arp</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.disableGwArp"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.disableGwArp">[docs]</a>    <span class="k">def</span> <span class="nf">disableGwArp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Disable the static ARP entry in hosts</span>
+        <span class="sd">&quot;&quot;&quot;Disables the static ARP entry in hosts</span>
 <span class="sd">        for the gateway only.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auto_gw_arp</span> <span class="o">=</span> <span class="kc">False</span></div>
@@ -1239,12 +1238,11 @@
 <span class="c1">## Links</span>
 <div class="viewcode-block" id="NetworkAPI.addLink"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.addLink">[docs]</a>    <span class="k">def</span> <span class="nf">addLink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="n">port1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">port2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add link between two nodes. If key is None, then the next</span>
-<span class="sd">        ordinal number is used.</span>
+        <span class="sd">&quot;&quot;&quot;Add link between two nodes.</span>
 
-<span class="sd">        Arguments:</span>
-<span class="sd">            node1 (str)        : first node of the link</span>
-<span class="sd">            node2 (str)        : second node of the link</span>
+<span class="sd">        Args:</span>
+<span class="sd">            node1 (str)        : name of the first node </span>
+<span class="sd">            node2 (str)        : name of the second node</span>
 <span class="sd">            port1 (int)        : port number on the first node (optional)</span>
 <span class="sd">            port2 (int)        : port number on the second node (optional)</span>
 <span class="sd">            key (int)          : id used to identify multiple edges which</span>
@@ -1252,19 +1250,22 @@
 <span class="sd">            **opts             : link options as listed below (optional)</span>
 <span class="sd">    </span>
 <span class="sd">        In particular, ****opts** can include the following:</span>
-<span class="sd">        </span>
-<span class="sd">        - intfName1, intfName2 (str): names of the interfaces (optional)</span>
-<span class="sd">        - addr1, addr2 (str)        : MAC addresses (optional)  </span>
-<span class="sd">        - weight (int)              : weight used to compute shortest paths</span>
+
+<span class="sd">        - **intfName1** (:py:class:`str`): name of the interface of the first node</span>
+<span class="sd">        - **intfName2** (:py:class:`str`): name of the interface of the second node</span>
+<span class="sd">        - **addr1** (:py:class:`str`)    : MAC address of the interface of the first node</span>
+<span class="sd">        - **addr2** (:py:class:`str`)    : MAC address of the interface of the second node  </span>
+<span class="sd">        - **weight** (:py:class:`int`)   : weight used to compute shortest paths</span>
 <span class="sd">        </span>
 <span class="sd">        Returns:</span>
-<span class="sd">            key (int)</span>
+<span class="sd">            int: **key** of the link between **node1** and **node2**.</span>
 
-<span class="sd">        Notice:</span>
+<span class="sd">        Note:</span>
+<span class="sd">            If ``key`` is **None**, then the next available number is used.</span>
 <span class="sd">            If not specified, all the optional fields are assigned automatically</span>
-<span class="sd">            by the method self.auto_assignment before the network is started.</span>
-<span class="sd">            The interface names must not be in the canonical format (i.e. &#39;node-ethN&#39;</span>
-<span class="sd">            where N is the port number of the interface) because the automatic</span>
+<span class="sd">            by the method :py:meth:`auto_assignment()` before the network is started.</span>
+<span class="sd">            The interface names must not be in the canonical format (i.e. ``node-ethN``</span>
+<span class="sd">            where ``N`` is the port number of the interface) because the automatic</span>
 <span class="sd">            assignment uses it.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">node_ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ports</span><span class="p">()</span>

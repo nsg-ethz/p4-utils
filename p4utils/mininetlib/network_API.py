@@ -28,7 +28,7 @@ class NetworkAPI(Topo):
         hosts (:py:class:`dict`)                    : dictionary of host and their properties.
         sw_clients (:py:class:`list`)               : list of *Thrift* clients (one per P4 switch) to populate tables.
         compilers (:py:class:`list`)                : list of compiler instances (one per P4 source provided) to compile P4 code.
-        net (:py:class:`object`)                    : network instance implemented using an extension to *Mininet* network class.
+        net (:py:class:`mininet.net.Mininet`)       : network instance implemented using an extension to *Mininet* network class.
         modules (:py:class:`dict`)                  : dictionary of external modules used by the API.
         ipv4_net (:py:class:`ipaddress.IPv4Network`): IPv4 network address generator (by default within the network ``10.0.0.0/8``).
                                                       A different network can be specified using :py:meth:`setIpBase()`.
@@ -844,51 +844,87 @@ class NetworkAPI(Topo):
 ### API
 ## External modules management
     def setLogLevel(self, logLevel):
-        """
-        Set the log level for the execution.
+        """Sets the log level for the execution.
 
-        Arguments:
-            logLevel (str): possible values are debug', 'info', 'output',
-                               'warning', 'error', 'critical'.
+        Args:
+            logLevel (str): level of logging detail.
+            
+        Possible **logLevel** values are the follwing:
+        
+        - ``debug``
+        - ``info``
+        - ``output``
+        - ``warning``
+        - ``error``
+        - ``critical``
         """
         setLogLevel(logLevel)
 
     def setIpBase(self, ipBase):
-        """
-        Set the network in which all the L3 devices will be placed,
+        """Sets the network in which all the L3 devices will be placed
         if no explicit assignment is performed (e.g. assignment strategies
         or manual assignment).
 
         Arguments:
-            ipBase (str): IP address/mask (e.g. '10.0.0.0/8')
+            ipBase (str): IP address / mask (e.g. ``10.0.0.0/8``)
 
-        Notice:
+        Note:
             Remember that setting the IP base won't automatically change
-            the already assigned IP. If you want to specify a network
-            different from '10.0.0.0/8' (default one), please use this method
-            before any node is added to the network.
+            the already assigned IP. If you want to specify a different network, 
+            please use this method before any node is added to the network.
         """
         self.ipv4_net = IPv4Network(ipBase)
 
     def setCompiler(self, compilerClass=None, **kwargs):
-        """
-        Set the default P4 compiler class and options.
+        """Sets the default P4 compiler class and options.
+
+        Args:
+            compilerClass (type): compiler class to use for the compilation
+                                  of P4 code
+            **kwargs            : keyword arguments to pass to the compiler
+                                  object when it is first instantiated
+        
+        Note:
+            One can provide both ``compilerClass`` and ``**kwargs`` or only one
+            of them (e.g. one may want to use the default compiler 
+            :py:class:`p4utils.utils.compiler.P4C` and pass some parameters to it).
         """
         if compilerClass is not None:
             self.modules['comp']['class'] = compilerClass
         self.modules['comp']['kwargs'].update(kwargs)
 
     def setNet(self, netClass=None, **kwargs):
-        """
-        Set the default Mininet class and options.
+        """Sets the default network class and options.
+
+        Args:
+            netClass (type): network class to use for the orchestration
+            **kwargs       : keyword arguments to pass to the network
+                             object when it is first instantiated
+        
+        Note:
+            One can provide both ``netClass`` and ``**kwargs`` or only one
+            of them (e.g. one may want to use the default network
+            :py:class:`p4utils.mininetlib.net.P4Mininet` and pass some
+            parameters to it).
         """
         if netClass is not None:
             self.modules['net']['class'] = netClass
         self.modules['net']['kwargs'].update(kwargs)
 
     def setSwitchClient(self, swclientClass=None, **kwargs):
-        """
-        Set the default switch client class and options.
+        """Sets the default switch client class and options.
+
+        Args:
+            swclientClass (type): Thrift client class to use for the
+                                  the control plane configuration
+            **kwargs            : keyword arguments to pass to the client
+                                  object when it is first instantiated
+        
+        Note:
+            One can provide both ``swclientClass`` and ``**kwargs`` or only one
+            of them (e.g. one may want to use the default client 
+            :py:class:`p4utils.utils.client.ThriftClient` and pass
+            some parameters to it).
         """
         if swclientClass is not None:
             self.modules['sw_cli']['class'] = swclientClass
@@ -896,9 +932,7 @@ class NetworkAPI(Topo):
 
 ## Generic methods
     def printPortMapping(self):
-        """
-        Print the port mapping of all the devices.
-        """
+        """Prints the port mapping of all the devices."""
         output('Port mapping:\n')
         node_ports = self.node_ports()
         for node1 in sorted(node_ports.keys(), key=natural):
@@ -908,21 +942,18 @@ class NetworkAPI(Topo):
             output('\n')
 
     def execScript(self, cmd, reboot=True):
-        """
-        Execute the given command in the main namespace after
+        """Executes the given command in the main namespace after
         the network boot.
 
-        Arguments:
-            cmd (str) : command to execute
-            reboot (bool): whether to rerun the script every time
+        Args:
+            cmd (str)    : command to execute
+            reboot (bool): rerun the script every time
                            all the P4 switches are rebooted.
         """
         self.scripts.append({'cmd': cmd, 'reboot_run': reboot})
 
     def describeP4Nodes(self):
-        """
-        Print a description for the P4 nodes in the network.
-        """
+        """Prints a description for the P4 nodes in the network."""
         for switch in self.net.switches:
             if self.isP4Switch(switch.name):
                 switch.describe()
@@ -930,57 +961,61 @@ class NetworkAPI(Topo):
             host.describe()
     
     def setTopologyFile(self, topoFile):
-        """
-        Set the file where the topology will be saved for subsequent
+        """Sets the file where the topology will be saved for subsequent
         queries in the exercises.
+
+        Args:
+            topoFile (str): path to the topology database file
+
+        Note:
+            The topology database is stored in ``./topology.json`` by default.
         """
         self.topoFile = topoFile
 
     def enableCli(self):
-        """
-        Enable the Mininet client.
+        """Enables the Mininet client.
+
+        Note: 
+            This option is enabled by default.
         """
         self.cli_enabled = True
 
     def disableCli(self):
-        """
-        Disable the Mininet client.
-        """
+        """Disables the Mininet client."""
         self.cli_enabled = False
 
     def enableArpTables(self):
-        """
-        Enable the static ARP entries for hosts in the
+        """Enables the static ARP entries for hosts in the
         same network.
+        
+        Note:
+            This option is enabled by default.
         """
         self.auto_arp_tables = True
 
     def disableArpTables(self):
-        """
-        Disable the static ARP entries for hosts in the
+        """Disables the static ARP entries for hosts in the
         same network.
         """
         self.auto_arp_tables = False
     
     def enableGwArp(self):
-        """
-        Enable the static ARP entry in hosts
+        """Enables the static ARP entry in hosts
         for the gateway only.
+
+        Note:
+            This option is enabled by default.
         """
         self.auto_gw_arp = True
 
     def disableGwArp(self):
-        """
-        Disable the static ARP entry in hosts
+        """Disables the static ARP entry in hosts
         for the gateway only.
         """
         self.auto_gw_arp = False
 
     def startNetwork(self):
-        """
-        Once the topology has been created, create and start the Mininet network.
-        If enabled, start the client.
-        """
+        """Starts and configures the network."""
         debug('Cleanup old files and processes...\n')
         self.cleanup()
 
@@ -1035,31 +1070,34 @@ class NetworkAPI(Topo):
 ## Links
     def addLink(self, node1, node2, port1=None, port2=None,
                 key=None, **opts):
-        """
-        Add link between two nodes. If key is None, then the next
-        ordinal number is used.
+        """Add link between two nodes.
 
-        Arguments:
-            node1, node2 (str)        : nodes to link together
-            port1, port2 (int)           : ports (optional)
-            key (int)                    : id used to identify multiple edges which
-                                           link two same nodes (optional)
-            opts                         : link options as listed below (optional)
+        Args:
+            node1 (str)        : name of the first node 
+            node2 (str)        : name of the second node
+            port1 (int)        : port number on the first node (optional)
+            port2 (int)        : port number on the second node (optional)
+            key (int)          : id used to identify multiple edges which
+                                 link two same nodes (optional)
+            **opts             : link options as listed below (optional)
     
-        Link options:
-            intfName1, intfName2 (str): names of the interfaces (optional)
-            addr1, addr2 (str)        : MAC addresses (optional)
-            
-            weight (int)                 : weight used to compute shortest paths
+        In particular, ****opts** can include the following:
+
+        - **intfName1** (:py:class:`str`): name of the interface of the first node
+        - **intfName2** (:py:class:`str`): name of the interface of the second node
+        - **addr1** (:py:class:`str`)    : MAC address of the interface of the first node
+        - **addr2** (:py:class:`str`)    : MAC address of the interface of the second node  
+        - **weight** (:py:class:`int`)   : weight used to compute shortest paths
         
         Returns:
-            key (int)
+            int: **key** of the link between **node1** and **node2**.
 
-        Notice:
+        Note:
+            If ``key`` is **None**, then the next available number is used.
             If not specified, all the optional fields are assigned automatically
-            by the method self.auto_assignment before the network is started.
-            The interface names must not be in the canonical format (i.e. 'node-ethN'
-            where N is the port number of the interface) because the automatic
+            by the method :py:meth:`auto_assignment()` before the network is started.
+            The interface names must not be in the canonical format (i.e. ``node-ethN``
+            where ``N`` is the port number of the interface) because the automatic
             assignment uses it.
         """
         node_ports = self.node_ports()
