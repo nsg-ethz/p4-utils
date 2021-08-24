@@ -15,7 +15,7 @@ Run the installation script:
 
 ```bash
 sudo ./install.sh
-````
+```
 
 The install script will use `pip -e` to install the project in editable mode, meaning that every time you update the files
 in this repository, either by pulling or doing local edits, the changes will automatically take place without the need of

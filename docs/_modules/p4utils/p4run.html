@@ -35,7 +35,7 @@
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
+              HAS_SOURCE:  false,
               SOURCELINK_SUFFIX: '.txt'
           };
       </script>
@@ -358,9 +358,9 @@
 <span class="sd">        compilers (:py:class:`list`)         : list of compiler instances (one per P4 source provided) to compile P4 code.</span>
 <span class="sd">        conf (:py:class:`dict`)              : parsed configuration from the JSON configuration file.</span>
 <span class="sd">        net (:py:class:`mininet.net.Mininet`): network instance implemented using an extension to *Mininet* network class.</span>
-<span class="sd">        host_node (:py:obj:`class`)          : extension to *Mininet* node class used as default host class.</span>
-<span class="sd">        switch_node (:py:obj:`class`)        : extension to *Mininet* switch node class used as default switch class.</span>
-<span class="sd">        router_node (:py:obj:`class`)        : extension to *Mininet* node class used as default router class.</span>
+<span class="sd">        host_node (:py:class:`type`)         : extension to *Mininet* node class used as default host class.</span>
+<span class="sd">        switch_node (:py:class:`type`)       : extension to *Mininet* switch node class used as default switch class.</span>
+<span class="sd">        router_node (:py:class:`type`)       : extension to *Mininet* node class used as default router class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf_file</span><span class="p">,</span>

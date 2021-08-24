@@ -117,6 +117,21 @@ html_sidebars = {
     ]
 }
 
+# Show 'Edit on GitHub'
+html_context = {
+    "display_github": True,
+    # Set the following variables to generate the resulting github URL for each page. 
+    # Format Template: https://{{ github_host|default("github.com") }}/{{ github_user }}
+    #/{{ github_repo }}/blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}{{ suffix }}
+    #https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/index.rst
+    "github_user": "nsg-ethz",
+    "github_repo": "p4-utils",
+    "github_version": "junota/",
+    "conf_py_path": "docs/source/"
+}
+
+# Remove copy of source files
+html_copy_source = False
 
 # -- Options for HTMLHelp output ------------------------------------------
 

@@ -35,7 +35,7 @@
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
+              HAS_SOURCE:  false,
               SOURCELINK_SUFFIX: '.txt'
           };
       </script>
@@ -174,7 +174,9 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/p4utils.mininetlib.network_API.rst.txt" rel="nofollow"> View page source</a>
+            
+              <a href="https://github.com/nsg-ethz/p4-utils/blob/junota/docs/source/p4utils.mininetlib.network_API.rst" class="fa fa-github"> Edit on GitHub</a>
+            
           
         
       </li>
@@ -269,23 +271,24 @@ ordinal number is used.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>node2</strong> (<em>node1</em><em>,</em>) – nodes to link together</li>
-<li><strong>port2</strong> (<em>port1</em><em>,</em>) – ports (optional)</li>
+<li><strong>node1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – first node of the link</li>
+<li><strong>node2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – second node of the link</li>
+<li><strong>port1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – port number on the first node (optional)</li>
+<li><strong>port2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – port number on the second node (optional)</li>
 <li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – id used to identify multiple edges which
 link two same nodes (optional)</li>
-<li><strong>opts</strong> – link options as listed below (optional)</li>
+<li><strong>**opts</strong> – link options as listed below (optional)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Link options:</dt>
-<dd><p class="first">intfName1, intfName2 (str): names of the interfaces (optional)
-addr1, addr2 (str)        : MAC addresses (optional)</p>
-<p class="last">weight (int)                 : weight used to compute shortest paths</p>
-</dd>
-</dl>
+<p>In particular, <strong>**opts</strong> can include the following:</p>
+<ul class="simple">
+<li>intfName1, intfName2 (str): names of the interfaces (optional)</li>
+<li>addr1, addr2 (str)        : MAC addresses (optional)</li>
+<li>weight (int)              : weight used to compute shortest paths</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -689,7 +692,7 @@ links</li>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.describeP4Nodes">
 <code class="descname">describeP4Nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.describeP4Nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.describeP4Nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print a description for the P4 nodes in the network.</p>
+<dd><p>Prints a description for the P4 nodes in the network.</p>
 </dd></dl>
 
 <dl class="method">
@@ -702,7 +705,7 @@ same network.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableCli">
 <code class="descname">disableCli</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.disableCli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableCli" title="Permalink to this definition">¶</a></dt>
-<dd><p>Disable the Mininet client.</p>
+<dd><p>Disables the Mininet client.</p>
 </dd></dl>
 
 <dl class="method">
@@ -839,14 +842,22 @@ for the gateway only.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableArpTables">
 <code class="descname">enableArpTables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.enableArpTables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableArpTables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable the static ARP entries for hosts in the
+<dd><p>Enables the static ARP entries for hosts in the
 same network.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This option is enabled by default.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableCli">
 <code class="descname">enableCli</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.enableCli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableCli" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable the Mininet client.</p>
+<dd><p>Enables the Mininet client.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This option is enabled by default.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -912,6 +923,10 @@ any CPU port enabled.</dd>
 <code class="descname">enableGwArp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.enableGwArp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableGwArp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enable the static ARP entry in hosts
 for the gateway only.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This option is enabled by default.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1015,7 +1030,7 @@ socket file will be placed</td>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.execScript">
 <code class="descname">execScript</code><span class="sig-paren">(</span><em>cmd</em>, <em>reboot=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.execScript"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.execScript" title="Permalink to this definition">¶</a></dt>
-<dd><p>Execute the given command in the main namespace after
+<dd><p>Executes the given command in the main namespace after
 the network boot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1023,7 +1038,7 @@ the network boot.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>cmd</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – command to execute</li>
-<li><strong>reboot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether to rerun the script every time
+<li><strong>reboot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – rerun the script every time
 all the P4 switches are rebooted.</li>
 </ul>
 </td>
@@ -1544,7 +1559,7 @@ links</li>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.printPortMapping">
 <code class="descname">printPortMapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.printPortMapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.printPortMapping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the port mapping of all the devices.</p>
+<dd><p>Prints the port mapping of all the devices.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1645,7 +1660,27 @@ link two same nodes (optional)</li>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setCompiler">
 <code class="descname">setCompiler</code><span class="sig-paren">(</span><em>compilerClass=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.setCompiler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setCompiler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the default P4 compiler class and options.</p>
+<dd><p>Sets the default P4 compiler class and options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>compilerClass</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)"><em>type</em></a>) – compiler class to use for the compilation
+of P4 code</li>
+<li><strong>**kwargs</strong> – keyword arguments to pass to the compiler
+object when it is first instantiated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">One can provide both <code class="docutils literal"><span class="pre">compilerClass</span></code> and <code class="docutils literal"><span class="pre">**kwargs</span></code> or only one
+of them (e.g. one may want to use the default compiler
+<a class="reference internal" href="p4utils.utils.compiler.html#p4utils.utils.compiler.P4C" title="p4utils.utils.compiler.P4C"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.compiler.P4C</span></code></a> and pass some parameters to it).</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1821,39 +1856,46 @@ link two same nodes (optional)</li>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setIpBase">
 <code class="descname">setIpBase</code><span class="sig-paren">(</span><em>ipBase</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.setIpBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIpBase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the network in which all the L3 devices will be placed,
+<dd><p>Sets the network in which all the L3 devices will be placed
 if no explicit assignment is performed (e.g. assignment strategies
 or manual assignment).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ipBase</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – IP address/mask (e.g. ‘10.0.0.0/8’)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ipBase</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – IP address / mask (e.g. <code class="docutils literal"><span class="pre">10.0.0.0/8</span></code>)</td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Notice:</dt>
-<dd>Remember that setting the IP base won’t automatically change
-the already assigned IP. If you want to specify a network
-different from ‘10.0.0.0/8’ (default one), please use this method
-before any node is added to the network.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remember that setting the IP base won’t automatically change
+the already assigned IP. If you want to specify a different network,
+please use this method before any node is added to the network.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setLogLevel">
 <code class="descname">setLogLevel</code><span class="sig-paren">(</span><em>logLevel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.setLogLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setLogLevel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the log level for the execution.</p>
+<dd><p>Sets the log level for the execution.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>logLevel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – possible values are debug’, ‘info’, ‘output’,
-‘warning’, ‘error’, ‘critical’.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>logLevel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – level of logging detail.</td>
 </tr>
 </tbody>
 </table>
+<p>Possible <strong>logLevel</strong> values are the follwing:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">debug</span></code></li>
+<li><code class="docutils literal"><span class="pre">info</span></code></li>
+<li><code class="docutils literal"><span class="pre">output</span></code></li>
+<li><code class="docutils literal"><span class="pre">warning</span></code></li>
+<li><code class="docutils literal"><span class="pre">error</span></code></li>
+<li><code class="docutils literal"><span class="pre">critical</span></code></li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1937,7 +1979,27 @@ link two same nodes (optional)</li>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setNet">
 <code class="descname">setNet</code><span class="sig-paren">(</span><em>netClass=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.setNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setNet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the default Mininet class and options.</p>
+<dd><p>Sets the default network class and options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>netClass</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)"><em>type</em></a>) – network class to use for the orchestration</li>
+<li><strong>**kwargs</strong> – keyword arguments to pass to the network
+object when it is first instantiated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">One can provide both <code class="docutils literal"><span class="pre">netClass</span></code> and <code class="docutils literal"><span class="pre">**kwargs</span></code> or only one
+of them (e.g. one may want to use the default network
+<a class="reference internal" href="p4utils.mininetlib.net.html#p4utils.mininetlib.net.P4Mininet" title="p4utils.mininetlib.net.P4Mininet"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.net.P4Mininet</span></code></a> and pass some
+parameters to it).</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -2017,7 +2079,28 @@ file</li>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setSwitchClient">
 <code class="descname">setSwitchClient</code><span class="sig-paren">(</span><em>swclientClass=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.setSwitchClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setSwitchClient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the default switch client class and options.</p>
+<dd><p>Sets the default switch client class and options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>swclientClass</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)"><em>type</em></a>) – Thrift client class to use for the
+the control plane configuration</li>
+<li><strong>**kwargs</strong> – keyword arguments to pass to the client
+object when it is first instantiated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">One can provide both <code class="docutils literal"><span class="pre">swclientClass</span></code> and <code class="docutils literal"><span class="pre">**kwargs</span></code> or only one
+of them (e.g. one may want to use the default client
+<a class="reference internal" href="p4utils.utils.client.html#p4utils.utils.client.ThriftClient" title="p4utils.utils.client.ThriftClient"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.client.ThriftClient</span></code></a> and pass
+some parameters to it).</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -2060,15 +2143,26 @@ since their DPID is determined by their ID.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setTopologyFile">
 <code class="descname">setTopologyFile</code><span class="sig-paren">(</span><em>topoFile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.setTopologyFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setTopologyFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the file where the topology will be saved for subsequent
+<dd><p>Sets the file where the topology will be saved for subsequent
 queries in the exercises.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topoFile</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the topology database file</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The topology database is stored in <code class="docutils literal"><span class="pre">./topology.json</span></code> by default.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.startNetwork">
 <code class="descname">startNetwork</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/network_API.html#NetworkAPI.startNetwork"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.startNetwork" title="Permalink to this definition">¶</a></dt>
-<dd><p>Once the topology has been created, create and start the Mininet network.
-If enabled, start the client.</p>
+<dd><p>Starts and configures the network.</p>
 </dd></dl>
 
 <dl class="method">
