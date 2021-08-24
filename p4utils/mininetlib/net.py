@@ -31,7 +31,7 @@ class P4Mininet(Mininet):
 
         Arguments:
             name (string): name of the router to add
-            cls (class)  : custom router class/constructor (optional)
+            cls (type)  : custom router class/constructor (optional)
         
         Returns:
             added router

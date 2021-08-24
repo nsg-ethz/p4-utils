@@ -190,9 +190,9 @@ class AppRunner(NetworkAPI):
         compilers (:py:class:`list`)         : list of compiler instances (one per P4 source provided) to compile P4 code.
         conf (:py:class:`dict`)              : parsed configuration from the JSON configuration file.
         net (:py:class:`mininet.net.Mininet`): network instance implemented using an extension to *Mininet* network class.
-        host_node (:py:obj:`class`)          : extension to *Mininet* node class used as default host class.
-        switch_node (:py:obj:`class`)        : extension to *Mininet* switch node class used as default switch class.
-        router_node (:py:obj:`class`)        : extension to *Mininet* node class used as default router class.
+        host_node (:py:class:`type`)        : extension to *Mininet* node class used as default host class.
+        switch_node (:py:class:`type`)      : extension to *Mininet* switch node class used as default switch class.
+        router_node (:py:class:`type`)      : extension to *Mininet* node class used as default router class.
     """
 
     def __init__(self, conf_file,
