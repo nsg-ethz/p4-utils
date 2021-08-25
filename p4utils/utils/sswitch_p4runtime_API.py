@@ -132,11 +132,12 @@ class SimpleSwitchP4RuntimeAPI:
 
         This method is buggy, please read the following warnings.
 
+        Warning:
+            Due to some bug in the implementation of the gRPC server, this command
+            does not fully erase all the forwarding state of the switch, but only resets the
+            server.
+
         Note:
-            - Due to some bug in the implementation of the gRPC server, this command
-              does not fully erase all the forwarding state of the switch, but only resets the
-              server. 
-            
             - It is recommended to use :py:meth:`p4utils.utils.thrift_API.ThriftAPI.reset_state()` 
               to reset the forwarding states. Moreover, if you only use
               the :py:class:`p4utils.utils.thrift_API.ThriftAPI` to reset the switch, 
@@ -309,11 +310,12 @@ class SimpleSwitchP4RuntimeAPI:
         Note:
             __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources
             
-            - When setting the default entry, the configurations for
-              its direct resources will be reset to their defaults, according to `this`__.
+            When setting the default entry, the configurations for
+            its direct resources will be reset to their defaults, according to `this`__.
             
-            - However, for the current implementation, the specification is not followed and
-              direct resources are not reset when modifying a table entry.
+        Warning:
+            For the current implementation, the specification is not followed and
+            direct resources are not reset when modifying a table entry.
         """
         print('Adding default action to: '+table_name)
         if not isinstance(action_params, list):
