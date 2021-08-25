@@ -293,8 +293,9 @@
 <div class="viewcode-block" id="NetworkAPI.save_topology"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.save_topology">[docs]</a>    <span class="k">def</span> <span class="nf">save_topology</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Saves mininet topology to a JSON file.</span>
 
-<span class="sd">        Note:</span>
-<span class="sd">            Multigraphs are not supported yet by :py:class:`p4utils.utils.topology.NetworkGraph`.</span>
+<span class="sd">        Warning:</span>
+<span class="sd">            :py:class:`networkx.classes.multigraph.MultiGraph` graphs are not </span>
+<span class="sd">            supported yet by :py:class:`p4utils.utils.topology.NetworkGraph`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># This function return None for each not serializable</span>
         <span class="c1"># obect so that no TypeError is thrown.</span>

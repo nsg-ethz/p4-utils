@@ -125,8 +125,9 @@ class NetworkAPI(Topo):
     def save_topology(self):
         """Saves mininet topology to a JSON file.
 
-        Note:
-            Multigraphs are not supported yet by :py:class:`p4utils.utils.topology.NetworkGraph`.
+        Warning:
+            :py:class:`networkx.classes.multigraph.MultiGraph` graphs are not 
+            supported yet by :py:class:`p4utils.utils.topology.NetworkGraph`.
         """
         # This function return None for each not serializable
         # obect so that no TypeError is thrown.
