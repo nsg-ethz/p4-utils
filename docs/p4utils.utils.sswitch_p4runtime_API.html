@@ -954,12 +954,15 @@ where units is bytes or packets, depending on the meter type.</p>
 this method sends to the server a <code class="docutils literal"><span class="pre">SetForwardingPipelineConfigRequest</span></code> with
 action <code class="docutils literal"><span class="pre">VERIFY_AND_COMMIT</span></code>.</p>
 <p>This method is buggy, please read the following warnings.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Due to some bug in the implementation of the gRPC server, this command
+does not fully erase all the forwarding state of the switch, but only resets the
+server.</p>
+</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
-<li>Due to some bug in the implementation of the gRPC server, this command
-does not fully erase all the forwarding state of the switch, but only resets the
-server.</li>
 <li>It is recommended to use <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.reset_state" title="p4utils.utils.thrift_API.ThriftAPI.reset_state"><code class="xref py py-meth docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI.reset_state()</span></code></a>
 to reset the forwarding states. Moreover, if you only use
 the <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI</span></code></a> to reset the switch,
@@ -1157,12 +1160,13 @@ its direct resources will be reset to their defaults (see <a class="reference ex
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>When setting the default entry, the configurations for
-its direct resources will be reset to their defaults, according to <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources">this</a>.</li>
-<li>However, for the current implementation, the specification is not followed and
-direct resources are not reset when modifying a table entry.</li>
-</ul>
+<p class="last">When setting the default entry, the configurations for
+its direct resources will be reset to their defaults, according to <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources">this</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">For the current implementation, the specification is not followed and
+direct resources are not reset when modifying a table entry.</p>
 </div>
 </dd></dl>
 

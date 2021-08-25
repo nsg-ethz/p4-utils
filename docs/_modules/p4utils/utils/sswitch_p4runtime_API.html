@@ -300,11 +300,12 @@
 
 <span class="sd">        This method is buggy, please read the following warnings.</span>
 
+<span class="sd">        Warning:</span>
+<span class="sd">            Due to some bug in the implementation of the gRPC server, this command</span>
+<span class="sd">            does not fully erase all the forwarding state of the switch, but only resets the</span>
+<span class="sd">            server.</span>
+
 <span class="sd">        Note:</span>
-<span class="sd">            - Due to some bug in the implementation of the gRPC server, this command</span>
-<span class="sd">              does not fully erase all the forwarding state of the switch, but only resets the</span>
-<span class="sd">              server. </span>
-<span class="sd">            </span>
 <span class="sd">            - It is recommended to use :py:meth:`p4utils.utils.thrift_API.ThriftAPI.reset_state()` </span>
 <span class="sd">              to reset the forwarding states. Moreover, if you only use</span>
 <span class="sd">              the :py:class:`p4utils.utils.thrift_API.ThriftAPI` to reset the switch, </span>
@@ -477,11 +478,12 @@
 <span class="sd">        Note:</span>
 <span class="sd">            __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources</span>
 <span class="sd">            </span>
-<span class="sd">            - When setting the default entry, the configurations for</span>
-<span class="sd">              its direct resources will be reset to their defaults, according to `this`__.</span>
+<span class="sd">            When setting the default entry, the configurations for</span>
+<span class="sd">            its direct resources will be reset to their defaults, according to `this`__.</span>
 <span class="sd">            </span>
-<span class="sd">            - However, for the current implementation, the specification is not followed and</span>
-<span class="sd">              direct resources are not reset when modifying a table entry.</span>
+<span class="sd">        Warning:</span>
+<span class="sd">            For the current implementation, the specification is not followed and</span>
+<span class="sd">            direct resources are not reset when modifying a table entry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Adding default action to: &#39;</span><span class="o">+</span><span class="n">table_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_params</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
