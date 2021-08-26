@@ -256,7 +256,7 @@ def load_conf(conf_file):
 
 
 def load_topo(json_path):
-    """Load the topology from the json_path provided.
+    """Load the topology from the path provided.
 
     Args:
         json_path (string): path of the JSON file to load
