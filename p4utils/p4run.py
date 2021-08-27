@@ -654,7 +654,7 @@ def get_args():
     """Parses command line options.
 
     Returns:
-        argparse.Namespace: namespace containing all the argument parsed
+        argparse.Namespace: namespace containing all the argument parsed.
 
     Here is a complete list of the command line invocation options available with ``p4run``:
 

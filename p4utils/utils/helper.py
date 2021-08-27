@@ -50,7 +50,7 @@ def next_element(elems, minimum=None, maximum=None):
         maximum (int): maximum value allowed for elements
 
     Returns:
-        int: the lowest number not already present in the set
+        int: the lowest number not already present in the set.
     """
     elements = set(elems)
     if len(elems) != len(elements):
@@ -89,7 +89,7 @@ def natural(text):
         text (str): name of the node
 
     Returns:
-        list: list used to sort the elements with :py:func:`sorted`
+        list: list used to sort the elements with :py:func:`sorted`.
 
     Example:
         To sort sanely/alphabetically a list ``l`` of nodes names use::
@@ -108,7 +108,7 @@ def rand_mac():
     """Generate a random, non-multicas MAC address.
 
     Returns:
-        str: MAC address
+        str: MAC address.
     """
     hex_str = hex(random.randint(1, 2**48-1) & 0xfeffffffffff | 0x020000000000)[2:]
     hex_str = '0'*(12-len(hex_str)) + hex_str
@@ -129,7 +129,7 @@ def dpidToStr(id):
         id (int): integer device id
 
     Returns:
-        str: device dpid
+        str: device dpid.
     """
     strDpid = hex(id)[2:]
     if len(strDpid) < 16:
@@ -144,7 +144,7 @@ def check_listening_on_port(port):
         port (int): port number
 
     Returns:
-        bool: **True** if the port is listening, **False** otherwise
+        bool: **True** if the port is listening, **False** otherwise.
     """
     for c in psutil.net_connections(kind='inet'):
         if c.status == 'LISTEN' and c.laddr[1] == port:
@@ -159,7 +159,7 @@ def cksum(filename):
         filename (str): path to the file
 
     Returns:
-        str: md5 checksum of the file
+        str: md5 checksum of the file.
     """
     return hashlib.md5(open(filename,'rb').read()).hexdigest()
 
@@ -173,7 +173,7 @@ def get_node_attr(node, attr_name, default=None):
         attr_name (string)  : attribute to look for
     
     Returns:
-        the value of the requested attribute
+        the value of the requested attribute.
     """
     try:
         return getattr(node, attr_name)
@@ -198,7 +198,7 @@ def get_by_attr(attr_name, attr_value, obj_list):
         obj_list (list)     : list of objects
 
     Returns:
-        object: the requested object or **None**
+        object: the requested object or **None**.
     """
     for obj in obj_list:
         if attr_value == getattr(obj, attr_name):
@@ -214,7 +214,7 @@ def ip_address_to_mac(ip):
         ip (str): IPv4 address
 
     Returns:
-        str: MAC address obtained from the IPv4 value
+        str: MAC address obtained from the IPv4 value.
     """
     if "/" in ip:
         ip = ip.split("/")[0]
@@ -232,7 +232,7 @@ def is_compiled(p4_src, compilers):
         compilers (list): list of P4 compiler objects (see compiler.py)
     
     Returns:
-        bool: **True** if the file has been already compiled, **False** otherwise
+        bool: **True** if the file has been already compiled, **False** otherwise.
     """
     for compiler in compilers:
         if getattr(compiler, 'compiled') and getattr(compiler, 'p4_src') == p4_src:
@@ -248,7 +248,7 @@ def load_conf(conf_file):
         conf_file (str): path to the JSON network configuration file
 
     Returns:
-        dict: network configuration dictionary
+        dict: network configuration dictionary.
     """
     with open(conf_file, 'r') as f:
         config = json.load(f)
@@ -262,7 +262,7 @@ def load_topo(json_path):
         json_path (string): path of the JSON file to load
 
     Returns:
-        p4utils.utils.topology.NetworkGraph: the topology graph
+        p4utils.utils.topology.NetworkGraph: the topology graph.
     """
     with open(json_path,'r') as f:
         graph_dict = json.load(f)
@@ -277,7 +277,7 @@ def load_custom_object(obj):
         dict: JSON object to load
     
     Returns:
-        object: Python object retrieved from the module
+        object: Python object retrieved from the module.
 
     Example:
         This function takes as input a module JSON object::
@@ -310,7 +310,7 @@ def run_command(command):
         command (str): command to execute
 
     Returns:
-        int: an integer value used by a process
+        int: an integer value used by a process.
     """
     debug(command+'\n')
     return os.WEXITSTATUS(os.system(command))
@@ -323,7 +323,7 @@ def parse_line(line):
         line (str): line to parse
 
     Returns:
-        list: list of args obtained from the parsing
+        list: list of args obtained from the parsing.
 
     Example:
         As an example, consider the following string::
@@ -357,7 +357,7 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
 
     Returns:
         tuple: a tuple (**args**, **kwargs**) where **args** is a list of arguments and **kwargs** 
-        is a dictionary of key-word pairs
+        is a dictionary of key-word pairs.
 
     Example:
         The file has to be a set of lines, where each has the following syntax::

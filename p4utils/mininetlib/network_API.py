@@ -447,7 +447,7 @@ class NetworkAPI(Topo):
         - ``sw_cli`` for switch *Thrift* client class to configure control plane
 
         Returns:
-            object: configured instance of the class of the module
+            object: configured instance of the class of the module.
         """
         default_kwargs = self.modules[mod_name]['kwargs']
         default_class = self.modules[mod_name]['class']
@@ -596,7 +596,7 @@ class NetworkAPI(Topo):
             port (int): port number
 
         Returns:
-            str: the chosen interface name
+            str: the chosen interface name.
         """
         return name + '-eth' + repr(port)
 
@@ -607,7 +607,7 @@ class NetworkAPI(Topo):
             base (int): starting *switch id*
 
         Returns:
-            int: the computed *switch id*
+            int: the computed *switch id*.
         """
         switch_ids = self.switch_ids().union(self.grpc_ports())
         return next_element(switch_ids, minimum=base)
@@ -619,7 +619,7 @@ class NetworkAPI(Topo):
             base (int): starting gRPC port
 
         Returns:
-            int: the computed gRPC port
+            int: the computed gRPC port.
         """
         grpc_ports = self.grpc_ports().union(self.thrift_ports())
         return next_element(grpc_ports, minimum=base)
@@ -631,7 +631,7 @@ class NetworkAPI(Topo):
             base (int): starting thrift port
 
         Returns:
-            int: the computed thrift port
+            int: the computed thrift port.
         """
         thrift_ports = self.thrift_ports()
         return next_element(thrift_ports, minimum=base)
@@ -644,7 +644,7 @@ class NetworkAPI(Topo):
             base (int): starting port number
 
         Returns:
-            int: available port number
+            int: available port number.
         """
         ports = self.node_ports().get(node)
         if ports is not None:
@@ -657,7 +657,7 @@ class NetworkAPI(Topo):
         """Generates a MAC address, different from any other already in the network.
         
         Returns:
-            str: MAC address
+            str: MAC address.
         """
         mac = rand_mac()
         mac_addresses = self.mac_addresses()
@@ -669,7 +669,7 @@ class NetworkAPI(Topo):
         """Generates an IPv4 address, different from anyone already in the network.
 
         Returns:
-            str: IP / subnet mask
+            str: IP / subnet mask.
 
         Note:
             The IPv4 will be generated within the network ``10.0.0.0/8``, if not 
@@ -1563,7 +1563,7 @@ class NetworkAPI(Topo):
             **opts (kwargs): node options
 
         Returns:
-            str: node name
+            str: node name.
 
         Warning:
             If a node with the same name is already present,
@@ -1578,7 +1578,7 @@ class NetworkAPI(Topo):
             node (str): node name
 
         Returns:
-            dict: node metadata
+            dict: node metadata.
         """
         return self.nodeInfo(name)
 
@@ -1591,7 +1591,7 @@ class NetworkAPI(Topo):
             **opts    : node options to update (optional)
         
         Returns:
-            str: node name
+            str: node name.
         """
         if self.isHost(name):
             node_setter = self.addHost
@@ -1634,7 +1634,7 @@ class NetworkAPI(Topo):
             remove_links (bool): remove all the incident links
 
         Returns:
-            dict: node metadata
+            dict: node metadata.
         """
         node = self.getNode(name)
         self.deleteNode(name, remove_links=remove_links)
@@ -1852,7 +1852,7 @@ class NetworkAPI(Topo):
             **opts    : host options (optional)
 
         Returns:
-            str: host name
+            str: host name.
 
         Warning:
             If a node with the same name is already present,
@@ -1935,7 +1935,7 @@ class NetworkAPI(Topo):
             **opts    : switch options
 
         Returns:
-            str: switch name
+            str: switch name.
 
         Warning:
             If a node with the same name is already present,
@@ -2006,7 +2006,7 @@ class NetworkAPI(Topo):
             opts (kwargs): switch options
 
         Returns:
-            P4 switch name (str)
+            str: P4 switch name.
 
         Warning:
             If a node with the same name is already present,

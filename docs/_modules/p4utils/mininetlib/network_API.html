@@ -615,7 +615,7 @@
 <span class="sd">        - ``sw_cli`` for switch *Thrift* client class to configure control plane</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            object: configured instance of the class of the module</span>
+<span class="sd">            object: configured instance of the class of the module.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">default_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">mod_name</span><span class="p">][</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span>
         <span class="n">default_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">mod_name</span><span class="p">][</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
@@ -764,7 +764,7 @@
 <span class="sd">            port (int): port number</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: the chosen interface name</span>
+<span class="sd">            str: the chosen interface name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;-eth&#39;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">port</span><span class="p">)</span></div>
 
@@ -775,7 +775,7 @@
 <span class="sd">            base (int): starting *switch id*</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: the computed *switch id*</span>
+<span class="sd">            int: the computed *switch id*.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">switch_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_ids</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_ports</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">next_element</span><span class="p">(</span><span class="n">switch_ids</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="n">base</span><span class="p">)</span></div>
@@ -787,7 +787,7 @@
 <span class="sd">            base (int): starting gRPC port</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: the computed gRPC port</span>
+<span class="sd">            int: the computed gRPC port.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">grpc_ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grpc_ports</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thrift_ports</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">next_element</span><span class="p">(</span><span class="n">grpc_ports</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="n">base</span><span class="p">)</span></div>
@@ -799,7 +799,7 @@
 <span class="sd">            base (int): starting thrift port</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: the computed thrift port</span>
+<span class="sd">            int: the computed thrift port.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">thrift_ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_ports</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">next_element</span><span class="p">(</span><span class="n">thrift_ports</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="n">base</span><span class="p">)</span></div>
@@ -812,7 +812,7 @@
 <span class="sd">            base (int): starting port number</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: available port number</span>
+<span class="sd">            int: available port number.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ports</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ports</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -825,7 +825,7 @@
         <span class="sd">&quot;&quot;&quot;Generates a MAC address, different from any other already in the network.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns:</span>
-<span class="sd">            str: MAC address</span>
+<span class="sd">            str: MAC address.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mac</span> <span class="o">=</span> <span class="n">rand_mac</span><span class="p">()</span>
         <span class="n">mac_addresses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mac_addresses</span><span class="p">()</span>
@@ -837,7 +837,7 @@
         <span class="sd">&quot;&quot;&quot;Generates an IPv4 address, different from anyone already in the network.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: IP / subnet mask</span>
+<span class="sd">            str: IP / subnet mask.</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            The IPv4 will be generated within the network ``10.0.0.0/8``, if not </span>
@@ -1731,7 +1731,7 @@
 <span class="sd">            **opts (kwargs): node options</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: node name</span>
+<span class="sd">            str: node name.</span>
 
 <span class="sd">        Warning:</span>
 <span class="sd">            If a node with the same name is already present,</span>
@@ -1746,7 +1746,7 @@
 <span class="sd">            node (str): node name</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: node metadata</span>
+<span class="sd">            dict: node metadata.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodeInfo</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
@@ -1759,7 +1759,7 @@
 <span class="sd">            **opts    : node options to update (optional)</span>
 <span class="sd">        </span>
 <span class="sd">        Returns:</span>
-<span class="sd">            str: node name</span>
+<span class="sd">            str: node name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isHost</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="n">node_setter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">addHost</span>
@@ -1802,7 +1802,7 @@
 <span class="sd">            remove_links (bool): remove all the incident links</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: node metadata</span>
+<span class="sd">            dict: node metadata.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">deleteNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">remove_links</span><span class="o">=</span><span class="n">remove_links</span><span class="p">)</span>
@@ -2020,7 +2020,7 @@
 <span class="sd">            **opts    : host options (optional)</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: host name</span>
+<span class="sd">            str: host name.</span>
 
 <span class="sd">        Warning:</span>
 <span class="sd">            If a node with the same name is already present,</span>
@@ -2103,7 +2103,7 @@
 <span class="sd">            **opts    : switch options</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: switch name</span>
+<span class="sd">            str: switch name.</span>
 
 <span class="sd">        Warning:</span>
 <span class="sd">            If a node with the same name is already present,</span>
@@ -2174,7 +2174,7 @@
 <span class="sd">            opts (kwargs): switch options</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            P4 switch name (str)</span>
+<span class="sd">            str: P4 switch name.</span>
 
 <span class="sd">        Warning:</span>
 <span class="sd">            If a node with the same name is already present,</span>

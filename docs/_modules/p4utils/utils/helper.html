@@ -218,7 +218,7 @@
 <span class="sd">        maximum (int): maximum value allowed for elements</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: the lowest number not already present in the set</span>
+<span class="sd">        int: the lowest number not already present in the set.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">elements</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">):</span>
@@ -257,7 +257,7 @@
 <span class="sd">        text (str): name of the node</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        list: list used to sort the elements with :py:func:`sorted`</span>
+<span class="sd">        list: list used to sort the elements with :py:func:`sorted`.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        To sort sanely/alphabetically a list ``l`` of nodes names use::</span>
@@ -276,7 +276,7 @@
     <span class="sd">&quot;&quot;&quot;Generate a random, non-multicas MAC address.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: MAC address</span>
+<span class="sd">        str: MAC address.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">hex_str</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">48</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xfeffffffffff</span> <span class="o">|</span> <span class="mh">0x020000000000</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
     <span class="n">hex_str</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">12</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">hex_str</span><span class="p">))</span> <span class="o">+</span> <span class="n">hex_str</span>
@@ -297,7 +297,7 @@
 <span class="sd">        id (int): integer device id</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: device dpid</span>
+<span class="sd">        str: device dpid.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">strDpid</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">id</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">strDpid</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">:</span>
@@ -312,7 +312,7 @@
 <span class="sd">        port (int): port number</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        bool: **True** if the port is listening, **False** otherwise</span>
+<span class="sd">        bool: **True** if the port is listening, **False** otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">psutil</span><span class="o">.</span><span class="n">net_connections</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;inet&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;LISTEN&#39;</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">laddr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">port</span><span class="p">:</span>
@@ -327,7 +327,7 @@
 <span class="sd">        filename (str): path to the file</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: md5 checksum of the file</span>
+<span class="sd">        str: md5 checksum of the file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
 
@@ -341,7 +341,7 @@
 <span class="sd">        attr_name (string)  : attribute to look for</span>
 <span class="sd">    </span>
 <span class="sd">    Returns:</span>
-<span class="sd">        the value of the requested attribute</span>
+<span class="sd">        the value of the requested attribute.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span>
@@ -366,7 +366,7 @@
 <span class="sd">        obj_list (list)     : list of objects</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        object: the requested object or **None**</span>
+<span class="sd">        object: the requested object or **None**.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">obj_list</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">attr_value</span> <span class="o">==</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">):</span>
@@ -382,7 +382,7 @@
 <span class="sd">        ip (str): IPv4 address</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: MAC address obtained from the IPv4 value</span>
+<span class="sd">        str: MAC address obtained from the IPv4 value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">ip</span><span class="p">:</span>
         <span class="n">ip</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -400,7 +400,7 @@
 <span class="sd">        compilers (list): list of P4 compiler objects (see compiler.py)</span>
 <span class="sd">    </span>
 <span class="sd">    Returns:</span>
-<span class="sd">        bool: **True** if the file has been already compiled, **False** otherwise</span>
+<span class="sd">        bool: **True** if the file has been already compiled, **False** otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">compiler</span> <span class="ow">in</span> <span class="n">compilers</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="s1">&#39;compiled&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="s1">&#39;p4_src&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">p4_src</span><span class="p">:</span>
@@ -416,7 +416,7 @@
 <span class="sd">        conf_file (str): path to the JSON network configuration file</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: network configuration dictionary</span>
+<span class="sd">        dict: network configuration dictionary.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">conf_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -424,13 +424,13 @@
 
 
 <div class="viewcode-block" id="load_topo"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.load_topo">[docs]</a><span class="k">def</span> <span class="nf">load_topo</span><span class="p">(</span><span class="n">json_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Load the topology from the json_path provided.</span>
+    <span class="sd">&quot;&quot;&quot;Load the topology from the path provided.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        json_path (string): path of the JSON file to load</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        p4utils.utils.topology.NetworkGraph: the topology graph</span>
+<span class="sd">        p4utils.utils.topology.NetworkGraph: the topology graph.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_path</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">graph_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -445,7 +445,7 @@
 <span class="sd">        dict: JSON object to load</span>
 <span class="sd">    </span>
 <span class="sd">    Returns:</span>
-<span class="sd">        object: Python object retrieved from the module</span>
+<span class="sd">        object: Python object retrieved from the module.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        This function takes as input a module JSON object::</span>
@@ -478,7 +478,7 @@
 <span class="sd">        command (str): command to execute</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: an integer value used by a process</span>
+<span class="sd">        int: an integer value used by a process.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">debug</span><span class="p">(</span><span class="n">command</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">WEXITSTATUS</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">command</span><span class="p">))</span></div>
@@ -491,7 +491,7 @@
 <span class="sd">        line (str): line to parse</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        list: list of args obtained from the parsing</span>
+<span class="sd">        list: list of args obtained from the parsing.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        As an example, consider the following string::</span>
@@ -525,7 +525,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple: a tuple (**args**, **kwargs**) where **args** is a list of arguments and **kwargs** </span>
-<span class="sd">        is a dictionary of key-word pairs</span>
+<span class="sd">        is a dictionary of key-word pairs.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        The file has to be a set of lines, where each has the following syntax::</span>
