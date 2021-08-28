@@ -170,7 +170,7 @@ class SimpleSwitchP4RuntimeAPI:
         Args:
             timeout (int): time to wait for packet
 
-        Return:
+        Returns:
             ``DigestList`` Protobuf Message or **None** if the timeout has expired and 
             no packet has been received.
         
@@ -510,8 +510,8 @@ class SimpleSwitchP4RuntimeAPI:
         Returns:
             tuple: ``(byte_count, packet_count)`` where:
 
-                    - ``byte_count`` is the number of bytes counted;
-                    - ``packet_count`` is the number of packets counted.
+            - ``byte_count`` is the number of bytes counted;
+            - ``packet_count`` is the number of packets counted.
 
         Note:
             __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry
@@ -736,8 +736,8 @@ class SimpleSwitchP4RuntimeAPI:
         Returns:
             tuple: ``(byte_count, packet_count)`` where:
 
-                   - ``byte_count`` is the number of bytes counted
-                   - ``packet_count`` is the number of bytes counted
+            - ``byte_count`` is the number of bytes counted;
+            - ``packet_count`` is the number of bytes counted.
 
         Note:
             __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry
@@ -1001,8 +1001,9 @@ class SimpleSwitchP4RuntimeAPI:
         
         Returns:
             tuple: ``(ports, instances)`` where:
-                   - ``ports`` is a list of port numbers of the multicast group;
-                   - ``instances`` is list of instances of the corresponding ports.
+
+            - ``ports`` is a list of port numbers of the multicast group;
+            - ``instances`` is list of instances of the corresponding ports.
 
         A replica is logically a tuple ``(port, instance)`` which has to be unique 
         within the same multicast group. Instances can be explicitly assigned to ports by 
@@ -1144,8 +1145,9 @@ class SimpleSwitchP4RuntimeAPI:
         
         Returns:
             tuple: ``(ports, instances)`` where:
-                   - ``ports`` is a list of port numbers of the clone session;
-                   - ``instances`` is a list of instances of the corresponding ports.
+
+            - ``ports`` is a list of port numbers of the clone session;
+            - ``instances`` is a list of instances of the corresponding ports.
 
         A replica is logically a tuple ``(port, instance)`` which has to be unique 
         within the same multicast group.
@@ -1253,11 +1255,11 @@ class SimpleSwitchP4RuntimeAPI:
         Returns:
             tuple: ``(max_timeout_ns, max_list_size, ack_timeout_ns)`` where:
                    
-                   - ``max_timeout_ns`` is the maximum server buffering delay in nanoseconds for an outstanding digest message;
-                   - ``max_list_size`` is the maximum digest list size (in number of digest messages) sent by the server
-                     to the client as a single DigestList Protobuf message;
-                   - ``ack_timeout_ns`` is the timeout in nanoseconds that a server must wait for a digest list acknowledgement 
-                     from the client before new digest messages can be generated for the same learned data.
+            - ``max_timeout_ns`` is the maximum server buffering delay in nanoseconds for an outstanding digest message;
+            - ``max_list_size`` is the maximum digest list size (in number of digest messages) sent by the server
+              to the client as a single DigestList Protobuf message;
+            - ``ack_timeout_ns`` is the timeout in nanoseconds that a server must wait for a digest list acknowledgement
+              from the client before new digest messages can be generated for the same learned data.
 
         Note:
             P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
