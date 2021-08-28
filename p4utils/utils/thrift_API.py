@@ -18,8 +18,16 @@
 # Antonin Bas (antonin@barefootnetworks.com)
 #
 #
-# Modified version of the runtime_CLI.py from behavioural model
-# Edgar Costa (cedgar@ethz.ch)
+# Further work: Edgar Costa (cedgar@ethz.ch)
+# Further work: Jurij Nota (junota@student.ethz.ch)
+
+"""__ https://github.com/p4lang/behavioral-model/blob/main/tools/runtime_CLI.py
+
+This module is a modified version of runtime_CLI__ that performs control plane
+operations by connecting to the *Thrift* server running on a capable switch. The
+main difference between this code and the original one is that this module is an API,
+whereas the other is a client.
+"""
 
 from collections import Counter
 import os

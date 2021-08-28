@@ -14,7 +14,7 @@
 
 """__ https://github.com/p4lang/p4runtime-shell/blob/main/p4runtime_sh/shell.py
 
-This module is a modified version of p4runtime_sh.shell__ that performs low lever
+This module is a modified version of p4runtime_sh.shell__ that performs low level
 P4Runtime operations with the server running on a capable switch. It allows to specify the
 context and the client for each method and class that uses them without falling back to the global ones.
 Indeed, some changes were needed to manage multiple switches at the same time.
