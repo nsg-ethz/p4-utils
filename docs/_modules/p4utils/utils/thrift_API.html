@@ -373,7 +373,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitwidth</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="SwitchInfo"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.SwitchInfo">[docs]</a><span class="k">class</span> <span class="nc">SwitchInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="SwitchInfo"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.SwitchInfo">[docs]</a><span class="k">class</span> <span class="nc">SwitchInfo</span><span class="p">():</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
@@ -1041,8 +1041,32 @@
     <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">format</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s2">&quot;02x&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">v</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="ThriftAPI"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI">[docs]</a><span class="k">class</span> <span class="nc">ThriftAPI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ThriftAPI"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI">[docs]</a><span class="k">class</span> <span class="nc">ThriftAPI</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;This class implements a client that connects to a P4 switch control plane </span>
+<span class="sd">    and allows to configure it. It establishes a *Thrift* connection with the </span>
+<span class="sd">    switch server that is then used to forward configuration information.</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        thrift_port (int) : port number the *Thrift* server listens on</span>
+<span class="sd">        thrift_ip (str)   : IP the *Thrift* server listens on</span>
+<span class="sd">        pre_type (str)    : PreType option</span>
+<span class="sd">        json_path (str)   : path to the P4 compiled JSON file (optional)</span>
+
+<span class="sd">    Possible values for **pre_type** are the following:</span>
+
+<span class="sd">    - ``simple_pre``</span>
+<span class="sd">    - ``simple_pre_lag``</span>
+<span class="sd">    - ``none``</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        switch_info (:py:class:`SwitchInfo`)            : object containing information about all the</span>
+<span class="sd">                                                          P4 structures present in the switch.</span>
+<span class="sd">        client                                          : *Thrift* client instance.</span>
+<span class="sd">        mc_client                                       : *Thrift* mc client instance.</span>
+<span class="sd">        pre_type (:py:class:`str`)                      : given PreType option.</span>
+<span class="sd">        table_entries_match_to_handle (:py:class:`dict`): dictionary used to associate table matches</span>
+<span class="sd">                                                          with the related handle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="ThriftAPI.get_thrift_services"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.get_thrift_services">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_thrift_services</span><span class="p">(</span><span class="n">pre_type</span><span class="p">):</span>
 
@@ -1087,7 +1111,7 @@
         <span class="k">return</span> <span class="n">d</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.shell"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.shell">[docs]</a>    <span class="k">def</span> <span class="nf">shell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="s2">&quot;Run a shell command&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Runs a shell command.&quot;&quot;&quot;</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span></div>
 
@@ -1107,19 +1131,23 @@
 
 <div class="viewcode-block" id="ThriftAPI.show_tables"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.show_tables">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">show_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;List tables defined in the P4 program: show_tables&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Lists tables defined in the P4 program.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">table_name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_info</span><span class="o">.</span><span class="n">tables</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_info</span><span class="o">.</span><span class="n">TABLES</span><span class="p">[</span><span class="n">table_name</span><span class="p">]</span><span class="o">.</span><span class="n">table_str</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.show_actions"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.show_actions">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">show_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;List actions defined in the P4 program: show_actions&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Lists actions defined in the P4 program.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">action_name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_info</span><span class="o">.</span><span class="n">actions</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_info</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="n">action_name</span><span class="p">]</span><span class="o">.</span><span class="n">action_str</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.table_show_actions"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_show_actions">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_show_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
-        <span class="s2">&quot;List one table&#39;s actions as per the P4 program: table_show_actions &lt;table_name&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Lists one table&#39;s actions as per the P4 program.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str): name of the table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">action_name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">actions</span><span class="p">):</span>
@@ -1127,7 +1155,11 @@
 
 <div class="viewcode-block" id="ThriftAPI.table_info"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_info">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
-        <span class="s2">&quot;Show info about a table: table_info &lt;table_name&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Shows info about a table.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str): name of the table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">table_str</span><span class="p">())</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
@@ -1144,8 +1176,17 @@
         <span class="p">))</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.table_set_default"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_set_default">[docs]</a>    <span class="nd">@handle_bad_input</span>
-    <span class="k">def</span> <span class="nf">table_set_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="p">):</span>
-        <span class="s2">&quot;Set default action for a match table: table_set_default &lt;table name&gt; &lt;action name&gt; &lt;action parameters&gt;&quot;</span>
+    <span class="k">def</span> <span class="nf">table_set_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;Sets default action for a match table.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)    : name of the table</span>
+<span class="sd">            action_name (str)   : name of the default action</span>
+<span class="sd">            action_params (list): list of parameters for the default action</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            In ``action_params``, action parameters must be :py:class:`str`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
         <span class="n">action</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span><span class="n">action_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_info</span><span class="o">.</span><span class="n">suffix_lookup_map</span><span class="p">)</span>
@@ -1162,7 +1203,11 @@
 
 <div class="viewcode-block" id="ThriftAPI.table_reset_default"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_reset_default">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_reset_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
-        <span class="s2">&quot;Reset default entry for a match table: table_reset_default &lt;table name&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Resets default entry for a match table.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str): name of the table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_mt_reset_default_entry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
@@ -1181,14 +1226,25 @@
 
 <div class="viewcode-block" id="ThriftAPI.table_num_entries"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_num_entries">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_num_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
-        <span class="s2">&quot;Return the number of entries in a match table (direct or indirect): table_num_entries &lt;table name&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns the number of entries in a match table (direct or indirect).</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str): name of the table</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: the number of entries in a table.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_mt_get_num_entries</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.table_clear"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_clear">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
-        <span class="s2">&quot;Clear all entries in a match table (direct or indirect), but not the default entry: table_clear &lt;table name&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Clears all entries in a match table (direct or indirect), but not the default entry.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str): name of the table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_mt_clear_entries</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
@@ -1209,8 +1265,26 @@
         <span class="k">return</span> <span class="n">d</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.table_add"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_add">[docs]</a>    <span class="nd">@handle_bad_input</span>
-    <span class="k">def</span> <span class="nf">table_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[],</span> <span class="n">prio</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="s2">&quot;Add entry to a match table: table_add &lt;table name&gt; &lt;action name&gt; &lt;match fields&gt; =&gt; &lt;action parameters&gt; [priority]&quot;</span>
+    <span class="k">def</span> <span class="nf">table_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[],</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds entry to a match table.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)    : name of the table</span>
+<span class="sd">            action_name (str)   : name of the action to execute</span>
+<span class="sd">            match_keys (list)   : list of matches in the order they appear in the P4 code</span>
+<span class="sd">            action_params (list): list of action parameters in the </span>
+<span class="sd">                                  order they appear in the P4 code</span>
+<span class="sd">            prio (int)          : priority in ternary matches</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: entry handle.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            - In ``action_params`` and ``match_keys``, action parameters and match keys</span>
+<span class="sd">              must be :py:class:`str`.</span>
+<span class="sd">            - A higher ``prio`` number indicates that the entry must be given higher</span>
+<span class="sd">              priority when performing a table lookup.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1">#print table_name, action_name, match_keys, action_params</span>
         <span class="c1">#import ipdb; ipdb.set_trace()</span>
@@ -1265,7 +1339,13 @@
 
 <div class="viewcode-block" id="ThriftAPI.table_set_timeout"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_set_timeout">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_set_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">entry_handle</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">):</span>
-        <span class="s2">&quot;Set a timeout in ms for a given entry; the table has to support timeouts: table_set_timeout &lt;table_name&gt; &lt;entry handle&gt; &lt;timeout (ms)&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Sets a timeout in ms for a given entry; the table has to support timeouts.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)  : name of the table</span>
+<span class="sd">            entry_handle (int): entry handle</span>
+<span class="sd">            timeout_ms (int)  : entry timeout in ms        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">table</span><span class="o">.</span><span class="n">support_timeout</span><span class="p">:</span>
@@ -1298,8 +1378,22 @@
         <span class="k">return</span> <span class="n">entry_handle</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.table_modify"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_modify">[docs]</a>    <span class="nd">@handle_bad_input</span>
-    <span class="k">def</span> <span class="nf">table_modify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">entry_handle</span><span class="p">,</span> <span class="n">action_parameters</span> <span class="o">=</span> <span class="p">[]):</span>
-        <span class="s2">&quot;Add entry to a match table: table_modify &lt;table name&gt; &lt;action name&gt; &lt;entry handle&gt; [action parameters]&quot;</span>
+    <span class="k">def</span> <span class="nf">table_modify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">entry_handle</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;Modifies entry of a match table.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)        : name of the table</span>
+<span class="sd">            action_name (str)       : name of the action</span>
+<span class="sd">            entry_handle (int)      : entry handle</span>
+<span class="sd">            action_params (list): list of action parameters in the </span>
+<span class="sd">                                      order they appear in the P4 code</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: entry handle.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            In ``action_params``, action parameters must be :py:class:`str`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
         <span class="n">action</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span><span class="n">action_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_info</span><span class="o">.</span><span class="n">suffix_lookup_map</span><span class="p">)</span>
@@ -1313,7 +1407,6 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">UIn_Error</span><span class="p">(</span><span class="s2">&quot;Bad format for entry handle&quot;</span><span class="p">)</span>
 
-        <span class="n">action_params</span> <span class="o">=</span> <span class="n">action_parameters</span>
         <span class="n">runtime_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_runtime_data</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">action_params</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Modifying entry&quot;</span><span class="p">,</span> <span class="n">entry_handle</span><span class="p">,</span> <span class="s2">&quot;for&quot;</span><span class="p">,</span> <span class="n">MatchType</span><span class="o">.</span><span class="n">to_str</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">match_type</span><span class="p">),</span> <span class="s2">&quot;match table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span>
@@ -1325,11 +1418,25 @@
 
         <span class="k">return</span> <span class="n">entry_handle</span></div>
 
-<div class="viewcode-block" id="ThriftAPI.table_modify_match"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_modify_match">[docs]</a>    <span class="k">def</span> <span class="nf">table_modify_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">action_parameters</span> <span class="o">=</span> <span class="p">[]):</span>
+<div class="viewcode-block" id="ThriftAPI.table_modify_match"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_modify_match">[docs]</a>    <span class="k">def</span> <span class="nf">table_modify_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;Modifies entry of a match table using match keys.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)        : name of the table</span>
+<span class="sd">            action_name (str)       : name of the action</span>
+<span class="sd">            match_keys (list)       : list of matches in the order they appear in the P4 code</span>
+<span class="sd">            action_params (list): list of action parameters in the </span>
+<span class="sd">                                      order they appear in the P4 code</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: entry handle.</span>
 
+<span class="sd">        Note:</span>
+<span class="sd">            In ``action_params``, action parameters must be :py:class:`str`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">entry_handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_handle_from_match</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">entry_handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">table_modify</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">entry_handle</span><span class="p">,</span> <span class="n">action_parameters</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table_modify</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">entry_handle</span><span class="p">,</span> <span class="n">action_params</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">UIn_Error</span><span class="p">(</span>
                 <span class="s2">&quot;Table </span><span class="si">{}</span><span class="s2"> has no match </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">)</span>
@@ -1338,7 +1445,13 @@
 
 <div class="viewcode-block" id="ThriftAPI.table_delete"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_delete">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">entry_handle</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="s2">&quot;Delete entry from a match table: table_delete &lt;table name&gt; &lt;entry handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Deletes entry from a match table.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)  : name of the table</span>
+<span class="sd">            entry_handle (int): entry handle</span>
+<span class="sd">            quiet (bool)      : disable verbose output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1">#TODO: delete handle</span>
 
@@ -1354,7 +1467,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_mt_delete_entry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">entry_handle</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.table_delete_match"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_delete_match">[docs]</a>    <span class="k">def</span> <span class="nf">table_delete_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Deletes entry from a table using match keys.</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str): name of the table</span>
+<span class="sd">            match_keys (list): list of matches in the order they appear in the P4 code</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            In ``match_keys``, match keys must be :py:class:`str`.</span>
+
+<span class="sd">        Warning:</span>
+<span class="sd">            This may not work with ternary matches and priority entries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">entry_handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_handle_from_match</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">pop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;trying to delete entry with handle &quot;</span><span class="p">,</span> <span class="n">entry_handle</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">entry_handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1380,8 +1504,21 @@
                 <span class="s2">&quot;Cannot run this command on an action profile without selector&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.act_prof_create_member"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.act_prof_create_member">[docs]</a>    <span class="nd">@handle_bad_input</span>
-    <span class="k">def</span> <span class="nf">act_prof_create_member</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="p">):</span>
-        <span class="s2">&quot;Add a member to an action profile: act_prof_create_member &lt;action profile name&gt; &lt;action_name&gt; [action parameters]&quot;</span>
+    <span class="k">def</span> <span class="nf">act_prof_create_member</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a member to an action profile.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            act_prof_name (str) : name of the action profile</span>
+<span class="sd">            action_name (str)   : name of the action</span>
+<span class="sd">            action_params (list): list of action parameters in the </span>
+<span class="sd">                                  order they appear in the P4 code</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: member handle.      </span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            In ``action_params``, action parameters must be :py:class:`str`.   </span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">act_prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;action profile&quot;</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">action_prof</span><span class="p">)</span>
@@ -1401,8 +1538,12 @@
 
 <div class="viewcode-block" id="ThriftAPI.act_prof_delete_member"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.act_prof_delete_member">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">act_prof_delete_member</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span> <span class="n">mbr_handle</span><span class="p">):</span>
-        <span class="s2">&quot;Delete a member in an action profile: act_prof_delete_member &lt;action profile name&gt; &lt;member handle&gt;&quot;</span>
-
+        <span class="sd">&quot;&quot;&quot;Deletes a member in an action profile.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            act_prof_name (str): name of the action profile</span>
+<span class="sd">            mbr_handle (int)   : member handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">act_prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;action profile&quot;</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">action_prof</span><span class="p">)</span>
@@ -1414,8 +1555,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_mt_act_prof_delete_member</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">act_prof</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mbr_handle</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.act_prof_modify_member"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.act_prof_modify_member">[docs]</a>    <span class="nd">@handle_bad_input</span>
-    <span class="k">def</span> <span class="nf">act_prof_modify_member</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">mbr_handle</span><span class="p">,</span> <span class="n">action_params</span><span class="p">):</span>
-        <span class="s2">&quot;Modify member in an action profile: act_prof_modify_member &lt;action profile name&gt; &lt;action_name&gt; &lt;member_handle&gt; [action parameters]&quot;</span>
+    <span class="k">def</span> <span class="nf">act_prof_modify_member</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">mbr_handle</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;Modifies member in an action profile.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            act_prof_name (str) : name of the action profile</span>
+<span class="sd">            action_name (str)   : name of the action</span>
+<span class="sd">            mbr_handle (int)    : member handle</span>
+<span class="sd">            action_params (list): list of action parameters in the </span>
+<span class="sd">                                  order they appear in the P4 code</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: member handle.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            In ``action_params``, action parameters must be :py:class:`str`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">act_prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;action profile&quot;</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">action_prof</span><span class="p">)</span>
@@ -1432,23 +1587,37 @@
 
         <span class="n">runtime_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_runtime_data</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">action_params</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_mt_act_prof_modify_member</span><span class="p">(</span>
-            <span class="mi">0</span><span class="p">,</span> <span class="n">act_prof</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mbr_handle</span><span class="p">,</span> <span class="n">action</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">runtime_data</span><span class="p">)</span></div>
+            <span class="mi">0</span><span class="p">,</span> <span class="n">act_prof</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mbr_handle</span><span class="p">,</span> <span class="n">action</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">runtime_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mbr_handle</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.act_prof_create_group"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.act_prof_create_group">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">act_prof_create_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">):</span>
-        <span class="s2">&quot;Add a group to an action pofile: act_prof_create_group &lt;action profile name&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Adds a group to an action pofile.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            act_prof_name (str): name of the action profile</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: group handle.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">act_prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;action profile&quot;</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">action_prof</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">check_act_prof_ws</span><span class="p">(</span><span class="n">act_prof</span><span class="p">)</span>
         <span class="n">grp_handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_mt_act_prof_create_group</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">act_prof</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Group has been created with handle&quot;</span><span class="p">,</span> <span class="n">grp_handle</span><span class="p">)</span></div>
 
+        <span class="k">return</span> <span class="n">grp_handle</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.act_prof_delete_group"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.act_prof_delete_group">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">act_prof_delete_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span> <span class="n">grp_handle</span><span class="p">):</span>
-        <span class="s2">&quot;Delete a group from an action profile: act_prof_delete_group &lt;action profile name&gt; &lt;group handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Delete a group from an action profile.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            act_prof_name (str): name of the action profile</span>
+<span class="sd">            grp_handle (int)   : group handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">act_prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;action profile&quot;</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">action_prof</span><span class="p">)</span>
@@ -1463,7 +1632,13 @@
 
 <div class="viewcode-block" id="ThriftAPI.act_prof_add_member_to_group"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.act_prof_add_member_to_group">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">act_prof_add_member_to_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span> <span class="n">mbr_handle</span><span class="p">,</span> <span class="n">grp_handle</span><span class="p">):</span>
-        <span class="s2">&quot;Add member to group in an action profile: act_prof_add_member_to_group &lt;action profile name&gt; &lt;member handle&gt; &lt;group handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Adds member to group in an action profile.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            act_prof_name (str): name of the action profile</span>
+<span class="sd">            mbr_handle (int)   : member handle</span>
+<span class="sd">            grp_handle (int)   : group handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">act_prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;action profile&quot;</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">action_prof</span><span class="p">)</span>
@@ -1485,7 +1660,13 @@
 
 <div class="viewcode-block" id="ThriftAPI.act_prof_remove_member_from_group"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.act_prof_remove_member_from_group">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">act_prof_remove_member_from_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span> <span class="n">mbr_handle</span><span class="p">,</span> <span class="n">grp_handle</span><span class="p">):</span>
-        <span class="s2">&quot;Remove member from group in action profile: act_prof_remove_member_from_group &lt;action profile name&gt; &lt;member handle&gt; &lt;group handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Removes member from group in action profile.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            act_prof_name (str): name of the action profile</span>
+<span class="sd">            mbr_handle (int)   : member handle</span>
+<span class="sd">            grp_handle (int)   : group handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">act_prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;action profile&quot;</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">action_prof</span><span class="p">)</span>
@@ -1519,7 +1700,17 @@
 
 <div class="viewcode-block" id="ThriftAPI.mc_mgrp_create"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.mc_mgrp_create">[docs]</a>    <span class="nd">@handle_bad_input_mc</span>
     <span class="k">def</span> <span class="nf">mc_mgrp_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">):</span>
-        <span class="s2">&quot;Create multicast group: mc_mgrp_create &lt;group id&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Creates multicast group.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mgrp (int): multicast group id</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: multicast group handle.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            The multicast group handle is equal to the multicast group id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">mgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mgrp</span><span class="p">(</span><span class="n">mgrp</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating multicast group&quot;</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">)</span>
@@ -1530,7 +1721,11 @@
 
 <div class="viewcode-block" id="ThriftAPI.mc_mgrp_destroy"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.mc_mgrp_destroy">[docs]</a>    <span class="nd">@handle_bad_input_mc</span>
     <span class="k">def</span> <span class="nf">mc_mgrp_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">):</span>
-        <span class="s2">&quot;Destroy multicast group: mc_mgrp_destroy &lt;group id&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Destroys multicast group.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            mgrp (int): multicast group id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">mgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mgrp</span><span class="p">(</span><span class="n">mgrp</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Destroying multicast group&quot;</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">)</span>
@@ -1558,7 +1753,16 @@
 
 <div class="viewcode-block" id="ThriftAPI.mc_node_create"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.mc_node_create">[docs]</a>    <span class="nd">@handle_bad_input_mc</span>
     <span class="k">def</span> <span class="nf">mc_node_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rid</span><span class="p">,</span> <span class="n">ports</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="s2">&quot;Create multicast node: mc_node_create &lt;rid&gt; &lt;space-separated port list&gt; [ | &lt;space-separated lag list&gt; ]&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Creates multicast node.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            rid (int)   : replication id</span>
+<span class="sd">            ports (list): list of port numbers</span>
+<span class="sd">            lags (list) : list of lags</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: node handle.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">rid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
@@ -1583,7 +1787,16 @@
 
 <div class="viewcode-block" id="ThriftAPI.mc_node_update"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.mc_node_update">[docs]</a>    <span class="nd">@handle_bad_input_mc</span>
     <span class="k">def</span> <span class="nf">mc_node_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l1_hdl</span><span class="p">,</span> <span class="n">ports</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="s2">&quot;Update multicast node: mc_node_update &lt;node handle&gt; &lt;space-separated port list&gt; [ | &lt;space-separated lag list&gt; ]&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Updates multicast node.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            l1_hdl (int): node handle</span>
+<span class="sd">            ports (list): list of port numbers</span>
+<span class="sd">            lags (list) : list of lags</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: node handle.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">l1_hdl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_node_handle</span><span class="p">(</span><span class="n">l1_hdl</span><span class="p">)</span>
         <span class="n">port_map_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ports_to_port_map_str</span><span class="p">(</span><span class="n">ports</span><span class="p">)</span>
@@ -1593,11 +1806,18 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">mc_client</span><span class="o">.</span><span class="n">bm_mc_node_update</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">l1_hdl</span><span class="p">,</span> <span class="n">port_map_str</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Updating node&quot;</span><span class="p">,</span> <span class="n">l1_hdl</span><span class="p">,</span> <span class="s2">&quot;with port map&quot;</span><span class="p">,</span> <span class="n">port_map_str</span><span class="p">,</span> <span class="s2">&quot;and lag map&quot;</span><span class="p">,</span> <span class="n">lag_map_str</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mc_client</span><span class="o">.</span><span class="n">bm_mc_node_update</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">l1_hdl</span><span class="p">,</span> <span class="n">port_map_str</span><span class="p">,</span> <span class="n">lag_map_str</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mc_client</span><span class="o">.</span><span class="n">bm_mc_node_update</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">l1_hdl</span><span class="p">,</span> <span class="n">port_map_str</span><span class="p">,</span> <span class="n">lag_map_str</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">l1_hdl</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.mc_node_associate"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.mc_node_associate">[docs]</a>    <span class="nd">@handle_bad_input_mc</span>
     <span class="k">def</span> <span class="nf">mc_node_associate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">,</span> <span class="n">l1_hdl</span><span class="p">):</span>
-        <span class="s2">&quot;Associate node to multicast group: mc_node_associate &lt;group handle&gt; &lt;node handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Associates node to multicast group.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            mgrp (int)  : multicast group id</span>
+<span class="sd">            l1_hdl (int): node handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">mgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mgrp</span><span class="p">(</span><span class="n">mgrp</span><span class="p">)</span>
         <span class="n">l1_hdl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_node_handle</span><span class="p">(</span><span class="n">l1_hdl</span><span class="p">)</span>
@@ -1606,7 +1826,12 @@
 
 <div class="viewcode-block" id="ThriftAPI.mc_node_dissociate"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.mc_node_dissociate">[docs]</a>    <span class="nd">@handle_bad_input_mc</span>
     <span class="k">def</span> <span class="nf">mc_node_dissociate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">,</span> <span class="n">l1_hdl</span><span class="p">):</span>
-        <span class="s2">&quot;Dissociate node from multicast group: mc_node_associate &lt;group handle&gt; &lt;node handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dissociates node from multicast group.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            mgrp (int)  : multicast group handle</span>
+<span class="sd">            l1_hdl (int): node handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">mgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mgrp</span><span class="p">(</span><span class="n">mgrp</span><span class="p">)</span>
         <span class="n">l1_hdl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_node_handle</span><span class="p">(</span><span class="n">l1_hdl</span><span class="p">)</span>
@@ -1615,7 +1840,11 @@
 
 <div class="viewcode-block" id="ThriftAPI.mc_node_destroy"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.mc_node_destroy">[docs]</a>    <span class="nd">@handle_bad_input_mc</span>
     <span class="k">def</span> <span class="nf">mc_node_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l1_hdl</span><span class="p">):</span>
-        <span class="s2">&quot;Destroy multicast node: mc_node_destroy &lt;node handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Destroys multicast node.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            l1_hdl (int): node handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">l1_hdl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_node_handle</span><span class="p">(</span><span class="n">l1_hdl</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Destroying node&quot;</span><span class="p">,</span> <span class="n">l1_hdl</span><span class="p">)</span>
@@ -1623,7 +1852,13 @@
 
 <div class="viewcode-block" id="ThriftAPI.mc_set_lag_membership"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.mc_set_lag_membership">[docs]</a>    <span class="nd">@handle_bad_input_mc</span>
     <span class="k">def</span> <span class="nf">mc_set_lag_membership</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lag_index</span><span class="p">,</span> <span class="n">ports</span><span class="p">):</span>
-        <span class="s2">&quot;Set lag membership of port list: mc_set_lag_membership &lt;lag index&gt; &lt;space-separated port list&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Sets lag membership of port list.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            lag_index (int): lag index</span>
+<span class="sd">            ports (list)   : list of port numbers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">check_has_pre</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_type</span> <span class="o">!=</span> <span class="n">PreType</span><span class="o">.</span><span class="n">SimplePreLAG</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">UIn_Error</span><span class="p">(</span>
@@ -1641,7 +1876,7 @@
 
 <div class="viewcode-block" id="ThriftAPI.mc_dump"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.mc_dump">[docs]</a>    <span class="nd">@handle_bad_input_mc</span>
     <span class="k">def</span> <span class="nf">mc_dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;Dump entries in multicast engine&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dumps entries in multicast engine.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_has_pre</span><span class="p">()</span>
         <span class="n">json_dump</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mc_client</span><span class="o">.</span><span class="n">bm_mc_get_entries</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1683,7 +1918,11 @@
 
 <div class="viewcode-block" id="ThriftAPI.load_new_config_file"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.load_new_config_file">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">load_new_config_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="s2">&quot;Load new json config: load_new_config_file &lt;path to .json file&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Loads new JSON config.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            filename (str): path to the P4 compiled JSON file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">UIn_Error</span><span class="p">(</span><span class="s2">&quot;Not a valid filename&quot;</span><span class="p">)</span>
@@ -1699,15 +1938,23 @@
 
 <div class="viewcode-block" id="ThriftAPI.swap_configs"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.swap_configs">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">swap_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;Swap the 2 existing configs, need to have called load_new_config_file before&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Swap the 2 existing configs, need to have called </span>
+<span class="sd">        :py:meth:`load_new_config_file` before.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Swapping configs&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_swap_configs</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.meter_array_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.meter_array_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">meter_array_set_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">rates</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Configure rates for an entire meter array: meter_array_set_rates &lt;name&gt; [(&lt;rate_1&gt;,&lt;burst_1&gt;), (&lt;rate_2&gt;,&lt;burst_2&gt;)] ...</span>
-<span class="sd">        Rate uses units/microsecond and burst uses units where units is bytes or packets.</span>
+        <span class="sd">&quot;&quot;&quot;Configures rates for an entire meter array.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            meter_name (str): name of the meter</span>
+<span class="sd">            rates (list)    : ``[(cir, cburst), (pir, pburst)]``</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units </span>
+<span class="sd">            where units is bytes or packets, depending on the meter type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">meter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;meter&quot;</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">meter_array</span><span class="p">)</span>
@@ -1727,9 +1974,16 @@
 
 <div class="viewcode-block" id="ThriftAPI.meter_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.meter_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">meter_set_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">rates</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Configure rates for a meter: meter_set_rates &lt;name&gt; &lt;index&gt; [(&lt;rate_1&gt;,&lt;burst_1&gt;), (&lt;rate_2&gt;,&lt;burst_2&gt;)] ...</span>
-<span class="sd">        Rate uses units/microsecond and burst uses units where units is bytes or packets.</span>
+        <span class="sd">&quot;&quot;&quot;Configures rates for a meter.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            meter_name (str): name of the meter</span>
+<span class="sd">            index (int)     : index in the array of meters (first element is at ``0``)</span>
+<span class="sd">            rates (list)    : ``[(cir, cburst), (pir, pburst)]``</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units </span>
+<span class="sd">            where units is bytes or packets, depending on the meter type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">meter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;meter&quot;</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">meter_array</span><span class="p">)</span>
@@ -1757,9 +2011,18 @@
 
 <div class="viewcode-block" id="ThriftAPI.meter_get_rates"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.meter_get_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">meter_get_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Retrieve rates for a meter: meter_get_rates &lt;name&gt; &lt;index&gt;.</span>
-<span class="sd">        Rate uses units/microsecond and burst uses units where units is bytes or packets.</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves rates for a meter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            meter_name (str): name of the meter</span>
+<span class="sd">            index (int)     : index in the array of meters (first element is at ``0``)</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list: ``[(cir, cburst), (pir, pburst)]``.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units </span>
+<span class="sd">            where units is bytes or packets, depending on the meter type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">meter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;meter&quot;</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">meter_array</span><span class="p">)</span>
@@ -1781,14 +2044,24 @@
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">rate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rates</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: info rate = </span><span class="si">{}</span><span class="s2">, burst size = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">idx</span><span class="p">,</span> <span class="n">rate</span><span class="o">.</span><span class="n">units_per_micros</span><span class="p">,</span> <span class="n">rate</span><span class="o">.</span><span class="n">burst_size</span><span class="p">))</span>
-            <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rate</span><span class="o">.</span><span class="n">units_per_micros</span><span class="p">)</span>
-            <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rate</span><span class="o">.</span><span class="n">burst_size</span><span class="p">)</span>
+            <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">rate</span><span class="o">.</span><span class="n">units_per_micros</span><span class="p">,</span> <span class="n">rate</span><span class="o">.</span><span class="n">burst_size</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">values</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.counter_read"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.counter_read">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">counter_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="s2">&quot;Read counter value: counter_read &lt;name&gt; &lt;entry handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Reads counter value.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            counter_name (str): name of the counter</span>
+<span class="sd">            index (int)       : index in the array of counters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: ``(byte_count, packet_count)`` where:</span>
+
+<span class="sd">            - ``byte_count`` is the number of bytes counted;</span>
+<span class="sd">            - ``packet_count`` is the number of bytes counted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;counter&quot;</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">counter_array</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1804,11 +2077,18 @@
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_counter_read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">counter</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">[</span><span class="si">{}</span><span class="s2">]= (</span><span class="si">{}</span><span class="s2"> bytes, </span><span class="si">{}</span><span class="s2"> packets)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">counter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">bytes</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">packets</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">value</span></div>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">bytes</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">packets</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.counter_write"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.counter_write">[docs]</a>    <span class="nd">@handle_bad_input</span>
-    <span class="k">def</span> <span class="nf">counter_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">pkts</span><span class="p">,</span> <span class="n">byts</span><span class="p">):</span>
-        <span class="s2">&quot;Write counter value: counter_write &lt;name&gt; &lt;index&gt; &lt;packets&gt; &lt;bytes&gt;&quot;</span>
+    <span class="k">def</span> <span class="nf">counter_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write counter value.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            counter_name (str): name of the counter</span>
+<span class="sd">            index (int)       : index in the array of counters (first element is at ``0``)</span>
+<span class="sd">            pkts (int)        : number of packets to write (default: ``0``)</span>
+<span class="sd">            byts (int)        : number of bytes to write (default: ``0``)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;counter&quot;</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">counter_array</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1833,7 +2113,11 @@
 
 <div class="viewcode-block" id="ThriftAPI.counter_reset"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.counter_reset">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">counter_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">):</span>
-        <span class="s2">&quot;Reset counter: counter_reset &lt;name&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Resets counter array.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            counter_name (str): name of the counter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;counter&quot;</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">counter_array</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">counter</span><span class="o">.</span><span class="n">is_direct</span><span class="p">:</span>
@@ -1845,7 +2129,17 @@
 
 <div class="viewcode-block" id="ThriftAPI.register_read"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.register_read">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">register_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">register_name</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="s2">&quot;Read register value: register_read &lt;name&gt; [index]&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Reads register value.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            register_name (str): name of the register</span>
+<span class="sd">            index (int)        : index in the array of registers (if **None**, the</span>
+<span class="sd">                                 whole array will be read)</span>
+<span class="sd">            show (bool)        : enable verbose output</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int or list: register value or list of values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">register</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;register&quot;</span><span class="p">,</span> <span class="n">register_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">register_array</span><span class="p">)</span>
@@ -1867,7 +2161,14 @@
 
 <div class="viewcode-block" id="ThriftAPI.register_write"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.register_write">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">register_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">register_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="s2">&quot;Write register value: register_write &lt;name&gt; &lt;index&gt;|[start_index, end_index] &lt;value&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Writes register value.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            register_name (str): name of the register</span>
+<span class="sd">            index (int or list): index in the array of registers or</span>
+<span class="sd">                                 ``[start_index, end_index]``</span>
+<span class="sd">            value (int)        : value to write</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">register</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;register&quot;</span><span class="p">,</span> <span class="n">register_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">register_array</span><span class="p">)</span>
@@ -1893,7 +2194,11 @@
 
 <div class="viewcode-block" id="ThriftAPI.register_reset"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.register_reset">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">register_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">register_name</span><span class="p">):</span>
-        <span class="s2">&quot;Reset all the cells in the register array to 0: register_reset &lt;name&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Resets all the cells in the register array to ``0``.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            register_name (str): name of the register</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">register</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;register&quot;</span><span class="p">,</span> <span class="n">register_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">register_array</span><span class="p">)</span>
@@ -1973,7 +2278,12 @@
 
 <div class="viewcode-block" id="ThriftAPI.table_dump_entry"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_dump_entry">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_dump_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">entry_handle</span><span class="p">):</span>
-        <span class="s2">&quot;Display some information about a table entry: table_dump_entry &lt;table name&gt; &lt;entry handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Displays some information about a table entry.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)  : name of the table</span>
+<span class="sd">            entry_handle (int): entry handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
 
@@ -1987,7 +2297,12 @@
 
 <div class="viewcode-block" id="ThriftAPI.act_prof_dump_member"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.act_prof_dump_member">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">act_prof_dump_member</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span> <span class="n">mbr_handle</span><span class="p">):</span>
-        <span class="s2">&quot;Display some information about a member: act_prof_dump_member &lt;action profile name&gt; &lt;member handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Displays some information about a member.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            act_prof_name (str): name of the action profile</span>
+<span class="sd">            mbr_handle (int)   : member handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">act_prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;action profile&quot;</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">action_prof</span><span class="p">)</span>
@@ -2003,7 +2318,12 @@
 
 <div class="viewcode-block" id="ThriftAPI.act_prof_dump_group"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.act_prof_dump_group">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">act_prof_dump_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span> <span class="n">grp_handle</span><span class="p">):</span>
-        <span class="s2">&quot;Display some information about a group: table_dump_group &lt;action profile name&gt; &lt;group handle&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Displays some information about a group.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            act_prof_name (str): name of the action profile</span>
+<span class="sd">            grp_handle (int)   : group handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">act_prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;action profile&quot;</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">action_prof</span><span class="p">)</span>
@@ -2030,7 +2350,11 @@
 
 <div class="viewcode-block" id="ThriftAPI.act_prof_dump"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.act_prof_dump">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">act_prof_dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">):</span>
-        <span class="s2">&quot;Display entries in an action profile: act_prof_dump &lt;action profile name&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Displays entries in an action profile.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            act_prof_name (str): name of the action profile</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">act_prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;action profile&quot;</span><span class="p">,</span> <span class="n">act_prof_name</span><span class="p">,</span>
                                 <span class="n">ResType</span><span class="o">.</span><span class="n">action_prof</span><span class="p">)</span>
@@ -2048,7 +2372,11 @@
 
 <div class="viewcode-block" id="ThriftAPI.table_dump"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_dump">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">table_dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
-        <span class="s2">&quot;Display entries in a match-table: table_dump &lt;table name&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Displays entries in a match-table.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str): name of the table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
         <span class="n">entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_mt_get_entries</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -2074,14 +2402,23 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==========&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.table_dump_entry_from_key"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_dump_entry_from_key">[docs]</a>    <span class="nd">@handle_bad_input</span>
-    <span class="k">def</span> <span class="nf">table_dump_entry_from_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">priority</span><span class="p">):</span>
-        <span class="s2">&quot;Display some information about a table entry: table_dump_entry_from_key &lt;table name&gt; &lt;match fields&gt; [priority]&quot;</span>
+    <span class="k">def</span> <span class="nf">table_dump_entry_from_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Displays some information about a table entry using match keys.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str) : name of the table</span>
+<span class="sd">            match_keys (list): list of matches in the order they appear in the P4 code</span>
+<span class="sd">            prio (int)       : priority in ternary match</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            In ``match_keys``, match keys must be :py:class:`str`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">table</span><span class="o">.</span><span class="n">match_type</span> <span class="ow">in</span> <span class="p">{</span><span class="n">MatchType</span><span class="o">.</span><span class="n">TERNARY</span><span class="p">,</span> <span class="n">MatchType</span><span class="o">.</span><span class="n">RANGE</span><span class="p">}:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">priority</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">priority</span><span class="p">)</span>
+                <span class="n">priority</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">prio</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">UIn_Error</span><span class="p">(</span>
                     <span class="s2">&quot;Table is ternary, but could not extract a valid priority from args&quot;</span>
@@ -2101,16 +2438,20 @@
 
 <div class="viewcode-block" id="ThriftAPI.show_pvs"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.show_pvs">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">show_pvs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="s2">&quot;List parser value sets defined in the P4 program: show_pvs&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">exactly_n_args</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Lists parser value sets defined in the P4 program.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">pvs_name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_info</span><span class="o">.</span><span class="n">parse_vsets</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_info</span><span class="o">.</span><span class="n">parse_vsets</span><span class="p">[</span><span class="n">pvs_name</span><span class="p">]</span><span class="o">.</span><span class="n">parse_vset_str</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.pvs_add"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.pvs_add">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">pvs_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvs_name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Add a value to a parser value set: pvs_add &lt;pvs_name&gt; &lt;value&gt;</span>
-<span class="sd">        bmv2 will not report an error if the value already exists.</span>
+        <span class="sd">&quot;&quot;&quot;Adds a value to a parser value set.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            pvs_name (str): name of the parser value set</span>
+<span class="sd">            value (int)   : value to add</span>
+<span class="sd">        </span>
+<span class="sd">        Warning:</span>
+<span class="sd">            *BMv2* will not report an error if the value already exists.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pvs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;parser value set&quot;</span><span class="p">,</span> <span class="n">pvs_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">parse_vset</span><span class="p">)</span>
 
@@ -2119,9 +2460,14 @@
 
 <div class="viewcode-block" id="ThriftAPI.pvs_remove"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.pvs_remove">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">pvs_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvs_name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Remove a value from a parser value set: pvs_remove &lt;pvs_name&gt; &lt;value&gt;</span>
-<span class="sd">        bmv2 will not report an error if the value does not exist.</span>
+        <span class="sd">&quot;&quot;&quot;Removes a value from a parser value set.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            pvs_name (str): name of the parser value set</span>
+<span class="sd">            value (int)   : value to remove</span>
+
+<span class="sd">        Warning:</span>
+<span class="sd">            *BMv2* will not report an error if the value does not exist.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pvs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;parser value set&quot;</span><span class="p">,</span> <span class="n">pvs_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">parse_vset</span><span class="p">)</span>
 
@@ -2130,9 +2476,16 @@
 
 <div class="viewcode-block" id="ThriftAPI.pvs_get"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.pvs_get">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">pvs_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvs_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Print all values from a parser value set: pvs_get &lt;pvs_name&gt;</span>
-<span class="sd">        Values are displayed in no particular order, one per line.</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves all values from a parser value set.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            pvs_name (str): name of the parser value set</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: values of the parser value set</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            Values are displayed in no particular order, one per line.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pvs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;parser value set&quot;</span><span class="p">,</span> <span class="n">pvs_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">parse_vset</span><span class="p">)</span>
 
@@ -2143,8 +2496,10 @@
 
 <div class="viewcode-block" id="ThriftAPI.pvs_clear"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.pvs_clear">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">pvs_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvs_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Remove all values from a parser value set: pvs_clear &lt;pvs_name&gt;</span>
+        <span class="sd">&quot;&quot;&quot;Removes all values from a parser value set.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            pvs_name (str): name of the parser value set</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pvs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="s2">&quot;parser value set&quot;</span><span class="p">,</span> <span class="n">pvs_name</span><span class="p">,</span> <span class="n">ResType</span><span class="o">.</span><span class="n">parse_vset</span><span class="p">)</span>
 
@@ -2152,7 +2507,13 @@
 
 <div class="viewcode-block" id="ThriftAPI.port_add"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.port_add">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">port_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iface_name</span><span class="p">,</span> <span class="n">port_num</span><span class="p">,</span> <span class="n">pcap_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="s2">&quot;Add a port to the switch (behavior depends on device manager used): port_add &lt;iface_name&gt; &lt;port_num&gt; [pcap_path]&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Adds a port to the switch (behavior depends on device manager used).</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            iface_name (str): interface name</span>
+<span class="sd">            port_num (int)  : port number</span>
+<span class="sd">            pcap_path (str) : path where the ``.pcap`` files are saved (optional)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">port_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">port_num</span><span class="p">)</span>
@@ -2163,7 +2524,11 @@
 
 <div class="viewcode-block" id="ThriftAPI.port_remove"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.port_remove">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">port_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_num</span><span class="p">):</span>
-        <span class="s2">&quot;Removes a port from the switch (behavior depends on device manager used): port_remove &lt;port_num&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Removes a port from the switch (behavior depends on device manager used).</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            port_num (int): port number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">port_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">port_num</span><span class="p">)</span>
@@ -2173,7 +2538,7 @@
 
 <div class="viewcode-block" id="ThriftAPI.show_ports"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.show_ports">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">show_ports</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;Shows the ports connected to the switch: show_ports&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Shows the ports connected to the switch.&quot;&quot;&quot;</span>
         <span class="n">ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_dev_mgr_show_ports</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:^10}{:^20}{:^10}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="s2">&quot;port #&quot;</span><span class="p">,</span> <span class="s2">&quot;iface name&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;extra info&quot;</span><span class="p">))</span>
@@ -2187,7 +2552,7 @@
 
 <div class="viewcode-block" id="ThriftAPI.switch_info"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.switch_info">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">switch_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;Show some basic info about the switch: switch_info&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Shows some basic info about the switch.&quot;&quot;&quot;</span>
 
         <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_mgmt_get_info</span><span class="p">()</span>
         <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">thrift_spec</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
@@ -2197,12 +2562,12 @@
 
 <div class="viewcode-block" id="ThriftAPI.reset_state"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.reset_state">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">reset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;Reset all state in the switch (table entries, registers, ...), but P4 config is preserved: reset_state&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Resets all state in the switch (table entries, registers, ...), but P4 config is preserved.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_reset_state</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.write_config_to_file"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.write_config_to_file">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">write_config_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="s2">&quot;Retrieves the JSON config currently used by the switch and dumps it to user-specified file&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves the JSON config currently used by the switch and dumps it to user-specified file.&quot;&quot;&quot;</span>
 
         <span class="n">json_cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_get_config</span><span class="p">()</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -2210,7 +2575,7 @@
 
 <div class="viewcode-block" id="ThriftAPI.serialize_state"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.serialize_state">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">serialize_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="s2">&quot;Serialize the switch state and dumps it to user-specified file&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Serializes the switch state and dumps it to user-specified file.&quot;&quot;&quot;</span>
 
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">bm_serialize_state</span><span class="p">()</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -2231,12 +2596,30 @@
 
 <div class="viewcode-block" id="ThriftAPI.set_crc16_parameters"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.set_crc16_parameters">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">set_crc16_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">polynomial</span><span class="p">,</span> <span class="n">initial_remainder</span><span class="p">,</span> <span class="n">final_xor_value</span><span class="p">,</span> <span class="n">reflect_data</span><span class="p">,</span> <span class="n">reflect_remainder</span><span class="p">):</span>
-        <span class="s2">&quot;Change the parameters for a custom crc16 hash: set_crc16_parameters &lt;name&gt; &lt;polynomial&gt; &lt;initial remainder&gt; &lt;final xor value&gt; &lt;reflect data?&gt; &lt;reflect remainder?&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Changes the parameters for a custom ``crc16`` hash.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            name (str)              : hash name</span>
+<span class="sd">            polynomial (int)        : polynomial</span>
+<span class="sd">            intial_remainder (int)  : initial reminder</span>
+<span class="sd">            final_xor_value  (int)  : final *xor* value</span>
+<span class="sd">            reflect_data (bool)     : reflect data or do not</span>
+<span class="sd">            reflect_remainder (bool): reflect remainder or do not</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_crc_parameters_common</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">polynomial</span><span class="p">,</span> <span class="n">initial_remainder</span><span class="p">,</span> <span class="n">final_xor_value</span><span class="p">,</span> <span class="n">reflect_data</span><span class="p">,</span> <span class="n">reflect_remainder</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ThriftAPI.set_crc32_parameters"><a class="viewcode-back" href="../../../p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.set_crc32_parameters">[docs]</a>    <span class="nd">@handle_bad_input</span>
     <span class="k">def</span> <span class="nf">set_crc32_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">polynomial</span><span class="p">,</span> <span class="n">initial_remainder</span><span class="p">,</span> <span class="n">final_xor_value</span><span class="p">,</span> <span class="n">reflect_data</span><span class="p">,</span> <span class="n">reflect_remainder</span><span class="p">):</span>
-        <span class="s2">&quot;Change the parameters for a custom crc32 hash: set_crc32_parameters &lt;name&gt; &lt;polynomial&gt; &lt;initial remainder&gt; &lt;final xor value&gt; &lt;reflect data?&gt; &lt;reflect remainder?&gt;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Changes the parameters for a custom ``crc32`` hash.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            name (str)              : name</span>
+<span class="sd">            polynomial (int)        : polynomial</span>
+<span class="sd">            intial_remainder (int)  : initial reminder</span>
+<span class="sd">            final_xor_value  (int)  : final *xor* value</span>
+<span class="sd">            reflect_data (bool)     : reflect data or do not</span>
+<span class="sd">            reflect_remainder (bool): reflect remainder or do not</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_crc_parameters_common</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">polynomial</span><span class="p">,</span> <span class="n">initial_remainder</span><span class="p">,</span> <span class="n">final_xor_value</span><span class="p">,</span> <span class="n">reflect_data</span><span class="p">,</span> <span class="n">reflect_remainder</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span></div>
 
 

@@ -844,7 +844,7 @@ class SimpleSwitchP4RuntimeAPI:
             meter_name (str): name of the meter
             rates (list)    : ``[(cir, cburst), (pir, pburst)]`` (default: **None**, i.e.
                               all packets are marked as **GREEN**)
-            index (int)     : index of the meter to set (first element is at 0)
+            index (int)     : index of the meter to set (first element is at ``0``)
         
         Note:
             ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units 
@@ -880,7 +880,7 @@ class SimpleSwitchP4RuntimeAPI:
 
         Args:
             meter_name (str): name of the meter
-            index (int)     : index of the meter to read (first element is at 0)
+            index (int)     : index of the meter to read (first element is at ``0``)
         
         Return:
             list: ``[(cir, cburst), (pir, pburst)]`` if meter is configured, **None** otherwise.

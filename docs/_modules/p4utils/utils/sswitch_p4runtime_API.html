@@ -338,7 +338,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            timeout (int): time to wait for packet</span>
 
-<span class="sd">        Return:</span>
+<span class="sd">        Returns:</span>
 <span class="sd">            ``DigestList`` Protobuf Message or **None** if the timeout has expired and </span>
 <span class="sd">            no packet has been received.</span>
 <span class="sd">        </span>
@@ -678,8 +678,8 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple: ``(byte_count, packet_count)`` where:</span>
 
-<span class="sd">                    - ``byte_count`` is the number of bytes counted;</span>
-<span class="sd">                    - ``packet_count`` is the number of packets counted.</span>
+<span class="sd">            - ``byte_count`` is the number of bytes counted;</span>
+<span class="sd">            - ``packet_count`` is the number of packets counted.</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry</span>
@@ -904,8 +904,8 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple: ``(byte_count, packet_count)`` where:</span>
 
-<span class="sd">                   - ``byte_count`` is the number of bytes counted</span>
-<span class="sd">                   - ``packet_count`` is the number of bytes counted</span>
+<span class="sd">            - ``byte_count`` is the number of bytes counted;</span>
+<span class="sd">            - ``packet_count`` is the number of bytes counted.</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry</span>
@@ -1012,7 +1012,7 @@
 <span class="sd">            meter_name (str): name of the meter</span>
 <span class="sd">            rates (list)    : ``[(cir, cburst), (pir, pburst)]`` (default: **None**, i.e.</span>
 <span class="sd">                              all packets are marked as **GREEN**)</span>
-<span class="sd">            index (int)     : index of the meter to set (first element is at 0)</span>
+<span class="sd">            index (int)     : index of the meter to set (first element is at ``0``)</span>
 <span class="sd">        </span>
 <span class="sd">        Note:</span>
 <span class="sd">            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units </span>
@@ -1048,7 +1048,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            meter_name (str): name of the meter</span>
-<span class="sd">            index (int)     : index of the meter to read (first element is at 0)</span>
+<span class="sd">            index (int)     : index of the meter to read (first element is at ``0``)</span>
 <span class="sd">        </span>
 <span class="sd">        Return:</span>
 <span class="sd">            list: ``[(cir, cburst), (pir, pburst)]`` if meter is configured, **None** otherwise.</span>
@@ -1169,8 +1169,9 @@
 <span class="sd">        </span>
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple: ``(ports, instances)`` where:</span>
-<span class="sd">                   - ``ports`` is a list of port numbers of the multicast group;</span>
-<span class="sd">                   - ``instances`` is list of instances of the corresponding ports.</span>
+
+<span class="sd">            - ``ports`` is a list of port numbers of the multicast group;</span>
+<span class="sd">            - ``instances`` is list of instances of the corresponding ports.</span>
 
 <span class="sd">        A replica is logically a tuple ``(port, instance)`` which has to be unique </span>
 <span class="sd">        within the same multicast group. Instances can be explicitly assigned to ports by </span>
@@ -1312,8 +1313,9 @@
 <span class="sd">        </span>
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple: ``(ports, instances)`` where:</span>
-<span class="sd">                   - ``ports`` is a list of port numbers of the clone session;</span>
-<span class="sd">                   - ``instances`` is a list of instances of the corresponding ports.</span>
+
+<span class="sd">            - ``ports`` is a list of port numbers of the clone session;</span>
+<span class="sd">            - ``instances`` is a list of instances of the corresponding ports.</span>
 
 <span class="sd">        A replica is logically a tuple ``(port, instance)`` which has to be unique </span>
 <span class="sd">        within the same multicast group.</span>
@@ -1421,11 +1423,11 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple: ``(max_timeout_ns, max_list_size, ack_timeout_ns)`` where:</span>
 <span class="sd">                   </span>
-<span class="sd">                   - ``max_timeout_ns`` is the maximum server buffering delay in nanoseconds for an outstanding digest message;</span>
-<span class="sd">                   - ``max_list_size`` is the maximum digest list size (in number of digest messages) sent by the server</span>
-<span class="sd">                     to the client as a single DigestList Protobuf message;</span>
-<span class="sd">                   - ``ack_timeout_ns`` is the timeout in nanoseconds that a server must wait for a digest list acknowledgement </span>
-<span class="sd">                     from the client before new digest messages can be generated for the same learned data.</span>
+<span class="sd">            - ``max_timeout_ns`` is the maximum server buffering delay in nanoseconds for an outstanding digest message;</span>
+<span class="sd">            - ``max_list_size`` is the maximum digest list size (in number of digest messages) sent by the server</span>
+<span class="sd">              to the client as a single DigestList Protobuf message;</span>
+<span class="sd">            - ``ack_timeout_ns`` is the timeout in nanoseconds that a server must wait for a digest list acknowledgement</span>
+<span class="sd">              from the client before new digest messages can be generated for the same learned data.</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:</span>

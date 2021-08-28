@@ -205,7 +205,7 @@ class ParseVSet:
             self.name, self.bitwidth)
 
 
-class SwitchInfo(object):
+class SwitchInfo():
 
     def __init__(self):
 
@@ -873,8 +873,32 @@ def hexstr(v):
     return "".join([format(c, "02x") for c in v])
 
 
-class ThriftAPI(object):
+class ThriftAPI():
+    """This class implements a client that connects to a P4 switch control plane 
+    and allows to configure it. It establishes a *Thrift* connection with the 
+    switch server that is then used to forward configuration information.
 
+    Args:
+        thrift_port (int) : port number the *Thrift* server listens on
+        thrift_ip (str)   : IP the *Thrift* server listens on
+        pre_type (str)    : PreType option
+        json_path (str)   : path to the P4 compiled JSON file (optional)
+
+    Possible values for **pre_type** are the following:
+
+    - ``simple_pre``
+    - ``simple_pre_lag``
+    - ``none``
+
+    Attributes:
+        switch_info (:py:class:`SwitchInfo`)            : object containing information about all the
+                                                          P4 structures present in the switch.
+        client                                          : *Thrift* client instance.
+        mc_client                                       : *Thrift* mc client instance.
+        pre_type (:py:class:`str`)                      : given PreType option.
+        table_entries_match_to_handle (:py:class:`dict`): dictionary used to associate table matches
+                                                          with the related handle.
+    """
     @staticmethod
     def get_thrift_services(pre_type):
 
@@ -919,7 +943,7 @@ class ThriftAPI(object):
         return d
 
     def shell(self, line):
-        "Run a shell command"
+        """Runs a shell command."""
         output = os.popen(line).read()
         print(output)
 
@@ -939,19 +963,23 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def show_tables(self):
-        "List tables defined in the P4 program: show_tables"
+        """Lists tables defined in the P4 program."""
         for table_name in sorted(self.switch_info.tables):
             print(self.switch_info.TABLES[table_name].table_str())
 
     @handle_bad_input
     def show_actions(self):
-        "List actions defined in the P4 program: show_actions"
+        """Lists actions defined in the P4 program."""
         for action_name in sorted(self.switch_info.actions):
             print(self.switch_info.actions[action_name].action_str())
 
     @handle_bad_input
     def table_show_actions(self, table_name):
-        "List one table's actions as per the P4 program: table_show_actions <table_name>"
+        """Lists one table's actions as per the P4 program.
+        
+        Args:
+            table_name (str): name of the table
+        """
 
         table = self.get_res("table", table_name, ResType.table)
         for action_name in sorted(table.actions):
@@ -959,7 +987,11 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def table_info(self, table_name):
-        "Show info about a table: table_info <table_name>"
+        """Shows info about a table.
+        
+        Args:
+            table_name (str): name of the table
+        """
         table = self.get_res("table", table_name, ResType.table)
         print(table.table_str())
         print("*" * 80)
@@ -976,8 +1008,17 @@ class ThriftAPI(object):
         ))
 
     @handle_bad_input
-    def table_set_default(self, table_name, action_name, action_params):
-        "Set default action for a match table: table_set_default <table name> <action name> <action parameters>"
+    def table_set_default(self, table_name, action_name, action_params=[]):
+        """Sets default action for a match table.
+        
+        Args:
+            table_name (str)    : name of the table
+            action_name (str)   : name of the default action
+            action_params (list): list of parameters for the default action
+
+        Note:
+            In ``action_params``, action parameters must be :py:class:`str`.
+        """
 
         table = self.get_res("table", table_name, ResType.table)
         action = table.get_action(action_name, self.switch_info.suffix_lookup_map)
@@ -994,7 +1035,11 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def table_reset_default(self, table_name):
-        "Reset default entry for a match table: table_reset_default <table name>"
+        """Resets default entry for a match table.
+        
+        Args:
+            table_name (str): name of the table
+        """
 
         table = self.get_res("table", table_name, ResType.table)
         self.client.bm_mt_reset_default_entry(0, table.name)
@@ -1013,14 +1058,25 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def table_num_entries(self, table_name):
-        "Return the number of entries in a match table (direct or indirect): table_num_entries <table name>"
+        """Returns the number of entries in a match table (direct or indirect).
+        
+        Args:
+            table_name (str): name of the table
+        
+        Returns:
+            int: the number of entries in a table.
+        """
 
         table = self.get_res("table", table_name, ResType.table)
         return self.client.bm_mt_get_num_entries(0, table.name)
 
     @handle_bad_input
     def table_clear(self, table_name):
-        "Clear all entries in a match table (direct or indirect), but not the default entry: table_clear <table name>"
+        """Clears all entries in a match table (direct or indirect), but not the default entry.
+        
+        Args:
+            table_name (str): name of the table
+        """
 
         table = self.get_res("table", table_name, ResType.table)
         self.client.bm_mt_clear_entries(0, table.name, False)
@@ -1041,8 +1097,26 @@ class ThriftAPI(object):
         return d
 
     @handle_bad_input
-    def table_add(self, table_name, action_name, match_keys, action_params=[], prio=None):
-        "Add entry to a match table: table_add <table name> <action name> <match fields> => <action parameters> [priority]"
+    def table_add(self, table_name, action_name, match_keys, action_params=[], prio=0):
+        """Adds entry to a match table.
+        
+        Args:
+            table_name (str)    : name of the table
+            action_name (str)   : name of the action to execute
+            match_keys (list)   : list of matches in the order they appear in the P4 code
+            action_params (list): list of action parameters in the 
+                                  order they appear in the P4 code
+            prio (int)          : priority in ternary matches
+
+        Returns:
+            int: entry handle.
+
+        Note:
+            - In ``action_params`` and ``match_keys``, action parameters and match keys
+              must be :py:class:`str`.
+            - A higher ``prio`` number indicates that the entry must be given higher
+              priority when performing a table lookup.
+        """
 
         #print table_name, action_name, match_keys, action_params
         #import ipdb; ipdb.set_trace()
@@ -1097,7 +1171,13 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def table_set_timeout(self, table_name, entry_handle, timeout_ms):
-        "Set a timeout in ms for a given entry; the table has to support timeouts: table_set_timeout <table_name> <entry handle> <timeout (ms)>"
+        """Sets a timeout in ms for a given entry; the table has to support timeouts.
+        
+        Args:
+            table_name (str)  : name of the table
+            entry_handle (int): entry handle
+            timeout_ms (int)  : entry timeout in ms        
+        """
 
         table = self.get_res("table", table_name, ResType.table)
         if not table.support_timeout:
@@ -1130,8 +1210,22 @@ class ThriftAPI(object):
         return entry_handle
 
     @handle_bad_input
-    def table_modify(self, table_name, action_name, entry_handle, action_parameters = []):
-        "Add entry to a match table: table_modify <table name> <action name> <entry handle> [action parameters]"
+    def table_modify(self, table_name, action_name, entry_handle, action_params=[]):
+        """Modifies entry of a match table.
+        
+        Args:
+            table_name (str)        : name of the table
+            action_name (str)       : name of the action
+            entry_handle (int)      : entry handle
+            action_params (list): list of action parameters in the 
+                                      order they appear in the P4 code
+        
+        Returns:
+            int: entry handle.
+
+        Note:
+            In ``action_params``, action parameters must be :py:class:`str`.
+        """
 
         table = self.get_res("table", table_name, ResType.table)
         action = table.get_action(action_name, self.switch_info.suffix_lookup_map)
@@ -1145,7 +1239,6 @@ class ThriftAPI(object):
         except:
             raise UIn_Error("Bad format for entry handle")
 
-        action_params = action_parameters
         runtime_data = self.parse_runtime_data(action, action_params)
 
         print("Modifying entry", entry_handle, "for", MatchType.to_str(table.match_type), "match table", table_name)
@@ -1157,11 +1250,25 @@ class ThriftAPI(object):
 
         return entry_handle
 
-    def table_modify_match(self, table_name, action_name, match_keys, action_parameters = []):
+    def table_modify_match(self, table_name, action_name, match_keys, action_params=[]):
+        """Modifies entry of a match table using match keys.
+        
+        Args:
+            table_name (str)        : name of the table
+            action_name (str)       : name of the action
+            match_keys (list)       : list of matches in the order they appear in the P4 code
+            action_params (list): list of action parameters in the 
+                                      order they appear in the P4 code
+        
+        Returns:
+            int: entry handle.
 
+        Note:
+            In ``action_params``, action parameters must be :py:class:`str`.
+        """
         entry_handle = self.get_handle_from_match(table_name, match_keys)
         if entry_handle is not None:
-            self.table_modify(table_name, action_name, entry_handle, action_parameters)
+            self.table_modify(table_name, action_name, entry_handle, action_params)
         else:
             raise UIn_Error(
                 "Table {} has no match {}".format(table_name, match_keys)
@@ -1170,7 +1277,13 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def table_delete(self, table_name, entry_handle, quiet=False):
-        "Delete entry from a match table: table_delete <table name> <entry handle>"
+        """Deletes entry from a match table.
+        
+        Args:
+            table_name (str)  : name of the table
+            entry_handle (int): entry handle
+            quiet (bool)      : disable verbose output
+        """
 
         #TODO: delete handle
 
@@ -1186,7 +1299,18 @@ class ThriftAPI(object):
         self.client.bm_mt_delete_entry(0, table.name, entry_handle)
 
     def table_delete_match(self, table_name, match_keys):
+        """Deletes entry from a table using match keys.
 
+        Args:
+            table_name (str): name of the table
+            match_keys (list): list of matches in the order they appear in the P4 code
+
+        Note:
+            In ``match_keys``, match keys must be :py:class:`str`.
+
+        Warning:
+            This may not work with ternary matches and priority entries.
+        """
         entry_handle = self.get_handle_from_match(table_name, match_keys, pop=True)
         print("trying to delete entry with handle ", entry_handle)
         if entry_handle is not None:
@@ -1212,8 +1336,21 @@ class ThriftAPI(object):
                 "Cannot run this command on an action profile without selector")
 
     @handle_bad_input
-    def act_prof_create_member(self, act_prof_name, action_name, action_params):
-        "Add a member to an action profile: act_prof_create_member <action profile name> <action_name> [action parameters]"
+    def act_prof_create_member(self, act_prof_name, action_name, action_params=[]):
+        """Adds a member to an action profile.
+        
+        Args:
+            act_prof_name (str) : name of the action profile
+            action_name (str)   : name of the action
+            action_params (list): list of action parameters in the 
+                                  order they appear in the P4 code
+
+        Returns:
+            int: member handle.      
+
+        Note:
+            In ``action_params``, action parameters must be :py:class:`str`.   
+        """
 
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
@@ -1233,8 +1370,12 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def act_prof_delete_member(self, act_prof_name, mbr_handle):
-        "Delete a member in an action profile: act_prof_delete_member <action profile name> <member handle>"
-
+        """Deletes a member in an action profile.
+        
+        Args:
+            act_prof_name (str): name of the action profile
+            mbr_handle (int)   : member handle
+        """
 
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
@@ -1246,8 +1387,22 @@ class ThriftAPI(object):
         self.client.bm_mt_act_prof_delete_member(0, act_prof.name, mbr_handle)
 
     @handle_bad_input
-    def act_prof_modify_member(self, act_prof_name, action_name, mbr_handle, action_params):
-        "Modify member in an action profile: act_prof_modify_member <action profile name> <action_name> <member_handle> [action parameters]"
+    def act_prof_modify_member(self, act_prof_name, action_name, mbr_handle, action_params=[]):
+        """Modifies member in an action profile.
+        
+        Args:
+            act_prof_name (str) : name of the action profile
+            action_name (str)   : name of the action
+            mbr_handle (int)    : member handle
+            action_params (list): list of action parameters in the 
+                                  order they appear in the P4 code
+
+        Returns:
+            int: member handle.
+
+        Note:
+            In ``action_params``, action parameters must be :py:class:`str`.
+        """
 
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
@@ -1266,21 +1421,35 @@ class ThriftAPI(object):
         self.client.bm_mt_act_prof_modify_member(
             0, act_prof.name, mbr_handle, action.name, runtime_data)
 
+        return mbr_handle
+
     @handle_bad_input
     def act_prof_create_group(self, act_prof_name):
-        "Add a group to an action pofile: act_prof_create_group <action profile name>"
+        """Adds a group to an action pofile.
+        
+        Args:
+            act_prof_name (str): name of the action profile
+
+        Returns:
+            int: group handle.
+        """
 
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
 
         self.check_act_prof_ws(act_prof)
         grp_handle = self.client.bm_mt_act_prof_create_group(0, act_prof.name)
-        print("Group has been created with handle", grp_handle)
 
+        return grp_handle
 
     @handle_bad_input
     def act_prof_delete_group(self, act_prof_name, grp_handle):
-        "Delete a group from an action profile: act_prof_delete_group <action profile name> <group handle>"
+        """Delete a group from an action profile.
+        
+        Args:
+            act_prof_name (str): name of the action profile
+            grp_handle (int)   : group handle
+        """
 
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
@@ -1295,7 +1464,13 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def act_prof_add_member_to_group(self, act_prof_name, mbr_handle, grp_handle):
-        "Add member to group in an action profile: act_prof_add_member_to_group <action profile name> <member handle> <group handle>"
+        """Adds member to group in an action profile.
+        
+        Args:
+            act_prof_name (str): name of the action profile
+            mbr_handle (int)   : member handle
+            grp_handle (int)   : group handle
+        """
 
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
@@ -1317,7 +1492,13 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def act_prof_remove_member_from_group(self, act_prof_name, mbr_handle, grp_handle):
-        "Remove member from group in action profile: act_prof_remove_member_from_group <action profile name> <member handle> <group handle>"
+        """Removes member from group in action profile.
+        
+        Args:
+            act_prof_name (str): name of the action profile
+            mbr_handle (int)   : member handle
+            grp_handle (int)   : group handle
+        """
 
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
@@ -1351,7 +1532,17 @@ class ThriftAPI(object):
 
     @handle_bad_input_mc
     def mc_mgrp_create(self, mgrp):
-        "Create multicast group: mc_mgrp_create <group id>"
+        """Creates multicast group.
+
+        Args:
+            mgrp (int): multicast group id
+
+        Returns:
+            int: multicast group handle.
+
+        Note:
+            The multicast group handle is equal to the multicast group id.
+        """
 
         mgrp = self.get_mgrp(mgrp)
         print("Creating multicast group", mgrp)
@@ -1362,7 +1553,11 @@ class ThriftAPI(object):
 
     @handle_bad_input_mc
     def mc_mgrp_destroy(self, mgrp):
-        "Destroy multicast group: mc_mgrp_destroy <group id>"
+        """Destroys multicast group.
+        
+        Args:
+            mgrp (int): multicast group id
+        """
 
         mgrp = self.get_mgrp(mgrp)
         print("Destroying multicast group", mgrp)
@@ -1390,7 +1585,16 @@ class ThriftAPI(object):
 
     @handle_bad_input_mc
     def mc_node_create(self, rid, ports, lags=[]):
-        "Create multicast node: mc_node_create <rid> <space-separated port list> [ | <space-separated lag list> ]"
+        """Creates multicast node.
+        
+        Args:
+            rid (int)   : replication id
+            ports (list): list of port numbers
+            lags (list) : list of lags
+
+        Returns:
+            int: node handle.
+        """
         try:
             rid = int(rid)
         except:
@@ -1415,7 +1619,16 @@ class ThriftAPI(object):
 
     @handle_bad_input_mc
     def mc_node_update(self, l1_hdl, ports, lags=[]):
-        "Update multicast node: mc_node_update <node handle> <space-separated port list> [ | <space-separated lag list> ]"
+        """Updates multicast node.
+        
+        Args:
+            l1_hdl (int): node handle
+            ports (list): list of port numbers
+            lags (list) : list of lags
+        
+        Returns:
+            int: node handle.
+        """
 
         l1_hdl = self.get_node_handle(l1_hdl)
         port_map_str = self.ports_to_port_map_str(ports)
@@ -1427,9 +1640,16 @@ class ThriftAPI(object):
             print("Updating node", l1_hdl, "with port map", port_map_str, "and lag map", lag_map_str)
             self.mc_client.bm_mc_node_update(0, l1_hdl, port_map_str, lag_map_str)
 
+        return l1_hdl
+
     @handle_bad_input_mc
     def mc_node_associate(self, mgrp, l1_hdl):
-        "Associate node to multicast group: mc_node_associate <group handle> <node handle>"
+        """Associates node to multicast group.
+        
+        Args:
+            mgrp (int)  : multicast group id
+            l1_hdl (int): node handle
+        """
 
         mgrp = self.get_mgrp(mgrp)
         l1_hdl = self.get_node_handle(l1_hdl)
@@ -1438,7 +1658,12 @@ class ThriftAPI(object):
 
     @handle_bad_input_mc
     def mc_node_dissociate(self, mgrp, l1_hdl):
-        "Dissociate node from multicast group: mc_node_associate <group handle> <node handle>"
+        """Dissociates node from multicast group.
+        
+        Args:
+            mgrp (int)  : multicast group handle
+            l1_hdl (int): node handle
+        """
 
         mgrp = self.get_mgrp(mgrp)
         l1_hdl = self.get_node_handle(l1_hdl)
@@ -1447,7 +1672,11 @@ class ThriftAPI(object):
 
     @handle_bad_input_mc
     def mc_node_destroy(self, l1_hdl):
-        "Destroy multicast node: mc_node_destroy <node handle>"
+        """Destroys multicast node.
+        
+        Args:
+            l1_hdl (int): node handle
+        """
 
         l1_hdl = self.get_node_handle(l1_hdl)
         print("Destroying node", l1_hdl)
@@ -1455,7 +1684,13 @@ class ThriftAPI(object):
 
     @handle_bad_input_mc
     def mc_set_lag_membership(self, lag_index, ports):
-        "Set lag membership of port list: mc_set_lag_membership <lag index> <space-separated port list>"
+        """Sets lag membership of port list.
+        
+        Args:
+            lag_index (int): lag index
+            ports (list)   : list of port numbers
+        """
+
         self.check_has_pre()
         if self.pre_type != PreType.SimplePreLAG:
             raise UIn_Error(
@@ -1473,7 +1708,7 @@ class ThriftAPI(object):
 
     @handle_bad_input_mc
     def mc_dump(self):
-        "Dump entries in multicast engine"
+        """Dumps entries in multicast engine."""
         self.check_has_pre()
         json_dump = self.mc_client.bm_mc_get_entries(0)
         try:
@@ -1515,7 +1750,11 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def load_new_config_file(self, filename):
-        "Load new json config: load_new_config_file <path to .json file>"
+        """Loads new JSON config.
+        
+        Args:
+            filename (str): path to the P4 compiled JSON file
+        """
 
         if not os.path.isfile(filename):
             raise UIn_Error("Not a valid filename")
@@ -1531,15 +1770,23 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def swap_configs(self):
-        "Swap the 2 existing configs, need to have called load_new_config_file before"
+        """Swap the 2 existing configs, need to have called 
+        :py:meth:`load_new_config_file` before.
+        """
         print("Swapping configs")
         self.client.bm_swap_configs()
 
     @handle_bad_input
     def meter_array_set_rates(self, meter_name, rates):
-        """
-        Configure rates for an entire meter array: meter_array_set_rates <name> [(<rate_1>,<burst_1>), (<rate_2>,<burst_2>)] ...
-        Rate uses units/microsecond and burst uses units where units is bytes or packets.
+        """Configures rates for an entire meter array.
+        
+        Args:
+            meter_name (str): name of the meter
+            rates (list)    : ``[(cir, cburst), (pir, pburst)]``
+        
+        Note:
+            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units 
+            where units is bytes or packets, depending on the meter type.
         """
 
         meter = self.get_res("meter", meter_name, ResType.meter_array)
@@ -1559,9 +1806,16 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def meter_set_rates(self, meter_name, index, rates):
-        """
-        Configure rates for a meter: meter_set_rates <name> <index> [(<rate_1>,<burst_1>), (<rate_2>,<burst_2>)] ...
-        Rate uses units/microsecond and burst uses units where units is bytes or packets.
+        """Configures rates for a meter.
+        
+        Args:
+            meter_name (str): name of the meter
+            index (int)     : index in the array of meters (first element is at ``0``)
+            rates (list)    : ``[(cir, cburst), (pir, pburst)]``
+        
+        Note:
+            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units 
+            where units is bytes or packets, depending on the meter type.
         """
 
         meter = self.get_res("meter", meter_name, ResType.meter_array)
@@ -1589,9 +1843,18 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def meter_get_rates(self, meter_name, index):
-        """
-        Retrieve rates for a meter: meter_get_rates <name> <index>.
-        Rate uses units/microsecond and burst uses units where units is bytes or packets.
+        """Retrieves rates for a meter.
+
+        Args:
+            meter_name (str): name of the meter
+            index (int)     : index in the array of meters (first element is at ``0``)
+        
+        Returns:
+            list: ``[(cir, cburst), (pir, pburst)]``.
+
+        Note:
+            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units 
+            where units is bytes or packets, depending on the meter type.
         """
 
         meter = self.get_res("meter", meter_name, ResType.meter_array)
@@ -1613,14 +1876,24 @@ class ThriftAPI(object):
         for idx, rate in enumerate(rates):
             print("{}: info rate = {}, burst size = {}".format(
                 idx, rate.units_per_micros, rate.burst_size))
-            values.append(rate.units_per_micros)
-            values.append(rate.burst_size)
+            values.append((rate.units_per_micros, rate.burst_size))
 
         return values
 
     @handle_bad_input
     def counter_read(self, counter_name, index):
-        "Read counter value: counter_read <name> <entry handle>"
+        """Reads counter value.
+        
+        Args:
+            counter_name (str): name of the counter
+            index (int)       : index in the array of counters
+
+        Returns:
+            tuple: ``(byte_count, packet_count)`` where:
+
+            - ``byte_count`` is the number of bytes counted;
+            - ``packet_count`` is the number of bytes counted.
+        """
 
         counter = self.get_res("counter", counter_name, ResType.counter_array)
         try:
@@ -1636,11 +1909,18 @@ class ThriftAPI(object):
             value = self.client.bm_counter_read(0, counter.name, index)
 
         print("{}[{}]= ({} bytes, {} packets)".format(counter_name, index, value.bytes, value.packets))
-        return value
+        return value.bytes, value.packets
 
     @handle_bad_input
-    def counter_write(self, counter_name, index, pkts, byts):
-        "Write counter value: counter_write <name> <index> <packets> <bytes>"
+    def counter_write(self, counter_name, index, pkts=0, byts=0):
+        """Write counter value.
+        
+        Args:
+            counter_name (str): name of the counter
+            index (int)       : index in the array of counters (first element is at ``0``)
+            pkts (int)        : number of packets to write (default: ``0``)
+            byts (int)        : number of bytes to write (default: ``0``)
+        """
 
         counter = self.get_res("counter", counter_name, ResType.counter_array)
         try:
@@ -1665,7 +1945,11 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def counter_reset(self, counter_name):
-        "Reset counter: counter_reset <name>"
+        """Resets counter array.
+        
+        Args:
+            counter_name (str): name of the counter
+        """
 
         counter = self.get_res("counter", counter_name, ResType.counter_array)
         if counter.is_direct:
@@ -1677,7 +1961,17 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def register_read(self, register_name, index=None, show=False):
-        "Read register value: register_read <name> [index]"
+        """Reads register value.
+        
+        Args:
+            register_name (str): name of the register
+            index (int)        : index in the array of registers (if **None**, the
+                                 whole array will be read)
+            show (bool)        : enable verbose output
+
+        Returns:
+            int or list: register value or list of values.
+        """
 
         register = self.get_res("register", register_name,
                                 ResType.register_array)
@@ -1699,7 +1993,14 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def register_write(self, register_name, index, value):
-        "Write register value: register_write <name> <index>|[start_index, end_index] <value>"
+        """Writes register value.
+        
+        Args:
+            register_name (str): name of the register
+            index (int or list): index in the array of registers or
+                                 ``[start_index, end_index]``
+            value (int)        : value to write
+        """
 
         register = self.get_res("register", register_name,
                                 ResType.register_array)
@@ -1725,7 +2026,11 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def register_reset(self, register_name):
-        "Reset all the cells in the register array to 0: register_reset <name>"
+        """Resets all the cells in the register array to ``0``.
+        
+        Args:
+            register_name (str): name of the register
+        """
 
         register = self.get_res("register", register_name,
                                 ResType.register_array)
@@ -1805,7 +2110,12 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def table_dump_entry(self, table_name, entry_handle):
-        "Display some information about a table entry: table_dump_entry <table name> <entry handle>"
+        """Displays some information about a table entry.
+        
+        Args:
+            table_name (str)  : name of the table
+            entry_handle (int): entry handle
+        """
 
         table = self.get_res("table", table_name, ResType.table)
 
@@ -1819,7 +2129,12 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def act_prof_dump_member(self, act_prof_name, mbr_handle):
-        "Display some information about a member: act_prof_dump_member <action profile name> <member handle>"
+        """Displays some information about a member.
+
+        Args:
+            act_prof_name (str): name of the action profile
+            mbr_handle (int)   : member handle
+        """
 
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
@@ -1835,7 +2150,12 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def act_prof_dump_group(self, act_prof_name, grp_handle):
-        "Display some information about a group: table_dump_group <action profile name> <group handle>"
+        """Displays some information about a group.
+        
+        Args:
+            act_prof_name (str): name of the action profile
+            grp_handle (int)   : group handle
+        """
 
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
@@ -1862,7 +2182,11 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def act_prof_dump(self, act_prof_name):
-        "Display entries in an action profile: act_prof_dump <action profile name>"
+        """Displays entries in an action profile.
+        
+        Args:
+            act_prof_name (str): name of the action profile
+        """
 
         act_prof = self.get_res("action profile", act_prof_name,
                                 ResType.action_prof)
@@ -1880,7 +2204,11 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def table_dump(self, table_name):
-        "Display entries in a match-table: table_dump <table name>"
+        """Displays entries in a match-table.
+        
+        Args:
+            table_name (str): name of the table
+        """
 
         table = self.get_res("table", table_name, ResType.table)
         entries = self.client.bm_mt_get_entries(0, table.name)
@@ -1906,14 +2234,23 @@ class ThriftAPI(object):
         print("==========")
 
     @handle_bad_input
-    def table_dump_entry_from_key(self, table_name, match_keys, priority):
-        "Display some information about a table entry: table_dump_entry_from_key <table name> <match fields> [priority]"
+    def table_dump_entry_from_key(self, table_name, match_keys, prio=0):
+        """Displays some information about a table entry using match keys.
+        
+        Args:
+            table_name (str) : name of the table
+            match_keys (list): list of matches in the order they appear in the P4 code
+            prio (int)       : priority in ternary match
+
+        Note:
+            In ``match_keys``, match keys must be :py:class:`str`.
+        """
 
         table = self.get_res("table", table_name, ResType.table)
 
         if table.match_type in {MatchType.TERNARY, MatchType.RANGE}:
             try:
-                priority = int(priority)
+                priority = int(prio)
             except:
                 raise UIn_Error(
                     "Table is ternary, but could not extract a valid priority from args"
@@ -1933,16 +2270,20 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def show_pvs(self, line):
-        "List parser value sets defined in the P4 program: show_pvs"
-        self.exactly_n_args(line.split(), 0)
+        """Lists parser value sets defined in the P4 program."""
         for pvs_name in sorted(self.switch_info.parse_vsets):
             print(self.switch_info.parse_vsets[pvs_name].parse_vset_str())
 
     @handle_bad_input
     def pvs_add(self, pvs_name, value):
-        """
-        Add a value to a parser value set: pvs_add <pvs_name> <value>
-        bmv2 will not report an error if the value already exists.
+        """Adds a value to a parser value set.
+        
+        Args:
+            pvs_name (str): name of the parser value set
+            value (int)   : value to add
+        
+        Warning:
+            *BMv2* will not report an error if the value already exists.
         """
         pvs = self.get_res("parser value set", pvs_name, ResType.parse_vset)
 
@@ -1951,9 +2292,14 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def pvs_remove(self, pvs_name, value):
-        """
-        Remove a value from a parser value set: pvs_remove <pvs_name> <value>
-        bmv2 will not report an error if the value does not exist.
+        """Removes a value from a parser value set.
+        
+        Args:
+            pvs_name (str): name of the parser value set
+            value (int)   : value to remove
+
+        Warning:
+            *BMv2* will not report an error if the value does not exist.
         """
         pvs = self.get_res("parser value set", pvs_name, ResType.parse_vset)
 
@@ -1962,9 +2308,16 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def pvs_get(self, pvs_name):
-        """
-        Print all values from a parser value set: pvs_get <pvs_name>
-        Values are displayed in no particular order, one per line.
+        """Retrieves all values from a parser value set.
+        
+        Args:
+            pvs_name (str): name of the parser value set
+
+        Returns:
+            list: values of the parser value set
+        
+        Note:
+            Values are displayed in no particular order, one per line.
         """
         pvs = self.get_res("parser value set", pvs_name, ResType.parse_vset)
 
@@ -1975,8 +2328,10 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def pvs_clear(self, pvs_name):
-        """
-        Remove all values from a parser value set: pvs_clear <pvs_name>
+        """Removes all values from a parser value set.
+        
+        Args:
+            pvs_name (str): name of the parser value set
         """
         pvs = self.get_res("parser value set", pvs_name, ResType.parse_vset)
 
@@ -1984,7 +2339,13 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def port_add(self, iface_name, port_num, pcap_path=""):
-        "Add a port to the switch (behavior depends on device manager used): port_add <iface_name> <port_num> [pcap_path]"
+        """Adds a port to the switch (behavior depends on device manager used).
+        
+        Args:
+            iface_name (str): interface name
+            port_num (int)  : port number
+            pcap_path (str) : path where the ``.pcap`` files are saved (optional)
+        """
 
         try:
             port_num = int(port_num)
@@ -1995,7 +2356,11 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def port_remove(self, port_num):
-        "Removes a port from the switch (behavior depends on device manager used): port_remove <port_num>"
+        """Removes a port from the switch (behavior depends on device manager used).
+        
+        Args:
+            port_num (int): port number
+        """
 
         try:
             port_num = int(port_num)
@@ -2005,7 +2370,7 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def show_ports(self):
-        "Shows the ports connected to the switch: show_ports"
+        """Shows the ports connected to the switch."""
         ports = self.client.bm_dev_mgr_show_ports()
         print("{:^10}{:^20}{:^10}{}".format(
             "port #", "iface name", "status", "extra info"))
@@ -2019,7 +2384,7 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def switch_info(self):
-        "Show some basic info about the switch: switch_info"
+        """Shows some basic info about the switch."""
 
         info = self.client.bm_mgmt_get_info()
         attributes = [t[2] for t in info.thrift_spec[1:]]
@@ -2029,12 +2394,12 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def reset_state(self):
-        "Reset all state in the switch (table entries, registers, ...), but P4 config is preserved: reset_state"
+        """Resets all state in the switch (table entries, registers, ...), but P4 config is preserved."""
         self.client.bm_reset_state()
 
     @handle_bad_input
     def write_config_to_file(self, filename):
-        "Retrieves the JSON config currently used by the switch and dumps it to user-specified file"
+        """Retrieves the JSON config currently used by the switch and dumps it to user-specified file."""
 
         json_cfg = self.client.bm_get_config()
         with open(filename, 'w') as f:
@@ -2042,7 +2407,7 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def serialize_state(self, filename):
-        "Serialize the switch state and dumps it to user-specified file"
+        """Serializes the switch state and dumps it to user-specified file."""
 
         state = self.client.bm_serialize_state()
         with open(filename, 'w') as f:
@@ -2063,12 +2428,30 @@ class ThriftAPI(object):
 
     @handle_bad_input
     def set_crc16_parameters(self, name, polynomial, initial_remainder, final_xor_value, reflect_data, reflect_remainder):
-        "Change the parameters for a custom crc16 hash: set_crc16_parameters <name> <polynomial> <initial remainder> <final xor value> <reflect data?> <reflect remainder?>"
+        """Changes the parameters for a custom ``crc16`` hash.
+        
+        Args:
+            name (str)              : hash name
+            polynomial (int)        : polynomial
+            intial_remainder (int)  : initial reminder
+            final_xor_value  (int)  : final *xor* value
+            reflect_data (bool)     : reflect data or do not
+            reflect_remainder (bool): reflect remainder or do not
+        """
         self.set_crc_parameters_common(name, polynomial, initial_remainder, final_xor_value, reflect_data, reflect_remainder, 16)
 
     @handle_bad_input
     def set_crc32_parameters(self, name, polynomial, initial_remainder, final_xor_value, reflect_data, reflect_remainder):
-        "Change the parameters for a custom crc32 hash: set_crc32_parameters <name> <polynomial> <initial remainder> <final xor value> <reflect data?> <reflect remainder?>"
+        """Changes the parameters for a custom ``crc32`` hash.
+        
+        Args:
+            name (str)              : name
+            polynomial (int)        : polynomial
+            intial_remainder (int)  : initial reminder
+            final_xor_value  (int)  : final *xor* value
+            reflect_data (bool)     : reflect data or do not
+            reflect_remainder (bool): reflect remainder or do not
+        """
         self.set_crc_parameters_common(name, polynomial, initial_remainder, final_xor_value, reflect_data, reflect_remainder, 32)
 
 
