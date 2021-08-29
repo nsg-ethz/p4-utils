@@ -8,9 +8,18 @@ Welcome to P4-Utils's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: General Documentation
 
-   modules
+   introduction
+   installation
+   usage
+   advanced_usage
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Reference
+
+   p4utils
 
 
 Indices and tables

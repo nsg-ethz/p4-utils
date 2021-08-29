@@ -1,10 +1,11 @@
-p4utils package
-===============
+P4-Utils API reference
+======================
 
 Subpackages
 -----------
 
 .. toctree::
+    :maxdepth: 3
 
     p4utils.mininetlib
     p4utils.utils
@@ -13,8 +14,9 @@ Submodules
 ----------
 
 .. toctree::
+    :maxdepth: 3
 
-   p4utils.p4run
+    p4utils.p4run
 
 Module contents
 ---------------

@@ -97,9 +97,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">General Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">p4utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../p4utils.html">P4-Utils API reference</a></li>
 </ul>
 
             
@@ -294,7 +301,7 @@
 <span class="sd">                ],</span>
 <span class="sd">                &quot;topology&quot;: </span>
 <span class="sd">                {</span>
-<span class="sd">                    &quot;assignment_strategy&quot;: assignment_strategy,</span>
+<span class="sd">                    &quot;assignment_strategy&quot;: &lt;assignment strategy&gt; (string),</span>
 <span class="sd">                    &quot;default&quot;:</span>
 <span class="sd">                    {</span>
 <span class="sd">                        &lt;default links and hosts configurations, see parse_links&gt;</span>
@@ -542,13 +549,13 @@
 <span class="sd">                {</span>
 <span class="sd">                    host_name:</span>
 <span class="sd">                    {</span>
-<span class="sd">                        &quot;scheduler&quot;: &lt;true|false&gt; (*)</span>
-<span class="sd">                        &quot;socket_path&quot;: &lt;dir to socket file&gt; (*)</span>
-<span class="sd">                        &quot;defaultRoute&quot;: &quot;via &lt;gateway ip&gt;&quot; (*)</span>
-<span class="sd">                        &quot;dhcp&quot;: &lt;true|false&gt; (*)</span>
-<span class="sd">                        &quot;log_enabled&quot; : &lt;true|false&gt; (bool), (*)</span>
-<span class="sd">                        &quot;log_dir&quot;: &lt;log path for switch binary&gt; (string), (*)</span>
-<span class="sd">                        &quot;host_node&quot;: &lt;custom switch node&gt; (dict) (*)</span>
+<span class="sd">                        &quot;scheduler&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;socket_path&quot;: &lt;dir to socket file&gt; (string) (*),</span>
+<span class="sd">                        &quot;defaultRoute&quot;: &quot;via &lt;gateway ip&gt;&quot; (string) (*),</span>
+<span class="sd">                        &quot;dhcp&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;log_enabled&quot; : &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;log_dir&quot;: &lt;log path for host&gt; (string) (*),</span>
+<span class="sd">                        &quot;host_node&quot;: &lt;custom host node&gt; (dict) (*)</span>
 <span class="sd">                    },</span>
 <span class="sd">                    ...</span>
 <span class="sd">                }</span>
@@ -600,12 +607,12 @@
 <span class="sd">                        &quot;cpu_port&quot;: &lt;true|false&gt; (bool) (*),</span>
 <span class="sd">                        &quot;cli_input&quot;: &lt;path to cli input file&gt; (string) (*),</span>
 <span class="sd">                        &quot;switch_node&quot;: &lt;custom switch node&gt; (dict) (*),</span>
-<span class="sd">                        &quot;log_enabled&quot; : &lt;true|false&gt; (bool), (*)</span>
-<span class="sd">                        &quot;log_dir&quot;: &lt;log path for switch binary&gt; (string), (*)</span>
-<span class="sd">                        &quot;pcap_dump&quot;: &lt;true|false&gt; (bool), (*)</span>
-<span class="sd">                        &quot;pcap_dir&quot;: &lt;path for pcap files&gt; (string), (*)</span>
-<span class="sd">                        &quot;sw_bin&quot;: &lt;switch binary&gt; (string), (*)</span>
-<span class="sd">                        &quot;thrift_port&quot;: &lt;thrift port&gt; (int), (*)</span>
+<span class="sd">                        &quot;log_enabled&quot; : &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;log_dir&quot;: &lt;log path for switch binary&gt; (string) (*),</span>
+<span class="sd">                        &quot;pcap_dump&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;pcap_dir&quot;: &lt;path for pcap files&gt; (string) (*),</span>
+<span class="sd">                        &quot;sw_bin&quot;: &lt;switch binary&gt; (string) (*),</span>
+<span class="sd">                        &quot;thrift_port&quot;: &lt;thrift port&gt; (int) (*),</span>
 <span class="sd">                        &quot;grpc_port&quot;: &lt;grpc port&gt; (int) (*)</span>
 <span class="sd">                    },</span>
 <span class="sd">                    ...</span>
@@ -768,13 +775,13 @@
 
 <span class="sd">            &quot;default&quot;:</span>
 <span class="sd">            {</span>
-<span class="sd">                &quot;weight&quot;: weight,</span>
-<span class="sd">                &quot;bw&quot;: bandwidth,</span>
-<span class="sd">                &quot;delay&quot;: transmit_delay,</span>
-<span class="sd">                &quot;loss&quot;: loss,</span>
-<span class="sd">                &quot;max_queue_size&quot;: max_queue_size,</span>
-<span class="sd">                &quot;auto_arp_tables&quot;: &lt;true|false&gt;,</span>
-<span class="sd">                &quot;auto_gw_arp&quot;: &lt;true|false&gt;</span>
+<span class="sd">                &quot;weight&quot;: &lt;weight&gt; (int) (*),</span>
+<span class="sd">                &quot;bw&quot;: &lt;bandwidth&gt; (int) (*),</span>
+<span class="sd">                &quot;delay&quot;: &lt;transmit_delay&gt; (int) (*),</span>
+<span class="sd">                &quot;loss&quot;: &lt;loss&gt; (float) (*),</span>
+<span class="sd">                &quot;max_queue_size&quot;: &lt;max_queue_size&gt; (int) (*),</span>
+<span class="sd">                &quot;auto_arp_tables&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                &quot;auto_gw_arp&quot;: &lt;true|false&gt; (bool) (*)</span>
 <span class="sd">            }</span>
 
 <span class="sd">        Note:</span>
