@@ -55,23 +55,97 @@
     "assignment_strategy": assignment_strategy,
     "default":
     {
-      <default links and hosts configurations, see parse_links>
+      "weight": <weight> (int) (*),
+      "bw": <bandwidth> (int) (*),
+      "delay": <transmit_delay> (int) (*),
+      "loss": <loss> (float) (*),
+      "max_queue_size": <max_queue_size> (int) (*),
+      "auto_arp_tables": <true|false> (bool) (*),
+      "auto_gw_arp": <true|false> (bool) (*)
     },
     "links": 
     [
-      <see parse_links>
+      [
+        "r1",
+        "h1", 
+        { 
+            "weight": <link weight> (int) (*),
+            "port1": <number of port1> (int) (*),
+            "port2": <number of port2> (int) (*),
+            "intfName1": <name of the interface1> (string) (*),
+            "intfName2": <name of the interface2> (string) (*),
+            "addr1": <mac address of interface1> (string) (*),
+            "addr2": <mac address of interface2> (string) (*),
+            "params1": <parameters for interface1> (dict) (*),
+            "params2": <parameters for interface2> (dict) (*),
+            "bw": <bandwidth weight> (int) (*),
+            "delay": <transmit delay> (int) (*),
+            "loss": <link data loss> (float) (*),
+            "max_queue_size": <max queue size> (int) (*)
+        }
+      ],
+      ...
     ],
-    "hosts": 
+    "hosts":
     {
-      <see parse_hosts>
+      "h1":
+      {
+        "scheduler": <true|false> (bool) (*),
+        "socket_path": <dir to socket file> (string) (*),
+        "defaultRoute": "via <gateway ip>" (string) (*),
+        "dhcp": <true|false> (bool) (*),
+        "log_enabled" : <true|false> (bool) (*),
+        "log_dir": <log path for host> (string) (*),
+        "host_node": <custom host_node> (dict) (*)
+      },
+      ...
     },
     "switches": 
     {
-      <see parse_switch>
+      "s1":
+        {
+          "p4_src": <path to p4 program> (string) (*),
+          "cpu_port": <true|false> (bool) (*),
+          "cli_input": <path to cli input file> (string) (*),
+          "switch_node": <custom switch_node> (dict) (*),
+          "log_enabled" : <true|false> (bool) (*),
+          "log_dir": <log path for switch binary> (string) (*),
+          "pcap_dump": <true|false> (bool) (*),
+          "pcap_dir": <path for pcap files> (string) (*),
+          "sw_bin": <switch binary> (string) (*),
+          "thrift_port": <thrift port> (int) (*),
+          "grpc_port": <grpc port> (int) (*)
+        },
+        ...
     },
     "routers": 
     {
-      <see parse_routers>
+      "r1":
+      {
+        "int_conf": <path to the router's integrate configuration file> (string),
+        "conf_dir": <path to the directory which contains the folder 
+                    (named after the router) with the configuration 
+                    files for all the daemons> (string),
+        "router_node": <custom router_node> (dict) (*),
+        "zebra": <true|false> (bool) (*),
+        "bgpd": <true|false> (bool) (*),
+        "ospfd": <true|false> (bool) (*),
+        "ospf6d": <true|false> (bool) (*),
+        "ripd": <true|false> (bool) (*),
+        "ripngd": <true|false> (bool) (*),
+        "isisd": <true|false> (bool) (*),
+        "pimd": <true|false> (bool) (*),
+        "ldpd": <true|false> (bool) (*),
+        "nhrpd": <true|false> (bool) (*),
+        "eigrpd": <true|false> (bool) (*),
+        "babeld": <true|false> (bool) (*),
+        "sharpd": <true|false> (bool) (*),
+        "staticd": <true|false> (bool) (*),
+        "pbrd": <true|false> (bool) (*),
+        "bfdd": <true|false> (bool) (*),
+        "fabricd" : <true|false> (bool) (*)
+      },
+      ...
     }
   }
 }

@@ -374,13 +374,13 @@ class AppRunner(NetworkAPI):
                 {
                     host_name:
                     {
-                        "scheduler": <true|false> (*)
-                        "socket_path": <dir to socket file> (*)
-                        "defaultRoute": "via <gateway ip>" (*)
-                        "dhcp": <true|false> (*)
-                        "log_enabled" : <true|false> (bool), (*)
-                        "log_dir": <log path for switch binary> (string), (*)
-                        "host_node": <custom switch node> (dict) (*)
+                        "scheduler": <true|false> (bool) (*),
+                        "socket_path": <dir to socket file> (string) (*),
+                        "defaultRoute": "via <gateway ip>" (string) (*),
+                        "dhcp": <true|false> (bool) (*),
+                        "log_enabled" : <true|false> (bool) (*),
+                        "log_dir": <log path for host> (string) (*),
+                        "host_node": <custom host node> (dict) (*)
                     },
                     ...
                 }
@@ -432,12 +432,12 @@ class AppRunner(NetworkAPI):
                         "cpu_port": <true|false> (bool) (*),
                         "cli_input": <path to cli input file> (string) (*),
                         "switch_node": <custom switch node> (dict) (*),
-                        "log_enabled" : <true|false> (bool), (*)
-                        "log_dir": <log path for switch binary> (string), (*)
-                        "pcap_dump": <true|false> (bool), (*)
-                        "pcap_dir": <path for pcap files> (string), (*)
-                        "sw_bin": <switch binary> (string), (*)
-                        "thrift_port": <thrift port> (int), (*)
+                        "log_enabled" : <true|false> (bool) (*),
+                        "log_dir": <log path for switch binary> (string) (*),
+                        "pcap_dump": <true|false> (bool) (*),
+                        "pcap_dir": <path for pcap files> (string) (*),
+                        "sw_bin": <switch binary> (string) (*),
+                        "thrift_port": <thrift port> (int) (*),
                         "grpc_port": <grpc port> (int) (*)
                     },
                     ...
@@ -600,13 +600,13 @@ class AppRunner(NetworkAPI):
 
             "default":
             {
-                "weight": weight,
-                "bw": bandwidth,
-                "delay": transmit_delay,
-                "loss": loss,
-                "max_queue_size": max_queue_size,
-                "auto_arp_tables": <true|false>,
-                "auto_gw_arp": <true|false>
+                "weight": <weight> (int) (*),
+                "bw": <bandwidth> (int) (*),
+                "delay": <transmit_delay> (int) (*),
+                "loss": <loss> (float) (*),
+                "max_queue_size": <max_queue_size> (int) (*),
+                "auto_arp_tables": <true|false> (bool) (*),
+                "auto_gw_arp": <true|false> (bool) (*)
             }
 
         Note:
