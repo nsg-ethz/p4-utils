@@ -126,7 +126,7 @@ class AppRunner(NetworkAPI):
                 ],
                 "topology": 
                 {
-                    "assignment_strategy": assignment_strategy,
+                    "assignment_strategy": <assignment_strategy> (string),
                     "default":
                     {
                         <default links and hosts configurations, see parse_links>
