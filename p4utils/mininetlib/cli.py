@@ -1,3 +1,10 @@
+"""__ https://github.com/mininet/mininet/blob/master/mininet/cli.py
+
+This module is an extension of `mininet.cli`__. It provides a CLI interface that the user can enable
+using the :py:class:`p4utils.mininetlib.network_API.NetworkAPI` or the JSON network configuration file.
+If enabled, the CLI starts right after the network boot and provides useful commands.
+"""
+
 import os
 import traceback as tbk
 from functools import wraps
@@ -78,7 +85,7 @@ class P4CLI(CLI):
         
         **Usage**::
 
-            p4switch_stop <p4switch name>
+            mininet> p4switch_stop <p4switch name>
         """
         switch_name = parse_line(line)
 
@@ -103,7 +110,7 @@ class P4CLI(CLI):
         
         **Usage**::
 
-            p4switch_start <p4switch name> [--p4src <path>] [--cmds <path>]
+            mininet> p4switch_start <p4switch name> [--p4src <path>] [--cmds <path>]
 
         Note:
             This command also allows to specify new configuration files for the switch:
@@ -209,7 +216,7 @@ class P4CLI(CLI):
         
         **Usage**::
 
-            p4switch_reboot <p4switch name> [--p4src <path>] [--cmds <path>]
+            mininet> p4switch_reboot <p4switch name> [--p4src <path>] [--cmds <path>]
 
         Note:
             This command also allows to specify new configuration files for the switch:
@@ -231,7 +238,7 @@ class P4CLI(CLI):
 
         **Usage**::
 
-            p4switches_reboot [--p4src <path>] [--cmds <path>]
+            mininet> p4switches_reboot [--p4src <path>] [--cmds <path>]
 
         Note:
             This command also allows to specify the same 
@@ -264,7 +271,7 @@ class P4CLI(CLI):
         
         **Usage**::
 
-            test_p4
+            mininet> test_p4
         """
         self.do_p4switch_stop("s1")
         self.do_p4switch_start("s1")
@@ -277,7 +284,7 @@ class P4CLI(CLI):
         
         **Usage**::
 
-            printSwitches
+            mininet> printSwitches
         """
         for sw in self.mn.p4switches:
             print(sw.name)
@@ -288,7 +295,7 @@ class P4CLI(CLI):
         
         **Usage**::
 
-            pingset <host1> ... <hostN>
+            mininet> pingset <host1> ... <hostN>
         """
         hosts_names = line.strip().split()
         hosts = [x for x in self.mn.hosts if x.name in hosts_names]
@@ -300,12 +307,12 @@ class P4CLI(CLI):
         
         **Usage**::
 
-            task <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
+            mininet> task <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
         
         Note:
             The starting delay (specified with ``<start>``) is taken with 
             respect to the current time. The deafult module in which functions
-            are looked up is :py:mod:`p4utils.utils.traffic_utils`. A non-default
+            are looked up is :py:mod:`p4utils.utils.traffic_utils`. A different
             module can be specified in the command with ``--mod <module>``.
         """
         args, kwargs = parse_task_line(line)
@@ -326,7 +333,7 @@ class P4CLI(CLI):
 
         **Usage**::
 
-            enable_scheduler [<node>] [--path <dir>]
+            mininet> enable_scheduler [<node>] [--path <dir>]
 
         Note:
             The directory where the socket file will be placed can be specified
