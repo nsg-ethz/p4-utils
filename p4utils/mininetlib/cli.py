@@ -8,9 +8,9 @@ from p4utils.utils.helper import *
 
 
 def exception_handler(f):
+    """Prevents exceptions from terminating the client, but still
+    prints them.
     """
-    Prevent exceptions from terminating the client but still
-    print them."""
     @wraps(f)
     def handle(*args, **kwargs):
         try:
@@ -24,25 +24,25 @@ def exception_handler(f):
 
 
 class P4CLI(CLI):
+    """Client class to interact with the network once it has been created.
+
+    Attributes:
+        network_api (:py:class:`p4utils.mininetlib.network_API.NetworkAPI`): instance of the network orchestrator.
+    """
 
     def __init__(self, network_api, *args, **kwargs):
-        """
-        Attributes:
-            network_api: instance of NetworkAPI
-        """
         self.net_api = network_api
         super().__init__(network_api.net, *args, **kwargs)
         # self.mn stores the Mininet network object according to the parent object
 
     def getNode(self, node_name):
-        """
-        Return the requested node.
+        """Retrieves the requested node.
 
-        Arguments:
-            node_name (string): name of the P4 Switch
+        Args:
+            node_name (str): node name
         
         Returns:
-            node (Mininet node object): requested node or None if no such object was found
+            mininet.node.Node: requested node or **None** if no such object was found.
         """
         # Check if the node is in Mininet
         if node_name not in self.mn:
@@ -52,14 +52,13 @@ class P4CLI(CLI):
         return node
 
     def getP4Switch(self, node_name):
-        """
-        Return the requested P4 Switch.
+        """Retrieves the requested P4 Switch.
         
-        Arguments:
-            node_name (string): name of the P4 Switch
+        Args:
+            node_name (string): P4 switch name
         
         Returns:
-            p4switch (Mininet node object): requested node or None if no such object was found
+            mininet.node.Node: requested node or **None** if no such object was found.
         """
         node = self.getNode(node_name)
 
@@ -75,7 +74,12 @@ class P4CLI(CLI):
 
     @exception_handler
     def do_p4switch_stop(self, line=""):
-        """Stop simple switch from switch namespace."""
+        """Stops execution of the specified P4 switch.
+        
+        **Usage**::
+
+            p4switch_stop <p4switch name>
+        """
         switch_name = parse_line(line)
 
         # Check args validity
@@ -95,7 +99,18 @@ class P4CLI(CLI):
 
     @exception_handler
     def do_p4switch_start(self, line=""):
-        """Start again simple switch from namespace."""
+        """Starts a P4 switch.
+        
+        **Usage**::
+
+            p4switch_start <p4switch name> [--p4src <path>] [--cmds <path>]
+
+        Note:
+            This command also allows to specify new configuration files for the switch:
+
+            - ``--p4src`` provides a new P4 source,
+            - ``--cmds`` provides a new command file.
+        """
         args = parse_line(line)
 
         # Check args validity
@@ -190,7 +205,18 @@ class P4CLI(CLI):
 
     @exception_handler
     def do_p4switch_reboot(self, line=""):
-        """Reboot a P4 switch with a new program."""
+        """Reboots a P4 switch.
+        
+        **Usage**::
+
+            p4switch_reboot <p4switch name> [--p4src <path>] [--cmds <path>]
+
+        Note:
+            This command also allows to specify new configuration files for the switch:
+
+            - ``--p4src`` provides a new P4 source,
+            - ``--cmds`` provides a new command file.
+        """
         if not line or len(parse_line(line)) > 5:
             error('usage: p4switch_reboot <p4switch name> [--p4src <path>] [--cmds <path>]\n')
             return False
@@ -201,11 +227,18 @@ class P4CLI(CLI):
 
     @exception_handler
     def do_p4switches_reboot(self, line=""):
-        """
-        Reboot all P4 switches with new program.
+        """Reboots all P4 switches with new program.
+
+        **Usage**::
+
+            p4switches_reboot [--p4src <path>] [--cmds <path>]
 
         Note:
-            If you provide a P4 source code or cmd, all switches will have the same.
+            This command also allows to specify the same 
+            new configuration files for all the switches:
+
+            - ``--p4src`` provides a new P4 source,
+            - ``--cmds`` provides a new command file.
         """
         if len(parse_line(line)) > 4:
             error('usage: p4switches_reboot [--p4src <path>] [--cmds <path>]\n')
@@ -227,7 +260,12 @@ class P4CLI(CLI):
 
     @exception_handler
     def do_test_p4(self, line=""):
-        """Tests start stop functionalities."""
+        """Tests start stop functionalities.
+        
+        **Usage**::
+
+            test_p4
+        """
         self.do_p4switch_stop("s1")
         self.do_p4switch_start("s1")
         self.do_p4switch_reboot("s1")
@@ -235,25 +273,40 @@ class P4CLI(CLI):
 
     @exception_handler
     def do_printSwitches(self, line=""):
-        """Print names of all switches."""
+        """Prints the names of all switches.
+        
+        **Usage**::
+
+            printSwitches
+        """
         for sw in self.mn.p4switches:
             print(sw.name)
 
     @exception_handler
     def do_pingset(self ,line=""):
-        """Ping between the hosts in the set."""
+        """Pings between the hosts in the set.
+        
+        **Usage**::
+
+            pingset <host1> ... <hostN>
+        """
         hosts_names = line.strip().split()
         hosts = [x for x in self.mn.hosts if x.name in hosts_names]
         self.mn.ping(hosts=hosts, timeout=1)
 
     @exception_handler
     def do_task(self, line=""):
-        """
-        Execute a task on the given host. The starting
-        delay is taken with respect to the current time.
+        """Executes a task on the given host. 
+        
+        **Usage**::
 
-        For the details check the function parse_task_line
-        in p4utils.utils.helper.
+            task <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
+        
+        Note:
+            The starting delay (specified with ``<start>``) is taken with 
+            respect to the current time. The deafult module in which functions
+            are looked up is :py:mod:`p4utils.utils.traffic_utils`. A non-default
+            module can be specified in the command with ``--mod <module>``.
         """
         args, kwargs = parse_task_line(line)
         node = args[0]
@@ -269,8 +322,15 @@ class P4CLI(CLI):
 
     @exception_handler
     def do_enable_scheduler(self, line=""):
-        """
-        Enable the TaskServer on a node.
+        """Enables the :py:class:`p4utils.utils.task_scheduler.TaskServer` on a node.
+
+        **Usage**::
+
+            enable_scheduler [<node>] [--path <dir>]
+
+        Note:
+            The directory where the socket file will be placed can be specified
+            using ``--path <dir>``.
         """
         args = parse_line(line)
         node = args[0]
