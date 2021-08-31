@@ -173,7 +173,14 @@
            <div itemprop="articleBody">
             
   <h1>Source code for p4utils.mininetlib.cli</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="sd">&quot;&quot;&quot;__ https://github.com/mininet/mininet/blob/master/mininet/cli.py</span>
+
+<span class="sd">This module is an extension of `mininet.cli`__. It provides a CLI interface that the user can enable</span>
+<span class="sd">using the :py:class:`p4utils.mininetlib.network_API.NetworkAPI` or the JSON network configuration file.</span>
+<span class="sd">If enabled, the CLI starts right after the network boot and provides useful commands.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">traceback</span> <span class="k">as</span> <span class="nn">tbk</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 <span class="kn">from</span> <span class="nn">mininet.cli</span> <span class="kn">import</span> <span class="n">CLI</span>
@@ -253,7 +260,7 @@
 <span class="sd">        </span>
 <span class="sd">        **Usage**::</span>
 
-<span class="sd">            p4switch_stop &lt;p4switch name&gt;</span>
+<span class="sd">            mininet&gt; p4switch_stop &lt;p4switch name&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">switch_name</span> <span class="o">=</span> <span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
@@ -278,7 +285,7 @@
 <span class="sd">        </span>
 <span class="sd">        **Usage**::</span>
 
-<span class="sd">            p4switch_start &lt;p4switch name&gt; [--p4src &lt;path&gt;] [--cmds &lt;path&gt;]</span>
+<span class="sd">            mininet&gt; p4switch_start &lt;p4switch name&gt; [--p4src &lt;path&gt;] [--cmds &lt;path&gt;]</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            This command also allows to specify new configuration files for the switch:</span>
@@ -384,7 +391,7 @@
 <span class="sd">        </span>
 <span class="sd">        **Usage**::</span>
 
-<span class="sd">            p4switch_reboot &lt;p4switch name&gt; [--p4src &lt;path&gt;] [--cmds &lt;path&gt;]</span>
+<span class="sd">            mininet&gt; p4switch_reboot &lt;p4switch name&gt; [--p4src &lt;path&gt;] [--cmds &lt;path&gt;]</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            This command also allows to specify new configuration files for the switch:</span>
@@ -406,7 +413,7 @@
 
 <span class="sd">        **Usage**::</span>
 
-<span class="sd">            p4switches_reboot [--p4src &lt;path&gt;] [--cmds &lt;path&gt;]</span>
+<span class="sd">            mininet&gt; p4switches_reboot [--p4src &lt;path&gt;] [--cmds &lt;path&gt;]</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            This command also allows to specify the same </span>
@@ -439,7 +446,7 @@
 <span class="sd">        </span>
 <span class="sd">        **Usage**::</span>
 
-<span class="sd">            test_p4</span>
+<span class="sd">            mininet&gt; test_p4</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_stop</span><span class="p">(</span><span class="s2">&quot;s1&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_p4switch_start</span><span class="p">(</span><span class="s2">&quot;s1&quot;</span><span class="p">)</span>
@@ -452,7 +459,7 @@
 <span class="sd">        </span>
 <span class="sd">        **Usage**::</span>
 
-<span class="sd">            printSwitches</span>
+<span class="sd">            mininet&gt; printSwitches</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">sw</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="o">.</span><span class="n">p4switches</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">sw</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
@@ -463,7 +470,7 @@
 <span class="sd">        </span>
 <span class="sd">        **Usage**::</span>
 
-<span class="sd">            pingset &lt;host1&gt; ... &lt;hostN&gt;</span>
+<span class="sd">            mininet&gt; pingset &lt;host1&gt; ... &lt;hostN&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">hosts_names</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="n">hosts</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mn</span><span class="o">.</span><span class="n">hosts</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">hosts_names</span><span class="p">]</span>
@@ -475,12 +482,12 @@
 <span class="sd">        </span>
 <span class="sd">        **Usage**::</span>
 
-<span class="sd">            task &lt;node&gt; &lt;start&gt; &lt;duration&gt; &lt;exe&gt; [&lt;arg1&gt;] ... [&lt;argN&gt;] [--mod &lt;module&gt;] [--&lt;key1&gt; &lt;kwarg1&gt;] ... [--&lt;keyM&gt; &lt;kwargM&gt;]</span>
+<span class="sd">            mininet&gt; task &lt;node&gt; &lt;start&gt; &lt;duration&gt; &lt;exe&gt; [&lt;arg1&gt;] ... [&lt;argN&gt;] [--mod &lt;module&gt;] [--&lt;key1&gt; &lt;kwarg1&gt;] ... [--&lt;keyM&gt; &lt;kwargM&gt;]</span>
 <span class="sd">        </span>
 <span class="sd">        Note:</span>
 <span class="sd">            The starting delay (specified with ``&lt;start&gt;``) is taken with </span>
 <span class="sd">            respect to the current time. The deafult module in which functions</span>
-<span class="sd">            are looked up is :py:mod:`p4utils.utils.traffic_utils`. A non-default</span>
+<span class="sd">            are looked up is :py:mod:`p4utils.utils.traffic_utils`. A different</span>
 <span class="sd">            module can be specified in the command with ``--mod &lt;module&gt;``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">parse_task_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -501,7 +508,7 @@
 
 <span class="sd">        **Usage**::</span>
 
-<span class="sd">            enable_scheduler [&lt;node&gt;] [--path &lt;dir&gt;]</span>
+<span class="sd">            mininet&gt; enable_scheduler [&lt;node&gt;] [--path &lt;dir&gt;]</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            The directory where the socket file will be placed can be specified</span>

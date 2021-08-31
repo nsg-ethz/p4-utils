@@ -191,13 +191,79 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>In order to work, P4-Utils needs different programs coming from different sources as prerequisites.
+Since the installation process can be long and cumbersome, we provide different methods to make the
+deployment easier for the users.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Running P4-Utils in a completely separated environment can be beneficial: in this way, installation
+and execution errors, that may arise, will not affect the whole system. For this reason, we recommend
+using a <a class="reference external" href="#virtual-machine">virtual machine</a>.</p>
+</div>
 <div class="section" id="virtual-machine">
 <h2>Virtual Machine<a class="headerlink" href="#virtual-machine" title="Permalink to this headline">¶</a></h2>
+<p>P4-Utils can run in a virtual machine to keep its environment separated from the rest of the system.
+Moreover, since P4-Utils is only available on Linux, other OS users can run it in a linux VM.
+We provide two different solutions for the P4-Utils VM. Both are supported by a wide range of
+operating systems:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.virtualbox.org/">VirtualBox</a></li>
+<li><a class="reference external" href="https://www.qemu.org/">QEMU</a></li>
+</ul>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Whether you are building your own VM or you are using the preconfigured images, you still
+need to install one of the above virtualizer according to your VM choice.</p>
+</div>
 <div class="section" id="build-your-own-vm">
 <h3>Build your own VM<a class="headerlink" href="#build-your-own-vm" title="Permalink to this headline">¶</a></h3>
+<p>To get started, you need to install the required software:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.virtualbox.org/">VirtualBox</a> or <a class="reference external" href="https://www.qemu.org/">QEMU</a></li>
+<li><a class="reference external" href="https://www.packer.io/">Packer</a></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference external" href="https://www.packer.io/">Packer</a> is a handy framework designed to automatically build custom VM images.</p>
+</div>
+<p>Clone the P4-Utils repository:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+</pre></div>
+</div>
+<p>Go to the Packer configurations folder:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">vm</span>
+</pre></div>
+</div>
+<p>If you want to build the <em>VirtualBox VM</em>, execute:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="n">virtualbox</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">--</span><span class="n">cpus</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">disk_size</span> <span class="mi">25000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">memory</span> <span class="mi">4000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vm_name</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">username</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">password</span> <span class="n">p4</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>On the other hand, if you prefer the <em>QEMU VM</em>, run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="n">qemu</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">--</span><span class="n">cpus</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">disk_size</span> <span class="mi">25000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">memory</span> <span class="mi">4000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vm_name</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">username</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">password</span> <span class="n">p4</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p>The default VMs configuration parameters are shown above. If you do not specify anything
+they will be used to build your VM. However, please pass to the scripts the parameters
+that best fit your needs. In particular, we have that:</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">--cpus</span></code> specifies the number of cores to use,</li>
+<li><code class="docutils literal"><span class="pre">--disk_size</span></code> is the size of the disk reserved by the VM in MBytes,</li>
+<li><code class="docutils literal"><span class="pre">--memory</span></code> is the amount of RAM to assign to the VM in MBytes,</li>
+<li><code class="docutils literal"><span class="pre">--vm_name</span></code> is the name of the VM,</li>
+<li><code class="docutils literal"><span class="pre">--username</span></code> is the login username,</li>
+<li><code class="docutils literal"><span class="pre">--password</span></code> is the login password.</li>
+</ul>
+</div>
 </div>
 <div class="section" id="use-our-preconfigured-vm">
 <h3>Use our preconfigured VM<a class="headerlink" href="#use-our-preconfigured-vm" title="Permalink to this headline">¶</a></h3>
+<p>To download our preconfiugred VMs, please click on the folllwing links:</p>
+<ul class="simple">
+<li><a class="reference external" href="#">VirtualBox VM</a></li>
+<li><a class="reference external" href="#">QEMU VM</a></li>
+</ul>
 </div>
 </div>
 <div class="section" id="manual-installation">
