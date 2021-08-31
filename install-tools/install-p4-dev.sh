@@ -34,8 +34,10 @@ LIBYANG_COMMIT="v${LIBYANG_VER}"
 set -xe
 
 # Make the system passwordless
-sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet"
-sudo chmod 440 /etc/sudoers.d/99_advnet
+if [ ! -f /etc/sudoers.d/99_advnet ]; then
+    sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet"
+    sudo chmod 440 /etc/sudoers.d/99_advnet
+fi
 
 # Create BUILD_DIR
 mkdir -p ${BUILD_DIR}
