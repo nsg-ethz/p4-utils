@@ -87,6 +87,52 @@ To download our preconfiugred VMs, please click on the folllwing links:
 Manual Installation
 -------------------
 
+__ #prerequisites
+
+If you have already installed all the `requirements`__, you can simply
+install P4-Utils using the following commands::
+
+    git clone https://github.com/nsg-ethz/p4-utils
+    cd p4-utils
+    ./install.sh
+
 Prerequisites
 +++++++++++++
 
+P4-Utils depends on the following programs in the given order:
+
+1. __ https://github.com/p4lang/PI
+
+   `PI LIBRARY REPOSITORY`__ (optional, if you want to use P4Runtime switches)
+2. __ https://github.com/p4lang/behavioral-model
+  
+   `BEHAVIORAL MODEL (bmv2)`__
+3. __ https://github.com/p4lang/p4c
+
+   `p4c`__
+4. __ https://github.com/mininet/mininet
+
+   `Mininet`__
+5. __ https://github.com/FRRouting/FRR
+
+   `FRRouting`__ (optional, if you want to use routers)
+
+The manual installation process is quite long and cumbersome because of the
+dependencies that are needed by P4-Utils. For this reason, we provide a Bash
+script that automatically goes through every step.
+
+.. Attention::
+    The script has been tested with **Ubuntu 18.04.4** and the compiler 
+    **GCC 7.5**. Errors have been reported with newer versions.
+
+In order to start the installation, you fist need to clone our repository::
+
+    git clone https://github.com/nsg-ethz/p4-utils
+
+Then, you have to go to the installation folder::
+
+    cd p4-utils/install-tools
+
+Finally, you can run the installation script::
+
+    ./install-p4-dev.sh

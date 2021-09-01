@@ -268,8 +268,43 @@ that best fit your needs. In particular, we have that:</p>
 </div>
 <div class="section" id="manual-installation">
 <h2>Manual Installation<a class="headerlink" href="#manual-installation" title="Permalink to this headline">¶</a></h2>
+<p>If you have already installed all the <a class="reference external" href="#prerequisites">requirements</a>, you can simply
+install P4-Utils using the following commands:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+<span class="n">cd</span> <span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+<span class="o">./</span><span class="n">install</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
 <div class="section" id="prerequisites">
 <h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>P4-Utils depends on the following programs in the given order:</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://github.com/p4lang/PI">PI LIBRARY REPOSITORY</a> (optional, if you want to use P4Runtime switches)</li>
+<li><a class="reference external" href="https://github.com/p4lang/behavioral-model">BEHAVIORAL MODEL (bmv2)</a></li>
+<li><a class="reference external" href="https://github.com/p4lang/p4c">p4c</a></li>
+<li><a class="reference external" href="https://github.com/mininet/mininet">Mininet</a></li>
+<li><a class="reference external" href="https://github.com/FRRouting/FRR">FRRouting</a> (optional, if you want to use routers)</li>
+</ol>
+<p>The manual installation process is quite long and cumbersome because of the
+dependencies that are needed by P4-Utils. For this reason, we provide a Bash
+script that automatically goes through every step.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">The script has been tested with <strong>Ubuntu 18.04.4</strong> and the compiler
+<strong>GCC 7.5</strong>. Errors have been reported with newer versions.</p>
+</div>
+<p>In order to start the installation, you fist need to clone our repository:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+</pre></div>
+</div>
+<p>Then, you have to go to the installation folder:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">tools</span>
+</pre></div>
+</div>
+<p>Finally, you can run the installation script:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
