@@ -284,11 +284,21 @@ install P4-Utils using the following commands:</p>
 <h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
 <p>P4-Utils depends on the following programs in the given order:</p>
 <ol class="arabic simple">
-<li><a class="reference external" href="https://github.com/p4lang/PI">PI LIBRARY REPOSITORY</a> (optional, if you want to use P4Runtime switches)</li>
-<li><a class="reference external" href="https://github.com/p4lang/behavioral-model">BEHAVIORAL MODEL (bmv2)</a></li>
-<li><a class="reference external" href="https://github.com/p4lang/p4c">p4c</a></li>
-<li><a class="reference external" href="https://github.com/mininet/mininet">Mininet</a></li>
-<li><a class="reference external" href="https://github.com/FRRouting/FRR">FRRouting</a> (optional, if you want to use routers)</li>
+<li><a class="reference external" href="https://github.com/p4lang/PI">PI LIBRARY REPOSITORY</a> provides an implementation framework
+for a P4Runtime server. <strong>It is required only for topologies with
+P4Runtime switches.</strong></li>
+<li><a class="reference external" href="https://github.com/p4lang/behavioral-model">BEHAVIORAL MODEL (bmv2)</a> contains the software implementation several
+variations of the behavioral model (e.g. <code class="docutils literal"><span class="pre">simple_switch</span></code> and
+<code class="docutils literal"><span class="pre">simple_switch_grpc</span></code>).</li>
+<li><a class="reference external" href="https://github.com/p4lang/p4c">p4c</a> is a reference compiler for the P4 programming language that
+supports both <strong>P4_14</strong> and <strong>P4_16</strong>.</li>
+<li><a class="reference external" href="https://github.com/mininet/mininet">Mininet</a> allows to create a realistic virtual network, running real
+kernel, switch and application code, on a single machine (VM, cloud or native).</li>
+<li><a class="reference external" href="https://github.com/FRRouting/FRR">FRRouting</a> is a free and open source Internet routing protocol suite
+for Linux and Unix platforms. It implements BGP, OSPF, RIP, IS-IS, PIM,
+LDP, BFD, Babel, PBR, OpenFabric and VRRP, with alpha support for EIGRP
+and NHRP. Router nodes in P4-Utils are based on FRRouting. <strong>It is required
+only for topologies with routers.</strong></li>
 </ol>
 <p>The manual installation process is quite long and cumbersome because of the
 dependencies that are needed by P4-Utils. For this reason, we provide a Bash

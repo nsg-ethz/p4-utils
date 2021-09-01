@@ -115,19 +115,29 @@ P4-Utils depends on the following programs in the given order:
 
 1. __ https://github.com/p4lang/PI
 
-   `PI LIBRARY REPOSITORY`__ (optional, if you want to use P4Runtime switches)
+   `PI LIBRARY REPOSITORY`__ provides an implementation framework 
+   for a P4Runtime server. **It is required only for topologies with
+   P4Runtime switches.**
 2. __ https://github.com/p4lang/behavioral-model
   
-   `BEHAVIORAL MODEL (bmv2)`__
+   `BEHAVIORAL MODEL (bmv2)`__ contains the software implementation several
+   variations of the behavioral model (e.g. ``simple_switch`` and 
+   ``simple_switch_grpc``).
 3. __ https://github.com/p4lang/p4c
 
-   `p4c`__
+   `p4c`__ is a reference compiler for the P4 programming language that
+   supports both **P4_14** and **P4_16**.
 4. __ https://github.com/mininet/mininet
 
-   `Mininet`__
+   `Mininet`__ allows to create a realistic virtual network, running real
+   kernel, switch and application code, on a single machine (VM, cloud or native).
 5. __ https://github.com/FRRouting/FRR
 
-   `FRRouting`__ (optional, if you want to use routers)
+   `FRRouting`__ is a free and open source Internet routing protocol suite 
+   for Linux and Unix platforms. It implements BGP, OSPF, RIP, IS-IS, PIM, 
+   LDP, BFD, Babel, PBR, OpenFabric and VRRP, with alpha support for EIGRP 
+   and NHRP. Router nodes in P4-Utils are based on FRRouting. **It is required 
+   only for topologies with routers.**
 
 The manual installation process is quite long and cumbersome because of the
 dependencies that are needed by P4-Utils. For this reason, we provide a Bash
