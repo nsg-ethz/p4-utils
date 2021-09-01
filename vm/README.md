@@ -11,8 +11,9 @@ operating systems:
 - [VirtualBox](https://www.virtualbox.org/)
 - [QEMU](https://www.qemu.org/)
 
-You can choose to download and use one of our [preconfigured VMs](#use-our-preconfigured-vm) or to
-[build it by yourself](#build-your-own-vm).
+You can choose to download and use one of our 
+[preconfigured VMs](https://nsg-ethz.github.io/p4-utils/installation.html#use-our-preconfigured-vm)
+or to [build it by yourself](#build-your-own-vm).
 
 > **Important**  
 > Whether you are building your own VM or you are using the preconfigured images, you still
@@ -66,10 +67,3 @@ to customize the VM:
 > The default VMs configuration parameters are shown above between square brakets. If you do not 
 > specify anything, they will be used to build your VM. However, please pass to the scripts the
 > parameters that best fit your needs.
-
-## Use our preconfigured VM
-
-To download our preconfiugred VMs, please click on the folllwing links:
-
-- [*VirtualBox VM*](#)
-- [*QEMU VM*](#)
