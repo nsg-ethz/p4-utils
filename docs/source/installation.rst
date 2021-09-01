@@ -5,12 +5,12 @@ In order to work, P4-Utils needs different programs coming from different source
 Since the installation process can be long and cumbersome, we provide different methods to make the
 deployment easier for the users:
 
-- __ #manual-installation
-
-  `manual installation`__ using an installation script,
 - __ #virtual-machine
 
-  `virtual machine`__ configured to work with P4-Utils.
+  `virtual machine`__ configured to work with P4-Utils,
+- __ #manual-installation
+
+  `manual installation`__ using an installation script.
 
 __ #virtual-machine
 
