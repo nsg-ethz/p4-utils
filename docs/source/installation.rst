@@ -34,6 +34,11 @@ operating systems:
 - VirtualBox_
 - QEMU_
 
+__ #use-our-preconfigured-vm
+__ #build-your-own-vm
+
+You can choose to download and use one of our `preconfigured VMs`__ or to `build it by yourself`__.
+
 .. Important::
     Whether you are building your own VM or you are using the preconfigured images, you still
     need to install one of the above virtualizer according to your VM choice.
