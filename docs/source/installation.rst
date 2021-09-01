@@ -16,7 +16,7 @@ __ #virtual-machine
 
 .. Note::
     Running P4-Utils in a completely separated environment can be beneficial: in this way, installation
-    and execution errors, that may arise, will not affect the whole system. For this reason, we recommend
+    and execution errors, that may arise, will not affect the whole system. For this reason, we **recommend**
     using a `virtual machine`__.
 
 Virtual Machine
@@ -72,12 +72,12 @@ On the other hand, if you prefer the *QEMU VM*, run::
     they will be used to build your VM. However, please pass to the scripts the parameters
     that best fit your needs. In particular, we have that:
 
-    - ``--cpus`` specifies the number of cores to use,
-    - ``--disk_size`` is the size of the disk reserved by the VM in MBytes,
-    - ``--memory`` is the amount of RAM to assign to the VM in MBytes,
-    - ``--vm_name`` is the name of the VM,
-    - ``--username`` is the login username,
-    - ``--password`` is the login password.
+    - ``--cpus`` specifies the **number of cores** to use,
+    - ``--disk_size`` is the **size of the disk** reserved by the VM in MBytes,
+    - ``--memory`` is the amount of **RAM** to assign to the VM in MBytes,
+    - ``--vm_name`` is the **name of the VM**,
+    - ``--username`` is the **login username**,
+    - ``--password`` is the **login password**.
 
 Use our preconfigured VM
 ++++++++++++++++++++++++
