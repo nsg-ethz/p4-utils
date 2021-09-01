@@ -1,117 +1,75 @@
-# P4 Virtual Machine Installation
+# P4-Utils Virtual Machine
 
-In this document we show how to build a VM with all the necessary dependencies and software to test and develop P4 applications.
+Although P4-Utils can be installed directly on your system, running P4-Utils in a completely separated
+environment can be beneficial: in this way, installation and execution errors, that may arise, will not
+affect the whole system. For this reason, **we recommend using one of the VM methods that we provide**.
+In addition, since P4-Utils is only available on Linux, other OS users can run it in a Linux virtual machine.
 
-**RECOMMENDED**: We  provide an [OVA image](#download-the-ova-package) that can be simply imported to VirtualBox.
+We provide two different solutions for the P4-Utils VM and both are supported by a wide range of 
+operating systems:
 
-**NOT RECOMMENDED**: If you don't want to use a VM and you already have Ubuntu 18.04 installed natively in your laptop you can also install the software manually. For that you can have a look at [install-tools](../install-tools) directory. However you do it at your own risk and we will not be able to help you if something goes wrong during the installation.
+- [VirtualBox](https://www.virtualbox.org/)
+- [QEMU](https://www.qemu.org/)
 
-### VM Contents
+You can choose to download and use one of our [preconfigured VMs](#use-our-preconfigured-vm) or to
+[build it by yourself](#build-your-own-vm).
 
-The VM is based on a Ubuntu 16.04.05 and after building it contains:
+> **Important**  
+> Whether you are building your own VM or you are using the preconfigured images, you still
+> need to install one of the above virtualizer according to your VM choice.
 
-- The suite of P4 Tools ([P4-Utils](https://github.com/nsg-ethz/p4-utils), [P4-Learning](https://github.com/nsg-ethz/p4-learning), etc) and their dependencies.
-- [Wireshark](https://www.wireshark.org/)
-- [Mininet](http://mininet.org/) network emulator
+## Build your own VM
 
-## Build the VM using Packer
+To get started, you need to install the required software:
 
-## Requirements
+- [VirtualBox](https://www.virtualbox.org/) or [QEMU](https://www.qemu.org/)
+- [Packer](https://www.packer.io/)
 
-In order to build the VM you need to install the following software:
+> **Note**  
+> Packer is a handy framework designed to automatically build custom VM images.
 
-- [Packer](https://www.packer.io/downloads)
-- [VirtualBox](https://www.virtualbox.org/wiki/Downloads) if you want to build the OVA image.
-- [QEMU](https://www.qemu.org/download/) if you want to build the QCOW2 image.
+Clone the P4-Utils repository:
 
-> **From now on, things still need to be updated!**
-
-## Settings
-
-The VM is configured to have 4 GB of RAM, 4 CPUS, and 25 GB of hard disk. To modify that you can edit the [Vagrantfile](Vagrantfile) before building. If needed (hopefully not), you can add more disk space to you virtual machine by following the steps shown in this [Tutorial](https://tuhrig.de/resizing-vagrant-box-disk-space/).
-
-### Building
-
-```bash
-vagrant up
+```
+git clone https://github.com/nsg-ethz/p4-utils
 ```
 
-> Note: the first time you do `vagrant up` the vm will be built which can take ~1h even with a good internet connection. Once the VM is built
-you should reboot it to get the graphical interface.
+Go to the Packer configurations folder:
 
-### Useful Vagrant Commands
-
-* `vagrant status` -- outputs status of the vagrant machine
-* `vagrant resume` -- resume a suspended machine (vagrant up works just fine for this as well)
-* `vagrant provision` -- forces reprovisioning of the vagrant machine
-* `vagrant reload` -- restarts vagrant machine, loads new Vagrantfile configuration
-* `vagrant reload --provision` -- restart the virtual machine and force provisioning
-* `vagrant halt` -- stops the vagrant machine
-* `vagrant suspend` -- suspends a virtual machine (remembers state)
-* `vagrant destroy` -- stops and deletes all traces of the vagrant machine
-
-### SSHing into the VM
-
-If you built the VM with vagrant you can ssh into it by running:
-
-```bash
-vagrant ssh
+```
+cd p4-utils/vm
 ```
 
-By default `vagrant ssh` will login as `vagrant` user, however you need to switch ** the user `p4`** in order to be able to use the software.
+If you want to build the *VirtualBox VM*, execute:
 
-You can achieve this in multiple ways:
-
-* Modify the `ssh` settings of vagrant. See [ssh_settings](https://www.vagrantup.com/docs/vagrantfile/ssh_settings.html).
-
-* Use the following command to login with the user `p4`:
-```bash
-ssh p4@localhost -p 2223 #default port we use to forward SSH from host to guest
-password: p4
+```
+./build-virtualbox.sh [--cpus 4] [--disk_size 25000] [--memory 4000] [--vm_name p4] [--username p4] [--password p4]
 ```
 
-* Use `vagrant ssh` to login with the user `vagrant`, then switch to user `p4`:
-```bash
-vagrant@p4:~$ su p4
+On the other hand, if you prefer the *QEMU VM*, run:
+
+```
+./build-qemu.sh [--cpus 4] [--disk_size 25000] [--memory 4000] [--vm_name p4] [--username p4] [--password p4]
 ```
 
-### VM Credentials
+According to the commands shown above, some parameters can be passed to the building scripts
+to customize the VM:
 
-The VM comes with two users, `vagrant` and `p4`, for both the password is the same than the user name. **Always use the user `p4`**.
+- ``--cpus`` specifies the **number of cores** to use,
+- ``--disk_size`` is the **size of the disk** reserved by the VM in MBytes,
+- ``--memory`` is the amount of **RAM** to assign to the VM in MBytes,
+- ``--vm_name`` is the **name of the VM**,
+- ``--username`` is the **login username**,
+- ``--password`` is the **login password**.
 
-## Download the OVA Package
+> **Attention**  
+> The default VMs configuration parameters are shown above between square brakets. If you do not 
+> specify anything, they will be used to build your VM. However, please pass to the scripts the
+> parameters that best fit your needs.
 
-Building the vagrant image can take some time. If you want to have an already built VM you can download the Open Virtual 
-Appliance (OVA) package and import it with a x86 software virtualizer that supports the format (this has been tested with VirtualBox only).
+## Use our preconfigured VM
 
-Pre-built OVA package: [ova](https://drive.google.com/open?id=1tubqk0PGIbX759tIzJGXqex08igFfzpD)
+To download our preconfiugred VMs, please click on the folllwing links:
 
-**Note:** During the course we might need to update the OVA package.
-
-## Manual Installation
-
-In case you want to use an already existing VM or you just want to manually install all the dependencies
-and required software to run virtual networks with p4 switches, you can have a look at the install [scripts](./bin) used
-by the Vagrant setup.
-
-If you are using Ubuntu 16.04.5, you can simply copy all the scripts in `/bin` to your machine/VM and run then run the `root-bootstrap.sh` script. However,
-before doing that you will have to copy all the files in `./vm_files` to your home directory, and edit all the lines in the scripts that try to use them. Finally, run
-the boostrap script:
-
-```bash
-sudo root-bootstrap.sh
-```
-
-## FAQ
-
-#### How to change the keyboard layout?
-run this command in the terminal: 
-```bash
-sudo dpkg-reconfigure keyboard-configuration
-```
-
-#### `Vagrant Up` hangs
-
-When you do the first `vagrant up` the ubuntu VM first runs `apt-get update`
-which for some reason does not work with some old vagrant `boxes` if you happen
-to ran into that problem try to update your boxes with `vagrant box update`.
+- [*VirtualBox VM*](#)
+- [*QEMU VM*](#)
