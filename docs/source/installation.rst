@@ -28,7 +28,7 @@ Virtual Machine
 
 P4-Utils can run in a virtual machine to keep its environment separated from the rest of the system.
 Moreover, since P4-Utils is only available on Linux, other OS users can run it in a linux VM.
-We provide two different solutions for the P4-Utils VM. Both are supported by a wide range of 
+We provide two different solutions for the P4-Utils VM and both are supported by a wide range of 
 operating systems:
 
 - VirtualBox_
