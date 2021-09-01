@@ -49,7 +49,7 @@ To get started, you need to install the required software:
 - Packer_
 
 .. Note::
-    *Packer* is a handy framework designed to automatically build custom VM images.
+    Packer is a handy framework designed to automatically build custom VM images.
 
 Clone the P4-Utils repository::
 
