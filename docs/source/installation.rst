@@ -3,7 +3,14 @@ Installation
 
 In order to work, P4-Utils needs different programs coming from different sources as prerequisites.
 Since the installation process can be long and cumbersome, we provide different methods to make the
-deployment easier for the users.
+deployment easier for the users:
+
+- __ #manual-installation
+
+  `manual installation`__ using an installation script,
+- __ #virtual-machine
+
+  `virtual machine`__ configured to work with P4-Utils.
 
 __ #virtual-machine
 
@@ -136,3 +143,5 @@ Then, you have to go to the installation folder::
 Finally, you can run the installation script::
 
     ./install-p4-dev.sh
+
+This will install P4-Utils together with all its requirements.
