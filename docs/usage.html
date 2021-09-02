@@ -192,10 +192,61 @@
             
   <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>In the following sections, we present a simple overview of the basic features of P4-Utils.
+In case you are looking for more advanced options, please have a look at the <a class="reference external" href="advanced_usage.html">advanced usage
+section</a>.</p>
+<p>To make the explaination simpler and more concrete, we consider the following network
+example. We will go through the configuration files that allow the user to define and
+use such a topology.</p>
+<img alt="_images/l2_topology.png" class="align-center" src="_images/l2_topology.png" />
+<p>As we can see in the figure above, we have four hosts connected to a switch. All the
+switches are placed in the same subnetwork <code class="docutils literal"><span class="pre">10.0.0.0/16</span></code>. We have to create the
+network and establish connectivity among the hosts via L2 forwarding</p>
 <div class="section" id="network-setup">
 <h2>Network Setup<a class="headerlink" href="#network-setup" title="Permalink to this headline">¶</a></h2>
+<p>To create a network we can use two different methods:</p>
+<ul class="simple">
+<li>the <a class="reference external" href="#python">Python method</a> relies on writing a network defining script
+that makes use of <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.network_API.NetworkAPI</span></code></a>,</li>
+<li>the <a class="reference external" href="#json">JSON method</a>, on the other hand, relies on writing a JSON network
+definition file using the specifications of the parser
+<a class="reference internal" href="p4utils.p4run.html#p4utils.p4run.AppRunner" title="p4utils.p4run.AppRunner"><code class="xref py py-class docutils literal"><span class="pre">p4utils.p4run.AppRunner</span></code></a>.</li>
+</ul>
 <div class="section" id="python">
 <h3>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
+<p>The Python method is a newly introduced feature that allows to programmatically
+specify which elements are present in the network and how they are connected.
+It is based on <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.network_API.NetworkAPI</span></code></a>, an API that
+has a lot of methods to precisely define the network structure.</p>
+<p>In order to define the network, we first need to import the required module and
+create a <code class="docutils literal"><span class="pre">NetworkAPI</span></code> object:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">p4utils.mininetlib.network_API</span> <span class="kn">import</span> <span class="n">NetworkAPI</span>
+
+<span class="n">net</span> <span class="o">=</span> <span class="n">NetworkAPI</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>We can also set the level of details for the log shown during the execution of
+the script:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="s1">&#39;info&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Possible <strong>logLevel</strong> values are the follwing (in decreasing order of detail):</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">debug</span></code></li>
+<li><code class="docutils literal"><span class="pre">info</span></code></li>
+<li><code class="docutils literal"><span class="pre">output</span></code></li>
+<li><code class="docutils literal"><span class="pre">warning</span></code></li>
+<li><code class="docutils literal"><span class="pre">error</span></code></li>
+<li><code class="docutils literal"><span class="pre">critical</span></code></li>
+</ul>
+<p>Now we are ready to define our topology. We start by adding the nodes:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">addP4Switch</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">)</span>
+<span class="n">net</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">)</span>
+<span class="n">net</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span>
+<span class="n">net</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="s1">&#39;h3&#39;</span><span class="p">)</span>
+<span class="n">net</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="s1">&#39;h4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="json">
 <h3>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h3>
