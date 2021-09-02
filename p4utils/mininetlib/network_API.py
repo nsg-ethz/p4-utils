@@ -864,7 +864,8 @@ class NetworkAPI(Topo):
         Args:
             logLevel (str): level of logging detail.
             
-        Possible **logLevel** values are the follwing:
+        Possible **logLevel** values are the follwing (in 
+        decreasing order of detail):
         
         - ``debug``
         - ``info``
