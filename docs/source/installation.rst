@@ -72,8 +72,8 @@ On the other hand, if you prefer the *QEMU VM*, run::
 
     ./build-qemu.sh [--cpus 4] [--disk_size 25000] [--memory 4000] [--vm_name p4] [--username p4] [--password p4]
 
-.. Attention::
-    The default VMs configuration parameters are shown above. If you do not specify anything
+.. Important::
+    The default VMs configuration parameters are shown above. If you do not specify anything,
     they will be used to build your VM. However, please pass to the scripts the parameters
     that best fit your needs. In particular, we have that:
 
@@ -143,7 +143,7 @@ The manual installation process is quite long and cumbersome because of the
 dependencies that are needed by P4-Utils. For this reason, we provide a Bash
 script that automatically goes through every step.
 
-.. Attention::
+.. Warning::
     The script has been tested with **Ubuntu 18.04.4** and the compiler 
     **GCC 7.5**. Errors have been reported with newer versions.
 
