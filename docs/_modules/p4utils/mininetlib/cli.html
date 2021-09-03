@@ -176,7 +176,7 @@
 <span></span><span class="sd">&quot;&quot;&quot;__ https://github.com/mininet/mininet/blob/master/mininet/cli.py</span>
 
 <span class="sd">This module is an extension of `mininet.cli`__. It provides a CLI interface that the user can enable</span>
-<span class="sd">using the :py:class:`p4utils.mininetlib.network_API.NetworkAPI` or the JSON network configuration file.</span>
+<span class="sd">using the :py:class:`~p4utils.mininetlib.network_API.NetworkAPI` or the JSON network configuration file.</span>
 <span class="sd">If enabled, the CLI starts right after the network boot and provides useful commands.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -209,7 +209,7 @@
     <span class="sd">&quot;&quot;&quot;Client class to interact with the network once it has been created.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        network_api (:py:class:`p4utils.mininetlib.network_API.NetworkAPI`): instance of the network orchestrator.</span>
+<span class="sd">        network_api (:py:class:`~p4utils.mininetlib.network_API.NetworkAPI`): instance of the network orchestrator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network_api</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -504,7 +504,7 @@
 
 <div class="viewcode-block" id="P4CLI.do_enable_scheduler"><a class="viewcode-back" href="../../../p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI.do_enable_scheduler">[docs]</a>    <span class="nd">@exception_handler</span>
     <span class="k">def</span> <span class="nf">do_enable_scheduler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Enables the :py:class:`p4utils.utils.task_scheduler.TaskServer` on a node.</span>
+        <span class="sd">&quot;&quot;&quot;Enables the :py:class:`~p4utils.utils.task_scheduler.TaskServer` on a node.</span>
 
 <span class="sd">        **Usage**::</span>
 

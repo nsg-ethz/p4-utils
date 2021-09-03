@@ -201,7 +201,7 @@
 <p>This module provides a <em>P4Runtime API</em> for the <em>Simple Switch</em> target. It builds
 on the generic <a class="reference external" href="p4utils.utils.p4runtime_API.html">P4Runtime API</a>. The methods listed here were designed to be as
 close as possible (in the naming and in the signature) to those used in the
-<a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI</span></code></a>, so that passing to one method to the
+<a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">ThriftAPI</span></code></a>, so that passing to one method to the
 other is easier for the user.</p>
 <dl class="class">
 <dt id="p4utils.utils.sswitch_p4runtime_API.CounterType">
@@ -263,13 +263,13 @@ P4Runtime server.</p>
 <dl class="attribute">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.client">
 <code class="descname">client</code><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.client" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient" title="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient</span></code></a> – P4Runtime client instance.</p>
+<dd><p><a class="reference internal" href="p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient" title="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient"><code class="xref py py-class docutils literal"><span class="pre">P4RuntimeClient</span></code></a> – P4Runtime client instance.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.context">
 <code class="descname">context</code><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.context" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="p4utils.utils.p4runtime_API.context.html#p4utils.utils.p4runtime_API.context.Context" title="p4utils.utils.p4runtime_API.context.Context"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.context.Context</span></code></a> – P4Runtime context containing the information about all the P4 objects.</p>
+<dd><p><a class="reference internal" href="p4utils.utils.p4runtime_API.context.html#p4utils.utils.p4runtime_API.context.Context" title="p4utils.utils.p4runtime_API.context.Context"><code class="xref py py-class docutils literal"><span class="pre">Context</span></code></a> – P4Runtime context containing the information about all the P4 objects.</p>
 </dd></dl>
 
 <dl class="method">
@@ -958,10 +958,10 @@ server.</p>
 <ul class="last simple">
 <li>It is recommended to use <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.reset_state" title="p4utils.utils.thrift_API.ThriftAPI.reset_state"><code class="xref py py-meth docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI.reset_state()</span></code></a>
 to reset the forwarding states. Moreover, if you only use
-the <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI</span></code></a> to reset the switch,
+the <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">ThriftAPI</span></code></a> to reset the switch,
 the gRPC server will not be reset.</li>
 <li>To do things properly, both methods need to be called
-(the one from <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI</span></code></a> and the one from
+(the one from <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">ThriftAPI</span></code></a> and the one from
 <a class="reference internal" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchP4RuntimeAPI</span></code></a>).</li>
 </ul>
 </div>

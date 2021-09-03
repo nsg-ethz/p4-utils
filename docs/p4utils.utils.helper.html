@@ -432,29 +432,6 @@ is optional and has to be used if the module is not present in <code class="docu
 </dd></dl>
 
 <dl class="function">
-<dt id="p4utils.utils.helper.natural">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">natural</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#natural"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.natural" title="Permalink to this definition">¶</a></dt>
-<dd><p>Key function to sort nodes names sanely/alphabetically.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the node</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list used to sort the elements with <a class="reference external" href="https://docs.python.org/3/library/functions.html#sorted" title="(in Python v3.9)"><code class="xref py py-func docutils literal"><span class="pre">sorted()</span></code></a>.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Example</p>
-<p>To sort sanely/alphabetically a list <code class="docutils literal"><span class="pre">l</span></code> of nodes names use:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">sorted</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">natural</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
 <dt id="p4utils.utils.helper.next_element">
 <code class="descclassname">p4utils.utils.helper.</code><code class="descname">next_element</code><span class="sig-paren">(</span><em>elems</em>, <em>minimum=None</em>, <em>maximum=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#next_element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.next_element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a list of integers, return the lowest number not already

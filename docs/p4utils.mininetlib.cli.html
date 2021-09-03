@@ -198,7 +198,7 @@
   <div class="section" id="module-p4utils.mininetlib.cli">
 <span id="p4utils-mininetlib-cli-module"></span><h1>p4utils.mininetlib.cli module<a class="headerlink" href="#module-p4utils.mininetlib.cli" title="Permalink to this headline">¶</a></h1>
 <p>This module is an extension of <a class="reference external" href="https://github.com/mininet/mininet/blob/master/mininet/cli.py">mininet.cli</a>. It provides a CLI interface that the user can enable
-using the <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.network_API.NetworkAPI</span></code></a> or the JSON network configuration file.
+using the <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">NetworkAPI</span></code></a> or the JSON network configuration file.
 If enabled, the CLI starts right after the network boot and provides useful commands.</p>
 <dl class="class">
 <dt id="p4utils.mininetlib.cli.P4CLI">
@@ -208,13 +208,13 @@ If enabled, the CLI starts right after the network boot and provides useful comm
 <dl class="attribute">
 <dt id="p4utils.mininetlib.cli.P4CLI.network_api">
 <code class="descname">network_api</code><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.network_api" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.network_API.NetworkAPI</span></code></a> – instance of the network orchestrator.</p>
+<dd><p><a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">NetworkAPI</span></code></a> – instance of the network orchestrator.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.cli.P4CLI.do_enable_scheduler">
 <code class="descname">do_enable_scheduler</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/cli.html#P4CLI.do_enable_scheduler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_enable_scheduler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enables the <a class="reference internal" href="p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.TaskServer" title="p4utils.utils.task_scheduler.TaskServer"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.task_scheduler.TaskServer</span></code></a> on a node.</p>
+<dd><p>Enables the <a class="reference internal" href="p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.TaskServer" title="p4utils.utils.task_scheduler.TaskServer"><code class="xref py py-class docutils literal"><span class="pre">TaskServer</span></code></a> on a node.</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">enable_scheduler</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">path</span> <span class="o">&lt;</span><span class="nb">dir</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>

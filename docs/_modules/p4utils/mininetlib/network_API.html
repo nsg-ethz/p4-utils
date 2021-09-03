@@ -190,6 +190,7 @@
 <span class="kn">from</span> <span class="nn">mininet.topo</span> <span class="kn">import</span> <span class="n">Topo</span>
 <span class="kn">from</span> <span class="nn">mininet.log</span> <span class="kn">import</span> <span class="n">setLogLevel</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span>
 <span class="kn">from</span> <span class="nn">mininet.clean</span> <span class="kn">import</span> <span class="n">cleanup</span><span class="p">,</span> <span class="n">sh</span>
+<span class="kn">from</span> <span class="nn">mininet.util</span> <span class="kn">import</span> <span class="n">natural</span>
 
 <span class="kn">from</span> <span class="nn">p4utils.utils.helper</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">p4utils.utils.helper</span> <span class="kn">import</span> <span class="n">_prefixLenMatchRegex</span>
@@ -302,7 +303,7 @@
 
 <span class="sd">        Warning:</span>
 <span class="sd">            :py:class:`networkx.classes.multigraph.MultiGraph` graphs are not </span>
-<span class="sd">            supported yet by :py:class:`p4utils.utils.topology.NetworkGraph`.</span>
+<span class="sd">            supported yet by :py:class:`~p4utils.utils.topology.NetworkGraph`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># This function return None for each not serializable</span>
         <span class="c1"># obect so that no TypeError is thrown.</span>
@@ -1078,7 +1079,7 @@
 <span class="sd">        Note:</span>
 <span class="sd">            One can provide both ``compilerClass`` and ``**kwargs`` or only one</span>
 <span class="sd">            of them (e.g. one may want to use the default compiler </span>
-<span class="sd">            :py:class:`p4utils.utils.compiler.P4C` and pass some parameters to it).</span>
+<span class="sd">            :py:class:`~p4utils.utils.compiler.P4C` and pass some parameters to it).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">compilerClass</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;comp&#39;</span><span class="p">][</span><span class="s1">&#39;class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">compilerClass</span>
@@ -1095,7 +1096,7 @@
 <span class="sd">        Note:</span>
 <span class="sd">            One can provide both ``netClass`` and ``**kwargs`` or only one</span>
 <span class="sd">            of them (e.g. one may want to use the default network</span>
-<span class="sd">            :py:class:`p4utils.mininetlib.net.P4Mininet` and pass some</span>
+<span class="sd">            :py:class:`~p4utils.mininetlib.net.P4Mininet` and pass some</span>
 <span class="sd">            parameters to it).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">netClass</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1114,7 +1115,7 @@
 <span class="sd">        Note:</span>
 <span class="sd">            One can provide both ``swclientClass`` and ``**kwargs`` or only one</span>
 <span class="sd">            of them (e.g. one may want to use the default client </span>
-<span class="sd">            :py:class:`p4utils.utils.client.ThriftClient` and pass</span>
+<span class="sd">            :py:class:`~p4utils.utils.client.ThriftClient` and pass</span>
 <span class="sd">            some parameters to it).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">swclientClass</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1837,12 +1838,14 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            list: list of ``(node [, info])``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">withInfo</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">sort</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">nodes</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">withInfo</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Ignore info when sorting</span>
-            <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="n">natural</span><span class="p">(</span><span class="n">l</span><span class="p">[:</span><span class="mi">1</span><span class="p">]))</span></div>
+            <span class="k">if</span> <span class="n">withInfo</span><span class="p">:</span>
+                <span class="c1"># Ignore info when sorting</span>
+                <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="n">natural</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">natural</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.enableLog"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.enableLog">[docs]</a>    <span class="k">def</span> <span class="nf">enableLog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">log_dir</span><span class="o">=</span><span class="s1">&#39;./log&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Enables log for node (also for its task scheduler).</span>
@@ -1971,7 +1974,7 @@
 
 <span class="sd">        Note:</span>
 <span class="sd">            This method can automatically enable the task scheduler </span>
-<span class="sd">            (provided by :py:class:`p4utils.utils.task_scheduler.TaskServer`)</span>
+<span class="sd">            (provided by the :py:class:`~p4utils.utils.task_scheduler.TaskServer`)</span>
 <span class="sd">            on the node with the socket lacated in the default path, if it has not </span>
 <span class="sd">            been previously enabled.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2289,7 +2292,7 @@
 <span class="sd">            name (str): P4 switch name</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.</span>
+<span class="sd">            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">enable_debugger</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2303,7 +2306,7 @@
 <span class="sd">            name (str): P4 switch name</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.</span>
+<span class="sd">            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>            
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">enable_debugger</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -2314,7 +2317,7 @@
         <span class="sd">&quot;&quot;&quot;Enable debugger for all the P4 switches.</span>
 <span class="sd">        </span>
 <span class="sd">        Note:</span>
-<span class="sd">            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.</span>
+<span class="sd">            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">switch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4switches</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">enableDebugger</span><span class="p">(</span><span class="n">switch</span><span class="p">)</span></div>
@@ -2323,7 +2326,7 @@
         <span class="sd">&quot;&quot;&quot;Disable debugger for all the P4 switches.</span>
 <span class="sd">        </span>
 <span class="sd">        Note:</span>
-<span class="sd">            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.</span>
+<span class="sd">            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">switch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4switches</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">disableDebugger</span><span class="p">(</span><span class="n">switch</span><span class="p">)</span></div>
@@ -2336,7 +2339,7 @@
 <span class="sd">            pcap_dir (str): where to save pcap files</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.</span>
+<span class="sd">            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>            
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pcap_dump</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pcap_dir</span><span class="o">=</span><span class="n">pcap_dir</span><span class="p">)</span>
@@ -2350,7 +2353,7 @@
 <span class="sd">            name (str): name of the P4 switch</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.</span>
+<span class="sd">            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isP4Switch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateNode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pcap_dump</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -2362,12 +2365,19 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            pcap_dir (str): where to save ``.pcap`` files</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">switch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4switches</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">enablePcapDump</span><span class="p">(</span><span class="n">switch</span><span class="p">,</span> <span class="n">pcap_dir</span><span class="o">=</span><span class="n">pcap_dir</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NetworkAPI.disablePcapDumpAll"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.disablePcapDumpAll">[docs]</a>    <span class="k">def</span> <span class="nf">disablePcapDumpAll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Disables generation of ``.pcap`` files for all the P4 switches.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Disables generation of ``.pcap`` files for all the P4 switches.</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">switch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4switches</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">disablePcapDump</span><span class="p">(</span><span class="n">switch</span><span class="p">)</span></div>
 
@@ -2628,7 +2638,7 @@
 
 <div class="viewcode-block" id="NetworkAPI.mixed"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.mixed">[docs]</a>    <span class="k">def</span> <span class="nf">mixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Automated IP/MAC assignment strategy for already initialized </span>
-<span class="sd">        links and nodes. All the hosts connected to a switch are placed</span>
+<span class="sd">        links and nodes. All the hosts connected to the same switch are placed</span>
 <span class="sd">        in the same subnetwork. Different switches (even those linked</span>
 <span class="sd">        together) are placed in different subnetworks.</span>
 
@@ -2777,7 +2787,7 @@
 
 <div class="viewcode-block" id="NetworkAPI.l3"><a class="viewcode-back" href="../../../p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.l3">[docs]</a>    <span class="k">def</span> <span class="nf">l3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Automated IP/MAC assignment strategy for already initialized </span>
-<span class="sd">        links and nodes. All the hosts have a different subnetwork shared</span>
+<span class="sd">        links and nodes. All the hosts have a different subnetwork that is shared</span>
 <span class="sd">        with the fake IP address of the switch port they are connected to.</span>
 
 <span class="sd">        **Assumes**</span>

@@ -180,7 +180,7 @@
 <span class="sd">This module provides a *P4Runtime API* for the *Simple Switch* target. It builds</span>
 <span class="sd">on the generic `P4Runtime API`__. The methods listed here were designed to be as</span>
 <span class="sd">close as possible (in the naming and in the signature) to those used in the </span>
-<span class="sd">:py:class:`p4utils.utils.thrift_API.ThriftAPI`, so that passing to one method to the</span>
+<span class="sd">:py:class:`~p4utils.utils.thrift_API.ThriftAPI`, so that passing to one method to the</span>
 <span class="sd">other is easier for the user.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -249,8 +249,8 @@
 <span class="sd">                           P4Runtime server.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        client (:py:class:`p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient`)  : P4Runtime client instance.</span>
-<span class="sd">        context (:py:class:`p4utils.utils.p4runtime_API.context.Context`)           : P4Runtime context containing the information about all the P4 objects.</span>
+<span class="sd">        client (:py:class:`~p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient`)  : P4Runtime client instance.</span>
+<span class="sd">        context (:py:class:`~p4utils.utils.p4runtime_API.context.Context`)           : P4Runtime context containing the information about all the P4 objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span>
                  <span class="n">grpc_port</span><span class="p">,</span>
@@ -315,11 +315,11 @@
 <span class="sd">        Note:</span>
 <span class="sd">            - It is recommended to use :py:meth:`p4utils.utils.thrift_API.ThriftAPI.reset_state()` </span>
 <span class="sd">              to reset the forwarding states. Moreover, if you only use</span>
-<span class="sd">              the :py:class:`p4utils.utils.thrift_API.ThriftAPI` to reset the switch, </span>
+<span class="sd">              the :py:class:`~p4utils.utils.thrift_API.ThriftAPI` to reset the switch, </span>
 <span class="sd">              the gRPC server will not be reset.</span>
 <span class="sd">            </span>
 <span class="sd">            - To do things properly, both methods need to be called </span>
-<span class="sd">              (the one from :py:class:`p4utils.utils.thrift_API.ThriftAPI` and the one from </span>
+<span class="sd">              (the one from :py:class:`~p4utils.utils.thrift_API.ThriftAPI` and the one from </span>
 <span class="sd">              :py:class:`SimpleSwitchP4RuntimeAPI`).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4rt_path</span><span class="p">):</span>
