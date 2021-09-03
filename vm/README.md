@@ -67,3 +67,10 @@ to customize the VM:
 > The default VMs configuration parameters are shown above between square brakets. If you do not 
 > specify anything, they will be used to build your VM. However, please pass to the scripts the
 > parameters that best fit your needs.
+
+The building process will generate the following files:
+
+- If you chose the QEMU VM, in `p4-utils/vm/output-ubuntu18044_qemu` you will find
+  a `.qcow2` file to use to set up your VM.
+- If you chose the VirtualBox VM, in `p4-utils/vm/output-ubuntu18044_vm` you will
+  find an `.ova` file to import in the VirtualBox VM manager.
