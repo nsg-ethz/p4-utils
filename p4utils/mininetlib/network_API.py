@@ -15,6 +15,7 @@ from mininet.nodelib import LinuxBridge
 from mininet.topo import Topo
 from mininet.log import setLogLevel, debug, info, output, warning, error
 from mininet.clean import cleanup, sh
+from mininet.util import natural
 
 from p4utils.utils.helper import *
 from p4utils.utils.helper import _prefixLenMatchRegex
@@ -1662,12 +1663,14 @@ class NetworkAPI(Topo):
         Returns:
             list: list of ``(node [, info])``.
         """
-        nodes = self.g.nodes(data=withInfo)
         if not sort:
-            return nodes
+            return self.g.nodes(data=withInfo)
         else:
-            # Ignore info when sorting
-            return sorted(nodes, key=lambda l: natural(l[:1]))
+            if withInfo:
+                # Ignore info when sorting
+                return sorted(self.g.nodes(data=True), key=lambda l: natural(l[0]))
+            else:
+                return sorted(self.g.nodes(data=False), key=natural)
 
     def enableLog(self, name, log_dir='./log'):
         """Enables log for node (also for its task scheduler).

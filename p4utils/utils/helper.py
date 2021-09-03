@@ -82,28 +82,6 @@ def next_element(elems, minimum=None, maximum=None):
             raise Exception('too many elements in the list.')
 
 
-def natural(text):
-    """Key function to sort nodes names sanely/alphabetically.
-
-    Args:
-        text (str): name of the node
-
-    Returns:
-        list: list used to sort the elements with :py:func:`sorted`.
-
-    Example:
-        To sort sanely/alphabetically a list ``l`` of nodes names use::
-
-            sorted(l, key=natural)
-    """
-
-    def num(s):
-        """Convert text segment to int if necessary."""
-        return int(s) if s.isdigit() else s
-
-    return [num(s) for s in re.split(r'(\d+)', str(text))]
-
-
 def rand_mac():
     """Generate a random, non-multicas MAC address.
 
