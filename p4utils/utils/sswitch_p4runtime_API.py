@@ -5,7 +5,7 @@
 This module provides a *P4Runtime API* for the *Simple Switch* target. It builds
 on the generic `P4Runtime API`__. The methods listed here were designed to be as
 close as possible (in the naming and in the signature) to those used in the 
-:py:class:`p4utils.utils.thrift_API.ThriftAPI`, so that passing to one method to the
+:py:class:`~p4utils.utils.thrift_API.ThriftAPI`, so that passing to one method to the
 other is easier for the user.
 """
 
@@ -74,8 +74,8 @@ class SimpleSwitchP4RuntimeAPI:
                            P4Runtime server.
 
     Attributes:
-        client (:py:class:`p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient`)  : P4Runtime client instance.
-        context (:py:class:`p4utils.utils.p4runtime_API.context.Context`)           : P4Runtime context containing the information about all the P4 objects.
+        client (:py:class:`~p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient`)  : P4Runtime client instance.
+        context (:py:class:`~p4utils.utils.p4runtime_API.context.Context`)           : P4Runtime context containing the information about all the P4 objects.
     """
     def __init__(self, device_id,
                  grpc_port,
@@ -140,11 +140,11 @@ class SimpleSwitchP4RuntimeAPI:
         Note:
             - It is recommended to use :py:meth:`p4utils.utils.thrift_API.ThriftAPI.reset_state()` 
               to reset the forwarding states. Moreover, if you only use
-              the :py:class:`p4utils.utils.thrift_API.ThriftAPI` to reset the switch, 
+              the :py:class:`~p4utils.utils.thrift_API.ThriftAPI` to reset the switch, 
               the gRPC server will not be reset.
             
             - To do things properly, both methods need to be called 
-              (the one from :py:class:`p4utils.utils.thrift_API.ThriftAPI` and the one from 
+              (the one from :py:class:`~p4utils.utils.thrift_API.ThriftAPI` and the one from 
               :py:class:`SimpleSwitchP4RuntimeAPI`).
         """
         if not os.path.isfile(self.p4rt_path):

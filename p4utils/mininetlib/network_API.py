@@ -127,7 +127,7 @@ class NetworkAPI(Topo):
 
         Warning:
             :py:class:`networkx.classes.multigraph.MultiGraph` graphs are not 
-            supported yet by :py:class:`p4utils.utils.topology.NetworkGraph`.
+            supported yet by :py:class:`~p4utils.utils.topology.NetworkGraph`.
         """
         # This function return None for each not serializable
         # obect so that no TypeError is thrown.
@@ -903,7 +903,7 @@ class NetworkAPI(Topo):
         Note:
             One can provide both ``compilerClass`` and ``**kwargs`` or only one
             of them (e.g. one may want to use the default compiler 
-            :py:class:`p4utils.utils.compiler.P4C` and pass some parameters to it).
+            :py:class:`~p4utils.utils.compiler.P4C` and pass some parameters to it).
         """
         if compilerClass is not None:
             self.modules['comp']['class'] = compilerClass
@@ -920,7 +920,7 @@ class NetworkAPI(Topo):
         Note:
             One can provide both ``netClass`` and ``**kwargs`` or only one
             of them (e.g. one may want to use the default network
-            :py:class:`p4utils.mininetlib.net.P4Mininet` and pass some
+            :py:class:`~p4utils.mininetlib.net.P4Mininet` and pass some
             parameters to it).
         """
         if netClass is not None:
@@ -939,7 +939,7 @@ class NetworkAPI(Topo):
         Note:
             One can provide both ``swclientClass`` and ``**kwargs`` or only one
             of them (e.g. one may want to use the default client 
-            :py:class:`p4utils.utils.client.ThriftClient` and pass
+            :py:class:`~p4utils.utils.client.ThriftClient` and pass
             some parameters to it).
         """
         if swclientClass is not None:
@@ -1796,7 +1796,7 @@ class NetworkAPI(Topo):
 
         Note:
             This method can automatically enable the task scheduler 
-            (provided by :py:class:`p4utils.utils.task_scheduler.TaskServer`)
+            (provided by the :py:class:`~p4utils.utils.task_scheduler.TaskServer`)
             on the node with the socket lacated in the default path, if it has not 
             been previously enabled.
         """
@@ -2114,7 +2114,7 @@ class NetworkAPI(Topo):
             name (str): P4 switch name
 
         Note:
-            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.
+            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.
         """
         if self.isP4Switch(name):
             self.updateNode(name, enable_debugger=True)
@@ -2128,7 +2128,7 @@ class NetworkAPI(Topo):
             name (str): P4 switch name
 
         Note:
-            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.
+            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.
         """            
         if self.isP4Switch(name):
             self.updateNode(name, enable_debugger=False)
@@ -2139,7 +2139,7 @@ class NetworkAPI(Topo):
         """Enable debugger for all the P4 switches.
         
         Note:
-            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.
+            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.
         """
         for switch in self.p4switches():
             self.enableDebugger(switch)
@@ -2148,7 +2148,7 @@ class NetworkAPI(Topo):
         """Disable debugger for all the P4 switches.
         
         Note:
-            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.
+            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.
         """
         for switch in self.p4switches():
             self.disableDebugger(switch)
@@ -2161,7 +2161,7 @@ class NetworkAPI(Topo):
             pcap_dir (str): where to save pcap files
 
         Note:
-            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.
+            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.
         """            
         if self.isP4Switch(name):
             self.updateNode(name, pcap_dump=True, pcap_dir=pcap_dir)
@@ -2175,7 +2175,7 @@ class NetworkAPI(Topo):
             name (str): name of the P4 switch
 
         Note:
-            For the default setting check out :py:class:`p4utils.mininetlib.node.P4Switch`.
+            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.
         """
         if self.isP4Switch(name):
             self.updateNode(name, pcap_dump=False)
@@ -2187,12 +2187,19 @@ class NetworkAPI(Topo):
 
         Args:
             pcap_dir (str): where to save ``.pcap`` files
+        
+        Note:
+            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.
         """
         for switch in self.p4switches():
             self.enablePcapDump(switch, pcap_dir=pcap_dir)
 
     def disablePcapDumpAll(self):
-        """Disables generation of ``.pcap`` files for all the P4 switches."""
+        """Disables generation of ``.pcap`` files for all the P4 switches.
+        
+        Note:
+            For the default setting check out :py:class:`~p4utils.mininetlib.node.P4Switch`.
+        """
         for switch in self.p4switches():
             self.disablePcapDump(switch)
 

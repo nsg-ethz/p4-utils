@@ -1,7 +1,7 @@
 """__ https://github.com/mininet/mininet/blob/master/mininet/cli.py
 
 This module is an extension of `mininet.cli`__. It provides a CLI interface that the user can enable
-using the :py:class:`p4utils.mininetlib.network_API.NetworkAPI` or the JSON network configuration file.
+using the :py:class:`~p4utils.mininetlib.network_API.NetworkAPI` or the JSON network configuration file.
 If enabled, the CLI starts right after the network boot and provides useful commands.
 """
 
@@ -34,7 +34,7 @@ class P4CLI(CLI):
     """Client class to interact with the network once it has been created.
 
     Attributes:
-        network_api (:py:class:`p4utils.mininetlib.network_API.NetworkAPI`): instance of the network orchestrator.
+        network_api (:py:class:`~p4utils.mininetlib.network_API.NetworkAPI`): instance of the network orchestrator.
     """
 
     def __init__(self, network_api, *args, **kwargs):
@@ -329,7 +329,7 @@ class P4CLI(CLI):
 
     @exception_handler
     def do_enable_scheduler(self, line=""):
-        """Enables the :py:class:`p4utils.utils.task_scheduler.TaskServer` on a node.
+        """Enables the :py:class:`~p4utils.utils.task_scheduler.TaskServer` on a node.
 
         **Usage**::
 
