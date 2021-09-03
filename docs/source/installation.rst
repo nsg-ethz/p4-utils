@@ -89,7 +89,7 @@ The building process will generate the following files:
 - If you chose the QEMU VM, in ``p4-utils/vm/output-ubuntu18044_qemu`` you will find
   a ``.qcow2`` file to use to set up your VM.
 - If you chose the VirtualBox VM, in ``p4-utils/vm/output-ubuntu18044_vm`` you will
-  find a ``.ova`` file to import in the VirtualBox VM manager.
+  find an ``.ova`` file to import in the VirtualBox VM manager.
 
 Use our preconfigured VM
 ++++++++++++++++++++++++
