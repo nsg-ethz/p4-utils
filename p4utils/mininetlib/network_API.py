@@ -2463,7 +2463,7 @@ class NetworkAPI(Topo):
 
     def mixed(self):
         """Automated IP/MAC assignment strategy for already initialized 
-        links and nodes. All the hosts connected to a switch are placed
+        links and nodes. All the hosts connected to the same switch are placed
         in the same subnetwork. Different switches (even those linked
         together) are placed in different subnetworks.
 
@@ -2612,7 +2612,7 @@ class NetworkAPI(Topo):
 
     def l3(self):
         """Automated IP/MAC assignment strategy for already initialized 
-        links and nodes. All the hosts have a different subnetwork shared
+        links and nodes. All the hosts have a different subnetwork that is shared
         with the fake IP address of the switch port they are connected to.
 
         **Assumes**
