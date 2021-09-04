@@ -276,13 +276,13 @@ The JSON structure is very simple and intuitive. We have that:
     Parameters without numbers in their names simply apply to the whole link.
 
   + ``hosts`` is a dictionary of hosts. Each host has its own dictionary to pass options.
-    If no custom options have to be passed, then the host dictionary must be left empty.
+    If no custom options are passed, then the host dictionary must be left empty.
     For example, the following will set ``10.0.0.254`` as the default gateway for ``h1``::
 
       "h1": {"defaultRoute": "via 10.0.0.254"}
 
   + ``switches`` is a dictionary of switches. Each switch has its own dictionary to pass options.
-    If no custom options have to be passed, then the switch dictionary must be left empty.
+    If no custom options are passed, then the switch dictionary must be left empty.
     For example, the following will set a custom P4 program for switch ``s1``::
 
       "s1": {"p4_src": "custom.p4"}
