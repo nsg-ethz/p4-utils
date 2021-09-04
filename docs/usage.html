@@ -224,8 +224,8 @@ definition file using the specifications of the parser
 specify which elements are present in the network and how they are connected.
 It is based on the <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">NetworkAPI</span></code></a>, an API that
 has a lot of methods to precisely define the network structure.</p>
-<p>In order to define the network, we first need to import the required module and
-create a <code class="docutils literal"><span class="pre">NetworkAPI</span></code> object:</p>
+<p>Let us create a file called <code class="docutils literal"><span class="pre">network.py</span></code>. In order to define the network, we first
+need to import the required module and create a <code class="docutils literal"><span class="pre">NetworkAPI</span></code> object:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">p4utils.mininetlib.network_API</span> <span class="kn">import</span> <span class="n">NetworkAPI</span>
 
 <span class="n">net</span> <span class="o">=</span> <span class="n">NetworkAPI</span><span class="p">()</span>
@@ -235,6 +235,18 @@ create a <code class="docutils literal"><span class="pre">NetworkAPI</span></cod
 the script:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="s1">&#39;info&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
+<p>Other important options are those involving ARP tables of hosts. One can choose
+to disable static ARP entries for hosts within the same subnetwork and their
+gateways by using the methods
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.disableArpTables" title="p4utils.mininetlib.network_API.NetworkAPI.disableArpTables"><code class="xref py py-meth docutils literal"><span class="pre">disableArpTables()</span></code></a> and
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.disableGwArp" title="p4utils.mininetlib.network_API.NetworkAPI.disableGwArp"><code class="xref py py-meth docutils literal"><span class="pre">disableGwArp()</span></code></a>. These
+options do not apply to our simple example.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">By default, the ARP tables of the hosts of the network are populated in a static
+way at network starting time. In this way, ARP requests have not to be taken into
+account when operating the network.</p>
 </div>
 <p>Possible <strong>logLevel</strong> values are the follwing (in decreasing order of detail):</p>
 <ul class="simple">
@@ -349,9 +361,33 @@ of the interface:</p>
 <p>In our case, since the hosts are in the same network, we can use the <strong>l2</strong> strategy.</p>
 </li>
 </ul>
+<p>Now, we can set up nodes generic options. For example, we can enable <code class="docutils literal"><span class="pre">.pcap</span></code> files
+dumping on disk and logging for all the P4 switches:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">enablePcapDumpAll</span><span class="p">()</span>
+<span class="n">net</span><span class="o">.</span><span class="n">enableLogAll</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">One can also specify only some switches using the methods
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.enablePcapDump" title="p4utils.mininetlib.network_API.NetworkAPI.enablePcapDump"><code class="xref py py-meth docutils literal"><span class="pre">enablePcapDump()</span></code></a> and
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.enableLog" title="p4utils.mininetlib.network_API.NetworkAPI.enableLog"><code class="xref py py-meth docutils literal"><span class="pre">enableLog()</span></code></a>.</p>
+</div>
+<p>Finally, we can enable the network client and start the network:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">enableCli</span><span class="p">()</span>
+<span class="n">net</span><span class="o">.</span><span class="n">startNetwork</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To execute the network, we can simply run our Python script with super user rights:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">python3</span> <span class="n">network</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="json">
 <h3>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h3>
+<p>The JSON method is the legacy method for defining a network topology. It is based
+on the <a class="reference internal" href="p4utils.p4run.html#p4utils.p4run.AppRunner" title="p4utils.p4run.AppRunner"><code class="xref py py-class docutils literal"><span class="pre">AppRunner</span></code></a>, a parser that reads the JSON files
+and creates a network accordingly.</p>
 </div>
 </div>
 <div class="section" id="automated-assignment-strategies">

@@ -42,8 +42,8 @@ specify which elements are present in the network and how they are connected.
 It is based on the :py:class:`~p4utils.mininetlib.network_API.NetworkAPI`, an API that
 has a lot of methods to precisely define the network structure.
 
-In order to define the network, we first need to import the required module and
-create a ``NetworkAPI`` object::
+Let us create a file called ``network.py``. In order to define the network, we first 
+need to import the required module and create a ``NetworkAPI`` object::
 
   from p4utils.mininetlib.network_API import NetworkAPI
 
@@ -53,6 +53,18 @@ We can also set the level of details for the log shown during the execution of
 the script::
 
   net.setLogLevel('info')
+
+Other important options are those involving ARP tables of hosts. One can choose
+to disable static ARP entries for hosts within the same subnetwork and their
+gateways by using the methods 
+:py:meth:`~p4utils.mininetlib.network_API.NetworkAPI.disableArpTables()` and 
+:py:meth:`~p4utils.mininetlib.network_API.NetworkAPI.disableGwArp()`. These
+options do not apply to our simple example.
+
+.. Important::
+   By default, the ARP tables of the hosts of the network are populated in a static 
+   way at network starting time. In this way, ARP requests have not to be taken into
+   account when operating the network.
 
 Possible **logLevel** values are the follwing (in decreasing order of detail):
 
@@ -161,8 +173,32 @@ three ways of doing this:
 
   In our case, since the hosts are in the same network, we can use the **l2** strategy.
 
+Now, we can set up nodes generic options. For example, we can enable ``.pcap`` files
+dumping on disk and logging for all the P4 switches::
+
+  net.enablePcapDumpAll()
+  net.enableLogAll()
+
+.. Note::
+   One can also specify only some switches using the methods 
+   :py:meth:`~p4utils.mininetlib.network_API.NetworkAPI.enablePcapDump()` and 
+   :py:meth:`~p4utils.mininetlib.network_API.NetworkAPI.enableLog()`.
+
+Finally, we can enable the network client and start the network::
+
+  net.enableCli()
+  net.startNetwork()
+
+To execute the network, we can simply run our Python script with super user rights::
+
+  sudo python3 network.py
+
 JSON
 ++++
+
+The JSON method is the legacy method for defining a network topology. It is based 
+on the :py:class:`~p4utils.p4run.AppRunner`, a parser that reads the JSON files 
+and creates a network accordingly.
 
 Automated Assignment Strategies
 -------------------------------
