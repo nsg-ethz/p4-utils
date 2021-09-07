@@ -360,5 +360,87 @@ second is explained below.
 Thrift Client
 +++++++++++++
 
+To start the *Thrift* client and connect to ``s1``, we need to know the IP and the port of
+its *Thrift* server. In our case, the IP is ``127.0.0.1`` and the port is ``9090``. After
+the network starts, we can execute the following command::
+
+  simple_switch_CLI --thrift-port 9090 --thrift-ip 127.0.0.1
+
+In general the following options can be passed to ``simple_switch_CLI``::
+
+  simple_switch_CLI [-h] [--thrift-port THRIFT_PORT]
+                         [--thrift-ip THRIFT_IP] [--json JSON]
+                         [--pre {None,SimplePre,SimplePreLAG}]
+
+.. Warning::
+   If they are not specified, the ``simple_switch_CLI`` command assumes that the IP is
+   ``127.0.0.1`` and the port is ``9090``.
+
+.. Important::
+   P4-Utils always assigns the IP ``127.0.0.1`` to all the *Thrift* servers, so the only
+   thing that changes from one switch to the other is the port the server is listening on.
+   The port numbers are assigned starting from ``9090``.
+
+One can retrieve a list of all the available commands, by typing the following::
+
+  RuntimeCmd: ?
+
+Also, to check the syntax of a command, one can use the follwing::
+
+  RuntimeCmd: help <command>
+
+If we want to populate the forwarding table of the ``s1`` switch of the example, we run::
+
+  RuntimeCmd: table_add dmac forward 00:00:0a:00:00:01 => 1
+  Adding entry to exact match table dmac
+  match key:           EXACT-00:00:0a:00:00:01
+  action:              forward
+  runtime data:        00:01
+  Entry has been added with handle 0
+  RuntimeCmd: table_add dmac forward 00:00:0a:00:00:02 => 2
+  Adding entry to exact match table dmac
+  match key:           EXACT-00:00:0a:00:00:02
+  action:              forward
+  runtime data:        00:02
+  Entry has been added with handle 1
+  RuntimeCmd: table_add dmac forward 00:00:0a:00:00:03 => 3
+  Adding entry to exact match table dmac
+  match key:           EXACT-00:00:0a:00:00:03
+  action:              forward
+  runtime data:        00:03
+  Entry has been added with handle 2
+  RuntimeCmd: table_add dmac forward 00:00:0a:00:00:04 => 4
+  Adding entry to exact match table dmac
+  match key:           EXACT-00:00:0a:00:00:04
+  action:              forward
+  runtime data:        00:04
+  Entry has been added with handle 3
+
 Command Files
 +++++++++++++
+
+Instead of typing each command individually for every switch, one can put them all
+(a command per line) in a ``.txt`` file and pass it to P4-Utils that will execute 
+it using the ``simple_switch_CLI``. The syntax of these files is the same used by the
+client.
+
+For example, the commands typed in the ``s1`` client can be put in a file called
+``s1-commands.txt``::
+
+  table_add dmac forward 00:00:0a:00:00:01 => 1
+  table_add dmac forward 00:00:0a:00:00:02 => 2
+  table_add dmac forward 00:00:0a:00:00:03 => 3
+  table_add dmac forward 00:00:0a:00:00:04 => 4
+
+Then this can be passed to P4-Utils by putting this line in the Python network
+configuration script (assuming that the script is in the same folder
+of the commands file)::
+
+  net.setP4CliInput('s1', 's1-commands.txt')
+
+If you are using the JSON network configuration file, you can specify the *Thrift*
+command file by modifying the switch ``s1`` in the ``topology`` field::
+
+  "s1": {"cli_input": "s1-commands.txt"}
+
+In this way, the switch is configured automatically after the network starts.

@@ -555,9 +555,91 @@ client. The first method will be covered in the <a class="reference external" hr
 second is explained below.</p>
 <div class="section" id="thrift-client">
 <h3>Thrift Client<a class="headerlink" href="#thrift-client" title="Permalink to this headline">¶</a></h3>
+<p>To start the <em>Thrift</em> client and connect to <code class="docutils literal"><span class="pre">s1</span></code>, we need to know the IP and the port of
+its <em>Thrift</em> server. In our case, the IP is <code class="docutils literal"><span class="pre">127.0.0.1</span></code> and the port is <code class="docutils literal"><span class="pre">9090</span></code>. After
+the network starts, we can execute the following command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simple_switch_CLI</span> <span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">port</span> <span class="mi">9090</span> <span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">ip</span> <span class="mf">127.0.0.1</span>
+</pre></div>
+</div>
+<p>In general the following options can be passed to <code class="docutils literal"><span class="pre">simple_switch_CLI</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simple_switch_CLI</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">port</span> <span class="n">THRIFT_PORT</span><span class="p">]</span>
+                       <span class="p">[</span><span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">ip</span> <span class="n">THRIFT_IP</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">json</span> <span class="n">JSON</span><span class="p">]</span>
+                       <span class="p">[</span><span class="o">--</span><span class="n">pre</span> <span class="p">{</span><span class="kc">None</span><span class="p">,</span><span class="n">SimplePre</span><span class="p">,</span><span class="n">SimplePreLAG</span><span class="p">}]</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If they are not specified, the <code class="docutils literal"><span class="pre">simple_switch_CLI</span></code> command assumes that the IP is
+<code class="docutils literal"><span class="pre">127.0.0.1</span></code> and the port is <code class="docutils literal"><span class="pre">9090</span></code>.</p>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">P4-Utils always assigns the IP <code class="docutils literal"><span class="pre">127.0.0.1</span></code> to all the <em>Thrift</em> servers, so the only
+thing that changes from one switch to the other is the port the server is listening on.
+The port numbers are assigned starting from <code class="docutils literal"><span class="pre">9090</span></code>.</p>
+</div>
+<p>One can retrieve a list of all the available commands, by typing the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>RuntimeCmd: ?
+</pre></div>
+</div>
+<p>Also, to check the syntax of a command, one can use the follwing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">help</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>If we want to populate the forwarding table of the <code class="docutils literal"><span class="pre">s1</span></code> switch of the example, we run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">=&gt;</span> <span class="mi">1</span>
+<span class="n">Adding</span> <span class="n">entry</span> <span class="n">to</span> <span class="n">exact</span> <span class="n">match</span> <span class="n">table</span> <span class="n">dmac</span>
+<span class="n">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span>
+<span class="n">action</span><span class="p">:</span>              <span class="n">forward</span>
+<span class="n">runtime</span> <span class="n">data</span><span class="p">:</span>        <span class="mi">00</span><span class="p">:</span><span class="mi">01</span>
+<span class="n">Entry</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="k">with</span> <span class="n">handle</span> <span class="mi">0</span>
+<span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span> <span class="o">=&gt;</span> <span class="mi">2</span>
+<span class="n">Adding</span> <span class="n">entry</span> <span class="n">to</span> <span class="n">exact</span> <span class="n">match</span> <span class="n">table</span> <span class="n">dmac</span>
+<span class="n">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span>
+<span class="n">action</span><span class="p">:</span>              <span class="n">forward</span>
+<span class="n">runtime</span> <span class="n">data</span><span class="p">:</span>        <span class="mi">00</span><span class="p">:</span><span class="mi">02</span>
+<span class="n">Entry</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="k">with</span> <span class="n">handle</span> <span class="mi">1</span>
+<span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">03</span> <span class="o">=&gt;</span> <span class="mi">3</span>
+<span class="n">Adding</span> <span class="n">entry</span> <span class="n">to</span> <span class="n">exact</span> <span class="n">match</span> <span class="n">table</span> <span class="n">dmac</span>
+<span class="n">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">03</span>
+<span class="n">action</span><span class="p">:</span>              <span class="n">forward</span>
+<span class="n">runtime</span> <span class="n">data</span><span class="p">:</span>        <span class="mi">00</span><span class="p">:</span><span class="mi">03</span>
+<span class="n">Entry</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="k">with</span> <span class="n">handle</span> <span class="mi">2</span>
+<span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span> <span class="o">=&gt;</span> <span class="mi">4</span>
+<span class="n">Adding</span> <span class="n">entry</span> <span class="n">to</span> <span class="n">exact</span> <span class="n">match</span> <span class="n">table</span> <span class="n">dmac</span>
+<span class="n">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span>
+<span class="n">action</span><span class="p">:</span>              <span class="n">forward</span>
+<span class="n">runtime</span> <span class="n">data</span><span class="p">:</span>        <span class="mi">00</span><span class="p">:</span><span class="mi">04</span>
+<span class="n">Entry</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="k">with</span> <span class="n">handle</span> <span class="mi">3</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="command-files">
 <h3>Command Files<a class="headerlink" href="#command-files" title="Permalink to this headline">¶</a></h3>
+<p>Instead of typing each command individually for every switch, one can put them all
+(a command per line) in a <code class="docutils literal"><span class="pre">.txt</span></code> file and pass it to P4-Utils that will execute
+it using the <code class="docutils literal"><span class="pre">simple_switch_CLI</span></code>. The syntax of these files is the same used by the
+client.</p>
+<p>For example, the commands typed in the <code class="docutils literal"><span class="pre">s1</span></code> client can be put in a file called
+<code class="docutils literal"><span class="pre">s1-commands.txt</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">=&gt;</span> <span class="mi">1</span>
+<span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span> <span class="o">=&gt;</span> <span class="mi">2</span>
+<span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">03</span> <span class="o">=&gt;</span> <span class="mi">3</span>
+<span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span> <span class="o">=&gt;</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>Then this can be passed to P4-Utils by putting this line in the Python network
+configuration script (assuming that the script is in the same folder
+of the commands file):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setP4CliInput</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;s1-commands.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you are using the JSON network configuration file, you can specify the <em>Thrift</em>
+command file by modifying the switch <code class="docutils literal"><span class="pre">s1</span></code> in the <code class="docutils literal"><span class="pre">topology</span></code> field:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;cli_input&quot;</span><span class="p">:</span> <span class="s2">&quot;s1-commands.txt&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>In this way, the switch is configured automatically after the network starts.</p>
 </div>
 </div>
 </div>
