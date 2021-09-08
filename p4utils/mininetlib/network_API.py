@@ -1767,7 +1767,7 @@ class NetworkAPI(Topo):
             filepath (str): tasks file path
             def_mod (str) : default module where to look for Python functions
 
-        The file has to be a set of lines, where each has the following syntax::
+        The file has to be a set of lines, where each one has the following syntax::
         
             <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
         
@@ -1787,10 +1787,10 @@ class NetworkAPI(Topo):
         Args:
             name (str)            : node name
             exe (str or function) : executable to run (either a shell string 
-                                    command or a python function)
+                                    command or a Python function)
             args                  : positional arguments for the passed function
             start (float)         : task delay in seconds with respect to the
-                                    network staring time.
+                                    network starting time.
             duration (float)      : task duration time in seconds (if duration is 
                                     lower than or equal to ``0``, then the task has no 
                                     time limitation)

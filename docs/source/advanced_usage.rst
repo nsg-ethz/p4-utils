@@ -4,7 +4,7 @@ Advanced Usage
 __ usage.html
 
 In this page we give an overview of the most advanced features available in P4-Utils. In the
-following paragraphs, we will explore some programmatic ways to configure the control plane 
+following paragraphs, we will explore some programmatic ways to control the switch
 and to schedule tasks on the nodes of the network.
 
 To get started, let us consider again the example already presented in the `usage section`__.
@@ -28,7 +28,7 @@ Control Plane Configuration
 __ usage.html#thrift-client
 
 In the following sections, we explore two alternatives to the *Thrift* command-line
-client `method`__ to configure the control plane. 
+client `method`__ to control the switch.
 
 Thrift API
 ++++++++++
@@ -203,7 +203,116 @@ our simple example, it looks like this::
 Topology Database
 -----------------
 
+Until now we have seen different methods to control the switch, but they always rely on the
+information that the user provides: the user has to know all the network addresses, the port 
+numbers, etc. Although this is feasible with small topologies, it becomes harder with large ones,
+where you have to deal with tens or even hundreds of addresses and port numbers.
 
+In order to overcome this issue, P4-Utils has a built-in topology database that is automatically
+generated after the network starts and it is saved to a JSON file, usually called ``topology.json``,
+in the execution directory.
+
+One can then query this file to retrieve topology information. This framework is implemented by
+:py:class:`p4utils.utils.topology.NetworkGraph`. Please have a look at it to learn more about the
+available methods.
+
+For example, let us consider our simple example. We can automatically configure the forwarding 
+table without knowing anything about the switch::
+
+    from p4utils.utils.helper import load_topo
+    from p4utils.utils.sswitch_p4runtime_API import SimpleSwitchP4RuntimeAPI
+
+    topo = load_topo('topology.json')
+
+    controller = SimpleSwitchP4RuntimeAPI(topo['s1']['device_id'],
+                                           topo['s1']['grpc_port'],
+                                           p4rt_path=topo['s1']['p4rt_path'],
+                                           json_path=topo['s1']['json_path'])
+
+    for neigh topo.get_neighbors('s1'):
+        if topo.isHost(neigh):
+            controller.table_add('dmac',
+                                 'forward',
+                                 [topo.get_host_mac(neigh)], 
+                                 [str(topo.node_to_node_port_num('s1', neigh))])
 
 Task Scheduler
 --------------
+
+The Task Scheduler allows the user to simply schedule different tasks (e.g. generation of traffic)
+on different nodes. It can be accessed in two ways:
+
+- __ usage.html#network-client
+
+  one can add tasks from the `network client`__,
+
+- one can put the tasks in a ``.txt`` file (one per line) that 
+  is parsed by P4-Utils.
+
+__ https://github.com/nsg-ethz/p4-utils/tree/junota/examples
+
+Here we provide only simple examples. To learn more about the capabilities of the task scheduler,
+you can check out the `examples`__ of the P4-Utils repository.
+
+Scheduling tasks with the Network Client
+++++++++++++++++++++++++++++++++++++++++
+
+After the network starts, we can use the following command in the network client::
+
+    mininet> task <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
+
+In particular, we have:
+
+- ``node`` is the node name,
+- ``exe`` is the executable to run (either a shell string command or the name of a Python function),
+- ``argX`` is a positional arguments for the passed function (optional),
+- ``start`` is the task delay in seconds with respect to the current time,
+- ``duration`` is the task duration time in seconds (if duration is lower than or equal to 
+  ``0``, then the task has no time limitation),
+- ``keyX`` and ``kwargX`` is a key-word arguments for the passed function (optional).
+
+.. Important::
+   The deafult module in which functions are looked up is :py:mod:`p4utils.utils.traffic_utils`.
+   A different module can be specified in the command with ``--mod <module>``.
+
+If we consider our simple example, to make ``h1`` ping ``h2`` for 10 seconds, we can type the
+the following line in the client::
+
+    mininet> task h1 0 10 "ping 10.0.0.2"
+
+Scheduling tasks with a file
+++++++++++++++++++++++++++++
+
+When dealing with multiple tasks, it is handy to use a single file that collects them all instead
+of using the client. This file is parsed during the network boot and the tasks are distributed
+right after.
+
+.. Warning::
+   For task files, the ``start`` value is the delay with respect to the network starting time.
+
+The syntax of this file is the same of the network client with only one
+difference: **you must not put the ``task`` command at the beginning of the task line**. You also
+have to put one task per line.
+
+For example, let us consider the L2 forwarding example. We want the following tasks:
+
+- ``h1`` pings ``h2`` for 10 seconds starting 30 seconds after the network boot.
+- ``h3`` pings ``h4`` for 30 seconds starting 10 seconds after the network boot.
+
+We can write our file ``tasks.txt`` as follows::
+
+    h1 30 10 "ping 10.0.0.2"
+    h3 10 30 "ping 10.0.0.4"
+
+Now, we need to pass the file to the P4-Utils framework. If you are using a Python network
+configuration script, you can add it using the following line::
+
+    net.addTaskFile('tasks.txt')
+
+On the other hand, if you are using the JSON configuration file, you can add the following
+key-value to the main dictionary (for example, you can place it after the ``p4_src`` option)::
+
+    "tasks_file": "tasks.txt"
+
+Now, you are ready. After the network starts, every task is automatically scheduled 
+according to the information contained in the tasks file.

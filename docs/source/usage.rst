@@ -351,8 +351,17 @@ Network Client
 --------------
 
 The network client is implemented by :py:class:`p4utils.mininetlib.cli.P4CLI`. You can 
-check out the available commands in the documentation. However, you can always get a summary
-of the commands by typing ``?`` in the client.
+check out the available commands in the documentation. If enabled, it starts
+right after the network.
+
+For example, if you want to rapidly check the connectivity among all the hosts,
+you can use the following command::
+
+  mininet> pingall
+
+You can always get a summary of the commands by doing as follows::
+
+  mininet> ?
 
 Control Plane Configuration
 ---------------------------

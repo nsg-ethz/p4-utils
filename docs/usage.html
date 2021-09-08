@@ -549,8 +549,17 @@ Please check out the implementation for further details.</p>
 <div class="section" id="network-client">
 <h2>Network Client<a class="headerlink" href="#network-client" title="Permalink to this headline">¶</a></h2>
 <p>The network client is implemented by <a class="reference internal" href="p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI" title="p4utils.mininetlib.cli.P4CLI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.cli.P4CLI</span></code></a>. You can
-check out the available commands in the documentation. However, you can always get a summary
-of the commands by typing <code class="docutils literal"><span class="pre">?</span></code> in the client.</p>
+check out the available commands in the documentation. If enabled, it starts
+right after the network.</p>
+<p>For example, if you want to rapidly check the connectivity among all the hosts,
+you can use the following command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">pingall</span>
+</pre></div>
+</div>
+<p>You can always get a summary of the commands by doing as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>mininet&gt; ?
+</pre></div>
+</div>
 </div>
 <div class="section" id="control-plane-configuration">
 <h2>Control Plane Configuration<a class="headerlink" href="#control-plane-configuration" title="Permalink to this headline">¶</a></h2>

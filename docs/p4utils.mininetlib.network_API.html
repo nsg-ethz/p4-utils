@@ -523,10 +523,10 @@ this method will overwrite it.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – node name</li>
 <li><strong>exe</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>function</em>) – executable to run (either a shell string
-command or a python function)</li>
+command or a Python function)</li>
 <li><strong>args</strong> – positional arguments for the passed function</li>
 <li><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – task delay in seconds with respect to the
-network staring time.</li>
+network starting time.</li>
 <li><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – task duration time in seconds (if duration is
 lower than or equal to <code class="docutils literal"><span class="pre">0</span></code>, then the task has no
 time limitation)</li>
@@ -562,7 +562,7 @@ been previously enabled.</p>
 </tr>
 </tbody>
 </table>
-<p>The file has to be a set of lines, where each has the following syntax:</p>
+<p>The file has to be a set of lines, where each one has the following syntax:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">start</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">duration</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">exe</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">arg1</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">...</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">argN</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">mod</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--&lt;</span><span class="n">key1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">kwarg1</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">...</span> <span class="p">[</span><span class="o">--&lt;</span><span class="n">keyM</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">kwargM</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
