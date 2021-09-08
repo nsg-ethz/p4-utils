@@ -610,7 +610,7 @@ class NetworkAPI(Topo):
         Returns:
             int: the computed *switch id*.
         """
-        switch_ids = self.switch_ids().union(self.grpc_ports())
+        switch_ids = self.switch_ids()
         return next_element(switch_ids, minimum=base)
 
     def auto_grpc_port(self, base=9559):
@@ -634,7 +634,7 @@ class NetworkAPI(Topo):
         Returns:
             int: the computed thrift port.
         """
-        thrift_ports = self.thrift_ports()
+        thrift_ports = self.thrift_ports().union(self.grpc_ports())
         return next_element(thrift_ports, minimum=base)
 
     def auto_port_num(self, node, base=0):

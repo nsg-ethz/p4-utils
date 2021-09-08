@@ -107,7 +107,11 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#control-plane-configuration">Control Plane Configuration</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#thrift-api">Thrift API</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#p4runtime-api">P4Runtime API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#p4runtime-api">P4Runtime API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-p4runtime-with-python">Enabling P4Runtime with Python</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-p4runtime-with-json">Enabling P4Runtime with JSON</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#topology-database">Topology Database</a></li>
@@ -189,13 +193,183 @@
             
   <div class="section" id="advanced-usage">
 <h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h1>
+<p>In this page we give an overview of the most advanced features available in P4-Utils. In the
+following paragraphs, we will explore some programmatic ways to configure the control plane
+and to schedule tasks on the nodes of the network.</p>
+<p>To get started, let us consider again the example already presented in the <a class="reference external" href="usage.html">usage section</a>.
+Let us assume, that we already followed the instructions to create the network and we are
+now able to start it. We need to configure the switch <code class="docutils literal"><span class="pre">s1</span></code> to make it able to perform
+L2 forwarding.</p>
+<img alt="_images/l2_topology.png" class="align-center" src="_images/l2_topology.png" />
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">For more examples and use cases, we recommend to check out the repository <a class="reference external" href="https://github.com/nsg-ethz/p4-learning">P4-Learning</a>. It
+is a collections of working examples and exercises that are very helpful to start programming
+with P4.</p>
+</div>
 <div class="section" id="control-plane-configuration">
 <h2>Control Plane Configuration<a class="headerlink" href="#control-plane-configuration" title="Permalink to this headline">¶</a></h2>
+<p>In the following sections, we explore two alternatives to the <em>Thrift</em> command-line
+client <a class="reference external" href="usage.html#thrift-client">method</a> to configure the control plane.</p>
 <div class="section" id="thrift-api">
 <h3>Thrift API<a class="headerlink" href="#thrift-api" title="Permalink to this headline">¶</a></h3>
+<p>The <em>Thrift API</em> can be used with every P4 switch and it is based on the code of the
+<em>Thrift</em> command-line client. In fact, it provides the same methods to control the switch.
+The implementation of the <em>Thrift API</em> relies on
+<a class="reference internal" href="p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI" title="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchThriftAPI</span></code></a> and its parent
+<a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">ThriftAPI</span></code></a>. Please check them out to learn more
+about the available control plane methods.</p>
+<p>To get started, we create a new Python script called <code class="docutils literal"><span class="pre">controller.py</span></code> and we import
+the module needed to configure the P4 switch:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">p4utils.utils.sswitch_thrift_API</span> <span class="kn">import</span> <span class="n">SimpleSwitchThriftAPI</span>
+</pre></div>
+</div>
+<p>We also need to esablish a connection with the server running on the switch. We know
+that the <em>Thrift</em> server of <code class="docutils literal"><span class="pre">s1</span></code> is listening on <code class="docutils literal"><span class="pre">127.0.0.1:9090</span></code> (see <a class="reference external" href="usage.html#thrift-client">here</a>), so we can
+connect using:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">controller</span> <span class="o">=</span> <span class="n">SimpleSwitchThriftAPI</span><span class="p">(</span><span class="mi">9090</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><a class="reference internal" href="p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI" title="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchThriftAPI</span></code></a> assumes by default
+that the IP address of the <em>Thrift</em> server is <code class="docutils literal"><span class="pre">127.0.0.1</span></code>.</p>
+</div>
+<p>Now, we can use the controller to set up our forwarding rules. We can use the
+method <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.table_add" title="p4utils.utils.thrift_API.ThriftAPI.table_add"><code class="xref py py-meth docutils literal"><span class="pre">table_add()</span></code></a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">controller</span><span class="o">.</span><span class="n">table_add</span><span class="p">(</span><span class="s1">&#39;dmac&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;00:00:0a:00:00:01&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">])</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">table_add</span><span class="p">(</span><span class="s1">&#39;dmac&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;00:00:0a:00:00:02&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">])</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">table_add</span><span class="p">(</span><span class="s1">&#39;dmac&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;00:00:0a:00:00:03&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;3&#39;</span><span class="p">])</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">table_add</span><span class="p">(</span><span class="s1">&#39;dmac&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;00:00:0a:00:00:04&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;4&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Now, after the network starts, we can run the controller script to populate the
+forwarding table of <code class="docutils literal"><span class="pre">s1</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">controller</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="p4runtime-api">
 <h3>P4Runtime API<a class="headerlink" href="#p4runtime-api" title="Permalink to this headline">¶</a></h3>
+<p>The <em>P4Runtime API</em> is implemented by
+<a class="reference internal" href="p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchP4RuntimeAPI</span></code></a>.
+Please check it out to learn more about the available control plane methods. Moreover,
+consider that the <em>P4Runtime API</em> can only be used with P4Runtime capable switches:
+not all the binaries provided by the <a class="reference external" href="https://github.com/p4lang/behavioral-model">behavioral-model</a> implement this feature.
+As a consequence, only <a class="reference internal" href="p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4RuntimeSwitch" title="p4utils.mininetlib.node.P4RuntimeSwitch"><code class="xref py py-class docutils literal"><span class="pre">P4RuntimeSwitch</span></code></a> supports
+P4Runtime, whereas <a class="reference internal" href="p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch" title="p4utils.mininetlib.node.P4Switch"><code class="xref py py-class docutils literal"><span class="pre">P4Switch</span></code></a> does not.</p>
+<p>For this reason, we provide a quick guide on how to enable P4Runtime in your network using the
+<a class="reference external" href="#enabling-p4runtime-with-python">Python script</a> or the <a class="reference external" href="#enabling-p4runtime-with-json">JSON file</a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The <a class="reference external" href="https://github.com/p4lang/behavioral-model">behavioral-model</a> must be build with the P4Runtime dependencies in order to
+make it work. Otherwise, only non-P4Runtime targets will be available.</p>
+</div>
+<p>Assuming that we have correctly enabled P4Runtime, we can write our Python P4Runtime
+controller (called <code class="docutils literal"><span class="pre">controller.py</span></code>) for the switch <code class="docutils literal"><span class="pre">s1</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">p4utils.utils.sswitch_p4runtime_API</span> <span class="kn">import</span> <span class="n">SimpleSwitchP4RuntimeAPI</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">SimpleSwitchP4RuntimeAPI</span><span class="p">(</span><span class="n">device_id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">grpc_port</span><span class="o">=</span><span class="mi">9559</span><span class="p">,</span>
+                                      <span class="n">p4rt_path</span><span class="o">=</span><span class="s1">&#39;l2_forwarding_p4rt.txt&#39;</span><span class="p">,</span>
+                                      <span class="n">json_path</span><span class="o">=</span><span class="s1">&#39;l2_forwarding.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Both the P4Info file <code class="docutils literal"><span class="pre">l2_forwarding_p4rt.txt</span></code> and the P4 compiled JSON file
+<code class="docutils literal"><span class="pre">l2_forwarding.json</span></code> are generated by the P4 compiler. In order to enable the P4Info file
+generation, please check the P4Runtime guides for <a class="reference external" href="#enabling-p4runtime-with-python">Python</a> and <a class="reference external" href="#enabling-p4runtime-with-json">JSON</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<ul class="last simple">
+<li>The <code class="docutils literal"><span class="pre">device_id</span></code> can be explicitly assigned to the switches in the network configuration.
+If the <code class="docutils literal"><span class="pre">device_id</span></code> is not specified for any switch in the network, then the alphabetic
+order is used for the assignment and the first switch will get <code class="docutils literal"><span class="pre">1</span></code>.</li>
+<li>The <code class="docutils literal"><span class="pre">grpc_port</span></code> can be explicitly assigned to the P4Runtime switches in the
+network configuration. If the <code class="docutils literal"><span class="pre">grpc_port</span></code> is not specified for any P4Runtime switch in
+the network, then the alphabetic order is used for the assignment and the first P4Runtime
+switch will get <code class="docutils literal"><span class="pre">9559</span></code>.</li>
+</ul>
+</div>
+<p>Now, we can use the controller to set up our forwarding rules. We can use the
+method <a class="reference internal" href="p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_add" title="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_add"><code class="xref py py-meth docutils literal"><span class="pre">table_add()</span></code></a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">controller</span><span class="o">.</span><span class="n">table_add</span><span class="p">(</span><span class="s1">&#39;dmac&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;00:00:0a:00:00:01&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">])</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">table_add</span><span class="p">(</span><span class="s1">&#39;dmac&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;00:00:0a:00:00:02&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">])</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">table_add</span><span class="p">(</span><span class="s1">&#39;dmac&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;00:00:0a:00:00:03&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;3&#39;</span><span class="p">])</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">table_add</span><span class="p">(</span><span class="s1">&#39;dmac&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;00:00:0a:00:00:04&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;4&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Now, after the network starts, we can run the controller script to populate the
+forwarding table of <code class="docutils literal"><span class="pre">s1</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">controller</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<div class="section" id="enabling-p4runtime-with-python">
+<h4>Enabling P4Runtime with Python<a class="headerlink" href="#enabling-p4runtime-with-python" title="Permalink to this headline">¶</a></h4>
+<p>Considering our simple example, the P4 compiler has to know that we are using a P4Runtime switch
+to generate the P4Info file needed to connect to the P4Runtime server of the switch.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setCompiler</span><span class="p">(</span><span class="n">p4rt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Afterwards, we need also to specify that we are using P4Runtime switches. In the
+Python network configuration script, this can be done by writing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">addP4RuntimeSwtich</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enabling-p4runtime-with-json">
+<h4>Enabling P4Runtime with JSON<a class="headerlink" href="#enabling-p4runtime-with-json" title="Permalink to this headline">¶</a></h4>
+<p>For what concerns the JSON confinguration files, the P4 compiler can generate the P4Info if
+one specifies it with the <code class="docutils literal"><span class="pre">compiler_module</span></code> option. Moreover, one can set the default
+type of P4 switches with the <code class="docutils literal"><span class="pre">switch_node</span></code> option. In this way, we can make every switch a
+<a class="reference internal" href="p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4RuntimeSwitch" title="p4utils.mininetlib.node.P4RuntimeSwitch"><code class="xref py py-class docutils literal"><span class="pre">P4RuntimeSwitch</span></code></a>.</p>
+<p>After having applied all the aforementioned settings to the JSON network configuration file of
+our simple example, it looks like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;p4_src&quot;</span><span class="p">:</span> <span class="s2">&quot;l2_forwarding.p4&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;cli&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+  <span class="s2">&quot;pcap_dump&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+  <span class="s2">&quot;enable_log&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+  <span class="s2">&quot;compiler_module&quot;</span><span class="p">:</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;options&quot;</span><span class="p">:</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;p4rt&quot;</span><span class="p">:</span> <span class="n">true</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;switch_node&quot;</span><span class="p">:</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="s2">&quot;p4utils.mininetlib.node&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="s2">&quot;P4RuntimeSwitch&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;topology&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;assignment_strategy&quot;</span><span class="p">:</span> <span class="s2">&quot;l2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;bw&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;links&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;h1&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;h2&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;h3&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;h4&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">]],</span>
+    <span class="s2">&quot;hosts&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;h1&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;h2&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="p">}</span>
+      <span class="p">,</span>
+      <span class="s2">&quot;h3&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="p">}</span>
+      <span class="p">,</span>
+      <span class="s2">&quot;h4&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;switches&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 <div class="section" id="topology-database">

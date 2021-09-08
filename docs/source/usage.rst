@@ -16,7 +16,14 @@ use such a topology.
 
 As we can see in the figure above, we have four hosts connected to a switch. All the
 switches are placed in the same subnetwork ``10.0.0.0/16``. We have to create the
-network and establish connectivity among the hosts via L2 forwarding
+network and establish connectivity among the hosts via L2 forwarding.
+
+.. Important::
+   __ https://github.com/nsg-ethz/p4-learning
+
+   For more examples and use cases, we recommend to check out the repository `P4-Learning`__. It
+   is a collections of working examples and exercises that are very helpful to start programming
+   with P4.
 
 Network Setup
 -------------
@@ -361,8 +368,14 @@ Thrift Client
 +++++++++++++
 
 To start the *Thrift* client and connect to ``s1``, we need to know the IP and the port of
-its *Thrift* server. In our case, the IP is ``127.0.0.1`` and the port is ``9090``. After
-the network starts, we can execute the following command::
+its *Thrift* server. In our case, the IP is ``127.0.0.1`` and the port is ``9090``.
+
+.. Warning::
+   The *Thrift* port number can be explicitly assigned in the network configuration. 
+   If it is not specified for any P4 switch in the network, then the alphabetic order 
+   is used for the assignment and the first P4 switch will get ``9090``.
+
+After the network starts, we can execute the following command::
 
   simple_switch_CLI --thrift-port 9090 --thrift-ip 127.0.0.1
 
@@ -372,14 +385,11 @@ In general the following options can be passed to ``simple_switch_CLI``::
                          [--thrift-ip THRIFT_IP] [--json JSON]
                          [--pre {None,SimplePre,SimplePreLAG}]
 
-.. Warning::
-   If they are not specified, the ``simple_switch_CLI`` command assumes that the IP is
-   ``127.0.0.1`` and the port is ``9090``.
-
 .. Important::
-   P4-Utils always assigns the IP ``127.0.0.1`` to all the *Thrift* servers, so the only
-   thing that changes from one switch to the other is the port the server is listening on.
-   The port numbers are assigned starting from ``9090``.
+   If they are not specified, the ``simple_switch_CLI`` command assumes that the IP is
+   ``127.0.0.1`` and the port is ``9090``. P4-Utils always assigns the IP ``127.0.0.1`` 
+   to all the *Thrift* servers, so the only thing that changes from one switch to the
+   other is the port the server is listening on.
 
 One can retrieve a list of all the available commands, by typing the following::
 

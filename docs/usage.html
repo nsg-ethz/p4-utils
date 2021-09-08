@@ -208,7 +208,13 @@ use such a topology.</p>
 <img alt="_images/l2_topology.png" class="align-center" src="_images/l2_topology.png" />
 <p>As we can see in the figure above, we have four hosts connected to a switch. All the
 switches are placed in the same subnetwork <code class="docutils literal"><span class="pre">10.0.0.0/16</span></code>. We have to create the
-network and establish connectivity among the hosts via L2 forwarding</p>
+network and establish connectivity among the hosts via L2 forwarding.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">For more examples and use cases, we recommend to check out the repository <a class="reference external" href="https://github.com/nsg-ethz/p4-learning">P4-Learning</a>. It
+is a collections of working examples and exercises that are very helpful to start programming
+with P4.</p>
+</div>
 <div class="section" id="network-setup">
 <h2>Network Setup<a class="headerlink" href="#network-setup" title="Permalink to this headline">¶</a></h2>
 <p>To create a network we can use two different methods:</p>
@@ -556,8 +562,14 @@ second is explained below.</p>
 <div class="section" id="thrift-client">
 <h3>Thrift Client<a class="headerlink" href="#thrift-client" title="Permalink to this headline">¶</a></h3>
 <p>To start the <em>Thrift</em> client and connect to <code class="docutils literal"><span class="pre">s1</span></code>, we need to know the IP and the port of
-its <em>Thrift</em> server. In our case, the IP is <code class="docutils literal"><span class="pre">127.0.0.1</span></code> and the port is <code class="docutils literal"><span class="pre">9090</span></code>. After
-the network starts, we can execute the following command:</p>
+its <em>Thrift</em> server. In our case, the IP is <code class="docutils literal"><span class="pre">127.0.0.1</span></code> and the port is <code class="docutils literal"><span class="pre">9090</span></code>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The <em>Thrift</em> port number can be explicitly assigned in the network configuration.
+If it is not specified for any P4 switch in the network, then the alphabetic order
+is used for the assignment and the first P4 switch will get <code class="docutils literal"><span class="pre">9090</span></code>.</p>
+</div>
+<p>After the network starts, we can execute the following command:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simple_switch_CLI</span> <span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">port</span> <span class="mi">9090</span> <span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">ip</span> <span class="mf">127.0.0.1</span>
 </pre></div>
 </div>
@@ -567,16 +579,12 @@ the network starts, we can execute the following command:</p>
                        <span class="p">[</span><span class="o">--</span><span class="n">pre</span> <span class="p">{</span><span class="kc">None</span><span class="p">,</span><span class="n">SimplePre</span><span class="p">,</span><span class="n">SimplePreLAG</span><span class="p">}]</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">If they are not specified, the <code class="docutils literal"><span class="pre">simple_switch_CLI</span></code> command assumes that the IP is
-<code class="docutils literal"><span class="pre">127.0.0.1</span></code> and the port is <code class="docutils literal"><span class="pre">9090</span></code>.</p>
-</div>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
-<p class="last">P4-Utils always assigns the IP <code class="docutils literal"><span class="pre">127.0.0.1</span></code> to all the <em>Thrift</em> servers, so the only
-thing that changes from one switch to the other is the port the server is listening on.
-The port numbers are assigned starting from <code class="docutils literal"><span class="pre">9090</span></code>.</p>
+<p class="last">If they are not specified, the <code class="docutils literal"><span class="pre">simple_switch_CLI</span></code> command assumes that the IP is
+<code class="docutils literal"><span class="pre">127.0.0.1</span></code> and the port is <code class="docutils literal"><span class="pre">9090</span></code>. P4-Utils always assigns the IP <code class="docutils literal"><span class="pre">127.0.0.1</span></code>
+to all the <em>Thrift</em> servers, so the only thing that changes from one switch to the
+other is the port the server is listening on.</p>
 </div>
 <p>One can retrieve a list of all the available commands, by typing the following:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>RuntimeCmd: ?

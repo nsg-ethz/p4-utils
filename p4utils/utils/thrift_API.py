@@ -1225,7 +1225,7 @@ class ThriftAPI():
             table_name (str)        : name of the table
             action_name (str)       : name of the action
             entry_handle (int)      : entry handle
-            action_params (list): list of action parameters in the 
+            action_params (list)    : list of action parameters in the 
                                       order they appear in the P4 code
         
         Returns:
