@@ -179,9 +179,8 @@
 
 
 <div class="viewcode-block" id="setSizeToInt"><a class="viewcode-back" href="../../../p4utils.utils.traffic_utils.html#p4utils.utils.traffic_utils.setSizeToInt">[docs]</a><span class="k">def</span> <span class="nf">setSizeToInt</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;&quot; Converts the sizes string notation to the corresponding integer</span>
-<span class="sd">    (in bytes).  Input size can be given with the following</span>
-<span class="sd">    magnitudes: B, K, M and G.</span>
+    <span class="sd">&quot;&quot;&quot;Converts the sizes string notation to the corresponding integer</span>
+<span class="sd">    (in bytes). Input size can be given with the following magnitudes: B, K, M and G.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">size</span>
@@ -202,17 +201,17 @@
 
 <div class="viewcode-block" id="send_udp_flow"><a class="viewcode-back" href="../../../p4utils.utils.traffic_utils.html#p4utils.utils.traffic_utils.send_udp_flow">[docs]</a><span class="k">def</span> <span class="nf">send_udp_flow</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="s2">&quot;10.0.0.2&quot;</span><span class="p">,</span> <span class="n">sport</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">dport</span><span class="o">=</span><span class="mi">5001</span><span class="p">,</span> <span class="n">tos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="s1">&#39;10M&#39;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
                   <span class="n">packet_size</span><span class="o">=</span><span class="mi">1400</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Udp sending function that keeps a constant rate and logs sent packets to a file.</span>
+    <span class="sd">&quot;&quot;&quot;Udp sending function that keeps a constant rate and logs sent packets to a file.</span>
+
 <span class="sd">    Args:</span>
-<span class="sd">        dst (str, optional): [description]. Defaults to &quot;10.0.0.2&quot;.</span>
-<span class="sd">        sport (int, optional): [description]. Defaults to 5000.</span>
-<span class="sd">        dport (int, optional): [description]. Defaults to 5001.</span>
-<span class="sd">        tos (int, optional): [description]. Defaults to 0.        </span>
-<span class="sd">        rate (str, optional): [description]. Defaults to &#39;10M&#39;.</span>
-<span class="sd">        duration (int, optional): [description]. Defaults to 0, i.e. no time limit.</span>
-<span class="sd">        packet_size ([type], optional): [description]. Defaults to 1400.</span>
-<span class="sd">        batch_size (int, optional): [description]. Defaults to 5.</span>
+<span class="sd">        dst (str, optional): destination IP. Defaults to &quot;10.0.0.2&quot;.</span>
+<span class="sd">        sport (int, optional): destination port. Defaults to 5000.</span>
+<span class="sd">        dport (int, optional): source port. Defaults to 5001.</span>
+<span class="sd">        tos (int, optional): type of service. Defaults to 0.        </span>
+<span class="sd">        rate (str, optional): flow rate. Defaults to &#39;10M&#39;.</span>
+<span class="sd">        duration (int, optional): flow duration. Defaults to 0, i.e. no time limit.</span>
+<span class="sd">        packet_size (int, optional): packet size. Defaults to 1400.</span>
+<span class="sd">        batch_size (int, optional): batch size. Defaults to 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">sport</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sport</span><span class="p">)</span>
@@ -270,7 +269,7 @@
 <span class="sd">    Receiving function.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        dport ([int]): port to listen</span>
+<span class="sd">        dport (int): port to listen</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dport</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dport</span><span class="p">)</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span>

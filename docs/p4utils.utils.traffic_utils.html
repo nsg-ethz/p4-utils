@@ -206,7 +206,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dport</strong> (<em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – port to listen</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dport</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – port to listen</td>
 </tr>
 </tbody>
 </table>
@@ -215,31 +215,32 @@
 <dl class="function">
 <dt id="p4utils.utils.traffic_utils.send_udp_flow">
 <code class="descclassname">p4utils.utils.traffic_utils.</code><code class="descname">send_udp_flow</code><span class="sig-paren">(</span><em>dst='10.0.0.2'</em>, <em>sport=5000</em>, <em>dport=5001</em>, <em>tos=0</em>, <em>rate='10M'</em>, <em>duration=0</em>, <em>packet_size=1400</em>, <em>batch_size=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/traffic_utils.html#send_udp_flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.traffic_utils.send_udp_flow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Udp sending function that keeps a constant rate and logs sent packets to a file.
-:param dst: [description]. Defaults to “10.0.0.2”.
-:type dst: str, optional
-:param sport: [description]. Defaults to 5000.
-:type sport: int, optional
-:param dport: [description]. Defaults to 5001.
-:type dport: int, optional
-:param tos: [description]. Defaults to 0.
-:type tos: int, optional
-:param rate: [description]. Defaults to ‘10M’.
-:type rate: str, optional
-:param duration: [description]. Defaults to 0, i.e. no time limit.
-:type duration: int, optional
-:param packet_size: [description]. Defaults to 1400.
-:type packet_size: [type], optional
-:param batch_size: [description]. Defaults to 5.
-:type batch_size: int, optional</p>
+<dd><p>Udp sending function that keeps a constant rate and logs sent packets to a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dst</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – destination IP. Defaults to “10.0.0.2”.</li>
+<li><strong>sport</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – destination port. Defaults to 5000.</li>
+<li><strong>dport</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – source port. Defaults to 5001.</li>
+<li><strong>tos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – type of service. Defaults to 0.</li>
+<li><strong>rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – flow rate. Defaults to ‘10M’.</li>
+<li><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – flow duration. Defaults to 0, i.e. no time limit.</li>
+<li><strong>packet_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – packet size. Defaults to 1400.</li>
+<li><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – batch size. Defaults to 1.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="p4utils.utils.traffic_utils.setSizeToInt">
 <code class="descclassname">p4utils.utils.traffic_utils.</code><code class="descname">setSizeToInt</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/traffic_utils.html#setSizeToInt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.traffic_utils.setSizeToInt" title="Permalink to this definition">¶</a></dt>
-<dd><p>” Converts the sizes string notation to the corresponding integer
-(in bytes).  Input size can be given with the following
-magnitudes: B, K, M and G.</p>
+<dd><p>Converts the sizes string notation to the corresponding integer
+(in bytes). Input size can be given with the following magnitudes: B, K, M and G.</p>
 </dd></dl>
 
 </div>

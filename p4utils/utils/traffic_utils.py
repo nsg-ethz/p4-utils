@@ -4,9 +4,8 @@ import socket
 
 
 def setSizeToInt(size):
-    """" Converts the sizes string notation to the corresponding integer
-    (in bytes).  Input size can be given with the following
-    magnitudes: B, K, M and G.
+    """Converts the sizes string notation to the corresponding integer
+    (in bytes). Input size can be given with the following magnitudes: B, K, M and G.
     """
     if isinstance(size, int):
         return size
@@ -27,17 +26,17 @@ def setSizeToInt(size):
 
 def send_udp_flow(dst="10.0.0.2", sport=5000, dport=5001, tos=0, rate='10M', duration=0, 
                   packet_size=1400, batch_size=1, **kwargs):
-    """
-    Udp sending function that keeps a constant rate and logs sent packets to a file.
+    """Udp sending function that keeps a constant rate and logs sent packets to a file.
+
     Args:
-        dst (str, optional): [description]. Defaults to "10.0.0.2".
-        sport (int, optional): [description]. Defaults to 5000.
-        dport (int, optional): [description]. Defaults to 5001.
-        tos (int, optional): [description]. Defaults to 0.        
-        rate (str, optional): [description]. Defaults to '10M'.
-        duration (int, optional): [description]. Defaults to 0, i.e. no time limit.
-        packet_size ([type], optional): [description]. Defaults to 1400.
-        batch_size (int, optional): [description]. Defaults to 5.
+        dst (str, optional): destination IP. Defaults to "10.0.0.2".
+        sport (int, optional): destination port. Defaults to 5000.
+        dport (int, optional): source port. Defaults to 5001.
+        tos (int, optional): type of service. Defaults to 0.        
+        rate (str, optional): flow rate. Defaults to '10M'.
+        duration (int, optional): flow duration. Defaults to 0, i.e. no time limit.
+        packet_size (int, optional): packet size. Defaults to 1400.
+        batch_size (int, optional): batch size. Defaults to 1.
     """
 
     sport = int(sport)
@@ -95,7 +94,7 @@ def recv_udp_flow(dport):
     Receiving function.
 
     Args:
-        dport ([int]): port to listen
+        dport (int): port to listen
     """
     dport = int(dport)
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
