@@ -291,7 +291,7 @@ right after.
    For task files, the ``start`` value is the delay with respect to the network starting time.
 
 The syntax of this file is the same of the network client with only one
-difference: **you must not put the ``task`` command at the beginning of the task line**. You also
+difference: **you must not put the** ``task`` **command at the beginning of the task line**. You also
 have to put one task per line.
 
 For example, let us consider the L2 forwarding example. We want the following tasks:
