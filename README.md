@@ -85,7 +85,7 @@ For more information see:
 
 ### Features
 
-P4-Utils adds on top of minininet:
+P4-Utils adds on top of Mininet:
 
 - A command-line launcher (`p4run`) to instantiate networks.
 - A helper script (`mx`) to run processes in namespaces
