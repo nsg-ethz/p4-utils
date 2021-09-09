@@ -63,8 +63,8 @@ P4-Utils depends on the following programs in the given order:
 5. [FRRouting](https://github.com/FRRouting/FRR) **is required 
    only for topologies with routers**
 
-Since the installation process of the dependencies is long and cumbersome, we provide
-a Bash script that automatically does it for you. You can find more information [here](./install-tools).
+Since the installation process is long and cumbersome, **we provide a [Bash script](./install-tools)
+that automatically installs the dependencies.**
 
 ### How does it work ?
 
