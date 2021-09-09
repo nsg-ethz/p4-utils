@@ -92,7 +92,7 @@ P4-Utils adds on top of *Mininet*:
 - A helper script (`mx`) to run processes in namespaces.
 - Custom `P4Host`, `P4Switch`, `P4RuntimeSwitch`, `FFRouter` nodes (based on [BMV2](https://github.com/p4lang/behavioral-model) and [FRRouting](https://github.com/FRRouting/FRR)).
 - A very simple way of defining networks using JSON files (see `p4app_example.json` and [related documentation](https://nsg-ethz.github.io/p4-utils/usage.html#json)).
-- A very intuitive programmatic way of defining networks using a Python API (see [related documentation](https://nsg-ethz.github.io/p4-utils/usage.html#python))
+- A very intuitive programmatic way of defining networks using a Python API (see [related documentation](https://nsg-ethz.github.io/p4-utils/usage.html#python)).
 - Enhances *Mininet* command-line interface by adding useful commands to manage P4 switches.
 - Saves the topology information in an object that can be loaded and queried (see [related documentation](https://nsg-ethz.github.io/p4-utils/advanced_usage.html#topology-database)).
 - Re-implementation of the `runtime_CLI` and `simple_switch_CLI` as Python objects to use in controller code.
