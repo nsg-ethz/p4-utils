@@ -113,7 +113,11 @@ install P4-Utils using the following commands::
 
     git clone https://github.com/nsg-ethz/p4-utils
     cd p4-utils
-    ./install.sh
+    sudo ./install.sh
+
+You can also uninstall it by running the command::
+
+    sudo ./uninstall.sh
 
 Prerequisites
 +++++++++++++
@@ -164,6 +168,6 @@ Then, you have to go to the installation folder::
 
 Finally, you can run the installation script::
 
-    ./install-p4-dev.sh
+    sudo ./install-p4-dev.sh
 
 This will install P4-Utils together with all its requirements.
