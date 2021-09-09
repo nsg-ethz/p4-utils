@@ -94,6 +94,6 @@ P4-Utils adds on top of *Mininet*:
 - A very simple way of defining networks using JSON files (see `p4app_example.json` and [related documentation](https://nsg-ethz.github.io/p4-utils/usage.html#json)).
 - A very intuitive programmatic way of defining networks using a Python API (see [related documentation](https://nsg-ethz.github.io/p4-utils/usage.html#python))
 - Enhances *Mininet* command-line interface by addind useful commands to manage P4 switches.
-- Saves the topology and features in an object that can be loaded and queried to extract meaningful information (see [related documentation](https://nsg-ethz.github.io/p4-utils/advanced_usage.html#topology-database)).
+- Saves the topology information in an object that can be loaded and queried (see [related documentation](https://nsg-ethz.github.io/p4-utils/advanced_usage.html#topology-database)).
 - Re-implementation of the `runtime_CLI` and `simple_switch_CLI` as Python objects to use in controller code.
 - Re-implementation of the [p4runtime-shell](https://github.com/p4lang/p4runtime-shell) as Python objects to use in controller code.
