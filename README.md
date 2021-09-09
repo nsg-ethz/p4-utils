@@ -64,7 +64,7 @@ P4-Utils depends on the following programs in the given order:
    only for topologies with routers**
 
 Since the installation process of the dependencies is long and cumbersome, we provide
-a Bash script that automatically does it for you. You can find more information [here](./install-tools)
+a Bash script that automatically does it for you. You can find more information [here](./install-tools).
 
 ### How does it work ?
 
