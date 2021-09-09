@@ -220,9 +220,7 @@ client <a class="reference external" href="usage.html#thrift-client">method</a> 
 <p>The <em>Thrift API</em> can be used with every P4 switch and it is based on the code of the
 <em>Thrift</em> command-line client. In fact, it provides the same methods to control the switch.
 The implementation of the <em>Thrift API</em> relies on
-<a class="reference internal" href="p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI" title="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchThriftAPI</span></code></a> and its parent
-<a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">ThriftAPI</span></code></a>. Please check them out to learn more
-about the available control plane methods.</p>
+<a class="reference internal" href="p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI" title="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchThriftAPI</span></code></a>.</p>
 <p>To get started, we create a new Python script called <code class="docutils literal"><span class="pre">controller.py</span></code> and we import
 the module needed to configure the P4 switch:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">p4utils.utils.sswitch_thrift_API</span> <span class="kn">import</span> <span class="n">SimpleSwitchThriftAPI</span>
@@ -252,16 +250,21 @@ forwarding table of <code class="docutils literal"><span class="pre">s1</span></
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">controller</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This guide is just a quick overview of how to use the <em>Thrift API</em>. Please check
+out the documentation of <a class="reference internal" href="p4utils.utils.sswitch_thrift_API.html#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI" title="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchThriftAPI</span></code></a>
+and <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">ThriftAPI</span></code></a> to learn more advanced options.</p>
+</div>
 </div>
 <div class="section" id="p4runtime-api">
 <h3>P4Runtime API<a class="headerlink" href="#p4runtime-api" title="Permalink to this headline">¶</a></h3>
 <p>The <em>P4Runtime API</em> is implemented by
-<a class="reference internal" href="p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchP4RuntimeAPI</span></code></a>.
-Please check it out to learn more about the available control plane methods. Moreover,
-consider that the <em>P4Runtime API</em> can only be used with P4Runtime capable switches:
-not all the binaries provided by the <a class="reference external" href="https://github.com/p4lang/behavioral-model">behavioral-model</a> implement this feature.
-As a consequence, only <a class="reference internal" href="p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4RuntimeSwitch" title="p4utils.mininetlib.node.P4RuntimeSwitch"><code class="xref py py-class docutils literal"><span class="pre">P4RuntimeSwitch</span></code></a> supports
-P4Runtime, whereas <a class="reference internal" href="p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch" title="p4utils.mininetlib.node.P4Switch"><code class="xref py py-class docutils literal"><span class="pre">P4Switch</span></code></a> does not.</p>
+<a class="reference internal" href="p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchP4RuntimeAPI</span></code></a> and can
+only be used with P4Runtime capable switches: not all the binaries provided by the
+<a class="reference external" href="https://github.com/p4lang/behavioral-model">behavioral-model</a> implement this feature. As a consequence, only
+<a class="reference internal" href="p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4RuntimeSwitch" title="p4utils.mininetlib.node.P4RuntimeSwitch"><code class="xref py py-class docutils literal"><span class="pre">P4RuntimeSwitch</span></code></a> supports P4Runtime, whereas
+<a class="reference internal" href="p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch" title="p4utils.mininetlib.node.P4Switch"><code class="xref py py-class docutils literal"><span class="pre">P4Switch</span></code></a> does not.</p>
 <p>For this reason, we provide a quick guide on how to enable P4Runtime in your network using the
 <a class="reference external" href="#enabling-p4runtime-with-python">Python script</a> or the <a class="reference external" href="#enabling-p4runtime-with-json">JSON file</a>.</p>
 <div class="admonition warning">
@@ -308,6 +311,13 @@ method <a class="reference internal" href="p4utils.utils.sswitch_p4runtime_API.h
 forwarding table of <code class="docutils literal"><span class="pre">s1</span></code>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">controller</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This example is only a brief overview of the most common options available with
+the <em>P4Runtime API</em>. Please check out the documentation of
+<a class="reference internal" href="p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchP4RuntimeAPI</span></code></a>
+to learn more advanced methods.</p>
 </div>
 <div class="section" id="enabling-p4runtime-with-python">
 <h4>Enabling P4Runtime with Python<a class="headerlink" href="#enabling-p4runtime-with-python" title="Permalink to this headline">¶</a></h4>
@@ -384,10 +394,8 @@ numbers, etc. Although this is feasible with small topologies, it becomes harder
 where you have to deal with tens or even hundreds of addresses and port numbers.</p>
 <p>In order to overcome this issue, P4-Utils has a built-in topology database that is automatically
 generated after the network starts and it is saved to a JSON file, usually called <code class="docutils literal"><span class="pre">topology.json</span></code>,
-in the execution directory.</p>
-<p>One can then query this file to retrieve topology information. This framework is implemented by
-<a class="reference internal" href="p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph" title="p4utils.utils.topology.NetworkGraph"><code class="xref py py-class docutils literal"><span class="pre">NetworkGraph</span></code></a>. Please have a look at it to learn more about the
-available methods.</p>
+in the execution directory. One can then query this file to retrieve topology information.
+This framework is implemented by <a class="reference internal" href="p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph" title="p4utils.utils.topology.NetworkGraph"><code class="xref py py-class docutils literal"><span class="pre">NetworkGraph</span></code></a>.</p>
 <p>For example, let us consider our simple example. We can automatically configure the forwarding
 table without knowing anything about the switch:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">p4utils.utils.helper</span> <span class="kn">import</span> <span class="n">load_topo</span>
@@ -407,6 +415,12 @@ table without knowing anything about the switch:</p>
                              <span class="p">[</span><span class="n">topo</span><span class="o">.</span><span class="n">get_host_mac</span><span class="p">(</span><span class="n">neigh</span><span class="p">)],</span>
                              <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">topo</span><span class="o">.</span><span class="n">node_to_node_port_num</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="n">neigh</span><span class="p">))])</span>
 </pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This guide is just a basic overview of how to use the topology database. Please check
+out the documentation of <a class="reference internal" href="p4utils.utils.topology.html#p4utils.utils.topology.NetworkGraph" title="p4utils.utils.topology.NetworkGraph"><code class="xref py py-class docutils literal"><span class="pre">NetworkGraph</span></code></a> to
+learn more advanced techniques involving also routers.</p>
 </div>
 </div>
 <div class="section" id="task-scheduler">

@@ -201,9 +201,9 @@ To execute the network, we can simply run our Python script with super user righ
   sudo python3 network.py
 
 .. Important::
-   This guide is just a basic overview of all the methods available. Please check
-   out the documentation of :py:class:`p4utils.mininetlib.network_API.NetworkAPI` to 
-   discover more advanced techniques involving also routers.
+   This guide is just a basic overview of the most useful network configuration options.
+   Please check out the documentation of :py:class:`~p4utils.mininetlib.network_API.NetworkAPI`
+   to learn more advanced techniques involving also routers.
 
 JSON
 ++++
@@ -305,7 +305,7 @@ In case the JSON configuration file is called ``p4app.json``, we can run the net
 .. Important::
    This explaination is only a brief overview of the most common options available with
    the JSON network configuration file. Please check out the documentation of the module 
-   :py:mod:`p4utils.p4run` to discover more advanced techniques involving also routers.
+   :py:mod:`~p4utils.p4run` to discover more advanced techniques involving also routers.
 
 Automated Assignment Strategies
 -------------------------------

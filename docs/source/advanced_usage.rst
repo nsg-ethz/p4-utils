@@ -36,9 +36,7 @@ Thrift API
 The *Thrift API* can be used with every P4 switch and it is based on the code of the
 *Thrift* command-line client. In fact, it provides the same methods to control the switch.
 The implementation of the *Thrift API* relies on 
-:py:class:`~p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI` and its parent 
-:py:class:`~p4utils.utils.thrift_API.ThriftAPI`. Please check them out to learn more
-about the available control plane methods.
+:py:class:`~p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI`.
 
 To get started, we create a new Python script called ``controller.py`` and we import
 the module needed to configure the P4 switch::
@@ -70,17 +68,21 @@ forwarding table of ``s1``::
 
     python3 controller.py
 
+.. Important::
+   This guide is just a quick overview of how to use the *Thrift API*. Please check
+   out the documentation of :py:class:`~p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI`
+   and :py:class:`~p4utils.utils.thrift_API.ThriftAPI` to learn more advanced options.
+
 P4Runtime API
 +++++++++++++
 __ https://github.com/p4lang/behavioral-model
 
 The *P4Runtime API* is implemented by
-:py:class:`~p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI`.
-Please check it out to learn more about the available control plane methods. Moreover,
-consider that the *P4Runtime API* can only be used with P4Runtime capable switches:
-not all the binaries provided by the `behavioral-model`__ implement this feature. 
-As a consequence, only :py:class:`~p4utils.mininetlib.node.P4RuntimeSwitch` supports 
-P4Runtime, whereas :py:class:`~p4utils.mininetlib.node.P4Switch` does not.
+:py:class:`~p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI` and can 
+only be used with P4Runtime capable switches: not all the binaries provided by the 
+`behavioral-model`__ implement this feature. As a consequence, only 
+:py:class:`~p4utils.mininetlib.node.P4RuntimeSwitch` supports P4Runtime, whereas 
+:py:class:`~p4utils.mininetlib.node.P4Switch` does not.
 
 __ #enabling-p4runtime-with-python
 __ #enabling-p4runtime-with-json
@@ -132,6 +134,12 @@ Now, after the network starts, we can run the controller script to populate the
 forwarding table of ``s1``::
 
     python3 controller.py
+
+.. Important::
+   This example is only a brief overview of the most common options available with
+   the *P4Runtime API*. Please check out the documentation of 
+   :py:class:`~p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI`
+   to learn more advanced methods.
 
 Enabling P4Runtime with Python
 ______________________________
@@ -210,11 +218,8 @@ where you have to deal with tens or even hundreds of addresses and port numbers.
 
 In order to overcome this issue, P4-Utils has a built-in topology database that is automatically
 generated after the network starts and it is saved to a JSON file, usually called ``topology.json``,
-in the execution directory.
-
-One can then query this file to retrieve topology information. This framework is implemented by
-:py:class:`~p4utils.utils.topology.NetworkGraph`. Please have a look at it to learn more about the
-available methods.
+in the execution directory. One can then query this file to retrieve topology information.
+This framework is implemented by :py:class:`~p4utils.utils.topology.NetworkGraph`.
 
 For example, let us consider our simple example. We can automatically configure the forwarding 
 table without knowing anything about the switch::
@@ -235,6 +240,11 @@ table without knowing anything about the switch::
                                  'forward',
                                  [topo.get_host_mac(neigh)], 
                                  [str(topo.node_to_node_port_num('s1', neigh))])
+
+.. Important::
+   This guide is just a basic overview of how to use the topology database. Please check
+   out the documentation of :py:class:`~p4utils.utils.topology.NetworkGraph` to 
+   learn more advanced techniques involving also routers.
 
 Task Scheduler
 --------------
