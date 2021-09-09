@@ -68,8 +68,8 @@ that automatically installs the dependencies.**
 
 ### How does it work ?
 
-P4-Utils creates virtual networks using mininet and extended nodes that run P4-enabled switches. To create hosts,
-Mininet uses a bash process running in a network namespace, in order words, all the processes that run within the
+P4-Utils creates virtual networks using *Mininet* and extended nodes that run P4-enabled switches. To create hosts,
+*Mininet* uses a bash process running in a network namespace, in order words, all the processes that run within the
 network namespaces have an isolated network stack. Switches are software-based switches like Open vSwitch, Linux Bridge,
 or BMV2 switches. Mininet uses virtual ethernet pairs, which live in the Linux kernel to connect the emulated hosts and switches.
 
@@ -85,14 +85,14 @@ For more information see:
 
 ### Features
 
-P4-Utils adds on top of Mininet:
+P4-Utils adds on top of *Mininet*:
 
 - A command-line launcher (`p4run`) to instantiate networks.
 - A helper script (`mx`) to run processes in namespaces
 - Custom `P4Host`, `P4Switch`, `P4RuntimeSwitch`, `FFRouter` nodes (based on the ones provided in the [`p4lang`](https://github.com/p4lang) repo)
 - A very simple way of defining networks using JSON files (see `p4app_example.json` and [related documentation](https://nsg-ethz.github.io/p4-utils/usage.html#json)).
 - A very intuitive programmatic way of defining networks using a Python API (see [related documentation](https://nsg-ethz.github.io/p4-utils/usage.html#python))
-- Enhances mininet command-line interface: adding the ability of rebooting switches with updated P4 programs and configurations, without the need
+- Enhances *Mininet* command-line interface: adding the ability of rebooting switches with updated P4 programs and configurations, without the need
  of restarting the entire network.
 - Saves the topology and features in an object that can be loded and queried to extract meaningful information (see [related documentation](https://nsg-ethz.github.io/p4-utils/advanced_usage.html#topology-database)).
 - Re-implementation of the `runtime_CLI` and `simple_switch_CLI` as Python objects to use in controller code.
