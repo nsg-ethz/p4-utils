@@ -26,4 +26,4 @@ Finally, you can run the installation script::
 sudo ./install-p4-dev.sh
 ```
 
-This script will install P4-Utils together with all its requirements.
+This will install P4-Utils together with all its requirements.
