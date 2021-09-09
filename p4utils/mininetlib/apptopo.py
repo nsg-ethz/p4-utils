@@ -292,7 +292,6 @@ class AppTopo(Topo):
             if self.is_host_link(link):
                 host_name = link[self.get_host_position(link)]
                 if self.check_host_valid_ip_from_name(host_name):
-
                     direct_sw = link[self.get_sw_position(link)]
                     sw_id = sw_to_id[direct_sw]
                     host_num = int(host_name[1:])
@@ -322,6 +321,7 @@ class AppTopo(Topo):
                     while ("10.%d.%d.2" % (sw_id, host_num)) in self.reserved_ips.values():
                         host_num +=1
                     assert host_num < 254
+                    sw_to_next_available_host_id[direct_sw] = host_num + 1
                     host_ip = "10.%d.%d.2" % (sw_id, host_num)
                     host_gw = "10.%d.%d.1" % (sw_id, host_num)
 
