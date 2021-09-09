@@ -80,6 +80,7 @@ For more information see:
  - [Virtual ethernet interfaces](http://man7.org/linux/man-pages/man4/veth.4.html)
  - [BMV2](https://github.com/p4lang/behavioral-model)
  - [p4runtime-shell](https://github.com/p4lang/p4runtime-shell)
+ - [FRRouting](https://frrouting.org/)
  - [OVS](https://www.openvswitch.org/)
  - [LinuxBridge](https://cloudbuilder.in/blogs/2013/12/02/linux-bridge-virtual-networking/)
 
@@ -88,8 +89,8 @@ For more information see:
 P4-Utils adds on top of *Mininet*:
 
 - A command-line launcher (`p4run`) to instantiate networks.
-- A helper script (`mx`) to run processes in namespaces
-- Custom `P4Host`, `P4Switch`, `P4RuntimeSwitch`, `FFRouter` nodes (based on the ones provided in the [`p4lang`](https://github.com/p4lang) repo)
+- A helper script (`mx`) to run processes in namespaces.
+- Custom `P4Host`, `P4Switch`, `P4RuntimeSwitch`, `FFRouter` nodes (based on [BMV2](https://github.com/p4lang/behavioral-model) and [FRRouting](https://github.com/FRRouting/FRR)).
 - A very simple way of defining networks using JSON files (see `p4app_example.json` and [related documentation](https://nsg-ethz.github.io/p4-utils/usage.html#json)).
 - A very intuitive programmatic way of defining networks using a Python API (see [related documentation](https://nsg-ethz.github.io/p4-utils/usage.html#python))
 - Enhances *Mininet* command-line interface: adding the ability of rebooting switches with updated P4 programs and configurations, without the need
