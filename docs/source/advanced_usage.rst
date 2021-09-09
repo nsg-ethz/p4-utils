@@ -213,7 +213,7 @@ generated after the network starts and it is saved to a JSON file, usually calle
 in the execution directory.
 
 One can then query this file to retrieve topology information. This framework is implemented by
-:py:class:`p4utils.utils.topology.NetworkGraph`. Please have a look at it to learn more about the
+:py:class:`~p4utils.utils.topology.NetworkGraph`. Please have a look at it to learn more about the
 available methods.
 
 For example, let us consider our simple example. We can automatically configure the forwarding 
