@@ -5,7 +5,6 @@ KERNEL=$(uname -r)
 DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 USER_NAME=$(whoami)
 BUILD_DIR=~/p4-tools
-SCRIPT_DIR=$(dirname $(realpath $0))
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
 DEBUG_FLAGS=true
 P4_RUNTIME=true
@@ -99,8 +98,8 @@ zip
 sudo ln -sf $(which python3) /usr/bin/python
 sudo ln -sf $(which pip3) /usr/bin/pip
 
-# Install shared dependencies (pip)
-sudo pip install \
+# Install shared dependencies (pip3)
+sudo pip3 install \
 cffi \
 ipaddress \
 ipdb \
@@ -124,13 +123,12 @@ sudo dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
 rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
 
 # Configure tmux
-cd $SCRIPT_DIR
-cp conf_files/tmux.conf ~/.tmux.conf
+wget -O ~/.tmux.conf https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/conf_files/tmux.conf
 
 # Fix site-packages issue 
 # Modified file from 
 # https://github.com/jafingerhut/p4-guide/blob/4111c7fa0a26ccdc40d3200040c767e9bba478ea/bin/install-p4dev-v4.sh#L244
-PY3LOCALPATH=`python ${SCRIPT_DIR}/scripts/py3localpath.py`
+PY3LOCALPATH=`curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/scripts/py3localpath.py | python3`
 function site_packages_fix {
     local SRC_DIR
     local DST_DIR
@@ -152,7 +150,7 @@ function site_packages_fix {
 
 # Fix google module issue which creates problems with sphinx
 function google_module_fix {
-    sudo python $SCRIPT_DIR/scripts/protoinitfix.py
+    curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/scripts/protoinitfix.py | sudo python3
 }
 
 ## Module-specific dependencies
@@ -203,7 +201,7 @@ function do_p4c_deps {
     net-tools \
     zlib1g-dev
 
-    sudo pip install \
+    sudo pip3 install \
     ipaddr \
     pyroute2 \
     ply \
@@ -261,7 +259,7 @@ function do_protobuf {
     # other Python libraries.
 
     # cd python
-    # sudo python setup.py install --cpp_implementation
+    # sudo python3 setup.py install --cpp_implementation
 }
 
 # Install grpc (needed for PI)
@@ -290,8 +288,8 @@ function do_grpc {
     # Do not install grpcio here and postpone it to
     # the installation of p4-utils.
 
-    # sudo pip install -r requirements.txt
-    # sudo pip install .
+    # sudo pip3 install -r requirements.txt
+    # sudo pip3 install .
 }
 
 # Install sysrepo (tentative gNMI support with sysrepo)
@@ -507,7 +505,7 @@ function do_ptf {
     git pull origin master
 
     # Build ptf
-    sudo python setup.py install
+    sudo python3 setup.py install
 }
 
 # Install mininet
@@ -568,7 +566,7 @@ function do_p4-learning {
 # Install Sphinx and ReadtheDocs
 function do_sphinx {
     sudo apt-get install python3-sphinx
-    sudo pip install sphinx-rtd-theme
+    sudo pip3 install sphinx-rtd-theme
 }
 
 # p4c depends on protobuf to compile p4runtime info files.

@@ -150,24 +150,35 @@ P4-Utils depends on the following programs in the given order:
    and NHRP. Router nodes in P4-Utils are based on FRRouting. **It is required 
    only for topologies with routers.**
 
+__ https://github.com/nsg-ethz/p4-utils/blob/master/install-tools/install-p4-dev.sh
+
 The manual installation process is quite long and cumbersome because of the
-dependencies that are needed by P4-Utils. For this reason, we provide a Bash
-script that automatically goes through every step.
+dependencies that are needed by P4-Utils. For this reason, we provide a `Bash
+script`__ that automatically goes through every step.
 
 .. Warning::
     The script has been tested with **Ubuntu 18.04.4** and the compiler 
     **GCC 7.5**. Errors have been reported with newer versions.
 
-In order to start the installation, you fist need to clone our repository::
+.. Important::
+    With the following installation methods, you will download and install *Mininet*
+    and the P4-Tools suite (P4-Utils, P4-Learning and their dependencies) in your 
+    user's home directory.
 
-    git clone https://github.com/nsg-ethz/p4-utils
+One-Step Automated Install
+__________________________
 
-Then, you have to go to the installation folder::
+To get started quickly and conveniently, you may want to install the P4-Tools suite 
+using the following command::
 
-    cd p4-utils/install-tools
+    curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/install-p4-dev.sh | bash
 
-Finally, you can run the installation script::
+Alternative Installation Method
+_______________________________
 
-    sudo ./install-p4-dev.sh
+The main drawback of piping to `bash` is that you cannot review the code
+that is going to run on your system. Therefore, we provide this alternative
+methods that allows you to inspect the intallation script::
 
-This will install P4-Utils together with all its requirements.
+    wget -O install-p4-dev.sh https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/install-p4-dev.sh
+    bash install-p4-dev.sh

@@ -109,7 +109,11 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#manual-installation">Manual Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#one-step-automated-install">One-Step Automated Install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alternative-installation-method">Alternative Installation Method</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -312,26 +316,37 @@ and NHRP. Router nodes in P4-Utils are based on FRRouting. <strong>It is require
 only for topologies with routers.</strong></li>
 </ol>
 <p>The manual installation process is quite long and cumbersome because of the
-dependencies that are needed by P4-Utils. For this reason, we provide a Bash
-script that automatically goes through every step.</p>
+dependencies that are needed by P4-Utils. For this reason, we provide a <a class="reference external" href="https://github.com/nsg-ethz/p4-utils/blob/master/install-tools/install-p4-dev.sh">Bash
+script</a> that automatically goes through every step.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The script has been tested with <strong>Ubuntu 18.04.4</strong> and the compiler
 <strong>GCC 7.5</strong>. Errors have been reported with newer versions.</p>
 </div>
-<p>In order to start the installation, you fist need to clone our repository:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">With the following installation methods, you will download and install <em>Mininet</em>
+and the P4-Tools suite (P4-Utils, P4-Learning and their dependencies) in your
+user’s home directory.</p>
+</div>
+<div class="section" id="one-step-automated-install">
+<h4>One-Step Automated Install<a class="headerlink" href="#one-step-automated-install" title="Permalink to this headline">¶</a></h4>
+<p>To get started quickly and conveniently, you may want to install the P4-Tools suite
+using the following command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">sSL</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span> <span class="o">|</span> <span class="n">bash</span>
 </pre></div>
 </div>
-<p>Then, you have to go to the installation folder:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">tools</span>
+</div>
+<div class="section" id="alternative-installation-method">
+<h4>Alternative Installation Method<a class="headerlink" href="#alternative-installation-method" title="Permalink to this headline">¶</a></h4>
+<p>The main drawback of piping to <cite>bash</cite> is that you cannot review the code
+that is going to run on your system. Therefore, we provide this alternative
+methods that allows you to inspect the intallation script:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">-</span><span class="n">O</span> <span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">bash</span> <span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
-<p>Finally, you can run the installation script:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">./</span><span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span>
-</pre></div>
 </div>
-<p>This will install P4-Utils together with all its requirements.</p>
 </div>
 </div>
 </div>
