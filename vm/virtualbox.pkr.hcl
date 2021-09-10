@@ -88,7 +88,6 @@ build {
       "cd $HOME",
       "git clone https://github.com/nsg-ethz/p4-utils.git",
       "cd p4-utils",
-      "git checkout junota",
       "cd install-tools",
       "./install-p4-dev.sh"
     ]

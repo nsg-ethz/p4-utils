@@ -550,7 +550,6 @@ function do_p4-utils {
         git clone https://github.com/nsg-ethz/p4-utils.git p4-utils
     fi
     cd p4-utils
-    git checkout junota
 
     # Build p4-utils    
     sudo ./install.sh
@@ -564,7 +563,6 @@ function do_p4-learning {
         git clone https://github.com/nsg-ethz/p4-learning.git p4-learning
     fi
     cd p4-learning
-    git checkout junota
 }
 
 # Install Sphinx and ReadtheDocs

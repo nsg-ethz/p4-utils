@@ -126,7 +126,7 @@ html_context = {
     #https://github.com/runawayhorse001/SphinxGithub/blob/master/doc/index.rst
     "github_user": "nsg-ethz",
     "github_repo": "p4-utils",
-    "github_version": "junota/",
+    "github_version": "master/",
     "conf_py_path": "docs/source/"
 }
 

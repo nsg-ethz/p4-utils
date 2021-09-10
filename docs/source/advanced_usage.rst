@@ -259,7 +259,7 @@ on different nodes. It can be accessed in two ways:
 - one can put the tasks in a ``.txt`` file (one per line) that 
   is parsed by P4-Utils.
 
-__ https://github.com/nsg-ethz/p4-utils/tree/junota/examples
+__ https://github.com/nsg-ethz/p4-utils/tree/master/examples
 
 Here we provide only simple examples. To learn more about the capabilities of the task scheduler,
 you can check out the `examples`__ of the P4-Utils repository.
