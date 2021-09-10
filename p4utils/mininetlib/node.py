@@ -14,8 +14,10 @@
 #
 
 import os
+import signal
 import tempfile
 from time import sleep
+from psutil import pid_exists
 from mininet.log import debug, info, output, warning, error
 from mininet.node import Node, Host, Switch
 from mininet.moduledeps import pathCheck
@@ -132,7 +134,7 @@ class P4Switch(Switch):
 
     def switch_started(self):
         """Check if the switch process has started."""
-        return os.path.exists(os.path.join('/proc', str(self.simple_switch_pid)))
+        return pid_exists(self.simple_switch_pid)
 
     def thrift_listening(self):
         """Check if a thrift process listens on the thrift port."""
@@ -196,18 +198,17 @@ class P4Switch(Switch):
             raise ChildProcessError('P4 switch {} did not start correctly. Check the switch log file.'.format(self.name))
         info('P4 switch {} has been started.\n'.format(self.name))
 
-        # only do this for l3..
-        #self.cmd('sysctl', '-w', 'net.ipv4.ip_forward=1')
-
     def stop_p4switch(self):
         """Just stops simple switch without deleting interfaces."""
         info('Stopping P4 switch {}.\n'.format(self.name))
-        self.cmd('kill -9 {}'.format(self.simple_switch_pid))
+        os.kill(self.simple_switch_pid, signal.SIGKILL)
+        if not wait_condition(self.switch_started, False):
+            raise ChildProcessError('P4 switch {} did not stop after requesting it.'.format(self.name))
 
-    def stop(self):
+    def stop(self, deleteIntfs=True):
         """Terminate P4 switch."""
-        self.cmd('kill -9 {}'.format(self.simple_switch_pid))
-        self.deleteIntfs()
+        os.kill(self.simple_switch_pid, signal.SIGKILL)
+        super().stop(deleteIntfs)
 
     def attach(self, intf):
         """Connect a data port."""
@@ -417,8 +418,8 @@ class FRRouter(Node):
     def stop(self):
         """Terminate FRRouter."""
         for daemon, value in self.daemons.items():
-            # Kill daemons
-            self.cmd('kill -9 {}'.format(value.get('pid')))
+            # Kill daemon
+            os.kill(value['pid'], signal.SIGKILL)
             # Remove pid, out and log files
             os.system('rm -f "/tmp/{name}-{daemon}.pid" '
                       '"/tmp/{name}-{daemon}.out" '

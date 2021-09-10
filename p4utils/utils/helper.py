@@ -7,6 +7,7 @@ import os
 import re
 import sys
 import json
+import time
 import random
 import psutil
 import hashlib
@@ -20,8 +21,38 @@ from p4utils.utils.topology import NetworkGraph
 _prefixLenMatchRegex = re.compile("netmask (\d+\.\d+\.\d+\.\d+)")
 
 
+def wait_condition(func, value, args=[], kwargs={}, timeout=10):
+    """Waits for the function to return the specified value.
+
+    Args:
+        func (function): function to check
+        value          : condition to meet
+        args (list)    : positional arguments of the function
+        kwargs (dict)  : key-word arguments of the function
+        timeout (float): time to wait for condition in seconds
+
+    Returns:
+        bool: **True** if the condition is met before the timeout 
+              expires, **False** otherwise.
+
+    Note:
+        If ``timeout`` is set to ``0``, this function will wait forever.
+    """
+    start_time = time.time()
+    if timeout > 0:
+        while func(*args, **kwargs) != value:
+            if time.time() - start_time >= timeout:
+                return False
+        else:
+            return True
+    else:
+        while func(*args, **kwargs) != value:
+            pass
+        else:
+            return True
+
 def merge_dict(dst, src):
-    """Merge source dictionary fields and subfields into destionation dictionary.
+    """Merges source dictionary fields and subfields into destionation dictionary.
 
     Args:
         dst (dict): destination dictionary
