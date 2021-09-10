@@ -1,0 +1,2092 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.utils.thrift_API module &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="p4utils.utils.topology module" href="p4utils.utils.topology.html" />
+    <link rel="prev" title="p4utils.utils.task_scheduler module" href="p4utils.utils.task_scheduler.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="p4utils.html">P4-Utils API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="p4utils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="p4utils.mininetlib.html">p4utils.mininetlib package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="p4utils.utils.html">p4utils.utils package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="p4utils.utils.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="p4utils.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="p4utils.utils.html#module-p4utils.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="p4utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="p4utils.html#module-p4utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
+        
+          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
+        
+      <li>p4utils.utils.thrift_API module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/nsg-ethz/p4-utils/blob/junota/docs/source/p4utils.utils.thrift_API.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-p4utils.utils.thrift_API">
+<span id="p4utils-utils-thrift-api-module"></span><h1>p4utils.utils.thrift_API module<a class="headerlink" href="#module-p4utils.utils.thrift_API" title="Permalink to this headline">¶</a></h1>
+<p>This module is a modified version of <a class="reference external" href="https://github.com/p4lang/behavioral-model/blob/main/tools/runtime_CLI.py">runtime_CLI</a> that performs control plane
+operations by connecting to the <em>Thrift</em> server running on a capable switch. The
+main difference between this code and the original one is that this module is an API,
+whereas the other is a client.</p>
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.Action">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">Action</code><span class="sig-paren">(</span><em>name</em>, <em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#Action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.Action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.Action.action_str">
+<code class="descname">action_str</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#Action.action_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.Action.action_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.Action.num_params">
+<code class="descname">num_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#Action.num_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.Action.num_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.Action.runtime_data_str">
+<code class="descname">runtime_data_str</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#Action.runtime_data_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.Action.runtime_data_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.ActionProf">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">ActionProf</code><span class="sig-paren">(</span><em>name</em>, <em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ActionProf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ActionProf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ActionProf.action_prof_str">
+<code class="descname">action_prof_str</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ActionProf.action_prof_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ActionProf.action_prof_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ActionProf.get_action">
+<code class="descname">get_action</code><span class="sig-paren">(</span><em>action_name</em>, <em>suffix_lookup_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ActionProf.get_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ActionProf.get_action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.BmMatchParamExact_to_str">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">BmMatchParamExact_to_str</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#BmMatchParamExact_to_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.BmMatchParamExact_to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.BmMatchParamLPM_to_str">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">BmMatchParamLPM_to_str</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#BmMatchParamLPM_to_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.BmMatchParamLPM_to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.BmMatchParamRange_to_str">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">BmMatchParamRange_to_str</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#BmMatchParamRange_to_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.BmMatchParamRange_to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.BmMatchParamTernary_to_str">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">BmMatchParamTernary_to_str</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#BmMatchParamTernary_to_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.BmMatchParamTernary_to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.BmMatchParamValid_to_str">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">BmMatchParamValid_to_str</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#BmMatchParamValid_to_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.BmMatchParamValid_to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.BmMatchParam_to_str">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">BmMatchParam_to_str</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#BmMatchParam_to_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.BmMatchParam_to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.thrift_API.CLI_FormatExploreError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">CLI_FormatExploreError</code><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#CLI_FormatExploreError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.CLI_FormatExploreError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.CounterArray">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">CounterArray</code><span class="sig-paren">(</span><em>name</em>, <em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#CounterArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.CounterArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.CounterArray.counter_str">
+<code class="descname">counter_str</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#CounterArray.counter_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.CounterArray.counter_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.MatchType">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">MatchType</code><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#MatchType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.MatchType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.MatchType.EXACT">
+<code class="descname">EXACT</code><em class="property"> = 0</em><a class="headerlink" href="#p4utils.utils.thrift_API.MatchType.EXACT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.MatchType.LPM">
+<code class="descname">LPM</code><em class="property"> = 1</em><a class="headerlink" href="#p4utils.utils.thrift_API.MatchType.LPM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.MatchType.RANGE">
+<code class="descname">RANGE</code><em class="property"> = 4</em><a class="headerlink" href="#p4utils.utils.thrift_API.MatchType.RANGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.MatchType.TERNARY">
+<code class="descname">TERNARY</code><em class="property"> = 2</em><a class="headerlink" href="#p4utils.utils.thrift_API.MatchType.TERNARY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.MatchType.VALID">
+<code class="descname">VALID</code><em class="property"> = 3</em><a class="headerlink" href="#p4utils.utils.thrift_API.MatchType.VALID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.MatchType.from_str">
+<em class="property">static </em><code class="descname">from_str</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#MatchType.from_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.MatchType.from_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.MatchType.to_str">
+<em class="property">static </em><code class="descname">to_str</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#MatchType.to_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.MatchType.to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.MeterArray">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">MeterArray</code><span class="sig-paren">(</span><em>name</em>, <em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#MeterArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.MeterArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.MeterArray.meter_str">
+<code class="descname">meter_str</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#MeterArray.meter_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.MeterArray.meter_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.MeterType">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">MeterType</code><a class="headerlink" href="#p4utils.utils.thrift_API.MeterType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.MeterType.bytes">
+<code class="descname">bytes</code><em class="property"> = 1</em><a class="headerlink" href="#p4utils.utils.thrift_API.MeterType.bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.MeterType.from_str">
+<em class="property">static </em><code class="descname">from_str</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.thrift_API.MeterType.from_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.MeterType.packets">
+<code class="descname">packets</code><em class="property"> = 0</em><a class="headerlink" href="#p4utils.utils.thrift_API.MeterType.packets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.MeterType.to_str">
+<em class="property">static </em><code class="descname">to_str</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.thrift_API.MeterType.to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.ParseVSet">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">ParseVSet</code><span class="sig-paren">(</span><em>name</em>, <em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ParseVSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ParseVSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ParseVSet.parse_vset_str">
+<code class="descname">parse_vset_str</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ParseVSet.parse_vset_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ParseVSet.parse_vset_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.PreType">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">PreType</code><a class="headerlink" href="#p4utils.utils.thrift_API.PreType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.PreType.SimplePre">
+<code class="descname">SimplePre</code><em class="property"> = 1</em><a class="headerlink" href="#p4utils.utils.thrift_API.PreType.SimplePre" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.PreType.SimplePreLAG">
+<code class="descname">SimplePreLAG</code><em class="property"> = 2</em><a class="headerlink" href="#p4utils.utils.thrift_API.PreType.SimplePreLAG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.PreType.from_str">
+<em class="property">static </em><code class="descname">from_str</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.thrift_API.PreType.from_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.PreType.none">
+<code class="descname">none</code><em class="property"> = 0</em><a class="headerlink" href="#p4utils.utils.thrift_API.PreType.none" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.PreType.to_str">
+<em class="property">static </em><code class="descname">to_str</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.thrift_API.PreType.to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.RegisterArray">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">RegisterArray</code><span class="sig-paren">(</span><em>name</em>, <em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#RegisterArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.RegisterArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.RegisterArray.register_str">
+<code class="descname">register_str</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#RegisterArray.register_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.RegisterArray.register_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.ResType">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">ResType</code><a class="headerlink" href="#p4utils.utils.thrift_API.ResType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ResType.action">
+<code class="descname">action</code><em class="property"> = 2</em><a class="headerlink" href="#p4utils.utils.thrift_API.ResType.action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ResType.action_prof">
+<code class="descname">action_prof</code><em class="property"> = 1</em><a class="headerlink" href="#p4utils.utils.thrift_API.ResType.action_prof" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ResType.counter_array">
+<code class="descname">counter_array</code><em class="property"> = 4</em><a class="headerlink" href="#p4utils.utils.thrift_API.ResType.counter_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.ResType.from_str">
+<em class="property">static </em><code class="descname">from_str</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.thrift_API.ResType.from_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ResType.meter_array">
+<code class="descname">meter_array</code><em class="property"> = 3</em><a class="headerlink" href="#p4utils.utils.thrift_API.ResType.meter_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ResType.parse_vset">
+<code class="descname">parse_vset</code><em class="property"> = 6</em><a class="headerlink" href="#p4utils.utils.thrift_API.ResType.parse_vset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ResType.register_array">
+<code class="descname">register_array</code><em class="property"> = 5</em><a class="headerlink" href="#p4utils.utils.thrift_API.ResType.register_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ResType.table">
+<code class="descname">table</code><em class="property"> = 0</em><a class="headerlink" href="#p4utils.utils.thrift_API.ResType.table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.ResType.to_str">
+<em class="property">static </em><code class="descname">to_str</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.thrift_API.ResType.to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.SwitchInfo">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">SwitchInfo</code><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#SwitchInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.SwitchInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.SwitchInfo.load_json_config">
+<code class="descname">load_json_config</code><span class="sig-paren">(</span><em>standard_client=None</em>, <em>json_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#SwitchInfo.load_json_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.SwitchInfo.load_json_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.SwitchInfo.load_json_str">
+<code class="descname">load_json_str</code><span class="sig-paren">(</span><em>json_str</em>, <em>architecture_spec=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#SwitchInfo.load_json_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.SwitchInfo.load_json_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.SwitchInfo.reset_config">
+<code class="descname">reset_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#SwitchInfo.reset_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.SwitchInfo.reset_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.Table">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">Table</code><span class="sig-paren">(</span><em>name</em>, <em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#Table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.Table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.Table.get_action">
+<code class="descname">get_action</code><span class="sig-paren">(</span><em>action_name</em>, <em>suffix_lookup_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#Table.get_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.Table.get_action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.Table.key_str">
+<code class="descname">key_str</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#Table.key_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.Table.key_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.Table.num_key_fields">
+<code class="descname">num_key_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#Table.num_key_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.Table.num_key_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.Table.table_str">
+<code class="descname">table_str</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#Table.table_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.Table.table_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.TableType">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">TableType</code><a class="headerlink" href="#p4utils.utils.thrift_API.TableType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.TableType.from_str">
+<em class="property">static </em><code class="descname">from_str</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.thrift_API.TableType.from_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.TableType.indirect">
+<code class="descname">indirect</code><em class="property"> = 1</em><a class="headerlink" href="#p4utils.utils.thrift_API.TableType.indirect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.TableType.indirect_ws">
+<code class="descname">indirect_ws</code><em class="property"> = 2</em><a class="headerlink" href="#p4utils.utils.thrift_API.TableType.indirect_ws" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.TableType.simple">
+<code class="descname">simple</code><em class="property"> = 0</em><a class="headerlink" href="#p4utils.utils.thrift_API.TableType.simple" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.TableType.to_str">
+<em class="property">static </em><code class="descname">to_str</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#p4utils.utils.thrift_API.TableType.to_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.utils.thrift_API.ThriftAPI">
+<em class="property">class </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">ThriftAPI</code><span class="sig-paren">(</span><em>thrift_port</em>, <em>thrift_ip</em>, <em>pre_type</em>, <em>json_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>This class implements a client that connects to a P4 switch control plane
+and allows to configure it. It establishes a <em>Thrift</em> connection with the
+switch server that is then used to forward configuration information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>thrift_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – port number the <em>Thrift</em> server listens on</li>
+<li><strong>thrift_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – IP the <em>Thrift</em> server listens on</li>
+<li><strong>pre_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – PreType option</li>
+<li><strong>json_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the P4 compiled JSON file (optional)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Possible values for <strong>pre_type</strong> are the following:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">simple_pre</span></code></li>
+<li><code class="docutils literal"><span class="pre">simple_pre_lag</span></code></li>
+<li><code class="docutils literal"><span class="pre">none</span></code></li>
+</ul>
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.switch_info">
+<code class="descname">switch_info</code><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.switch_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.switch_info" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#p4utils.utils.thrift_API.SwitchInfo" title="p4utils.utils.thrift_API.SwitchInfo"><code class="xref py py-class docutils literal"><span class="pre">SwitchInfo</span></code></a> – object containing information about all the
+P4 structures present in the switch.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.client">
+<code class="descname">client</code><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.client" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Thrift</em> client instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.mc_client">
+<code class="descname">mc_client</code><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.mc_client" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Thrift</em> mc client instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.pre_type">
+<code class="descname">pre_type</code><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.pre_type" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> – given PreType option.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_entries_match_to_handle">
+<code class="descname">table_entries_match_to_handle</code><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_entries_match_to_handle" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary used to associate table matches
+with the related handle.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.act_prof_add_member_to_group">
+<code class="descname">act_prof_add_member_to_group</code><span class="sig-paren">(</span><em>act_prof_name</em>, <em>mbr_handle</em>, <em>grp_handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.act_prof_add_member_to_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.act_prof_add_member_to_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds member to group in an action profile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>act_prof_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action profile</li>
+<li><strong>mbr_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – member handle</li>
+<li><strong>grp_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – group handle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.act_prof_create_group">
+<code class="descname">act_prof_create_group</code><span class="sig-paren">(</span><em>act_prof_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.act_prof_create_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.act_prof_create_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a group to an action pofile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>act_prof_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action profile</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">group handle.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.act_prof_create_member">
+<code class="descname">act_prof_create_member</code><span class="sig-paren">(</span><em>act_prof_name</em>, <em>action_name</em>, <em>action_params=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.act_prof_create_member"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.act_prof_create_member" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a member to an action profile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>act_prof_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action profile</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of action parameters in the
+order they appear in the P4 code</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">member handle.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In <code class="docutils literal"><span class="pre">action_params</span></code>, action parameters must be <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.act_prof_delete_group">
+<code class="descname">act_prof_delete_group</code><span class="sig-paren">(</span><em>act_prof_name</em>, <em>grp_handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.act_prof_delete_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.act_prof_delete_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a group from an action profile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>act_prof_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action profile</li>
+<li><strong>grp_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – group handle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.act_prof_delete_member">
+<code class="descname">act_prof_delete_member</code><span class="sig-paren">(</span><em>act_prof_name</em>, <em>mbr_handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.act_prof_delete_member"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.act_prof_delete_member" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a member in an action profile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>act_prof_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action profile</li>
+<li><strong>mbr_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – member handle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.act_prof_dump">
+<code class="descname">act_prof_dump</code><span class="sig-paren">(</span><em>act_prof_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.act_prof_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.act_prof_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays entries in an action profile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>act_prof_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action profile</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.act_prof_dump_group">
+<code class="descname">act_prof_dump_group</code><span class="sig-paren">(</span><em>act_prof_name</em>, <em>grp_handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.act_prof_dump_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.act_prof_dump_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays some information about a group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>act_prof_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action profile</li>
+<li><strong>grp_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – group handle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.act_prof_dump_member">
+<code class="descname">act_prof_dump_member</code><span class="sig-paren">(</span><em>act_prof_name</em>, <em>mbr_handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.act_prof_dump_member"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.act_prof_dump_member" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays some information about a member.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>act_prof_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action profile</li>
+<li><strong>mbr_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – member handle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.act_prof_modify_member">
+<code class="descname">act_prof_modify_member</code><span class="sig-paren">(</span><em>act_prof_name</em>, <em>action_name</em>, <em>mbr_handle</em>, <em>action_params=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.act_prof_modify_member"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.act_prof_modify_member" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modifies member in an action profile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>act_prof_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action profile</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action</li>
+<li><strong>mbr_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – member handle</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of action parameters in the
+order they appear in the P4 code</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">member handle.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In <code class="docutils literal"><span class="pre">action_params</span></code>, action parameters must be <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.act_prof_remove_member_from_group">
+<code class="descname">act_prof_remove_member_from_group</code><span class="sig-paren">(</span><em>act_prof_name</em>, <em>mbr_handle</em>, <em>grp_handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.act_prof_remove_member_from_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.act_prof_remove_member_from_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes member from group in action profile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>act_prof_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action profile</li>
+<li><strong>mbr_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – member handle</li>
+<li><strong>grp_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – group handle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.check_act_prof_ws">
+<code class="descname">check_act_prof_ws</code><span class="sig-paren">(</span><em>act_prof</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.check_act_prof_ws"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.check_act_prof_ws" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.check_has_pre">
+<code class="descname">check_has_pre</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.check_has_pre"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.check_has_pre" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.check_indirect">
+<code class="descname">check_indirect</code><span class="sig-paren">(</span><em>table</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.check_indirect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.check_indirect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.check_indirect_ws">
+<code class="descname">check_indirect_ws</code><span class="sig-paren">(</span><em>table</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.check_indirect_ws"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.check_indirect_ws" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.counter_read">
+<code class="descname">counter_read</code><span class="sig-paren">(</span><em>counter_name</em>, <em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.counter_read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.counter_read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads counter value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the counter</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index in the array of counters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p><code class="docutils literal"><span class="pre">(byte_count,</span> <span class="pre">packet_count)</span></code> where:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">byte_count</span></code> is the number of bytes counted;</li>
+<li><code class="docutils literal"><span class="pre">packet_count</span></code> is the number of bytes counted.</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.counter_reset">
+<code class="descname">counter_reset</code><span class="sig-paren">(</span><em>counter_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.counter_reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.counter_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets counter array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the counter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.counter_write">
+<code class="descname">counter_write</code><span class="sig-paren">(</span><em>counter_name</em>, <em>index</em>, <em>pkts=0</em>, <em>byts=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.counter_write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.counter_write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write counter value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the counter</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index in the array of counters (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of packets to write (default: <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of bytes to write (default: <code class="docutils literal"><span class="pre">0</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.create_match_to_handle_dict">
+<code class="descname">create_match_to_handle_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.create_match_to_handle_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.create_match_to_handle_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.dump_action_and_data">
+<code class="descname">dump_action_and_data</code><span class="sig-paren">(</span><em>action_name</em>, <em>action_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.dump_action_and_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.dump_action_and_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.dump_action_entry">
+<code class="descname">dump_action_entry</code><span class="sig-paren">(</span><em>a_entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.dump_action_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.dump_action_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.dump_groups">
+<code class="descname">dump_groups</code><span class="sig-paren">(</span><em>groups</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.dump_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.dump_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.dump_members">
+<code class="descname">dump_members</code><span class="sig-paren">(</span><em>members</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.dump_members"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.dump_members" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.dump_one_entry">
+<code class="descname">dump_one_entry</code><span class="sig-paren">(</span><em>table</em>, <em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.dump_one_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.dump_one_entry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.dump_one_group">
+<code class="descname">dump_one_group</code><span class="sig-paren">(</span><em>group</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.dump_one_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.dump_one_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.dump_one_member">
+<code class="descname">dump_one_member</code><span class="sig-paren">(</span><em>member</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.dump_one_member"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.dump_one_member" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_action_profs">
+<code class="descname">get_action_profs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_action_profs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_action_profs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_actions">
+<code class="descname">get_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_counter_arrays">
+<code class="descname">get_counter_arrays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_counter_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_counter_arrays" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_custom_crc_calcs">
+<code class="descname">get_custom_crc_calcs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_custom_crc_calcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_custom_crc_calcs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_handle_from_match">
+<code class="descname">get_handle_from_match</code><span class="sig-paren">(</span><em>table_name</em>, <em>match_keys</em>, <em>pop=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_handle_from_match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_handle_from_match" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_meter_arrays">
+<code class="descname">get_meter_arrays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_meter_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_meter_arrays" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_mgrp">
+<code class="descname">get_mgrp</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_mgrp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_mgrp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_node_handle">
+<code class="descname">get_node_handle</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_node_handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_node_handle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_parse_vsets">
+<code class="descname">get_parse_vsets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_parse_vsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_parse_vsets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_register_arrays">
+<code class="descname">get_register_arrays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_register_arrays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_register_arrays" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_res">
+<code class="descname">get_res</code><span class="sig-paren">(</span><em>type_name</em>, <em>name</em>, <em>res_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_res" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_suffix_lookup_map">
+<code class="descname">get_suffix_lookup_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_suffix_lookup_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_suffix_lookup_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_tables">
+<code class="descname">get_tables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_tables" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.get_thrift_services">
+<em class="property">static </em><code class="descname">get_thrift_services</code><span class="sig-paren">(</span><em>pre_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.get_thrift_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.get_thrift_services" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.load_new_config_file">
+<code class="descname">load_new_config_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.load_new_config_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.load_new_config_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads new JSON config.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the P4 compiled JSON file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.load_table_entries_match_to_handle">
+<code class="descname">load_table_entries_match_to_handle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.load_table_entries_match_to_handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.load_table_entries_match_to_handle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.load_table_to_all_names">
+<code class="descname">load_table_to_all_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.load_table_to_all_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.load_table_to_all_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.mc_dump">
+<code class="descname">mc_dump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.mc_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.mc_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dumps entries in multicast engine.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.mc_mgrp_create">
+<code class="descname">mc_mgrp_create</code><span class="sig-paren">(</span><em>mgrp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.mc_mgrp_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.mc_mgrp_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates multicast group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – multicast group id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">multicast group handle.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The multicast group handle is equal to the multicast group id.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.mc_mgrp_destroy">
+<code class="descname">mc_mgrp_destroy</code><span class="sig-paren">(</span><em>mgrp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.mc_mgrp_destroy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.mc_mgrp_destroy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroys multicast group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – multicast group id</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.mc_node_associate">
+<code class="descname">mc_node_associate</code><span class="sig-paren">(</span><em>mgrp</em>, <em>l1_hdl</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.mc_node_associate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.mc_node_associate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Associates node to multicast group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – multicast group id</li>
+<li><strong>l1_hdl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – node handle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.mc_node_create">
+<code class="descname">mc_node_create</code><span class="sig-paren">(</span><em>rid</em>, <em>ports</em>, <em>lags=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.mc_node_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.mc_node_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates multicast node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – replication id</li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of port numbers</li>
+<li><strong>lags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of lags</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">node handle.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.mc_node_destroy">
+<code class="descname">mc_node_destroy</code><span class="sig-paren">(</span><em>l1_hdl</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.mc_node_destroy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.mc_node_destroy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroys multicast node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>l1_hdl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – node handle</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.mc_node_dissociate">
+<code class="descname">mc_node_dissociate</code><span class="sig-paren">(</span><em>mgrp</em>, <em>l1_hdl</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.mc_node_dissociate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.mc_node_dissociate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dissociates node from multicast group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – multicast group handle</li>
+<li><strong>l1_hdl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – node handle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.mc_node_update">
+<code class="descname">mc_node_update</code><span class="sig-paren">(</span><em>l1_hdl</em>, <em>ports</em>, <em>lags=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.mc_node_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.mc_node_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates multicast node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>l1_hdl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – node handle</li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of port numbers</li>
+<li><strong>lags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of lags</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">node handle.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.mc_set_lag_membership">
+<code class="descname">mc_set_lag_membership</code><span class="sig-paren">(</span><em>lag_index</em>, <em>ports</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.mc_set_lag_membership"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.mc_set_lag_membership" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets lag membership of port list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lag_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – lag index</li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of port numbers</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.meter_array_set_rates">
+<code class="descname">meter_array_set_rates</code><span class="sig-paren">(</span><em>meter_name</em>, <em>rates</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.meter_array_set_rates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.meter_array_set_rates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures rates for an entire meter array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the meter</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal"><span class="pre">cir</span></code> and <code class="docutils literal"><span class="pre">pir</span></code> use units/second, <code class="docutils literal"><span class="pre">cbursts</span></code> and <code class="docutils literal"><span class="pre">pburst</span></code> use units
+where units is bytes or packets, depending on the meter type.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.meter_get_rates">
+<code class="descname">meter_get_rates</code><span class="sig-paren">(</span><em>meter_name</em>, <em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.meter_get_rates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.meter_get_rates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves rates for a meter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the meter</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index in the array of meters (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal"><span class="pre">cir</span></code> and <code class="docutils literal"><span class="pre">pir</span></code> use units/second, <code class="docutils literal"><span class="pre">cbursts</span></code> and <code class="docutils literal"><span class="pre">pburst</span></code> use units
+where units is bytes or packets, depending on the meter type.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.meter_set_rates">
+<code class="descname">meter_set_rates</code><span class="sig-paren">(</span><em>meter_name</em>, <em>index</em>, <em>rates</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.meter_set_rates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.meter_set_rates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures rates for a meter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the meter</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index in the array of meters (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal"><span class="pre">cir</span></code> and <code class="docutils literal"><span class="pre">pir</span></code> use units/second, <code class="docutils literal"><span class="pre">cbursts</span></code> and <code class="docutils literal"><span class="pre">pburst</span></code> use units
+where units is bytes or packets, depending on the meter type.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.parse_runtime_data">
+<code class="descname">parse_runtime_data</code><span class="sig-paren">(</span><em>action</em>, <em>action_params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.parse_runtime_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.parse_runtime_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.port_add">
+<code class="descname">port_add</code><span class="sig-paren">(</span><em>iface_name</em>, <em>port_num</em>, <em>pcap_path=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.port_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.port_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a port to the switch (behavior depends on device manager used).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>iface_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – interface name</li>
+<li><strong>port_num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – port number</li>
+<li><strong>pcap_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path where the <code class="docutils literal"><span class="pre">.pcap</span></code> files are saved (optional)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.port_remove">
+<code class="descname">port_remove</code><span class="sig-paren">(</span><em>port_num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.port_remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.port_remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a port from the switch (behavior depends on device manager used).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>port_num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – port number</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.ports_to_port_map_str">
+<code class="descname">ports_to_port_map_str</code><span class="sig-paren">(</span><em>ports</em>, <em>description='port'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.ports_to_port_map_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.ports_to_port_map_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.print_set_default">
+<code class="descname">print_set_default</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>runtime_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.print_set_default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.print_set_default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.print_table_add">
+<code class="descname">print_table_add</code><span class="sig-paren">(</span><em>match_key</em>, <em>action_name</em>, <em>runtime_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.print_table_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.print_table_add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.pvs_add">
+<code class="descname">pvs_add</code><span class="sig-paren">(</span><em>pvs_name</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.pvs_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.pvs_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a value to a parser value set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pvs_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the parser value set</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – value to add</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><em>BMv2</em> will not report an error if the value already exists.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.pvs_clear">
+<code class="descname">pvs_clear</code><span class="sig-paren">(</span><em>pvs_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.pvs_clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.pvs_clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes all values from a parser value set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pvs_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the parser value set</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.pvs_get">
+<code class="descname">pvs_get</code><span class="sig-paren">(</span><em>pvs_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.pvs_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.pvs_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves all values from a parser value set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pvs_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the parser value set</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">values of the parser value set</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Values are displayed in no particular order, one per line.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.pvs_remove">
+<code class="descname">pvs_remove</code><span class="sig-paren">(</span><em>pvs_name</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.pvs_remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.pvs_remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a value from a parser value set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pvs_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the parser value set</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – value to remove</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><em>BMv2</em> will not report an error if the value does not exist.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.register_read">
+<code class="descname">register_read</code><span class="sig-paren">(</span><em>register_name</em>, <em>index=None</em>, <em>show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.register_read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.register_read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads register value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>register_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the register</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index in the array of registers (if <strong>None</strong>, the
+whole array will be read)</li>
+<li><strong>show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable verbose output</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">register value or list of values.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.register_reset">
+<code class="descname">register_reset</code><span class="sig-paren">(</span><em>register_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.register_reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.register_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets all the cells in the register array to <code class="docutils literal"><span class="pre">0</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>register_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the register</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.register_write">
+<code class="descname">register_write</code><span class="sig-paren">(</span><em>register_name</em>, <em>index</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.register_write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.register_write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes register value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>register_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the register</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – index in the array of registers or
+<code class="docutils literal"><span class="pre">[start_index,</span> <span class="pre">end_index]</span></code></li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – value to write</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.reset_state">
+<code class="descname">reset_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.reset_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.reset_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets all state in the switch (table entries, registers, …), but P4 config is preserved.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.serialize_state">
+<code class="descname">serialize_state</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.serialize_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.serialize_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the switch state and dumps it to user-specified file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.set_crc16_parameters">
+<code class="descname">set_crc16_parameters</code><span class="sig-paren">(</span><em>name</em>, <em>polynomial</em>, <em>initial_remainder</em>, <em>final_xor_value</em>, <em>reflect_data</em>, <em>reflect_remainder</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.set_crc16_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.set_crc16_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the parameters for a custom <code class="docutils literal"><span class="pre">crc16</span></code> hash.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – hash name</li>
+<li><strong>polynomial</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – polynomial</li>
+<li><strong>intial_remainder</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – initial reminder</li>
+<li><strong>final_xor_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – final <em>xor</em> value</li>
+<li><strong>reflect_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – reflect data or do not</li>
+<li><strong>reflect_remainder</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – reflect remainder or do not</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.set_crc32_parameters">
+<code class="descname">set_crc32_parameters</code><span class="sig-paren">(</span><em>name</em>, <em>polynomial</em>, <em>initial_remainder</em>, <em>final_xor_value</em>, <em>reflect_data</em>, <em>reflect_remainder</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.set_crc32_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.set_crc32_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the parameters for a custom <code class="docutils literal"><span class="pre">crc32</span></code> hash.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name</li>
+<li><strong>polynomial</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – polynomial</li>
+<li><strong>intial_remainder</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – initial reminder</li>
+<li><strong>final_xor_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – final <em>xor</em> value</li>
+<li><strong>reflect_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – reflect data or do not</li>
+<li><strong>reflect_remainder</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – reflect remainder or do not</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.set_crc_parameters_common">
+<code class="descname">set_crc_parameters_common</code><span class="sig-paren">(</span><em>name</em>, <em>polynomial</em>, <em>initial_remainder</em>, <em>final_xor_value</em>, <em>reflect_data</em>, <em>reflect_remainder</em>, <em>crc_width=16</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.set_crc_parameters_common"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.set_crc_parameters_common" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.shell">
+<code class="descname">shell</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.shell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs a shell command.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.show_actions">
+<code class="descname">show_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.show_actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.show_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists actions defined in the P4 program.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.show_ports">
+<code class="descname">show_ports</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.show_ports"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.show_ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows the ports connected to the switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.show_pvs">
+<code class="descname">show_pvs</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.show_pvs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.show_pvs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists parser value sets defined in the P4 program.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.show_tables">
+<code class="descname">show_tables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.show_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.show_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists tables defined in the P4 program.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.swap_configs">
+<code class="descname">swap_configs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.swap_configs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.swap_configs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Swap the 2 existing configs, need to have called
+<a class="reference internal" href="#p4utils.utils.thrift_API.ThriftAPI.load_new_config_file" title="p4utils.utils.thrift_API.ThriftAPI.load_new_config_file"><code class="xref py py-meth docutils literal"><span class="pre">load_new_config_file()</span></code></a> before.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">switch_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.switch_info"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Shows some basic info about the switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_add">
+<code class="descname">table_add</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>match_keys</em>, <em>action_params=[]</em>, <em>prio=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds entry to a match table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action to execute</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of matches in the order they appear in the P4 code</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of action parameters in the
+order they appear in the P4 code</li>
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary matches</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">entry handle.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>In <code class="docutils literal"><span class="pre">action_params</span></code> and <code class="docutils literal"><span class="pre">match_keys</span></code>, action parameters and match keys
+must be <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>.</li>
+<li>A higher <code class="docutils literal"><span class="pre">prio</span></code> number indicates that the entry must be given higher
+priority when performing a table lookup.</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_clear">
+<code class="descname">table_clear</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears all entries in a match table (direct or indirect), but not the default entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_delete">
+<code class="descname">table_delete</code><span class="sig-paren">(</span><em>table_name</em>, <em>entry_handle</em>, <em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes entry from a match table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>entry_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – entry handle</li>
+<li><strong>quiet</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – disable verbose output</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_delete_match">
+<code class="descname">table_delete_match</code><span class="sig-paren">(</span><em>table_name</em>, <em>match_keys</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_delete_match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_delete_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes entry from a table using match keys.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of matches in the order they appear in the P4 code</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In <code class="docutils literal"><span class="pre">match_keys</span></code>, match keys must be <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This may not work with ternary matches and priority entries.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_dump">
+<code class="descname">table_dump</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays entries in a match-table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_dump_entry">
+<code class="descname">table_dump_entry</code><span class="sig-paren">(</span><em>table_name</em>, <em>entry_handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_dump_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_dump_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays some information about a table entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>entry_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – entry handle</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_dump_entry_from_key">
+<code class="descname">table_dump_entry_from_key</code><span class="sig-paren">(</span><em>table_name</em>, <em>match_keys</em>, <em>prio=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_dump_entry_from_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_dump_entry_from_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays some information about a table entry using match keys.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of matches in the order they appear in the P4 code</li>
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In <code class="docutils literal"><span class="pre">match_keys</span></code>, match keys must be <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_info">
+<code class="descname">table_info</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows info about a table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_modify">
+<code class="descname">table_modify</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>entry_handle</em>, <em>action_params=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_modify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_modify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modifies entry of a match table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action</li>
+<li><strong>entry_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – entry handle</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of action parameters in the
+order they appear in the P4 code</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">entry handle.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In <code class="docutils literal"><span class="pre">action_params</span></code>, action parameters must be <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_modify_match">
+<code class="descname">table_modify_match</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>match_keys</em>, <em>action_params=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_modify_match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_modify_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modifies entry of a match table using match keys.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the action</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of matches in the order they appear in the P4 code</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of action parameters in the
+order they appear in the P4 code</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">entry handle.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In <code class="docutils literal"><span class="pre">action_params</span></code>, action parameters must be <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_num_entries">
+<code class="descname">table_num_entries</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_num_entries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_num_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of entries in a match table (direct or indirect).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the number of entries in a table.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_reset_default">
+<code class="descname">table_reset_default</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_reset_default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_reset_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets default entry for a match table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_set_default">
+<code class="descname">table_set_default</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>action_params=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_set_default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_set_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets default action for a match table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the default action</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of parameters for the default action</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In <code class="docutils literal"><span class="pre">action_params</span></code>, action parameters must be <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_set_timeout">
+<code class="descname">table_set_timeout</code><span class="sig-paren">(</span><em>table_name</em>, <em>entry_handle</em>, <em>timeout_ms</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_set_timeout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_set_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a timeout in ms for a given entry; the table has to support timeouts.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
+<li><strong>entry_handle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – entry handle</li>
+<li><strong>timeout_ms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – entry timeout in ms</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.table_show_actions">
+<code class="descname">table_show_actions</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.table_show_actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.table_show_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists one table’s actions as per the P4 program.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.thrift_API.ThriftAPI.write_config_to_file">
+<code class="descname">write_config_to_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ThriftAPI.write_config_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ThriftAPI.write_config_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the JSON config currently used by the switch and dumps it to user-specified file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.thrift_API.UIn_BadIPv4Error">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">UIn_BadIPv4Error</code><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#UIn_BadIPv4Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.UIn_BadIPv4Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.thrift_API.UIn_Error" title="p4utils.utils.thrift_API.UIn_Error"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.UIn_Error</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.thrift_API.UIn_BadIPv6Error">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">UIn_BadIPv6Error</code><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#UIn_BadIPv6Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.UIn_BadIPv6Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.thrift_API.UIn_Error" title="p4utils.utils.thrift_API.UIn_Error"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.UIn_Error</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.thrift_API.UIn_BadMacError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">UIn_BadMacError</code><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#UIn_BadMacError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.UIn_BadMacError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.thrift_API.UIn_Error" title="p4utils.utils.thrift_API.UIn_Error"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.UIn_Error</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.thrift_API.UIn_BadParamError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">UIn_BadParamError</code><span class="sig-paren">(</span><em>info=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#UIn_BadParamError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.UIn_BadParamError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.thrift_API.UIn_Error" title="p4utils.utils.thrift_API.UIn_Error"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.UIn_Error</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.thrift_API.UIn_Error">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">UIn_Error</code><span class="sig-paren">(</span><em>info=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#UIn_Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.UIn_Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.thrift_API.UIn_MatchKeyError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">UIn_MatchKeyError</code><span class="sig-paren">(</span><em>info=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#UIn_MatchKeyError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.UIn_MatchKeyError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.thrift_API.UIn_Error" title="p4utils.utils.thrift_API.UIn_Error"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.UIn_Error</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.thrift_API.UIn_ResourceError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">UIn_ResourceError</code><span class="sig-paren">(</span><em>res_type</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#UIn_ResourceError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.UIn_ResourceError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.thrift_API.UIn_Error" title="p4utils.utils.thrift_API.UIn_Error"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.UIn_Error</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="p4utils.utils.thrift_API.UIn_RuntimeDataError">
+<em class="property">exception </em><code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">UIn_RuntimeDataError</code><span class="sig-paren">(</span><em>info=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#UIn_RuntimeDataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.UIn_RuntimeDataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.utils.thrift_API.UIn_Error" title="p4utils.utils.thrift_API.UIn_Error"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.UIn_Error</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.bytes_to_string">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">bytes_to_string</code><span class="sig-paren">(</span><em>byte_array</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#bytes_to_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.bytes_to_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.deprecated_act_prof">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">deprecated_act_prof</code><span class="sig-paren">(</span><em>substitute</em>, <em>with_selection=False</em>, <em>strictly_deprecated=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#deprecated_act_prof"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.deprecated_act_prof" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.enum">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">enum</code><span class="sig-paren">(</span><em>type_name</em>, <em>*sequential</em>, <em>**named</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#enum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.enum" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.handle_bad_input">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">handle_bad_input</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#handle_bad_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.handle_bad_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.handle_bad_input_mc">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">handle_bad_input_mc</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#handle_bad_input_mc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.handle_bad_input_mc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.hex_to_i16">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">hex_to_i16</code><span class="sig-paren">(</span><em>h</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#hex_to_i16"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.hex_to_i16" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.hex_to_i32">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">hex_to_i32</code><span class="sig-paren">(</span><em>h</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#hex_to_i32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.hex_to_i32" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.hexstr">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">hexstr</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#hexstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.hexstr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.i16_to_hex">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">i16_to_hex</code><span class="sig-paren">(</span><em>h</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#i16_to_hex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.i16_to_hex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.i32_to_hex">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">i32_to_hex</code><span class="sig-paren">(</span><em>h</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#i32_to_hex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.i32_to_hex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.int_to_bytes">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">int_to_bytes</code><span class="sig-paren">(</span><em>i</em>, <em>num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#int_to_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.int_to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.ipv4Addr_to_bytes">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">ipv4Addr_to_bytes</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ipv4Addr_to_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ipv4Addr_to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.ipv6Addr_to_bytes">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">ipv6Addr_to_bytes</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#ipv6Addr_to_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.ipv6Addr_to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.macAddr_to_bytes">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">macAddr_to_bytes</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#macAddr_to_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.macAddr_to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.parse_bool">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">parse_bool</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#parse_bool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.parse_bool" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.parse_match_key">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">parse_match_key</code><span class="sig-paren">(</span><em>table</em>, <em>key_fields</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#parse_match_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.parse_match_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.parse_param">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">parse_param</code><span class="sig-paren">(</span><em>input_str</em>, <em>bitwidth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#parse_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.parse_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.parse_pvs_value">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">parse_pvs_value</code><span class="sig-paren">(</span><em>input_str</em>, <em>bitwidth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#parse_pvs_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.parse_pvs_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.parse_runtime_data">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">parse_runtime_data</code><span class="sig-paren">(</span><em>action</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#parse_runtime_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.parse_runtime_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.printable_byte_str">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">printable_byte_str</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#printable_byte_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.printable_byte_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.table_error_name">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">table_error_name</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#table_error_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.table_error_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.thrift_API.thrift_connect">
+<code class="descclassname">p4utils.utils.thrift_API.</code><code class="descname">thrift_connect</code><span class="sig-paren">(</span><em>thrift_ip</em>, <em>thrift_port</em>, <em>services</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/thrift_API.html#thrift_connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.thrift_API.thrift_connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="p4utils.utils.topology.html" class="btn btn-neutral float-right" title="p4utils.utils.topology module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="p4utils.utils.task_scheduler.html" class="btn btn-neutral float-left" title="p4utils.utils.task_scheduler module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

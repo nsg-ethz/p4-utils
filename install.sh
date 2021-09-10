@@ -1,7 +1,7 @@
 #!/bin/bash
 
 install_p4utils() {
-    pip install -e "."
+    pip3 install -e "."
 }
 
 mx() {

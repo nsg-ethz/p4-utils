@@ -1,0 +1,1499 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.utils.sswitch_p4runtime_API &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../p4utils.html">P4-Utils API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>p4utils.utils.sswitch_p4runtime_API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for p4utils.utils.sswitch_p4runtime_API</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="sd">&quot;&quot;&quot;__ p4utils.utils.p4runtime_API.html</span>
+
+<span class="sd">This module provides a *P4Runtime API* for the *Simple Switch* target. It builds</span>
+<span class="sd">on the generic `P4Runtime API`__. The methods listed here were designed to be as</span>
+<span class="sd">close as possible (in the naming and in the signature) to those used in the </span>
+<span class="sd">:py:class:`~p4utils.utils.thrift_API.ThriftAPI`, so that passing to one method to the</span>
+<span class="sd">other is easier for the user.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="kn">import</span> <span class="nn">p4utils</span>
+<span class="kn">import</span> <span class="nn">p4utils.utils.p4runtime_API.api</span> <span class="k">as</span> <span class="nn">api</span>
+
+
+<div class="viewcode-block" id="CounterType"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.CounterType">[docs]</a><span class="nd">@enum</span><span class="o">.</span><span class="n">unique</span>
+<span class="k">class</span> <span class="nc">CounterType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Counter type according to *P4 Runtime Specification*. See `here`__ for details.</span>
+
+<span class="sd">    __ https://github.com/p4lang/p4runtime/blob/57bb925a30df02b5c492c2a16c29b0014b98fa7a/proto/p4/config/v1/p4info.proto#L278</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">unspecified</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nb">bytes</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">packets</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">both</span> <span class="o">=</span> <span class="mi">3</span></div>
+
+
+<div class="viewcode-block" id="handle_bad_input"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.handle_bad_input">[docs]</a><span class="k">def</span> <span class="nf">handle_bad_input</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Handles bad input.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        f (function): function or method to handle</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: **True** if the function was correctly executed, and **False** otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">handle</span></div>
+
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI">[docs]</a><span class="k">class</span> <span class="nc">SimpleSwitchP4RuntimeAPI</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;For a better documentation of the primitives and the assumptions used,</span>
+<span class="sd">    please take a look at:</span>
+
+<span class="sd">    - __ p4utils.utils.p4runtime_API.html</span>
+<span class="sd">    </span>
+<span class="sd">      `P4Runtime API subpackage`__</span>
+
+<span class="sd">    - __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html</span>
+
+<span class="sd">      `P4Runtime specification`__</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        device_id (int): switch *id*</span>
+<span class="sd">        grpc_port (int): the port the switch gRPC server is listening on</span>
+<span class="sd">        grpc_ip (int)  : the IP the switch gRPC server is listening on</span>
+<span class="sd">        p4rt_path (str): path to the P4Runtime Info file</span>
+<span class="sd">        json_path (str): path to the P4 JSON compiled file</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        FileNotFoundError: if ``p4rt_path`` or ``json_path`` are not specified, or invalid and</span>
+<span class="sd">                           the client cannot retrieve the relevant informations from the</span>
+<span class="sd">                           P4Runtime server.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        client (:py:class:`~p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient`)  : P4Runtime client instance.</span>
+<span class="sd">        context (:py:class:`~p4utils.utils.p4runtime_API.context.Context`)           : P4Runtime context containing the information about all the P4 objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span>
+                 <span class="n">grpc_port</span><span class="p">,</span>
+                 <span class="n">grpc_ip</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span>
+                 <span class="n">p4rt_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">json_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="n">device_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grpc_port</span> <span class="o">=</span> <span class="n">grpc_port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grpc_ip</span> <span class="o">=</span> <span class="n">grpc_ip</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p4rt_path</span> <span class="o">=</span> <span class="n">p4rt_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">json_path</span> <span class="o">=</span> <span class="n">json_path</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># The client will always attempt to retrieve the configuration info from the server.</span>
+            <span class="c1"># This works only if the switch has been configured via grpc at least once to avoid</span>
+            <span class="c1"># unwanted overwrites of the current configuration.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">device_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device_id</span><span class="p">,</span>
+                                                  <span class="n">grpc_addr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_ip</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_port</span><span class="p">))</span>
+
+        <span class="k">except</span> <span class="n">p4utils</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">p4runtime_API</span><span class="o">.</span><span class="n">p4runtime</span><span class="o">.</span><span class="n">P4RuntimeException</span><span class="p">:</span>
+            <span class="c1"># If the client fails to retrieve the configuration information from the server,</span>
+            <span class="c1"># it will establish the connection using the configuration files provided.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4rt_path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;No P4 runtime information file provided.&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;No P4 compiled JSON file provided.&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">device_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device_id</span><span class="p">,</span>
+                                                  <span class="n">grpc_addr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_ip</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_port</span><span class="p">),</span>
+                                                  <span class="n">config</span><span class="o">=</span><span class="n">api</span><span class="o">.</span><span class="n">FwdPipeConfig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4rt_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_path</span><span class="p">))</span>
+
+    <span class="c1">## Utils</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.parse_match_key"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_match_key">[docs]</a>    <span class="k">def</span> <span class="nf">parse_match_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">key_fields</span><span class="p">):</span>
+        <span class="n">match_keys_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">key_fields</span><span class="p">)):</span>
+            <span class="n">match_keys_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_name</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">key_fields</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">match_keys_dict</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.parse_action_param"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_action_param">[docs]</a>    <span class="k">def</span> <span class="nf">parse_action_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="p">):</span>
+        <span class="n">params_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">action_params</span><span class="p">)):</span>
+            <span class="n">params_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_param_name</span><span class="p">(</span><span class="n">action_name</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">action_params</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">params_dict</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.reset_state"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state">[docs]</a>    <span class="k">def</span> <span class="nf">reset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Resets the gRPC server of switch by establishing a new ``ForwardingPipelineConfig``.</span>
+
+<span class="sd">        __ https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668</span>
+<span class="sd">            </span>
+<span class="sd">        For further details about this method, please check `this`__. Indeed, </span>
+<span class="sd">        this method sends to the server a ``SetForwardingPipelineConfigRequest`` with</span>
+<span class="sd">        action ``VERIFY_AND_COMMIT``.</span>
+
+<span class="sd">        This method is buggy, please read the following warnings.</span>
+
+<span class="sd">        Warning:</span>
+<span class="sd">            Due to some bug in the implementation of the gRPC server, this command</span>
+<span class="sd">            does not fully erase all the forwarding state of the switch, but only resets the</span>
+<span class="sd">            server.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            - It is recommended to use :py:meth:`p4utils.utils.thrift_API.ThriftAPI.reset_state()` </span>
+<span class="sd">              to reset the forwarding states. Moreover, if you only use</span>
+<span class="sd">              the :py:class:`~p4utils.utils.thrift_API.ThriftAPI` to reset the switch, </span>
+<span class="sd">              the gRPC server will not be reset.</span>
+<span class="sd">            </span>
+<span class="sd">            - To do things properly, both methods need to be called </span>
+<span class="sd">              (the one from :py:class:`~p4utils.utils.thrift_API.ThriftAPI` and the one from </span>
+<span class="sd">              :py:class:`SimpleSwitchP4RuntimeAPI`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4rt_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;No P4 runtime information file provided.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;No P4 compiled JSON file provided.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Disconnect</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">teardown</span><span class="p">()</span>
+
+        <span class="c1"># Reconnect</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">device_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device_id</span><span class="p">,</span>
+                                              <span class="n">grpc_addr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_ip</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_port</span><span class="p">),</span>
+                                              <span class="n">config</span><span class="o">=</span><span class="n">api</span><span class="o">.</span><span class="n">FwdPipeConfig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4rt_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_path</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.teardown"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.teardown">[docs]</a>    <span class="k">def</span> <span class="nf">teardown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tears down gRPC connection with the switch server.&quot;&quot;&quot;</span>
+        <span class="n">api</span><span class="o">.</span><span class="n">teardown</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.get_digest_list"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_digest_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves ``DigestList`` and send back acknowledgment.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            timeout (int): time to wait for packet</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ``DigestList`` Protobuf Message or **None** if the timeout has expired and </span>
+<span class="sd">            no packet has been received.</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            __ https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543</span>
+
+<span class="sd">            See `here`__ for further details. If ``timeout`` is set to **None**, the</span>
+<span class="sd">            function will wait indefinitely.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_digest_list</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span></div>
+
+    <span class="c1">## Tables</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_add"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_add">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">table_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[],</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds entry to a match table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)    : name of the table</span>
+<span class="sd">            action_name (str)   : action to execute on hit</span>
+<span class="sd">            match_keys (list)   : values to match (each value is a :py:class:`str`)</span>
+<span class="sd">            action_params (list): parameters passed to action (each parameter is a :py:class:`str`)</span>
+<span class="sd">            prio (int)          : priority in ternary match</span>
+<span class="sd">            rates (list)        : ``[(cir, cburst), (pir, pburst)]`` (if **None**, the meter</span>
+<span class="sd">                                  is set to its default behavior, i.e. marks</span>
+<span class="sd">                                  all packets as **GREEN**)</span>
+<span class="sd">            pkts (int)          : number of packets to write (if **None**, the count</span>
+<span class="sd">                                  is not changed)</span>
+<span class="sd">            byts (int)          : number of bytes to write (if **None**, the count</span>
+<span class="sd">                                  is not changed)</span>
+<span class="sd">        </span>
+<span class="sd">        There are different kinds of matches:</span>
+
+<span class="sd">        - For *exact* match: ``&lt;value&gt;``</span>
+<span class="sd">        - For *ternary* match: ``&lt;value&gt;&amp;&amp;&amp;&lt;mask&gt;``</span>
+<span class="sd">        - For *LPM* match: ``&lt;value&gt;/&lt;mask&gt;``</span>
+<span class="sd">        - For *range* match: ``&lt;start&gt;..&lt;end&gt;``</span>
+
+<span class="sd">        There are three types of *counters*:</span>
+
+<span class="sd">        - **BYTES**, only the field ``byts`` is written and the value of ``pkts`` is ignored.</span>
+<span class="sd">        - **PACKETS**, only the field ``pkts`` is written and the value of ``byts`` is ignored.</span>
+<span class="sd">        - **PACKETS_AND_BYTES**, both ``byts`` and ``pkts`` are written.</span>
+
+<span class="sd">        There are two types of *meters*:</span>
+
+<span class="sd">        - **BYTES**, ``rates`` must be expressed in number of bytes per second.</span>
+<span class="sd">        - **PACKETS**, ``rates`` must be expressed in number of packets per second.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            - The ``rates`` field only applies if there is a direct meter attached</span>
+<span class="sd">              to the table.</span>
+<span class="sd">            - The ``pkts`` and ``byts`` fields only apply if there is a direct counter</span>
+<span class="sd">              attached to the table.</span>
+<span class="sd">            - The ``prio`` field must be set to a non-zero value if the match key includes </span>
+<span class="sd">              a ternary match or to zero otherwise.</span>
+<span class="sd">            - __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry</span>
+
+<span class="sd">              A higher ``prio`` number indicates that the entry must be given higher</span>
+<span class="sd">              priority when performing a table lookup (see `here`__ for details).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Adding entry to: &#39;</span><span class="o">+</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_keys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;match_keys is not a list.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_params</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;action_params is not a list.&#39;</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">TableEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)(</span><span class="n">action</span><span class="o">=</span><span class="n">action_name</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;match:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">):</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">match</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_match_key</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;table &quot;</span><span class="si">{}</span><span class="s1">&quot; has </span><span class="si">{}</span><span class="s1"> match keys, </span><span class="si">{}</span><span class="s1"> entered.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span>
+                                                                               <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">),</span>
+                                                                               <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)))</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;action: &#39;</span><span class="o">+</span><span class="n">action_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">action_params</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_param_len</span><span class="p">(</span><span class="n">action_name</span><span class="p">):</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_action_param</span><span class="p">(</span><span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;action &quot;</span><span class="si">{}</span><span class="s1">&quot; takes </span><span class="si">{}</span><span class="s1"> params, </span><span class="si">{}</span><span class="s1"> entered.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action_name</span><span class="p">,</span>
+                                                                              <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">action_name</span><span class="p">),</span>
+                                                                              <span class="nb">len</span><span class="p">(</span><span class="n">action_params</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">prio</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;priority: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prio</span><span class="p">))</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">prio</span>
+
+        <span class="c1"># DirectMeter</span>
+        <span class="k">if</span> <span class="n">rates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_meter</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                        <span class="c1"># Set rates</span>
+                        <span class="n">entry</span><span class="o">.</span><span class="n">meter_config</span><span class="o">.</span><span class="n">cir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">entry</span><span class="o">.</span><span class="n">meter_config</span><span class="o">.</span><span class="n">cburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="n">entry</span><span class="o">.</span><span class="n">meter_config</span><span class="o">.</span><span class="n">pir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">entry</span><span class="o">.</span><span class="n">meter_config</span><span class="o">.</span><span class="n">pburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;table </span><span class="si">{}</span><span class="s1"> has no direct meter attached.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">))</span>
+
+        <span class="c1"># DirectCounter</span>
+        <span class="k">if</span> <span class="n">pkts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_counter</span><span class="p">:</span>
+                <span class="n">direct_counter_type</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_counter</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">unit</span>
+                <span class="k">if</span> <span class="n">direct_counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">packets</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">counter_data</span><span class="o">.</span><span class="n">packet_count</span> <span class="o">=</span> <span class="n">pkts</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;table </span><span class="si">{}</span><span class="s1"> has no direct counter attached.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">byts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_counter</span><span class="p">:</span>
+                <span class="n">direct_counter_type</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_counter</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">unit</span>
+                <span class="k">if</span> <span class="n">direct_counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">bytes</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">counter_data</span><span class="o">.</span><span class="n">byte_count</span> <span class="o">=</span> <span class="n">byts</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;table </span><span class="si">{}</span><span class="s1"> has no direct counter attached.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">))</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_set_default"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_set_default">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">table_set_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;Sets default action for a match table.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)             : name of the table</span>
+<span class="sd">            action_name (str)            : action to execute on hit</span>
+<span class="sd">            action_params (list)         : parameters passed to action </span>
+<span class="sd">                                           (each parameter is a :py:class:`str`)</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources</span>
+<span class="sd">            </span>
+<span class="sd">            When setting the default entry, the configurations for</span>
+<span class="sd">            its direct resources will be reset to their defaults, according to `this`__.</span>
+<span class="sd">            </span>
+<span class="sd">        Warning:</span>
+<span class="sd">            For the current implementation, the specification is not followed and</span>
+<span class="sd">            direct resources are not reset when modifying a table entry.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Adding default action to: &#39;</span><span class="o">+</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_params</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;action_params is not a list.&#39;</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">TableEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)(</span><span class="n">action</span><span class="o">=</span><span class="n">action_name</span><span class="p">,</span> <span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;action: &#39;</span><span class="o">+</span><span class="n">action_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">action_params</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_param_len</span><span class="p">(</span><span class="n">action_name</span><span class="p">):</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_action_param</span><span class="p">(</span><span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;action &quot;</span><span class="si">{}</span><span class="s1">&quot; takes </span><span class="si">{}</span><span class="s1"> params, </span><span class="si">{}</span><span class="s1"> entered.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action_name</span><span class="p">,</span>
+                                                                              <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">action_name</span><span class="p">),</span>
+                                                                              <span class="nb">len</span><span class="p">(</span><span class="n">action_params</span><span class="p">)))</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_reset_default"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_reset_default">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">table_reset_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Resets default action for a match table.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str): name of the table</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-default-entry</span>
+
+<span class="sd">            When resetting the default entry, the configurations for</span>
+<span class="sd">            its direct resources will be reset to their defaults (see `here`__).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resetting default action of: &#39;</span><span class="o">+</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">TableEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)(</span><span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_delete_match"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_delete_match">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">table_delete_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Deletes an existing entry in a table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)  : name of the table</span>
+<span class="sd">            match_keys (list) : values to match (each value is a :py:class:`str`)</span>
+<span class="sd">            prio (int)        : priority in ternary match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Deleting entry of: &#39;</span><span class="o">+</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_keys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;match_keys is not a list.&#39;</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">TableEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;match:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">):</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">match</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_match_key</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;table &quot;</span><span class="si">{}</span><span class="s1">&quot; has </span><span class="si">{}</span><span class="s1"> match keys, </span><span class="si">{}</span><span class="s1"> entered.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span>
+                                                                               <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">),</span>
+                                                                               <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">prio</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;priority: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prio</span><span class="p">))</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">prio</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_modify_match"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_modify_match">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">table_modify_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">action_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">action_params</span><span class="o">=</span><span class="p">[],</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Modifies entry in a table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str)     : name of the table</span>
+<span class="sd">            action_name (str)    : action to execute on hit</span>
+<span class="sd">            match_keys (list)    : values to match (each value is a :py:class:`str`)</span>
+<span class="sd">            action_params (list) : parameters passed to action (each parameter is a :py:class:`str`)</span>
+<span class="sd">            prio (int)           : priority in ternary match</span>
+<span class="sd">            rates (list)         : ``[(cir, cburst), (pir, pburst)]`` (if **None**, the meter</span>
+<span class="sd">                                   is set to its default behavior, i.e. marks</span>
+<span class="sd">                                   all packets as **GREEN**)</span>
+<span class="sd">            pkts (int)           : number of packets to write (if **None**, the count</span>
+<span class="sd">                                   is not changed)</span>
+<span class="sd">            byts (int)           : number of bytes to write (if **None**, the count</span>
+<span class="sd">                                   is not changed)</span>
+
+<span class="sd">        There are three types of *counters*:</span>
+
+<span class="sd">        - **BYTES**, only the field ``byts`` is written and the value of ``pkts`` is ignored.</span>
+<span class="sd">        - **PACKETS**, only the field ``pkts`` is written and the value of ``byts`` is ignored.</span>
+<span class="sd">        - **PACKETS_AND_BYTES**, both ``byts`` and ``pkts`` are written.</span>
+
+<span class="sd">        There are two types of *meters*:</span>
+
+<span class="sd">        - **BYTES**, ``rates`` must be expressed in number of bytes per second.</span>
+<span class="sd">        - **PACKETS**, ``rates`` must be expressed in number of packets per second.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            - The ``rates`` field only applies if there is a direct meter attached</span>
+<span class="sd">              to the table.</span>
+<span class="sd">            - The ``pkts`` and ``byts`` fields only apply if there is a direct counter</span>
+<span class="sd">              attached to the table.</span>
+<span class="sd">            - __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources</span>
+
+<span class="sd">              When modifying the default entry, the configurations for its direct</span>
+<span class="sd">              resources will be reset to their defaults, according to `this`__.</span>
+<span class="sd">            - The ``prio`` field must be set to a non-zero value if the match key includes </span>
+<span class="sd">              a ternary match or to zero otherwise.</span>
+<span class="sd">            - __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry</span>
+
+<span class="sd">              A higher ``prio`` number indicates that the entry must be given higher</span>
+<span class="sd">              priority when performing a table lookup (see `here`__ for details).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Modifying entry of: &#39;</span><span class="o">+</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_keys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;match_keys is not a list.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action_params</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;action_params is not a list.&#39;</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">TableEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)(</span><span class="n">action</span><span class="o">=</span><span class="n">action_name</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;match:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">):</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">match</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_match_key</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;table &quot;</span><span class="si">{}</span><span class="s1">&quot; has </span><span class="si">{}</span><span class="s1"> match keys, </span><span class="si">{}</span><span class="s1"> entered.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span>
+                                                                             <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">),</span>
+                                                                             <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)))</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;action: &#39;</span><span class="o">+</span><span class="n">action_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">action_params</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_param_len</span><span class="p">(</span><span class="n">action_name</span><span class="p">):</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_action_param</span><span class="p">(</span><span class="n">action_name</span><span class="p">,</span> <span class="n">action_params</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;action &quot;</span><span class="si">{}</span><span class="s1">&quot; takes </span><span class="si">{}</span><span class="s1"> params, </span><span class="si">{}</span><span class="s1"> entered.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action_name</span><span class="p">,</span>
+                                                                            <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">action_name</span><span class="p">),</span>
+                                                                            <span class="nb">len</span><span class="p">(</span><span class="n">action_params</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">prio</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;priority: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prio</span><span class="p">))</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">prio</span>
+
+        <span class="c1"># DirectMeter</span>
+        <span class="k">if</span> <span class="n">rates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_meter</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                        <span class="c1"># Set rates</span>
+                        <span class="n">entry</span><span class="o">.</span><span class="n">meter_config</span><span class="o">.</span><span class="n">cir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">entry</span><span class="o">.</span><span class="n">meter_config</span><span class="o">.</span><span class="n">cburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="n">entry</span><span class="o">.</span><span class="n">meter_config</span><span class="o">.</span><span class="n">pir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">entry</span><span class="o">.</span><span class="n">meter_config</span><span class="o">.</span><span class="n">pburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;table </span><span class="si">{}</span><span class="s1"> has no direct meter attached.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">))</span>
+
+        <span class="c1"># DirectCounter</span>
+        <span class="k">if</span> <span class="n">pkts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_counter</span><span class="p">:</span>
+                <span class="n">direct_counter_type</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_counter</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">unit</span>
+                <span class="k">if</span> <span class="n">direct_counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">packets</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">counter_data</span><span class="o">.</span><span class="n">packet_count</span> <span class="o">=</span> <span class="n">pkts</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;table </span><span class="si">{}</span><span class="s1"> has no direct counter attached.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">byts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_counter</span><span class="p">:</span>
+                <span class="n">direct_counter_type</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_counter</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">unit</span>
+                <span class="k">if</span> <span class="n">direct_counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">bytes</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">counter_data</span><span class="o">.</span><span class="n">byte_count</span> <span class="o">=</span> <span class="n">byts</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;table </span><span class="si">{}</span><span class="s1"> has no direct counter attached.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">))</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.table_clear"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_clear">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">table_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Clears all entries in a match table (direct or indirect), </span>
+<span class="sd">        but not the default entry.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            table_name (str): name of the table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Deleting all entries of: &#39;</span><span class="o">+</span><span class="n">table_name</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">TableEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">delete</span><span class="p">())</span></div>
+
+    <span class="c1">## DirectCounters</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_counter_read"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_read">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">direct_counter_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reads direct counter values.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            direct_counter_name (str)   : name of the direct counter</span>
+<span class="sd">            match_keys (list)           : values to match (each value is a :py:class:`str`) used</span>
+<span class="sd">                                          to identify the entry</span>
+<span class="sd">            prio (int)                  : priority in ternary match (used to identify the table</span>
+<span class="sd">                                          entry to which the direct counter is attached)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: ``(byte_count, packet_count)`` where:</span>
+
+<span class="sd">            - ``byte_count`` is the number of bytes counted;</span>
+<span class="sd">            - ``packet_count`` is the number of packets counted.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry</span>
+
+<span class="sd">            P4Runtime does not distinguish between the different counter types, i.e. counters are</span>
+<span class="sd">            always considered of **PACKETS_AND_BYTES** and both values are returned. It is user&#39;s responsability</span>
+<span class="sd">            to use only the correct value (see `here`__).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reading direct counter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_counter_name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_keys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;match_keys is not a list.&#39;</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DirectCounterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="p">)</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_table_name</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;match:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">):</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">match</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_match_key</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;table &quot;</span><span class="si">{}</span><span class="s1">&quot; has </span><span class="si">{}</span><span class="s1"> match keys, </span><span class="si">{}</span><span class="s1"> entered.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span>
+                                                                               <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">),</span>
+                                                                               <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">prio</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;priority: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prio</span><span class="p">))</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">prio</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">byte_count</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">packet_count</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_counter_write"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_write">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">direct_counter_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Writes direct counter values. If no values are specified, the counter is reset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            direct_counter_name (str)   : name of the direct counter</span>
+<span class="sd">            match_keys (list)           : values to match (each value is a :py:class:`str`) used</span>
+<span class="sd">                                          to identify the entry</span>
+<span class="sd">            prio (int)                  : priority in ternary match (used to identify the table</span>
+<span class="sd">                                          entry to which the direct counter is attached)</span>
+<span class="sd">            pkts (int)                  : number of packets to write (default: 0)</span>
+<span class="sd">            byts (int)                  : number of bytes to write (default: 0)</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            There are three types of counters:</span>
+
+<span class="sd">            - **BYTES**, only the field ``byts`` is written and the value of ``pkts`` is ignored.</span>
+<span class="sd">            - **PACKETS**, only the field ``pkts`` is written and the value of ``byts`` is ignored.</span>
+<span class="sd">            - **PACKETS_AND_BYTES**, both ``byts`` and ``pkts`` are written.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Writing to direct counter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_counter_name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_keys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;match_keys is not a list.&#39;</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DirectCounterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="p">)</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_table_name</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;match:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">):</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">match</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_match_key</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;counter &quot;</span><span class="si">{}</span><span class="s1">&quot; has </span><span class="si">{}</span><span class="s1"> match keys, </span><span class="si">{}</span><span class="s1"> entered.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span>
+                                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">),</span>
+                                                                                 <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">prio</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;priority: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prio</span><span class="p">))</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">prio</span>
+        
+        <span class="n">direct_counter_type</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_counter_type</span>
+        <span class="k">if</span> <span class="n">direct_counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">packets</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">packet_count</span> <span class="o">=</span> <span class="n">pkts</span>
+        <span class="k">if</span> <span class="n">direct_counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">bytes</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">byte_count</span> <span class="o">=</span> <span class="n">byts</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_counter_reset"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_reset">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">direct_counter_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Resets all the direct counters values.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            direct_counter_name (str): name of the direct counter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resetting direct counter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_counter_name</span><span class="p">))</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DirectCounterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">direct_counter_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+            <span class="n">direct_counter_type</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_counter_type</span>
+            <span class="k">if</span> <span class="n">direct_counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">packets</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">packet_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">direct_counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">bytes</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">byte_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+        
+    <span class="c1">## DirectMeters</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_meter_array_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_array_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">direct_meter_array_set_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="p">,</span> <span class="n">rates</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Configures rates for an entire direct meter array.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            direct_meter_name (str): name of the direct meter</span>
+<span class="sd">            rates (list)           : ``[(cir, cburst), (pir, pburst)]``</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units </span>
+<span class="sd">            where units is bytes or packets, depending on the meter type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Setting direct meter array: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_meter_name</span><span class="p">))</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DirectMeterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                <span class="c1"># Set rates</span>
+                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">cir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">cburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">pir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">pburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>        </div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_meter_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">direct_meter_set_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rates</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Configures rates for a single direct meter entry.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            direct_meter_name (str)     : name of the direct meter</span>
+<span class="sd">            match_keys (list)           : values to match (each value is a :py:class:`str`)</span>
+<span class="sd">                                          used to identify the entry</span>
+<span class="sd">            prio (int)                  : priority in ternary match (used to identify the table</span>
+<span class="sd">                                          entry to which the direct meter is attached)</span>
+<span class="sd">            rates (list)                : ``[(cir, cburst), (pir, pburst)]`` (default: None, i.e.</span>
+<span class="sd">                                          all packets are marked as green)</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units </span>
+<span class="sd">            where units is bytes or packets, depending on the meter type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Setting direct meter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_meter_name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_keys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;match_keys is not a list.&#39;</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DirectMeterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="p">)</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_table_name</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;match:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">):</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">match</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_match_key</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;meter &quot;</span><span class="si">{}</span><span class="s1">&quot; has </span><span class="si">{}</span><span class="s1"> match keys, </span><span class="si">{}</span><span class="s1"> entered.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_meter_name</span><span class="p">,</span>
+                                                                               <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">),</span>
+                                                                               <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">prio</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;priority: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prio</span><span class="p">))</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">prio</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                <span class="c1"># Set rates</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">cir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">cburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">pir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">pburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.direct_meter_get_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_get_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">direct_meter_get_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">,</span> <span class="n">prio</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves rates for a direct meter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            direct_meter_name (str): name of the direct meter</span>
+<span class="sd">            match_keys (list)      : values to match (each value is a :py:class:`str`)</span>
+<span class="sd">                                     used to identify the entry</span>
+<span class="sd">            prio (int)             : priority in ternary match (used to identify the table</span>
+<span class="sd">        </span>
+<span class="sd">        Return:</span>
+<span class="sd">            list: ``[(cir, cburst), (pir, pburst)]`` if meter is configured, **None** otherwise</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units </span>
+<span class="sd">            where units is bytes or packets, depending on the meter type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reading rates of direct meter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_meter_name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">match_keys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;match_keys is not a list.&#39;</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DirectMeterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">direct_meter_name</span><span class="p">)</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_direct_table_name</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;match:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">):</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">match</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_match_key</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">match_keys</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;meter &quot;</span><span class="si">{}</span><span class="s1">&quot; has </span><span class="si">{}</span><span class="s1"> match keys, </span><span class="si">{}</span><span class="s1"> entered.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">direct_meter_name</span><span class="p">,</span>
+                                                                               <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get_mf_len</span><span class="p">(</span><span class="n">table_name</span><span class="p">),</span>
+                                                                               <span class="nb">len</span><span class="p">(</span><span class="n">match_keys</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">prio</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;priority: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prio</span><span class="p">))</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">table_entry</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">prio</span>
+
+        <span class="n">entry</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="p">[(</span><span class="n">entry</span><span class="o">.</span><span class="n">cir</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">cburst</span><span class="p">),</span> <span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">pir</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">pburst</span><span class="p">)]</span></div>
+
+    <span class="c1">## Counters</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.counter_read"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_read">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">counter_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reads counter value.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            counter_name (str): name of the counter</span>
+<span class="sd">            index (int)       : index of the counter to read (first element is at ``0``)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: ``(byte_count, packet_count)`` where:</span>
+
+<span class="sd">            - ``byte_count`` is the number of bytes counted;</span>
+<span class="sd">            - ``packet_count`` is the number of bytes counted.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-counterentry-directcounterentry</span>
+
+<span class="sd">            P4Runtime does not distinguish between the different counter types, i.e. counters are</span>
+<span class="sd">            always considered of **PACKETS_AND_BYTES** and both values are returned. It is user&#39;s responsability</span>
+<span class="sd">            to use only the correct value (see `here`__).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reading counter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">counter_name</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">CounterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;index: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+        
+        <span class="n">entry</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">byte_count</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">packet_count</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.counter_write"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_write">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">counter_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">pkts</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">byts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Writes counter values. If no values are specified, the counter is reset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            counter_name (str): name of the counter</span>
+<span class="sd">            index (int)       : index of the counter to write (first element is at ``0``)</span>
+<span class="sd">            pkts (int)        : number of packets to write (default: ``0``)</span>
+<span class="sd">            byts (int)        : number of bytes to write (default: ``0``)</span>
+<span class="sd">        </span>
+<span class="sd">        There are three types of counters:</span>
+
+<span class="sd">        - **BYTES**, only the field ``byts`` is written and the value of ``pkts`` is ignored.</span>
+<span class="sd">        - **PACKETS**, only the field ``pkts`` is written and the value of ``byts`` is ignored.</span>
+<span class="sd">        - **PACKETS_AND_BYTES**, both ``byts`` and ``pkts`` are written.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Writing to counter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">counter_name</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">CounterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;index: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+
+        <span class="n">counter_type</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_counter_type</span>
+        <span class="k">if</span> <span class="n">counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">packets</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">packet_count</span> <span class="o">=</span> <span class="n">pkts</span>
+        <span class="k">if</span> <span class="n">counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">bytes</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">byte_count</span> <span class="o">=</span> <span class="n">byts</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.counter_reset"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_reset">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">counter_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Resets all the counters values.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            counter_name (str): name of the counter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resetting counter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">counter_name</span><span class="p">))</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">CounterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">counter_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+            <span class="n">counter_type</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">_counter_type</span>
+            <span class="k">if</span> <span class="n">counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">packets</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">packet_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">counter_type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CounterType</span><span class="o">.</span><span class="n">bytes</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">CounterType</span><span class="o">.</span><span class="n">both</span><span class="o">.</span><span class="n">value</span><span class="p">]:</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">byte_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+    <span class="c1">## Meters</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.meter_array_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_array_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">meter_array_set_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">rates</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Configures rates for an entire meter array.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            meter_name (str): name of the meter</span>
+<span class="sd">            rates (list)    : ``[(cir, cburst), (pir, pburst)]``</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units </span>
+<span class="sd">            where units is bytes or packets, depending on the meter type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Setting meter array: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">meter_name</span><span class="p">))</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">MeterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                <span class="c1"># Set rates</span>
+                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">cir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">cburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">pir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">pburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>        </div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.meter_set_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_set_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">meter_set_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">rates</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Configures rates for a single  meter entry.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            meter_name (str): name of the meter</span>
+<span class="sd">            rates (list)    : ``[(cir, cburst), (pir, pburst)]`` (default: **None**, i.e.</span>
+<span class="sd">                              all packets are marked as **GREEN**)</span>
+<span class="sd">            index (int)     : index of the meter to set (first element is at ``0``)</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units </span>
+<span class="sd">            where units is bytes or packets, depending on the meter type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Setting meter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">meter_name</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">MeterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;index: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+                <span class="c1"># Set rates</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">cir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">cburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">pir</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">pburst</span> <span class="o">=</span> <span class="n">rates</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;rates is not in the specified format [(cir, cburst), (pir, pburst)].&#39;</span><span class="p">)</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.meter_get_rates"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_get_rates">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">meter_get_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves rates for a meter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            meter_name (str): name of the meter</span>
+<span class="sd">            index (int)     : index of the meter to read (first element is at ``0``)</span>
+<span class="sd">        </span>
+<span class="sd">        Return:</span>
+<span class="sd">            list: ``[(cir, cburst), (pir, pburst)]`` if meter is configured, **None** otherwise.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units </span>
+<span class="sd">            where units is bytes or packets, depending on the meter type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reading rates of meter: &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">meter_name</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">MeterEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">meter_name</span><span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;index: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+
+        <span class="n">entry</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="p">[(</span><span class="n">entry</span><span class="o">.</span><span class="n">cir</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">cburst</span><span class="p">),</span> <span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">pir</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">pburst</span><span class="p">)]</span></div>
+
+    <span class="c1">## MulticastGroups</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_mgrp_create"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_create">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">mc_mgrp_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[],</span> <span class="n">instances</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates multicast group.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mgrp (int)      : multicast group *id*</span>
+<span class="sd">            ports (list)    : list of port numbers to add to the multicast group</span>
+<span class="sd">                              (each port number is a :py:class:`int`)</span>
+<span class="sd">            instances (list): list of instances of the corresponding ports</span>
+<span class="sd">                              (each instance is a :py:class:`int`)</span>
+
+<span class="sd">        A replica is logically a tuple ``(port, instance)`` which has to be unique </span>
+<span class="sd">        within the same multicast group. Instances can be explicitly assigned to ports by </span>
+<span class="sd">        passing the list instances to this function. If the list instances is not</span>
+<span class="sd">        specified, then the instance number is set to ``0`` for all the replicas by default.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            ``mgrp`` must be larger than ``0``. If ``ports`` is an empty list, </span>
+<span class="sd">            then the packets are not multicasted to any port.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating multicast group: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mgrp</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">MulticastGroupEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ports</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;ports is not a list.&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">instances</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instances</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;instances is not a list.&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;instances and ports have different lengths.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">)):</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ports</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">instances</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">)):</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ports</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_mgrp_destroy"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_destroy">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">mc_mgrp_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Destroys multicast group.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mgrp (int): multicast group *id*</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            ``mgrp`` must be larger than ``0``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Destroying multicast group: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mgrp</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">MulticastGroupEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">)</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_set_replicas"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_set_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">mc_set_replicas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[],</span> <span class="n">instances</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets replicas for multicast group.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mgrp (int)      : multicast group *id*</span>
+<span class="sd">            ports (list)    : list of port numbers to add to the multicast group</span>
+<span class="sd">                              (each port number is a :py:class:`int`)</span>
+<span class="sd">            instances (list): list of instances of the corresponding ports</span>
+<span class="sd">                              (each instance is a :py:class:`int`)</span>
+
+<span class="sd">        A replica is logically a tuple ``(port, instance)`` which has to be unique </span>
+<span class="sd">        within the same multicast group. Instances can be explicitly assigned to ports by </span>
+<span class="sd">        passing the list instances to this function. If the list instances is not</span>
+<span class="sd">        specified, then the instance number is set to ``0`` for all the replicas by default.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            ``mgrp`` must be larger than ``0``. If ``ports`` is an empty list,</span>
+<span class="sd">            then the packets are not multicasted to any port.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Setting replicas of multicast group: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mgrp</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">MulticastGroupEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ports</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;ports is not a list.&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">instances</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instances</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;instances is not a list.&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;instances and ports have different lengths.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">)):</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ports</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">instances</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">)):</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ports</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.mc_get_replicas"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_get_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">mc_get_replicas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets replicas which belog to a multicast group.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mgrp (int): multicast group *id*</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: ``(ports, instances)`` where:</span>
+
+<span class="sd">            - ``ports`` is a list of port numbers of the multicast group;</span>
+<span class="sd">            - ``instances`` is list of instances of the corresponding ports.</span>
+
+<span class="sd">        A replica is logically a tuple ``(port, instance)`` which has to be unique </span>
+<span class="sd">        within the same multicast group. Instances can be explicitly assigned to ports by </span>
+<span class="sd">        passing the list instances to this function. If the list instances is not</span>
+<span class="sd">        specified, then the instance number is set to ``0`` for all the replicas by default.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            ``mgrp`` must be greater than ``0``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ports</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">instances</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Read MulticastGroup entries</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reading replicas of multicast group: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mgrp</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">MulticastGroupEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">mgrp</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="c1"># Get replicas</span>
+        <span class="n">replicas</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">replicas</span>
+        
+        <span class="k">for</span> <span class="n">replica</span> <span class="ow">in</span> <span class="n">replicas</span><span class="p">:</span>
+            <span class="n">ports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">replica</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+            <span class="n">instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">replica</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ports</span><span class="p">,</span> <span class="n">instances</span></div>
+
+    <span class="c1">## CloseSession</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cs_create"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_create">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">cs_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[],</span> <span class="n">instances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">packet_length</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a packet cloning session.</span>
+
+<span class="sd">        __ https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            session_id (int)    : clone session *id*</span>
+<span class="sd">            ports (list)        : list of port numbers to add to the clone session </span>
+<span class="sd">                                  (each port number is :py:class:`int`)</span>
+<span class="sd">            instances (list)    : list of instances of the corresponding ports</span>
+<span class="sd">                                  (each instance is :py:class:`int`)</span>
+<span class="sd">            cos (int)           : Class of Service (see `here`__)</span>
+<span class="sd">            packet_lentgth (int): maximal packet length in bytes (after which, packets are truncated)</span>
+
+<span class="sd">        A replica is logically a tuple ``(port, instance)`` which has to be unique </span>
+<span class="sd">        within the same multicast group. Instances can be explicitly assigned to ports by </span>
+<span class="sd">        passing the list instances to this function. If the list instances is not</span>
+<span class="sd">        specified, then the instance number is set to ``0`` for all the replicas by default.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            By default, ``packet_length`` is set to ``0`` i.e. no truncation happens and </span>
+<span class="sd">            ``cos`` is set to ``0`` (normal packet classification). If ``ports`` is</span>
+<span class="sd">            an empty list, then the packets are not cloned to any port.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating clone session: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">session_id</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">CloneSessionEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">session_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ports</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;ports is not a list.&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">instances</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instances</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;instances is not a list.&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;instances and ports have different lengths.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">)):</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ports</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">instances</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">)):</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ports</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">cos</span> <span class="o">=</span> <span class="n">cos</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">packet_length_bytes</span> <span class="o">=</span> <span class="n">packet_length</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cs_destroy"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_destroy">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">cs_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes a packet cloning session.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            session_id (int): clone session *id*</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Removing clone session: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">session_id</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">CloneSessionEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">session_id</span><span class="p">)</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cs_set_replicas"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_set_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">cs_set_replicas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[],</span> <span class="n">instances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">packet_length</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Configures a packet cloning session.</span>
+
+<span class="sd">        __ https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            session_id (int)    : clone session *id*</span>
+<span class="sd">            ports (list)        : list of port numbers to add to the clone session</span>
+<span class="sd">                                  (each port number is :py:class:`int`)</span>
+<span class="sd">            instances (list)    : list of instances of the corresponding ports</span>
+<span class="sd">                                  (each instance is :py:class:`int`)</span>
+<span class="sd">            cos (int)           : Class of Service (see `here`__)</span>
+<span class="sd">            packet_lentgth (int): maximal packet length in bytes (after which, packets are truncated)</span>
+
+<span class="sd">        A replica is logically a tuple ``(port, instance)`` which has to be unique </span>
+<span class="sd">        within the same multicast group. Instances can be explicitly assigned to ports by </span>
+<span class="sd">        passing the list instances to this function. If the list instances is not</span>
+<span class="sd">        specified, then the instance number is set to ``0`` for all the replicas by default.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            By default, the ``packet_length`` is set to ``0`` i.e. no truncation happens and </span>
+<span class="sd">            ``cos`` is set to ``0`` (normal packet classification). If ``ports`` is an empty </span>
+<span class="sd">            list, then the packets are not cloned to any port.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Setting replicas of clone session: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">session_id</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">CloneSessionEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">session_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ports</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;ports is not a list.&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">instances</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instances</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;instances is not a list.&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;instances and ports have different lengths.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">)):</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ports</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">instances</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">)):</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ports</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">cos</span> <span class="o">=</span> <span class="n">cos</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">packet_length_bytes</span> <span class="o">=</span> <span class="n">packet_length</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.cd_get_replicas"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cd_get_replicas">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">cd_get_replicas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets replicas which belog to a clone session.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            session_id (int): clone session id</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: ``(ports, instances)`` where:</span>
+
+<span class="sd">            - ``ports`` is a list of port numbers of the clone session;</span>
+<span class="sd">            - ``instances`` is a list of instances of the corresponding ports.</span>
+
+<span class="sd">        A replica is logically a tuple ``(port, instance)`` which has to be unique </span>
+<span class="sd">        within the same multicast group.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ports</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">instances</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Read MulticastGroup entries</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reading replicas of clone session: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">session_id</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">CloneSessionEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">session_id</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="c1"># Get replicas</span>
+        <span class="n">replicas</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">replicas</span>
+        
+        <span class="k">for</span> <span class="n">replica</span> <span class="ow">in</span> <span class="n">replicas</span><span class="p">:</span>
+            <span class="n">ports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">replica</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+            <span class="n">instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">replica</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ports</span><span class="p">,</span> <span class="n">instances</span></div>
+
+    <span class="c1">## Digests</span>
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.digest_enable"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_enable">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">digest_enable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">,</span> <span class="n">max_timeout_ns</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_list_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ack_timeout_ns</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enables and configure the digests generation of the switch.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            digest_name (str)   : name of the digest (the name is shown in the P4 runtime information file</span>
+<span class="sd">                                  generated by the compiler)</span>
+<span class="sd">            max_timeout_ns (int): the maximum server buffering delay in nanoseconds for an outstanding digest message</span>
+<span class="sd">            max_list_size (int) : the maximum digest list size (in number of digest messages) sent by the server</span>
+<span class="sd">                                  to the client as a single ``DigestList`` Protobuf message</span>
+<span class="sd">            ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement </span>
+<span class="sd">                                  from the client before new digest messages can be generated for the same learned data</span>
+
+<span class="sd">        By default, ``max_timeout_ns`` is set to ``0``, i.e. the server should generate a ``DigestList`` </span>
+<span class="sd">        message for every digest message generated by the data plane.</span>
+
+<span class="sd">        By default, ``max_list_size`` is set to ``1``, i.e. the server should generate a ``DigestList`` </span>
+<span class="sd">        message for every digest message generated by the data plane.</span>
+
+<span class="sd">        By default, ``ack_timeout_ns`` is set to ``0``, i.e. the cache of digests not yet acknowledged must </span>
+<span class="sd">        always be an empty set.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:</span>
+<span class="sd">            ``digest&lt;named_struct_type&gt;(1, {struct_field_1, struct_field_2, ...})`` where ``named_struct_type`` must </span>
+<span class="sd">            be explicited and previously defined. The name of the digest for the configuration&#39;s sake </span>
+<span class="sd">            is the name of the struct type (i.e. ``named_struct_type``).            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enabling digest: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">digest_name</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DigestEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">)</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">max_timeout_ns</span> <span class="o">=</span> <span class="n">max_timeout_ns</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">max_list_size</span> <span class="o">=</span> <span class="n">max_list_size</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">ack_timeout_ns</span> <span class="o">=</span> <span class="n">ack_timeout_ns</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.digest_set_conf"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_set_conf">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">digest_set_conf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">,</span> <span class="n">max_timeout_ns</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_list_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ack_timeout_ns</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Configures the digests generation of the switch.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            digest_name (str)   : name of the digest (the name is shown in the P4 runtime information file</span>
+<span class="sd">                                  generated by the compiler)</span>
+<span class="sd">            max_timeout_ns (int): the maximum server buffering delay in nanoseconds for an outstanding digest message</span>
+<span class="sd">            max_list_size (int) : the maximum digest list size (in number of digest messages) sent by the server</span>
+<span class="sd">                                  to the client as a single ``DigestList`` Protobuf message</span>
+<span class="sd">            ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement </span>
+<span class="sd">                                  from the client before new digest messages can be generated for the same learned data</span>
+
+<span class="sd">        By default, ``max_timeout_ns`` is set to ``0``, i.e. the server should generate a ``DigestList`` </span>
+<span class="sd">        message for every digest message generated by the data plane.</span>
+
+<span class="sd">        By default, ``max_list_size`` is set to ``1``, i.e. the server should generate a ``DigestList`` </span>
+<span class="sd">        message for every digest message generated by the data plane.</span>
+
+<span class="sd">        By default, ``ack_timeout_ns`` is set to ``0``, i.e. the cache of digests not yet acknowledged must </span>
+<span class="sd">        always be an empty set.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:</span>
+<span class="sd">            ``digest&lt;named_struct_type&gt;(1, {struct_field_1, struct_field_2, ...})`` where ``named_struct_type`` must </span>
+<span class="sd">            be explicited and previously defined. The name of the digest for the configuration&#39;s sake </span>
+<span class="sd">            is the name of the struct type (i.e. ``named_struct_type``).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Configuring digest: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">digest_name</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DigestEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">)</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">max_timeout_ns</span> <span class="o">=</span> <span class="n">max_timeout_ns</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">max_list_size</span> <span class="o">=</span> <span class="n">max_list_size</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">ack_timeout_ns</span> <span class="o">=</span> <span class="n">ack_timeout_ns</span>
+
+        <span class="n">entry</span><span class="o">.</span><span class="n">modify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleSwitchP4RuntimeAPI.digest_get_conf"><a class="viewcode-back" href="../../../p4utils.utils.sswitch_p4runtime_API.html#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_get_conf">[docs]</a>    <span class="nd">@handle_bad_input</span>
+    <span class="k">def</span> <span class="nf">digest_get_conf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enables and configure the digests generation of the switch.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            digest_name (str): name of the digest (the name is shown in the P4 runtime information file</span>
+<span class="sd">                                  generated by the compiler)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: ``(max_timeout_ns, max_list_size, ack_timeout_ns)`` where:</span>
+<span class="sd">                   </span>
+<span class="sd">            - ``max_timeout_ns`` is the maximum server buffering delay in nanoseconds for an outstanding digest message;</span>
+<span class="sd">            - ``max_list_size`` is the maximum digest list size (in number of digest messages) sent by the server</span>
+<span class="sd">              to the client as a single DigestList Protobuf message;</span>
+<span class="sd">            - ``ack_timeout_ns`` is the timeout in nanoseconds that a server must wait for a digest list acknowledgement</span>
+<span class="sd">              from the client before new digest messages can be generated for the same learned data.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:</span>
+<span class="sd">            ``digest&lt;named_struct_type&gt;(1, {struct_field_1, struct_field_2, ...})`` where ``named_struct_type`` must </span>
+<span class="sd">            be explicited and previously defined. The name of the digest for the configuration&#39;s sake </span>
+<span class="sd">            is the name of the struct type (i.e. ``named_struct_type``).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enabling digest: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">digest_name</span><span class="p">))</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DigestEntry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">digest_name</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="n">max_timeout_ns</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">max_timeout_ns</span>
+        <span class="n">max_list_size</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">max_list_size</span>
+        <span class="n">ack_timeout_ns</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">ack_timeout_ns</span>
+
+        <span class="k">return</span> <span class="n">max_timeout_ns</span><span class="p">,</span> <span class="n">max_list_size</span><span class="p">,</span> <span class="n">ack_timeout_ns</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

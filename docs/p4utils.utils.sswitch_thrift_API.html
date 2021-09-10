@@ -1,0 +1,465 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.utils.sswitch_thrift_API module &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="p4utils.utils.task_scheduler module" href="p4utils.utils.task_scheduler.html" />
+    <link rel="prev" title="p4utils.utils.sswitch_p4runtime_API module" href="p4utils.utils.sswitch_p4runtime_API.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="p4utils.html">P4-Utils API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="p4utils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="p4utils.mininetlib.html">p4utils.mininetlib package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="p4utils.utils.html">p4utils.utils package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="p4utils.utils.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="p4utils.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="p4utils.utils.html#module-p4utils.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="p4utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="p4utils.html#module-p4utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
+        
+          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
+        
+      <li>p4utils.utils.sswitch_thrift_API module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/nsg-ethz/p4-utils/blob/junota/docs/source/p4utils.utils.sswitch_thrift_API.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-p4utils.utils.sswitch_thrift_API">
+<span id="p4utils-utils-sswitch-thrift-api-module"></span><h1>p4utils.utils.sswitch_thrift_API module<a class="headerlink" href="#module-p4utils.utils.sswitch_thrift_API" title="Permalink to this headline">¶</a></h1>
+<p>This module provides the <em>Simple Switch Thrift API</em>. It builds
+on the generic <a class="reference external" href="p4utils.utils.thrift_API.html">Thrift API</a>. It is a modified version of
+<a class="reference external" href="https://github.com/p4lang/behavioral-model/blob/main/targets/simple_switch/sswitch_CLI.py">sswitch_CLI.py</a> from behavioral model.</p>
+<dl class="class">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI">
+<em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_thrift_API.</code><code class="descname">SimpleSwitchThriftAPI</code><span class="sig-paren">(</span><em>thrift_port</em>, <em>thrift_ip='localhost'</em>, <em>json_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI</span></code></a></p>
+<p>Simple Switch <em>Thrift</em> control plane API.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>thrift_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – port to connect to</li>
+<li><strong>thrift_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – IP the <em>Thrift</em> server is listening on</li>
+<li><strong>json_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – optional JSON compiled P4 file to push to the switch</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.sswitch_client">
+<code class="descname">sswitch_client</code><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.sswitch_client" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Thrift</em> client instance to communicate with the switch</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_thrift_services">
+<em class="property">static </em><code class="descname">get_thrift_services</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.get_thrift_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_thrift_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get available <em>Thrift</em> services.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_elapsed">
+<code class="descname">get_time_elapsed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.get_time_elapsed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_elapsed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints time elapsed (in microseconds) since the switch started.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_since_epoch">
+<code class="descname">get_time_since_epoch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.get_time_since_epoch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_since_epoch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints time elapsed (in microseconds) since the switch clock’s epoch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add">
+<code class="descname">mirroring_add</code><span class="sig-paren">(</span><em>mirror_id</em>, <em>egress_port</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.mirroring_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds mirroring mapping.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mirror_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – <em>mirror id</em> to use</li>
+<li><strong>egress_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – <em>egress port</em> to associate with the mirror</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_mc">
+<code class="descname">mirroring_add_mc</code><span class="sig-paren">(</span><em>mirror_id</em>, <em>mgrp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.mirroring_add_mc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_mc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds mirroring session to multicast group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mirror_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – <em>mirror id</em> to associate</li>
+<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – <em>multicast group</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_port_and_mgrp">
+<code class="descname">mirroring_add_port_and_mgrp</code><span class="sig-paren">(</span><em>mirror_id</em>, <em>egress_port</em>, <em>mgrp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.mirroring_add_port_and_mgrp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_port_and_mgrp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds mirroring session to multicast group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mirror_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – <em>mirror id</em> to use</li>
+<li><strong>egress_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – <em>egress port</em> to associate with the mirror</li>
+<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – <em>multicast group</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_delete">
+<code class="descname">mirroring_delete</code><span class="sig-paren">(</span><em>mirror_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.mirroring_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes mirroring mapping.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mirror_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – <em>id</em> of the mirror to delete</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_get">
+<code class="descname">mirroring_get</code><span class="sig-paren">(</span><em>mirror_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.mirroring_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints mirroring session information</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mirror_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – <em>id</em> of the mirror to display</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.parse_int">
+<code class="descname">parse_int</code><span class="sig-paren">(</span><em>arg</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.parse_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.parse_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to convert the argument to <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>arg</strong> – argument that can be converted to <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the argument</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">integer value of the argument</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.UIn_Error" title="p4utils.utils.thrift_API.UIn_Error"><code class="xref py py-exc docutils literal"><span class="pre">p4utils.utils.thrift_API.UIn_Error</span></code></a> – if the argument cannot be transformed in
+an integer.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_depth">
+<code class="descname">set_queue_depth</code><span class="sig-paren">(</span><em>queue_depth</em>, <em>egress_port=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.set_queue_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets depth of one / all egress queue(s).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>queue_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of packets</li>
+<li><strong>egress_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – optional <em>egress port</em>, otherwise all ports
+are considered</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_rate">
+<code class="descname">set_queue_rate</code><span class="sig-paren">(</span><em>rate</em>, <em>egress_port=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#SimpleSwitchThriftAPI.set_queue_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets rate of one / all egress queue(s).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – rate (packets per seconds)</li>
+<li><strong>egress_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – optional <em>egress port</em>, otherwise all ports
+are considered</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.utils.sswitch_thrift_API.handle_bad_input">
+<code class="descclassname">p4utils.utils.sswitch_thrift_API.</code><code class="descname">handle_bad_input</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/sswitch_thrift_API.html#handle_bad_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.handle_bad_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles bad input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<em>function</em>) – function or method to handle</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if the function was correctly executed, and <strong>False</strong> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="p4utils.utils.task_scheduler.html" class="btn btn-neutral float-right" title="p4utils.utils.task_scheduler module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="p4utils.utils.sswitch_p4runtime_API.html" class="btn btn-neutral float-left" title="p4utils.utils.sswitch_p4runtime_API module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,720 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.p4run module &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="p4utils.utils.traffic_utils module" href="p4utils.utils.traffic_utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="p4utils.html">P4-Utils API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="p4utils.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="p4utils.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">p4utils.p4run module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="p4utils.html#module-p4utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
+        
+      <li>p4utils.p4run module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/nsg-ethz/p4-utils/blob/junota/docs/source/p4utils.p4run.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-p4utils.p4run">
+<span id="p4utils-p4run-module"></span><h1>p4utils.p4run module<a class="headerlink" href="#module-p4utils.p4run" title="Permalink to this headline">¶</a></h1>
+<p>This module is responsible for the legacy network configuration method that makes
+use of JSON files. Indeed, it uses the information contained within it to start and
+configure all the components of the virtualized network.</p>
+<dl class="class">
+<dt id="p4utils.p4run.AppRunner">
+<em class="property">class </em><code class="descclassname">p4utils.p4run.</code><code class="descname">AppRunner</code><span class="sig-paren">(</span><em>conf_file</em>, <em>cli_enabled=True</em>, <em>log_dir=None</em>, <em>pcap_dir=None</em>, <em>verbosity='info'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.network_API.NetworkAPI</span></code></a></p>
+<p>Class used to run P4 applications from a JSON configuration file.</p>
+<p>The <code class="docutils literal"><span class="pre">AppRunner</span></code> creates a <em>Mininet</em> network reading information from the JSON
+configuration file. It also specifies whether logs and sniffed packets are to be
+saved on the disk at some location.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>conf_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – a JSON file which describes the <em>Mininet</em> topology</li>
+<li><strong>cli_enabled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable <em>Mininet</em> CLI</li>
+<li><strong>log_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – directory for <em>Mininet</em> log files</li>
+<li><strong>pcap_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – directory where to store pcap files</li>
+<li><strong>verbosity</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – amount of information shown during the execution</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p id="verbosity">Possible <strong>verbosity</strong> values, listed from the most to less verbose, are the following:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">debug</span></code></li>
+<li><code class="docutils literal"><span class="pre">info</span></code></li>
+<li><code class="docutils literal"><span class="pre">output</span></code></li>
+<li><code class="docutils literal"><span class="pre">warning</span></code></li>
+<li><code class="docutils literal"><span class="pre">warn</span></code></li>
+<li><code class="docutils literal"><span class="pre">error</span></code></li>
+<li><code class="docutils literal"><span class="pre">critical</span></code></li>
+</ul>
+<p class="rubric">Example</p>
+<p>The structure of the <strong>JSON</strong> network configuration file parsed by the <code class="docutils literal"><span class="pre">AppRunner</span></code> is
+the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;p4_src&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">gobal</span> <span class="n">p4</span> <span class="n">source</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+    <span class="s2">&quot;cli&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
+    <span class="s2">&quot;pcap_dump&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
+    <span class="s2">&quot;enable_log&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
+    <span class="s2">&quot;tasks_file&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">tasks</span> <span class="n">file</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+    <span class="s2">&quot;host_node&quot;</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;switch_node&quot;</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;router_node&quot;</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;compiler_module&quot;</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">options</span> <span class="n">passed</span> <span class="n">to</span> <span class="n">init</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;client_module&quot;</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">options</span> <span class="n">passed</span> <span class="n">to</span> <span class="n">init</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;mininet_module&quot;</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">module</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">file</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="nb">object</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;exec_scripts&quot;</span><span class="p">:</span>
+    <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;cmd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">script</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+            <span class="s2">&quot;reboot_run&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="p">},</span>
+        <span class="o">...</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;topology&quot;</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;assignment_strategy&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">assignment</span> <span class="n">strategy</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="o">&lt;</span><span class="n">default</span> <span class="n">links</span> <span class="ow">and</span> <span class="n">hosts</span> <span class="n">configurations</span><span class="p">,</span> <span class="n">see</span> <span class="n">parse_links</span><span class="o">&gt;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;links&quot;</span><span class="p">:</span>
+        <span class="p">[</span>
+            <span class="o">&lt;</span><span class="n">see</span> <span class="n">parse_links</span><span class="o">&gt;</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;hosts&quot;</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="o">&lt;</span><span class="n">see</span> <span class="n">parse_hosts</span><span class="o">&gt;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;switches&quot;</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="o">&lt;</span><span class="n">see</span> <span class="n">parse_switch</span><span class="o">&gt;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;routers&quot;</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="o">&lt;</span><span class="n">see</span> <span class="n">parse_routers</span><span class="o">&gt;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Inside the network configuration file, several modules and nodes
+JSON objects can be present. These are the possible values:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">host_node</span></code> loads an extension to <em>Mininet</em> node class into the <a class="reference external" href="#p4utils.p4run.AppRunner.host_node">homonymous
+attribute</a>.</li>
+<li><code class="docutils literal"><span class="pre">switch_node</span></code> loads an extension to <em>Mininet</em> switch node class into the
+<a class="reference external" href="#p4utils.p4run.AppRunner.switch_node">homonymous attribute</a>.</li>
+<li><code class="docutils literal"><span class="pre">router_node</span></code> loads an extension to <em>Mininet</em> node class
+into the <a class="reference external" href="#p4utils.p4run.AppRunner.router_node">homonymous attribute</a>.</li>
+<li><code class="docutils literal"><span class="pre">mininet_module</span></code> loads an extension to <em>Mininet</em> network class.</li>
+<li><code class="docutils literal"><span class="pre">compiler_module</span></code> loads the external P4 compiler class.</li>
+<li><code class="docutils literal"><span class="pre">client_module</span></code> loads the external <em>Thrift</em> client class.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">None of the modules or nodes are mandatory. In case they are not specified,
+default settings will be used. For further information about how these modules
+are imported and the related JSON syntax, please check out <a class="reference external" href="p4utils.utils.helper.html#p4utils.utils.helper.load_custom_object">this</a> helper function.</p>
+</div>
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.cli_enabled">
+<code class="descname">cli_enabled</code><a class="headerlink" href="#p4utils.p4run.AppRunner.cli_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a> – enable an extension to <em>Mininet</em> CLI after the network starts.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.log_enabled">
+<code class="descname">log_enabled</code><a class="headerlink" href="#p4utils.p4run.AppRunner.log_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a> – enable saving log files to the disk.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.log_dir">
+<code class="descname">log_dir</code><a class="headerlink" href="#p4utils.p4run.AppRunner.log_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> – directory used to store log files.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.pcap_dump">
+<code class="descname">pcap_dump</code><a class="headerlink" href="#p4utils.p4run.AppRunner.pcap_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a> – generate <code class="docutils literal"><span class="pre">.pcap</span></code> files for interfaces.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.pcap_dir">
+<code class="descname">pcap_dir</code><a class="headerlink" href="#p4utils.p4run.AppRunner.pcap_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> – directory where to store <code class="docutils literal"><span class="pre">.pcap</span></code> files.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.hosts">
+<code class="descname">hosts</code><a class="headerlink" href="#p4utils.p4run.AppRunner.hosts" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of host and their properties.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.switches">
+<code class="descname">switches</code><a class="headerlink" href="#p4utils.p4run.AppRunner.switches" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of switches and their properties.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.routers">
+<code class="descname">routers</code><a class="headerlink" href="#p4utils.p4run.AppRunner.routers" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of routers and their properties.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.links">
+<code class="descname">links</code><a class="headerlink" href="#p4utils.p4run.AppRunner.links" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of mininet links and their properties.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.clients">
+<code class="descname">clients</code><a class="headerlink" href="#p4utils.p4run.AppRunner.clients" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> – list of <em>Thrift</em> clients (one per P4 switch) to populate tables.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.compilers">
+<code class="descname">compilers</code><a class="headerlink" href="#p4utils.p4run.AppRunner.compilers" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> – list of compiler instances (one per P4 source provided) to compile P4 code.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.conf">
+<code class="descname">conf</code><a class="headerlink" href="#p4utils.p4run.AppRunner.conf" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – parsed configuration from the JSON configuration file.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.net">
+<code class="descname">net</code><a class="headerlink" href="#p4utils.p4run.AppRunner.net" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-class docutils literal"><span class="pre">mininet.net.Mininet</span></code> – network instance implemented using an extension to <em>Mininet</em> network class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.host_node">
+<code class="descname">host_node</code><a class="headerlink" href="#p4utils.p4run.AppRunner.host_node" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a> – extension to <em>Mininet</em> node class used as default host class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.switch_node">
+<code class="descname">switch_node</code><a class="headerlink" href="#p4utils.p4run.AppRunner.switch_node" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a> – extension to <em>Mininet</em> switch node class used as default switch class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.p4run.AppRunner.router_node">
+<code class="descname">router_node</code><a class="headerlink" href="#p4utils.p4run.AppRunner.router_node" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a> – extension to <em>Mininet</em> node class used as default router class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.p4run.AppRunner.execute_scripts">
+<code class="descname">execute_scripts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner.execute_scripts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner.execute_scripts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the script listed in the JSON network configuration file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.p4run.AppRunner.parse_hosts">
+<code class="descname">parse_hosts</code><span class="sig-paren">(</span><em>unparsed_hosts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner.parse_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner.parse_hosts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses hosts from the JSON configuration files and add
+them to the network initializer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unparsed_host</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – dictionary of hosts and properties retrieved from
+the JSON network configuration file</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>Hosts have the following description in the <code class="docutils literal"><span class="pre">topology</span></code> field of the
+JSON network configuration file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;hosts&quot;</span><span class="p">:</span>
+<span class="p">{</span>
+    <span class="n">host_name</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;scheduler&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;socket_path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">dir</span> <span class="n">to</span> <span class="n">socket</span> <span class="n">file</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;defaultRoute&quot;</span><span class="p">:</span> <span class="s2">&quot;via &lt;gateway ip&gt;&quot;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;dhcp&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;log_enabled&quot;</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;log_dir&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">log</span> <span class="n">path</span> <span class="k">for</span> <span class="n">host</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;host_node&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">custom</span> <span class="n">host</span> <span class="n">node</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">None of the fields marked with <code class="docutils literal"><span class="pre">(*)</span></code> is mandatory. If they are not specified
+default values will be used.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.p4run.AppRunner.parse_links">
+<code class="descname">parse_links</code><span class="sig-paren">(</span><em>unparsed_links</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner.parse_links"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner.parse_links" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a list of links descriptions of the form.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>uparsed_links</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of links and properties retrieved from
+the JSON network configuration file</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>Links have the following description in the <code class="docutils literal"><span class="pre">topology</span></code> field of the
+JSON network configuration file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;links&quot;</span><span class="p">:</span>
+<span class="p">[</span>
+    <span class="p">[</span>
+        <span class="n">node1</span><span class="p">,</span>
+        <span class="n">node2</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">link</span> <span class="n">weight</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;port1&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">number</span> <span class="n">of</span> <span class="n">port1</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;port2&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">number</span> <span class="n">of</span> <span class="n">port2</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;intfName1&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">interface1</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;intfName2&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">interface2</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;addr1&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">mac</span> <span class="n">address</span> <span class="n">of</span> <span class="n">interface1</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;addr2&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">mac</span> <span class="n">address</span> <span class="n">of</span> <span class="n">interface2</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;params1&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">parameters</span> <span class="k">for</span> <span class="n">interface1</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;params2&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">parameters</span> <span class="k">for</span> <span class="n">interface2</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;bw&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">bandwidth</span> <span class="n">weight</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;delay&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">transmit</span> <span class="n">delay</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">link</span> <span class="n">data</span> <span class="n">loss</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+            <span class="s2">&quot;max_queue_size&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">max</span> <span class="n">queue</span> <span class="n">size</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="o">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>One can also specify default values for some links and hosts configuration parameters.
+In particular, this can be done by putting the following structure in the <code class="docutils literal"><span class="pre">topology</span></code> field of the
+JSON network configuration file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;default&quot;</span><span class="p">:</span>
+<span class="p">{</span>
+    <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">weight</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+    <span class="s2">&quot;bw&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">bandwidth</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+    <span class="s2">&quot;delay&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">transmit_delay</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+    <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">loss</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+    <span class="s2">&quot;max_queue_size&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">max_queue_size</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+    <span class="s2">&quot;auto_arp_tables&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+    <span class="s2">&quot;auto_gw_arp&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">None of the fields marked with <code class="docutils literal"><span class="pre">(*)</span></code> is mandatory. If they are not specified
+default values will be used.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.p4run.AppRunner.parse_routers">
+<code class="descname">parse_routers</code><span class="sig-paren">(</span><em>unparsed_routers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner.parse_routers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner.parse_routers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse hosts and add them to the network. Hosts have
+the following structure:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unparsed_routers</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – dictionary of routers and properties retrieved from
+the JSON network configuration file</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>Routers have the following description in the <code class="docutils literal"><span class="pre">topology</span></code> field of the
+JSON network configuration file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;routers&quot;</span><span class="p">:</span>
+<span class="p">{</span>
+    <span class="n">router_name</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;int_conf&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">router</span><span class="s1">&#39;s integrate configuration file&gt; (string),</span>
+        <span class="s2">&quot;conf_dir&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">directory</span> <span class="n">which</span> <span class="n">contains</span> <span class="n">the</span> <span class="n">folder</span>
+                    <span class="p">(</span><span class="n">named</span> <span class="n">after</span> <span class="n">the</span> <span class="n">router</span><span class="p">)</span> <span class="k">with</span> <span class="n">the</span> <span class="n">configuration</span>
+                    <span class="n">files</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">daemons</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">),</span>
+        <span class="s2">&quot;router_node&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">custom</span> <span class="n">router</span> <span class="n">node</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;zebra&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;bgpd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;ospfd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;ospf6d&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;ripd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;ripngd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;isisd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;pimd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;ldpd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;nhrpd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;eigrpd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;babeld&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;sharpd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;staticd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;pbrd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;bfdd&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;fabricd&quot;</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">None of the fields marked with <code class="docutils literal"><span class="pre">(*)</span></code> is mandatory. If they are not specified
+default values will be used. Moreover, if <code class="docutils literal"><span class="pre">int_conf</span></code> is specified,
+then <code class="docutils literal"><span class="pre">conf_dir</span></code> is ignored.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.p4run.AppRunner.parse_switches">
+<code class="descname">parse_switches</code><span class="sig-paren">(</span><em>unparsed_switches</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#AppRunner.parse_switches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.AppRunner.parse_switches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the switches and adds them to the network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unparsed_switches</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – dictionary of switches and properties retrieved from
+the JSON network configuration file</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>Switches have the following description in the <code class="docutils literal"><span class="pre">topology</span></code> field of the
+JSON network configuration file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;switches&quot;</span><span class="p">:</span>
+<span class="p">{</span>
+    <span class="n">switch_name</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;p4_src&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">p4</span> <span class="n">program</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;cpu_port&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;cli_input&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">cli</span> <span class="nb">input</span> <span class="n">file</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;switch_node&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">custom</span> <span class="n">switch</span> <span class="n">node</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">dict</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;log_enabled&quot;</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;log_dir&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">log</span> <span class="n">path</span> <span class="k">for</span> <span class="n">switch</span> <span class="n">binary</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;pcap_dump&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">true</span><span class="o">|</span><span class="n">false</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;pcap_dir&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">path</span> <span class="k">for</span> <span class="n">pcap</span> <span class="n">files</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;sw_bin&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">switch</span> <span class="n">binary</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;thrift_port&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">thrift</span> <span class="n">port</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">),</span>
+        <span class="s2">&quot;grpc_port&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">grpc</span> <span class="n">port</span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">None of the fields marked with <code class="docutils literal"><span class="pre">(*)</span></code> is mandatory. If they are not specified
+default values will be used.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.p4run.get_args">
+<code class="descclassname">p4utils.p4run.</code><code class="descname">get_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#get_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.get_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses command line options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">namespace containing all the argument parsed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.9)">argparse.Namespace</a></td>
+</tr>
+</tbody>
+</table>
+<p>Here is a complete list of the command line invocation options available with <code class="docutils literal"><span class="pre">p4run</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">--config</span></code> is the path to configuration (if it is not specified,
+it is assumed to be <code class="docutils literal"><span class="pre">./p4app.json</span></code>).</li>
+<li><code class="docutils literal"><span class="pre">--log-dir</span></code> is the path to log files (if it is not specified,
+it is assumed to be <code class="docutils literal"><span class="pre">./log</span></code>).</li>
+<li><code class="docutils literal"><span class="pre">--pcap-dir</span></code> is the path to the <code class="docutils literal"><span class="pre">.pcap</span></code> files generated for each switch interface
+(if it is not specified, it is assumed to be <code class="docutils literal"><span class="pre">./pcap</span></code>).</li>
+<li><code class="docutils literal"><span class="pre">--verbosity</span></code> specifies the desired verbosity of the output (if it is not specified,
+it is assumed to be set to <code class="docutils literal"><span class="pre">info</span></code>). Valid verbosity values are listed <a class="reference internal" href="#verbosity">here</a>.</li>
+<li><code class="docutils literal"><span class="pre">--no-cli</span></code> disables the <em>Mininet</em> client (it is enabled by default).</li>
+<li><code class="docutils literal"><span class="pre">--clean</span></code> cleans old log files, if specified.</li>
+<li><code class="docutils literal"><span class="pre">--clean-dir</span></code> cleans old log files and closes, if specified.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="p4utils.p4run.main">
+<code class="descclassname">p4utils.p4run.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/p4run.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.p4run.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleans up files created by old executions and starts the virtual network.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="p4utils.utils.traffic_utils.html" class="btn btn-neutral float-left" title="p4utils.utils.traffic_utils module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

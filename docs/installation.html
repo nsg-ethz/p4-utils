@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Installation &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#virtual-machine">Virtual Machine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-your-own-vm">Build your own VM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-our-preconfigured-vm">Use our preconfigured VM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-installation">Manual Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="p4utils.html">P4-Utils API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/nsg-ethz/p4-utils/blob/junota/docs/source/installation.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>In order to work, P4-Utils needs different programs coming from different sources as prerequisites.
+Since the installation process can be long and cumbersome, we provide different methods to make the
+deployment easier for the users:</p>
+<ul class="simple">
+<li><a class="reference external" href="#virtual-machine">virtual machine</a> configured to work with P4-Utils,</li>
+<li><a class="reference external" href="#manual-installation">manual installation</a> using an installation script.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Running P4-Utils in a completely separated environment can be beneficial: in this way, installation
+and execution errors, that may arise, will not affect the whole system. For this reason, we <strong>recommend</strong>
+using a <a class="reference external" href="#virtual-machine">virtual machine</a>.</p>
+</div>
+<div class="section" id="virtual-machine">
+<h2>Virtual Machine<a class="headerlink" href="#virtual-machine" title="Permalink to this headline">¶</a></h2>
+<p>P4-Utils can run in a virtual machine to keep its environment separated from the rest of the system.
+Moreover, since P4-Utils is only available on Linux, other OS users can run it in a linux VM.
+We provide two different solutions for the P4-Utils VM and both are supported by a wide range of
+operating systems:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.virtualbox.org/">VirtualBox</a></li>
+<li><a class="reference external" href="https://www.qemu.org/">QEMU</a></li>
+</ul>
+<p>You can choose to download and use one of our <a class="reference external" href="#use-our-preconfigured-vm">preconfigured VMs</a> or to <a class="reference external" href="#build-your-own-vm">build it by yourself</a>.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Whether you are building your own VM or you are using the preconfigured images, you still
+need to install one of the above virtualizer according to your VM choice.</p>
+</div>
+<div class="section" id="build-your-own-vm">
+<h3>Build your own VM<a class="headerlink" href="#build-your-own-vm" title="Permalink to this headline">¶</a></h3>
+<p>To get started, you need to install the required software:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.virtualbox.org/">VirtualBox</a> or <a class="reference external" href="https://www.qemu.org/">QEMU</a></li>
+<li><a class="reference external" href="https://www.packer.io/">Packer</a></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Packer is a handy framework designed to automatically build custom VM images.</p>
+</div>
+<p>Clone the P4-Utils repository:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+</pre></div>
+</div>
+<p>Go to the Packer configurations folder:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">vm</span>
+</pre></div>
+</div>
+<p>If you want to build the <em>VirtualBox VM</em>, execute:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="n">virtualbox</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">--</span><span class="n">cpus</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">disk_size</span> <span class="mi">25000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">memory</span> <span class="mi">4000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vm_name</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">username</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">password</span> <span class="n">p4</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>On the other hand, if you prefer the <em>QEMU VM</em>, run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="n">qemu</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">--</span><span class="n">cpus</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">disk_size</span> <span class="mi">25000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">memory</span> <span class="mi">4000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vm_name</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">username</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">password</span> <span class="n">p4</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>The default VMs configuration parameters are shown above. If you do not specify anything,
+they will be used to build your VM. However, please pass to the scripts the parameters
+that best fit your needs. In particular, we have that:</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">--cpus</span></code> specifies the <strong>number of cores</strong> to use,</li>
+<li><code class="docutils literal"><span class="pre">--disk_size</span></code> is the <strong>size of the disk</strong> reserved by the VM in MBytes,</li>
+<li><code class="docutils literal"><span class="pre">--memory</span></code> is the amount of <strong>RAM</strong> to assign to the VM in MBytes,</li>
+<li><code class="docutils literal"><span class="pre">--vm_name</span></code> is the <strong>name of the VM</strong>,</li>
+<li><code class="docutils literal"><span class="pre">--username</span></code> is the <strong>login username</strong>,</li>
+<li><code class="docutils literal"><span class="pre">--password</span></code> is the <strong>login password</strong>.</li>
+</ul>
+</div>
+<p>The building process will generate the following files:</p>
+<ul class="simple">
+<li>If you chose the QEMU VM, in <code class="docutils literal"><span class="pre">p4-utils/vm/output-ubuntu18044_qemu</span></code> you will find
+a <code class="docutils literal"><span class="pre">.qcow2</span></code> file to use to set up your VM.</li>
+<li>If you chose the VirtualBox VM, in <code class="docutils literal"><span class="pre">p4-utils/vm/output-ubuntu18044_vb</span></code> you will
+find an <code class="docutils literal"><span class="pre">.ova</span></code> file to import in the VirtualBox VM manager.</li>
+</ul>
+</div>
+<div class="section" id="use-our-preconfigured-vm">
+<h3>Use our preconfigured VM<a class="headerlink" href="#use-our-preconfigured-vm" title="Permalink to this headline">¶</a></h3>
+<p>To download our preconfiugred VMs, please click on the folllwing links:</p>
+<ul class="simple">
+<li><a class="reference external" href="#">VirtualBox VM</a></li>
+<li><a class="reference external" href="#">QEMU VM</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="manual-installation">
+<h2>Manual Installation<a class="headerlink" href="#manual-installation" title="Permalink to this headline">¶</a></h2>
+<p>If you have already installed all the <a class="reference external" href="#prerequisites">requirements</a>, you can simply
+install P4-Utils using the following commands:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+<span class="n">cd</span> <span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+<span class="n">sudo</span> <span class="o">./</span><span class="n">install</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>You can also uninstall it by running the command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">./</span><span class="n">uninstall</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>P4-Utils depends on the following programs in the given order:</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://github.com/p4lang/PI">PI LIBRARY REPOSITORY</a> provides an implementation framework
+for a P4Runtime server. <strong>It is required only for topologies with
+P4Runtime switches.</strong></li>
+<li><a class="reference external" href="https://github.com/p4lang/behavioral-model">BEHAVIORAL MODEL (bmv2)</a> contains the software implementation several
+variations of the behavioral model (e.g. <code class="docutils literal"><span class="pre">simple_switch</span></code> and
+<code class="docutils literal"><span class="pre">simple_switch_grpc</span></code>).</li>
+<li><a class="reference external" href="https://github.com/p4lang/p4c">p4c</a> is a reference compiler for the P4 programming language that
+supports both <strong>P4_14</strong> and <strong>P4_16</strong>.</li>
+<li><a class="reference external" href="https://github.com/mininet/mininet">Mininet</a> allows to create a realistic virtual network, running real
+kernel, switch and application code, on a single machine (VM, cloud or native).</li>
+<li><a class="reference external" href="https://github.com/FRRouting/FRR">FRRouting</a> is a free and open source Internet routing protocol suite
+for Linux and Unix platforms. It implements BGP, OSPF, RIP, IS-IS, PIM,
+LDP, BFD, Babel, PBR, OpenFabric and VRRP, with alpha support for EIGRP
+and NHRP. Router nodes in P4-Utils are based on FRRouting. <strong>It is required
+only for topologies with routers.</strong></li>
+</ol>
+<p>The manual installation process is quite long and cumbersome because of the
+dependencies that are needed by P4-Utils. For this reason, we provide a Bash
+script that automatically goes through every step.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The script has been tested with <strong>Ubuntu 18.04.4</strong> and the compiler
+<strong>GCC 7.5</strong>. Errors have been reported with newer versions.</p>
+</div>
+<p>In order to start the installation, you fist need to clone our repository:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+</pre></div>
+</div>
+<p>Then, you have to go to the installation folder:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">tools</span>
+</pre></div>
+</div>
+<p>Finally, you can run the installation script:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">./</span><span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>This will install P4-Utils together with all its requirements.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.mininetlib.node module &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="p4utils.utils package" href="p4utils.utils.html" />
+    <link rel="prev" title="p4utils.mininetlib.network_API module" href="p4utils.mininetlib.network_API.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="p4utils.html">P4-Utils API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="p4utils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="p4utils.mininetlib.html">p4utils.mininetlib package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="p4utils.mininetlib.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="p4utils.mininetlib.html#module-p4utils.mininetlib">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="p4utils.utils.html">p4utils.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="p4utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="p4utils.html#module-p4utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
+        
+          <li><a href="p4utils.mininetlib.html">p4utils.mininetlib package</a> &raquo;</li>
+        
+      <li>p4utils.mininetlib.node module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com/nsg-ethz/p4-utils/blob/junota/docs/source/p4utils.mininetlib.node.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-p4utils.mininetlib.node">
+<span id="p4utils-mininetlib-node-module"></span><h1>p4utils.mininetlib.node module<a class="headerlink" href="#module-p4utils.mininetlib.node" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="p4utils.mininetlib.node.FRRouter">
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">FRRouter</code><span class="sig-paren">(</span><em>name</em>, <em>bin_dir='/usr/local/sbin'</em>, <em>int_conf=None</em>, <em>conf_dir='./routers'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#FRRouter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.node.Node</span></code></p>
+<p>FRRouter built as Mininet node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the router</li>
+<li><strong>bin_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – directory that contains the daemons binaries</li>
+<li><strong>int_conf</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the router integrated configuration file</li>
+<li><strong>conf_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the directory which contains the folder with
+the configuration files for all the daemons (the folder
+is named after the router)</li>
+<li><strong>zebra</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable Zebra daemon</li>
+<li><strong>bgpd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable BGP protocol</li>
+<li><strong>ospfd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable OSPFv2 (for IPv4) protocol</li>
+<li><strong>ospf6d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable OSPFv3 (for IPv6) protocol</li>
+<li><strong>ripd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable RIP protocol</li>
+<li><strong>ripngd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable RIPng protocol</li>
+<li><strong>isisd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable IS-IS protocol</li>
+<li><strong>pimd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable PIM protocol</li>
+<li><strong>ldpd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable LPD protocol</li>
+<li><strong>nhrpd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable NHRP protocol</li>
+<li><strong>eigrpd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable EIGRP protocol</li>
+<li><strong>babeld</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable Babel protocol</li>
+<li><strong>sharpd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable SHARP daemon</li>
+<li><strong>staticd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable STATIC daemon</li>
+<li><strong>pbrd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable Policy Based Routing</li>
+<li><strong>bfdd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable Bidirectional Forwarding Detection</li>
+<li><strong>fabricd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – enable OpenFabric protocol</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Only the following daemons and protocols are enabled by default:</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">zebra</span></code></li>
+<li><code class="docutils literal"><span class="pre">ospfd</span></code></li>
+<li><code class="docutils literal"><span class="pre">bgpd</span></code></li>
+<li><code class="docutils literal"><span class="pre">staticd</span></code></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If <code class="docutils literal"><span class="pre">int_conf</span></code> is set, the content <code class="docutils literal"><span class="pre">conf_dir</span></code> is not considered except for
+<code class="docutils literal"><span class="pre">vtysh.conf</span></code> which is always taken into account.
+If <code class="docutils literal"><span class="pre">conf_dir</span></code> is not specified, then it is assumed to be <code class="docutils literal"><span class="pre">./routers</span></code>, and the
+folder which contains the configuration files is then <code class="docutils literal"><span class="pre">./routers/&lt;name&gt;</span></code>.</p>
+</div>
+<dl class="attribute">
+<dt id="p4utils.mininetlib.node.FRRouter.DAEMONS">
+<code class="descname">DAEMONS</code><em class="property"> = ['zebra', 'bgpd', 'ospfd', 'ospf6d', 'ripd', 'ripngd', 'isisd', 'pimd', 'ldpd', 'nhrpd', 'eigrpd', 'babeld', 'sharpd', 'staticd', 'pbrd', 'bfdd', 'fabricd']</em><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter.DAEMONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.FRRouter.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#FRRouter.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts the FRRouter node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.FRRouter.start_daemon">
+<code class="descname">start_daemon</code><span class="sig-paren">(</span><em>daemon</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#FRRouter.start_daemon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter.start_daemon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts a daemon on the router.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.FRRouter.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#FRRouter.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminates FRRouter.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.mininetlib.node.P4Host">
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">P4Host</code><span class="sig-paren">(</span><em>name</em>, <em>inNamespace=True</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Host"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.node.Host</span></code></p>
+<p>Virtual hosts with custom configuration to work with P4 switches.</p>
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Host.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Host.config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Host.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure host.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Host.describe">
+<code class="descname">describe</code><span class="sig-paren">(</span><em>sw_addr=None</em>, <em>sw_mac=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Host.describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Host.describe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe host.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.mininetlib.node.P4RuntimeSwitch">
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">P4RuntimeSwitch</code><span class="sig-paren">(</span><em>*args</em>, <em>sw_bin='simple_switch_grpc'</em>, <em>grpc_port=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4RuntimeSwitch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#p4utils.mininetlib.node.P4Switch" title="p4utils.mininetlib.node.P4Switch"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.node.P4Switch</span></code></a></p>
+<p>BMv2 switch with gRPC support</p>
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4RuntimeSwitch.add_arguments">
+<code class="descname">add_arguments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4RuntimeSwitch.add_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.add_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds arguments to the simple switch process</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4RuntimeSwitch.describe">
+<code class="descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4RuntimeSwitch.describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.describe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes P4RuntimeSwitch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4RuntimeSwitch.grpc_listening">
+<code class="descname">grpc_listening</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4RuntimeSwitch.grpc_listening"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.grpc_listening" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a grpc process listens on the grpc port.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4RuntimeSwitch.switch_status">
+<code class="descname">switch_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4RuntimeSwitch.switch_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.switch_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if all the switch processes have started correctly.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.mininetlib.node.P4Switch">
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">P4Switch</code><span class="sig-paren">(</span><em>name</em>, <em>device_id</em>, <em>sw_bin='simple_switch'</em>, <em>json_path=None</em>, <em>thrift_port=None</em>, <em>pcap_dump=False</em>, <em>pcap_dir=None</em>, <em>log_enabled=False</em>, <em>log_dir='/tmp'</em>, <em>enable_debugger=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.node.Switch</span></code></p>
+<p>P4 virtual switch</p>
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.add_arguments">
+<code class="descname">add_arguments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.add_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.add_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds arguments to the simple switch process</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.attach">
+<code class="descname">attach</code><span class="sig-paren">(</span><em>intf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.attach"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.attach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connects a data port.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.describe">
+<code class="descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.describe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes P4Switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.detach">
+<code class="descname">detach</code><span class="sig-paren">(</span><em>intf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.detach"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.detach" title="Permalink to this definition">¶</a></dt>
+<dd><p>“Disconnects a data port.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.set_binary">
+<code class="descname">set_binary</code><span class="sig-paren">(</span><em>sw_bin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.set_binary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.set_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets switch default binary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.set_json">
+<code class="descname">set_json</code><span class="sig-paren">(</span><em>json_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.set_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.set_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the compiled P4 JSON file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.start">
+<code class="descname">start</code><span class="sig-paren">(</span><em>controllers=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts a new P4 switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><em>deleteIntfs=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminates the P4 switch node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.stop_p4switch">
+<code class="descname">stop_p4switch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.stop_p4switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.stop_p4switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the simple switch binary without deleting the interfaces.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.switch_started">
+<code class="descname">switch_started</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.switch_started"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.switch_started" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the switch process has started.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.switch_status">
+<code class="descname">switch_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.switch_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.switch_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if all the switch processes have started correctly.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.P4Switch.thrift_listening">
+<code class="descname">thrift_listening</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/mininetlib/node.html#P4Switch.thrift_listening"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.thrift_listening" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a thrift process listens on the thrift port.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="p4utils.utils.html" class="btn btn-neutral float-right" title="p4utils.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="p4utils.mininetlib.network_API.html" class="btn btn-neutral float-left" title="p4utils.mininetlib.network_API module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Communication in the same subnet
+h1 15 30 send_udp_flow --dst 1.0.0.3 --sport 5000 --dport 5051 --rate 10M
+h4 15 30 recv_udp_flow --dport 5051
+# Monitor bandwitdth
+s1 0 0 "python -m p4utils.utils.monitor -i s1-eth1 -d 100 h1.csv"
+s1 0 0 "python -m p4utils.utils.monitor -i s1-eth2 -d 100 h4.csv"
+
+# Communication in the same AS
+h4 45 30 send_udp_flow --dst 1.7.0.2 --sport 5001 --dport 5051 --rate 10M
+h2 45 30 recv_udp_flow --dport 5051
+# Monitor bandwitdth
+s2 0 0 "python -m p4utils.utils.monitor -i s2-eth1 -d 100 h2.csv"
+
+# Communication among ASes
+h2 60 30 send_udp_flow --dst 2.0.0.2 --sport 5002 --dport 5051 --rate 10M
+h3 60 30 recv_udp_flow --dport 5051
+# Monitor bandwitdth
+s3 0 0 "python -m p4utils.utils.monitor -i s3-eth1 -d 100 h3.csv"

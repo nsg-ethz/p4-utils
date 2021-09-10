@@ -1,0 +1,967 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.p4run &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../p4utils.html">P4-Utils API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>p4utils.p4run</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for p4utils.p4run</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># Copyright 2013-present Barefoot Networks, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1"># Adapted by Robert MacDavid (macdavid@cs.princeton.edu) from scripts found in</span>
+<span class="c1"># the p4app repository (https://github.com/p4lang/p4app)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># Further work: Edgar Costa Molero (cedgar@ethz.ch)</span>
+<span class="c1"># Further work: Fabian Schleiss (fabian.schleiss@alumni.ethz.ch)</span>
+<span class="c1"># Further work: Jurij Nota (junota@student.ethz.ch)</span>
+
+<span class="sd">&quot;&quot;&quot;This module is responsible for the legacy network configuration method that makes</span>
+<span class="sd">use of JSON files. Indeed, it uses the information contained within it to start and</span>
+<span class="sd">configure all the components of the virtualized network.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">mininet.log</span> <span class="kn">import</span> <span class="n">debug</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span>
+<span class="kn">from</span> <span class="nn">mininet.clean</span> <span class="kn">import</span> <span class="n">cleanup</span><span class="p">,</span> <span class="n">sh</span>
+
+<span class="kn">from</span> <span class="nn">p4utils.utils.helper</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">p4utils.utils.compiler</span> <span class="kn">import</span> <span class="n">P4C</span> <span class="k">as</span> <span class="n">DEFAULT_COMPILER</span>
+<span class="kn">from</span> <span class="nn">p4utils.utils.client</span> <span class="kn">import</span> <span class="n">ThriftClient</span> <span class="k">as</span> <span class="n">DEFAULT_CLIENT</span>
+<span class="kn">from</span> <span class="nn">p4utils.mininetlib.node</span> <span class="kn">import</span> <span class="n">P4Switch</span> <span class="k">as</span> <span class="n">DEFAULT_SWITCH</span>
+<span class="kn">from</span> <span class="nn">p4utils.mininetlib.node</span> <span class="kn">import</span> <span class="n">FRRouter</span> <span class="k">as</span> <span class="n">DEFAULT_ROUTER</span>
+<span class="kn">from</span> <span class="nn">p4utils.mininetlib.node</span> <span class="kn">import</span> <span class="n">P4Switch</span><span class="p">,</span> <span class="n">P4RuntimeSwitch</span>
+<span class="kn">from</span> <span class="nn">p4utils.mininetlib.node</span> <span class="kn">import</span> <span class="n">P4Host</span> <span class="k">as</span> <span class="n">DEFAULT_HOST</span>
+<span class="kn">from</span> <span class="nn">p4utils.mininetlib.net</span> <span class="kn">import</span> <span class="n">P4Mininet</span> <span class="k">as</span> <span class="n">DEFAULT_NET</span>
+<span class="kn">from</span> <span class="nn">p4utils.mininetlib.network_API</span> <span class="kn">import</span> <span class="n">NetworkAPI</span>
+
+
+<div class="viewcode-block" id="AppRunner"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner">[docs]</a><span class="k">class</span> <span class="nc">AppRunner</span><span class="p">(</span><span class="n">NetworkAPI</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class used to run P4 applications from a JSON configuration file.</span>
+
+<span class="sd">    The ``AppRunner`` creates a *Mininet* network reading information from the JSON</span>
+<span class="sd">    configuration file. It also specifies whether logs and sniffed packets are to be</span>
+<span class="sd">    saved on the disk at some location.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        conf_file (str): a JSON file which describes the *Mininet* topology</span>
+<span class="sd">        cli_enabled (bool): enable *Mininet* CLI</span>
+<span class="sd">        log_dir (str): directory for *Mininet* log files</span>
+<span class="sd">        pcap_dir (str): directory where to store pcap files</span>
+<span class="sd">        verbosity (str): amount of information shown during the execution</span>
+
+<span class="sd">    .. _verbosity:</span>
+
+<span class="sd">    Possible **verbosity** values, listed from the most to less verbose, are the following:</span>
+
+<span class="sd">    - ``debug``</span>
+<span class="sd">    - ``info``</span>
+<span class="sd">    - ``output``</span>
+<span class="sd">    - ``warning``</span>
+<span class="sd">    - ``warn``</span>
+<span class="sd">    - ``error``</span>
+<span class="sd">    - ``critical``</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        The structure of the **JSON** network configuration file parsed by the ``AppRunner`` is</span>
+<span class="sd">        the following::</span>
+
+<span class="sd">            {</span>
+<span class="sd">                &quot;p4_src&quot;: &lt;path to gobal p4 source&gt; (string),</span>
+<span class="sd">                &quot;cli&quot;: &lt;true|false&gt; (bool),</span>
+<span class="sd">                &quot;pcap_dump&quot;: &lt;true|false&gt; (bool),</span>
+<span class="sd">                &quot;enable_log&quot;: &lt;true|false&gt; (bool),</span>
+<span class="sd">                &quot;tasks_file&quot;: &lt;path to the tasks file&gt; (string),</span>
+<span class="sd">                &quot;host_node&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;switch_node&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;router_node&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;compiler_module&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string),</span>
+<span class="sd">                    &quot;options&quot;: &lt;options passed to init&gt; (dict)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;client_module&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string),</span>
+<span class="sd">                    &quot;options&quot;: &lt;options passed to init&gt; (dict)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;mininet_module&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;file_path&quot;: &lt;path to module&gt; (string),</span>
+<span class="sd">                    &quot;module_name&quot;: &lt;module file name&gt; (string),</span>
+<span class="sd">                    &quot;object_name&quot;: &lt;module object name&gt; (string)</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;exec_scripts&quot;: </span>
+<span class="sd">                [</span>
+<span class="sd">                    {</span>
+<span class="sd">                        &quot;cmd&quot;: &lt;path to script&gt; (string),</span>
+<span class="sd">                        &quot;reboot_run&quot;: &lt;true|false&gt; (bool)</span>
+<span class="sd">                    },</span>
+<span class="sd">                    ...</span>
+<span class="sd">                ],</span>
+<span class="sd">                &quot;topology&quot;: </span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;assignment_strategy&quot;: &lt;assignment strategy&gt; (string),</span>
+<span class="sd">                    &quot;default&quot;:</span>
+<span class="sd">                    {</span>
+<span class="sd">                        &lt;default links and hosts configurations, see parse_links&gt;</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &quot;links&quot;: </span>
+<span class="sd">                    [</span>
+<span class="sd">                        &lt;see parse_links&gt;</span>
+<span class="sd">                    ],</span>
+<span class="sd">                    &quot;hosts&quot;: </span>
+<span class="sd">                    {</span>
+<span class="sd">                        &lt;see parse_hosts&gt;</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &quot;switches&quot;: </span>
+<span class="sd">                    {</span>
+<span class="sd">                        &lt;see parse_switch&gt;</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &quot;routers&quot;: </span>
+<span class="sd">                    {</span>
+<span class="sd">                        &lt;see parse_routers&gt;</span>
+<span class="sd">                    }</span>
+<span class="sd">                }</span>
+<span class="sd">            }</span>
+
+<span class="sd">        Inside the network configuration file, several modules and nodes</span>
+<span class="sd">        JSON objects can be present. These are the possible values:</span>
+<span class="sd">        </span>
+<span class="sd">        - __ #p4utils.p4run.AppRunner.host_node</span>
+
+<span class="sd">          ``host_node`` loads an extension to *Mininet* node class into the `homonymous </span>
+<span class="sd">          attribute`__. </span>
+<span class="sd">        - __ #p4utils.p4run.AppRunner.switch_node</span>
+
+<span class="sd">          ``switch_node`` loads an extension to *Mininet* switch node class into the </span>
+<span class="sd">          `homonymous attribute`__.</span>
+<span class="sd">        - __ #p4utils.p4run.AppRunner.router_node</span>
+
+<span class="sd">          ``router_node`` loads an extension to *Mininet* node class </span>
+<span class="sd">          into the `homonymous attribute`__.</span>
+<span class="sd">        - ``mininet_module`` loads an extension to *Mininet* network class.</span>
+<span class="sd">        - ``compiler_module`` loads the external P4 compiler class.</span>
+<span class="sd">        - ``client_module`` loads the external *Thrift* client class.</span>
+
+<span class="sd">    Note: </span>
+<span class="sd">        __ p4utils.utils.helper.html#p4utils.utils.helper.load_custom_object</span>
+<span class="sd">        </span>
+<span class="sd">        None of the modules or nodes are mandatory. In case they are not specified,</span>
+<span class="sd">        default settings will be used. For further information about how these modules</span>
+<span class="sd">        are imported and the related JSON syntax, please check out `this`__ helper function.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        cli_enabled (:py:class:`bool`)       : enable an extension to *Mininet* CLI after the network starts.</span>
+<span class="sd">        log_enabled (:py:class:`bool`)       : enable saving log files to the disk.</span>
+<span class="sd">        log_dir (:py:class:`str`)            : directory used to store log files.</span>
+<span class="sd">        pcap_dump (:py:class:`bool`)         : generate ``.pcap`` files for interfaces.</span>
+<span class="sd">        pcap_dir (:py:class:`str`)           : directory where to store ``.pcap`` files.</span>
+<span class="sd">        hosts (:py:class:`dict`)             : dictionary of host and their properties.</span>
+<span class="sd">        switches (:py:class:`dict`)          : dictionary of switches and their properties.</span>
+<span class="sd">        routers (:py:class:`dict`)           : dictionary of routers and their properties.</span>
+<span class="sd">        links (:py:class:`dict`)             : dictionary of mininet links and their properties.</span>
+<span class="sd">        clients (:py:class:`list`)           : list of *Thrift* clients (one per P4 switch) to populate tables.</span>
+<span class="sd">        compilers (:py:class:`list`)         : list of compiler instances (one per P4 source provided) to compile P4 code.</span>
+<span class="sd">        conf (:py:class:`dict`)              : parsed configuration from the JSON configuration file.</span>
+<span class="sd">        net (:py:class:`mininet.net.Mininet`): network instance implemented using an extension to *Mininet* network class.</span>
+<span class="sd">        host_node (:py:class:`type`)         : extension to *Mininet* node class used as default host class.</span>
+<span class="sd">        switch_node (:py:class:`type`)       : extension to *Mininet* switch node class used as default switch class.</span>
+<span class="sd">        router_node (:py:class:`type`)       : extension to *Mininet* node class used as default router class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf_file</span><span class="p">,</span>
+                 <span class="n">cli_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">log_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">pcap_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">verbosity</span><span class="o">=</span><span class="s1">&#39;info&#39;</span><span class="p">):</span>
+        
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="n">verbosity</span><span class="p">)</span>
+
+        <span class="c1"># Read JSON configuration file</span>
+        <span class="n">info</span><span class="p">(</span><span class="s1">&#39;Reading JSON configuration file...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Opening file </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">conf_file</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">conf_file</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not in the directory!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">conf_file</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conf</span> <span class="o">=</span> <span class="n">load_conf</span><span class="p">(</span><span class="n">conf_file</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cli_enabled</span> <span class="o">=</span> <span class="n">cli_enabled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pcap_dir</span> <span class="o">=</span> <span class="n">pcap_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="n">log_dir</span>
+
+        <span class="c1">## Get log settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enable_log&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Ensure that all the needed directories exist and are directories</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_enabled</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; exists and is not a directory!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Creating directory </span><span class="si">{}</span><span class="s1"> for logs.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">))</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">)</span>
+        
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;P4APP_LOGDIR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span>
+
+        <span class="c1">## Get pcap settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pcap_dump</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pcap_dump&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Ensure that all the needed directories exist and are directories</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcap_dump</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pcap_dir</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pcap_dir</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; exists and is not a directory!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pcap_dir</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Creating directory </span><span class="si">{}</span><span class="s1"> for pcap files.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pcap_dir</span><span class="p">))</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pcap_dir</span><span class="p">)</span>
+
+        <span class="c1">## Mininet nodes</span>
+        <span class="c1"># Load default router node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">router_node</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">router_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;router_node&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">router_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">router_node</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="p">(</span><span class="n">router_node</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">router_node</span> <span class="o">=</span> <span class="n">DEFAULT_ROUTER</span>
+
+        <span class="c1"># Load default switch node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">switch_node</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">switch_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;switch_node&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">switch_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">switch_node</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="p">(</span><span class="n">switch_node</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">switch_node</span> <span class="o">=</span> <span class="n">DEFAULT_SWITCH</span>
+
+        <span class="c1"># Load default host node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host_node</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">host_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;host_node&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">host_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host_node</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="p">(</span><span class="n">host_node</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host_node</span> <span class="o">=</span> <span class="n">DEFAULT_HOST</span>
+
+        <span class="c1">## Modules</span>
+        <span class="c1"># Load default compiler module</span>
+        <span class="c1"># Set default options for the compiler</span>
+        <span class="n">compiler_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s1">&#39;opts&#39;</span><span class="p">:</span> <span class="s1">&#39;--target bmv2 --arch v1model --std p4-16&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;p4rt&#39;</span><span class="p">:</span> <span class="kc">False</span>
+                          <span class="p">}</span>
+        <span class="n">compiler</span> <span class="o">=</span> <span class="n">DEFAULT_COMPILER</span>
+        <span class="n">compiler_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compiler_module&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">compiler_module</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">compiler_module</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;object_name&#39;</span><span class="p">):</span>
+                <span class="n">compiler</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="p">(</span><span class="n">compiler_module</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">compiler</span> <span class="o">=</span> <span class="n">DEFAULT_COMPILER</span>
+            <span class="c1"># Load compiler module default arguments</span>
+            <span class="n">compiler_kwargs</span> <span class="o">=</span> <span class="n">compiler_module</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCompiler</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="o">**</span><span class="n">compiler_kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Load default client module</span>
+        <span class="c1"># Set default options for the client</span>
+        <span class="n">client_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s1">&#39;log_enabled&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_enabled</span><span class="p">,</span>
+                            <span class="s1">&#39;log_dir&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span>
+                        <span class="p">}</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">DEFAULT_CLIENT</span>
+        <span class="n">client_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;client_module&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">client_module</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">client_module</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;object_name&#39;</span><span class="p">):</span>
+                <span class="n">client</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="p">(</span><span class="n">client_module</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">client</span> <span class="o">=</span> <span class="n">DEFAULT_CLIENT</span>
+            <span class="c1"># Load client module default arguments</span>
+            <span class="n">compiler_kwargs</span> <span class="o">=</span> <span class="n">client_module</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSwitchClient</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="o">**</span><span class="n">client_kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Load default Mininet network</span>
+        <span class="n">mininet_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mininet_module&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mininet_module</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mininet</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="p">(</span><span class="n">mininet_module</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mininet</span> <span class="o">=</span> <span class="n">DEFAULT_NET</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setNet</span><span class="p">(</span><span class="n">mininet</span><span class="p">)</span>
+
+        <span class="c1">## Load topology</span>
+        <span class="n">topology</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;topology&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">topology</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;no topology defined in </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="p">))</span>
+
+        <span class="c1"># Import topology components</span>
+        <span class="n">unparsed_hosts</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;hosts&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unparsed_hosts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse_hosts</span><span class="p">(</span><span class="n">unparsed_hosts</span><span class="p">)</span>
+        <span class="n">unparsed_switches</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;switches&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unparsed_switches</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse_switches</span><span class="p">(</span><span class="n">unparsed_switches</span><span class="p">)</span>
+        <span class="n">unparsed_routers</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;routers&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unparsed_routers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse_routers</span><span class="p">(</span><span class="n">unparsed_routers</span><span class="p">)</span>
+        <span class="n">unparsed_links</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;links&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unparsed_links</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse_links</span><span class="p">(</span><span class="n">unparsed_links</span><span class="p">)</span>
+
+        <span class="c1"># Execute scripts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_scripts</span><span class="p">()</span>
+
+        <span class="c1"># Set assignment strategy</span>
+        <span class="n">assignment_strategy</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;assignment_strategy&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">assignment_strategy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">assignment_strategy</span> <span class="o">==</span> <span class="s1">&#39;l2&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">l2</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">assignment_strategy</span> <span class="o">==</span> <span class="s1">&#39;l3&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">l3</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">assignment_strategy</span> <span class="o">==</span> <span class="s1">&#39;mixed&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mixed</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Unknown assignment strategy &quot;</span><span class="si">{}</span><span class="s1">&quot;.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">assignment_strategy</span><span class="p">))</span>
+
+        <span class="c1"># Enable/disable Mininet client</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cli_enabled</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">enableCli</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disableCli</span><span class="p">()</span>
+
+        <span class="n">tasks_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tasks_file&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tasks_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Add tasks file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">addTaskFile</span><span class="p">(</span><span class="n">tasks_file</span><span class="p">)</span>
+
+        <span class="c1"># Start the network</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startNetwork</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AppRunner.parse_hosts"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner.parse_hosts">[docs]</a>    <span class="k">def</span> <span class="nf">parse_hosts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unparsed_hosts</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parses hosts from the JSON configuration files and add </span>
+<span class="sd">        them to the network initializer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            unparsed_host (dict): dictionary of hosts and properties retrieved from</span>
+<span class="sd">                                  the JSON network configuration file</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Hosts have the following description in the ``topology`` field of the </span>
+<span class="sd">            JSON network configuration file::</span>
+
+<span class="sd">                &quot;hosts&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    host_name:</span>
+<span class="sd">                    {</span>
+<span class="sd">                        &quot;scheduler&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;socket_path&quot;: &lt;dir to socket file&gt; (string) (*),</span>
+<span class="sd">                        &quot;defaultRoute&quot;: &quot;via &lt;gateway ip&gt;&quot; (string) (*),</span>
+<span class="sd">                        &quot;dhcp&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;log_enabled&quot; : &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;log_dir&quot;: &lt;log path for host&gt; (string) (*),</span>
+<span class="sd">                        &quot;host_node&quot;: &lt;custom host node&gt; (dict) (*)</span>
+<span class="sd">                    },</span>
+<span class="sd">                    ...</span>
+<span class="sd">                }</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            None of the fields marked with ``(*)`` is mandatory. If they are not specified</span>
+<span class="sd">            default values will be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">default_params</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s1">&#39;log_enabled&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_enabled</span><span class="p">,</span>
+                            <span class="s1">&#39;log_dir&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">,</span>
+                            <span class="s1">&#39;host_node&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host_node</span><span class="p">),</span>
+                         <span class="p">}</span>
+        <span class="k">for</span> <span class="n">host</span><span class="p">,</span> <span class="n">custom_params</span> <span class="ow">in</span> <span class="n">unparsed_hosts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Set general default host options</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">default_params</span><span class="p">)</span>
+
+            <span class="c1">## Parse Host node type</span>
+            <span class="c1"># Set non default node type (the module JSON is converted into a Host object)</span>
+            <span class="k">if</span> <span class="s1">&#39;host_node&#39;</span> <span class="ow">in</span> <span class="n">custom_params</span><span class="p">:</span>
+                <span class="n">custom_params</span><span class="p">[</span><span class="s1">&#39;cls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="p">(</span><span class="n">custom_params</span><span class="p">[</span><span class="s1">&#39;host_node&#39;</span><span class="p">])</span>
+                <span class="c1"># This field is not propagated further</span>
+                <span class="k">del</span> <span class="n">custom_params</span><span class="p">[</span><span class="s1">&#39;host_node&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;host_node&#39;</span><span class="p">]</span>
+            <span class="c1"># This field is not propagated further</span>
+            <span class="k">del</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;host_node&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Update default parameters with custom ones</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">custom_params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="AppRunner.parse_switches"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner.parse_switches">[docs]</a>    <span class="k">def</span> <span class="nf">parse_switches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unparsed_switches</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parses the switches and adds them to the network.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            unparsed_switches (dict): dictionary of switches and properties retrieved from</span>
+<span class="sd">                                      the JSON network configuration file</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Switches have the following description in the ``topology`` field of the </span>
+<span class="sd">            JSON network configuration file::</span>
+<span class="sd">        </span>
+<span class="sd">                &quot;switches&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    switch_name:</span>
+<span class="sd">                    {</span>
+<span class="sd">                        &quot;p4_src&quot;: &lt;path to p4 program&gt; (string) (*),</span>
+<span class="sd">                        &quot;cpu_port&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;cli_input&quot;: &lt;path to cli input file&gt; (string) (*),</span>
+<span class="sd">                        &quot;switch_node&quot;: &lt;custom switch node&gt; (dict) (*),</span>
+<span class="sd">                        &quot;log_enabled&quot; : &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;log_dir&quot;: &lt;log path for switch binary&gt; (string) (*),</span>
+<span class="sd">                        &quot;pcap_dump&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;pcap_dir&quot;: &lt;path for pcap files&gt; (string) (*),</span>
+<span class="sd">                        &quot;sw_bin&quot;: &lt;switch binary&gt; (string) (*),</span>
+<span class="sd">                        &quot;thrift_port&quot;: &lt;thrift port&gt; (int) (*),</span>
+<span class="sd">                        &quot;grpc_port&quot;: &lt;grpc port&gt; (int) (*)</span>
+<span class="sd">                    },</span>
+<span class="sd">                    ...</span>
+<span class="sd">                }</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            None of the fields marked with ``(*)`` is mandatory. If they are not specified</span>
+<span class="sd">            default values will be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">default_params</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s1">&#39;p4_src&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;p4_src&#39;</span><span class="p">),</span>
+                            <span class="s1">&#39;switch_node&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_node</span><span class="p">),</span>
+                            <span class="s1">&#39;pcap_dump&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcap_dump</span><span class="p">,</span>
+                            <span class="s1">&#39;pcap_dir&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pcap_dir</span><span class="p">,</span>
+                            <span class="s1">&#39;log_enabled&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_enabled</span><span class="p">,</span>
+                            <span class="s1">&#39;log_dir&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span>
+                         <span class="p">}</span>
+        
+        <span class="k">for</span> <span class="n">switch</span><span class="p">,</span> <span class="n">custom_params</span> <span class="ow">in</span> <span class="n">unparsed_switches</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="c1"># Set general default switch options</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">default_params</span><span class="p">)</span>
+
+            <span class="c1">## Parse Switch node type</span>
+            <span class="c1"># Set non default node type (the module JSON is converted into a Switch object)</span>
+            <span class="k">if</span> <span class="s1">&#39;switch_node&#39;</span> <span class="ow">in</span> <span class="n">custom_params</span><span class="p">:</span>
+                <span class="n">custom_params</span><span class="p">[</span><span class="s1">&#39;cls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="p">(</span><span class="n">custom_params</span><span class="p">[</span><span class="s1">&#39;switch_node&#39;</span><span class="p">])</span>
+                <span class="c1"># This field is not propagated further</span>
+                <span class="k">del</span> <span class="n">custom_params</span><span class="p">[</span><span class="s1">&#39;switch_node&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;switch_node&#39;</span><span class="p">]</span>
+            <span class="c1"># This field is not propagated further</span>
+            <span class="k">del</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;switch_node&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Update default parameters with custom ones</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">custom_params</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;cls&#39;</span><span class="p">],</span> <span class="n">P4Switch</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;cls&#39;</span><span class="p">],</span> <span class="n">P4RuntimeSwitch</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">addP4RuntimeSwitch</span><span class="p">(</span><span class="n">switch</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">addP4Switch</span><span class="p">(</span><span class="n">switch</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cpu_port&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">enableCpuPort</span><span class="p">(</span><span class="n">switch</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">addSwitch</span><span class="p">(</span><span class="n">switch</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppRunner.parse_routers"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner.parse_routers">[docs]</a>    <span class="k">def</span> <span class="nf">parse_routers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unparsed_routers</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse hosts and add them to the network. Hosts have</span>
+<span class="sd">        the following structure:</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            unparsed_routers (dict): dictionary of routers and properties retrieved from</span>
+<span class="sd">                                     the JSON network configuration file</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Routers have the following description in the ``topology`` field of the </span>
+<span class="sd">            JSON network configuration file::</span>
+
+<span class="sd">                &quot;routers&quot;:</span>
+<span class="sd">                {</span>
+<span class="sd">                    router_name:</span>
+<span class="sd">                    {</span>
+<span class="sd">                        &quot;int_conf&quot;: &lt;path to the router&#39;s integrate configuration file&gt; (string),</span>
+<span class="sd">                        &quot;conf_dir&quot;: &lt;path to the directory which contains the folder </span>
+<span class="sd">                                    (named after the router) with the configuration </span>
+<span class="sd">                                    files for all the daemons&gt; (string),</span>
+<span class="sd">                        &quot;router_node&quot;: &lt;custom router node&gt; (dict) (*),</span>
+<span class="sd">                        &quot;zebra&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;bgpd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;ospfd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;ospf6d&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;ripd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;ripngd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;isisd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;pimd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;ldpd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;nhrpd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;eigrpd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;babeld&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;sharpd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;staticd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;pbrd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;bfdd&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                        &quot;fabricd&quot; : &lt;true|false&gt; (bool) (*)</span>
+<span class="sd">                    },</span>
+<span class="sd">                    ...</span>
+<span class="sd">                }</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            None of the fields marked with ``(*)`` is mandatory. If they are not specified</span>
+<span class="sd">            default values will be used. Moreover, if ``int_conf`` is specified,</span>
+<span class="sd">            then ``conf_dir`` is ignored.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">default_params</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s1">&#39;router_node&#39;</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">router_node</span><span class="p">),</span>
+                            <span class="s1">&#39;zebra&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                            <span class="s1">&#39;ospfd&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                            <span class="s1">&#39;staticd&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                            <span class="s1">&#39;bgpd&#39;</span><span class="p">:</span> <span class="kc">True</span>
+                         <span class="p">}</span>
+        
+        <span class="k">for</span> <span class="n">router</span><span class="p">,</span> <span class="n">custom_params</span> <span class="ow">in</span> <span class="n">unparsed_routers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Set general default router options</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">default_params</span><span class="p">)</span>
+
+            <span class="c1">## Parse Router node type</span>
+            <span class="c1"># Set non default node type (the module JSON is converted into a Router object)</span>
+            <span class="k">if</span> <span class="s1">&#39;router_node&#39;</span> <span class="ow">in</span> <span class="n">custom_params</span><span class="p">:</span>
+                <span class="n">custom_params</span><span class="p">[</span><span class="s1">&#39;cls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="p">(</span><span class="n">custom_params</span><span class="p">[</span><span class="s1">&#39;router_node&#39;</span><span class="p">])</span>
+                <span class="c1"># This field is not propagated further</span>
+                <span class="k">del</span> <span class="n">custom_params</span><span class="p">[</span><span class="s1">&#39;router_node&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;router_node&#39;</span><span class="p">]</span>
+            <span class="c1"># This field is not propagated further</span>
+            <span class="k">del</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;router_node&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Update default parameters with custom ones</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">custom_params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">addRouter</span><span class="p">(</span><span class="n">router</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppRunner.parse_links"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner.parse_links">[docs]</a>    <span class="k">def</span> <span class="nf">parse_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unparsed_links</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a list of links descriptions of the form.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            uparsed_links (list): list of links and properties retrieved from</span>
+<span class="sd">                                  the JSON network configuration file</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Links have the following description in the ``topology`` field of the </span>
+<span class="sd">            JSON network configuration file::</span>
+
+<span class="sd">                &quot;links&quot;:</span>
+<span class="sd">                [</span>
+<span class="sd">                    [</span>
+<span class="sd">                        node1,</span>
+<span class="sd">                        node2, </span>
+<span class="sd">                        { </span>
+<span class="sd">                            &quot;weight&quot;: &lt;link weight&gt; (int) (*),</span>
+<span class="sd">                            &quot;port1&quot;: &lt;number of port1&gt; (int) (*),</span>
+<span class="sd">                            &quot;port2&quot;: &lt;number of port2&gt; (int) (*),</span>
+<span class="sd">                            &quot;intfName1&quot;: &lt;name of the interface1&gt; (string) (*),</span>
+<span class="sd">                            &quot;intfName2&quot;: &lt;name of the interface2&gt; (string) (*),</span>
+<span class="sd">                            &quot;addr1&quot;: &lt;mac address of interface1&gt; (string) (*),</span>
+<span class="sd">                            &quot;addr2&quot;: &lt;mac address of interface2&gt; (string) (*),</span>
+<span class="sd">                            &quot;params1&quot;: &lt;parameters for interface1&gt; (dict) (*),</span>
+<span class="sd">                            &quot;params2&quot;: &lt;parameters for interface2&gt; (dict) (*),</span>
+<span class="sd">                            &quot;bw&quot;: &lt;bandwidth weight&gt; (int) (*),</span>
+<span class="sd">                            &quot;delay&quot;: &lt;transmit delay&gt; (int) (*),</span>
+<span class="sd">                            &quot;loss&quot;: &lt;link data loss&gt; (float) (*),</span>
+<span class="sd">                            &quot;max_queue_size&quot;: &lt;max queue size&gt; (int) (*)</span>
+<span class="sd">                        }</span>
+<span class="sd">                    ],</span>
+<span class="sd">                    ...</span>
+<span class="sd">                ]</span>
+
+<span class="sd">        One can also specify default values for some links and hosts configuration parameters.</span>
+<span class="sd">        In particular, this can be done by putting the following structure in the ``topology`` field of the </span>
+<span class="sd">        JSON network configuration file::</span>
+
+<span class="sd">            &quot;default&quot;:</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;weight&quot;: &lt;weight&gt; (int) (*),</span>
+<span class="sd">                &quot;bw&quot;: &lt;bandwidth&gt; (int) (*),</span>
+<span class="sd">                &quot;delay&quot;: &lt;transmit_delay&gt; (int) (*),</span>
+<span class="sd">                &quot;loss&quot;: &lt;loss&gt; (float) (*),</span>
+<span class="sd">                &quot;max_queue_size&quot;: &lt;max_queue_size&gt; (int) (*),</span>
+<span class="sd">                &quot;auto_arp_tables&quot;: &lt;true|false&gt; (bool) (*),</span>
+<span class="sd">                &quot;auto_gw_arp&quot;: &lt;true|false&gt; (bool) (*)</span>
+<span class="sd">            }</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            None of the fields marked with ``(*)`` is mandatory. If they are not specified</span>
+<span class="sd">            default values will be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">default_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;topology&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="c1"># Default topology settings</span>
+        <span class="k">if</span> <span class="n">default_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;auto_arp_tables&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">enableArpTables</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disableArpTables</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">default_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;auto_gw_arp&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">enableGwArp</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disableGwArp</span><span class="p">()</span>
+
+        <span class="c1"># This field is not propagated further</span>
+        <span class="k">if</span> <span class="s1">&#39;auto_arp_tables&#39;</span> <span class="ow">in</span> <span class="n">default_params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">del</span> <span class="n">default_params</span><span class="p">[</span><span class="s1">&#39;auto_arp_tables&#39;</span><span class="p">]</span>
+        
+        <span class="c1"># This field is not propagated further</span>
+        <span class="k">if</span> <span class="s1">&#39;auto_gw_arp&#39;</span> <span class="ow">in</span> <span class="n">default_params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">del</span> <span class="n">default_params</span><span class="p">[</span><span class="s1">&#39;auto_gw_arp&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">unparsed_links</span><span class="p">:</span>
+            <span class="n">node1</span> <span class="o">=</span> <span class="n">link</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">node2</span> <span class="o">=</span> <span class="n">link</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">default_params</span><span class="p">)</span>
+            <span class="c1"># If attributes are present for that link</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">link</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">addLink</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppRunner.execute_scripts"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.AppRunner.execute_scripts">[docs]</a>    <span class="k">def</span> <span class="nf">execute_scripts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Executes the script listed in the JSON network configuration file.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exec_scripts&#39;</span><span class="p">),</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">script</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exec_scripts&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">execScript</span><span class="p">(</span><span class="n">script</span><span class="p">[</span><span class="s1">&#39;cmd&#39;</span><span class="p">],</span> <span class="n">reboot</span><span class="o">=</span><span class="n">script</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reboot_run&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="get_args"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.get_args">[docs]</a><span class="k">def</span> <span class="nf">get_args</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Parses command line options.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        argparse.Namespace: namespace containing all the argument parsed.</span>
+
+<span class="sd">    Here is a complete list of the command line invocation options available with ``p4run``:</span>
+
+<span class="sd">    - ``--config`` is the path to configuration (if it is not specified,</span>
+<span class="sd">      it is assumed to be ``./p4app.json``).</span>
+<span class="sd">    - ``--log-dir`` is the path to log files (if it is not specified,</span>
+<span class="sd">      it is assumed to be ``./log``).</span>
+<span class="sd">    - ``--pcap-dir`` is the path to the ``.pcap`` files generated for each switch interface</span>
+<span class="sd">      (if it is not specified, it is assumed to be ``./pcap``).</span>
+<span class="sd">    - __ verbosity_</span>
+<span class="sd">    </span>
+<span class="sd">      ``--verbosity`` specifies the desired verbosity of the output (if it is not specified,</span>
+<span class="sd">      it is assumed to be set to ``info``). Valid verbosity values are listed `here`__.</span>
+<span class="sd">    - ``--no-cli`` disables the *Mininet* client (it is enabled by default).</span>
+<span class="sd">    - ``--clean`` cleans old log files, if specified.</span>
+<span class="sd">    - ``--clean-dir`` cleans old log files and closes, if specified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    <span class="n">default_log</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">)</span>
+    <span class="n">default_pcap</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">&#39;pcap&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--config&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Path to configuration.&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;./p4app.json&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--log-dir&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Generate logs in the specified folder.&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default_log</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--pcap-dir&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Generate .pcap files for interfaces.&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default_pcap</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--verbosity&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Set messages verbosity.&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;info&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--no-cli&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Do not run the Mininet CLI.&#39;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--clean&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Cleans old log files.&#39;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--clean-dir&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Cleans old log files and closes.&#39;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>             
+
+    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../p4utils.p4run.html#p4utils.p4run.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Cleans up files created by old executions and starts the virtual network.&quot;&quot;&quot;</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">()</span>
+
+    <span class="c1"># Cleanup</span>
+    <span class="n">cleanup</span><span class="p">()</span>
+    <span class="n">bridges</span> <span class="o">=</span> <span class="n">sh</span><span class="p">(</span><span class="s2">&quot;brctl show | awk &#39;FNR &gt; 1 {print $1}&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">bridge</span> <span class="ow">in</span> <span class="n">bridges</span><span class="p">:</span>
+        <span class="n">sh</span><span class="p">(</span><span class="s2">&quot;ifconfig </span><span class="si">{}</span><span class="s2"> down&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bridge</span><span class="p">))</span>
+        <span class="n">sh</span><span class="p">(</span><span class="s2">&quot;brctl delbr </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bridge</span><span class="p">))</span>
+
+    <span class="c1"># Remove cli logs</span>
+    <span class="n">sh</span><span class="p">(</span><span class="s1">&#39;find -type f -regex &quot;.*cli_output.*&quot; | xargs rm&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">clean</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">clean_dir</span><span class="p">:</span>
+        <span class="c1"># Removes first level pcap and log dirs</span>
+        <span class="n">sh</span><span class="p">(</span><span class="s2">&quot;rm -rf </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="o">.</span><span class="n">pcap_dir</span><span class="p">)</span>
+        <span class="n">sh</span><span class="p">(</span><span class="s2">&quot;rm -rf </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="o">.</span><span class="n">log_dir</span><span class="p">)</span>
+        <span class="c1"># Tries to recursively remove all pcap and log dirs if they are named &#39;log&#39; and &#39;pcap&#39;</span>
+        <span class="n">sh</span><span class="p">(</span><span class="s1">&#39;find -type d -regex &quot;.*pcap&quot; | xargs rm -rf&#39;</span><span class="p">)</span>
+        <span class="n">sh</span><span class="p">(</span><span class="s1">&#39;find -type d -regex &quot;.*log&quot; | xargs rm -rf&#39;</span><span class="p">)</span>
+        <span class="c1"># Removes topologies files</span>
+        <span class="n">sh</span><span class="p">(</span><span class="s1">&#39;find -type f -regex &quot;.*db&quot; | xargs rm&#39;</span><span class="p">)</span>
+        <span class="c1"># Remove compiler outputs</span>
+        <span class="n">sh</span><span class="p">(</span><span class="s1">&#39;find -type f -regex &quot;.*\(p4i\|p4rt\)&quot; | xargs rm&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Remove all the jsons that come from a p4</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">sh</span><span class="p">(</span><span class="s1">&#39;find -type f -regex &quot;.*p4&quot;&#39;</span><span class="p">)</span>
+        <span class="n">p4_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">p4_file</span> <span class="ow">in</span> <span class="n">p4_files</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">p4_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;p4&quot;</span><span class="p">,</span> <span class="s2">&quot;json&quot;</span><span class="p">)</span>
+            <span class="n">reg_str</span> <span class="o">=</span> <span class="s2">&quot;.*</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="n">sh</span><span class="p">(</span><span class="s1">&#39;find -type f -regex </span><span class="si">{}</span><span class="s1"> | xargs rm -f&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reg_str</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">clean_dir</span><span class="p">:</span>
+            <span class="k">return</span>
+
+    <span class="n">app</span> <span class="o">=</span> <span class="n">AppRunner</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+                    <span class="n">cli_enabled</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_cli</span><span class="p">),</span>
+                    <span class="n">log_dir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">log_dir</span><span class="p">,</span>
+                    <span class="n">pcap_dir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">pcap_dir</span><span class="p">,</span>
+                    <span class="n">verbosity</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">verbosity</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,25 +1,29 @@
-#Git Ignore P4 examples
-
 # Python byte code
 *.pyc
 
 # Emacs
 *~
 ls
+
 # Compiled JSON
 *.json
 !*p4app*.json
 
+# P4 files
 *p4i
 *p4rt
 
-*.pcap
-
-*.db
-
+# Logs and dumps
 log*/
+*.pcap
 
 *.egg-info/
 
 *mxexec.1
 *mxexec
+
+flows/
+*.csv
+
+# Docs hidden files
+docs/.doctrees

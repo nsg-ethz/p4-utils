@@ -1,0 +1,646 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>p4utils.utils.helper &mdash; P4-Utils 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> P4-Utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../p4utils.html">P4-Utils API reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">P4-Utils</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>p4utils.utils.helper</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for p4utils.utils.helper</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module includes all the functions that are frequently used </span>
+<span class="sd">in different parts of the code. These functions usually perform low level</span>
+<span class="sd">operations on data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">psutil</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">from</span> <span class="nn">networkx.readwrite.json_graph</span> <span class="kn">import</span> <span class="n">node_link_graph</span>
+<span class="kn">from</span> <span class="nn">mininet.log</span> <span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">warn</span><span class="p">,</span> <span class="n">debug</span>
+
+<span class="kn">from</span> <span class="nn">p4utils.utils.topology</span> <span class="kn">import</span> <span class="n">NetworkGraph</span>
+
+
+<span class="n">_prefixLenMatchRegex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;netmask (\d+\.\d+\.\d+\.\d+)&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="wait_condition"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.wait_condition">[docs]</a><span class="k">def</span> <span class="nf">wait_condition</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[],</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Waits for the function to return the specified value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        func (function): function to check</span>
+<span class="sd">        value          : condition to meet</span>
+<span class="sd">        args (list)    : positional arguments of the function</span>
+<span class="sd">        kwargs (dict)  : key-word arguments of the function</span>
+<span class="sd">        timeout (float): time to wait for condition in seconds</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: **True** if the condition is met before the timeout </span>
+<span class="sd">        expires, **False** otherwise.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        If ``timeout`` is set to ``0``, this function will wait forever.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">timeout</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&gt;=</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="merge_dict"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.merge_dict">[docs]</a><span class="k">def</span> <span class="nf">merge_dict</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Merges source dictionary fields and subfields into destionation dictionary.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dst (dict): destination dictionary</span>
+<span class="sd">        src (dict): source dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span><span class="p">)]</span>
+    <span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
+        <span class="n">current_dst</span><span class="p">,</span> <span class="n">current_src</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">current_src</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_dst</span><span class="p">:</span>
+                <span class="n">current_dst</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_src</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">current_src</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">current_dst</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">current_dst</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">current_src</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">current_dst</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_src</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="next_element"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.next_element">[docs]</a><span class="k">def</span> <span class="nf">next_element</span><span class="p">(</span><span class="n">elems</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given a list of integers, return the lowest number not already</span>
+<span class="sd">    present in the set, starting from minimum and ending in maximum.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        elems (list)  : list of integers</span>
+<span class="sd">        minimum (int): minimum value allowed for elements</span>
+<span class="sd">        maximum (int): maximum value allowed for elements</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: the lowest number not already present in the set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;the list contains duplicates.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">minimum</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">maximum</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">maximum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">minimum</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">minimum</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Remove elements lower than minimum</span>
+            <span class="n">del_elements</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">elem</span> <span class="o">&lt;</span> <span class="n">minimum</span><span class="p">:</span>
+                    <span class="n">del_elements</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+            <span class="n">elements</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">del_elements</span><span class="p">)</span>
+            <span class="c1"># Update maximum</span>
+            <span class="n">maximum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">maximum</span><span class="p">,</span> <span class="n">minimum</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">maximum</span> <span class="o">-</span> <span class="n">minimum</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">maximum</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">maximum</span> <span class="o">-</span> <span class="n">minimum</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">minimum</span><span class="p">,</span> <span class="n">maximum</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">elem</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">elem</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;too many elements in the list.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rand_mac"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.rand_mac">[docs]</a><span class="k">def</span> <span class="nf">rand_mac</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Generate a random, non-multicas MAC address.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: MAC address.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hex_str</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">48</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xfeffffffffff</span> <span class="o">|</span> <span class="mh">0x020000000000</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="n">hex_str</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">12</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">hex_str</span><span class="p">))</span> <span class="o">+</span> <span class="n">hex_str</span>
+    <span class="n">mac_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">hex_str</span><span class="p">):</span>
+        <span class="n">mac_str</span> <span class="o">+=</span> <span class="n">hex_str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">mac_str</span> <span class="o">+=</span> <span class="n">hex_str</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">mac_str</span> <span class="o">+=</span> <span class="s1">&#39;:&#39;</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">mac_str</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="dpidToStr"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.dpidToStr">[docs]</a><span class="k">def</span> <span class="nf">dpidToStr</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute a string **dpid** from an integer **id**.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        id (int): integer device id</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: device dpid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">strDpid</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">id</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">strDpid</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">16</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">strDpid</span><span class="p">))</span> <span class="o">+</span> <span class="n">strDpid</span>
+    <span class="k">return</span> <span class="n">strDpid</span></div>
+
+
+<div class="viewcode-block" id="check_listening_on_port"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.check_listening_on_port">[docs]</a><span class="k">def</span> <span class="nf">check_listening_on_port</span><span class="p">(</span><span class="n">port</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Checks if the given port is listening in the main namespace.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        port (int): port number</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: **True** if the port is listening, **False** otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">psutil</span><span class="o">.</span><span class="n">net_connections</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;inet&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;LISTEN&#39;</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">laddr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">port</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="cksum"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.cksum">[docs]</a><span class="k">def</span> <span class="nf">cksum</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns the md5 checksum of a file.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        filename (str): path to the file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: md5 checksum of the file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="get_node_attr"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.get_node_attr">[docs]</a><span class="k">def</span> <span class="nf">get_node_attr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds the value of the specified attribute of a *Mininet* node</span>
+<span class="sd">    by looking also inside its unparsed parameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        node (object)          : *Mininet* node object</span>
+<span class="sd">        attr_name (string)  : attribute to look for</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        the value of the requested attribute.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s1">&#39;params&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">params</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">default</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default</span></div>
+
+
+<div class="viewcode-block" id="get_by_attr"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.get_by_attr">[docs]</a><span class="k">def</span> <span class="nf">get_by_attr</span><span class="p">(</span><span class="n">attr_name</span><span class="p">,</span> <span class="n">attr_value</span><span class="p">,</span> <span class="n">obj_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the first object in the list that has an attribute matching with</span>
+<span class="sd">    the attribute name and value provided.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        attr_name (string)  : attribute name</span>
+<span class="sd">        attr_value          : attrubute value</span>
+<span class="sd">        obj_list (list)     : list of objects</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        object: the requested object or **None**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">obj_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">attr_value</span> <span class="o">==</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">obj</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="ip_address_to_mac"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.ip_address_to_mac">[docs]</a><span class="k">def</span> <span class="nf">ip_address_to_mac</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate MAC from IP address.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        ip (str): IPv4 address</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: MAC address obtained from the IPv4 value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">ip</span><span class="p">:</span>
+        <span class="n">ip</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">split_ip</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">ip</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)))</span>
+    <span class="n">mac_address</span> <span class="o">=</span> <span class="s1">&#39;00:</span><span class="si">%02x</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;:</span><span class="si">%02x</span><span class="s1">:</span><span class="si">%02x</span><span class="s1">:</span><span class="si">%02x</span><span class="s1">:</span><span class="si">%02x</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">split_ip</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mac_address</span></div>
+
+
+<div class="viewcode-block" id="is_compiled"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.is_compiled">[docs]</a><span class="k">def</span> <span class="nf">is_compiled</span><span class="p">(</span><span class="n">p4_src</span><span class="p">,</span> <span class="n">compilers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if a file has been already compiled by at least one compiler in the list.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        p4_src (string) : P4 file path</span>
+<span class="sd">        compilers (list): list of P4 compiler objects (see compiler.py)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: **True** if the file has been already compiled, **False** otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">compiler</span> <span class="ow">in</span> <span class="n">compilers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="s1">&#39;compiled&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">compiler</span><span class="p">,</span> <span class="s1">&#39;p4_src&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">p4_src</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="load_conf"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.load_conf">[docs]</a><span class="k">def</span> <span class="nf">load_conf</span><span class="p">(</span><span class="n">conf_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load JSON application configuration file.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        conf_file (str): path to the JSON network configuration file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: network configuration dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">conf_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="load_topo"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.load_topo">[docs]</a><span class="k">def</span> <span class="nf">load_topo</span><span class="p">(</span><span class="n">json_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load the topology from the path provided.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        json_path (string): path of the JSON file to load</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        p4utils.utils.topology.NetworkGraph: the topology graph.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_path</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">graph_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">node_link_graph</span><span class="p">(</span><span class="n">graph_dict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">NetworkGraph</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_custom_object"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.load_custom_object">[docs]</a><span class="k">def</span> <span class="nf">load_custom_object</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads object from module.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        dict: JSON object to load</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        object: Python object retrieved from the module.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        This function takes as input a module JSON object::</span>
+
+<span class="sd">            {</span>
+<span class="sd">                &quot;file_path&quot;: &lt;path to module&gt; (string) (*),</span>
+<span class="sd">                &quot;module_name&quot;: &lt;module file_name&gt; (string),</span>
+<span class="sd">                &quot;object_name&quot;: &lt;module object name&gt; (string),</span>
+<span class="sd">            }</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        None of the fields marked with ``(*)`` is mandatory. The ``file_path`` field </span>
+<span class="sd">        is optional and has to be used if the module is not present in ``sys.path``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;file_path&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+
+    <span class="n">module_name</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;module_name&quot;</span><span class="p">]</span>
+    <span class="n">object_name</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;object_name&quot;</span><span class="p">]</span>
+
+    <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">object_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="run_command"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.run_command">[docs]</a><span class="k">def</span> <span class="nf">run_command</span><span class="p">(</span><span class="n">command</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Execute command in the main namespace.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        command (str): command to execute</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: an integer value used by a process.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">debug</span><span class="p">(</span><span class="n">command</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">WEXITSTATUS</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">command</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="parse_line"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.parse_line">[docs]</a><span class="k">def</span> <span class="nf">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parse text line returning a list of substrings.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        line (str): line to parse</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: list of args obtained from the parsing.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        As an example, consider the following string::</span>
+
+<span class="sd">            &#39;ahjdjf djdfkfo1 --jdke hdjejeek --dfjfj &quot;vneovn rijvtg&quot;&#39;</span>
+<span class="sd">   </span>
+<span class="sd">        The function will parse it and give as output the following list::</span>
+
+<span class="sd">            [&quot;ahjdjf&quot;, &quot;djdfkfo1&quot;, &quot;--jdke&quot;, &quot;hdjejeek&quot;, &quot;--dfjfj&quot;, &quot;vneovn rijvtg&quot;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Isolate &quot;&quot; terms</span>
+    <span class="n">args1</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
+    <span class="n">args2</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args1</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Isolate and append spaced terms</span>
+            <span class="n">args2</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">args1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Append &quot;&quot; terms</span>
+            <span class="n">args2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">args1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">args2</span></div>
+
+
+<div class="viewcode-block" id="parse_task_line"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.parse_task_line">[docs]</a><span class="k">def</span> <span class="nf">parse_task_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">def_mod</span><span class="o">=</span><span class="s1">&#39;p4utils.utils.traffic_utils&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parse text line and return all the parameters needed</span>
+<span class="sd">    to create a task with :py:func:`p4utils.mininetlib.network_API.NetworkAPI.addTask()`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        line (str)   : string containing all the task information</span>
+<span class="sd">        def_mod (str): default module where to look for exe functions</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: a tuple (**args**, **kwargs**) where **args** is a list of arguments and **kwargs** </span>
+<span class="sd">        is a dictionary of key-word pairs.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        The file has to be a set of lines, where each has the following syntax::</span>
+
+<span class="sd">            &lt;node&gt; &lt;start&gt; &lt;duration&gt; &lt;exe&gt; [&lt;arg1&gt;] ... [&lt;argN&gt;] [--mod &lt;module&gt;] [--&lt;key1&gt; &lt;kwarg1&gt;] ... [--&lt;keyM&gt; &lt;kwargM&gt;]</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        A non-default module can be specified in the command with ``--mod &lt;module&gt;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">skip_next</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">def_mod</span><span class="p">)</span> 
+    <span class="n">parsed_cmd</span> <span class="o">=</span> <span class="n">parse_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parsed_cmd</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="s1">&#39;usage: &lt;node&gt; &lt;start&gt; &lt;duration&gt; &lt;exe&gt; [&lt;arg1&gt;] ... [&lt;argN&gt;] [--mod &lt;module&gt;] [--&lt;key1&gt; &lt;kwarg1&gt;] ... [--&lt;keyM&gt; &lt;kwargM&gt;]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parsed_cmd</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">skip_next</span><span class="p">:</span>
+            <span class="n">skip_next</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">continue</span>
+        <span class="c1"># Parse node (index 0 in args)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="c1"># Parse start</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="c1"># Parse duration</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="c1"># Parse exe (index 1 in args)</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="c1"># Parse args and kwargs</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="c1"># Parse kwargs</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;--&#39;</span><span class="p">:</span>
+                <span class="c1"># Parse module</span>
+                <span class="k">if</span> <span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;--mod&#39;</span><span class="p">:</span>
+                    <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">:]]</span> <span class="o">=</span> <span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">skip_next</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># Parse args</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parsed_cmd</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Import function from module</span>
+        <span class="n">exe</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># Set function as the executable</span>
+        <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">exe</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="c1"># Interpret the executable as a command</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

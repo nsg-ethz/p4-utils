@@ -1,0 +1,129 @@
+{
+    "p4_src": "l2_learning_digest.p4",
+    "cli": true,
+    "pcap_dump": true,
+    "enable_log": true,
+    "tasks_file": "tasks.txt",
+    "exec_scripts": [
+        {
+            "cmd": "python l2_learning_controller.py s1 digest &",
+            "reboot_run": true
+        },
+        {
+            "cmd": "python l2_learning_controller.py s2 digest &",
+            "reboot_run": true
+        },
+        {
+            "cmd": "python l2_learning_controller.py s3 digest &",
+            "reboot_run": true
+        }
+    ],
+    "topology": {
+      "default":{
+        "auto_arp_tables": false,
+        "auto_gw_arp": false,
+        "bw": 5
+      },
+      "links": [
+          ["h1", "s1",
+          {"params1" : {"ip": "1.0.0.2/24"}}
+          ],
+          ["h4", "s1",
+          {"params1" : {"ip": "1.0.0.3/24"}}
+          ],
+          ["h2", "s2",
+          {"params1" : {"ip": "1.7.0.2/24"}}
+          ],
+          ["h5", "s2",
+          {"params1" : {"ip": "1.7.0.3/24"}}
+          ],
+          ["h3", "s3",
+          {"params1" : {"ip": "2.0.0.2/24"}}
+          ],
+          ["h6", "s3",
+          {"params1" : {"ip": "2.0.0.3/24"}}
+          ],
+          ["s1", "r1",
+          {"intfName2" : "port_S1"}
+          ],
+          ["s2", "r2",
+          {"intfName2" : "port_S2"}
+          ],
+          ["s3", "r5",
+          {"intfName2" : "port_S3"}
+          ],
+          ["r1", "r2",
+          {"intfName1" : "port_R2", "intfName2": "port_R1"}
+          ],
+          ["r1", "r3",
+          {"intfName1" : "port_R3", "intfName2": "port_R1"}
+          ],
+          ["r1", "r4",
+          {"intfName1" : "port_R4", "intfName2": "port_R1"}
+          ],
+          ["r2", "r3",
+          {"intfName1" : "port_R3", "intfName2": "port_R2"}
+          ],
+          ["r2", "r4",
+          {"intfName1" : "port_R4", "intfName2": "port_R2"}
+          ],
+          ["r3", "r4",
+          {"intfName1" : "port_R4", "intfName2": "port_R3"}
+          ],
+          ["r4", "r5",
+          {"intfName1" : "port_AS2", "intfName2": "port_AS1"}
+          ]
+      ],
+      "hosts": {
+        "h1": {
+            "defaultRoute": "via 1.0.0.1"
+        },
+        "h2": {
+            "defaultRoute": "via 1.7.0.1"
+        },
+        "h3": {
+            "defaultRoute": "via 2.0.0.1"
+        },
+        "h4": {
+            "defaultRoute": "via 1.0.0.1"
+        },
+        "h5": {
+            "defaultRoute": "via 1.7.0.1"
+        },
+        "h6": {
+            "defaultRoute": "via 2.0.0.1"
+        }
+      },
+      "switches": {
+        "s1": {
+        },
+        "s2": {
+        },
+        "s3": {
+        }
+      },
+      "routers": {
+        "r1": {
+            "int_conf": "./routers/r1.conf", 
+            "ldpd": "True"
+        },
+        "r2": {
+            "int_conf": "./routers/r2.conf", 
+            "ldpd": "True"
+        },
+        "r3": {
+            "int_conf": "./routers/r3.conf", 
+            "ldpd": "True"
+        },
+        "r4": {
+            "int_conf": "./routers/r4.conf", 
+            "ldpd": "True"
+        },
+        "r5": {
+            "int_conf": "./routers/r5.conf", 
+            "ldpd": "True"
+        }
+      }
+    }
+  }
+  

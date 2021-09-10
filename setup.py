@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 "Setuptools params"
 
@@ -25,7 +25,7 @@ setup(
     include_package_data = True,
     classifiers=[
         "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python 2.7",
+        "Programming Language :: Python 3",
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "Topic :: System :: Networking",
@@ -33,13 +33,16 @@ setup(
     keywords='networking p4 mininet',
     license='GPLv2',
     install_requires=[
-        'setuptools',
-        'networkx',
+        'googleapis-common-protos >= 1.52',
+        'grpcio >= 1.17.2',
+        'ipaddr',
         'ipaddress',
+        'networkx',
+        'p4runtime',
+        'protobuf >= 3.6.1',
+        'psutil',
         'scapy',
-        'psutil'
+        'setuptools',
     ],
     extras_require={}
-    #tests_require=['pytest'],
-    #setup_requires=['pytest-runner']
 )
