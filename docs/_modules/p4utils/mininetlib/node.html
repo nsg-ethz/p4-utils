@@ -625,7 +625,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="FRRouter.start_daemon"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.FRRouter.start_daemon">[docs]</a>    <span class="k">def</span> <span class="nf">start_daemon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">daemon</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Starts FRR on a given router.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Starts a daemon on the router.&quot;&quot;&quot;</span>
         <span class="c1"># Get PID file</span>
         <span class="n">pid_file</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">pid_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

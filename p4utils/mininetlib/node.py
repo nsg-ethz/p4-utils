@@ -450,7 +450,7 @@ class FRRouter(Node):
         super().stop()
 
     def start_daemon(self, daemon, *args, **kwargs):
-        """Starts FRR on a given router."""
+        """Starts a daemon on the router."""
         # Get PID file
         pid_file = kwargs.get('i')
         if pid_file is None:
