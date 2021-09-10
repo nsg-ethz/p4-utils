@@ -119,13 +119,13 @@ class P4Switch(Switch):
             raise ConnectionRefusedError('{} cannot bind port {} because it is bound by another process.'.format(self.name, self.thrift_port))
 
     def set_binary(self, sw_bin):
-        """Set switch default binary"""
+        """Sets switch default binary"""
         # Make sure that the provided sw_bin is valid
         pathCheck(sw_bin)
         self.sw_bin = sw_bin
 
     def set_json(self, json_path):
-        """Set the compiled P4 JSON file."""
+        """Sets the compiled P4 JSON file."""
         # Make sure that the provided JSON file exists if it is not None
         if json_path and not os.path.isfile(json_path):
             raise FileNotFoundError('Invalid JSON file.')
@@ -133,15 +133,15 @@ class P4Switch(Switch):
             self.json_path = json_path
 
     def switch_started(self):
-        """Check if the switch process has started."""
+        """Checks if the switch process has started."""
         return pid_exists(self.simple_switch_pid)
 
     def thrift_listening(self):
-        """Check if a thrift process listens on the thrift port."""
+        """Checks if a thrift process listens on the thrift port."""
         return check_listening_on_port(self.thrift_port)
 
     def switch_status(self):
-        """Check if all the switch processes have started correctly."""
+        """Checks if all the switch processes have started correctly."""
         status = {'switch': self.switch_started(),
                   'thrift': self.thrift_listening()}
         if status['switch']:
@@ -154,7 +154,7 @@ class P4Switch(Switch):
         return status
 
     def add_arguments(self):
-        """Add arguments to the simple switch process"""
+        """Adds arguments to the simple switch process"""
         args = [self.sw_bin]
         for port, intf in list(self.intfs.items()):
             if not intf.IP():
@@ -180,7 +180,7 @@ class P4Switch(Switch):
         return args
 
     def start(self, controllers=None):
-        """Start up a new P4 switch."""
+        """Starts a new P4 switch."""
         info('Starting P4 switch {}.\n'.format(self.name))
         cmd = ' '.join(self.add_arguments())
         info(cmd + "\n")
@@ -199,27 +199,27 @@ class P4Switch(Switch):
         info('P4 switch {} has been started.\n'.format(self.name))
 
     def stop_p4switch(self):
-        """Just stops simple switch without deleting interfaces."""
+        """Stops the simple switch binary without deleting the interfaces."""
         info('Stopping P4 switch {}.\n'.format(self.name))
         os.kill(self.simple_switch_pid, signal.SIGKILL)
         if not wait_condition(self.switch_started, False):
             raise ChildProcessError('P4 switch {} did not stop after requesting it.'.format(self.name))
 
     def stop(self, deleteIntfs=True):
-        """Terminate P4 switch."""
+        """Terminates the P4 switch node."""
         os.kill(self.simple_switch_pid, signal.SIGKILL)
         super().stop(deleteIntfs)
 
     def attach(self, intf):
-        """Connect a data port."""
+        """Connects a data port."""
         assert 0
 
     def detach(self, intf):
-        """"Disconnect a data port."""
+        """"Disconnects a data port."""
         assert 0
 
     def describe(self):
-        """Describe P4Switch."""
+        """Describes P4Switch."""
         print('{} -> Thrift port: {}'.format(self.name, self.thrift_port))
 
 
@@ -238,11 +238,11 @@ class P4RuntimeSwitch(P4Switch):
         super().__init__(*args, sw_bin=sw_bin, **kwargs)
 
     def grpc_listening(self):
-        """Check if a grpc process listens on the grpc port."""
+        """Checks if a grpc process listens on the grpc port."""
         return check_listening_on_port(self.grpc_port)
 
     def switch_status(self):
-        """Check if all the switch processes have started correctly."""
+        """Checks if all the switch processes have started correctly."""
         status = {'switch': self.switch_started(),
                   'thrift': self.thrift_listening(),
                   'grpc': self.grpc_listening()}
@@ -257,19 +257,59 @@ class P4RuntimeSwitch(P4Switch):
         return status
 
     def add_arguments(self):
-        """Add arguments to the simple switch process"""
+        """Adds arguments to the simple switch process"""
         args = super().add_arguments()
         if self.grpc_port:
             args.append('-- --grpc-server-addr 0.0.0.0:' + str(self.grpc_port))
         return args
 
     def describe(self):
-        """Describe P4RuntimeSwitch."""
+        """Describes P4RuntimeSwitch."""
         super().describe()
         print('{} -> gRPC port: {}'.format(self.name, self.grpc_port))
 
 class FRRouter(Node):
-    """FRRouter built as Mininet node"""
+    """FRRouter built as Mininet node.
+    
+    Args:
+        name (str)    : name of the router
+        bin_dir (str) : directory that contains the daemons binaries
+        int_conf (str): path to the router integrated configuration file 
+        conf_dir (str): path to the directory which contains the folder with
+                        the configuration files for all the daemons (the folder
+                        is named after the router)
+        zebra (bool)  : enable Zebra daemon
+        bgpd (bool)   : enable BGP protocol
+        ospfd (bool)  : enable OSPFv2 (for IPv4) protocol
+        ospf6d (bool) : enable OSPFv3 (for IPv6) protocol
+        ripd (bool)   : enable RIP protocol
+        ripngd (bool) : enable RIPng protocol
+        isisd (bool)  : enable IS-IS protocol
+        pimd (bool)   : enable PIM protocol
+        ldpd (bool)   : enable LPD protocol
+        nhrpd (bool)  : enable NHRP protocol
+        eigrpd (bool) : enable EIGRP protocol
+        babeld (bool) : enable Babel protocol
+        sharpd (bool) : enable SHARP daemon
+        staticd (bool): enable STATIC daemon
+        pbrd (bool)   : enable Policy Based Routing
+        bfdd (bool)   : enable Bidirectional Forwarding Detection
+        fabricd (bool): enable OpenFabric protocol
+
+    Warning:
+        Only the following daemons and protocols are enabled by default:
+        
+        - ``zebra``
+        - ``ospfd``
+        - ``bgpd``
+        - ``staticd``
+
+    Note:
+        If ``int_conf`` is set, the content ``conf_dir`` is not considered except for 
+        ``vtysh.conf`` which is always taken into account.  
+        If ``conf_dir`` is not specified, then it is assumed to be ``./routers``, and the
+        folder which contains the configuration files is then ``./routers/<name>``.
+    """
 
     DAEMONS = [
         'zebra',
@@ -296,27 +336,7 @@ class FRRouter(Node):
                  int_conf=None,
                  conf_dir='./routers',
                  **kwargs):
-        """
-        Attributes:
-            name (string)       : name of the router
-            bin_dir             : directory that contains the daemons binaries
-            int_conf (string)   : path to the router integrated configuration file 
-            conf_dir (string)   : path to the directory which contains the folder with
-                                  the configuration files for all the daemons (the folder
-                                  is named after the router)
 
-            Additional configuration parameters involve the daemon selections. The daemons
-            'zebra', 'ospfd', 'bgpd', 'staticd' are enabled by default. To disable them pass
-            to the router the keyword argument <daemon>=False. To enable other non-default 
-            daemons, pass <daemon>=True.
-
-        Notice:
-            If int_conf is set, the content conf_dir is not considered except for 
-            vtysh.conf which is always taken into account.
-
-            If conf_dir is not specified, then conf_dir is assumed to be './routers', and the
-            folder which contains the configuration files is then './routers/<name>'.
-        """
         super().__init__(name, **kwargs)
 
         self.bin_dir = bin_dir
@@ -352,6 +372,7 @@ class FRRouter(Node):
                 self.daemons.setdefault(key, {})
 
     def start(self):
+        """Starts the FRRouter node."""
         # Enable IPv4 forwarding
         self.cmd('sysctl -w net.ipv4.ip_forward=1')
         # Enable MPLS forwarding
@@ -416,7 +437,7 @@ class FRRouter(Node):
                                       log='file:/tmp/{}-{}.log'.format(self.name, daemon))
 
     def stop(self):
-        """Terminate FRRouter."""
+        """Terminates FRRouter."""
         for daemon, value in self.daemons.items():
             # Kill daemon
             os.kill(value['pid'], signal.SIGKILL)
@@ -429,7 +450,7 @@ class FRRouter(Node):
         super().stop()
 
     def start_daemon(self, daemon, *args, **kwargs):
-        """Start FRR on a given router."""
+        """Starts FRR on a given router."""
         # Get PID file
         pid_file = kwargs.get('i')
         if pid_file is None:

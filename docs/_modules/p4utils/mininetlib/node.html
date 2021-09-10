@@ -189,8 +189,10 @@
 <span class="c1">#</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">signal</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">from</span> <span class="nn">psutil</span> <span class="kn">import</span> <span class="n">pid_exists</span>
 <span class="kn">from</span> <span class="nn">mininet.log</span> <span class="kn">import</span> <span class="n">debug</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span>
 <span class="kn">from</span> <span class="nn">mininet.node</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Host</span><span class="p">,</span> <span class="n">Switch</span>
 <span class="kn">from</span> <span class="nn">mininet.moduledeps</span> <span class="kn">import</span> <span class="n">pathCheck</span>
@@ -292,13 +294,13 @@
             <span class="k">raise</span> <span class="ne">ConnectionRefusedError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> cannot bind port </span><span class="si">{}</span><span class="s1"> because it is bound by another process.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_port</span><span class="p">))</span>
 
 <div class="viewcode-block" id="P4Switch.set_binary"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.set_binary">[docs]</a>    <span class="k">def</span> <span class="nf">set_binary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sw_bin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set switch default binary&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Sets switch default binary&quot;&quot;&quot;</span>
         <span class="c1"># Make sure that the provided sw_bin is valid</span>
         <span class="n">pathCheck</span><span class="p">(</span><span class="n">sw_bin</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sw_bin</span> <span class="o">=</span> <span class="n">sw_bin</span></div>
 
 <div class="viewcode-block" id="P4Switch.set_json"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.set_json">[docs]</a>    <span class="k">def</span> <span class="nf">set_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the compiled P4 JSON file.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Sets the compiled P4 JSON file.&quot;&quot;&quot;</span>
         <span class="c1"># Make sure that the provided JSON file exists if it is not None</span>
         <span class="k">if</span> <span class="n">json_path</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">json_path</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;Invalid JSON file.&#39;</span><span class="p">)</span>
@@ -306,15 +308,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">json_path</span> <span class="o">=</span> <span class="n">json_path</span></div>
 
 <div class="viewcode-block" id="P4Switch.switch_started"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.switch_started">[docs]</a>    <span class="k">def</span> <span class="nf">switch_started</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check if the switch process has started.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/proc&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_switch_pid</span><span class="p">)))</span></div>
+        <span class="sd">&quot;&quot;&quot;Checks if the switch process has started.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pid_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_switch_pid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="P4Switch.thrift_listening"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.thrift_listening">[docs]</a>    <span class="k">def</span> <span class="nf">thrift_listening</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check if a thrift process listens on the thrift port.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Checks if a thrift process listens on the thrift port.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">check_listening_on_port</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thrift_port</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="P4Switch.switch_status"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.switch_status">[docs]</a>    <span class="k">def</span> <span class="nf">switch_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check if all the switch processes have started correctly.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Checks if all the switch processes have started correctly.&quot;&quot;&quot;</span>
         <span class="n">status</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;switch&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_started</span><span class="p">(),</span>
                   <span class="s1">&#39;thrift&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_listening</span><span class="p">()}</span>
         <span class="k">if</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;switch&#39;</span><span class="p">]:</span>
@@ -327,7 +329,7 @@
         <span class="k">return</span> <span class="n">status</span></div>
 
 <div class="viewcode-block" id="P4Switch.add_arguments"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.add_arguments">[docs]</a>    <span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add arguments to the simple switch process&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Adds arguments to the simple switch process&quot;&quot;&quot;</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_bin</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">port</span><span class="p">,</span> <span class="n">intf</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intfs</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">intf</span><span class="o">.</span><span class="n">IP</span><span class="p">():</span>
@@ -353,7 +355,7 @@
         <span class="k">return</span> <span class="n">args</span></div>
 
 <div class="viewcode-block" id="P4Switch.start"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">controllers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Start up a new P4 switch.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Starts a new P4 switch.&quot;&quot;&quot;</span>
         <span class="n">info</span><span class="p">(</span><span class="s1">&#39;Starting P4 switch </span><span class="si">{}</span><span class="s1">.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_arguments</span><span class="p">())</span>
         <span class="n">info</span><span class="p">(</span><span class="n">cmd</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -371,29 +373,28 @@
             <span class="k">raise</span> <span class="ne">ChildProcessError</span><span class="p">(</span><span class="s1">&#39;P4 switch </span><span class="si">{}</span><span class="s1"> did not start correctly. Check the switch log file.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
         <span class="n">info</span><span class="p">(</span><span class="s1">&#39;P4 switch </span><span class="si">{}</span><span class="s1"> has been started.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
 
-        <span class="c1"># only do this for l3..</span>
-        <span class="c1">#self.cmd(&#39;sysctl&#39;, &#39;-w&#39;, &#39;net.ipv4.ip_forward=1&#39;)</span>
-
 <div class="viewcode-block" id="P4Switch.stop_p4switch"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.stop_p4switch">[docs]</a>    <span class="k">def</span> <span class="nf">stop_p4switch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Just stops simple switch without deleting interfaces.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Stops the simple switch binary without deleting the interfaces.&quot;&quot;&quot;</span>
         <span class="n">info</span><span class="p">(</span><span class="s1">&#39;Stopping P4 switch </span><span class="si">{}</span><span class="s1">.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="p">(</span><span class="s1">&#39;kill -9 </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_switch_pid</span><span class="p">))</span></div>
+        <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_switch_pid</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGKILL</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wait_condition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_started</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ChildProcessError</span><span class="p">(</span><span class="s1">&#39;P4 switch </span><span class="si">{}</span><span class="s1"> did not stop after requesting it.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="P4Switch.stop"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Terminate P4 switch.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="p">(</span><span class="s1">&#39;kill -9 </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_switch_pid</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">deleteIntfs</span><span class="p">()</span></div>
+<div class="viewcode-block" id="P4Switch.stop"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deleteIntfs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Terminates the P4 switch node.&quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_switch_pid</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGKILL</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">deleteIntfs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="P4Switch.attach"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.attach">[docs]</a>    <span class="k">def</span> <span class="nf">attach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intf</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Connect a data port.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Connects a data port.&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="P4Switch.detach"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.detach">[docs]</a>    <span class="k">def</span> <span class="nf">detach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intf</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;&quot;Disconnect a data port.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;&quot;Disconnects a data port.&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="P4Switch.describe"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.describe">[docs]</a>    <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Describe P4Switch.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Describes P4Switch.&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> -&gt; Thrift port: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_port</span><span class="p">))</span></div></div>
 
 
@@ -412,11 +413,11 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">sw_bin</span><span class="o">=</span><span class="n">sw_bin</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="P4RuntimeSwitch.grpc_listening"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4RuntimeSwitch.grpc_listening">[docs]</a>    <span class="k">def</span> <span class="nf">grpc_listening</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check if a grpc process listens on the grpc port.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Checks if a grpc process listens on the grpc port.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">check_listening_on_port</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_port</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="P4RuntimeSwitch.switch_status"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4RuntimeSwitch.switch_status">[docs]</a>    <span class="k">def</span> <span class="nf">switch_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check if all the switch processes have started correctly.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Checks if all the switch processes have started correctly.&quot;&quot;&quot;</span>
         <span class="n">status</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;switch&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_started</span><span class="p">(),</span>
                   <span class="s1">&#39;thrift&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_listening</span><span class="p">(),</span>
                   <span class="s1">&#39;grpc&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">grpc_listening</span><span class="p">()}</span>
@@ -431,19 +432,59 @@
         <span class="k">return</span> <span class="n">status</span></div>
 
 <div class="viewcode-block" id="P4RuntimeSwitch.add_arguments"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4RuntimeSwitch.add_arguments">[docs]</a>    <span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add arguments to the simple switch process&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Adds arguments to the simple switch process&quot;&quot;&quot;</span>
         <span class="n">args</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add_arguments</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grpc_port</span><span class="p">:</span>
             <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-- --grpc-server-addr 0.0.0.0:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grpc_port</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">args</span></div>
 
 <div class="viewcode-block" id="P4RuntimeSwitch.describe"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4RuntimeSwitch.describe">[docs]</a>    <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Describe P4RuntimeSwitch.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Describes P4RuntimeSwitch.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> -&gt; gRPC port: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grpc_port</span><span class="p">))</span></div></div>
 
 <div class="viewcode-block" id="FRRouter"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.FRRouter">[docs]</a><span class="k">class</span> <span class="nc">FRRouter</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;FRRouter built as Mininet node&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;FRRouter built as Mininet node.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        name (str)    : name of the router</span>
+<span class="sd">        bin_dir (str) : directory that contains the daemons binaries</span>
+<span class="sd">        int_conf (str): path to the router integrated configuration file </span>
+<span class="sd">        conf_dir (str): path to the directory which contains the folder with</span>
+<span class="sd">                        the configuration files for all the daemons (the folder</span>
+<span class="sd">                        is named after the router)</span>
+<span class="sd">        zebra (bool)  : enable Zebra daemon</span>
+<span class="sd">        bgpd (bool)   : enable BGP protocol</span>
+<span class="sd">        ospfd (bool)  : enable OSPFv2 (for IPv4) protocol</span>
+<span class="sd">        ospf6d (bool) : enable OSPFv3 (for IPv6) protocol</span>
+<span class="sd">        ripd (bool)   : enable RIP protocol</span>
+<span class="sd">        ripngd (bool) : enable RIPng protocol</span>
+<span class="sd">        isisd (bool)  : enable IS-IS protocol</span>
+<span class="sd">        pimd (bool)   : enable PIM protocol</span>
+<span class="sd">        ldpd (bool)   : enable LPD protocol</span>
+<span class="sd">        nhrpd (bool)  : enable NHRP protocol</span>
+<span class="sd">        eigrpd (bool) : enable EIGRP protocol</span>
+<span class="sd">        babeld (bool) : enable Babel protocol</span>
+<span class="sd">        sharpd (bool) : enable SHARP daemon</span>
+<span class="sd">        staticd (bool): enable STATIC daemon</span>
+<span class="sd">        pbrd (bool)   : enable Policy Based Routing</span>
+<span class="sd">        bfdd (bool)   : enable Bidirectional Forwarding Detection</span>
+<span class="sd">        fabricd (bool): enable OpenFabric protocol</span>
+
+<span class="sd">    Warning:</span>
+<span class="sd">        Only the following daemons and protocols are enabled by default:</span>
+<span class="sd">        </span>
+<span class="sd">        - ``zebra``</span>
+<span class="sd">        - ``ospfd``</span>
+<span class="sd">        - ``bgpd``</span>
+<span class="sd">        - ``staticd``</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        If ``int_conf`` is set, the content ``conf_dir`` is not considered except for </span>
+<span class="sd">        ``vtysh.conf`` which is always taken into account.  </span>
+<span class="sd">        If ``conf_dir`` is not specified, then it is assumed to be ``./routers``, and the</span>
+<span class="sd">        folder which contains the configuration files is then ``./routers/&lt;name&gt;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">DAEMONS</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s1">&#39;zebra&#39;</span><span class="p">,</span>
@@ -470,27 +511,7 @@
                  <span class="n">int_conf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">conf_dir</span><span class="o">=</span><span class="s1">&#39;./routers&#39;</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Attributes:</span>
-<span class="sd">            name (string)       : name of the router</span>
-<span class="sd">            bin_dir             : directory that contains the daemons binaries</span>
-<span class="sd">            int_conf (string)   : path to the router integrated configuration file </span>
-<span class="sd">            conf_dir (string)   : path to the directory which contains the folder with</span>
-<span class="sd">                                  the configuration files for all the daemons (the folder</span>
-<span class="sd">                                  is named after the router)</span>
 
-<span class="sd">            Additional configuration parameters involve the daemon selections. The daemons</span>
-<span class="sd">            &#39;zebra&#39;, &#39;ospfd&#39;, &#39;bgpd&#39;, &#39;staticd&#39; are enabled by default. To disable them pass</span>
-<span class="sd">            to the router the keyword argument &lt;daemon&gt;=False. To enable other non-default </span>
-<span class="sd">            daemons, pass &lt;daemon&gt;=True.</span>
-
-<span class="sd">        Notice:</span>
-<span class="sd">            If int_conf is set, the content conf_dir is not considered except for </span>
-<span class="sd">            vtysh.conf which is always taken into account.</span>
-
-<span class="sd">            If conf_dir is not specified, then conf_dir is assumed to be &#39;./routers&#39;, and the</span>
-<span class="sd">            folder which contains the configuration files is then &#39;./routers/&lt;name&gt;&#39;.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">bin_dir</span> <span class="o">=</span> <span class="n">bin_dir</span>
@@ -526,6 +547,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">daemons</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">{})</span>
 
 <div class="viewcode-block" id="FRRouter.start"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.FRRouter.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Starts the FRRouter node.&quot;&quot;&quot;</span>
         <span class="c1"># Enable IPv4 forwarding</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="p">(</span><span class="s1">&#39;sysctl -w net.ipv4.ip_forward=1&#39;</span><span class="p">)</span>
         <span class="c1"># Enable MPLS forwarding</span>
@@ -590,10 +612,10 @@
                                       <span class="n">log</span><span class="o">=</span><span class="s1">&#39;file:/tmp/</span><span class="si">{}</span><span class="s1">-</span><span class="si">{}</span><span class="s1">.log&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">daemon</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="FRRouter.stop"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.FRRouter.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Terminate FRRouter.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Terminates FRRouter.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">daemon</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">daemons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="c1"># Kill daemons</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="p">(</span><span class="s1">&#39;kill -9 </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pid&#39;</span><span class="p">)))</span>
+            <span class="c1"># Kill daemon</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">],</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGKILL</span><span class="p">)</span>
             <span class="c1"># Remove pid, out and log files</span>
             <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -f &quot;/tmp/</span><span class="si">{name}</span><span class="s1">-</span><span class="si">{daemon}</span><span class="s1">.pid&quot; &#39;</span>
                       <span class="s1">&#39;&quot;/tmp/</span><span class="si">{name}</span><span class="s1">-</span><span class="si">{daemon}</span><span class="s1">.out&quot; &#39;</span>
@@ -603,7 +625,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="FRRouter.start_daemon"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.FRRouter.start_daemon">[docs]</a>    <span class="k">def</span> <span class="nf">start_daemon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">daemon</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Start FRR on a given router.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Starts FRR on a given router.&quot;&quot;&quot;</span>
         <span class="c1"># Get PID file</span>
         <span class="n">pid_file</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">pid_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

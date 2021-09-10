@@ -182,6 +182,7 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">psutil</span>
 <span class="kn">import</span> <span class="nn">hashlib</span>
@@ -195,8 +196,38 @@
 <span class="n">_prefixLenMatchRegex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;netmask (\d+\.\d+\.\d+\.\d+)&quot;</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="wait_condition"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.wait_condition">[docs]</a><span class="k">def</span> <span class="nf">wait_condition</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[],</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Waits for the function to return the specified value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        func (function): function to check</span>
+<span class="sd">        value          : condition to meet</span>
+<span class="sd">        args (list)    : positional arguments of the function</span>
+<span class="sd">        kwargs (dict)  : key-word arguments of the function</span>
+<span class="sd">        timeout (float): time to wait for condition in seconds</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: **True** if the condition is met before the timeout </span>
+<span class="sd">              expires, **False** otherwise.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        If ``timeout`` is set to ``0``, this function will wait forever.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">timeout</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&gt;=</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
 <div class="viewcode-block" id="merge_dict"><a class="viewcode-back" href="../../../p4utils.utils.helper.html#p4utils.utils.helper.merge_dict">[docs]</a><span class="k">def</span> <span class="nf">merge_dict</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Merge source dictionary fields and subfields into destionation dictionary.</span>
+    <span class="sd">&quot;&quot;&quot;Merges source dictionary fields and subfields into destionation dictionary.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        dst (dict): destination dictionary</span>

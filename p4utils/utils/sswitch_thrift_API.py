@@ -41,7 +41,7 @@ def handle_bad_input(f):
     """Handles bad input.
 
     Args:
-        f (func): function or method to handle
+        f (function): function or method to handle
     
     Returns:
         bool: **True** if the function was correctly executed, and **False** otherwise.
