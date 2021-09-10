@@ -84,12 +84,8 @@ build {
     inline = [
       "echo ${var.password} | sudo -S bash -c \"echo '${var.username} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet\"",
       "echo ${var.password} | sudo -S sudo chmod 440 /etc/sudoers.d/99_advnet",
-      "sudo apt-get install -y git",
-      "cd $HOME",
-      "git clone https://github.com/nsg-ethz/p4-utils.git",
-      "cd p4-utils",
-      "cd install-tools",
-      "./install-p4-dev.sh"
+      "sudo apt-get install -y git curl",
+      "curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/install-p4-dev.sh | bash"
     ]
   }
 }

@@ -90,12 +90,8 @@ build {
       "        name: e*",
       "      dhcp4: yes",
       "EOF'",
-      "sudo apt-get install -y git",
-      "cd $HOME",
-      "git clone https://github.com/nsg-ethz/p4-utils.git",
-      "cd p4-utils",
-      "cd install-tools",
-      "./install-p4-dev.sh"
+      "sudo apt-get install -y git curl",
+      "curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/install-p4-dev.sh | bash"
     ]
   }
 }
