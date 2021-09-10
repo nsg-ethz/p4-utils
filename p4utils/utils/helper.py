@@ -21,7 +21,7 @@ from p4utils.utils.topology import NetworkGraph
 _prefixLenMatchRegex = re.compile("netmask (\d+\.\d+\.\d+\.\d+)")
 
 
-def wait_condition(func, value, args=[], kwargs={}, timeout=10):
+def wait_condition(func, value, args=[], kwargs={}, timeout=0):
     """Waits for the function to return the specified value.
 
     Args:

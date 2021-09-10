@@ -16,7 +16,6 @@
 import os
 import signal
 import tempfile
-from time import sleep
 from psutil import pid_exists
 from mininet.log import debug, info, output, warning, error
 from mininet.node import Node, Host, Switch
@@ -26,6 +25,7 @@ from p4utils.utils.helper import *
 
 
 SWITCH_START_TIMEOUT = 10
+SWITCH_STOP_TIMEOUT = 10
 
 
 class P4Host(Host):
@@ -142,16 +142,7 @@ class P4Switch(Switch):
 
     def switch_status(self):
         """Checks if all the switch processes have started correctly."""
-        status = {'switch': self.switch_started(),
-                  'thrift': self.thrift_listening()}
-        if status['switch']:
-            for _ in range(SWITCH_START_TIMEOUT * 2):
-                if status['thrift']:
-                    break
-                else:
-                    status['thrift'] = self.thrift_listening()
-                sleep(0.5)
-        return status
+        return self.switch_started() and self.thrift_listening()
 
     def add_arguments(self):
         """Adds arguments to the simple switch process"""
@@ -193,8 +184,7 @@ class P4Switch(Switch):
                 self.cmd(cmd + '> /dev/null 2>&1 & echo $! >> ' + f.name)
             self.simple_switch_pid = int(f.read())
         debug('P4 switch {} PID is {}.\n'.format(self.name, self.simple_switch_pid))
-        sleep(1)
-        if not all(self.switch_status().values()):
+        if not wait_condition(self.switch_status, True, timeout=SWITCH_START_TIMEOUT):
             raise ChildProcessError('P4 switch {} did not start correctly. Check the switch log file.'.format(self.name))
         info('P4 switch {} has been started.\n'.format(self.name))
 
@@ -202,7 +192,7 @@ class P4Switch(Switch):
         """Stops the simple switch binary without deleting the interfaces."""
         info('Stopping P4 switch {}.\n'.format(self.name))
         os.kill(self.simple_switch_pid, signal.SIGKILL)
-        if not wait_condition(self.switch_started, False):
+        if not wait_condition(self.switch_started, False, timeout=SWITCH_STOP_TIMEOUT):
             raise ChildProcessError('P4 switch {} did not stop after requesting it.'.format(self.name))
 
     def stop(self, deleteIntfs=True):
@@ -243,18 +233,7 @@ class P4RuntimeSwitch(P4Switch):
 
     def switch_status(self):
         """Checks if all the switch processes have started correctly."""
-        status = {'switch': self.switch_started(),
-                  'thrift': self.thrift_listening(),
-                  'grpc': self.grpc_listening()}
-        if status['switch']:
-            for _ in range(SWITCH_START_TIMEOUT*2):
-                if status['thrift'] and status['grpc']:
-                    break
-                else:
-                    status['thrift'] = self.thrift_listening()
-                    status['grpc'] = self.grpc_listening()
-                sleep(0.5)
-        return status
+        return super().switch_status() and self.grpc_listening()
 
     def add_arguments(self):
         """Adds arguments to the simple switch process"""

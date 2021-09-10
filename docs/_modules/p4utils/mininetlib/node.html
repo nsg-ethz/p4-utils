@@ -191,7 +191,6 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">signal</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 <span class="kn">from</span> <span class="nn">psutil</span> <span class="kn">import</span> <span class="n">pid_exists</span>
 <span class="kn">from</span> <span class="nn">mininet.log</span> <span class="kn">import</span> <span class="n">debug</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span>
 <span class="kn">from</span> <span class="nn">mininet.node</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Host</span><span class="p">,</span> <span class="n">Switch</span>
@@ -201,6 +200,7 @@
 
 
 <span class="n">SWITCH_START_TIMEOUT</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">SWITCH_STOP_TIMEOUT</span> <span class="o">=</span> <span class="mi">10</span>
 
 
 <div class="viewcode-block" id="P4Host"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Host">[docs]</a><span class="k">class</span> <span class="nc">P4Host</span><span class="p">(</span><span class="n">Host</span><span class="p">):</span>
@@ -317,16 +317,7 @@
 
 <div class="viewcode-block" id="P4Switch.switch_status"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.switch_status">[docs]</a>    <span class="k">def</span> <span class="nf">switch_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Checks if all the switch processes have started correctly.&quot;&quot;&quot;</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;switch&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_started</span><span class="p">(),</span>
-                  <span class="s1">&#39;thrift&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_listening</span><span class="p">()}</span>
-        <span class="k">if</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;switch&#39;</span><span class="p">]:</span>
-            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">SWITCH_START_TIMEOUT</span> <span class="o">*</span> <span class="mi">2</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;thrift&#39;</span><span class="p">]:</span>
-                    <span class="k">break</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">status</span><span class="p">[</span><span class="s1">&#39;thrift&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_listening</span><span class="p">()</span>
-                <span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">status</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_started</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_listening</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="P4Switch.add_arguments"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.add_arguments">[docs]</a>    <span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Adds arguments to the simple switch process&quot;&quot;&quot;</span>
@@ -368,8 +359,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="p">(</span><span class="n">cmd</span> <span class="o">+</span> <span class="s1">&#39;&gt; /dev/null 2&gt;&amp;1 &amp; echo $! &gt;&gt; &#39;</span> <span class="o">+</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">simple_switch_pid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
         <span class="n">debug</span><span class="p">(</span><span class="s1">&#39;P4 switch </span><span class="si">{}</span><span class="s1"> PID is </span><span class="si">{}</span><span class="s1">.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple_switch_pid</span><span class="p">))</span>
-        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_status</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wait_condition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_status</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">SWITCH_START_TIMEOUT</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ChildProcessError</span><span class="p">(</span><span class="s1">&#39;P4 switch </span><span class="si">{}</span><span class="s1"> did not start correctly. Check the switch log file.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
         <span class="n">info</span><span class="p">(</span><span class="s1">&#39;P4 switch </span><span class="si">{}</span><span class="s1"> has been started.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
 
@@ -377,7 +367,7 @@
         <span class="sd">&quot;&quot;&quot;Stops the simple switch binary without deleting the interfaces.&quot;&quot;&quot;</span>
         <span class="n">info</span><span class="p">(</span><span class="s1">&#39;Stopping P4 switch </span><span class="si">{}</span><span class="s1">.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
         <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_switch_pid</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGKILL</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">wait_condition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_started</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wait_condition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_started</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">SWITCH_STOP_TIMEOUT</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ChildProcessError</span><span class="p">(</span><span class="s1">&#39;P4 switch </span><span class="si">{}</span><span class="s1"> did not stop after requesting it.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="P4Switch.stop"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4Switch.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deleteIntfs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -418,18 +408,7 @@
 
 <div class="viewcode-block" id="P4RuntimeSwitch.switch_status"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4RuntimeSwitch.switch_status">[docs]</a>    <span class="k">def</span> <span class="nf">switch_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Checks if all the switch processes have started correctly.&quot;&quot;&quot;</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;switch&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_started</span><span class="p">(),</span>
-                  <span class="s1">&#39;thrift&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_listening</span><span class="p">(),</span>
-                  <span class="s1">&#39;grpc&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">grpc_listening</span><span class="p">()}</span>
-        <span class="k">if</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;switch&#39;</span><span class="p">]:</span>
-            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">SWITCH_START_TIMEOUT</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;thrift&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">status</span><span class="p">[</span><span class="s1">&#39;grpc&#39;</span><span class="p">]:</span>
-                    <span class="k">break</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">status</span><span class="p">[</span><span class="s1">&#39;thrift&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thrift_listening</span><span class="p">()</span>
-                    <span class="n">status</span><span class="p">[</span><span class="s1">&#39;grpc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grpc_listening</span><span class="p">()</span>
-                <span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">status</span></div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">switch_status</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">grpc_listening</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="P4RuntimeSwitch.add_arguments"><a class="viewcode-back" href="../../../p4utils.mininetlib.node.html#p4utils.mininetlib.node.P4RuntimeSwitch.add_arguments">[docs]</a>    <span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Adds arguments to the simple switch process&quot;&quot;&quot;</span>
