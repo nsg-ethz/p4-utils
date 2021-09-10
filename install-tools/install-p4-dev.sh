@@ -560,7 +560,6 @@ function do_p4-learning {
     if [ ! -d p4-learning ]; then
         git clone https://github.com/nsg-ethz/p4-learning.git p4-learning
     fi
-    cd p4-learning
 }
 
 # Install Sphinx and ReadtheDocs
