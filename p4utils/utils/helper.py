@@ -33,7 +33,7 @@ def wait_condition(func, value, args=[], kwargs={}, timeout=0):
 
     Returns:
         bool: **True** if the condition is met before the timeout 
-              expires, **False** otherwise.
+        expires, **False** otherwise.
 
     Note:
         If ``timeout`` is set to ``0``, this function will wait forever.
