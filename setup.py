@@ -41,7 +41,7 @@ setup(
         'p4runtime',
         'protobuf >= 3.6.1',
         'psutil',
-        'scapy',
+        'scapy == 2.4.4',
         'setuptools',
     ],
     extras_require={}
