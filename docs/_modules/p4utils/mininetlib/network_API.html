@@ -1960,17 +1960,17 @@
         <span class="sd">&quot;&quot;&quot;Adds a task to the node.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            name (str)            : node name</span>
-<span class="sd">            exe (str or function) : executable to run (either a shell string </span>
-<span class="sd">                                    command or a Python function)</span>
-<span class="sd">            args                  : positional arguments for the passed function</span>
-<span class="sd">            start (float)         : task delay in seconds with respect to the</span>
-<span class="sd">                                    network starting time.</span>
-<span class="sd">            duration (float)      : task duration time in seconds (if duration is </span>
-<span class="sd">                                    lower than or equal to ``0``, then the task has no </span>
-<span class="sd">                                    time limitation)</span>
-<span class="sd">            enableScheduler (bool): whether to automatically enable the TaskServer or not</span>
-<span class="sd">            **kwargs              : key-word arguments for the passed function</span>
+<span class="sd">            name (str)                     : node name</span>
+<span class="sd">            exe (str or types.FunctionType): executable to run (either a shell string </span>
+<span class="sd">                                             command or a Python function)</span>
+<span class="sd">            *args                          : positional arguments for the passed function</span>
+<span class="sd">            start (float)                  : task delay in seconds with respect to the</span>
+<span class="sd">                                             network starting time.</span>
+<span class="sd">            duration (float)               : task duration time in seconds (if duration is </span>
+<span class="sd">                                             lower than or equal to ``0``, then the task has no </span>
+<span class="sd">                                             time limitation)</span>
+<span class="sd">            enableScheduler (bool)         : whether to automatically enable the TaskServer or not</span>
+<span class="sd">            **kwargs                       : key-word arguments for the passed function</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            This method can automatically enable the task scheduler </span>

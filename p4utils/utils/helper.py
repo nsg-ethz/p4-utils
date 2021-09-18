@@ -25,11 +25,11 @@ def wait_condition(func, value, args=[], kwargs={}, timeout=0):
     """Waits for the function to return the specified value.
 
     Args:
-        func (function): function to check
-        value          : condition to meet
-        args (list)    : positional arguments of the function
-        kwargs (dict)  : key-word arguments of the function
-        timeout (float): time to wait for condition in seconds
+        func (types.FunctionType): function to check
+        value                    : condition to meet
+        args (list)              : positional arguments of the function
+        kwargs (dict)            : key-word arguments of the function
+        timeout (float)          : time to wait for condition in seconds
 
     Returns:
         bool: **True** if the condition is met before the timeout 

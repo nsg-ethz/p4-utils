@@ -14,21 +14,19 @@ import multiprocessing as mp
 
 
 class Task:
-    """
-    Abstraction of a Task executed by the TaskServer.
+    """Abstraction of a Task executed by the TaskServer.
+
+    Args:
+        exe (str or types.FunctionType): executable to run (either a shell string 
+                                            command or a python function)
+        *args                          : positional arguments for the passed function
+        start (int or float)           : task absolute starting time (unix time)
+        duration (int or float)        : task duration time in seconds (if duration is 
+                                         lower than or equal to ``0``, then the task has no 
+                                         time limitation)
+        **kwargs                       : key-word arguments for the passed function
     """
     def __init__(self, exe, *args, start=0, duration=0, **kwargs):
-        """
-        Attributes:
-            exe             : executable to run (either a shell string 
-                              command or a python function)
-            args            : positional arguments for the passed function
-            start (float)   : task absolute starting time (unix time)
-            duration (float): task duration time in seconds (if duration is 
-                              lower than or equal to 0, then the task has no 
-                              time limitation)
-            kwargs          : key-word arguments for the passed function
-        """
         if start >= 0:
             self.start = start
         else:
@@ -52,8 +50,7 @@ class Task:
         self.thread = None
 
     def is_alive(self):
-        """
-        Check whether the task is alive or not and
+        """Checks whether the task is alive or not and
         update the task states.
         """
         if isinstance(self.proc, sp.Popen):
@@ -65,8 +62,7 @@ class Task:
         return alive
 
     def _start(self):
-        """
-        Start the executable in a separate process and populate
+        """Starts the executable in a separate process and populate
         self.process with it.
         """
         # If it is a function
@@ -85,18 +81,14 @@ class Task:
             raise TypeError('{} is not a supported type.'.format(type(self.exe)))
     
     def _stop(self):
-        """
-        Stops the execution of the process.
-        """
+        """Stops the execution of the process."""
         # Check if the process is running
         if self.is_alive():
             # Kill process
             os.kill(self.proc.pid, signal.SIGKILL)
 
     def _run(self):
-        """
-        Start the process, wait for its end and then kill it.
-        """
+        """Starts the process, wait for its end and then kill it."""
         # Wait for starting time
         time.sleep(max(0, self.start - time.time()))
         # Start process
@@ -108,9 +100,7 @@ class Task:
             self._stop()
 
     def run(self):
-        """
-        Start a thread to control the execution of the task.
-        """
+        """Starts a thread to control the execution of the task."""
         # Avoid zombie processes
         signal.signal(signal.SIGCHLD, signal.SIG_IGN)
         # Run the thread in non-blocking mode
@@ -129,14 +119,12 @@ class Task:
 
 
 class TaskClient:
-    """
-    Task scheduler client which communicates with servers.
+    """Task scheduler client which communicates with servers.
+    
+    Args:
+        unix_socket_file (str): path to the file used by the Unix socket
     """
     def __init__(self, unix_socket_file):
-        """
-        Attributes:
-            unix_socket_file (string): path to the file used by the Unix socket
-        """
         # Unix socket file
         self.unix_socket_file = unix_socket_file
         # Blocking server socket
@@ -144,10 +132,9 @@ class TaskClient:
         self.socket.setblocking(True)
     
     def send(self, obj, retry=False):
-        """
-        Send an object to the server and close connection.
+        """Sends an object to the server and close connection.
 
-        Arguments:
+        Args:
             obj         : serializable object to send to the server
                           using Pickle
             retry (bool): whether to attempt a reconnection upon failure
@@ -156,10 +143,9 @@ class TaskClient:
         self._close()
 
     def _send(self, obj, retry=False):
-        """
-        Send an object to the server.
+        """Sends an object to the server.
 
-        Arguments:
+        Args:
             obj : serializable object to send to the server
                   using Pickle
         """
@@ -177,22 +163,18 @@ class TaskClient:
         self.socket.sendall(bin_data)      
         
     def _close(self):
-        """
-        Close the socket.
-        """
+        """Closes the socket."""
         self.socket.close()
 
 
 class TaskServer:
-    """
-    Task scheduler server which runs on the Mininet nodes.
+    """Task scheduler server which runs on the Mininet nodes.
+    
+    Args:
+        unix_socket_file (str): path to the file used by the Unix socket
     """
 
     def __init__(self, unix_socket_file):
-        """
-        Attributes:
-            unix_socket_file (string): path to the file used by the Unix socket
-        """
         if os.path.exists(unix_socket_file):
             if os.path.isdir(unix_socket_file):
                 sh.rmtree(unix_socket_file)
@@ -218,9 +200,7 @@ class TaskServer:
         self.start()
 
     def server_loop(self):
-        """
-        Enqueue the tasks received via the Unix Domain Socket.
-        """
+        """Enqueues the tasks received via the Unix Domain Socket."""
         self.socket.listen()
         while True:
             # Accept connection
@@ -261,9 +241,7 @@ class TaskServer:
                     tbk.print_exc()
 
     def scheduler_loop(self):
-        """
-        Start the tasks and stop them when it is required.
-        """
+        """Starts the tasks and stop them when it is required."""
         while True:
                 # Get task from the queue 
                 task = self.queue.get()
@@ -303,9 +281,7 @@ class TaskServer:
                     print()
 
     def start(self):
-        """
-        Start the server.
-        """
+        """Starts the server."""
         # Start server to listen for tasks
         self.server = th.Thread(target=self.server_loop, daemon=True)
         self.server.start()

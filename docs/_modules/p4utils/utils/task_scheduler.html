@@ -189,21 +189,19 @@
 
 
 <div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../../p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Abstraction of a Task executed by the TaskServer.</span>
+    <span class="sd">&quot;&quot;&quot;Abstraction of a Task executed by the TaskServer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        exe (str or types.FunctionType): executable to run (either a shell string </span>
+<span class="sd">                                            command or a python function)</span>
+<span class="sd">        *args                          : positional arguments for the passed function</span>
+<span class="sd">        start (int or float)           : task absolute starting time (unix time)</span>
+<span class="sd">        duration (int or float)        : task duration time in seconds (if duration is </span>
+<span class="sd">                                         lower than or equal to ``0``, then the task has no </span>
+<span class="sd">                                         time limitation)</span>
+<span class="sd">        **kwargs                       : key-word arguments for the passed function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exe</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Attributes:</span>
-<span class="sd">            exe             : executable to run (either a shell string </span>
-<span class="sd">                              command or a python function)</span>
-<span class="sd">            args            : positional arguments for the passed function</span>
-<span class="sd">            start (float)   : task absolute starting time (unix time)</span>
-<span class="sd">            duration (float): task duration time in seconds (if duration is </span>
-<span class="sd">                              lower than or equal to 0, then the task has no </span>
-<span class="sd">                              time limitation)</span>
-<span class="sd">            kwargs          : key-word arguments for the passed function</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
         <span class="k">else</span><span class="p">:</span>
@@ -227,8 +225,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Task.is_alive"><a class="viewcode-back" href="../../../p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.Task.is_alive">[docs]</a>    <span class="k">def</span> <span class="nf">is_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check whether the task is alive or not and</span>
+        <span class="sd">&quot;&quot;&quot;Checks whether the task is alive or not and</span>
 <span class="sd">        update the task states.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proc</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">Popen</span><span class="p">):</span>
@@ -240,8 +237,7 @@
         <span class="k">return</span> <span class="n">alive</span></div>
 
     <span class="k">def</span> <span class="nf">_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Start the executable in a separate process and populate</span>
+        <span class="sd">&quot;&quot;&quot;Starts the executable in a separate process and populate</span>
 <span class="sd">        self.process with it.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># If it is a function</span>
@@ -260,18 +256,14 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a supported type.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="p">)))</span>
     
     <span class="k">def</span> <span class="nf">_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Stops the execution of the process.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Stops the execution of the process.&quot;&quot;&quot;</span>
         <span class="c1"># Check if the process is running</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
             <span class="c1"># Kill process</span>
             <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGKILL</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Start the process, wait for its end and then kill it.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Starts the process, wait for its end and then kill it.&quot;&quot;&quot;</span>
         <span class="c1"># Wait for starting time</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
         <span class="c1"># Start process</span>
@@ -283,9 +275,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Task.run"><a class="viewcode-back" href="../../../p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.Task.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Start a thread to control the execution of the task.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Starts a thread to control the execution of the task.&quot;&quot;&quot;</span>
         <span class="c1"># Avoid zombie processes</span>
         <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGCHLD</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIG_IGN</span><span class="p">)</span>
         <span class="c1"># Run the thread in non-blocking mode</span>
@@ -304,14 +294,12 @@
 
 
 <div class="viewcode-block" id="TaskClient"><a class="viewcode-back" href="../../../p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.TaskClient">[docs]</a><span class="k">class</span> <span class="nc">TaskClient</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Task scheduler client which communicates with servers.</span>
+    <span class="sd">&quot;&quot;&quot;Task scheduler client which communicates with servers.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        unix_socket_file (str): path to the file used by the Unix socket</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unix_socket_file</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Attributes:</span>
-<span class="sd">            unix_socket_file (string): path to the file used by the Unix socket</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Unix socket file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unix_socket_file</span> <span class="o">=</span> <span class="n">unix_socket_file</span>
         <span class="c1"># Blocking server socket</span>
@@ -319,10 +307,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
     
 <div class="viewcode-block" id="TaskClient.send"><a class="viewcode-back" href="../../../p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.TaskClient.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">retry</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Send an object to the server and close connection.</span>
+        <span class="sd">&quot;&quot;&quot;Sends an object to the server and close connection.</span>
 
-<span class="sd">        Arguments:</span>
+<span class="sd">        Args:</span>
 <span class="sd">            obj         : serializable object to send to the server</span>
 <span class="sd">                          using Pickle</span>
 <span class="sd">            retry (bool): whether to attempt a reconnection upon failure</span>
@@ -331,10 +318,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_close</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">retry</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Send an object to the server.</span>
+        <span class="sd">&quot;&quot;&quot;Sends an object to the server.</span>
 
-<span class="sd">        Arguments:</span>
+<span class="sd">        Args:</span>
 <span class="sd">            obj : serializable object to send to the server</span>
 <span class="sd">                  using Pickle</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -352,22 +338,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">bin_data</span><span class="p">)</span>      
         
     <span class="k">def</span> <span class="nf">_close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Close the socket.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Closes the socket.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="TaskServer"><a class="viewcode-back" href="../../../p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.TaskServer">[docs]</a><span class="k">class</span> <span class="nc">TaskServer</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Task scheduler server which runs on the Mininet nodes.</span>
+    <span class="sd">&quot;&quot;&quot;Task scheduler server which runs on the Mininet nodes.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        unix_socket_file (str): path to the file used by the Unix socket</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unix_socket_file</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Attributes:</span>
-<span class="sd">            unix_socket_file (string): path to the file used by the Unix socket</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">unix_socket_file</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">unix_socket_file</span><span class="p">):</span>
                 <span class="n">sh</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">unix_socket_file</span><span class="p">)</span>
@@ -393,9 +375,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
 <div class="viewcode-block" id="TaskServer.server_loop"><a class="viewcode-back" href="../../../p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.TaskServer.server_loop">[docs]</a>    <span class="k">def</span> <span class="nf">server_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Enqueue the tasks received via the Unix Domain Socket.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Enqueues the tasks received via the Unix Domain Socket.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="c1"># Accept connection</span>
@@ -436,9 +416,7 @@
                     <span class="n">tbk</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TaskServer.scheduler_loop"><a class="viewcode-back" href="../../../p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.TaskServer.scheduler_loop">[docs]</a>    <span class="k">def</span> <span class="nf">scheduler_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Start the tasks and stop them when it is required.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Starts the tasks and stop them when it is required.&quot;&quot;&quot;</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="c1"># Get task from the queue </span>
                 <span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
@@ -478,9 +456,7 @@
                     <span class="nb">print</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TaskServer.start"><a class="viewcode-back" href="../../../p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.TaskServer.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Start the server.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Starts the server.&quot;&quot;&quot;</span>
         <span class="c1"># Start server to listen for tasks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">server_loop</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>

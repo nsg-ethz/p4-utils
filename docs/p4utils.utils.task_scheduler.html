@@ -203,17 +203,35 @@
 <em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">Task</code><span class="sig-paren">(</span><em>exe</em>, <em>*args</em>, <em>start=0</em>, <em>duration=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/task_scheduler.html#Task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Abstraction of a Task executed by the TaskServer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>exe</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/types.html#types.FunctionType" title="(in Python v3.9)"><em>types.FunctionType</em></a>) – executable to run (either a shell string
+command or a python function)</li>
+<li><strong>*args</strong> – positional arguments for the passed function</li>
+<li><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – task absolute starting time (unix time)</li>
+<li><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – task duration time in seconds (if duration is
+lower than or equal to <code class="docutils literal"><span class="pre">0</span></code>, then the task has no
+time limitation)</li>
+<li><strong>**kwargs</strong> – key-word arguments for the passed function</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.Task.is_alive">
 <code class="descname">is_alive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/task_scheduler.html#Task.is_alive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.is_alive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether the task is alive or not and
+<dd><p>Checks whether the task is alive or not and
 update the task states.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.Task.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/task_scheduler.html#Task.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start a thread to control the execution of the task.</p>
+<dd><p>Starts a thread to control the execution of the task.</p>
 </dd></dl>
 
 </dd></dl>
@@ -223,10 +241,18 @@ update the task states.</p>
 <em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">TaskClient</code><span class="sig-paren">(</span><em>unix_socket_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/task_scheduler.html#TaskClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Task scheduler client which communicates with servers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unix_socket_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the file used by the Unix socket</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.TaskClient.send">
 <code class="descname">send</code><span class="sig-paren">(</span><em>obj</em>, <em>retry=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/task_scheduler.html#TaskClient.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskClient.send" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send an object to the server and close connection.</p>
+<dd><p>Sends an object to the server and close connection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -249,22 +275,30 @@ using Pickle</li>
 <em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">TaskServer</code><span class="sig-paren">(</span><em>unix_socket_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/task_scheduler.html#TaskServer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskServer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Task scheduler server which runs on the Mininet nodes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unix_socket_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the file used by the Unix socket</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.TaskServer.scheduler_loop">
 <code class="descname">scheduler_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/task_scheduler.html#TaskServer.scheduler_loop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskServer.scheduler_loop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start the tasks and stop them when it is required.</p>
+<dd><p>Starts the tasks and stop them when it is required.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.TaskServer.server_loop">
 <code class="descname">server_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/task_scheduler.html#TaskServer.server_loop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskServer.server_loop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enqueue the tasks received via the Unix Domain Socket.</p>
+<dd><p>Enqueues the tasks received via the Unix Domain Socket.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.TaskServer.start">
 <code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/task_scheduler.html#TaskServer.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskServer.start" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start the server.</p>
+<dd><p>Starts the server.</p>
 </dd></dl>
 
 </dd></dl>

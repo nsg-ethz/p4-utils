@@ -1785,17 +1785,17 @@ class NetworkAPI(Topo):
         """Adds a task to the node.
 
         Args:
-            name (str)            : node name
-            exe (str or function) : executable to run (either a shell string 
-                                    command or a Python function)
-            args                  : positional arguments for the passed function
-            start (float)         : task delay in seconds with respect to the
-                                    network starting time.
-            duration (float)      : task duration time in seconds (if duration is 
-                                    lower than or equal to ``0``, then the task has no 
-                                    time limitation)
-            enableScheduler (bool): whether to automatically enable the TaskServer or not
-            **kwargs              : key-word arguments for the passed function
+            name (str)                     : node name
+            exe (str or types.FunctionType): executable to run (either a shell string 
+                                             command or a Python function)
+            *args                          : positional arguments for the passed function
+            start (float)                  : task delay in seconds with respect to the
+                                             network starting time.
+            duration (float)               : task duration time in seconds (if duration is 
+                                             lower than or equal to ``0``, then the task has no 
+                                             time limitation)
+            enableScheduler (bool)         : whether to automatically enable the TaskServer or not
+            **kwargs                       : key-word arguments for the passed function
 
         Note:
             This method can automatically enable the task scheduler 
