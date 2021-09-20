@@ -201,6 +201,28 @@
 <p>This module includes all the functions that are frequently used
 in different parts of the code. These functions usually perform low level
 operations on data.</p>
+<dl class="class">
+<dt id="p4utils.utils.helper.WrapFunc">
+<em class="property">class </em><code class="descclassname">p4utils.utils.helper.</code><code class="descname">WrapFunc</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#WrapFunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.WrapFunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Wraps a function is such a way that they can be executed
+across different Python interpreters in the same system.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>func</strong> (<a class="reference external" href="https://docs.python.org/3/library/types.html#types.FunctionType" title="(in Python v3.9)"><em>types.FunctionType</em></a>) – function to wrap</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="p4utils.utils.helper.WrapFunc.unwrap">
+<code class="descname">unwrap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#WrapFunc.unwrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.WrapFunc.unwrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unwraps function and returns it.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt id="p4utils.utils.helper.check_listening_on_port">
 <code class="descclassname">p4utils.utils.helper.</code><code class="descname">check_listening_on_port</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#check_listening_on_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.check_listening_on_port" title="Permalink to this definition">¶</a></dt>

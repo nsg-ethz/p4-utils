@@ -18,16 +18,24 @@ class P4InfoDisabled(Exception):
 
 
 class P4C:
-    """
-    This compiler reads the .p4 program and outputs
+    """This compiler reads the P4 program and generates
     the configuration files used by switches.
+
+    Args:
+        p4_src (str) : path of the source P4 file to compile.
+        p4c_bin (str): path to the compiler binary
+        outdir (str) : directory containing all the output files. If set to None,
+                       then every output is stored in the directory of p4_src.
+        opts (str)   : p4c compilation options
+        p4rt (bool)  : whether to output the p4info file used to
+                       establish p4runtime connection to simple_switch_grpc.
     """
     compiled = False
     p4c_bin = 'p4c'
 
     @classmethod
     def set_binary(self, p4c_bin):
-        """Set class default binary"""
+        """Sets class default binary."""
         P4C.p4c_bin = p4c_bin
 
     def __init__(self, p4_src,
@@ -36,16 +44,6 @@ class P4C:
                  opts='--target bmv2 --arch v1model --std p4-16',
                  p4rt=False,
                  **kwargs):
-        """
-        Attributes:
-            p4_src (string) : path of the source P4 file to compile.
-            p4c_bin (string): path to the compiler binary
-            outdir (string) : directory containing all the output files. If set to None,
-                              then every output is stored in the directory of p4_src.
-            opts (string)   : p4c compilation options
-            p4rt (bool)     : whether to output the p4info file used to
-                              establish p4runtime connection to simple_switch_grpc.
-        """
 
         if p4c_bin is not None:
             self.set_binary(p4c_bin)
@@ -83,10 +81,7 @@ class P4C:
         self.json_out = self.outdir + '/' + json_out_basename
 
     def compile(self):
-        """
-        This method compiles the .p4 file and generates the
-        configuration files
-        """
+        """Compiles the P4 file and generates the configuration files."""
         # Compute checksum of P4 file. This allows to recognize modified files.
         self.cksum = cksum(self.p4_src)
         debug('source: {}\tcksum: {}\n'.format(self.p4_src, self.cksum))
@@ -108,14 +103,14 @@ class P4C:
             self.compiled = True
     
     def get_json_out(self):
-        """Returns the json configuration filepath"""
+        """Returns the JSON configuration filepath."""
         if self.compiled:
             return self.json_out
         else:
             raise NotCompiledError
 
     def get_p4rt_out(self):
-        """Returns the p4info filepath"""
+        """Returns the P4Info configuration filepath."""
         if self.compiled:
             if self.p4rt:
                 return self.p4rt_out
@@ -125,16 +120,17 @@ class P4C:
             raise NotCompiledError
 
     def clean(self):
-        """Remove output files and set compiler as uncompiled."""
+        """Removes output files and set compiler as uncompiled."""
         os.remove(self.p4rt_out)
         os.remove(self.json_out)
         self.compiled = False
 
     def new_source(self):
-        """
-        Returns True if the source P4 file has changed since
-        the last time it was compiled.
+        """Checks whether a new source was provided to the
+        compiler.
+        
+        Returns:
+            bool: **True** if the source P4 file has changed since
+            the last time it was compiled, **False** otherwise.
         """
         return cksum(self.p4_src) != self.cksum
-
-    

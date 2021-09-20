@@ -214,19 +214,35 @@
 <dt id="p4utils.utils.compiler.P4C">
 <em class="property">class </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">P4C</code><span class="sig-paren">(</span><em>p4_src</em>, <em>p4c_bin=None</em>, <em>outdir=None</em>, <em>opts='--target bmv2 --arch v1model --std p4-16'</em>, <em>p4rt=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/compiler.html#P4C"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
-<p>This compiler reads the .p4 program and outputs
+<p>This compiler reads the P4 program and generates
 the configuration files used by switches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path of the source P4 file to compile.</li>
+<li><strong>p4c_bin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the compiler binary</li>
+<li><strong>outdir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – directory containing all the output files. If set to None,
+then every output is stored in the directory of p4_src.</li>
+<li><strong>opts</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – p4c compilation options</li>
+<li><strong>p4rt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether to output the p4info file used to
+establish p4runtime connection to simple_switch_grpc.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="p4utils.utils.compiler.P4C.clean">
 <code class="descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/compiler.html#P4C.clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.clean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove output files and set compiler as uncompiled.</p>
+<dd><p>Removes output files and set compiler as uncompiled.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.compiler.P4C.compile">
 <code class="descname">compile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/compiler.html#P4C.compile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.compile" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method compiles the .p4 file and generates the
-configuration files</p>
+<dd><p>Compiles the P4 file and generates the configuration files.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -237,20 +253,31 @@ configuration files</p>
 <dl class="method">
 <dt id="p4utils.utils.compiler.P4C.get_json_out">
 <code class="descname">get_json_out</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/compiler.html#P4C.get_json_out"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.get_json_out" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the json configuration filepath</p>
+<dd><p>Returns the JSON configuration filepath.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.compiler.P4C.get_p4rt_out">
 <code class="descname">get_p4rt_out</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/compiler.html#P4C.get_p4rt_out"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.get_p4rt_out" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the p4info filepath</p>
+<dd><p>Returns the P4Info configuration filepath.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.compiler.P4C.new_source">
 <code class="descname">new_source</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/compiler.html#P4C.new_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.new_source" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if the source P4 file has changed since
-the last time it was compiled.</p>
+<dd><p>Checks whether a new source was provided to the
+compiler.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if the source P4 file has changed since
+the last time it was compiled, <strong>False</strong> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
@@ -261,7 +288,7 @@ the last time it was compiled.</p>
 <dl class="classmethod">
 <dt id="p4utils.utils.compiler.P4C.set_binary">
 <em class="property">classmethod </em><code class="descname">set_binary</code><span class="sig-paren">(</span><em>p4c_bin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/compiler.html#P4C.set_binary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.set_binary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set class default binary</p>
+<dd><p>Sets class default binary.</p>
 </dd></dl>
 
 </dd></dl>

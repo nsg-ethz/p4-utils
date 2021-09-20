@@ -193,16 +193,24 @@
 
 
 <div class="viewcode-block" id="P4C"><a class="viewcode-back" href="../../../p4utils.utils.compiler.html#p4utils.utils.compiler.P4C">[docs]</a><span class="k">class</span> <span class="nc">P4C</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This compiler reads the .p4 program and outputs</span>
+    <span class="sd">&quot;&quot;&quot;This compiler reads the P4 program and generates</span>
 <span class="sd">    the configuration files used by switches.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        p4_src (str) : path of the source P4 file to compile.</span>
+<span class="sd">        p4c_bin (str): path to the compiler binary</span>
+<span class="sd">        outdir (str) : directory containing all the output files. If set to None,</span>
+<span class="sd">                       then every output is stored in the directory of p4_src.</span>
+<span class="sd">        opts (str)   : p4c compilation options</span>
+<span class="sd">        p4rt (bool)  : whether to output the p4info file used to</span>
+<span class="sd">                       establish p4runtime connection to simple_switch_grpc.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">compiled</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">p4c_bin</span> <span class="o">=</span> <span class="s1">&#39;p4c&#39;</span>
 
 <div class="viewcode-block" id="P4C.set_binary"><a class="viewcode-back" href="../../../p4utils.utils.compiler.html#p4utils.utils.compiler.P4C.set_binary">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">set_binary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4c_bin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set class default binary&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Sets class default binary.&quot;&quot;&quot;</span>
         <span class="n">P4C</span><span class="o">.</span><span class="n">p4c_bin</span> <span class="o">=</span> <span class="n">p4c_bin</span></div>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p4_src</span><span class="p">,</span>
@@ -211,16 +219,6 @@
                  <span class="n">opts</span><span class="o">=</span><span class="s1">&#39;--target bmv2 --arch v1model --std p4-16&#39;</span><span class="p">,</span>
                  <span class="n">p4rt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Attributes:</span>
-<span class="sd">            p4_src (string) : path of the source P4 file to compile.</span>
-<span class="sd">            p4c_bin (string): path to the compiler binary</span>
-<span class="sd">            outdir (string) : directory containing all the output files. If set to None,</span>
-<span class="sd">                              then every output is stored in the directory of p4_src.</span>
-<span class="sd">            opts (string)   : p4c compilation options</span>
-<span class="sd">            p4rt (bool)     : whether to output the p4info file used to</span>
-<span class="sd">                              establish p4runtime connection to simple_switch_grpc.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">p4c_bin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_binary</span><span class="p">(</span><span class="n">p4c_bin</span><span class="p">)</span>
@@ -258,10 +256,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">json_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">json_out_basename</span>
 
 <div class="viewcode-block" id="P4C.compile"><a class="viewcode-back" href="../../../p4utils.utils.compiler.html#p4utils.utils.compiler.P4C.compile">[docs]</a>    <span class="k">def</span> <span class="nf">compile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This method compiles the .p4 file and generates the</span>
-<span class="sd">        configuration files</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Compiles the P4 file and generates the configuration files.&quot;&quot;&quot;</span>
         <span class="c1"># Compute checksum of P4 file. This allows to recognize modified files.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cksum</span> <span class="o">=</span> <span class="n">cksum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4_src</span><span class="p">)</span>
         <span class="n">debug</span><span class="p">(</span><span class="s1">&#39;source: </span><span class="si">{}</span><span class="se">\t</span><span class="s1">cksum: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4_src</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cksum</span><span class="p">))</span>
@@ -283,14 +278,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">compiled</span> <span class="o">=</span> <span class="kc">True</span></div>
     
 <div class="viewcode-block" id="P4C.get_json_out"><a class="viewcode-back" href="../../../p4utils.utils.compiler.html#p4utils.utils.compiler.P4C.get_json_out">[docs]</a>    <span class="k">def</span> <span class="nf">get_json_out</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the json configuration filepath&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns the JSON configuration filepath.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compiled</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_out</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NotCompiledError</span></div>
 
 <div class="viewcode-block" id="P4C.get_p4rt_out"><a class="viewcode-back" href="../../../p4utils.utils.compiler.html#p4utils.utils.compiler.P4C.get_p4rt_out">[docs]</a>    <span class="k">def</span> <span class="nf">get_p4rt_out</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the p4info filepath&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns the P4Info configuration filepath.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compiled</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4rt</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">p4rt_out</span>
@@ -300,19 +295,20 @@
             <span class="k">raise</span> <span class="n">NotCompiledError</span></div>
 
 <div class="viewcode-block" id="P4C.clean"><a class="viewcode-back" href="../../../p4utils.utils.compiler.html#p4utils.utils.compiler.P4C.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove output files and set compiler as uncompiled.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Removes output files and set compiler as uncompiled.&quot;&quot;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4rt_out</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_out</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">compiled</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="P4C.new_source"><a class="viewcode-back" href="../../../p4utils.utils.compiler.html#p4utils.utils.compiler.P4C.new_source">[docs]</a>    <span class="k">def</span> <span class="nf">new_source</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns True if the source P4 file has changed since</span>
-<span class="sd">        the last time it was compiled.</span>
+        <span class="sd">&quot;&quot;&quot;Checks whether a new source was provided to the</span>
+<span class="sd">        compiler.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: **True** if the source P4 file has changed since</span>
+<span class="sd">            the last time it was compiled, **False** otherwise.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">cksum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p4_src</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cksum</span></div></div>
-
-    
 </pre></div>
 
            </div>
