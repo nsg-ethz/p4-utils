@@ -30,7 +30,6 @@ class P4C:
         p4rt (bool)  : generate the P4Info file used to establish P4Runtime connection
                        to ``simple_switch_grpc``
     """
-    compiled = False
     p4c_bin = 'p4c'
 
     @classmethod
