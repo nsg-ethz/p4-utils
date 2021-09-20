@@ -22,13 +22,13 @@ class P4C:
     the configuration files used by switches.
 
     Args:
-        p4_src (str) : path of the source P4 file to compile.
+        p4_src (str) : path of the source P4 file to compile
         p4c_bin (str): path to the compiler binary
         outdir (str) : directory containing all the output files. If set to **None**,
-                       then every output is stored in the directory of ``p4_src``.
+                       then every output is stored in the directory of ``p4_src``
         opts (str)   : ``p4c`` compilation options
-        p4rt (bool)  : whether to output the p4info file used to
-                       establish p4runtime connection to ``simple_switch_grpc``.
+        p4rt (bool)  : generate the P4Info file used to establish P4Runtime connection
+                       to ``simple_switch_grpc``
     """
     compiled = False
     p4c_bin = 'p4c'
