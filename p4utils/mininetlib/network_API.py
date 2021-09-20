@@ -25,7 +25,7 @@ from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.node import *
 from p4utils.mininetlib.net import P4Mininet
 from p4utils.mininetlib.cli import P4CLI
-from p4utils.utils.task_scheduler import TaskClient
+from p4utils.utils.task_scheduler import Task, TaskClient
 
 
 class NetworkAPI(Topo):
@@ -380,7 +380,7 @@ class NetworkAPI(Topo):
         for node, tasks in self.tasks.items():
             # Update start with current time
             for task in tasks:
-                task[1]['start'] += current_time
+                task.startTime += current_time
             unix_path = self.getNode(node).get('unix_path', '/tmp')
             unix_socket = unix_path + '/' + node + '_socket'
             info('Tasks for node {} distributed to socket {}.\n'.format(node, unix_socket))
@@ -1810,13 +1810,10 @@ class NetworkAPI(Topo):
             elif not self.hasScheduler(name) and not enableScheduler:
                 raise Exception('"{}" does not have a scheduler.'. format(name))
             self.tasks.setdefault(name, [])
-            # Parse execution parameters to pass to the server
-            kwargs.update(start=start, duration=duration)
-            args = list(args)
-            args.insert(0, exe)
-            params = (args, kwargs)
+            # Create task
+            task = Task(exe, *args, start=start, duration=duration, **kwargs)
             # Append task to tasks
-            self.tasks[name].append(params)
+            self.tasks[name].append(task)
         else:
             raise Exception('"{}" does not exists.'.format(name))
 
