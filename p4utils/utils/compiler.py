@@ -24,11 +24,11 @@ class P4C:
     Args:
         p4_src (str) : path of the source P4 file to compile.
         p4c_bin (str): path to the compiler binary
-        outdir (str) : directory containing all the output files. If set to None,
-                       then every output is stored in the directory of p4_src.
-        opts (str)   : p4c compilation options
+        outdir (str) : directory containing all the output files. If set to **None**,
+                       then every output is stored in the directory of ``p4_src``.
+        opts (str)   : ``p4c`` compilation options
         p4rt (bool)  : whether to output the p4info file used to
-                       establish p4runtime connection to simple_switch_grpc.
+                       establish p4runtime connection to ``simple_switch_grpc``.
     """
     compiled = False
     p4c_bin = 'p4c'
