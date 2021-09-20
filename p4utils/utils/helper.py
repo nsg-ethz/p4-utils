@@ -8,6 +8,7 @@ import re
 import sys
 import json
 import time
+import types
 import random
 import psutil
 import hashlib
@@ -423,3 +424,55 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
         pass
 
     return args, kwargs
+
+class WrapFunc:
+    """Wraps a function is such a way that they can be executed
+    across different Python interpreters in the same system.
+    
+    Args:
+        func (types.FunctionType): function to wrap
+    """
+
+    def __init__(self, func):
+        # Sanity check
+        assert isinstance(func, types.FunctionType)
+
+        # Set function name
+        self.f_name = func.__name__
+
+        # Set module nome
+        if func.__module__ == '__main__':
+            self.m_name, _ = os.path.splitext(os.path.basename(sys.modules[func.__module__].__file__))
+        else:
+            self.m_name = func.__module__
+
+        # Get module relative path from package
+        m_rel_path = str.replace(self.m_name, '.', '/')
+        # Get module absolute path
+        m_abs_path, _ = os.path.splitext(os.path.realpath(sys.modules[func.__module__].__file__))
+        # Get package absolute path
+        if m_abs_path[-len(m_rel_path):] == m_rel_path:
+            self.p_path = m_abs_path[:len(m_abs_path)-len(m_rel_path)]
+        else:
+            raise Exception('module name does not match its path!')
+
+    def __repr__(self):
+        return 'function {}.{}'.format(self.m_name, self.f_name)
+
+    def unwrap(self):
+        """Unwraps function and returns it."""
+        # Add path in the sys.path
+        for path in sys.path:
+            # Get absolute path
+            abs_path = os.path.realpath(path)
+            # Check if module path is a subpath of a path already in sys.path
+            if os.path.commonpath([abs_path, self.p_path]) == abs_path:
+                # Break loop
+                break
+        # If the path is not in sys.path, add it
+        else:
+            sys.path.append(self.p_path)
+        # Import module
+        module = importlib.import_module(self.m_name)
+        # Return function
+        return getattr(module, self.f_name)
