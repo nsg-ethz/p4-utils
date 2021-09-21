@@ -1,5 +1,5 @@
 #!/bin/bash
-SCRIPT_DIR=$(dirname $(realpath $0))
+SCRIPT_DIR=$(dirname "$(realpath $0)")
 
 OPTS=""
 while [[ $# -gt 0 ]]; do
@@ -8,6 +8,6 @@ while [[ $# -gt 0 ]]; do
     shift # past value
 done
 
-packer init $SCRIPT_DIR/virtualbox.pkr.hcl
-packer validate $SCRIPT_DIR/virtualbox.pkr.hcl
-packer build $OPTS $SCRIPT_DIR/virtualbox.pkr.hcl
+packer init "$SCRIPT_DIR/virtualbox.pkr.hcl"
+packer validate "$SCRIPT_DIR/virtualbox.pkr.hcl"
+packer build $OPTS "$SCRIPT_DIR/virtualbox.pkr.hcl"

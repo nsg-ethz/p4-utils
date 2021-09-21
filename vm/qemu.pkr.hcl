@@ -45,6 +45,7 @@ packer {
 
 source "qemu" "ubuntu18044_qemu" {
   vm_name           = "${var.vm_name}.qcow2"
+  headless          = true
   iso_url           = var.iso_url
   iso_checksum      = var.iso_checksum
   http_directory    = "http"
@@ -67,6 +68,7 @@ source "qemu" "ubuntu18044_qemu" {
     " auto-install/enable=true",
     " debconf/priority=critical",
     " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<wait>",
+    " hostname=${var.vm_name}",
     " -- <wait>",
     "<enter><wait>"
   ]
