@@ -27,3 +27,7 @@ flows/
 
 # Docs hidden files
 docs/.doctrees
+
+# Packer auto generated files
+vm/packer_cache
+vm/output-*

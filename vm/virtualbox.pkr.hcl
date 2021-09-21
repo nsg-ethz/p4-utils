@@ -49,6 +49,7 @@ packer {
 
 source "virtualbox-iso" "ubuntu18044_vb" {
   vm_name           = var.vm_name
+  headless          = true
   guest_os_type     = "Ubuntu_64"
   iso_url           = var.iso_url
   iso_checksum      = var.iso_checksum
@@ -71,6 +72,7 @@ source "virtualbox-iso" "ubuntu18044_vb" {
     " auto-install/enable=true",
     " debconf/priority=critical",
     " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<wait>",
+    " hostname={{ .Name }}",
     " -- <wait>",
     "<enter><wait>"
   ]
