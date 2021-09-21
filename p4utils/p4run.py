@@ -709,9 +709,6 @@ def main():
         sh("ifconfig {} down".format(bridge))
         sh("brctl delbr {}".format(bridge))
 
-    # Remove cli logs
-    sh('find -type f -regex ".*cli_output.*" | xargs rm')
-
     if args.clean or args.clean_dir:
         # Removes first level pcap and log dirs
         sh("rm -rf %s" % args.pcap_dir)
@@ -720,7 +717,7 @@ def main():
         sh('find -type d -regex ".*pcap" | xargs rm -rf')
         sh('find -type d -regex ".*log" | xargs rm -rf')
         # Removes topologies files
-        sh('find -type f -regex ".*db" | xargs rm')
+        sh('find -type f -regex ".*topology.json" | xargs rm')
         # Remove compiler outputs
         sh('find -type f -regex ".*\(p4i\|p4rt\)" | xargs rm')
 
