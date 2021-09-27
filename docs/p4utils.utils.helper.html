@@ -1,34 +1,15 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html4" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>p4utils.utils.helper module &mdash; P4-Utils 1.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>p4utils.utils.helper module &mdash; P4-Utils 1.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript">
+      <script>
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'./',
               VERSION:'1.0',
@@ -39,47 +20,27 @@
               SOURCELINK_SUFFIX: '.txt'
           };
       </script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="p4utils.utils.monitor module" href="p4utils.utils.monitor.html" />
     <link rel="prev" title="p4utils.utils.compiler module" href="p4utils.utils.compiler.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> P4-Utils
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 1.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -87,18 +48,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">General Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
@@ -125,77 +75,32 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">P4-Utils</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
-        
           <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
-        
       <li>p4utils.utils.helper module</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/p4utils.utils.helper.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <div class="section" id="module-p4utils.utils.helper">
 <span id="p4utils-utils-helper-module"></span><h1>p4utils.utils.helper module<a class="headerlink" href="#module-p4utils.utils.helper" title="Permalink to this headline">¶</a></h1>
 <p>This module includes all the functions that are frequently used
@@ -203,7 +108,7 @@ in different parts of the code. These functions usually perform low level
 operations on data.</p>
 <dl class="class">
 <dt id="p4utils.utils.helper.WrapFunc">
-<em class="property">class </em><code class="descclassname">p4utils.utils.helper.</code><code class="descname">WrapFunc</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#WrapFunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.WrapFunc" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.utils.helper.</code><code class="descname">WrapFunc</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L428-L478"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.WrapFunc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Wraps a function is such a way that they can be executed
 across different Python interpreters in the same system.</p>
@@ -217,7 +122,7 @@ across different Python interpreters in the same system.</p>
 </table>
 <dl class="method">
 <dt id="p4utils.utils.helper.WrapFunc.unwrap">
-<code class="descname">unwrap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#WrapFunc.unwrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.WrapFunc.unwrap" title="Permalink to this definition">¶</a></dt>
+<code class="descname">unwrap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L462-L478"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.WrapFunc.unwrap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unwraps function and returns it.</p>
 </dd></dl>
 
@@ -225,7 +130,7 @@ across different Python interpreters in the same system.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.check_listening_on_port">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">check_listening_on_port</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#check_listening_on_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.check_listening_on_port" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">check_listening_on_port</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L150-L162"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.check_listening_on_port" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the given port is listening in the main namespace.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -243,7 +148,7 @@ across different Python interpreters in the same system.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.cksum">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">cksum</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#cksum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.cksum" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">cksum</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L165-L174"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.cksum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the md5 checksum of a file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -261,7 +166,7 @@ across different Python interpreters in the same system.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.dpidToStr">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">dpidToStr</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#dpidToStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.dpidToStr" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">dpidToStr</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L135-L147"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.dpidToStr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a string <strong>dpid</strong> from an integer <strong>id</strong>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -279,7 +184,7 @@ across different Python interpreters in the same system.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.get_by_attr">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">get_by_attr</code><span class="sig-paren">(</span><em>attr_name</em>, <em>attr_value</em>, <em>obj_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#get_by_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.get_by_attr" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">get_by_attr</code><span class="sig-paren">(</span><em>attr_name</em>, <em>attr_value</em>, <em>obj_list</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L201-L217"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.get_by_attr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the first object in the list that has an attribute matching with
 the attribute name and value provided.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -305,7 +210,7 @@ the attribute name and value provided.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.get_node_attr">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">get_node_attr</code><span class="sig-paren">(</span><em>node</em>, <em>attr_name</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#get_node_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.get_node_attr" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">get_node_attr</code><span class="sig-paren">(</span><em>node</em>, <em>attr_name</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L177-L198"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.get_node_attr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the value of the specified attribute of a <em>Mininet</em> node
 by looking also inside its unparsed parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -327,7 +232,7 @@ by looking also inside its unparsed parameters.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.ip_address_to_mac">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">ip_address_to_mac</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#ip_address_to_mac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.ip_address_to_mac" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">ip_address_to_mac</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L220-L234"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.ip_address_to_mac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate MAC from IP address.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -345,7 +250,7 @@ by looking also inside its unparsed parameters.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.is_compiled">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">is_compiled</code><span class="sig-paren">(</span><em>p4_src</em>, <em>compilers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#is_compiled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.is_compiled" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">is_compiled</code><span class="sig-paren">(</span><em>p4_src</em>, <em>compilers</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L237-L251"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.is_compiled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a file has been already compiled by at least one compiler in the list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -369,7 +274,7 @@ by looking also inside its unparsed parameters.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.load_conf">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">load_conf</code><span class="sig-paren">(</span><em>conf_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#load_conf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.load_conf" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">load_conf</code><span class="sig-paren">(</span><em>conf_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L254-L265"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.load_conf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load JSON application configuration file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -387,7 +292,7 @@ by looking also inside its unparsed parameters.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.load_custom_object">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">load_custom_object</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#load_custom_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.load_custom_object" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">load_custom_object</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L283-L313"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.load_custom_object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads object from module.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -419,7 +324,7 @@ is optional and has to be used if the module is not present in <code class="docu
 
 <dl class="function">
 <dt id="p4utils.utils.helper.load_topo">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">load_topo</code><span class="sig-paren">(</span><em>json_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#load_topo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.load_topo" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">load_topo</code><span class="sig-paren">(</span><em>json_path</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L268-L280"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.load_topo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the topology from the path provided.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -437,7 +342,7 @@ is optional and has to be used if the module is not present in <code class="docu
 
 <dl class="function">
 <dt id="p4utils.utils.helper.merge_dict">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">merge_dict</code><span class="sig-paren">(</span><em>dst</em>, <em>src</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#merge_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.merge_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">merge_dict</code><span class="sig-paren">(</span><em>dst</em>, <em>src</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L55-L72"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.merge_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merges source dictionary fields and subfields into destionation dictionary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -455,7 +360,7 @@ is optional and has to be used if the module is not present in <code class="docu
 
 <dl class="function">
 <dt id="p4utils.utils.helper.next_element">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">next_element</code><span class="sig-paren">(</span><em>elems</em>, <em>minimum=None</em>, <em>maximum=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#next_element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.next_element" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">next_element</code><span class="sig-paren">(</span><em>elems</em>, <em>minimum=None</em>, <em>maximum=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L75-L114"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.next_element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a list of integers, return the lowest number not already
 present in the set, starting from minimum and ending in maximum.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -481,7 +386,7 @@ present in the set, starting from minimum and ending in maximum.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.parse_line">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">parse_line</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#parse_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.parse_line" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">parse_line</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L329-L357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.parse_line" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse text line returning a list of substrings.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -508,7 +413,7 @@ present in the set, starting from minimum and ending in maximum.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.parse_task_line">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">parse_task_line</code><span class="sig-paren">(</span><em>line</em>, <em>def_mod='p4utils.utils.traffic_utils'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#parse_task_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.parse_task_line" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">parse_task_line</code><span class="sig-paren">(</span><em>line</em>, <em>def_mod='p4utils.utils.traffic_utils'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L360-L426"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.parse_task_line" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse text line and return all the parameters needed
 to create a task with <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.addTask" title="p4utils.mininetlib.network_API.NetworkAPI.addTask"><code class="xref py py-func docutils literal"><span class="pre">p4utils.mininetlib.network_API.NetworkAPI.addTask()</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -543,7 +448,7 @@ is a dictionary of key-word pairs.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.rand_mac">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">rand_mac</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#rand_mac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.rand_mac" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">rand_mac</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L117-L132"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.rand_mac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a random, non-multicas MAC address.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -559,7 +464,7 @@ is a dictionary of key-word pairs.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.run_command">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">run_command</code><span class="sig-paren">(</span><em>command</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#run_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.run_command" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">run_command</code><span class="sig-paren">(</span><em>command</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L316-L326"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.run_command" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute command in the main namespace.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -577,7 +482,7 @@ is a dictionary of key-word pairs.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.helper.wait_condition">
-<code class="descclassname">p4utils.utils.helper.</code><code class="descname">wait_condition</code><span class="sig-paren">(</span><em>func</em>, <em>value</em>, <em>args=[]</em>, <em>kwargs={}</em>, <em>timeout=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/helper.html#wait_condition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.wait_condition" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.helper.</code><code class="descname">wait_condition</code><span class="sig-paren">(</span><em>func</em>, <em>value</em>, <em>args=[]</em>, <em>kwargs={}</em>, <em>timeout=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/helper.py#L25-L53"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.helper.wait_condition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Waits for the function to return the specified value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -611,50 +516,33 @@ expires, <strong>False</strong> otherwise.</p>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="p4utils.utils.monitor.html" class="btn btn-neutral float-right" title="p4utils.utils.monitor module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="p4utils.utils.compiler.html" class="btn btn-neutral float-left" title="p4utils.utils.compiler module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="p4utils.utils.monitor.html" class="btn btn-neutral float-right" title="p4utils.utils.monitor module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
-
-    </p>
+    <p>&#169; Copyright 2021, Networked Systems Group (NSG@ETH).</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

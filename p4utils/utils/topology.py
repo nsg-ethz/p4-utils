@@ -71,13 +71,13 @@ class NetworkGraph(nx.Graph):
         :py:func:`p4utils.utils.helper.load_topo()`.
 
     Attributes:
-        edge_to_intf (dict): stores interface information indexed by ``[node1][node2]``,
-                             where the interface belongs to ``node1`` and 
-                             is facing ``node2``.
-        node_to_intf (dict): stores interface information indexed by ``[node][intfName]``,
-                             where the interface belongs to ``node`` and 
-                             is named according to ``intfName``.
-        ip_to_host (dict): stores hosts information indexed by ``[ip]``.
+        edge_to_intf (:py:class:`dict`): stores interface information indexed by ``[node1][node2]``,
+                                         where the interface belongs to ``node1`` and 
+                                         is facing ``node2``.
+        node_to_intf (:py:class:`dict`): stores interface information indexed by ``[node][intfName]``,
+                                         where the interface belongs to ``node`` and 
+                                         is named according to ``intfName``.
+        ip_to_host (:py:class:`dict`)  : stores hosts information indexed by ``[ip]``.
     """
 
     def __init__(self, *args, **kwargs):

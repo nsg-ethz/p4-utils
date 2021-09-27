@@ -1,34 +1,15 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html4" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>p4utils.utils.traffic_utils module &mdash; P4-Utils 1.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>p4utils.utils.traffic_utils module &mdash; P4-Utils 1.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript">
+      <script>
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'./',
               VERSION:'1.0',
@@ -39,47 +20,27 @@
               SOURCELINK_SUFFIX: '.txt'
           };
       </script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="p4utils.p4run module" href="p4utils.p4run.html" />
     <link rel="prev" title="p4utils.utils.topology module" href="p4utils.utils.topology.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> P4-Utils
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 1.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -87,18 +48,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">General Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
@@ -125,82 +75,37 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">P4-Utils</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
-        
           <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
-        
       <li>p4utils.utils.traffic_utils module</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/p4utils.utils.traffic_utils.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <div class="section" id="module-p4utils.utils.traffic_utils">
 <span id="p4utils-utils-traffic-utils-module"></span><h1>p4utils.utils.traffic_utils module<a class="headerlink" href="#module-p4utils.utils.traffic_utils" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="p4utils.utils.traffic_utils.recv_udp_flow">
-<code class="descclassname">p4utils.utils.traffic_utils.</code><code class="descname">recv_udp_flow</code><span class="sig-paren">(</span><em>dport</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/traffic_utils.html#recv_udp_flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.traffic_utils.recv_udp_flow" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.traffic_utils.</code><code class="descname">recv_udp_flow</code><span class="sig-paren">(</span><em>dport</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/traffic_utils.py#L92-L106"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.traffic_utils.recv_udp_flow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Receiving function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -214,7 +119,7 @@
 
 <dl class="function">
 <dt id="p4utils.utils.traffic_utils.send_udp_flow">
-<code class="descclassname">p4utils.utils.traffic_utils.</code><code class="descname">send_udp_flow</code><span class="sig-paren">(</span><em>dst='10.0.0.2'</em>, <em>sport=5000</em>, <em>dport=5001</em>, <em>tos=0</em>, <em>rate='10M'</em>, <em>duration=0</em>, <em>packet_size=1400</em>, <em>batch_size=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/traffic_utils.html#send_udp_flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.traffic_utils.send_udp_flow" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.traffic_utils.</code><code class="descname">send_udp_flow</code><span class="sig-paren">(</span><em>dst='10.0.0.2'</em>, <em>sport=5000</em>, <em>dport=5001</em>, <em>tos=0</em>, <em>rate='10M'</em>, <em>duration=0</em>, <em>packet_size=1400</em>, <em>batch_size=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/traffic_utils.py#L27-L89"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.traffic_utils.send_udp_flow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Udp sending function that keeps a constant rate and logs sent packets to a file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -238,7 +143,7 @@
 
 <dl class="function">
 <dt id="p4utils.utils.traffic_utils.setSizeToInt">
-<code class="descclassname">p4utils.utils.traffic_utils.</code><code class="descname">setSizeToInt</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/p4utils/utils/traffic_utils.html#setSizeToInt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.traffic_utils.setSizeToInt" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.traffic_utils.</code><code class="descname">setSizeToInt</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/traffic_utils.py#L6-L24"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.traffic_utils.setSizeToInt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts the sizes string notation to the corresponding integer
 (in bytes). Input size can be given with the following magnitudes: B, K, M and G.</p>
 </dd></dl>
@@ -247,50 +152,33 @@
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="p4utils.p4run.html" class="btn btn-neutral float-right" title="p4utils.p4run module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="p4utils.utils.topology.html" class="btn btn-neutral float-left" title="p4utils.utils.topology module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="p4utils.p4run.html" class="btn btn-neutral float-right" title="p4utils.p4run module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Networked Systems Group (NSG@ETH).
-
-    </p>
+    <p>&#169; Copyright 2021, Networked Systems Group (NSG@ETH).</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -5,8 +5,8 @@
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = P4-Utils
-SOURCEDIR     = source
-BUILDDIR      = .
+SOURCEDIR     = .
+BUILDDIR      = ../docs
 NUM_CPUS	  = `grep -c ^processor /proc/cpuinfo`
 
 # Put it first so that "make" without argument is like "make help".

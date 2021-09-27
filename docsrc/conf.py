@@ -17,9 +17,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+import inspect
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- General configuration ------------------------------------------------
@@ -38,12 +39,13 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
-    'sphinx.ext.viewcode',
+    'sphinx.ext.linkcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+#
+# templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -103,7 +105,8 @@ html_theme = 'sphinx_rtd_theme'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+#
+# html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -190,9 +193,33 @@ texinfo_documents = [
 ]
 
 
-
+# -- Options for sphinx.ext.intersphinx -----------------------------------
 
 # Refer to the Python standard library, NetworkX and Google Protobuf
 intersphinx_mapping = {'https://docs.python.org/': None,
                        'https://networkx.org/documentation/stable/': None,
                        'https://googleapis.dev/python/protobuf/latest/': None}
+
+
+# -- Options for sphinx.ext.linkcode --------------------------------------
+
+# Build link to the relevant lines in the GitHub code
+def linkcode_resolve(domain, info):
+    
+    def find_source(info):
+
+        obj = mod = sys.modules[info['module']]
+        for part in info['fullname'].split('.'):
+            obj = getattr(obj, part)
+        fn = os.path.relpath(inspect.getsourcefile(mod),
+                             start=os.path.abspath('..'))
+        source, lineno = inspect.getsourcelines(obj)
+        return fn, lineno, lineno + len(source) - 1
+
+    if domain != 'py':
+        return None
+    try:
+        filename = '%s#L%d-L%d' % find_source(info)
+    except Exception:
+        filename = info['module'].replace('.', '/') + '.py'
+    return "https://github.com/nsg-ethz/p4-utils/tree/master/%s" % filename

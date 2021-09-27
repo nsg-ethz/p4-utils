@@ -4,18 +4,18 @@ import time
 import argparse
 
 class Monitor:
+    """Monitor the interface bandwidth and dump a .csv file with
+    the rates in Mbps.
+
+    Args:
+        csv_file (string): path to the output file
+        i (string)       : name of the interface to monitor
+        t (float)        : interval between data points
+        d (float)        : monitoring duration
+    """
 
     def __init__(self, csv_file, i, t=0.5, d=60):
-        """
-        Monitor the interface bandwidth and dump a .csv file with
-        the rates in Mbps.
 
-        Attributes
-            csv_file (string): path to the output file
-            i (string)       : name of the interface to monitor
-            t (float)        : interval between data points
-            d (float)        : monitoring duration
-        """
         current_time = time.time()
         start_time = current_time
         stop_time = current_time + d
