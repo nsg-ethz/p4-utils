@@ -1137,7 +1137,7 @@ class SimpleSwitchP4RuntimeAPI:
         entry.modify()
 
     @handle_bad_input
-    def cd_get_replicas(self, session_id):
+    def cs_get_replicas(self, session_id):
         """Gets replicas which belog to a clone session.
 
         Args:
