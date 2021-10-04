@@ -361,37 +361,39 @@ in <code class="docutils literal"><span class="pre">.pcap</span></code> files.</
 assigning addresses to the interfaces. Possible values are <code class="docutils literal"><span class="pre">l2</span></code>, <code class="docutils literal"><span class="pre">mixed</span></code> and <code class="docutils literal"><span class="pre">l3</span></code>.</p>
 </li>
 <li><p class="first"><code class="docutils literal"><span class="pre">default</span></code> is a collection of default settings that apply to every link.
-For instance, in the JSON example, we force the bandwidth of every link to be 5 Mbps.
-Basically, every parameter that is used to configure links can be specified here to
-set it as default. In addition, two more options can be put here to disable ARP
-static entries in hosts (which are enabled by default):</p>
+For instance, in the JSON example, we force the bandwidth of every link to be 10 Mbps.
+Every parameter passed to the constructor of <code class="xref py py-class docutils literal"><span class="pre">mininet.link.Link</span></code> can be specified
+here to set it as default for all the links.</p>
+<p>In addition, two more options can be put here to disable ARP static entries in
+hosts (which are enabled by default):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;auto_arp_tables&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
 <span class="s2">&quot;auto_gw_arp&quot;</span><span class="p">:</span> <span class="n">false</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first"><code class="docutils literal"><span class="pre">links</span></code> is simply a list of all the links that are present in the topology. You
-can also specify custom options for a link. Basically, every parameter that can be
-passed to the constructor of <code class="xref py py-class docutils literal"><span class="pre">mininet.link.Link</span></code>, can be used as option here
-by putting it in a dictionary after the name of the connected nodes. For example, the
-following will set the addresses of the link and limit its bandwidth to 5 Mbps:</p>
+can also specify custom options for a link. Every parameter passed to the constructor
+of <code class="xref py py-class docutils literal"><span class="pre">mininet.link.Link</span></code> can be used as option here, by putting it in a dictionary
+after the name of the connected nodes.</p>
+<p>For example, the following will set the addresses of the link and limit its bandwidth to 5 Mbps
+(as opposite to the default value of 10 Mbps):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;h1&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;bw&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;addr1&quot;</span><span class="p">:</span> <span class="s2">&quot;00:00:00:00:00:01&quot;</span><span class="p">,</span> <span class="s2">&quot;addr2&quot;</span><span class="p">:</span> <span class="s2">&quot;00:01:00:00:00:01&quot;</span><span class="p">,</span> <span class="s2">&quot;params1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ip&quot;</span><span class="p">:</span><span class="s2">&quot;10.0.0.1/24&quot;</span><span class="p">}}]</span>
 </pre></div>
 </div>
-<p>Every parameter whose name contains <code class="docutils literal"><span class="pre">1</span></code> refers to the interface on <code class="docutils literal"><span class="pre">h1</span></code>. On the
-other hand, every parameter whose name contains <code class="docutils literal"><span class="pre">2</span></code> refers to the interface on <code class="docutils literal"><span class="pre">h2</span></code>.
-Parameters without numbers in their names simply apply to the whole link.</p>
+<p>Parameters containing <code class="docutils literal"><span class="pre">1</span></code> refer to the interface of the first node (i.e. <code class="docutils literal"><span class="pre">h1</span></code>),
+whereas those containing <code class="docutils literal"><span class="pre">2</span></code> refer to the interface on the second node (i.e. <code class="docutils literal"><span class="pre">s1</span></code>).
+Parameters that do not contain numbers apply to the whole link (i.e. to both interfaces).</p>
 </li>
 <li><p class="first"><code class="docutils literal"><span class="pre">hosts</span></code> is a dictionary of hosts. Each host has its own dictionary to pass options.
-If no custom options are passed, then the host dictionary must be left empty.
-For example, the following will set <code class="docutils literal"><span class="pre">10.0.0.254</span></code> as the default gateway for <code class="docutils literal"><span class="pre">h1</span></code>:</p>
+If no custom options are passed, then the host dictionary must be left empty.</p>
+<p>For example, the following will set <code class="docutils literal"><span class="pre">10.0.0.254</span></code> as the default gateway for <code class="docutils literal"><span class="pre">h1</span></code>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;h1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;defaultRoute&quot;</span><span class="p">:</span> <span class="s2">&quot;via 10.0.0.254&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first"><code class="docutils literal"><span class="pre">switches</span></code> is a dictionary of switches. Each switch has its own dictionary to pass options.
-If no custom options are passed, then the switch dictionary must be left empty.
-For example, the following will set a custom P4 program for switch <code class="docutils literal"><span class="pre">s1</span></code>:</p>
+If no custom options are passed, then the switch dictionary must be left empty.</p>
+<p>For example, the following will set a custom P4 program for switch <code class="docutils literal"><span class="pre">s1</span></code>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;p4_src&quot;</span><span class="p">:</span> <span class="s2">&quot;custom.p4&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
@@ -418,8 +420,8 @@ the JSON network configuration file. Please check out the documentation of the m
 <div class="section" id="automated-assignment-strategies">
 <h2>Automated Assignment Strategies<a class="headerlink" href="#automated-assignment-strategies" title="Permalink to this headline">¶</a></h2>
 <p>Specifying the addresses of every interface in the network can be long and cumbersome.
-For this reason one can use automated assignment strategies that performs this work for
-you, following simple rules.</p>
+For this reason, one can exploit automated assignment strategies that follow simple rules
+and are very useful in most cases.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p>All of the following strategies assume that:</p>
@@ -431,26 +433,47 @@ you, following simple rules.</p>
 </div>
 <div class="section" id="l2">
 <h3>l2<a class="headerlink" href="#l2" title="Permalink to this headline">¶</a></h3>
-<p><strong>l2</strong> strategy places all the devices inside the same IPv4 network (<code class="docutils literal"><span class="pre">10.0.0.0/16</span></code>). It
-is implemented by <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.l2" title="p4utils.mininetlib.network_API.NetworkAPI.l2"><code class="xref py py-meth docutils literal"><span class="pre">l2()</span></code></a>. The IPs and the
-MACs are assigned according to the numbers present in the host names. Please check out the
-implementation for further details.</p>
+<p>The <strong>l2</strong> strategy places all the devices inside the same IPv4 network (<code class="docutils literal"><span class="pre">10.0.0.0/16</span></code>). It
+is implemented by <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.l2" title="p4utils.mininetlib.network_API.NetworkAPI.l2"><code class="xref py py-meth docutils literal"><span class="pre">l2()</span></code></a>.</p>
+<p>If you use the namings <code class="docutils literal"><span class="pre">h&lt;ID&gt;</span></code> for hosts and <code class="docutils literal"><span class="pre">s&lt;ID&gt;</span></code> for switches (e.g <code class="docutils literal"><span class="pre">h1</span></code>, <code class="docutils literal"><span class="pre">h2</span></code>, <code class="docutils literal"><span class="pre">s1</span></code>,
+<code class="docutils literal"><span class="pre">s2</span></code>…), the IP assignment will go as follows:</p>
+<ul class="simple">
+<li><strong>Host IPs</strong>: <code class="docutils literal"><span class="pre">10.0.x.y/16</span></code>, where <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> are respectively the upper and the lower bytes
+of the host ID (i.e. its binary representation).</li>
+</ul>
 </div>
 <div class="section" id="mixed">
 <h3>mixed<a class="headerlink" href="#mixed" title="Permalink to this headline">¶</a></h3>
-<p><strong>mixed</strong> strategy places the hosts connected to the same switch in the same subnetwork
+<p>The <strong>mixed</strong> strategy places the hosts connected to the same switch in the same subnetwork
 and different switches (even those linked together) in different ones. It is implemented
-by <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.mixed" title="p4utils.mininetlib.network_API.NetworkAPI.mixed"><code class="xref py py-meth docutils literal"><span class="pre">mixed()</span></code></a>. The IPs and the
-MACs are assigned according to the numbers present in the host and switch names. Please
-check out the implementation for further details.</p>
+by <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.mixed" title="p4utils.mininetlib.network_API.NetworkAPI.mixed"><code class="xref py py-meth docutils literal"><span class="pre">mixed()</span></code></a>.</p>
+<p>If you use the namings <code class="docutils literal"><span class="pre">h&lt;ID&gt;</span></code> for hosts and <code class="docutils literal"><span class="pre">s&lt;ID&gt;</span></code> for switches (e.g <code class="docutils literal"><span class="pre">h1</span></code>, <code class="docutils literal"><span class="pre">h2</span></code>, <code class="docutils literal"><span class="pre">s1</span></code>,
+<code class="docutils literal"><span class="pre">s2</span></code>…), the IP assignment will go as follows:</p>
+<ul class="simple">
+<li><strong>Host IPs</strong>: <code class="docutils literal"><span class="pre">10.x.y.z/24</span></code>, where <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> are respectively the upper and the lower bytes
+of the gateway switch ID (i.e. its binary representation) and <code class="docutils literal"><span class="pre">z</span></code> is the host ID.</li>
+<li><strong>Switch ports directly connected to a host</strong>: <code class="docutils literal"><span class="pre">10.x.y.254/24</span></code>, where <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> are
+respectively the upper and the lower bytes of the gateway switch ID (i.e. its binary representation).</li>
+<li><strong>Switch to Switch interfaces</strong>: <code class="docutils literal"><span class="pre">20.sw1.sw2.&lt;1,2&gt;/24</span></code>, where <code class="docutils literal"><span class="pre">sw1</span></code> is the ID of the first switch
+(following the order in the link definition), <code class="docutils literal"><span class="pre">sw2</span></code> is the ID of the second switch.
+The last byte is <code class="docutils literal"><span class="pre">1</span></code> for <code class="docutils literal"><span class="pre">sw1</span></code>’s interface and <code class="docutils literal"><span class="pre">2</span></code> for <code class="docutils literal"><span class="pre">sw2</span></code>’s interface.</li>
+</ul>
 </div>
 <div class="section" id="l3">
 <h3>l3<a class="headerlink" href="#l3" title="Permalink to this headline">¶</a></h3>
-<p><strong>l3</strong> strategy places all the hosts in a different subnetwork that is shared
-with the fake IP address of the switch port they are connected to. It is implemented
-by <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.l3" title="p4utils.mininetlib.network_API.NetworkAPI.l3"><code class="xref py py-meth docutils literal"><span class="pre">l3()</span></code></a>. The IPs and the
-MACs are assigned according to the numbers present in the host and switch names.
-Please check out the implementation for further details.</p>
+<p>The <strong>l3</strong> strategy places each host in a different subnetwork that is shared with the
+IP address of the switch port it is connected to. It is implemented by
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.l3" title="p4utils.mininetlib.network_API.NetworkAPI.l3"><code class="xref py py-meth docutils literal"><span class="pre">l3()</span></code></a>.</p>
+<p>If you use the namings <code class="docutils literal"><span class="pre">h&lt;ID&gt;</span></code> for hosts and <code class="docutils literal"><span class="pre">s&lt;ID&gt;</span></code> for switches (e.g <code class="docutils literal"><span class="pre">h1</span></code>, <code class="docutils literal"><span class="pre">h2</span></code>, <code class="docutils literal"><span class="pre">s1</span></code>,
+<code class="docutils literal"><span class="pre">s2</span></code>…), the IP assignment will go as follows:</p>
+<ul class="simple">
+<li><strong>Host IPs</strong>: <code class="docutils literal"><span class="pre">10.x.y.2/24</span></code>, where <code class="docutils literal"><span class="pre">x</span></code> is the ID of the gateway switch, and <code class="docutils literal"><span class="pre">y</span></code> is the host ID.</li>
+<li><strong>Switch ports directly connected to a host</strong>: <code class="docutils literal"><span class="pre">10.x.y.1/24</span></code>, where <code class="docutils literal"><span class="pre">x</span></code> is the ID of the gateway
+switch, and <code class="docutils literal"><span class="pre">y</span></code> is the host ID.</li>
+<li><strong>Switch to Switch interfaces</strong>: <code class="docutils literal"><span class="pre">20.sw1.sw2.&lt;1,2&gt;/24</span></code>, where <code class="docutils literal"><span class="pre">sw1</span></code> is the ID of the first switch
+(following the order in the link definition), <code class="docutils literal"><span class="pre">sw2</span></code> is the ID of the second switch.
+The last byte is <code class="docutils literal"><span class="pre">1</span></code> for <code class="docutils literal"><span class="pre">sw1</span></code>’s interface and <code class="docutils literal"><span class="pre">2</span></code> for <code class="docutils literal"><span class="pre">sw2</span></code>’s interface.</li>
+</ul>
 </div>
 </div>
 <div class="section" id="network-client">

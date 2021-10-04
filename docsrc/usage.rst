@@ -262,34 +262,40 @@ The JSON structure is very simple and intuitive. We have that:
     assigning addresses to the interfaces. Possible values are ``l2``, ``mixed`` and ``l3``.
 
   + ``default`` is a collection of default settings that apply to every link.
-    For instance, in the JSON example, we force the bandwidth of every link to be 5 Mbps.
-    Basically, every parameter that is used to configure links can be specified here to
-    set it as default. In addition, two more options can be put here to disable ARP 
-    static entries in hosts (which are enabled by default)::
+    For instance, in the JSON example, we force the bandwidth of every link to be 10 Mbps.
+    Every parameter passed to the constructor of :py:class:`mininet.link.Link` can be specified
+    here to set it as default for all the links.
+    
+    In addition, two more options can be put here to disable ARP static entries in 
+    hosts (which are enabled by default)::
 
       "auto_arp_tables": false,
       "auto_gw_arp": false
 
   + ``links`` is simply a list of all the links that are present in the topology. You
-    can also specify custom options for a link. Basically, every parameter that can be 
-    passed to the constructor of :py:class:`mininet.link.Link`, can be used as option here
-    by putting it in a dictionary after the name of the connected nodes. For example, the
-    following will set the addresses of the link and limit its bandwidth to 5 Mbps::
+    can also specify custom options for a link. Every parameter passed to the constructor 
+    of :py:class:`mininet.link.Link` can be used as option here, by putting it in a dictionary
+    after the name of the connected nodes.
+    
+    For example, the following will set the addresses of the link and limit its bandwidth to 5 Mbps
+    (as opposite to the default value of 10 Mbps)::
 
       ["h1", "s1", {"bw": 5, "addr1": "00:00:00:00:00:01", "addr2": "00:01:00:00:00:01", "params1": {"ip":"10.0.0.1/24"}}]
 
-    Every parameter whose name contains ``1`` refers to the interface on ``h1``. On the 
-    other hand, every parameter whose name contains ``2`` refers to the interface on ``h2``.
-    Parameters without numbers in their names simply apply to the whole link.
+    Parameters containing ``1`` refer to the interface of the first node (i.e. ``h1``),
+    whereas those containing ``2`` refer to the interface on the second node (i.e. ``s1``).
+    Parameters that do not contain numbers apply to the whole link (i.e. to both interfaces).
 
   + ``hosts`` is a dictionary of hosts. Each host has its own dictionary to pass options.
     If no custom options are passed, then the host dictionary must be left empty.
+
     For example, the following will set ``10.0.0.254`` as the default gateway for ``h1``::
 
       "h1": {"defaultRoute": "via 10.0.0.254"}
 
   + ``switches`` is a dictionary of switches. Each switch has its own dictionary to pass options.
     If no custom options are passed, then the switch dictionary must be left empty.
+
     For example, the following will set a custom P4 program for switch ``s1``::
 
       "s1": {"p4_src": "custom.p4"}
@@ -311,8 +317,8 @@ Automated Assignment Strategies
 -------------------------------
 
 Specifying the addresses of every interface in the network can be long and cumbersome.
-For this reason one can use automated assignment strategies that performs this work for
-you, following simple rules.
+For this reason, one can exploit automated assignment strategies that follow simple rules
+and are very useful in most cases.
 
 .. Warning::
    All of the following strategies assume that:
@@ -324,28 +330,49 @@ you, following simple rules.
 l2
 ++
 
-**l2** strategy places all the devices inside the same IPv4 network (``10.0.0.0/16``). It
-is implemented by :py:meth:`~p4utils.mininetlib.network_API.NetworkAPI.l2()`. The IPs and the
-MACs are assigned according to the numbers present in the host names. Please check out the 
-implementation for further details.
+The **l2** strategy places all the devices inside the same IPv4 network (``10.0.0.0/16``). It
+is implemented by :py:meth:`~p4utils.mininetlib.network_API.NetworkAPI.l2()`. 
+
+If you use the namings ``h<ID>`` for hosts and ``s<ID>`` for switches (e.g ``h1``, ``h2``, ``s1``,
+``s2``...), the IP assignment will go as follows:
+
+- **Host IPs**: ``10.0.x.y/16``, where ``x`` and ``y`` are respectively the upper and the lower bytes 
+  of the host ID (i.e. its binary representation).
 
 mixed
 +++++
 
-**mixed** strategy places the hosts connected to the same switch in the same subnetwork
+The **mixed** strategy places the hosts connected to the same switch in the same subnetwork
 and different switches (even those linked together) in different ones. It is implemented
-by :py:meth:`~p4utils.mininetlib.network_API.NetworkAPI.mixed()`. The IPs and the
-MACs are assigned according to the numbers present in the host and switch names. Please
-check out the implementation for further details.
+by :py:meth:`~p4utils.mininetlib.network_API.NetworkAPI.mixed()`.
+
+If you use the namings ``h<ID>`` for hosts and ``s<ID>`` for switches (e.g ``h1``, ``h2``, ``s1``,
+``s2``...), the IP assignment will go as follows:
+
+- **Host IPs**: ``10.x.y.z/24``, where ``x`` and ``y`` are respectively the upper and the lower bytes 
+  of the gateway switch ID (i.e. its binary representation) and ``z`` is the host ID.
+- **Switch ports directly connected to a host**: ``10.x.y.254/24``, where ``x`` and ``y`` are 
+  respectively the upper and the lower bytes of the gateway switch ID (i.e. its binary representation).
+- **Switch to Switch interfaces**: ``20.sw1.sw2.<1,2>/24``, where ``sw1`` is the ID of the first switch 
+  (following the order in the link definition), ``sw2`` is the ID of the second switch.
+  The last byte is ``1`` for ``sw1``'s interface and ``2`` for ``sw2``'s interface.
 
 l3
 ++
 
-**l3** strategy places all the hosts in a different subnetwork that is shared
-with the fake IP address of the switch port they are connected to. It is implemented
-by :py:meth:`~p4utils.mininetlib.network_API.NetworkAPI.l3()`. The IPs and the
-MACs are assigned according to the numbers present in the host and switch names.
-Please check out the implementation for further details.
+The **l3** strategy places each host in a different subnetwork that is shared with the
+IP address of the switch port it is connected to. It is implemented by 
+:py:meth:`~p4utils.mininetlib.network_API.NetworkAPI.l3()`.
+
+If you use the namings ``h<ID>`` for hosts and ``s<ID>`` for switches (e.g ``h1``, ``h2``, ``s1``,
+``s2``...), the IP assignment will go as follows:
+
+- **Host IPs**: ``10.x.y.2/24``, where ``x`` is the ID of the gateway switch, and ``y`` is the host ID.
+- **Switch ports directly connected to a host**: ``10.x.y.1/24``, where ``x`` is the ID of the gateway 
+  switch, and ``y`` is the host ID.
+- **Switch to Switch interfaces**: ``20.sw1.sw2.<1,2>/24``, where ``sw1`` is the ID of the first switch 
+  (following the order in the link definition), ``sw2`` is the ID of the second switch.
+  The last byte is ``1`` for ``sw1``'s interface and ``2`` for ``sw2``'s interface.
 
 Network Client
 --------------
