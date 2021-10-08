@@ -108,7 +108,7 @@ on the generic <a class="reference external" href="p4utils.utils.thrift_API.html
 <a class="reference external" href="https://github.com/p4lang/behavioral-model/blob/main/targets/simple_switch/sswitch_CLI.py">sswitch_CLI.py</a> from behavioral model.</p>
 <dl class="class">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI">
-<em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_thrift_API.</code><code class="descname">SimpleSwitchThriftAPI</code><span class="sig-paren">(</span><em>thrift_port</em>, <em>thrift_ip='localhost'</em>, <em>json_path=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L60-L211"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_thrift_API.</code><code class="descname">SimpleSwitchThriftAPI</code><span class="sig-paren">(</span><em>thrift_port</em>, <em>thrift_ip='localhost'</em>, <em>json_path=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L57-L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI</span></code></a></p>
 <p>Simple Switch <em>Thrift</em> control plane API.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -132,25 +132,25 @@ on the generic <a class="reference external" href="p4utils.utils.thrift_API.html
 
 <dl class="staticmethod">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_thrift_services">
-<em class="property">static </em><code class="descname">get_thrift_services</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L72-L75"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_thrift_services" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">get_thrift_services</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L69-L72"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_thrift_services" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get available <em>Thrift</em> services.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_elapsed">
-<code class="descname">get_time_elapsed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L203-L206"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_elapsed" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_time_elapsed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L200-L203"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_elapsed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints time elapsed (in microseconds) since the switch started.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_since_epoch">
-<code class="descname">get_time_since_epoch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L208-L211"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_since_epoch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_time_since_epoch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L205-L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.get_time_since_epoch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints time elapsed (in microseconds) since the switch clock’s epoch.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add">
-<code class="descname">mirroring_add</code><span class="sig-paren">(</span><em>mirror_id</em>, <em>egress_port</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L145-L155"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mirroring_add</code><span class="sig-paren">(</span><em>mirror_id</em>, <em>egress_port</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L142-L152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds mirroring mapping.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -168,7 +168,7 @@ on the generic <a class="reference external" href="p4utils.utils.thrift_API.html
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_mc">
-<code class="descname">mirroring_add_mc</code><span class="sig-paren">(</span><em>mirror_id</em>, <em>mgrp</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L157-L167"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_mc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mirroring_add_mc</code><span class="sig-paren">(</span><em>mirror_id</em>, <em>mgrp</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L154-L164"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_mc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds mirroring session to multicast group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -186,7 +186,7 @@ on the generic <a class="reference external" href="p4utils.utils.thrift_API.html
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_port_and_mgrp">
-<code class="descname">mirroring_add_port_and_mgrp</code><span class="sig-paren">(</span><em>mirror_id</em>, <em>egress_port</em>, <em>mgrp</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L169-L180"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_port_and_mgrp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mirroring_add_port_and_mgrp</code><span class="sig-paren">(</span><em>mirror_id</em>, <em>egress_port</em>, <em>mgrp</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L166-L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_add_port_and_mgrp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds mirroring session to multicast group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -205,7 +205,7 @@ on the generic <a class="reference external" href="p4utils.utils.thrift_API.html
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_delete">
-<code class="descname">mirroring_delete</code><span class="sig-paren">(</span><em>mirror_id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L182-L190"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_delete" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mirroring_delete</code><span class="sig-paren">(</span><em>mirror_id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L179-L187"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes mirroring mapping.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -219,7 +219,7 @@ on the generic <a class="reference external" href="p4utils.utils.thrift_API.html
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_get">
-<code class="descname">mirroring_get</code><span class="sig-paren">(</span><em>mirror_id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L192-L201"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_get" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mirroring_get</code><span class="sig-paren">(</span><em>mirror_id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L189-L198"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.mirroring_get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints mirroring session information</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -233,7 +233,7 @@ on the generic <a class="reference external" href="p4utils.utils.thrift_API.html
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.parse_int">
-<code class="descname">parse_int</code><span class="sig-paren">(</span><em>arg</em>, <em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L92-L109"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.parse_int" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parse_int</code><span class="sig-paren">(</span><em>arg</em>, <em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L89-L106"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.parse_int" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tries to convert the argument to <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -261,7 +261,7 @@ an integer.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_depth">
-<code class="descname">set_queue_depth</code><span class="sig-paren">(</span><em>queue_depth</em>, <em>egress_port=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L111-L126"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_depth" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_queue_depth</code><span class="sig-paren">(</span><em>queue_depth</em>, <em>egress_port=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L108-L123"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_depth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets depth of one / all egress queue(s).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -280,7 +280,7 @@ are considered</li>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_rate">
-<code class="descname">set_queue_rate</code><span class="sig-paren">(</span><em>rate</em>, <em>egress_port=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L128-L143"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_rate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_queue_rate</code><span class="sig-paren">(</span><em>rate</em>, <em>egress_port=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L125-L140"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.SimpleSwitchThriftAPI.set_queue_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets rate of one / all egress queue(s).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -301,17 +301,13 @@ are considered</li>
 
 <dl class="function">
 <dt id="p4utils.utils.sswitch_thrift_API.handle_bad_input">
-<code class="descclassname">p4utils.utils.sswitch_thrift_API.</code><code class="descname">handle_bad_input</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L40-L57"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.handle_bad_input" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.sswitch_thrift_API.</code><code class="descname">handle_bad_input</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_thrift_API.py#L40-L54"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_thrift_API.handle_bad_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles bad input.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<a class="reference external" href="https://docs.python.org/3/library/types.html#types.FunctionType" title="(in Python v3.10)"><em>types.FunctionType</em></a>) – function or method to handle</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if the function was correctly executed, and <strong>False</strong> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>

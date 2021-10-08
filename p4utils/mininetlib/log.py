@@ -3,6 +3,7 @@
 This module is an extension of `mininet.log`__ that implements colored logs.
 """
 
+import sys
 import logging
 from mininet.log import *
 
@@ -66,14 +67,29 @@ LOG_FORMAT = {
     LEVELS['critical']: ShellStyles.bold + ShellBGColors.red
 }
 
+
 class ColoredFormatter(logging.Formatter):
     """Get colored logs."""
     def format(self, record):
         s = super().format(record)
         if record.levelno in LOG_FORMAT:
-            s = LOG_FORMAT[record.levelno] + s + ShellStyles.reset
+            s = LOG_FORMAT[record.levelno] + s
+            if record.levelno == LEVELS['critical']:
+                s += '\n'
+        if s[-1] == '\n':
+            s = s[:-1] + ShellStyles.reset + '\n'
         return s
 
 
+# Add critical level
+critical = lg.critical
+
+# Set formatter
 formatter = ColoredFormatter( LOGMSGFORMAT )
 lg.ch.setFormatter( formatter )
+
+# Handle exceptions as critical
+def excepthook(type, value, traceback):
+    critical('', exc_info=(type, value, traceback))
+
+sys.excepthook = excepthook

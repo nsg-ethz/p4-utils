@@ -26,7 +26,7 @@ from mininet.node import Node, Host, Switch
 from mininet.moduledeps import pathCheck
 
 from p4utils.utils.helper import *
-from p4utils.mininetlib.log import debug, info, output, warning, error
+from p4utils.mininetlib.log import debug, info, output, warning, error, critical
 
 
 SWITCH_START_TIMEOUT = 10
@@ -372,12 +372,11 @@ class FRRouter(Node):
         self.cmd('sysctl -w net.ipv4.conf.all.rp_filter=2')
 
         # Check binaries
-        if not os.path.isfile(self.bin_dir + "/" + "zebra"):
-            error("Binaries path {} does not contain daemons!".format(self.bin_dir))
-            exit(0)
+        if not os.path.isfile(self.bin_dir + '/' + 'zebra'):
+            raise FileNotFoundError('binary path {} does not contain daemons!'.format(self.bin_dir))
 
         if len(self.daemons.keys()) == 0:
-            error('Nothing to start in router {}'.format(self.name))
+            warning('Nothing to start in router {}\n'.format(self.name))
 
         # Integrated configuration
         if self.int_conf is not None:

@@ -1,9 +1,8 @@
 import os
-import tempfile
 import hashlib
 
 from p4utils.utils.helper import *
-from p4utils.mininetlib.log import debug, info, warning
+from p4utils.mininetlib.log import debug, info, output, warning, error, critical
 
 
 class CompilationError(Exception):
@@ -101,7 +100,7 @@ class P4C:
         else:
             info('{} compiled successfully.\n'.format(self.p4_src))
             self.compiled = True
-    
+
     def get_json_out(self):
         """Returns the JSON configuration filepath."""
         if self.compiled:
