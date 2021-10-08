@@ -1,8 +1,9 @@
 import os
 import tempfile
 import hashlib
-from mininet.log import debug, info, warning
+
 from p4utils.utils.helper import *
+from p4utils.mininetlib.log import debug, info, warning
 
 
 class CompilationError(Exception):
@@ -98,7 +99,7 @@ class P4C:
         if return_value != 0:
             raise CompilationError
         else:
-            output('{} compiled successfully.\n'.format(self.p4_src))
+            info('{} compiled successfully.\n'.format(self.p4_src))
             self.compiled = True
     
     def get_json_out(self):

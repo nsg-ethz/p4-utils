@@ -28,7 +28,6 @@ configure all the components of the virtualized network.
 
 import argparse
 from copy import deepcopy
-from mininet.log import debug, info, output, warning, error
 from mininet.clean import cleanup, sh
 
 from p4utils.utils.helper import *
@@ -40,6 +39,7 @@ from p4utils.mininetlib.node import P4Switch, P4RuntimeSwitch
 from p4utils.mininetlib.node import P4Host as DEFAULT_HOST
 from p4utils.mininetlib.net import P4Mininet as DEFAULT_NET
 from p4utils.mininetlib.network_API import NetworkAPI
+from p4utils.mininetlib.log import debug, info, output, warning, error
 
 
 class AppRunner(NetworkAPI):

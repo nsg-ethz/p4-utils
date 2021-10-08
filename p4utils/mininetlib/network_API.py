@@ -1,8 +1,11 @@
 """ __ http://mininet.org/
 
+__ https://github.com/mininet/mininet/blob/master/mininet/topo.py
+
 This module provides an API to easily and programmatically build a virtual network
-using `Mininet`__ as framework. Here, you will find the documentation for all the
-methods that will help you instantiate and start the network.
+using `Mininet`__ as framework. It is an extension of `mininet.topo`__.
+Here, you will find the documentation for all the methods that will help you 
+instantiate and start the network.
 """
 
 import os
@@ -13,7 +16,6 @@ from networkx.readwrite.json_graph import node_link_data
 from mininet.link import TCLink
 from mininet.nodelib import LinuxBridge
 from mininet.topo import Topo
-from mininet.log import setLogLevel, debug, info, output, warning, error
 from mininet.clean import cleanup, sh
 from mininet.util import natural
 
@@ -22,10 +24,11 @@ from p4utils.utils.helper import _prefixLenMatchRegex
 from p4utils.utils.client import ThriftClient
 from p4utils.utils.compiler import *
 from p4utils.utils.topology import NetworkGraph
+from p4utils.utils.task_scheduler import Task, TaskClient
 from p4utils.mininetlib.node import *
 from p4utils.mininetlib.net import P4Mininet
 from p4utils.mininetlib.cli import P4CLI
-from p4utils.utils.task_scheduler import Task, TaskClient
+from p4utils.mininetlib.log import setLogLevel, debug, info, output, warning, error
 
 
 class NetworkAPI(Topo):

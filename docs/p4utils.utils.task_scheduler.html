@@ -106,7 +106,7 @@
 <dl class="class">
 <dt id="p4utils.utils.task_scheduler.ProcessType">
 <em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">ProcessType</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L19-L22"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.ProcessType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.IntEnum" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">enum.IntEnum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.IntEnum" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">enum.IntEnum</span></code></a></p>
 <p>Enum class that defines task types.</p>
 <dl class="attribute">
 <dt id="p4utils.utils.task_scheduler.ProcessType.MULTIPROC">
@@ -123,18 +123,18 @@
 <dl class="class">
 <dt id="p4utils.utils.task_scheduler.Task">
 <em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">Task</code><span class="sig-paren">(</span><em>exe</em>, <em>*args</em>, <em>start=0</em>, <em>duration=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L25-L279"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Abstraction of a Task executed by the TaskServer.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>exe</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>function</em>) – executable to run (either a shell string
+<li><strong>exe</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>function</em>) – executable to run (either a shell string
 command or a python function)</li>
 <li><strong>*args</strong> – positional arguments for the passed function</li>
-<li><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – task absolute starting time (Unix time).</li>
-<li><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – task duration time in seconds (if duration is
+<li><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – task absolute starting time (Unix time).</li>
+<li><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – task duration time in seconds (if duration is
 lower than or equal to 0, then the task has no
 time limitation)</li>
 <li><strong>**kwargs</strong> – key-word arguments for the passed function</li>
@@ -153,7 +153,7 @@ time limitation)</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">exit code of the task.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -173,7 +173,7 @@ time limitation)</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if the process is alive, <strong>False</strong> otherwise.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -195,7 +195,7 @@ time limitation)</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">PID of the running task.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -214,7 +214,7 @@ of the task and stops it if duration expires.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cond</strong> (<a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Condition" title="(in Python v3.9)"><em>threading.Condition</em></a>) – condition to notify when self.thread is completed</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cond</strong> (<a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Condition" title="(in Python v3.10)"><em>threading.Condition</em></a>) – condition to notify when self.thread is completed</td>
 </tr>
 </tbody>
 </table>
@@ -230,8 +230,8 @@ will communicate its state putting items in the queue.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – task id used to communicate</li>
-<li><strong>q</strong> (<a class="reference external" href="https://docs.python.org/3/library/queue.html#queue.Queue" title="(in Python v3.9)"><em>queue.Queue</em></a>) – communication queue</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – task id used to communicate</li>
+<li><strong>q</strong> (<a class="reference external" href="https://docs.python.org/3/library/queue.html#queue.Queue" title="(in Python v3.10)"><em>queue.Queue</em></a>) – communication queue</li>
 </ul>
 </td>
 </tr>
@@ -256,13 +256,13 @@ will communicate its state putting items in the queue.</p>
 <dl class="class">
 <dt id="p4utils.utils.task_scheduler.TaskClient">
 <em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">TaskClient</code><span class="sig-paren">(</span><em>unix_socket_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L282-L323"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskClient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Task scheduler client which communicates with servers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unix_socket_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the file used by the Unix socket</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unix_socket_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path to the file used by the Unix socket</td>
 </tr>
 </tbody>
 </table>
@@ -275,8 +275,8 @@ will communicate its state putting items in the queue.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>tasks</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – list or tuple of py:class:<cite>Task</cite> objects to execute</li>
-<li><strong>retry</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether to attempt a reconnection upon failure</li>
+<li><strong>tasks</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – list or tuple of py:class:<cite>Task</cite> objects to execute</li>
+<li><strong>retry</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether to attempt a reconnection upon failure</li>
 </ul>
 </td>
 </tr>
@@ -289,13 +289,13 @@ will communicate its state putting items in the queue.</p>
 <dl class="class">
 <dt id="p4utils.utils.task_scheduler.TaskServer">
 <em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">TaskServer</code><span class="sig-paren">(</span><em>unix_socket_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L326-L500"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskServer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Task scheduler server which runs on the Mininet nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unix_socket_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – path to the file used by the Unix socket</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unix_socket_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.10)"><em>string</em></a>) – path to the file used by the Unix socket</td>
 </tr>
 </tbody>
 </table>

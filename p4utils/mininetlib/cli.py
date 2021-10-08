@@ -9,10 +9,9 @@ import os
 import traceback as tbk
 from functools import wraps
 from mininet.cli import CLI
-from mininet.log import debug, info, output, warning, error
 
 from p4utils.utils.helper import *
-
+from p4utils.mininetlib.log import debug, info, output, warning, error
 
 def exception_handler(f):
     """Prevents exceptions from terminating the client, but still

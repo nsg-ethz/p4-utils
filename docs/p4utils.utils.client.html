@@ -105,10 +105,26 @@
 <span id="p4utils-utils-client-module"></span><h1>p4utils.utils.client module<a class="headerlink" href="#module-p4utils.utils.client" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="p4utils.utils.client.ThriftClient">
-<em class="property">class </em><code class="descclassname">p4utils.utils.client.</code><code class="descname">ThriftClient</code><span class="sig-paren">(</span><em>thrift_port</em>, <em>sw_name</em>, <em>cli_bin=None</em>, <em>cli_input=None</em>, <em>log_enabled=True</em>, <em>log_dir='/tmp'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/client.py#L7-L89"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.client.ThriftClient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<em class="property">class </em><code class="descclassname">p4utils.utils.client.</code><code class="descname">ThriftClient</code><span class="sig-paren">(</span><em>thrift_port</em>, <em>sw_name</em>, <em>cli_bin=None</em>, <em>cli_input=None</em>, <em>log_enabled=True</em>, <em>log_dir='/tmp'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/client.py#L7-L111"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.client.ThriftClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>This controller reads commands from a thrift configuration
 file and uses it to set up the thrift switch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cli_bin</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.10)"><em>string</em></a>) – client binary file path.</li>
+<li><strong>cli_input</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.10)"><em>string</em></a>) – path of the configuration text file.</li>
+<li><strong>log_enabled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether to enable logs.</li>
+<li><strong>log_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.10)"><em>string</em></a>) – directory to store logs.</li>
+<li><strong>thrift_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – thrift server thrift_port number.</li>
+<li><strong>sw_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.10)"><em>string</em></a>) – name of the switch to configure.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="p4utils.utils.client.ThriftClient.cli_bin">
 <code class="descname">cli_bin</code><em class="property"> = 'simple_switch_CLI'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/client.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.client.ThriftClient.cli_bin" title="Permalink to this definition">¶</a></dt>
@@ -116,7 +132,7 @@ file and uses it to set up the thrift switch.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.client.ThriftClient.configure">
-<code class="descname">configure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/client.py#L66-L89"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.client.ThriftClient.configure" title="Permalink to this definition">¶</a></dt>
+<code class="descname">configure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/client.py#L66-L111"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.client.ThriftClient.configure" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method configures the switch with the provided file.</p>
 </dd></dl>
 
@@ -128,8 +144,8 @@ file and uses it to set up the thrift switch.</p>
 
 <dl class="classmethod">
 <dt id="p4utils.utils.client.ThriftClient.set_binary">
-<em class="property">classmethod </em><code class="descname">set_binary</code><span class="sig-paren">(</span><em>cli_bin</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/client.py#L14-L17"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.client.ThriftClient.set_binary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set class default binary</p>
+<em class="property">classmethod </em><code class="descname">set_binary</code><span class="sig-paren">(</span><em>cli_bin</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/client.py#L23-L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.client.ThriftClient.set_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set class default binary.</p>
 </dd></dl>
 
 <dl class="method">

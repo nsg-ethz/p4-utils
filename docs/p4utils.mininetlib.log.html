@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>p4utils.mininetlib.log module &mdash; P4-Utils 1.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+      <script>
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  false,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="p4utils.mininetlib.net module" href="p4utils.mininetlib.net.html" />
+    <link rel="prev" title="p4utils.mininetlib.cli module" href="p4utils.mininetlib.cli.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> P4-Utils
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">General Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="p4utils.html">P4-Utils API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="p4utils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="p4utils.mininetlib.html">p4utils.mininetlib package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="p4utils.mininetlib.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="p4utils.mininetlib.html#module-p4utils.mininetlib">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="p4utils.utils.html">p4utils.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="p4utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="p4utils.html#module-p4utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">P4-Utils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
+          <li><a href="p4utils.mininetlib.html">p4utils.mininetlib package</a> &raquo;</li>
+      <li>p4utils.mininetlib.log module</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/p4utils.mininetlib.log.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-p4utils.mininetlib.log">
+<span id="p4utils-mininetlib-log-module"></span><h1>p4utils.mininetlib.log module<a class="headerlink" href="#module-p4utils.mininetlib.log" title="Permalink to this headline">¶</a></h1>
+<p>This module is an extension of <a class="reference external" href="https://github.com/mininet/mininet/blob/master/mininet/log.py">mininet.log</a> that implements colored logs.</p>
+<dl class="class">
+<dt id="p4utils.mininetlib.log.ColoredFormatter">
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.log.</code><code class="descname">ColoredFormatter</code><span class="sig-paren">(</span><em>fmt=None</em>, <em>datefmt=None</em>, <em>style='%'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py#L69-L75"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ColoredFormatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Formatter" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">logging.Formatter</span></code></a></p>
+<p>Get colored logs.</p>
+<dl class="method">
+<dt id="p4utils.mininetlib.log.ColoredFormatter.format">
+<code class="descname">format</code><span class="sig-paren">(</span><em>record</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py#L71-L75"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ColoredFormatter.format" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.mininetlib.log.ShellBGColors">
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.log.</code><code class="descname">ShellBGColors</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py#L40-L56"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Shell background colors.</p>
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.black">
+<code class="descname">black</code><em class="property"> = '\x1b[40m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.black" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.blue">
+<code class="descname">blue</code><em class="property"> = '\x1b[44m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.blue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.cyan">
+<code class="descname">cyan</code><em class="property"> = '\x1b[46m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.cyan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.darkgrey">
+<code class="descname">darkgrey</code><em class="property"> = '\x1b[100m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.darkgrey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.green">
+<code class="descname">green</code><em class="property"> = '\x1b[42m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.green" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.lightblue">
+<code class="descname">lightblue</code><em class="property"> = '\x1b[104m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.lightblue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.lightcyan">
+<code class="descname">lightcyan</code><em class="property"> = '\x1b[106m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.lightcyan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.lightgreen">
+<code class="descname">lightgreen</code><em class="property"> = '\x1b[102m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.lightgreen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.lightgrey">
+<code class="descname">lightgrey</code><em class="property"> = '\x1b[47m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.lightgrey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.lightred">
+<code class="descname">lightred</code><em class="property"> = '\x1b[101m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.lightred" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.orange">
+<code class="descname">orange</code><em class="property"> = '\x1b[43m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.orange" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.pink">
+<code class="descname">pink</code><em class="property"> = '\x1b[105m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.pink" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.purple">
+<code class="descname">purple</code><em class="property"> = '\x1b[45m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.purple" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.red">
+<code class="descname">red</code><em class="property"> = '\x1b[41m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.red" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellBGColors.yellow">
+<code class="descname">yellow</code><em class="property"> = '\x1b[103m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellBGColors.yellow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.mininetlib.log.ShellFGColors">
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.log.</code><code class="descname">ShellFGColors</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py#L21-L37"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Shell foreground colors.</p>
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.black">
+<code class="descname">black</code><em class="property"> = '\x1b[30m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.black" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.blue">
+<code class="descname">blue</code><em class="property"> = '\x1b[34m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.blue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.cyan">
+<code class="descname">cyan</code><em class="property"> = '\x1b[36m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.cyan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.darkgrey">
+<code class="descname">darkgrey</code><em class="property"> = '\x1b[90m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.darkgrey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.green">
+<code class="descname">green</code><em class="property"> = '\x1b[32m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.green" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.lightblue">
+<code class="descname">lightblue</code><em class="property"> = '\x1b[94m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.lightblue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.lightcyan">
+<code class="descname">lightcyan</code><em class="property"> = '\x1b[96m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.lightcyan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.lightgreen">
+<code class="descname">lightgreen</code><em class="property"> = '\x1b[92m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.lightgreen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.lightgrey">
+<code class="descname">lightgrey</code><em class="property"> = '\x1b[37m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.lightgrey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.lightred">
+<code class="descname">lightred</code><em class="property"> = '\x1b[91m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.lightred" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.orange">
+<code class="descname">orange</code><em class="property"> = '\x1b[33m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.orange" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.pink">
+<code class="descname">pink</code><em class="property"> = '\x1b[95m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.pink" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.purple">
+<code class="descname">purple</code><em class="property"> = '\x1b[35m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.purple" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.red">
+<code class="descname">red</code><em class="property"> = '\x1b[31m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.red" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellFGColors.yellow">
+<code class="descname">yellow</code><em class="property"> = '\x1b[93m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellFGColors.yellow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.mininetlib.log.ShellStyles">
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.log.</code><code class="descname">ShellStyles</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py#L10-L18"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellStyles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Shell styles.</p>
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellStyles.bold">
+<code class="descname">bold</code><em class="property"> = '\x1b[01m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellStyles.bold" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellStyles.disable">
+<code class="descname">disable</code><em class="property"> = '\x1b[02m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellStyles.disable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellStyles.invisible">
+<code class="descname">invisible</code><em class="property"> = '\x1b[08m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellStyles.invisible" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellStyles.reset">
+<code class="descname">reset</code><em class="property"> = '\x1b[0m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellStyles.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellStyles.reverse">
+<code class="descname">reverse</code><em class="property"> = '\x1b[07m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellStyles.reverse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellStyles.strikethrough">
+<code class="descname">strikethrough</code><em class="property"> = '\x1b[09m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellStyles.strikethrough" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="p4utils.mininetlib.log.ShellStyles.underline">
+<code class="descname">underline</code><em class="property"> = '\x1b[04m'</em><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/log.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.log.ShellStyles.underline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="p4utils.mininetlib.cli.html" class="btn btn-neutral float-left" title="p4utils.mininetlib.cli module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="p4utils.mininetlib.net.html" class="btn btn-neutral float-right" title="p4utils.mininetlib.net module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Networked Systems Group (NSG@ETH).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

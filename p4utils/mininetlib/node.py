@@ -13,15 +13,20 @@
 # limitations under the License.
 #
 
+"""__ https://github.com/mininet/mininet/blob/master/mininet/node.py
+
+This module is an extension of `mininet.node`__ with customized nodes.
+"""
+
 import os
 import signal
 import tempfile
 from psutil import pid_exists
-from mininet.log import debug, info, output, warning, error
 from mininet.node import Node, Host, Switch
 from mininet.moduledeps import pathCheck
 
 from p4utils.utils.helper import *
+from p4utils.mininetlib.log import debug, info, output, warning, error
 
 
 SWITCH_START_TIMEOUT = 10
