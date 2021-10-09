@@ -55,16 +55,16 @@ class P4Host(Host):
     def describe(self, sw_addr=None, sw_mac=None):
         """Describe host."""
 
-        print('**********')
-        print('Network configuration for: {}'.format(self.name))
-        print('Default interface: {}\t{}\t{}'.format(
-            self.defaultIntf().name,
-            self.defaultIntf().IP(),
-            self.defaultIntf().MAC()
+        output('**********\n')
+        output('Network configuration for: {}\n'.format(self.name))
+        output('Default interface: {}\t{}\t{}\n'.format(
+               self.defaultIntf().name,
+               self.defaultIntf().IP(),
+               self.defaultIntf().MAC()
         ))
         if sw_addr is not None or sw_mac is not None:
-            print('Default route to switch: {} ({})'.format(sw_addr, sw_mac))
-        print('**********')
+            output('Default route to switch: {} ({})\n'.format(sw_addr, sw_mac))
+        output('**********\n')
 
 
 class P4Switch(Switch):
@@ -215,7 +215,7 @@ class P4Switch(Switch):
 
     def describe(self):
         """Describes P4Switch."""
-        print('{} -> Thrift port: {}'.format(self.name, self.thrift_port))
+        output('{} -> Thrift port: {}\n'.format(self.name, self.thrift_port))
 
 
 class P4RuntimeSwitch(P4Switch):
@@ -250,7 +250,7 @@ class P4RuntimeSwitch(P4Switch):
     def describe(self):
         """Describes P4RuntimeSwitch."""
         super().describe()
-        print('{} -> gRPC port: {}'.format(self.name, self.grpc_port))
+        output('{} -> gRPC port: {}\n'.format(self.name, self.grpc_port))
 
 class FRRouter(Node):
     """FRRouter built as Mininet node.
