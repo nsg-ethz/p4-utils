@@ -77,8 +77,11 @@ class ThriftClient:
                 # Join commands
                 entries = '\n'.join(entries)
                 # Execute commands
+                debug(self.cli_bin + ' --thrift-port ' + str(self.thrift_port) + '\n')
                 p = subprocess.Popen([self.cli_bin, '--thrift-port', str(self.thrift_port)],
-                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                                     stdin=subprocess.PIPE,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.STDOUT)
                 stdout, _ = p.communicate(input=entries.encode())
                 stdout = stdout.decode()
                 # Save logs
@@ -103,8 +106,8 @@ class ThriftClient:
                     success = False
                 # Print success
                 if success:
-                    info('Switch {}: successfully configured with file {}\n'.format(self.sw_name,
-                                                                                    self.cli_input))
+                    info('Switch {}: successfully configured with file {}.\n'.format(self.sw_name,
+                                                                                     self.cli_input))
             else:
                 raise ConnectionRefusedError('could not connect to switch {} on port {}.'.format(self.sw_name, self.thrift_port))
         else:

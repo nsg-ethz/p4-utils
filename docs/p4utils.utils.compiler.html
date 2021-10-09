@@ -105,19 +105,19 @@
 <span id="p4utils-utils-compiler-module"></span><h1>p4utils.utils.compiler module<a class="headerlink" href="#module-p4utils.utils.compiler" title="Permalink to this headline">¶</a></h1>
 <dl class="exception">
 <dt id="p4utils.utils.compiler.CompilationError">
-<em class="property">exception </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">CompilationError</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L8-L9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.CompilationError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">CompilationError</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L10-L11"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.CompilationError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="p4utils.utils.compiler.NotCompiledError">
-<em class="property">exception </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">NotCompiledError</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L12-L13"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.NotCompiledError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">NotCompiledError</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L14-L15"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.NotCompiledError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="p4utils.utils.compiler.P4C">
-<em class="property">class </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">P4C</code><span class="sig-paren">(</span><em>p4_src</em>, <em>p4c_bin=None</em>, <em>outdir=None</em>, <em>opts='--target bmv2 --arch v1model --std p4-16'</em>, <em>p4rt=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L20-L135"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">P4C</code><span class="sig-paren">(</span><em>p4_src</em>, <em>p4c_bin=None</em>, <em>outdir=None</em>, <em>opts='--target bmv2 --arch v1model --std p4-16'</em>, <em>p4rt=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L22-L153"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>This compiler reads the P4 program and generates
 the configuration files used by switches.</p>
@@ -140,31 +140,31 @@ to <code class="docutils literal"><span class="pre">simple_switch_grpc</span></c
 </table>
 <dl class="method">
 <dt id="p4utils.utils.compiler.P4C.clean">
-<code class="descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L121-L125"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.clean" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L139-L143"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.clean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes output files and set compiler as uncompiled.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.compiler.P4C.compile">
-<code class="descname">compile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L82-L102"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.compile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L84-L120"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.compile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compiles the P4 file and generates the configuration files.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.compiler.P4C.get_json_out">
-<code class="descname">get_json_out</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L104-L109"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.get_json_out" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_json_out</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L122-L127"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.get_json_out" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the JSON configuration filepath.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.compiler.P4C.get_p4rt_out">
-<code class="descname">get_p4rt_out</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L111-L119"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.get_p4rt_out" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_p4rt_out</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L129-L137"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.get_p4rt_out" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the P4Info configuration filepath.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.compiler.P4C.new_source">
-<code class="descname">new_source</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L127-L135"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.new_source" title="Permalink to this definition">¶</a></dt>
+<code class="descname">new_source</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L145-L153"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.new_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether a new source was provided to the
 compiler.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -187,7 +187,7 @@ the last time it was compiled, <strong>False</strong> otherwise.</td>
 
 <dl class="classmethod">
 <dt id="p4utils.utils.compiler.P4C.set_binary">
-<em class="property">classmethod </em><code class="descname">set_binary</code><span class="sig-paren">(</span><em>p4c_bin</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L35-L38"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.set_binary" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">set_binary</code><span class="sig-paren">(</span><em>p4c_bin</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L37-L40"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C.set_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets class default binary.</p>
 </dd></dl>
 
@@ -195,7 +195,7 @@ the last time it was compiled, <strong>False</strong> otherwise.</td>
 
 <dl class="exception">
 <dt id="p4utils.utils.compiler.P4InfoDisabled">
-<em class="property">exception </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">P4InfoDisabled</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L16-L17"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4InfoDisabled" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">P4InfoDisabled</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L18-L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4InfoDisabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
 </dd></dl>
 
