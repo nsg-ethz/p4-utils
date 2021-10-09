@@ -34,18 +34,13 @@ def handle_bad_input(f):
 
     Args:
         f (types.FunctionType): function or method to handle
-    
-    Returns:
-        bool: **True** if the function was correctly executed, and **False** otherwise.
     """
     @wraps(f)
     def handle(*args, **kwargs):
         try:
-            f(*args, **kwargs)
-            return True
+            return f(*args, **kwargs)
         except Exception as e:
             print(e)
-            return False
     return handle
 
 
@@ -201,6 +196,9 @@ class SimpleSwitchP4RuntimeAPI:
             byts (int)          : number of bytes to write (if **None**, the count
                                   is not changed)
         
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
+
         There are different kinds of matches:
 
         - For *exact* match: ``<value>``
@@ -296,6 +294,7 @@ class SimpleSwitchP4RuntimeAPI:
                 raise Exception('table {} has no direct counter attached.'.format(table_name))
 
         entry.insert()
+        return True
 
     @handle_bad_input
     def table_set_default(self, table_name, action_name, action_params=[]):
@@ -306,6 +305,9 @@ class SimpleSwitchP4RuntimeAPI:
             action_name (str)            : action to execute on hit
             action_params (list)         : parameters passed to action 
                                            (each parameter is a :py:class:`str`)
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
 
         Note:
             __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources
@@ -329,6 +331,7 @@ class SimpleSwitchP4RuntimeAPI:
                                                                               self.context.get_mf_len(action_name),
                                                                               len(action_params)))
         entry.modify()
+        return True
 
     @handle_bad_input
     def table_reset_default(self, table_name):
@@ -336,6 +339,9 @@ class SimpleSwitchP4RuntimeAPI:
         
         Args:
             table_name (str): name of the table
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
 
         Note:
             __ https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-default-entry
@@ -346,6 +352,7 @@ class SimpleSwitchP4RuntimeAPI:
         print('Resetting default action of: '+table_name)
         entry = api.TableEntry(self.client, self.context, table_name)(is_default=True)
         entry.modify()
+        return True
 
     @handle_bad_input
     def table_delete_match(self, table_name, match_keys, prio=None):
@@ -355,6 +362,9 @@ class SimpleSwitchP4RuntimeAPI:
             table_name (str)  : name of the table
             match_keys (list) : values to match (each value is a :py:class:`str`)
             prio (int)        : priority in ternary match
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
         """
         print('Deleting entry of: '+table_name)
         if not isinstance(match_keys, list):
@@ -372,6 +382,7 @@ class SimpleSwitchP4RuntimeAPI:
             print('priority: {}'.format(prio))
             entry.priority = prio
         entry.delete()
+        return True
 
     @handle_bad_input
     def table_modify_match(self, table_name, action_name, match_keys, action_params=[], prio=0, rates=None, pkts=None, byts=None):
@@ -390,6 +401,9 @@ class SimpleSwitchP4RuntimeAPI:
                                    is not changed)
             byts (int)           : number of bytes to write (if **None**, the count
                                    is not changed)
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
 
         There are three types of *counters*:
 
@@ -483,6 +497,7 @@ class SimpleSwitchP4RuntimeAPI:
                 raise Exception('table {} has no direct counter attached.'.format(table_name))
 
         entry.modify()
+        return True
 
     @handle_bad_input
     def table_clear(self, table_name):
@@ -491,9 +506,13 @@ class SimpleSwitchP4RuntimeAPI:
         
         Args:
             table_name (str): name of the table
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
         """
         print('Deleting all entries of: '+table_name)
         entry = api.TableEntry(self.client, self.context, table_name).read(function=lambda x: x.delete())
+        return True
 
     ## DirectCounters
     @handle_bad_input
@@ -552,6 +571,9 @@ class SimpleSwitchP4RuntimeAPI:
             pkts (int)                  : number of packets to write (default: 0)
             byts (int)                  : number of bytes to write (default: 0)
 
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
+
         Note:
             There are three types of counters:
 
@@ -582,6 +604,7 @@ class SimpleSwitchP4RuntimeAPI:
         if direct_counter_type in [CounterType.bytes.value, CounterType.both.value]:
             entry.byte_count = byts
         entry.modify()
+        return True
 
     @handle_bad_input
     def direct_counter_reset(self, direct_counter_name):
@@ -589,6 +612,9 @@ class SimpleSwitchP4RuntimeAPI:
 
         Args:
             direct_counter_name (str): name of the direct counter
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
         """
         print('Resetting direct counter: "{}"'.format(direct_counter_name))
         entries = api.DirectCounterEntry(self.client, self.context, direct_counter_name).read()
@@ -599,6 +625,7 @@ class SimpleSwitchP4RuntimeAPI:
             if direct_counter_type in [CounterType.bytes.value, CounterType.both.value]:
                 entry.byte_count = 0
             entry.modify()
+        return True
         
     ## DirectMeters
     @handle_bad_input
@@ -608,6 +635,9 @@ class SimpleSwitchP4RuntimeAPI:
         Args:
             direct_meter_name (str): name of the direct meter
             rates (list)           : ``[(cir, cburst), (pir, pburst)]``
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
 
         Note:
             ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units 
@@ -632,7 +662,8 @@ class SimpleSwitchP4RuntimeAPI:
             else:
                 raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
         else:
-            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')        
+            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+        return True
 
     @handle_bad_input
     def direct_meter_set_rates(self, direct_meter_name, match_keys, prio=0, rates=None):
@@ -647,6 +678,9 @@ class SimpleSwitchP4RuntimeAPI:
             rates (list)                : ``[(cir, cburst), (pir, pburst)]`` (default: None, i.e.
                                           all packets are marked as green)
         
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
+
         Note:
             ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units 
             where units is bytes or packets, depending on the meter type.
@@ -685,6 +719,7 @@ class SimpleSwitchP4RuntimeAPI:
             raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
 
         entry.modify()
+        return True
 
     @handle_bad_input
     def direct_meter_get_rates(self, direct_meter_name, match_keys, prio=0):
@@ -696,7 +731,7 @@ class SimpleSwitchP4RuntimeAPI:
                                      used to identify the entry
             prio (int)             : priority in ternary match (used to identify the table
         
-        Return:
+        Returns:
             list: ``[(cir, cburst), (pir, pburst)]`` if meter is configured, **None** otherwise
 
         Note:
@@ -765,6 +800,9 @@ class SimpleSwitchP4RuntimeAPI:
             pkts (int)        : number of packets to write (default: ``0``)
             byts (int)        : number of bytes to write (default: ``0``)
         
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
+
         There are three types of counters:
 
         - **BYTES**, only the field ``byts`` is written and the value of ``pkts`` is ignored.
@@ -783,6 +821,7 @@ class SimpleSwitchP4RuntimeAPI:
         if counter_type in [CounterType.bytes.value, CounterType.both.value]:
             entry.byte_count = byts
         entry.modify()
+        return True
 
     @handle_bad_input
     def counter_reset(self, counter_name):
@@ -790,6 +829,9 @@ class SimpleSwitchP4RuntimeAPI:
 
         Args:
             counter_name (str): name of the counter
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
         """
         print('Resetting counter: "{}"'.format(counter_name))
         entries = api.CounterEntry(self.client, self.context, counter_name).read()
@@ -801,6 +843,7 @@ class SimpleSwitchP4RuntimeAPI:
             if counter_type in [CounterType.bytes.value, CounterType.both.value]:
                 entry.byte_count = 0
             entry.modify()
+        return True
 
     ## Meters
     @handle_bad_input
@@ -810,6 +853,9 @@ class SimpleSwitchP4RuntimeAPI:
         Args:
             meter_name (str): name of the meter
             rates (list)    : ``[(cir, cburst), (pir, pburst)]``
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
 
         Note:
             ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units 
@@ -834,7 +880,8 @@ class SimpleSwitchP4RuntimeAPI:
             else:
                 raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
         else:
-            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')        
+            raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
+        return True
 
     @handle_bad_input
     def meter_set_rates(self, meter_name, index, rates):
@@ -845,7 +892,10 @@ class SimpleSwitchP4RuntimeAPI:
             rates (list)    : ``[(cir, cburst), (pir, pburst)]`` (default: **None**, i.e.
                               all packets are marked as **GREEN**)
             index (int)     : index of the meter to set (first element is at ``0``)
-        
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
+
         Note:
             ``cir`` and ``pir`` use units/second, ``cbursts`` and ``pburst`` use units 
             where units is bytes or packets, depending on the meter type.
@@ -873,6 +923,7 @@ class SimpleSwitchP4RuntimeAPI:
             raise Exception('rates is not in the specified format [(cir, cburst), (pir, pburst)].')
 
         entry.modify()
+        return True
 
     @handle_bad_input
     def meter_get_rates(self, meter_name, index):
@@ -882,7 +933,7 @@ class SimpleSwitchP4RuntimeAPI:
             meter_name (str): name of the meter
             index (int)     : index of the meter to read (first element is at ``0``)
         
-        Return:
+        Returns:
             list: ``[(cir, cburst), (pir, pburst)]`` if meter is configured, **None** otherwise.
 
         Note:
@@ -911,6 +962,9 @@ class SimpleSwitchP4RuntimeAPI:
             instances (list): list of instances of the corresponding ports
                               (each instance is a :py:class:`int`)
 
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
+
         A replica is logically a tuple ``(port, instance)`` which has to be unique 
         within the same multicast group. Instances can be explicitly assigned to ports by 
         passing the list instances to this function. If the list instances is not
@@ -938,6 +992,7 @@ class SimpleSwitchP4RuntimeAPI:
                 entry.add(ports[i])
 
         entry.insert()
+        return True
     
     @handle_bad_input
     def mc_mgrp_destroy(self, mgrp):
@@ -946,12 +1001,16 @@ class SimpleSwitchP4RuntimeAPI:
         Args:
             mgrp (int): multicast group *id*
 
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
+
         Note:
             ``mgrp`` must be larger than ``0``.
         """
         print('Destroying multicast group: {}'.format(mgrp))
         entry = api.MulticastGroupEntry(self.client, self.context, mgrp)
         entry.delete()
+        return True
 
     @handle_bad_input
     def mc_set_replicas(self, mgrp, ports=[], instances=None):
@@ -963,6 +1022,9 @@ class SimpleSwitchP4RuntimeAPI:
                               (each port number is a :py:class:`int`)
             instances (list): list of instances of the corresponding ports
                               (each instance is a :py:class:`int`)
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
 
         A replica is logically a tuple ``(port, instance)`` which has to be unique 
         within the same multicast group. Instances can be explicitly assigned to ports by 
@@ -991,6 +1053,7 @@ class SimpleSwitchP4RuntimeAPI:
                 entry.add(ports[i])
 
         entry.modify()
+        return True
 
     @handle_bad_input
     def mc_get_replicas(self, mgrp):
@@ -1046,6 +1109,9 @@ class SimpleSwitchP4RuntimeAPI:
             cos (int)           : Class of Service (see `here`__)
             packet_lentgth (int): maximal packet length in bytes (after which, packets are truncated)
 
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
+
         A replica is logically a tuple ``(port, instance)`` which has to be unique 
         within the same multicast group. Instances can be explicitly assigned to ports by 
         passing the list instances to this function. If the list instances is not
@@ -1077,6 +1143,7 @@ class SimpleSwitchP4RuntimeAPI:
         entry.packet_length_bytes = packet_length
 
         entry.insert()
+        return True
 
     @handle_bad_input
     def cs_destroy(self, session_id):
@@ -1084,10 +1151,14 @@ class SimpleSwitchP4RuntimeAPI:
 
         Args:
             session_id (int): clone session *id*
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
         """
         print('Removing clone session: {}'.format(session_id))
         entry = api.CloneSessionEntry(self.client, self.context, session_id)
         entry.delete()
+        return True
 
     @handle_bad_input
     def cs_set_replicas(self, session_id, ports=[], instances=None, cos=0, packet_length=0):
@@ -1103,6 +1174,9 @@ class SimpleSwitchP4RuntimeAPI:
                                   (each instance is :py:class:`int`)
             cos (int)           : Class of Service (see `here`__)
             packet_lentgth (int): maximal packet length in bytes (after which, packets are truncated)
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
 
         A replica is logically a tuple ``(port, instance)`` which has to be unique 
         within the same multicast group. Instances can be explicitly assigned to ports by 
@@ -1135,6 +1209,7 @@ class SimpleSwitchP4RuntimeAPI:
         entry.packet_length_bytes = packet_length
 
         entry.modify()
+        return True
 
     @handle_bad_input
     def cs_get_replicas(self, session_id):
@@ -1183,6 +1258,9 @@ class SimpleSwitchP4RuntimeAPI:
             ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement 
                                   from the client before new digest messages can be generated for the same learned data
 
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
+
         By default, ``max_timeout_ns`` is set to ``0``, i.e. the server should generate a ``DigestList`` 
         message for every digest message generated by the data plane.
 
@@ -1206,6 +1284,7 @@ class SimpleSwitchP4RuntimeAPI:
         entry.ack_timeout_ns = ack_timeout_ns
 
         entry.insert()
+        return True
 
     @handle_bad_input
     def digest_set_conf(self, digest_name, max_timeout_ns=0, max_list_size=1, ack_timeout_ns=0):
@@ -1219,6 +1298,9 @@ class SimpleSwitchP4RuntimeAPI:
                                   to the client as a single ``DigestList`` Protobuf message
             ack_timeout_ns (int): the timeout in nanoseconds that a server must wait for a digest list acknowledgement 
                                   from the client before new digest messages can be generated for the same learned data
+
+        Returns:
+            bool: **True** in case of success, **None** otherwise.
 
         By default, ``max_timeout_ns`` is set to ``0``, i.e. the server should generate a ``DigestList`` 
         message for every digest message generated by the data plane.
@@ -1243,6 +1325,7 @@ class SimpleSwitchP4RuntimeAPI:
         entry.ack_timeout_ns = ack_timeout_ns
 
         entry.modify()
+        return True
 
     @handle_bad_input
     def digest_get_conf(self, digest_name):
