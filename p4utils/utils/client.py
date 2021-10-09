@@ -89,14 +89,14 @@ class ThriftClient:
                 success = True
                 # Check for errors in the commands (they are in the stdout)
                 if 'Invalid' in stdout or 'Error' in stdout:
-                    error('Switch {}: error in file {},'
+                    error('Switch {}: error in file {}, '
                           'check {} for details.\n'.format(self.sw_name,
                                                            self.cli_input,
                                                            log_path))
                     success = False
                 # Check returncode
                 if p.returncode != 0:
-                    error('Switch {}: thrift client exited with error,'
+                    error('Switch {}: thrift client exited with error, '
                           'check {} for details.\n'.format(self.sw_name,
                                                            log_path))
                 
