@@ -78,6 +78,8 @@ class ColoredFormatter(logging.Formatter):
                 s += '\n'
         if s[-1] == '\n':
             s = s[:-1] + ShellStyles.reset + '\n'
+        else:
+            s += ShellStyles.reset
         return s
 
 
