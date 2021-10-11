@@ -42,9 +42,6 @@ def handle_bad_input(f):
 
     Args:
         f (types.FunctionType): function or method to handle
-    
-    Returns:
-        bool: **True** if the function was correctly executed, and **False** otherwise.
     """
     @wraps(f)
     @thrift_API.handle_bad_input

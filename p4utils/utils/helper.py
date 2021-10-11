@@ -14,10 +14,9 @@ import psutil
 import hashlib
 import importlib
 from networkx.readwrite.json_graph import node_link_graph
-from mininet.log import info, output, error, warn, debug
 
 from p4utils.utils.topology import NetworkGraph
-
+from p4utils.mininetlib.log import info, output, error, warning, debug
 
 _prefixLenMatchRegex = re.compile("netmask (\d+\.\d+\.\d+\.\d+)")
 

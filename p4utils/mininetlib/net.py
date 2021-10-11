@@ -1,9 +1,14 @@
+"""__ https://github.com/mininet/mininet/blob/master/mininet/net.py
+
+This module is an extension of `mininet.net`__ that allows also router nodes.
+"""
+
 from itertools import groupby
 from mininet.net import Mininet
 from mininet.node import Controller
-from mininet.log import debug, info, output, warning, error
 
 from p4utils.mininetlib.node import FRRouter
+from p4utils.mininetlib.log import debug, info, output, warning, error
 
 
 class P4Mininet(Mininet):

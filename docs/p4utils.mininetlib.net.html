@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="p4utils.mininetlib.network_API module" href="p4utils.mininetlib.network_API.html" />
-    <link rel="prev" title="p4utils.mininetlib.cli module" href="p4utils.mininetlib.cli.html" /> 
+    <link rel="prev" title="p4utils.mininetlib.log module" href="p4utils.mininetlib.log.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -102,22 +102,23 @@
              
   <div class="section" id="module-p4utils.mininetlib.net">
 <span id="p4utils-mininetlib-net-module"></span><h1>p4utils.mininetlib.net module<a class="headerlink" href="#module-p4utils.mininetlib.net" title="Permalink to this headline">¶</a></h1>
+<p>This module is an extension of <a class="reference external" href="https://github.com/mininet/mininet/blob/master/mininet/net.py">mininet.net</a> that allows also router nodes.</p>
 <dl class="class">
 <dt id="p4utils.mininetlib.net.P4Mininet">
-<em class="property">class </em><code class="descclassname">p4utils.mininetlib.net.</code><code class="descname">P4Mininet</code><span class="sig-paren">(</span><em>*args</em>, <em>router=&lt;class 'p4utils.mininetlib.node.FRRouter'&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L9-L183"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.net.</code><code class="descname">P4Mininet</code><span class="sig-paren">(</span><em>*args</em>, <em>router=&lt;class 'p4utils.mininetlib.node.FRRouter'&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L14-L188"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.net.Mininet</span></code></p>
 <p>P4Mininet is the Mininet Class extended with P4 switches.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.net.P4Mininet.addRouter">
-<code class="descname">addRouter</code><span class="sig-paren">(</span><em>name</em>, <em>cls=None</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L28-L46"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet.addRouter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addRouter</code><span class="sig-paren">(</span><em>name</em>, <em>cls=None</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L33-L51"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet.addRouter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a router to the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of the router to add</li>
-<li><strong>cls</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)"><em>type</em></a>) – custom router class/constructor (optional)</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.10)"><em>string</em></a>) – name of the router to add</li>
+<li><strong>cls</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><em>type</em></a>) – custom router class/constructor (optional)</li>
 </ul>
 </td>
 </tr>
@@ -130,25 +131,25 @@
 
 <dl class="method">
 <dt id="p4utils.mininetlib.net.P4Mininet.build">
-<code class="descname">build</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L19-L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet.build" title="Permalink to this definition">¶</a></dt>
+<code class="descname">build</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L24-L31"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build P4Mininet.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.net.P4Mininet.buildFromTopo">
-<code class="descname">buildFromTopo</code><span class="sig-paren">(</span><em>topo=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L48-L100"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet.buildFromTopo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">buildFromTopo</code><span class="sig-paren">(</span><em>topo=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L53-L105"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet.buildFromTopo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build mininet from a topology object. At the end of this
 function, everything should be connected and up.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.net.P4Mininet.start">
-<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L102-L141"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet.start" title="Permalink to this definition">¶</a></dt>
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L107-L146"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet.start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.net.P4Mininet.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L143-L183"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet.stop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/net.py#L148-L188"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.net.P4Mininet.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop the controller(s), switches and hosts</p>
 </dd></dl>
 
@@ -160,7 +161,7 @@ function, everything should be connected and up.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="p4utils.mininetlib.cli.html" class="btn btn-neutral float-left" title="p4utils.mininetlib.cli module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="p4utils.mininetlib.log.html" class="btn btn-neutral float-left" title="p4utils.mininetlib.log module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="p4utils.mininetlib.network_API.html" class="btn btn-neutral float-right" title="p4utils.mininetlib.network_API module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -1,8 +1,10 @@
 import os
-import tempfile
+import shlex 
 import hashlib
-from mininet.log import debug, info, warning
+import subprocess
+
 from p4utils.utils.helper import *
+from p4utils.mininetlib.log import debug, info, output, warning, error, critical
 
 
 class CompilationError(Exception):
@@ -85,22 +87,38 @@ class P4C:
         self.cksum = cksum(self.p4_src)
         debug('source: {}\tcksum: {}\n'.format(self.p4_src, self.cksum))
 
-        compiler_args = []
-        compiler_args.append(self.opts)
-        compiler_args.append('-o "{}"'.format(self.outdir))
+        # Compiler command to execute
+        cmd = self.p4c_bin + ' '
+        cmd += '"{}" '.format(self.p4_src)
+        cmd += self.opts + ' '
+        cmd += '-o "{}" '.format(self.outdir)
 
         if self.p4rt:
-            compiler_args.append('--p4runtime-files "{}"'.format(self.p4rt_out))
-        
-        compiler_args.append('"{}"'.format(self.p4_src))
-        info(self.p4c_bin + ' {}'.format(' '.join(compiler_args)) + '\n')
-        return_value = run_command(self.p4c_bin + ' {}'.format(' '.join(compiler_args)))
-        if return_value != 0:
+            cmd += '--p4runtime-files "{}" '.format(self.p4rt_out)
+
+        debug(cmd + '\n')
+
+        # Execute command
+        p = subprocess.Popen(shlex.split(cmd),
+                             stdin=subprocess.DEVNULL,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
+
+        if p.returncode != 0:
+            info(stdout.decode())
+            error(stderr.decode())
             raise CompilationError
         else:
-            output('{} compiled successfully.\n'.format(self.p4_src))
+            if len(stderr) == 0:
+                info('{} compiled successfully.\n'.format(self.p4_src))
+                info(stdout.decode())
+            else:
+                info('{} compiled with warnings.\n'.format(self.p4_src))
+                info(stdout.decode())
+                warning(stderr.decode())
             self.compiled = True
-    
+
     def get_json_out(self):
         """Returns the JSON configuration filepath."""
         if self.compiled:

@@ -111,7 +111,7 @@ other is easier for the user.</p>
 <dl class="class">
 <dt id="p4utils.utils.sswitch_p4runtime_API.CounterType">
 <em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">CounterType</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L21-L29"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.CounterType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
 <p>Counter type according to <em>P4 Runtime Specification</em>. See <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/57bb925a30df02b5c492c2a16c29b0014b98fa7a/proto/p4/config/v1/p4info.proto#L278">here</a> for details.</p>
 <dl class="attribute">
 <dt id="p4utils.utils.sswitch_p4runtime_API.CounterType.both">
@@ -137,8 +137,8 @@ other is easier for the user.</p>
 
 <dl class="class">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI">
-<em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">SimpleSwitchP4RuntimeAPI</code><span class="sig-paren">(</span><em>device_id</em>, <em>grpc_port</em>, <em>grpc_ip='0.0.0.0'</em>, <em>p4rt_path=None</em>, <em>json_path=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L52-L1278"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">SimpleSwitchP4RuntimeAPI</code><span class="sig-paren">(</span><em>device_id</em>, <em>grpc_port</em>, <em>grpc_ip='0.0.0.0'</em>, <em>p4rt_path=None</em>, <em>json_path=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L47-L1361"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>For a better documentation of the primitives and the assumptions used,
 please take a look at:</p>
 <ul class="simple">
@@ -150,15 +150,15 @@ please take a look at:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>device_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – switch <em>id</em></li>
-<li><strong>grpc_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the port the switch gRPC server is listening on</li>
-<li><strong>grpc_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the IP the switch gRPC server is listening on</li>
-<li><strong>p4rt_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the P4Runtime Info file</li>
-<li><strong>json_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path to the P4 JSON compiled file</li>
+<li><strong>device_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – switch <em>id</em></li>
+<li><strong>grpc_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the port the switch gRPC server is listening on</li>
+<li><strong>grpc_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the IP the switch gRPC server is listening on</li>
+<li><strong>p4rt_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path to the P4Runtime Info file</li>
+<li><strong>json_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path to the P4 JSON compiled file</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.9)"><code class="xref py py-exc docutils literal"><span class="pre">FileNotFoundError</span></code></a> – if <code class="docutils literal"><span class="pre">p4rt_path</span></code> or <code class="docutils literal"><span class="pre">json_path</span></code> are not specified, or invalid and
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.10)"><code class="xref py py-exc docutils literal"><span class="pre">FileNotFoundError</span></code></a> – if <code class="docutils literal"><span class="pre">p4rt_path</span></code> or <code class="docutils literal"><span class="pre">json_path</span></code> are not specified, or invalid and
 the client cannot retrieve the relevant informations from the
 P4Runtime server.</p>
 </td>
@@ -179,15 +179,15 @@ P4Runtime server.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_read">
-<code class="descname">counter_read</code><span class="sig-paren">(</span><em>counter_name</em>, <em>index</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L728-L756"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_read" title="Permalink to this definition">¶</a></dt>
+<code class="descname">counter_read</code><span class="sig-paren">(</span><em>counter_name</em>, <em>index</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L763-L791"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads counter value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the counter</li>
-<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index of the counter to read (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the counter</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – index of the counter to read (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
 </ul>
 </td>
 </tr>
@@ -199,7 +199,7 @@ P4Runtime server.</p>
 </p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
 </td>
 </tr>
 </tbody>
@@ -214,13 +214,17 @@ to use only the correct value (see <a class="reference external" href="https://p
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_reset">
-<code class="descname">counter_reset</code><span class="sig-paren">(</span><em>counter_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L787-L803"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">counter_reset</code><span class="sig-paren">(</span><em>counter_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L826-L846"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets all the counters values.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the counter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the counter</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -228,18 +232,24 @@ to use only the correct value (see <a class="reference external" href="https://p
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_write">
-<code class="descname">counter_write</code><span class="sig-paren">(</span><em>counter_name</em>, <em>index</em>, <em>pkts=0</em>, <em>byts=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L758-L785"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_write" title="Permalink to this definition">¶</a></dt>
+<code class="descname">counter_write</code><span class="sig-paren">(</span><em>counter_name</em>, <em>index</em>, <em>pkts=0</em>, <em>byts=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L793-L824"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.counter_write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes counter values. If no values are specified, the counter is reset.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the counter</li>
-<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index of the counter to write (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
-<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of packets to write (default: <code class="docutils literal"><span class="pre">0</span></code>)</li>
-<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of bytes to write (default: <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the counter</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – index of the counter to write (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of packets to write (default: <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of bytes to write (default: <code class="docutils literal"><span class="pre">0</span></code>)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -254,21 +264,27 @@ to use only the correct value (see <a class="reference external" href="https://p
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_create">
-<code class="descname">cs_create</code><span class="sig-paren">(</span><em>session_id</em>, <em>ports=[]</em>, <em>instances=None</em>, <em>cos=0</em>, <em>packet_length=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1034-L1079"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_create" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cs_create</code><span class="sig-paren">(</span><em>session_id</em>, <em>ports=[]</em>, <em>instances=None</em>, <em>cos=0</em>, <em>packet_length=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1097-L1146"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a packet cloning session.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – clone session <em>id</em></li>
-<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of port numbers to add to the clone session
-(each port number is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of instances of the corresponding ports
-(each instance is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>cos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Class of Service (see <a class="reference external" href="https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress">here</a>)</li>
-<li><strong>packet_lentgth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – maximal packet length in bytes (after which, packets are truncated)</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – clone session <em>id</em></li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of port numbers to add to the clone session
+(each port number is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
+<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of instances of the corresponding ports
+(each instance is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
+<li><strong>cos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Class of Service (see <a class="reference external" href="https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress">here</a>)</li>
+<li><strong>packet_lentgth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximal packet length in bytes (after which, packets are truncated)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -287,13 +303,17 @@ an empty list, then the packets are not cloned to any port.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_destroy">
-<code class="descname">cs_destroy</code><span class="sig-paren">(</span><em>session_id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1081-L1090"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_destroy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cs_destroy</code><span class="sig-paren">(</span><em>session_id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1148-L1161"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_destroy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a packet cloning session.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – clone session <em>id</em></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – clone session <em>id</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -301,13 +321,13 @@ an empty list, then the packets are not cloned to any port.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_get_replicas">
-<code class="descname">cs_get_replicas</code><span class="sig-paren">(</span><em>session_id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1139-L1170"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_get_replicas" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cs_get_replicas</code><span class="sig-paren">(</span><em>session_id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1214-L1245"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_get_replicas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets replicas which belog to a clone session.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – clone session id</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – clone session id</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">(ports,</span> <span class="pre">instances)</span></code> where:<ul class="simple">
 <li><code class="docutils literal"><span class="pre">ports</span></code> is a list of port numbers of the clone session;</li>
@@ -315,7 +335,7 @@ an empty list, then the packets are not cloned to any port.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></td>
 </tr>
 </tbody>
 </table>
@@ -325,21 +345,27 @@ within the same multicast group.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_set_replicas">
-<code class="descname">cs_set_replicas</code><span class="sig-paren">(</span><em>session_id</em>, <em>ports=[]</em>, <em>instances=None</em>, <em>cos=0</em>, <em>packet_length=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1092-L1137"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_set_replicas" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cs_set_replicas</code><span class="sig-paren">(</span><em>session_id</em>, <em>ports=[]</em>, <em>instances=None</em>, <em>cos=0</em>, <em>packet_length=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1163-L1212"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.cs_set_replicas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configures a packet cloning session.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – clone session <em>id</em></li>
-<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of port numbers to add to the clone session
-(each port number is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of instances of the corresponding ports
-(each instance is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>cos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Class of Service (see <a class="reference external" href="https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress">here</a>)</li>
-<li><strong>packet_lentgth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – maximal packet length in bytes (after which, packets are truncated)</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – clone session <em>id</em></li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of port numbers to add to the clone session
+(each port number is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
+<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of instances of the corresponding ports
+(each instance is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
+<li><strong>cos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Class of Service (see <a class="reference external" href="https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress">here</a>)</li>
+<li><strong>packet_lentgth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximal packet length in bytes (after which, packets are truncated)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -358,21 +384,27 @@ list, then the packets are not cloned to any port.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_enable">
-<code class="descname">digest_enable</code><span class="sig-paren">(</span><em>digest_name</em>, <em>max_timeout_ns=0</em>, <em>max_list_size=1</em>, <em>ack_timeout_ns=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1173-L1208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_enable" title="Permalink to this definition">¶</a></dt>
+<code class="descname">digest_enable</code><span class="sig-paren">(</span><em>digest_name</em>, <em>max_timeout_ns=0</em>, <em>max_list_size=1</em>, <em>ack_timeout_ns=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1248-L1287"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_enable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables and configure the digests generation of the switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
 generated by the compiler)</li>
-<li><strong>max_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum server buffering delay in nanoseconds for an outstanding digest message</li>
-<li><strong>max_list_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum digest list size (in number of digest messages) sent by the server
+<li><strong>max_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum server buffering delay in nanoseconds for an outstanding digest message</li>
+<li><strong>max_list_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum digest list size (in number of digest messages) sent by the server
 to the client as a single <code class="docutils literal"><span class="pre">DigestList</span></code> Protobuf message</li>
-<li><strong>ack_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the timeout in nanoseconds that a server must wait for a digest list acknowledgement
+<li><strong>ack_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the timeout in nanoseconds that a server must wait for a digest list acknowledgement
 from the client before new digest messages can be generated for the same learned data</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -394,13 +426,13 @@ is the name of the struct type (i.e. <code class="docutils literal"><span class=
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_get_conf">
-<code class="descname">digest_get_conf</code><span class="sig-paren">(</span><em>digest_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1247-L1278"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_get_conf" title="Permalink to this definition">¶</a></dt>
+<code class="descname">digest_get_conf</code><span class="sig-paren">(</span><em>digest_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1330-L1361"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_get_conf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables and configure the digests generation of the switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
 generated by the compiler)</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">(max_timeout_ns,</span> <span class="pre">max_list_size,</span> <span class="pre">ack_timeout_ns)</span></code> where:<ul class="simple">
@@ -412,7 +444,7 @@ from the client before new digest messages can be generated for the same learned
 </ul>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></td>
 </tr>
 </tbody>
 </table>
@@ -427,21 +459,27 @@ is the name of the struct type (i.e. <code class="docutils literal"><span class=
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_set_conf">
-<code class="descname">digest_set_conf</code><span class="sig-paren">(</span><em>digest_name</em>, <em>max_timeout_ns=0</em>, <em>max_list_size=1</em>, <em>ack_timeout_ns=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1210-L1245"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_set_conf" title="Permalink to this definition">¶</a></dt>
+<code class="descname">digest_set_conf</code><span class="sig-paren">(</span><em>digest_name</em>, <em>max_timeout_ns=0</em>, <em>max_list_size=1</em>, <em>ack_timeout_ns=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1289-L1328"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.digest_set_conf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configures the digests generation of the switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
 generated by the compiler)</li>
-<li><strong>max_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum server buffering delay in nanoseconds for an outstanding digest message</li>
-<li><strong>max_list_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum digest list size (in number of digest messages) sent by the server
+<li><strong>max_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum server buffering delay in nanoseconds for an outstanding digest message</li>
+<li><strong>max_list_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum digest list size (in number of digest messages) sent by the server
 to the client as a single <code class="docutils literal"><span class="pre">DigestList</span></code> Protobuf message</li>
-<li><strong>ack_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the timeout in nanoseconds that a server must wait for a digest list acknowledgement
+<li><strong>ack_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the timeout in nanoseconds that a server must wait for a digest list acknowledgement
 from the client before new digest messages can be generated for the same learned data</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -463,17 +501,17 @@ is the name of the struct type (i.e. <code class="docutils literal"><span class=
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_read">
-<code class="descname">direct_counter_read</code><span class="sig-paren">(</span><em>direct_counter_name</em>, <em>match_keys</em>, <em>prio=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L499-L540"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_read" title="Permalink to this definition">¶</a></dt>
+<code class="descname">direct_counter_read</code><span class="sig-paren">(</span><em>direct_counter_name</em>, <em>match_keys</em>, <em>prio=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L518-L559"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads direct counter values.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct counter</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) used
+<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct counter</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) used
 to identify the entry</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match (used to identify the table
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match (used to identify the table
 entry to which the direct counter is attached)</li>
 </ul>
 </td>
@@ -486,7 +524,7 @@ entry to which the direct counter is attached)</li>
 </p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
 </td>
 </tr>
 </tbody>
@@ -501,13 +539,17 @@ to use only the correct value (see <a class="reference external" href="https://p
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_reset">
-<code class="descname">direct_counter_reset</code><span class="sig-paren">(</span><em>direct_counter_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L586-L601"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">direct_counter_reset</code><span class="sig-paren">(</span><em>direct_counter_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L609-L628"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets all the direct counters values.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct counter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct counter</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -515,21 +557,27 @@ to use only the correct value (see <a class="reference external" href="https://p
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_write">
-<code class="descname">direct_counter_write</code><span class="sig-paren">(</span><em>direct_counter_name</em>, <em>match_keys</em>, <em>prio=0</em>, <em>pkts=0</em>, <em>byts=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L542-L584"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_write" title="Permalink to this definition">¶</a></dt>
+<code class="descname">direct_counter_write</code><span class="sig-paren">(</span><em>direct_counter_name</em>, <em>match_keys</em>, <em>prio=0</em>, <em>pkts=0</em>, <em>byts=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L561-L607"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_counter_write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes direct counter values. If no values are specified, the counter is reset.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct counter</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) used
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct counter</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) used
 to identify the entry</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match (used to identify the table
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match (used to identify the table
 entry to which the direct counter is attached)</li>
-<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of packets to write (default: 0)</li>
-<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of bytes to write (default: 0)</li>
+<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of packets to write (default: 0)</li>
+<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of bytes to write (default: 0)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -547,16 +595,22 @@ entry to which the direct counter is attached)</li>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_array_set_rates">
-<code class="descname">direct_meter_array_set_rates</code><span class="sig-paren">(</span><em>direct_meter_name</em>, <em>rates</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L604-L635"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_array_set_rates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">direct_meter_array_set_rates</code><span class="sig-paren">(</span><em>direct_meter_name</em>, <em>rates</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L631-L666"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_array_set_rates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configures rates for an entire direct meter array.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct meter</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code></li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct meter</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code></li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -570,24 +624,24 @@ where units is bytes or packets, depending on the meter type.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_get_rates">
-<code class="descname">direct_meter_get_rates</code><span class="sig-paren">(</span><em>direct_meter_name</em>, <em>match_keys</em>, <em>prio=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L689-L725"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_get_rates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">direct_meter_get_rates</code><span class="sig-paren">(</span><em>direct_meter_name</em>, <em>match_keys</em>, <em>prio=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L724-L760"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_get_rates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves rates for a direct meter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct meter</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)
+<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct meter</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)
 used to identify the entry</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match (used to identify the table</li>
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match (used to identify the table</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> if meter is configured, <strong>None</strong> otherwise</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
 </td>
 </tr>
 </tbody>
@@ -601,21 +655,27 @@ where units is bytes or packets, depending on the meter type.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_set_rates">
-<code class="descname">direct_meter_set_rates</code><span class="sig-paren">(</span><em>direct_meter_name</em>, <em>match_keys</em>, <em>prio=0</em>, <em>rates=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L637-L687"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_set_rates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">direct_meter_set_rates</code><span class="sig-paren">(</span><em>direct_meter_name</em>, <em>match_keys</em>, <em>prio=0</em>, <em>rates=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L668-L722"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.direct_meter_set_rates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configures rates for a single direct meter entry.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the direct meter</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct meter</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)
 used to identify the entry</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match (used to identify the table
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match (used to identify the table
 entry to which the direct meter is attached)</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (default: None, i.e.
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (default: None, i.e.
 all packets are marked as green)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -629,13 +689,13 @@ where units is bytes or packets, depending on the meter type.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list">
-<code class="descname">get_digest_list</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L167-L183"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_digest_list</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L162-L178"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves <code class="docutils literal"><span class="pre">DigestList</span></code> and send back acknowledgment.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – time to wait for packet</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – time to wait for packet</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">DigestList</span></code> Protobuf Message or <strong>None</strong> if the timeout has expired and
 no packet has been received.</td>
@@ -651,13 +711,13 @@ function will wait indefinitely.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_get_replicas">
-<code class="descname">mc_get_replicas</code><span class="sig-paren">(</span><em>mgrp</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L995-L1031"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_get_replicas" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mc_get_replicas</code><span class="sig-paren">(</span><em>mgrp</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1058-L1094"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_get_replicas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets replicas which belog to a multicast group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – multicast group <em>id</em></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – multicast group <em>id</em></td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">(ports,</span> <span class="pre">instances)</span></code> where:<ul class="simple">
 <li><code class="docutils literal"><span class="pre">ports</span></code> is a list of port numbers of the multicast group;</li>
@@ -665,7 +725,7 @@ function will wait indefinitely.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></td>
 </tr>
 </tbody>
 </table>
@@ -681,19 +741,25 @@ specified, then the instance number is set to <code class="docutils literal"><sp
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_create">
-<code class="descname">mc_mgrp_create</code><span class="sig-paren">(</span><em>mgrp</em>, <em>ports=[]</em>, <em>instances=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L903-L940"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_create" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mc_mgrp_create</code><span class="sig-paren">(</span><em>mgrp</em>, <em>ports=[]</em>, <em>instances=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L954-L995"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates multicast group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – multicast group <em>id</em></li>
-<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of port numbers to add to the multicast group
-(each port number is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of instances of the corresponding ports
-(each instance is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – multicast group <em>id</em></li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of port numbers to add to the multicast group
+(each port number is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
+<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of instances of the corresponding ports
+(each instance is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -711,13 +777,17 @@ then the packets are not multicasted to any port.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_destroy">
-<code class="descname">mc_mgrp_destroy</code><span class="sig-paren">(</span><em>mgrp</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L942-L954"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_destroy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mc_mgrp_destroy</code><span class="sig-paren">(</span><em>mgrp</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L997-L1013"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_mgrp_destroy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Destroys multicast group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – multicast group <em>id</em></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – multicast group <em>id</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -729,19 +799,25 @@ then the packets are not multicasted to any port.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_set_replicas">
-<code class="descname">mc_set_replicas</code><span class="sig-paren">(</span><em>mgrp</em>, <em>ports=[]</em>, <em>instances=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L956-L993"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_set_replicas" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mc_set_replicas</code><span class="sig-paren">(</span><em>mgrp</em>, <em>ports=[]</em>, <em>instances=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L1015-L1056"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.mc_set_replicas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets replicas for multicast group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – multicast group <em>id</em></li>
-<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of port numbers to add to the multicast group
-(each port number is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of instances of the corresponding ports
-(each instance is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – multicast group <em>id</em></li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of port numbers to add to the multicast group
+(each port number is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
+<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of instances of the corresponding ports
+(each instance is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -759,16 +835,22 @@ then the packets are not multicasted to any port.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_array_set_rates">
-<code class="descname">meter_array_set_rates</code><span class="sig-paren">(</span><em>meter_name</em>, <em>rates</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L806-L837"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_array_set_rates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">meter_array_set_rates</code><span class="sig-paren">(</span><em>meter_name</em>, <em>rates</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L849-L884"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_array_set_rates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configures rates for an entire meter array.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the meter</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code></li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the meter</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code></li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -782,22 +864,22 @@ where units is bytes or packets, depending on the meter type.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_get_rates">
-<code class="descname">meter_get_rates</code><span class="sig-paren">(</span><em>meter_name</em>, <em>index</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L877-L900"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_get_rates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">meter_get_rates</code><span class="sig-paren">(</span><em>meter_name</em>, <em>index</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L928-L951"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_get_rates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves rates for a meter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the meter</li>
-<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index of the meter to read (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the meter</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – index of the meter to read (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> if meter is configured, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
 </td>
 </tr>
 </tbody>
@@ -811,18 +893,24 @@ where units is bytes or packets, depending on the meter type.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_set_rates">
-<code class="descname">meter_set_rates</code><span class="sig-paren">(</span><em>meter_name</em>, <em>index</em>, <em>rates</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L839-L875"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_set_rates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">meter_set_rates</code><span class="sig-paren">(</span><em>meter_name</em>, <em>index</em>, <em>rates</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L886-L926"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.meter_set_rates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configures rates for a single  meter entry.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the meter</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (default: <strong>None</strong>, i.e.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the meter</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (default: <strong>None</strong>, i.e.
 all packets are marked as <strong>GREEN</strong>)</li>
-<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – index of the meter to set (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – index of the meter to set (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -836,17 +924,17 @@ where units is bytes or packets, depending on the meter type.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_action_param">
-<code class="descname">parse_action_param</code><span class="sig-paren">(</span><em>action_name</em>, <em>action_params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L118-L122"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_action_param" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parse_action_param</code><span class="sig-paren">(</span><em>action_name</em>, <em>action_params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L113-L117"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_action_param" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_match_key">
-<code class="descname">parse_match_key</code><span class="sig-paren">(</span><em>table_name</em>, <em>key_fields</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L112-L116"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_match_key" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parse_match_key</code><span class="sig-paren">(</span><em>table_name</em>, <em>key_fields</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L107-L111"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.parse_match_key" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state">
-<code class="descname">reset_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L124-L161"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L119-L156"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the gRPC server of switch by establishing a new <code class="docutils literal"><span class="pre">ForwardingPipelineConfig</span></code>.</p>
 <p>For further details about this method, please check <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668">this</a>. Indeed,
 this method sends to the server a <code class="docutils literal"><span class="pre">SetForwardingPipelineConfigRequest</span></code> with
@@ -874,26 +962,32 @@ the gRPC server will not be reset.</li>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_add">
-<code class="descname">table_add</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>match_keys</em>, <em>action_params=[]</em>, <em>prio=0</em>, <em>rates=None</em>, <em>pkts=None</em>, <em>byts=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L186-L298"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">table_add</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>match_keys</em>, <em>action_params=[]</em>, <em>prio=0</em>, <em>rates=None</em>, <em>pkts=None</em>, <em>byts=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L181-L297"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds entry to a match table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
-<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – action to execute on hit</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
-<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – parameters passed to action (each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (if <strong>None</strong>, the meter
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – action to execute on hit</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – parameters passed to action (each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (if <strong>None</strong>, the meter
 is set to its default behavior, i.e. marks
 all packets as <strong>GREEN</strong>)</li>
-<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of packets to write (if <strong>None</strong>, the count
+<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of packets to write (if <strong>None</strong>, the count
 is not changed)</li>
-<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of bytes to write (if <strong>None</strong>, the count
+<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of bytes to write (if <strong>None</strong>, the count
 is not changed)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -933,14 +1027,18 @@ priority when performing a table lookup (see <a class="reference external" href=
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_clear">
-<code class="descname">table_clear</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L487-L496"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_clear" title="Permalink to this definition">¶</a></dt>
+<code class="descname">table_clear</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L502-L515"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clears all entries in a match table (direct or indirect),
 but not the default entry.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -948,17 +1046,23 @@ but not the default entry.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_delete_match">
-<code class="descname">table_delete_match</code><span class="sig-paren">(</span><em>table_name</em>, <em>match_keys</em>, <em>prio=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L350-L374"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_delete_match" title="Permalink to this definition">¶</a></dt>
+<code class="descname">table_delete_match</code><span class="sig-paren">(</span><em>table_name</em>, <em>match_keys</em>, <em>prio=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L357-L385"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_delete_match" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes an existing entry in a table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -967,26 +1071,32 @@ but not the default entry.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_modify_match">
-<code class="descname">table_modify_match</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>match_keys</em>, <em>action_params=[]</em>, <em>prio=0</em>, <em>rates=None</em>, <em>pkts=None</em>, <em>byts=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L376-L485"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_modify_match" title="Permalink to this definition">¶</a></dt>
+<code class="descname">table_modify_match</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>match_keys</em>, <em>action_params=[]</em>, <em>prio=0</em>, <em>rates=None</em>, <em>pkts=None</em>, <em>byts=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L387-L500"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_modify_match" title="Permalink to this definition">¶</a></dt>
 <dd><p>Modifies entry in a table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
-<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – action to execute on hit</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
-<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – parameters passed to action (each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – priority in ternary match</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (if <strong>None</strong>, the meter
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – action to execute on hit</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – parameters passed to action (each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (if <strong>None</strong>, the meter
 is set to its default behavior, i.e. marks
 all packets as <strong>GREEN</strong>)</li>
-<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of packets to write (if <strong>None</strong>, the count
+<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of packets to write (if <strong>None</strong>, the count
 is not changed)</li>
-<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of bytes to write (if <strong>None</strong>, the count
+<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of bytes to write (if <strong>None</strong>, the count
 is not changed)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -1021,13 +1131,17 @@ priority when performing a table lookup (see <a class="reference external" href=
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_reset_default">
-<code class="descname">table_reset_default</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L333-L348"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_reset_default" title="Permalink to this definition">¶</a></dt>
+<code class="descname">table_reset_default</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L336-L355"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_reset_default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets default action for a match table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -1040,18 +1154,24 @@ its direct resources will be reset to their defaults (see <a class="reference ex
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_set_default">
-<code class="descname">table_set_default</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>action_params=[]</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L300-L331"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_set_default" title="Permalink to this definition">¶</a></dt>
+<code class="descname">table_set_default</code><span class="sig-paren">(</span><em>table_name</em>, <em>action_name</em>, <em>action_params=[]</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L299-L334"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.table_set_default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets default action for a match table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of the table</li>
-<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – action to execute on hit</li>
-<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – parameters passed to action
-(each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – action to execute on hit</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – parameters passed to action
+(each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -1070,7 +1190,7 @@ direct resources are not reset when modifying a table entry.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.teardown">
-<code class="descname">teardown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L163-L165"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.teardown" title="Permalink to this definition">¶</a></dt>
+<code class="descname">teardown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L158-L160"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.teardown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tears down gRPC connection with the switch server.</p>
 </dd></dl>
 
@@ -1078,17 +1198,13 @@ direct resources are not reset when modifying a table entry.</p>
 
 <dl class="function">
 <dt id="p4utils.utils.sswitch_p4runtime_API.handle_bad_input">
-<code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">handle_bad_input</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L32-L49"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.handle_bad_input" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">handle_bad_input</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L32-L44"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.handle_bad_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles bad input.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<a class="reference external" href="https://docs.python.org/3/library/types.html#types.FunctionType" title="(in Python v3.9)"><em>types.FunctionType</em></a>) – function or method to handle</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if the function was correctly executed, and <strong>False</strong> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<a class="reference external" href="https://docs.python.org/3/library/types.html#types.FunctionType" title="(in Python v3.10)"><em>types.FunctionType</em></a>) – function or method to handle</td>
 </tr>
 </tbody>
 </table>

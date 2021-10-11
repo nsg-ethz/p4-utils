@@ -6,13 +6,13 @@ If enabled, the CLI starts right after the network boot and provides useful comm
 """
 
 import os
+import sys
 import traceback as tbk
 from functools import wraps
 from mininet.cli import CLI
-from mininet.log import debug, info, output, warning, error
 
 from p4utils.utils.helper import *
-
+from p4utils.mininetlib.log import debug, info, output, warning, error, critical
 
 def exception_handler(f):
     """Prevents exceptions from terminating the client, but still
@@ -23,9 +23,7 @@ def exception_handler(f):
         try:
             return f(*args, **kwargs)
         except:
-            print()
-            tbk.print_exc()
-            print()
+            error(*tbk.format_exception(*sys.exc_info()))
             return False
     return handle
 
@@ -287,7 +285,7 @@ class P4CLI(CLI):
             mininet> printSwitches
         """
         for sw in self.mn.p4switches:
-            print(sw.name)
+            output(sw.name+'\n')
 
     @exception_handler
     def do_pingset(self ,line=""):

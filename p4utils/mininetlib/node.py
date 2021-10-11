@@ -13,15 +13,20 @@
 # limitations under the License.
 #
 
+"""__ https://github.com/mininet/mininet/blob/master/mininet/node.py
+
+This module is an extension of `mininet.node`__ with customized nodes.
+"""
+
 import os
 import signal
 import tempfile
 from psutil import pid_exists
-from mininet.log import debug, info, output, warning, error
 from mininet.node import Node, Host, Switch
 from mininet.moduledeps import pathCheck
 
 from p4utils.utils.helper import *
+from p4utils.mininetlib.log import debug, info, output, warning, error, critical
 
 
 SWITCH_START_TIMEOUT = 10
@@ -50,16 +55,16 @@ class P4Host(Host):
     def describe(self, sw_addr=None, sw_mac=None):
         """Describe host."""
 
-        print('**********')
-        print('Network configuration for: {}'.format(self.name))
-        print('Default interface: {}\t{}\t{}'.format(
-            self.defaultIntf().name,
-            self.defaultIntf().IP(),
-            self.defaultIntf().MAC()
+        output('**********\n')
+        output('Network configuration for: {}\n'.format(self.name))
+        output('Default interface: {}\t{}\t{}\n'.format(
+               self.defaultIntf().name,
+               self.defaultIntf().IP(),
+               self.defaultIntf().MAC()
         ))
         if sw_addr is not None or sw_mac is not None:
-            print('Default route to switch: {} ({})'.format(sw_addr, sw_mac))
-        print('**********')
+            output('Default route to switch: {} ({})\n'.format(sw_addr, sw_mac))
+        output('**********\n')
 
 
 class P4Switch(Switch):
@@ -210,7 +215,7 @@ class P4Switch(Switch):
 
     def describe(self):
         """Describes P4Switch."""
-        print('{} -> Thrift port: {}'.format(self.name, self.thrift_port))
+        output('{} -> Thrift port: {}\n'.format(self.name, self.thrift_port))
 
 
 class P4RuntimeSwitch(P4Switch):
@@ -245,7 +250,7 @@ class P4RuntimeSwitch(P4Switch):
     def describe(self):
         """Describes P4RuntimeSwitch."""
         super().describe()
-        print('{} -> gRPC port: {}'.format(self.name, self.grpc_port))
+        output('{} -> gRPC port: {}\n'.format(self.name, self.grpc_port))
 
 class FRRouter(Node):
     """FRRouter built as Mininet node.
@@ -367,12 +372,11 @@ class FRRouter(Node):
         self.cmd('sysctl -w net.ipv4.conf.all.rp_filter=2')
 
         # Check binaries
-        if not os.path.isfile(self.bin_dir + "/" + "zebra"):
-            error("Binaries path {} does not contain daemons!".format(self.bin_dir))
-            exit(0)
+        if not os.path.isfile(self.bin_dir + '/' + 'zebra'):
+            raise FileNotFoundError('binary path {} does not contain daemons!'.format(self.bin_dir))
 
         if len(self.daemons.keys()) == 0:
-            error('Nothing to start in router {}'.format(self.name))
+            warning('Nothing to start in router {}\n'.format(self.name))
 
         # Integrated configuration
         if self.int_conf is not None:

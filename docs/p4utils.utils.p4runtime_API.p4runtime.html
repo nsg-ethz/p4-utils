@@ -107,7 +107,7 @@
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">P4RuntimeClient</code><span class="sig-paren">(</span><em>device_id</em>, <em>grpc_addr</em>, <em>election_id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/p4runtime.py#L138-L338"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.api_version">
 <code class="descname">api_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/p4runtime.py#L334-L338"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient.api_version" title="Permalink to this definition">¶</a></dt>
@@ -121,7 +121,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – time to wait for packet, if set to None,
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – time to wait for packet, if set to None,
 the function will wait indefinitely</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DigestList packet (protobuf message) or None if the timeout has
@@ -150,8 +150,8 @@ for further details.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.9)"><em>string</em></a>) – name of a field present in the packet</li>
-<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – time to wait for packet, if set to None,
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.10)"><em>string</em></a>) – name of a field present in the packet</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – time to wait for packet, if set to None,
 the function will wait indefinitely</li>
 </ul>
 </td>
@@ -203,25 +203,25 @@ the function will wait indefinitely</li>
 <dl class="exception">
 <dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorFormatException">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">P4RuntimeErrorFormatException</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/p4runtime.py#L30-L32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorFormatException" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorIterator">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">P4RuntimeErrorIterator</code><span class="sig-paren">(</span><em>grpc_error</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/p4runtime.py#L36-L73"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeErrorIterator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeException">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">P4RuntimeException</code><span class="sig-paren">(</span><em>grpc_error</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/p4runtime.py#L105-L113"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeException" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeWriteException">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.p4runtime.</code><code class="descname">P4RuntimeWriteException</code><span class="sig-paren">(</span><em>grpc_error</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/p4runtime.py#L83-L102"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeWriteException" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.9)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
 </dd></dl>
 
 <dl class="function">
