@@ -106,17 +106,17 @@ class P4C:
         stdout, stderr = p.communicate()
 
         if p.returncode != 0:
-            info(stdout.decode())
-            error(stderr.decode())
+            info(stdout.decode(errors='backslashreplace'))
+            error(stderr.decode(errors='backslashreplace'))
             raise CompilationError
         else:
             if len(stderr) == 0:
                 info('{} compiled successfully.\n'.format(self.p4_src))
-                info(stdout.decode())
+                info(stdout.decode(errors='backslashreplace'))
             else:
                 info('{} compiled with warnings.\n'.format(self.p4_src))
-                info(stdout.decode())
-                warning(stderr.decode())
+                info(stdout.decode(errors='backslashreplace'))
+                warning(stderr.decode(errors='backslashreplace'))
             self.compiled = True
 
     def get_json_out(self):

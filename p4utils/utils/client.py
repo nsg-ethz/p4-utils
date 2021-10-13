@@ -83,7 +83,7 @@ class ThriftClient:
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.STDOUT)
                 stdout, _ = p.communicate(input=entries.encode())
-                stdout = stdout.decode()
+                stdout = stdout.decode(errors='backslashreplace')
                 # Save logs
                 if self.log_enabled:
                     with open(log_path, 'w') as log_file:
