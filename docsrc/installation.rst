@@ -98,8 +98,9 @@ To download our preconfiugred VMs, please click on the folllwing links:
 
 - __ #
 
-  `VirtualBox VM`__
-- __ #
+  `VirtualBox VM (unavailable)`__
+
+- __ https://polybox.ethz.ch/index.php/s/9orcmetpNxOAhlI
 
   `QEMU VM`__
 
