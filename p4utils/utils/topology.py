@@ -495,7 +495,9 @@ class NetworkGraph(nx.Graph):
         Returns:
             list: list of neighbors names.
         """
-        return list(self.get_intfs()[name].keys())
+        #return list(self.get_intfs()[name].keys())
+        return list(self.neighbors(name))
+        
 
     def isNode(self, name):
         """Checks if the node exists.
