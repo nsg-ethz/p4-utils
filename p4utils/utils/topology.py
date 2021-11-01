@@ -1103,6 +1103,25 @@ class NetworkGraph(nx.Graph):
         """
         return self._node_interface(node, intf)['port']
 
+    def port_to_node(self, node, port):
+        """Gets the neighboring node  of *node* connected to *port*.
+
+        Args:
+            node (str): name of the first node
+            port (int):  port number 
+
+        Returns:
+            str: neighbor node.
+        """
+
+        # TODO: this function probably has to be done differently.
+        for neighbor in self.get_neighbors(node):
+            if port == self.node_to_node_port_num(node, neighbor):
+                return neighbor
+
+        # TODO: also fix this..
+        raise Exception("Node {} does not have port {}".format(node, port))
+        
     def node_to_node_port_num(self, node1, node2):
         """Gets the number of the port of *node1* that is connected to *node2*.
 
