@@ -773,7 +773,7 @@ class NetworkGraph(nx.Graph):
             Returns **None** if no CPU port is found.
         """
         if self.isP4Switch(name) and self.get_nodes()[name].get('cpu_port', False):
-            return [x for x in self.node_to_intf[name].keys() if 'cpu' in x][0]
+            return self.get_nodes()[name]['cpu_intf']
         else:
             if not quiet:
                 print('Switch {} has no cpu port.'.format(name))
@@ -792,8 +792,7 @@ class NetworkGraph(nx.Graph):
             Returns **None** if no CPU port is found.
         """
         if self.isP4Switch(name) and self.get_nodes()[name].get('cpu_port', False):
-            intf = self.get_cpu_port_intf(name)
-            return self._node_interface(name, intf)['port']
+            return self.get_nodes()[name]['cpu_port_num']
         else:
             if not quiet:
                 print('Switch {} has no cpu port.'.format(name))
@@ -871,7 +870,7 @@ class NetworkGraph(nx.Graph):
             str: name of the controller side CPU interface.
         """
         if self.isP4Switch(name) and self.get_nodes()[name]['cpu_port']:
-            return self.get_intfs()['sw-cpu'][name]['intfName']
+            return self.get_nodes()[name]['cpu_ctl_intf']
         else:
             raise TypeError('Switch {} has no cpu port.'.format(name))
 

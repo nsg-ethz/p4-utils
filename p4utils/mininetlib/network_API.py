@@ -11,7 +11,7 @@ instantiate and start the network.
 import os
 import time
 from ipaddress import ip_interface, IPv4Network
-from networkx import MultiGraph
+from networkx import Graph, MultiGraph
 from networkx.readwrite.json_graph import node_link_data
 from mininet.link import TCLink
 from mininet.nodelib import LinuxBridge
@@ -23,7 +23,6 @@ from p4utils.utils.helper import *
 from p4utils.utils.helper import _prefixLenMatchRegex
 from p4utils.utils.client import ThriftClient
 from p4utils.utils.compiler import *
-from p4utils.utils.topology import NetworkGraph
 from p4utils.utils.task_scheduler import Task, TaskClient
 from p4utils.mininetlib.node import *
 from p4utils.mininetlib.net import P4Mininet
@@ -148,7 +147,7 @@ class NetworkAPI(Topo):
             graph = self.g.convertTo(MultiGraph, data=True, keys=True)
         else:
             debug('Simple graph topology selected.\n')
-            graph = self.g.convertTo(NetworkGraph, data=True, keys=False)
+            graph = self.g.convertTo(Graph, data=True, keys=False)
             
             for _, _, params in graph.edges(data=True):
                 
@@ -157,6 +156,22 @@ class NetworkAPI(Topo):
                 edge = graph[node1][node2]
                 params1 = edge.pop('params1', {})
                 params2 = edge.pop('params2', {})
+
+                # Save controller cpu interfaces in nodes.
+                if node1 == 'sw-cpu' and node2 != 'sw-cpu':
+                    if graph.nodes[node2]['cpu_port']:
+                        graph.nodes[node2]['cpu_port_num'] = edge['port2']
+                        graph.nodes[node2]['cpu_intf'] = edge['intfName2']
+                        graph.nodes[node2]['cpu_ctl_intf'] = edge['intfName1']
+                    else:
+                        raise Exception('inconsistent cpu port for node {}.'.format(node2))
+                elif node2 == 'sw-cpu' and node1 != 'sw-cpu':
+                    if graph.nodes[node1]['cpu_port']:
+                        graph.nodes[node1]['cpu_port_num'] = edge['port1']
+                        graph.nodes[node1]['cpu_intf'] = edge['intfName1']
+                        graph.nodes[node1]['cpu_ctl_intf'] = edge['intfName2']
+                    else:
+                        raise Exception('inconsistent cpu port for node {}.'.format(node1))
 
                 # Move outside parameters in subdictionaries
                 # and append number to identify them.
@@ -192,6 +207,10 @@ class NetworkAPI(Topo):
                     subnet2 = _prefixLenMatchRegex.findall(intf2.ifconfig())[0]
                     ip2 = ip_interface(ip2+'/'+subnet2).with_prefixlen
                 edge.update(ip2=ip2, addr2=addr2)
+
+            # Remove sw-cpu if present
+            if 'sw-cpu' in graph:
+                graph.remove_node('sw-cpu')
 
         graph_dict = node_link_data(graph)
         with open(self.topoFile,'w') as f:
