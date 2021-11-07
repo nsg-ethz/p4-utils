@@ -150,7 +150,7 @@ is facing.</li>
 
 <dl class="class">
 <dt id="p4utils.utils.topology.NetworkGraph">
-<em class="property">class </em><code class="descclassname">p4utils.utils.topology.</code><code class="descname">NetworkGraph</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L62-L1257"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.utils.topology.</code><code class="descname">NetworkGraph</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L62-L1276"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.6.2)"><code class="xref py py-class docutils literal"><span class="pre">networkx.classes.graph.Graph</span></code></a></p>
 <p>Querying API that allows retrieving information about the
 network topology. It also provides useful methods to perform
@@ -247,7 +247,7 @@ is named according to <code class="docutils literal"><span class="pre">intfName<
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.get_all_paths_between_nodes">
-<code class="descname">get_all_paths_between_nodes</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1169-L1188"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_all_paths_between_nodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_all_paths_between_nodes</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1188-L1207"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_all_paths_between_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute all the simple paths (i.e. with no repeated nodes)
 between <em>node1</em> and <em>node2</em>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -902,7 +902,7 @@ the value is directly put in the dictionary.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.get_shortest_paths_between_nodes">
-<code class="descname">get_shortest_paths_between_nodes</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1149-L1167"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_shortest_paths_between_nodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_shortest_paths_between_nodes</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1168-L1186"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.get_shortest_paths_between_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes all the shortest paths between <em>node1</em> and <em>node2</em>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1242,19 +1242,19 @@ incoming <em>Thrift</em> connections.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.keep_only_p4switches">
-<code class="descname">keep_only_p4switches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1194-L1196"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.keep_only_p4switches" title="Permalink to this definition">¶</a></dt>
+<code class="descname">keep_only_p4switches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1213-L1215"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.keep_only_p4switches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a networkx subgraph including only P4 switches.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.keep_only_p4switches_and_hosts">
-<code class="descname">keep_only_p4switches_and_hosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1198-L1200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.keep_only_p4switches_and_hosts" title="Permalink to this definition">¶</a></dt>
+<code class="descname">keep_only_p4switches_and_hosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1217-L1219"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.keep_only_p4switches_and_hosts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a networkx subgraph including only hosts and P4 switches.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.keep_only_switches">
-<code class="descname">keep_only_switches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1190-L1192"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.keep_only_switches" title="Permalink to this definition">¶</a></dt>
+<code class="descname">keep_only_switches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1209-L1211"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.keep_only_switches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a networkx subgraph including only switches.</p>
 </dd></dl>
 
@@ -1365,7 +1365,7 @@ incoming <em>Thrift</em> connections.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.node_to_node_mac">
-<code class="descname">node_to_node_mac</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1119-L1130"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.node_to_node_mac" title="Permalink to this definition">¶</a></dt>
+<code class="descname">node_to_node_mac</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1138-L1149"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.node_to_node_mac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the MAC address of the interface of <em>node1</em> connected to <em>node2</em>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1389,7 +1389,7 @@ incoming <em>Thrift</em> connections.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.node_to_node_port_num">
-<code class="descname">node_to_node_port_num</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1106-L1117"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.node_to_node_port_num" title="Permalink to this definition">¶</a></dt>
+<code class="descname">node_to_node_port_num</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1125-L1136"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.node_to_node_port_num" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the number of the port of <em>node1</em> that is connected to <em>node2</em>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1412,8 +1412,32 @@ incoming <em>Thrift</em> connections.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="p4utils.utils.topology.NetworkGraph.port_to_node">
+<code class="descname">port_to_node</code><span class="sig-paren">(</span><em>node</em>, <em>port</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1106-L1123"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.port_to_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the neighboring node  of <em>node</em> connected to <em>port</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the first node</li>
+<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – port number</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">neighbor node.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.set_node_color">
-<code class="descname">set_node_color</code><span class="sig-paren">(</span><em>node</em>, <em>color</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1212-L1219"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_color" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_node_color</code><span class="sig-paren">(</span><em>node</em>, <em>color</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1231-L1238"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets node’s color. Used when plotting the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1431,7 +1455,7 @@ incoming <em>Thrift</em> connections.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.set_node_shape">
-<code class="descname">set_node_shape</code><span class="sig-paren">(</span><em>node</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1203-L1210"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_shape" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_node_shape</code><span class="sig-paren">(</span><em>node</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1222-L1229"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_shape" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets node’s shape. Used when plotting the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1449,7 +1473,7 @@ incoming <em>Thrift</em> connections.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.set_node_type_color">
-<code class="descname">set_node_type_color</code><span class="sig-paren">(</span><em>node_type</em>, <em>color</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1240-L1257"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_type_color" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_node_type_color</code><span class="sig-paren">(</span><em>node_type</em>, <em>color</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1259-L1276"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_type_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the color of the nodes filtered by type. Used when plotting the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1475,7 +1499,7 @@ incoming <em>Thrift</em> connections.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.set_node_type_shape">
-<code class="descname">set_node_type_shape</code><span class="sig-paren">(</span><em>node_type</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1221-L1238"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_type_shape" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_node_type_shape</code><span class="sig-paren">(</span><em>node_type</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1240-L1257"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.set_node_type_shape" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the shape of the nodes filtered by type. Used when plotting the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1525,7 +1549,7 @@ incoming <em>Thrift</em> connections.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.topology.NetworkGraph.total_number_of_paths">
-<code class="descname">total_number_of_paths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1132-L1147"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.total_number_of_paths" title="Permalink to this definition">¶</a></dt>
+<code class="descname">total_number_of_paths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/topology.py#L1151-L1166"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.topology.NetworkGraph.total_number_of_paths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the total number of shortest paths between all
 host pairs in the network.</p>
 <table class="docutils field-list" frame="void" rules="none">

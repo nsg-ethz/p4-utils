@@ -36,6 +36,25 @@ SWITCH_STOP_TIMEOUT = 10
 class P4Host(Host):
     """Virtual hosts with custom configuration to work with P4 switches."""
 
+    def __init__(self, *args,
+                 log_enabled=False,
+                 log_dir='/tmp',
+                 **kwargs):
+
+        self.log_enabled = log_enabled
+        self.log_dir = log_dir
+
+        super().__init__(*args, **kwargs)
+
+        if self.log_enabled:
+            # Make sure that the provided log path is not pointing to a file
+            # and, if necessary, create an empty log dir
+            if not os.path.isdir(self.log_dir):
+                if os.path.exists(self.log_dir):
+                    raise NotADirectoryError("'{}' exists and is not a directory.".format(self.log_dir))
+                else:
+                    os.mkdir(self.log_dir)     
+
     def config(self, **params):
         """Configure host."""
 
@@ -89,7 +108,7 @@ class P4Switch(Switch):
 
         kwargs.update(dpid=dpidToStr(self.device_id))
         
-        super().__init__(name, **kwargs)  
+        super().__init__(name, **kwargs)
 
         self.set_binary(sw_bin)
         self.set_json(json_path)        
