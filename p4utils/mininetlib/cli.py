@@ -100,7 +100,12 @@ class P4CLI(CLI):
             error('usage: p4switch_stop <p4switch name>\n')
             return False
         
-        p4switch.stop_p4switch()
+        # Check if switch is running
+        if not p4switch.switch_running():
+            error('P4 Switch already stopped, start it first: p4switch_start {} \n'.format(switch_name))
+            return False
+        
+        p4switch.stop(deleteIntfs=False)
 
     @exception_handler
     def do_p4switch_start(self, line=""):
@@ -133,7 +138,7 @@ class P4CLI(CLI):
             return False
 
         # Check if switch is running
-        if p4switch.switch_started():
+        if p4switch.switch_running():
             error('P4 Switch already running, stop it first: p4switch_stop {} \n'.format(switch_name))
             return False
 

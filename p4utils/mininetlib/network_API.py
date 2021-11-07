@@ -2323,7 +2323,7 @@ class NetworkAPI(Topo):
             name (str): node name
 
         Returns:
-            bool: **True** if node is a P4 switch, else **False**.
+            bool: **True** if node is a P4Runtime switch, else **False**.
         """
         return self.g.node[name].get('isP4RuntimeSwitch', False)
 
@@ -2354,6 +2354,35 @@ class NetworkAPI(Topo):
         else:
             raise Exception('"{}" is not a P4 runtime switch.'.format(name))
 
+# Tofino switches
+    def addTofino(self, name, **opts):
+        """Adds Tofino switch node to Mininet topology.
+
+        Args:
+            name (str): P4Runtime switch name
+            **opts    : switch options
+
+        Returns:
+            str: Tofino switch name.
+
+        Warning:
+            If a node with the same name is already present,
+            this method will overwrite it.
+        """
+        opts.setdefault('cls', Tofino)
+        opts.update(isTofino = True)
+        return self.addP4Switch(name, **opts)
+
+    def isTofino(self, name):
+        """Checks if node is a Tofino switch.
+
+        Args:
+            name (str): node name
+
+        Returns:
+            bool: **True** if node is a Tofino switch, else **False**.
+        """
+        return self.g.node[name].get('isTofino', False)
 # Routers
     def addRouter(self, name, **opts):
         """Adds a router node to the network.
