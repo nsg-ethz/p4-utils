@@ -1803,21 +1803,21 @@ class NetworkAPI(Topo):
                 args, kwargs = parse_task_line(line, def_mod=def_mod)
                 self.addTask(*args, **kwargs)
 
-    def addTask(self, name, exe, *args, start=0, duration=0, enableScheduler=True, **kwargs):
+    def addTask(self, name, exe, start=0, duration=0, enableScheduler=True, args=(), kwargs={}):
         """Adds a task to the node.
 
         Args:
             name (str)                     : node name
             exe (str or types.FunctionType): executable to run (either a shell string 
                                              command or a Python function)
-            *args                          : positional arguments for the passed function
             start (float)                  : task delay in seconds with respect to the
                                              network starting time.
             duration (float)               : task duration time in seconds (if duration is 
                                              lower than or equal to ``0``, then the task has no 
                                              time limitation)
             enableScheduler (bool)         : whether to automatically enable the TaskServer or not
-            **kwargs                       : key-word arguments for the passed function
+            args (tuple or list)           : positional arguments for the passed function
+            kwargs (dict)                  : key-word arguments for the passed function
 
         Note:
             This method can automatically enable the task scheduler 
@@ -1833,7 +1833,7 @@ class NetworkAPI(Topo):
                 raise Exception('"{}" does not have a scheduler.'. format(name))
             self.tasks.setdefault(name, [])
             # Create task
-            task = Task(exe, *args, start=start, duration=duration, **kwargs)
+            task = Task(exe, start=start, duration=duration, args=args, kwargs=kwargs)
             # Append task to tasks
             self.tasks[name].append(task)
         else:

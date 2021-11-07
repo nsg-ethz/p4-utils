@@ -122,7 +122,7 @@
 
 <dl class="class">
 <dt id="p4utils.utils.task_scheduler.Task">
-<em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">Task</code><span class="sig-paren">(</span><em>exe</em>, <em>*args</em>, <em>start=0</em>, <em>duration=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L25-L279"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">Task</code><span class="sig-paren">(</span><em>exe</em>, <em>start=0</em>, <em>duration=0</em>, <em>args=()</em>, <em>kwargs={}</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L25-L280"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Abstraction of a Task executed by the TaskServer.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -130,14 +130,14 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>exe</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>function</em>) – executable to run (either a shell string
+<li><strong>exe</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/types.html#types.FunctionType" title="(in Python v3.10)"><em>types.FunctionType</em></a>) – executable to run (either a shell string
 command or a python function)</li>
-<li><strong>*args</strong> – positional arguments for the passed function</li>
 <li><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – task absolute starting time (Unix time).</li>
 <li><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – task duration time in seconds (if duration is
 lower than or equal to 0, then the task has no
 time limitation)</li>
-<li><strong>**kwargs</strong> – key-word arguments for the passed function</li>
+<li><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – positional arguments for the passed function</li>
+<li><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – key-word arguments for the passed function</li>
 </ul>
 </td>
 </tr>
@@ -165,7 +165,7 @@ time limitation)</li>
 
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.Task.is_alive">
-<code class="descname">is_alive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L160-L172"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.is_alive" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_alive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L161-L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.is_alive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the process is alive.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -181,7 +181,7 @@ time limitation)</li>
 
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.Task.join">
-<code class="descname">join</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L153-L158"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.join" title="Permalink to this definition">¶</a></dt>
+<code class="descname">join</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L154-L159"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.join" title="Permalink to this definition">¶</a></dt>
 <dd><p>Joins the subprocess.</p>
 </dd></dl>
 
@@ -207,7 +207,7 @@ time limitation)</li>
 
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.Task.schedule">
-<code class="descname">schedule</code><span class="sig-paren">(</span><em>cond=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L121-L130"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.schedule" title="Permalink to this definition">¶</a></dt>
+<code class="descname">schedule</code><span class="sig-paren">(</span><em>cond=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L122-L131"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.schedule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts a new thread that orchestrate the execution
 of the task and stops it if duration expires.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -222,7 +222,7 @@ of the task and stops it if duration expires.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.Task.setComm">
-<code class="descname">setComm</code><span class="sig-paren">(</span><em>q</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L108-L119"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.setComm" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setComm</code><span class="sig-paren">(</span><em>q</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L109-L120"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.setComm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set communication queue for the Task. The task
 will communicate its state putting items in the queue.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -241,13 +241,13 @@ will communicate its state putting items in the queue.</p>
 
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.Task.start">
-<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L132-L142"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.start" title="Permalink to this definition">¶</a></dt>
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L133-L143"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the executable in a separate process.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.Task.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L144-L151"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.stop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L145-L152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.Task.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops the task using SIGTERM and, if it fails, SIGKILL.</p>
 </dd></dl>
 
@@ -255,7 +255,7 @@ will communicate its state putting items in the queue.</p>
 
 <dl class="class">
 <dt id="p4utils.utils.task_scheduler.TaskClient">
-<em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">TaskClient</code><span class="sig-paren">(</span><em>unix_socket_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L282-L323"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskClient" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">TaskClient</code><span class="sig-paren">(</span><em>unix_socket_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L283-L324"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Task scheduler client which communicates with servers.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -268,7 +268,7 @@ will communicate its state putting items in the queue.</p>
 </table>
 <dl class="method">
 <dt id="p4utils.utils.task_scheduler.TaskClient.send">
-<code class="descname">send</code><span class="sig-paren">(</span><em>tasks</em>, <em>retry=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L294-L323"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskClient.send" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send</code><span class="sig-paren">(</span><em>tasks</em>, <em>retry=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L295-L324"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskClient.send" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send an object to the server and close connection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -288,7 +288,7 @@ will communicate its state putting items in the queue.</p>
 
 <dl class="class">
 <dt id="p4utils.utils.task_scheduler.TaskServer">
-<em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">TaskServer</code><span class="sig-paren">(</span><em>unix_socket_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L326-L500"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskServer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.utils.task_scheduler.</code><code class="descname">TaskServer</code><span class="sig-paren">(</span><em>unix_socket_file</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/task_scheduler.py#L327-L501"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.task_scheduler.TaskServer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Task scheduler server which runs on the Mininet nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">

@@ -26,16 +26,16 @@ class Task:
     """Abstraction of a Task executed by the TaskServer.
 
     Args:
-        exe (str or function)  : executable to run (either a shell string 
-                                 command or a python function)
-        *args                  : positional arguments for the passed function
+        exe (str or types.FunctionType)  : executable to run (either a shell string 
+                                           command or a python function)
         start (int or float)   : task absolute starting time (Unix time).
         duration (int or float): task duration time in seconds (if duration is 
                                  lower than or equal to 0, then the task has no 
                                  time limitation)
-        **kwargs               : key-word arguments for the passed function
+        args (tuple or list)   : positional arguments for the passed function
+        kwargs (dict)          : key-word arguments for the passed function
     """
-    def __init__(self, exe, *args, start=0, duration=0, **kwargs):
+    def __init__(self, exe, start=0, duration=0, args=(), kwargs={}):
         # Sanity checks
         if isinstance(exe, str):
             self.type = ProcessType.SUBPROC
@@ -55,7 +55,7 @@ class Task:
         # Other task parameters
         self.startTime = start
         self.duration = duration
-        self.args = args
+        self.args = tuple(args)
         self.kwargs = kwargs
 
         # Scheduler thread
@@ -67,10 +67,11 @@ class Task:
         self.queue = None
 
     def __repr__(self):
-        return 'Task({}, {})'.format([self.exe, *self.args],
+        return 'Task({}, {})'.format(self.exe,
                                      {'start': self.startTime,
                                      'duration': self.duration,
-                                     **self.kwargs})
+                                     'args': self.args,
+                                     'kwargs': self.kwargs})
 
     @property
     def pid(self):
