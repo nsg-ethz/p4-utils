@@ -407,11 +407,13 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
                 if parsed_cmd[i] == '--mod':
                     mod = importlib.import_module(parsed_cmd[i+1])
                 else:
-                    kwargs[parsed_cmd[i][2:]] = parsed_cmd[i+1]
+                    kwargs.setdefault('kwargs', {})
+                    kwargs['kwargs'][parsed_cmd[i][2:]] = parsed_cmd[i+1]
                 skip_next = True
             # Parse args
             else:
-                args.append(parsed_cmd[i])
+                kwargs.setdefault('args', [])
+                kwargs['args'].append(parsed_cmd[i])
     
     try:
         # Import function from module

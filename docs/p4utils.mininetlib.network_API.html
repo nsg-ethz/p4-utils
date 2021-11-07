@@ -420,7 +420,7 @@ this method will overwrite it.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addTask">
-<code class="descname">addTask</code><span class="sig-paren">(</span><em>name</em>, <em>exe</em>, <em>*args</em>, <em>start=0</em>, <em>duration=0</em>, <em>enableScheduler=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1806-L1840"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addTask" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addTask</code><span class="sig-paren">(</span><em>name</em>, <em>exe</em>, <em>start=0</em>, <em>duration=0</em>, <em>enableScheduler=True</em>, <em>args=()</em>, <em>kwargs={}</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1806-L1840"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addTask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a task to the node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -430,14 +430,14 @@ this method will overwrite it.</p>
 <li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – node name</li>
 <li><strong>exe</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/types.html#types.FunctionType" title="(in Python v3.10)"><em>types.FunctionType</em></a>) – executable to run (either a shell string
 command or a Python function)</li>
-<li><strong>*args</strong> – positional arguments for the passed function</li>
 <li><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – task delay in seconds with respect to the
 network starting time.</li>
 <li><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – task duration time in seconds (if duration is
 lower than or equal to <code class="docutils literal"><span class="pre">0</span></code>, then the task has no
 time limitation)</li>
 <li><strong>enableScheduler</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether to automatically enable the TaskServer or not</li>
-<li><strong>**kwargs</strong> – key-word arguments for the passed function</li>
+<li><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – positional arguments for the passed function</li>
+<li><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – key-word arguments for the passed function</li>
 </ul>
 </td>
 </tr>
