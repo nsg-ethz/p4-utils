@@ -38,7 +38,7 @@ class P4Mininet(Mininet):
         self.configTofinos()
         # Increase number of HugePages according to number of Tofinos
         info( '\n' )
-        info(os.popen('sudo sysctl -w vm.nr_hugepages={}'.format(128*len(self.tofinos))).read())
+        debug( os.popen('sudo sysctl -w vm.nr_hugepages={}'.format(128*len(self.tofinos)) + '\n' ).read())
 
     def addRouter(self, name, cls=None, **params):
         """Adds a router to the network.
@@ -203,7 +203,7 @@ class P4Mininet(Mininet):
 
         # Set number of HugePages to 0
         info( '\n' )
-        info(os.popen('sudo sysctl -w vm.nr_hugepages=0').read())
+        debug( os.popen('sudo sysctl -w vm.nr_hugepages=0').read() + '\n' )
 
         info( '\n' )
         info( '*** Stopping %i hosts\n' % len( self.hosts ) )
