@@ -108,7 +108,7 @@ Here, you will find the documentation for all the methods that will help you
 instantiate and start the network.</p>
 <dl class="class">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI">
-<em class="property">class </em><code class="descclassname">p4utils.mininetlib.network_API.</code><code class="descname">NetworkAPI</code><span class="sig-paren">(</span><em>*args</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L33-L2775"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.network_API.</code><code class="descname">NetworkAPI</code><span class="sig-paren">(</span><em>*args</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L33-L2804"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.topo.Topo</span></code></p>
 <p>Network definition and initialization API.</p>
 <dl class="attribute">
@@ -362,7 +362,7 @@ this method will overwrite it.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addRouter">
-<code class="descname">addRouter</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2358-L2374"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addRouter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addRouter</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2387-L2403"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addRouter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a router node to the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -475,6 +475,35 @@ been previously enabled.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">A non-default module can be specified in the command with <code class="docutils literal"><span class="pre">--mod</span> <span class="pre">&lt;module&gt;</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.addTofino">
+<code class="descname">addTofino</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2358-L2374"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addTofino" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds Tofino switch node to Mininet topology.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – P4Runtime switch name</li>
+<li><strong>**opts</strong> – switch options</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Tofino switch name.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If a node with the same name is already present,
+this method will overwrite it.</p>
 </div>
 </dd></dl>
 
@@ -1108,7 +1137,7 @@ link two same nodes (optional)</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – node name</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if node is a P4 switch, else <strong>False</strong>.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if node is a P4Runtime switch, else <strong>False</strong>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
 </tr>
@@ -1136,7 +1165,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.isRouter">
-<code class="descname">isRouter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2376-L2385"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isRouter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">isRouter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2405-L2414"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isRouter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a node is a router.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1171,8 +1200,26 @@ link two same nodes (optional)</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.isTofino">
+<code class="descname">isTofino</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2376-L2385"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isTofino" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if node is a Tofino switch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – node name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if node is a Tofino switch, else <strong>False</strong>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.l2">
-<code class="descname">l2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2403-L2481"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.l2" title="Permalink to this definition">¶</a></dt>
+<code class="descname">l2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2432-L2510"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.l2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automated IP/MAC assignment strategy for already initialized
 links and nodes. All the devices are placed inside the same
 IPv4 network (<code class="docutils literal"><span class="pre">10.0.0.0/16</span></code>).</p>
@@ -1190,7 +1237,7 @@ IPv4 network (<code class="docutils literal"><span class="pre">10.0.0.0/16</span
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.l3">
-<code class="descname">l3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2632-L2775"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.l3" title="Permalink to this definition">¶</a></dt>
+<code class="descname">l3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2661-L2804"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.l3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automated IP/MAC assignment strategy for already initialized
 links and nodes. All the hosts have a different subnetwork that is shared
 with the fake IP address of the switch port they are connected to.</p>
@@ -1233,7 +1280,7 @@ with the fake IP address of the switch port they are connected to.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.mixed">
-<code class="descname">mixed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2483-L2630"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.mixed" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mixed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2512-L2659"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.mixed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automated IP/MAC assignment strategy for already initialized
 links and nodes. All the hosts connected to the same switch are placed
 in the same subnetwork. Different switches (even those linked
@@ -1389,7 +1436,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.routers">
-<code class="descname">routers</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2387-L2400"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.routers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">routers</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2416-L2429"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.routers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return routers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
