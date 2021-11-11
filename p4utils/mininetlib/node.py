@@ -514,7 +514,7 @@ class Tofino(Switch):
     Args:
         name (str)            : name of the switch
         device_id (int)       : switch unique id
-        p4_name (str)          : name of the P4 source
+        p4_src (str)          : P4 source
         sde (str)             : Tofino SDE path ($SDE)
         sde_install (str)     : Tofino SDE install path ($SDE_INSTALL)
         cli_port (int)        : switch client port
@@ -524,7 +524,7 @@ class Tofino(Switch):
 
     def __init__(self, name,
                  device_id,
-                 p4_name,
+                 p4_src,
                  sde,
                  sde_install,
                  cli_port=8000,
@@ -545,7 +545,7 @@ class Tofino(Switch):
         if not self.inNamespace:
             raise Exception('tofino-model cannot run in main namespace.')
 
-        self.p4_name = p4_name
+        self.p4_name, _ = os.path.splitext(os.path.basename(p4_src))
         self.sde = os.path.realpath(sde)
         self.sde_install = os.path.realpath(sde_install)
         self.cli_port = cli_port

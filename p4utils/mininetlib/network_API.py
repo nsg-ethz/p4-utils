@@ -227,13 +227,14 @@ class NetworkAPI(Topo):
                     self.compilers.append(compiler)
                 else:
                     compiler = get_by_attr('p4_src', os.path.realpath(p4_src), self.compilers)
-                # Retrieve json_path
-                self.updateNode(p4switch, json_path=compiler.get_json_out())
-                # Try to retrieve p4 runtime info file path
-                try:
-                    self.updateNode(p4switch, p4rt_path=compiler.get_p4rt_out())
-                except P4InfoDisabled:
-                    pass
+                if not self.isTofino(p4switch):
+                    # Retrieve json_path
+                    self.updateNode(p4switch, json_path=compiler.get_json_out())
+                    # Try to retrieve p4 runtime info file path
+                    try:
+                        self.updateNode(p4switch, p4rt_path=compiler.get_p4rt_out())
+                    except P4InfoDisabled:
+                        pass
 
     def program_switches(self):
         """If any command files were provided for the switches, this method will start up the
