@@ -634,6 +634,9 @@ class Tofino(Switch):
         self.cmd('export SDE={}'.format(self.sde))
         self.cmd('export SDE_INSTALL={}'.format(self.sde_install))
 
+        # Change directory
+        self.cmd('cd {}'.format(os.path.join(self.log_dir, self.name)))
+
         # Add ports to switch
         self.add_ports()
 
@@ -642,8 +645,7 @@ class Tofino(Switch):
         info(cmd + "\n")
 
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd('cd {} && '.format(os.path.join(self.log_dir, self.name)) + \
-                     cmd + ' > tofino.log 2>&1 & echo $! >> ' + f.name)
+            self.cmd(cmd + ' > tofino.log 2>&1 & echo $! >> ' + f.name)
             self.switch_pid = int(f.read())
 
         debug('P4 switch {} PID is {}.\n'.format(self.name, self.switch_pid))
@@ -655,8 +657,7 @@ class Tofino(Switch):
         info(cmd + "\n")
 
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd('cd {} && '.format(os.path.join(self.log_dir, self.name)) + \
-                     cmd + ' > driver.log 2>&1 & echo $! >> ' + f.name)
+            self.cmd(cmd + ' > driver.log 2>&1 & echo $! >> ' + f.name)
             self.driver_pid = int(f.read())
 
         debug('P4 switch {} driver PID is {}.\n'.format(self.name, self.driver_pid))
