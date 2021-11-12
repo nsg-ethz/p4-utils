@@ -186,12 +186,15 @@ class BF_P4C:
                 self.build_dir = os.path.join(os.path.dirname(self.p4_src), 'build')
         else:
             # Make sure that the provided outdir path is not pointing to a file
-            # and, if necessary, create an empty outdir
+            # and, if necessary, create an empty build_dir
             if not os.path.isdir(build_dir):
                 if os.path.exists(build_dir):
                     raise NotADirectoryError("'{}' exists and is not a directory.".format(self.build_dir))
                 else:
                     os.mkdir(build_dir)
+            else:
+                # Remove existent files and subdirectories
+                os.system('rm -rf {}'.format(os.path.join(build_dir, '*')))
             self.build_dir = build_dir
 
         self.p4_name, _ = os.path.splitext(os.path.basename(self.p4_src))
