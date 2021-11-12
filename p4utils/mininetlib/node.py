@@ -625,7 +625,7 @@ class Tofino(Switch):
         args.append('--background')
         args.append('--tcp-port-base {}'.format(self.dr_port_base))
         return args
-    
+
     def start(self, controllers=None):
         """Starts a new P4 switch."""
         info('Starting P4 switch {}.\n'.format(self.name))
@@ -642,9 +642,8 @@ class Tofino(Switch):
         info(cmd + "\n")
 
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd('cd {}; '.format(os.path.join(self.log_dir, self.name)) + \
-                     cmd + ' > ' + os.path.join(self.log_dir, self.name) + '/tofino.log' + \
-                     ' 2>&1 & echo $! >> ' + f.name)
+            self.cmd('cd {} && '.format(os.path.join(self.log_dir, self.name)) + \
+                     cmd + ' > tofino.log 2>&1 & echo $! >> ' + f.name)
             self.switch_pid = int(f.read())
 
         debug('P4 switch {} PID is {}.\n'.format(self.name, self.switch_pid))
@@ -656,9 +655,8 @@ class Tofino(Switch):
         info(cmd + "\n")
 
         with tempfile.NamedTemporaryFile() as f:
-            self.cmd('cd {}; '.format(os.path.join(self.log_dir, self.name)) + \
-                     cmd + ' > ' + os.path.join(self.log_dir, self.name) + '/driver.log' + \
-                     ' 2>&1 & echo $! >> ' + f.name)
+            self.cmd('cd {} && '.format(os.path.join(self.log_dir, self.name)) + \
+                     cmd + ' > driver.log 2>&1 & echo $! >> ' + f.name)
             self.driver_pid = int(f.read())
 
         debug('P4 switch {} driver PID is {}.\n'.format(self.name, self.driver_pid))
@@ -666,6 +664,9 @@ class Tofino(Switch):
             raise ChildProcessError('Tofino switch {} driver did not start correctly. Check the switch log file.'.format(self.name))
 
         info('P4 switch {} has been started.\n'.format(self.name))
+
+        # Reset directory
+        self.cmd('cd {}'.format(os.getcwd()))
 
     def stop(self, deleteIntfs=True):
         """Stops the P4 switch."""
