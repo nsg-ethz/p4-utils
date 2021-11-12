@@ -337,7 +337,7 @@ folder which contains the configuration files is then <code class="docutils lite
 
 <dl class="class">
 <dt id="p4utils.mininetlib.node.Tofino">
-<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">Tofino</code><span class="sig-paren">(</span><em>name</em>, <em>device_id</em>, <em>p4_name</em>, <em>sde</em>, <em>sde_install</em>, <em>cli_port=8000</em>, <em>dr_port_base=8001</em>, <em>log_dir='/tmp'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L511-L698"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">Tofino</code><span class="sig-paren">(</span><em>name</em>, <em>device_id</em>, <em>p4_src</em>, <em>sde</em>, <em>sde_install</em>, <em>cli_port=8000</em>, <em>dr_port_base=8001</em>, <em>log_dir='/tmp'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L511-L698"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.node.Switch</span></code></p>
 <p>Tofino-model switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -347,7 +347,7 @@ folder which contains the configuration files is then <code class="docutils lite
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the switch</li>
 <li><strong>device_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – switch unique id</li>
-<li><strong>p4_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the P4 source</li>
+<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – P4 source</li>
 <li><strong>sde</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tofino SDE path ($SDE)</li>
 <li><strong>sde_install</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tofino SDE install path ($SDE_INSTALL)</li>
 <li><strong>cli_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – switch client port</li>

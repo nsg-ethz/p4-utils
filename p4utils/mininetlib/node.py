@@ -657,8 +657,8 @@ class Tofino(Switch):
 
         with tempfile.NamedTemporaryFile() as f:
             self.cmd('cd {}; '.format(os.path.join(self.log_dir, self.name)) + \
-                    cmd + ' > ' + os.path.join(self.log_dir, self.name) + '/driver.log' + \
-                    ' 2>&1 & echo $! >> ' + f.name)
+                     cmd + ' > ' + os.path.join(self.log_dir, self.name) + '/driver.log' + \
+                     ' 2>&1 & echo $! >> ' + f.name)
             self.driver_pid = int(f.read())
 
         debug('P4 switch {} driver PID is {}.\n'.format(self.name, self.driver_pid))
