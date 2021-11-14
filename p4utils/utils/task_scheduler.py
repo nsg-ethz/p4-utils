@@ -12,6 +12,7 @@ import subprocess as sp
 import multiprocessing as mp
 from enum import IntEnum
 
+
 import p4utils.utils.task_scheduler
 from p4utils.utils.helper import WrapFunc
 
@@ -194,6 +195,15 @@ class Task:
             cond (threading.Condition): condition to notify when this function
                                         is completed
         """
+        # Print a warning if sleep time is negatative.
+        if time.time() > self.startTime:
+            # log it also 
+            self._send_msg("Schedule time wait: {}".format(self.startTime - time.time()))            
+            self._send_msg("Warning: Invalid start time in the past. This event won't be scheduled. Consider rerunning the experiment with more time margin")
+            sys.exit(1)
+        else:
+            self._send_msg("Schedule time wait: {}".format(self.startTime - time.time()))
+
         # Wait for starting time
         time.sleep(max(0, self.startTime - time.time()))
         # Start process

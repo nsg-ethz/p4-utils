@@ -2414,7 +2414,7 @@ class NetworkAPI(Topo):
         Warning:
             Routers are not supported.
         """
-        output('"l2" assignment strategy selected.\n')
+        debug('"l2" assignment strategy selected.\n')
         ip_generator = IPv4Network('10.0.0.0/16').hosts()
         reserved_ips = {}
         assigned_ips = set()
@@ -2495,7 +2495,7 @@ class NetworkAPI(Topo):
         Warning:
             Routers are not supported.
         """
-        output('"mixed" assignment strategy selected.\n')
+        debug('"mixed" assignment strategy selected.\n')
         reserved_ips = {}
         assigned_ips = set()
         sw_to_generator = {}
@@ -2643,7 +2643,7 @@ class NetworkAPI(Topo):
         Warning:
             Routers are not supported.
         """
-        output('"l3" assignment strategy selected.\n')
+        debug('"l3" assignment strategy selected.\n')
         assigned_ips = set()
         sw_to_next_available_host_id = {}
         sw_to_id = {}
