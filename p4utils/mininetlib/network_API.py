@@ -213,8 +213,12 @@ class NetworkAPI(Topo):
                 graph.remove_node('sw-cpu')
 
         graph_dict = node_link_data(graph)
+        # save topology locally
         with open(self.topoFile,'w') as f:
             json.dump(graph_dict, f, default=default)
+        # save a global copy in tmp
+        with open("/tmp/topology.json", 'w') as f:
+            json.dump(graph_dict, f, default=default)        
 
     def compile(self):
         """Compiles all the required P4 files."""

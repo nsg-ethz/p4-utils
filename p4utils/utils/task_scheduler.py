@@ -200,7 +200,6 @@ class Task:
             # log it also 
             self._send_msg("Schedule time wait: {}".format(self.startTime - time.time()))            
             self._send_msg("Warning: Invalid start time in the past. This event won't be scheduled. Consider rerunning the experiment with more time margin")
-            sys.exit(1)
         else:
             self._send_msg("Schedule time wait: {}".format(self.startTime - time.time()))
 
