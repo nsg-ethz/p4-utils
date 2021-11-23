@@ -515,8 +515,8 @@ class Tofino(Switch):
         name (str)            : name of the switch
         device_id (int)       : switch unique id
         p4_src (str)          : P4 source
-        sde (str)             : Tofino SDE path ($SDE)
-        sde_install (str)     : Tofino SDE install path ($SDE_INSTALL)
+        sde (str)             : Tofino SDE path (``$SDE``)
+        sde_install (str)     : Tofino SDE install path (``$SDE_INSTALL``)
         cli_port (int)        : switch client port
         dr_port_base (int)    : port base for driver connection
         log_dir (srt)         : log path
@@ -674,14 +674,10 @@ class Tofino(Switch):
         if not deleteIntfs:
             info('Stopping P4 switch {}.\n'.format(self.name))
         if self.bin_running():
-            os.kill(self.switch_pid, signal.SIGKILL)
-            if not wait_condition(self.bin_running, False, timeout=SWITCH_STOP_TIMEOUT):
-                raise ChildProcessError('P4 switch {} did not stop after requesting it.'.format(self.name))
+            kill_proc_tree(self.switch_pid)
             self.switch_pid = None
         if self.driver_running():
-            os.kill(self.driver_pid, signal.SIGKILL)
-            if not wait_condition(self.driver_running, False, timeout=SWITCH_STOP_TIMEOUT):
-                raise ChildProcessError('P4 switch {} did not stop after requesting it.'.format(self.name))
+            kill_proc_tree(self.driver_pid)
             self.driver_pid = None
         super().stop(deleteIntfs)
 

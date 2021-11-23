@@ -337,7 +337,7 @@ folder which contains the configuration files is then <code class="docutils lite
 
 <dl class="class">
 <dt id="p4utils.mininetlib.node.Tofino">
-<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">Tofino</code><span class="sig-paren">(</span><em>name</em>, <em>device_id</em>, <em>p4_src</em>, <em>sde</em>, <em>sde_install</em>, <em>cli_port=8000</em>, <em>dr_port_base=8001</em>, <em>log_dir='/tmp'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L511-L700"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">Tofino</code><span class="sig-paren">(</span><em>name</em>, <em>device_id</em>, <em>p4_src</em>, <em>sde</em>, <em>sde_install</em>, <em>cli_port=8000</em>, <em>dr_port_base=8001</em>, <em>log_dir='/tmp'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L511-L696"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.node.Switch</span></code></p>
 <p>Tofino-model switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -348,8 +348,8 @@ folder which contains the configuration files is then <code class="docutils lite
 <li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the switch</li>
 <li><strong>device_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – switch unique id</li>
 <li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – P4 source</li>
-<li><strong>sde</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tofino SDE path ($SDE)</li>
-<li><strong>sde_install</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tofino SDE install path ($SDE_INSTALL)</li>
+<li><strong>sde</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tofino SDE path (<code class="docutils literal"><span class="pre">$SDE</span></code>)</li>
+<li><strong>sde_install</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tofino SDE install path (<code class="docutils literal"><span class="pre">$SDE_INSTALL</span></code>)</li>
 <li><strong>cli_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – switch client port</li>
 <li><strong>dr_port_base</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – port base for driver connection</li>
 <li><strong>log_dir</strong> (<em>srt</em>) – log path</li>
@@ -384,13 +384,13 @@ folder which contains the configuration files is then <code class="docutils lite
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.Tofino.config">
-<code class="descname">config</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L688-L696"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.config" title="Permalink to this definition">¶</a></dt>
+<code class="descname">config</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L684-L692"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configures Tofino.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.Tofino.describe">
-<code class="descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L698-L700"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.describe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L694-L696"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes P4Switch.</p>
 </dd></dl>
 
@@ -408,7 +408,7 @@ folder which contains the configuration files is then <code class="docutils lite
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.Tofino.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><em>deleteIntfs=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L672-L686"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.stop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stop</code><span class="sig-paren">(</span><em>deleteIntfs=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L672-L682"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops the P4 switch.</p>
 </dd></dl>
 

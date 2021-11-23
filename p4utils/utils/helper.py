@@ -11,6 +11,7 @@ import time
 import types
 import random
 import psutil
+import signal
 import hashlib
 import importlib
 from networkx.readwrite.json_graph import node_link_graph
@@ -425,6 +426,35 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
         pass
 
     return args, kwargs
+
+
+def kill_proc_tree(pid, sig=signal.SIGKILL, include_parent=True,
+                   timeout=None, on_terminate=None):
+    """Kills a process tree (including grandchildren).
+    
+    Args:
+        pid (int)                        : PID of the parent process
+        sig (int)                        : signal used to kill the tree
+        include_parent (bool)            : whether to kill the parent process or not
+        on_terminate (types.FunctionType): callback function executed as soon as a child terminates.
+
+    Returns:
+        tuple: ``(gone, still_alive)``.
+    """
+    assert pid != os.getpid(), "won't kill myself"
+    parent = psutil.Process(pid)
+    children = parent.children(recursive=True)
+    if include_parent:
+        children.append(parent)
+    for p in children:
+        try:
+            p.send_signal(sig)
+        except psutil.NoSuchProcess:
+            pass
+    gone, alive = psutil.wait_procs(children, timeout=timeout,
+                                    callback=on_terminate)
+    return (gone, alive)
+
 
 class WrapFunc:
     """Wraps a function is such a way that they can be executed
