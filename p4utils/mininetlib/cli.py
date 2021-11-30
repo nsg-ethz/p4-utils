@@ -14,6 +14,7 @@ from mininet.cli import CLI
 from p4utils.utils.helper import *
 from p4utils.mininetlib.log import debug, info, output, warning, error, critical
 
+
 def exception_handler(f):
     """Prevents exceptions from terminating the client, but still
     prints them.
@@ -45,7 +46,7 @@ class P4CLI(CLI):
 
         Args:
             node_name (str): node name
-        
+
         Returns:
             mininet.node.Node: requested node or **None** if no such object was found.
         """
@@ -58,10 +59,10 @@ class P4CLI(CLI):
 
     def getP4Switch(self, node_name):
         """Retrieves the requested P4 Switch.
-        
+
         Args:
             node_name (string): P4 switch name
-        
+
         Returns:
             mininet.node.Node: requested node or **None** if no such object was found.
         """
@@ -80,7 +81,7 @@ class P4CLI(CLI):
     @exception_handler
     def do_p4switch_stop(self, line=""):
         """Stops execution of the specified P4 switch.
-        
+
         **Usage**::
 
             mininet> p4switch_stop <p4switch name>
@@ -99,13 +100,13 @@ class P4CLI(CLI):
         if p4switch is None:
             error('usage: p4switch_stop <p4switch name>\n')
             return False
-        
+
         p4switch.stop_p4switch()
 
     @exception_handler
     def do_p4switch_start(self, line=""):
         """Starts a P4 switch.
-        
+
         **Usage**::
 
             mininet> p4switch_start <p4switch name> [--p4src <path>] [--cmds <path>]
@@ -121,7 +122,8 @@ class P4CLI(CLI):
         # Check args validity
         if len(args) > 5:
             error('Wrong syntax.\n')
-            error('usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds <path>]\n')
+            error(
+                'usage: p4switch_start <p4switch name> [--p4src <path>] [--cmds <path>]\n')
             return False
 
         switch_name = args[0]
@@ -134,7 +136,8 @@ class P4CLI(CLI):
 
         # Check if switch is running
         if p4switch.switch_started():
-            error('P4 Switch already running, stop it first: p4switch_stop {} \n'.format(switch_name))
+            error('P4 Switch already running, stop it first: p4switch_stop {} \n'.format(
+                switch_name))
             return False
 
         # Check if new P4 source file has been provided
@@ -150,7 +153,9 @@ class P4CLI(CLI):
                 error('File Error: p4source {} is not a file\n'.format(p4_src))
                 return False
         if p4_src is not None:
-            compiler = get_by_attr('p4_src', os.path.realpath(p4_src), self.net_api.compilers)
+            compiler = get_by_attr(
+                'p4_src', os.path.realpath(p4_src),
+                self.net_api.compilers)
             # If a compiler for the same p4_src has been found
             if compiler is not None:
                 # If new file has been provided
@@ -160,10 +165,10 @@ class P4CLI(CLI):
                 else:
                     debug('P4 source already compiled!\n')
             # If this file is compiled for the first time
-            elif self.net_api.modules['comp'] is not None: 
+            elif self.net_api.modules['comp'] is not None:
                 debug('New p4 source file detected!\n')
-                compiler = self.net_api.modules['comp']['class'](p4_src=p4_src,
-                                                                 **self.net_api.modules['comp']['kwargs'])
+                compiler = self.net_api.modules['comp']['class'](
+                    p4_src=p4_src, **self.net_api.modules['comp']['kwargs'])
                 compiler.compile()
                 self.net_api.compilers.append(compiler)
             else:
@@ -172,21 +177,26 @@ class P4CLI(CLI):
 
         # Start switch
         p4switch.start()
-        
+
         cmd_path = None
         # Check if new cmd file has been provided
         if '--cmds' in args:
             cmd_path = args[args.index("--cmds") + 1]
             # Check if file exists
             if not os.path.exists(cmd_path):
-                error('File Error: command file {} does not exist\n'.format(cmd_path))
+                error(
+                    'File Error: command file {} does not exist\n'.format(
+                        cmd_path))
                 return False
             # Check if its not a file
             if not os.path.isfile(cmd_path):
-                error('File Error: command file {} is not a file\n'.format(cmd_path))
+                error(
+                    'File Error: command file {} is not a file\n'.format(
+                        cmd_path))
                 return False
         if cmd_path is not None:
-            client = get_by_attr('sw_name', switch_name, self.net_api.sw_clients)
+            client = get_by_attr('sw_name', switch_name,
+                                 self.net_api.sw_clients)
             # If a client is present
             if client is not None:
                 client.set_conf(cmd_path)
@@ -202,7 +212,9 @@ class P4CLI(CLI):
                     client.configure()
                     self.net_api.sw_clients.append(client)
                 else:
-                    error('Switch {} has not thrift server enabled.\n'.format(switch_name))
+                    error(
+                        'Switch {} has not thrift server enabled.\n'.format(
+                            switch_name))
                     return False
             else:
                 error('No client module provided!\n')
@@ -211,7 +223,7 @@ class P4CLI(CLI):
     @exception_handler
     def do_p4switch_reboot(self, line=""):
         """Reboots a P4 switch.
-        
+
         **Usage**::
 
             mininet> p4switch_reboot <p4switch name> [--p4src <path>] [--cmds <path>]
@@ -223,7 +235,8 @@ class P4CLI(CLI):
             - ``--cmds`` provides a new command file.
         """
         if not line or len(parse_line(line)) > 5:
-            error('usage: p4switch_reboot <p4switch name> [--p4src <path>] [--cmds <path>]\n')
+            error(
+                'usage: p4switch_reboot <p4switch name> [--p4src <path>] [--cmds <path>]\n')
             return False
         else:
             switch_name = parse_line(line)[0]
@@ -246,14 +259,15 @@ class P4CLI(CLI):
             - ``--cmds`` provides a new command file.
         """
         if len(parse_line(line)) > 4:
-            error('usage: p4switches_reboot [--p4src <path>] [--cmds <path>]\n')
+            error(
+                'usage: p4switches_reboot [--p4src <path>] [--cmds <path>]\n')
             return False
         else:
             for sw in self.mn.p4switches:
                 switch_name = sw.name
                 self.do_p4switch_stop(line=switch_name)
 
-                tmp_line = switch_name + " " +line
+                tmp_line = switch_name + " " + line
                 self.do_p4switch_start(line=tmp_line)
 
             # Run scripts
@@ -261,12 +275,12 @@ class P4CLI(CLI):
                 for script in self.net_api.scripts:
                     if script["reboot_run"]:
                         info("Exec Script: {}\n".format(script["cmd"]))
-                        run_command(script["cmd"])
+                        run_command(script["cmd"], script["out_file"])
 
     @exception_handler
     def do_test_p4(self, line=""):
         """Tests start stop functionalities.
-        
+
         **Usage**::
 
             mininet> test_p4
@@ -279,7 +293,7 @@ class P4CLI(CLI):
     @exception_handler
     def do_printSwitches(self, line=""):
         """Prints the names of all switches.
-        
+
         **Usage**::
 
             mininet> printSwitches
@@ -288,9 +302,9 @@ class P4CLI(CLI):
             output(sw.name+'\n')
 
     @exception_handler
-    def do_pingset(self ,line=""):
+    def do_pingset(self, line=""):
         """Pings between the hosts in the set.
-        
+
         **Usage**::
 
             mininet> pingset <host1> ... <hostN>
@@ -302,11 +316,11 @@ class P4CLI(CLI):
     @exception_handler
     def do_task(self, line=""):
         """Executes a task on the given host. 
-        
+
         **Usage**::
 
             mininet> task <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]
-        
+
         Note:
             The starting delay (specified with ``<start>``) is taken with 
             respect to the current time. The deafult module in which functions
@@ -360,7 +374,8 @@ class P4CLI(CLI):
                             error(e+'\n')
                             return False
                 else:
-                    error('Node {} has already a task scheduler running.\n'.format(node))
+                    error(
+                        'Node {} has already a task scheduler running.\n'.format(node))
                     return False
         else:
             error('Node {} does not exist!\n'.format(node))
