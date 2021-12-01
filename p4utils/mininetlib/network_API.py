@@ -1137,20 +1137,10 @@ class NetworkAPI(Topo):
             # Stop right after the CLI is exited
             self.stopNetwork()
 
-    def kill_process(self, proc_pid):
-        """Kills process and all its childs."""
-        try:
-            process = psutil.Process(proc_pid)
-            for proc in process.children(recursive=True):
-                proc.kill()
-            process.kill()
-        except:
-            pass
-
     def stop_exec_scripts(self):
         """Stops all exec scripts."""
         for pid in self.scripts_pids:
-            self.kill_process(pid)
+            kill_proc_tree(pid)
 
     def stopNetwork(self):
         """Stops the network."""

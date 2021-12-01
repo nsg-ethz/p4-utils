@@ -464,12 +464,13 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
 
 def kill_proc_tree(pid, sig=signal.SIGKILL, include_parent=True,
                    timeout=None, on_terminate=None):
-    """Kills a process tree (including grandchildren).
-    
+    """Kills a process tree (including children).
+
     Args:
         pid (int)                        : PID of the parent process
         sig (int)                        : signal used to kill the tree
         include_parent (bool)            : whether to kill the parent process or not
+        timeout (int or float)           : time to wait for a process to terminate
         on_terminate (types.FunctionType): callback function executed as soon as a child terminates.
 
     Returns:
