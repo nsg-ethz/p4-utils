@@ -5,6 +5,7 @@ operations on data.
 
 import os
 import re
+import subprocess
 import sys
 import json
 import time
@@ -52,6 +53,7 @@ def wait_condition(func, value, args=[], kwargs={}, timeout=0):
         else:
             return True
 
+
 def merge_dict(dst, src):
     """Merges source dictionary fields and subfields into destionation dictionary.
 
@@ -66,7 +68,11 @@ def merge_dict(dst, src):
             if key not in current_dst:
                 current_dst[key] = current_src[key]
             else:
-                if isinstance(current_src[key], dict) and isinstance(current_dst[key], dict):
+                if isinstance(
+                        current_src[key],
+                        dict) and isinstance(
+                        current_dst[key],
+                        dict):
                     stack.append((current_dst[key], current_src[key]))
                 else:
                     current_dst[key] = current_src[key]
@@ -120,7 +126,8 @@ def rand_mac():
     Returns:
         str: MAC address.
     """
-    hex_str = hex(random.randint(1, 2**48-1) & 0xfeffffffffff | 0x020000000000)[2:]
+    hex_str = hex(random.randint(1, 2**48-1) &
+                  0xfeffffffffff | 0x020000000000)[2:]
     hex_str = '0'*(12-len(hex_str)) + hex_str
     mac_str = ''
     i = 0
@@ -134,7 +141,7 @@ def rand_mac():
 
 def dpidToStr(id):
     """Compute a string **dpid** from an integer **id**.
-    
+
     Args:
         id (int): integer device id
 
@@ -149,7 +156,7 @@ def dpidToStr(id):
 
 def check_listening_on_port(port):
     """Checks if the given port is listening in the main namespace.
-    
+
     Args:
         port (int): port number
 
@@ -164,14 +171,14 @@ def check_listening_on_port(port):
 
 def cksum(filename):
     """Returns the md5 checksum of a file.
-    
+
     Args:
         filename (str): path to the file
 
     Returns:
         str: md5 checksum of the file.
     """
-    return hashlib.md5(open(filename,'rb').read()).hexdigest()
+    return hashlib.md5(open(filename, 'rb').read()).hexdigest()
 
 
 def get_node_attr(node, attr_name, default=None):
@@ -181,7 +188,7 @@ def get_node_attr(node, attr_name, default=None):
     Args:
         node (object)          : *Mininet* node object
         attr_name (string)  : attribute to look for
-    
+
     Returns:
         the value of the requested attribute.
     """
@@ -219,7 +226,7 @@ def get_by_attr(attr_name, attr_value, obj_list):
 
 def ip_address_to_mac(ip):
     """Generate MAC from IP address.
-    
+
     Args:
         ip (str): IPv4 address
 
@@ -240,12 +247,14 @@ def is_compiled(p4_src, compilers):
     Arguments:
         p4_src (string) : P4 file path
         compilers (list): list of P4 compiler objects (see compiler.py)
-    
+
     Returns:
         bool: **True** if the file has been already compiled, **False** otherwise.
     """
     for compiler in compilers:
-        if getattr(compiler, 'compiled') and getattr(compiler, 'p4_src') == p4_src:
+        if getattr(
+                compiler, 'compiled') and getattr(
+                compiler, 'p4_src') == p4_src:
             return True
     else:
         return False
@@ -253,7 +262,7 @@ def is_compiled(p4_src, compilers):
 
 def load_conf(conf_file):
     """Load JSON application configuration file.
-    
+
     Args:
         conf_file (str): path to the JSON network configuration file
 
@@ -274,7 +283,7 @@ def load_topo(json_path):
     Returns:
         p4utils.utils.topology.NetworkGraph: the topology graph.
     """
-    with open(json_path,'r') as f:
+    with open(json_path, 'r') as f:
         graph_dict = json.load(f)
         graph = node_link_graph(graph_dict)
     return NetworkGraph(graph)
@@ -282,10 +291,10 @@ def load_topo(json_path):
 
 def load_custom_object(obj):
     """Loads object from module.
-    
+
     Args:
         dict: JSON object to load
-    
+
     Returns:
         object: Python object retrieved from the module.
 
@@ -313,9 +322,9 @@ def load_custom_object(obj):
     return getattr(module, object_name)
 
 
-def run_command(command):
+def old_run_command(command):
     """Execute command in the main namespace.
-    
+
     Args:
         command (str): command to execute
 
@@ -324,6 +333,30 @@ def run_command(command):
     """
     debug(command+'\n')
     return os.WEXITSTATUS(os.system(command))
+
+
+def run_command(command, outputfile=None):
+    """Execute command in the main namespace.
+
+    Args:
+        command (str): command to execute
+
+    Returns:
+        int: returns parent pid
+    """
+    if isinstance(command, str):
+        debug(command+'\n')
+        command = command.split()
+    else:
+        debug(" ".join(command) + "\n")
+
+    if not outputfile:
+        of = subprocess.DEVNULL
+    else:
+        of = open(outputfile, "w")
+
+    proc = subprocess.Popen(command, stdout=of, stderr=of)
+    return proc.pid
 
 
 def parse_line(line):
@@ -339,7 +372,7 @@ def parse_line(line):
         As an example, consider the following string::
 
             'ahjdjf djdfkfo1 --jdke hdjejeek --dfjfj "vneovn rijvtg"'
-   
+
         The function will parse it and give as output the following list::
 
             ["ahjdjf", "djdfkfo1", "--jdke", "hdjejeek", "--dfjfj", "vneovn rijvtg"]
@@ -380,10 +413,11 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
     args = []
     kwargs = {}
     skip_next = False
-    mod = importlib.import_module(def_mod) 
+    mod = importlib.import_module(def_mod)
     parsed_cmd = parse_line(line)
     if len(parsed_cmd) < 4:
-        error('usage: <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]\n')
+        error(
+            'usage: <node> <start> <duration> <exe> [<arg1>] ... [<argN>] [--mod <module>] [--<key1> <kwarg1>] ... [--<keyM> <kwargM>]\n')
     for i in range(len(parsed_cmd)):
         if skip_next:
             skip_next = False
@@ -415,7 +449,7 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
             else:
                 kwargs.setdefault('args', [])
                 kwargs['args'].append(parsed_cmd[i])
-    
+
     try:
         # Import function from module
         exe = getattr(mod, args[1])
@@ -459,7 +493,7 @@ def kill_proc_tree(pid, sig=signal.SIGKILL, include_parent=True,
 class WrapFunc:
     """Wraps a function is such a way that they can be executed
     across different Python interpreters in the same system.
-    
+
     Args:
         func (types.FunctionType): function to wrap
     """
@@ -473,14 +507,16 @@ class WrapFunc:
 
         # Set module nome
         if func.__module__ == '__main__':
-            self.m_name, _ = os.path.splitext(os.path.basename(sys.modules[func.__module__].__file__))
+            self.m_name, _ = os.path.splitext(
+                os.path.basename(sys.modules[func.__module__].__file__))
         else:
             self.m_name = func.__module__
 
         # Get module relative path from package
         m_rel_path = str.replace(self.m_name, '.', '/')
         # Get module absolute path
-        m_abs_path, _ = os.path.splitext(os.path.realpath(sys.modules[func.__module__].__file__))
+        m_abs_path, _ = os.path.splitext(
+            os.path.realpath(sys.modules[func.__module__].__file__))
         # Get package absolute path
         if m_abs_path[-len(m_rel_path):] == m_rel_path:
             self.p_path = m_abs_path[:len(m_abs_path)-len(m_rel_path)]
