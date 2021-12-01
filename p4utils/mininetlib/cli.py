@@ -185,7 +185,7 @@ class P4CLI(CLI):
         cmd_path = None
         # Check if new cmd file has been provided
         if '--cmds' in args:
-            cmd_path = args[args.index("--cmds") + 1]
+            cmd_path = args[args.index('--cmds') + 1]
             # Check if file exists
             if not os.path.exists(cmd_path):
                 error(
@@ -277,9 +277,9 @@ class P4CLI(CLI):
             # Run scripts
             if isinstance(self.net_api.scripts, list):
                 for script in self.net_api.scripts:
-                    if script["reboot_run"]:
-                        info("Exec Script: {}\n".format(script["cmd"]))
-                        run_command(script["cmd"], script["out_file"])
+                    if script['reboot_run']:
+                        info('Exec Script: {}\n'.format(script['cmd']))
+                        run_command(script['cmd'], script['out_file'])
 
     @exception_handler
     def do_test_p4(self, line=""):
@@ -289,9 +289,9 @@ class P4CLI(CLI):
 
             mininet> test_p4
         """
-        self.do_p4switch_stop("s1")
-        self.do_p4switch_start("s1")
-        self.do_p4switch_reboot("s1")
+        self.do_p4switch_stop('s1')
+        self.do_p4switch_start('s1')
+        self.do_p4switch_reboot('s1')
         self.do_p4switches_reboot()
 
     @exception_handler

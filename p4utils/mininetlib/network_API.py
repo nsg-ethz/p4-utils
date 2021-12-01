@@ -10,7 +10,6 @@ instantiate and start the network.
 
 import os
 import time
-import psutil
 from ipaddress import ip_interface, IPv4Network
 from networkx import Graph, MultiGraph
 from networkx.readwrite.json_graph import node_link_data
@@ -113,8 +112,8 @@ class NetworkAPI(Topo):
         cleanup()
         bridges = sh("brctl show | awk 'FNR > 1 {print $1}'").splitlines()
         for bridge in bridges:
-            sh("ifconfig {} down".format(bridge))
-            sh("brctl delbr {}".format(bridge))
+            sh('ifconfig {} down'.format(bridge))
+            sh('brctl delbr {}'.format(bridge))
 
     def is_multigraph(self):
         """Check whether the graph is a multigraph, i.e. it has multiple parallel
@@ -223,7 +222,7 @@ class NetworkAPI(Topo):
         with open(self.topoFile, 'w') as f:
             json.dump(graph_dict, f, default=default)
         # save a global copy in tmp
-        with open("/tmp/topology.json", 'w') as f:
+        with open('/tmp/topology.json', 'w') as f:
             json.dump(graph_dict, f, default=default)
 
     def compile(self):
@@ -360,7 +359,7 @@ class NetworkAPI(Topo):
             self.scripts_pids.append(
                 run_command(
                     script['cmd'],
-                    script["out_file"]))
+                    script['out_file']))
 
     def start_scheduler(self, node):
         """Starts the task scheduler on node if enabled.
@@ -451,7 +450,7 @@ class NetworkAPI(Topo):
                 switch.describe()
         for host in self.net.hosts:
             host.describe()
-        info("Starting mininet CLI...\n")
+        info('Starting mininet CLI...\n')
         # Generate a message that will be printed by the Mininet CLI to make
         # interacting with the simple switch a little easier.
         output('\n')
@@ -1017,9 +1016,10 @@ class NetworkAPI(Topo):
         the network boot.
 
         Args:
-            cmd (str)    : command to execute
-            reboot (bool): rerun the script every time
-                           all the P4 switches are rebooted.
+            cmd (str)     : command to execute
+            out_file (str): where to redirect *stdout* and *stderr*
+            reboot (bool) : rerun the script every time
+                            all the P4 switches are rebooted.
         """
         self.scripts.append(
             {'cmd': cmd, 'reboot_run': reboot, 'out_file': out_file})

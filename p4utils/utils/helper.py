@@ -20,7 +20,7 @@ from networkx.readwrite.json_graph import node_link_graph
 from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.log import info, output, error, warning, debug
 
-_prefixLenMatchRegex = re.compile("netmask (\d+\.\d+\.\d+\.\d+)")
+_prefixLenMatchRegex = re.compile('netmask (\d+\.\d+\.\d+\.\d+)')
 
 
 def wait_condition(func, value, args=[], kwargs={}, timeout=0):
@@ -234,9 +234,9 @@ def ip_address_to_mac(ip):
         str: MAC address obtained from the IPv4 value.
     """
     if "/" in ip:
-        ip = ip.split("/")[0]
+        ip = ip.split('/')[0]
 
-    split_ip = list(map(int, ip.split(".")))
+    split_ip = list(map(int, ip.split('.')))
     mac_address = '00:%02x' + ':%02x:%02x:%02x:%02x' % tuple(split_ip)
     return mac_address
 
@@ -312,11 +312,11 @@ def load_custom_object(obj):
         is optional and has to be used if the module is not present in ``sys.path``.
     """
 
-    file_path = obj.get("file_path", ".")
+    file_path = obj.get('file_path', '.')
     sys.path.insert(0, file_path)
 
-    module_name = obj["module_name"]
-    object_name = obj["object_name"]
+    module_name = obj['module_name']
+    object_name = obj['object_name']
 
     module = importlib.import_module(module_name)
     return getattr(module, object_name)
@@ -335,25 +335,26 @@ def old_run_command(command):
     return os.WEXITSTATUS(os.system(command))
 
 
-def run_command(command, outputfile=None):
+def run_command(command, out_file=None):
     """Execute command in the main namespace.
 
     Args:
-        command (str): command to execute
+        command (str) : command to execute
+        out_file (str): where to redirect *stdout* and *stderr*
 
     Returns:
-        int: returns parent pid
+        int: returns parent pid.
     """
     if isinstance(command, str):
         debug(command+'\n')
         command = command.split()
     else:
-        debug(" ".join(command) + "\n")
+        debug(' '.join(command) + '\n')
 
-    if not outputfile:
+    if not out_file:
         of = subprocess.DEVNULL
     else:
-        of = open(outputfile, "w")
+        of = open(out_file, 'w')
 
     proc = subprocess.Popen(command, stdout=of, stderr=of)
     return proc.pid
