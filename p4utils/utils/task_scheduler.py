@@ -295,10 +295,10 @@ class Task:
         one. Thus, it is recommended to only use this to run a list of ordered
         commands.
         """
-        asynch_cmds = self.exe[:-1]
+        synch_cmds = self.exe[:-1]
         last_cmd = self.exe[-1]
 
-        for cmd in asynch_cmds:
+        for cmd in synch_cmds:
             proc = sp.Popen(shlex.split(cmd),
                             stdout=sp.DEVNULL,
                             stderr=sp.DEVNULL)
