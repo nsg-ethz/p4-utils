@@ -22,6 +22,11 @@ class ProcessType(IntEnum):
     """Enum class that defines task types."""
     MULTIPROC = 0
     SUBPROC = 1
+    # A chain of commands is a list of commands that have to be executed at a
+    # given time and in a given order. Thus each command is blocking and
+    # expected to not block the others, until the last one which wont be
+    # blocking.
+    CHAIN_SUBPROC = 2
 
 
 class Task:
@@ -44,6 +49,13 @@ class Task:
             self.type = ProcessType.SUBPROC
             # exe is the string to execute
             self.exe = exe
+        elif isinstance(exe, list):
+            # if all internal chained subcommands are string
+            assert len(exe) > 1
+            if all(isinstance(cmd, str) for cmd in exe):
+                self.type = ProcessType.CHAIN_SUBPROC
+                # exe is the string to execute
+                self.exe = exe
         elif isinstance(exe, types.FunctionType):
             self.type = ProcessType.MULTIPROC
             # exe is a WrapFunc object
@@ -52,7 +64,6 @@ class Task:
             raise TypeError(
                 'cannot execute an object of type {}!'.format(type(exe)))
 
-        assert isinstance(exe, str) or isinstance(exe, types.FunctionType)
         assert isinstance(start, int) or isinstance(start, float)
         assert (isinstance(duration, int) or isinstance(
             duration, float)) and duration >= 0
@@ -139,6 +150,8 @@ class Task:
         """Starts the executable in a separate process."""
         if self.type == ProcessType.MULTIPROC:
             self._start_mp()
+        elif self.type == ProcessType.CHAIN_SUBPROC:
+            self._start_chain_sp()
         else:
             self._start_sp()
         # Log
@@ -151,7 +164,7 @@ class Task:
         """Stops the task using SIGTERM and, if it fails, SIGKILL."""
         if self.type == ProcessType.MULTIPROC:
             self._stop_mp()
-        else:
+        else:  # for both sp and chained sp
             self._stop_sp()
         # Log
         self._send_msg(
@@ -163,7 +176,7 @@ class Task:
         """Joins the subprocess."""
         if self.type == ProcessType.MULTIPROC:
             self._join_mp(timeout)
-        else:
+        else:  # for both sp and chained sp
             self._join_sp(timeout)
 
     def is_alive(self):
@@ -272,6 +285,27 @@ class Task:
     def _start_sp(self):
         """Starts subprocess."""
         self.proc = sp.Popen(shlex.split(self.exe),
+                             stdout=sp.DEVNULL,
+                             stderr=sp.DEVNULL)
+
+    def _start_chain_sp(self):
+        """Starts a chain of subprocesses.
+
+        All processes are executed synchronously and blocking until the last
+        one. Thus, it is recommended to only use this to run a list of ordered
+        commands.
+        """
+        asynch_cmds = self.exe[:-1]
+        last_cmd = self.exe[-1]
+
+        for cmd in asynch_cmds:
+            proc = sp.Popen(shlex.split(cmd),
+                            stdout=sp.DEVNULL,
+                            stderr=sp.DEVNULL)
+            proc.wait()
+
+        # last command, run as _start_sp
+        self.proc = sp.Popen(shlex.split(last_cmd),
                              stdout=sp.DEVNULL,
                              stderr=sp.DEVNULL)
 
