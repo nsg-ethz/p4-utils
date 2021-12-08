@@ -538,7 +538,8 @@ class TaskServer:
                             '\n{}: malformed task received!\n'.format(
                                 time.ctime()))
             else:
-                self.logs.put('\n{}: malformed data received!\n')
+                self.logs.put('\n{}: malformed data received!\n'.format(
+                                time.ctime()))
         finally:
             with self.conn_close_cond:
                 # Notify that the connection closed
