@@ -108,7 +108,7 @@ Here, you will find the documentation for all the methods that will help you
 instantiate and start the network.</p>
 <dl class="class">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI">
-<em class="property">class </em><code class="descclassname">p4utils.mininetlib.network_API.</code><code class="descname">NetworkAPI</code><span class="sig-paren">(</span><em>*args</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L33-L2775"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.network_API.</code><code class="descname">NetworkAPI</code><span class="sig-paren">(</span><em>*args</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L34-L2896"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.topo.Topo</span></code></p>
 <p>Network definition and initialization API.</p>
 <dl class="attribute">
@@ -119,7 +119,7 @@ instantiate and start the network.</p>
 
 <dl class="attribute">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.hosts">
-<code class="descname">hosts</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1899-L1912"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.hosts" title="Permalink to this definition">¶</a></dt>
+<code class="descname">hosts</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1987-L2000"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.hosts" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> – dictionary of host and their properties.</p>
 </dd></dl>
 
@@ -193,7 +193,7 @@ hosts present in the same subnetwork.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addHost">
-<code class="descname">addHost</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1870-L1886"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addHost" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addHost</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1958-L1974"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addHost" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds P4 host node to the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -222,7 +222,7 @@ this method will overwrite it.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addLink">
-<code class="descname">addLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>port1=None</em>, <em>port2=None</em>, <em>key=None</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1110-L1232"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addLink" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>port1=None</em>, <em>port2=None</em>, <em>key=None</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1169-L1307"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addLink" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds link between two nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -275,7 +275,7 @@ assignment uses it.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addNode">
-<code class="descname">addNode</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1582-L1596"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addNode</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1662-L1676"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a node to the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -304,7 +304,7 @@ this method will overwrite it.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addP4RuntimeSwitch">
-<code class="descname">addP4RuntimeSwitch</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2301-L2317"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addP4RuntimeSwitch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addP4RuntimeSwitch</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2394-L2410"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addP4RuntimeSwitch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds P4 runtime switch node to Mininet topology.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -333,7 +333,7 @@ this method will overwrite it.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addP4Switch">
-<code class="descname">addP4Switch</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2024-L2045"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addP4Switch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addP4Switch</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2112-L2134"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addP4Switch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds P4 switch node to the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -362,7 +362,7 @@ this method will overwrite it.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addRouter">
-<code class="descname">addRouter</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2358-L2374"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addRouter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addRouter</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2451-L2467"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addRouter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a router node to the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -391,7 +391,7 @@ this method will overwrite it.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addSwitch">
-<code class="descname">addSwitch</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1953-L1976"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addSwitch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addSwitch</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2041-L2064"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addSwitch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds switch node to the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -420,7 +420,7 @@ this method will overwrite it.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addTask">
-<code class="descname">addTask</code><span class="sig-paren">(</span><em>name</em>, <em>exe</em>, <em>start=0</em>, <em>duration=0</em>, <em>enableScheduler=True</em>, <em>args=()</em>, <em>kwargs={}</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1806-L1840"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addTask" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addTask</code><span class="sig-paren">(</span><em>name</em>, <em>exe</em>, <em>start=0</em>, <em>duration=0</em>, <em>enableScheduler=True</em>, <em>args=()</em>, <em>kwargs={}</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1889-L1928"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addTask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a task to the node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -454,7 +454,7 @@ been previously enabled.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.addTaskFile">
-<code class="descname">addTaskFile</code><span class="sig-paren">(</span><em>filepath</em>, <em>def_mod='p4utils.utils.traffic_utils'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1785-L1804"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addTaskFile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addTaskFile</code><span class="sig-paren">(</span><em>filepath</em>, <em>def_mod='p4utils.utils.traffic_utils'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1867-L1887"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.addTaskFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds the tasks to the node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -480,7 +480,7 @@ been previously enabled.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.areNeighbors">
-<code class="descname">areNeighbors</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1854-L1867"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.areNeighbors" title="Permalink to this definition">¶</a></dt>
+<code class="descname">areNeighbors</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1942-L1955"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.areNeighbors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if two node are neighbors.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -504,7 +504,7 @@ been previously enabled.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.deleteLink">
-<code class="descname">deleteLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1292-L1312"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.deleteLink" title="Permalink to this definition">¶</a></dt>
+<code class="descname">deleteLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1367-L1387"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.deleteLink" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete link.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -528,7 +528,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.deleteNode">
-<code class="descname">deleteNode</code><span class="sig-paren">(</span><em>name</em>, <em>remove_links=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1637-L1651"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.deleteNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">deleteNode</code><span class="sig-paren">(</span><em>name</em>, <em>remove_links=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1717-L1731"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.deleteNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -546,26 +546,26 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.describeP4Nodes">
-<code class="descname">describeP4Nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L994-L1000"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.describeP4Nodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">describeP4Nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1029-L1035"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.describeP4Nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints a description for the P4 nodes in the network.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableArpTables">
-<code class="descname">disableArpTables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1035-L1039"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableArpTables" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableArpTables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1070-L1074"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableArpTables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables the static ARP entries for hosts in the
 same network.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableCli">
-<code class="descname">disableCli</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1022-L1024"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableCli" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableCli</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1057-L1059"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableCli" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables the Mininet client.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableCpuPort">
-<code class="descname">disableCpuPort</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2262-L2282"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableCpuPort" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableCpuPort</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2355-L2375"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableCpuPort" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables CPU port on switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -579,13 +579,13 @@ same network.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableCpuPortAll">
-<code class="descname">disableCpuPortAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2295-L2298"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableCpuPortAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableCpuPortAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2388-L2391"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableCpuPortAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables CPU port on all the P4 switches.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableDebugger">
-<code class="descname">disableDebugger</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2146-L2158"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableDebugger" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableDebugger</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2235-L2247"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableDebugger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables debugger for the P4 switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -603,7 +603,7 @@ same network.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableDebuggerAll">
-<code class="descname">disableDebuggerAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2169-L2176"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableDebuggerAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableDebuggerAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2258-L2265"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableDebuggerAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disable debugger for all the P4 switches.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -613,7 +613,7 @@ same network.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableDhcp">
-<code class="descname">disableDhcp</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1928-L1940"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableDhcp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableDhcp</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2016-L2028"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableDhcp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables DHCP server in hosts.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -629,20 +629,20 @@ same network.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableDhcpAll">
-<code class="descname">disableDhcpAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1947-L1950"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableDhcpAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableDhcpAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2035-L2038"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableDhcpAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables DHCP for all the hosts.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableGwArp">
-<code class="descname">disableGwArp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1050-L1054"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableGwArp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableGwArp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1085-L1089"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableGwArp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables the static ARP entry in hosts
 for the gateway only.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableLog">
-<code class="descname">disableLog</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1709-L1718"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableLog" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableLog</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1791-L1800"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableLog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables log for node (also for its task scheduler).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -656,13 +656,13 @@ for the gateway only.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableLogAll">
-<code class="descname">disableLogAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1730-L1733"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableLogAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableLogAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1812-L1815"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableLogAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables log for all the nodes (also for the task schedulers).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disablePcapDump">
-<code class="descname">disablePcapDump</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2193-L2205"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disablePcapDump" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disablePcapDump</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2282-L2294"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disablePcapDump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables generation of <code class="docutils literal"><span class="pre">.pcap</span></code> files for the P4 switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -680,7 +680,7 @@ for the gateway only.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disablePcapDumpAll">
-<code class="descname">disablePcapDumpAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2219-L2226"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disablePcapDumpAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disablePcapDumpAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2308-L2315"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disablePcapDumpAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables generation of <code class="docutils literal"><span class="pre">.pcap</span></code> files for all the P4 switches.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -690,7 +690,7 @@ for the gateway only.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableScheduler">
-<code class="descname">disableScheduler</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1748-L1757"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableScheduler" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableScheduler</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1830-L1839"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableScheduler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables the task scheduler server for the node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -704,13 +704,13 @@ for the gateway only.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.disableSchedulerAll">
-<code class="descname">disableSchedulerAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1780-L1783"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableSchedulerAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disableSchedulerAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1862-L1865"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.disableSchedulerAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables the task scheduler server for all the nodes.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableArpTables">
-<code class="descname">enableArpTables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1026-L1033"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableArpTables" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableArpTables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1061-L1068"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableArpTables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables the static ARP entries for hosts in the
 same network.</p>
 <div class="admonition note">
@@ -721,7 +721,7 @@ same network.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableCli">
-<code class="descname">enableCli</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1014-L1020"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableCli" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableCli</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1049-L1055"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableCli" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables the Mininet client.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -731,7 +731,7 @@ same network.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableCpuPort">
-<code class="descname">enableCpuPort</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2242-L2260"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableCpuPort" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableCpuPort</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2331-L2353"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableCpuPort" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables CPU port on switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -750,7 +750,7 @@ with the same name exist, then it would be overwritten.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableCpuPortAll">
-<code class="descname">enableCpuPortAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2284-L2293"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableCpuPortAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableCpuPortAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2377-L2386"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableCpuPortAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables CPU port on all the P4 switches.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -762,7 +762,7 @@ any CPU port enabled.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableDebugger">
-<code class="descname">enableDebugger</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2132-L2144"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableDebugger" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableDebugger</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2221-L2233"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableDebugger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables debugger for the P4 switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -780,7 +780,7 @@ any CPU port enabled.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableDebuggerAll">
-<code class="descname">enableDebuggerAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2160-L2167"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableDebuggerAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableDebuggerAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2249-L2256"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableDebuggerAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enable debugger for all the P4 switches.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -790,7 +790,7 @@ any CPU port enabled.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableDhcp">
-<code class="descname">enableDhcp</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1914-L1926"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableDhcp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableDhcp</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2002-L2014"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableDhcp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables DHCP server in hosts.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -806,13 +806,13 @@ any CPU port enabled.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableDhcpAll">
-<code class="descname">enableDhcpAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1942-L1945"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableDhcpAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableDhcpAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2030-L2033"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableDhcpAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables DHCP for all the hosts.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableGwArp">
-<code class="descname">enableGwArp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1041-L1048"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableGwArp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableGwArp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1076-L1083"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableGwArp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables the static ARP entry in hosts
 for the gateway only.</p>
 <div class="admonition note">
@@ -823,7 +823,7 @@ for the gateway only.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableLog">
-<code class="descname">enableLog</code><span class="sig-paren">(</span><em>name</em>, <em>log_dir='./log'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1697-L1707"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableLog" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableLog</code><span class="sig-paren">(</span><em>name</em>, <em>log_dir='./log'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1779-L1789"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableLog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables log for node (also for its task scheduler).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -841,7 +841,7 @@ for the gateway only.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableLogAll">
-<code class="descname">enableLogAll</code><span class="sig-paren">(</span><em>log_dir='./log'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1720-L1728"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableLogAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableLogAll</code><span class="sig-paren">(</span><em>log_dir='./log'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1802-L1810"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableLogAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables log for all the nodes (also for
 their task schedulers).</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -856,7 +856,7 @@ their task schedulers).</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enablePcapDump">
-<code class="descname">enablePcapDump</code><span class="sig-paren">(</span><em>name</em>, <em>pcap_dir='./pcap'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2178-L2191"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enablePcapDump" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enablePcapDump</code><span class="sig-paren">(</span><em>name</em>, <em>pcap_dir='./pcap'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2267-L2280"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enablePcapDump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables generation of <code class="docutils literal"><span class="pre">.pcap</span></code> files for the P4 switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -878,7 +878,7 @@ their task schedulers).</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enablePcapDumpAll">
-<code class="descname">enablePcapDumpAll</code><span class="sig-paren">(</span><em>pcap_dir='./pcap'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2207-L2217"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enablePcapDumpAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enablePcapDumpAll</code><span class="sig-paren">(</span><em>pcap_dir='./pcap'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2296-L2306"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enablePcapDumpAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables generation of <code class="docutils literal"><span class="pre">.pcap</span></code> files for all the P4 switches.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -896,7 +896,7 @@ their task schedulers).</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableScheduler">
-<code class="descname">enableScheduler</code><span class="sig-paren">(</span><em>name</em>, <em>path='/tmp'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1735-L1746"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableScheduler" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableScheduler</code><span class="sig-paren">(</span><em>name</em>, <em>path='/tmp'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1817-L1828"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableScheduler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables the task scheduler server for the node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -915,7 +915,7 @@ socket file will be placed</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.enableSchedulerAll">
-<code class="descname">enableSchedulerAll</code><span class="sig-paren">(</span><em>path='/tmp'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1770-L1778"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableSchedulerAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enableSchedulerAll</code><span class="sig-paren">(</span><em>path='/tmp'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1852-L1860"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.enableSchedulerAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables a task scheduler server for each node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -930,7 +930,7 @@ socket files will be placed</td>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.execScript">
-<code class="descname">execScript</code><span class="sig-paren">(</span><em>cmd</em>, <em>reboot=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L983-L992"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.execScript" title="Permalink to this definition">¶</a></dt>
+<code class="descname">execScript</code><span class="sig-paren">(</span><em>cmd</em>, <em>out_file=None</em>, <em>reboot=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1017-L1027"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.execScript" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes the given command in the main namespace after
 the network boot.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -950,7 +950,7 @@ all the P4 switches are rebooted.</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.getLink">
-<code class="descname">getLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1234-L1252"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.getLink" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1309-L1327"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.getLink" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns link metadata dictionary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -986,7 +986,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.getNode">
-<code class="descname">getNode</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1598-L1607"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.getNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getNode</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1678-L1687"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.getNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets node information.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1004,7 +1004,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.hasCpuPort">
-<code class="descname">hasCpuPort</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2228-L2240"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.hasCpuPort" title="Permalink to this definition">¶</a></dt>
+<code class="descname">hasCpuPort</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2317-L2329"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.hasCpuPort" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the P4 Switch has a CPU port.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1022,7 +1022,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.hasScheduler">
-<code class="descname">hasScheduler</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1759-L1768"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.hasScheduler" title="Permalink to this definition">¶</a></dt>
+<code class="descname">hasScheduler</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1841-L1850"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.hasScheduler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a host has an active scheduler.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1040,7 +1040,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt>
-<code class="descname">hosts</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1899-L1912"><span class="viewcode-link">[source]</span></a></dt>
+<code class="descname">hosts</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1987-L2000"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Returns hosts.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1064,7 +1064,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.isHost">
-<code class="descname">isHost</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1888-L1897"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isHost" title="Permalink to this definition">¶</a></dt>
+<code class="descname">isHost</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1976-L1985"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isHost" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if node is a host.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1082,7 +1082,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.isNode">
-<code class="descname">isNode</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1667-L1676"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">isNode</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1747-L1756"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if node exists.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1100,7 +1100,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.isP4RuntimeSwitch">
-<code class="descname">isP4RuntimeSwitch</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2319-L2328"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isP4RuntimeSwitch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">isP4RuntimeSwitch</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2412-L2421"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isP4RuntimeSwitch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if node is a P4Runtime switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1118,7 +1118,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.isP4Switch">
-<code class="descname">isP4Switch</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2047-L2056"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isP4Switch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">isP4Switch</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2136-L2145"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isP4Switch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the node is a P4 switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1136,7 +1136,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.isRouter">
-<code class="descname">isRouter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2376-L2385"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isRouter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">isRouter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2469-L2478"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isRouter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a node is a router.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1154,7 +1154,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.isSwitch">
-<code class="descname">isSwitch</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1978-L1987"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isSwitch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">isSwitch</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2066-L2075"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.isSwitch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if node is a switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1171,8 +1171,14 @@ link two same nodes (optional)</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.kill_process">
+<code class="descname">kill_process</code><span class="sig-paren">(</span><em>proc_pid</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1142-L1150"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.kill_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kills process and all its childs.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.l2">
-<code class="descname">l2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2403-L2481"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.l2" title="Permalink to this definition">¶</a></dt>
+<code class="descname">l2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2496-L2577"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.l2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automated IP/MAC assignment strategy for already initialized
 links and nodes. All the devices are placed inside the same
 IPv4 network (<code class="docutils literal"><span class="pre">10.0.0.0/16</span></code>).</p>
@@ -1190,7 +1196,7 @@ IPv4 network (<code class="docutils literal"><span class="pre">10.0.0.0/16</span
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.l3">
-<code class="descname">l3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2632-L2775"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.l3" title="Permalink to this definition">¶</a></dt>
+<code class="descname">l3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2737-L2896"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.l3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automated IP/MAC assignment strategy for already initialized
 links and nodes. All the hosts have a different subnetwork that is shared
 with the fake IP address of the switch port they are connected to.</p>
@@ -1208,7 +1214,7 @@ with the fake IP address of the switch port they are connected to.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.links">
-<code class="descname">links</code><span class="sig-paren">(</span><em>sort=False</em>, <em>withKeys=False</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1335-L1346"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.links" title="Permalink to this definition">¶</a></dt>
+<code class="descname">links</code><span class="sig-paren">(</span><em>sort=False</em>, <em>withKeys=False</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1410-L1421"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.links" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns links with no duplicated edges. Every link is listed exactly once.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1233,7 +1239,7 @@ with the fake IP address of the switch port they are connected to.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.mixed">
-<code class="descname">mixed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2483-L2630"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.mixed" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mixed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2579-L2735"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.mixed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automated IP/MAC assignment strategy for already initialized
 links and nodes. All the hosts connected to the same switch are placed
 in the same subnetwork. Different switches (even those linked
@@ -1252,7 +1258,7 @@ together) are placed in different subnetworks.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.nodes">
-<code class="descname">nodes</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1678-L1695"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.nodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">nodes</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1758-L1777"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all the nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1276,7 +1282,7 @@ together) are placed in different subnetworks.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.p4rtswitches">
-<code class="descname">p4rtswitches</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2330-L2343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.p4rtswitches" title="Permalink to this definition">¶</a></dt>
+<code class="descname">p4rtswitches</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2423-L2436"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.p4rtswitches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns P4Runtime switches.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1300,7 +1306,7 @@ together) are placed in different subnetworks.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.p4switches">
-<code class="descname">p4switches</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2058-L2071"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.p4switches" title="Permalink to this definition">¶</a></dt>
+<code class="descname">p4switches</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2147-L2160"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.p4switches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns P4 switches.</p>
 <blockquote>
 <div><dl class="docutils">
@@ -1323,7 +1329,7 @@ withInfo (bool): retrieve node information</dd>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.popLink">
-<code class="descname">popLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1314-L1333"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.popLink" title="Permalink to this definition">¶</a></dt>
+<code class="descname">popLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1389-L1408"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.popLink" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pops link.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1359,7 +1365,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.popNode">
-<code class="descname">popNode</code><span class="sig-paren">(</span><em>name</em>, <em>remove_links=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1653-L1665"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.popNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">popNode</code><span class="sig-paren">(</span><em>name</em>, <em>remove_links=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1733-L1745"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.popNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pops node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1383,13 +1389,13 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.printPortMapping">
-<code class="descname">printPortMapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L973-L981"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.printPortMapping" title="Permalink to this definition">¶</a></dt>
+<code class="descname">printPortMapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1005-L1015"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.printPortMapping" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints the port mapping of all the devices.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.routers">
-<code class="descname">routers</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2387-L2400"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.routers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">routers</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2480-L2493"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.routers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return routers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1413,7 +1419,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setBw">
-<code class="descname">setBw</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>bw</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1348-L1367"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setBw" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setBw</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>bw</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1423-L1442"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setBw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets link bandwidth.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1444,7 +1450,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setBwAll">
-<code class="descname">setBwAll</code><span class="sig-paren">(</span><em>bw</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1522-L1534"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setBwAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setBwAll</code><span class="sig-paren">(</span><em>bw</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1602-L1614"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setBwAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets bandwidth for all the links currently in the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1464,7 +1470,7 @@ not meet this setting.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setCompiler">
-<code class="descname">setCompiler</code><span class="sig-paren">(</span><em>compilerClass=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L917-L933"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setCompiler" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setCompiler</code><span class="sig-paren">(</span><em>compilerClass=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L949-L965"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setCompiler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the default P4 compiler class and options.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1490,7 +1496,7 @@ of them (e.g. one may want to use the default compiler
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setDefaultRoute">
-<code class="descname">setDefaultRoute</code><span class="sig-paren">(</span><em>name</em>, <em>default_route</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1842-L1852"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setDefaultRoute" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setDefaultRoute</code><span class="sig-paren">(</span><em>name</em>, <em>default_route</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1930-L1940"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setDefaultRoute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the node’s default route.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1508,7 +1514,7 @@ of them (e.g. one may want to use the default compiler
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setDelay">
-<code class="descname">setDelay</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>delay</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1369-L1388"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setDelay" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setDelay</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>delay</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1444-L1464"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setDelay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets link delay.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1539,7 +1545,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setDelayAll">
-<code class="descname">setDelayAll</code><span class="sig-paren">(</span><em>delay</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1536-L1548"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setDelayAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setDelayAll</code><span class="sig-paren">(</span><em>delay</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1616-L1628"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setDelayAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets delay for all the links currently in the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1559,7 +1565,7 @@ not meet this setting.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setGrpcPort">
-<code class="descname">setGrpcPort</code><span class="sig-paren">(</span><em>name</em>, <em>port</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2345-L2355"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setGrpcPort" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setGrpcPort</code><span class="sig-paren">(</span><em>name</em>, <em>port</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2438-L2448"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setGrpcPort" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the gRPC port number for the P4Runtime switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1577,7 +1583,7 @@ not meet this setting.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setIntfIp">
-<code class="descname">setIntfIp</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>ip</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1480-L1502"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIntfIp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setIntfIp</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>ip</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1560-L1582"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIntfIp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets IP of <em>node1</em>’s interface facing <em>node2</em> with the specified key.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1608,7 +1614,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setIntfMac">
-<code class="descname">setIntfMac</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>mac</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1504-L1520"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIntfMac" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setIntfMac</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>mac</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1584-L1600"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIntfMac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets MAC of <em>node1</em>’s interface facing <em>node2</em> with the specified key.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1639,7 +1645,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setIntfName">
-<code class="descname">setIntfName</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>intfName</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1438-L1457"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIntfName" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setIntfName</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>intfName</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1515-L1536"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIntfName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets name of <em>node1</em>’s interface facing <em>node2</em> with the specified key.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1670,7 +1676,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setIntfPort">
-<code class="descname">setIntfPort</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>port</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1459-L1478"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIntfPort" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setIntfPort</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>port</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1538-L1558"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIntfPort" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets port number of <em>node1</em>’s interface facing <em>node2</em> with the specified key.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1701,7 +1707,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setIpBase">
-<code class="descname">setIpBase</code><span class="sig-paren">(</span><em>ipBase</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L902-L915"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIpBase" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setIpBase</code><span class="sig-paren">(</span><em>ipBase</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L934-L947"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setIpBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the network in which all the L3 devices will be placed
 if no explicit assignment is performed (e.g. assignment strategies
 or manual assignment).</p>
@@ -1723,7 +1729,7 @@ please use this method before any node is added to the network.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setLogLevel">
-<code class="descname">setLogLevel</code><span class="sig-paren">(</span><em>logLevel</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L884-L900"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setLogLevel" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setLogLevel</code><span class="sig-paren">(</span><em>logLevel</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L916-L932"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setLogLevel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the log level for the execution.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1747,7 +1753,7 @@ decreasing order of detail):</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setLoss">
-<code class="descname">setLoss</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>loss</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1390-L1414"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setLoss" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setLoss</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>loss</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1466-L1490"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setLoss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets link loss.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1779,7 +1785,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setLossAll">
-<code class="descname">setLossAll</code><span class="sig-paren">(</span><em>loss</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1550-L1563"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setLossAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setLossAll</code><span class="sig-paren">(</span><em>loss</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1630-L1643"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setLossAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets loss for all the links currently in the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1800,7 +1806,7 @@ not meet this setting.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setMaxQueueSize">
-<code class="descname">setMaxQueueSize</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>max_queue_size</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1416-L1436"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setMaxQueueSize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setMaxQueueSize</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>max_queue_size</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1492-L1513"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setMaxQueueSize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets link max queue size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1832,7 +1838,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setMaxQueueSizeAll">
-<code class="descname">setMaxQueueSizeAll</code><span class="sig-paren">(</span><em>max_queue_size</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1565-L1578"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setMaxQueueSizeAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setMaxQueueSizeAll</code><span class="sig-paren">(</span><em>max_queue_size</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1645-L1658"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setMaxQueueSizeAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets max queue size for all the links currently in the network.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1853,7 +1859,7 @@ not meet this setting.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setNet">
-<code class="descname">setNet</code><span class="sig-paren">(</span><em>netClass=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L935-L951"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setNet" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setNet</code><span class="sig-paren">(</span><em>netClass=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L967-L983"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setNet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the default network class and options.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1879,7 +1885,7 @@ parameters to it).</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setP4CliInput">
-<code class="descname">setP4CliInput</code><span class="sig-paren">(</span><em>name</em>, <em>cli_input</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2094-L2106"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setP4CliInput" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setP4CliInput</code><span class="sig-paren">(</span><em>name</em>, <em>cli_input</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2183-L2195"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setP4CliInput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the path to the command line configuration file for
 a <em>Thrift</em> capable P4 switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1899,7 +1905,7 @@ file</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setP4Source">
-<code class="descname">setP4Source</code><span class="sig-paren">(</span><em>name</em>, <em>p4_src</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2073-L2083"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setP4Source" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setP4Source</code><span class="sig-paren">(</span><em>name</em>, <em>p4_src</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2162-L2172"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setP4Source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the P4 source for the switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1917,7 +1923,7 @@ file</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setP4SourceAll">
-<code class="descname">setP4SourceAll</code><span class="sig-paren">(</span><em>p4_src</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2085-L2092"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setP4SourceAll" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setP4SourceAll</code><span class="sig-paren">(</span><em>p4_src</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2174-L2181"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setP4SourceAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the same P4 source for all the P4 switches.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1931,7 +1937,7 @@ file</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setP4SwitchId">
-<code class="descname">setP4SwitchId</code><span class="sig-paren">(</span><em>name</em>, <em>id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2108-L2118"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setP4SwitchId" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setP4SwitchId</code><span class="sig-paren">(</span><em>name</em>, <em>id</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2197-L2207"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setP4SwitchId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets P4 Switch ID.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1949,7 +1955,7 @@ file</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setSwitchClient">
-<code class="descname">setSwitchClient</code><span class="sig-paren">(</span><em>swclientClass=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L953-L970"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setSwitchClient" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setSwitchClient</code><span class="sig-paren">(</span><em>swclientClass=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L985-L1002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setSwitchClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the default switch client class and options.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1976,7 +1982,7 @@ some parameters to it).</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setSwitchDpid">
-<code class="descname">setSwitchDpid</code><span class="sig-paren">(</span><em>name</em>, <em>dpid</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2004-L2021"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setSwitchDpid" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setSwitchDpid</code><span class="sig-paren">(</span><em>name</em>, <em>dpid</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2092-L2109"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setSwitchDpid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets Switch DPID.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1999,7 +2005,7 @@ since P4 switches’ DPIDs are determined by their IDs.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setThriftPort">
-<code class="descname">setThriftPort</code><span class="sig-paren">(</span><em>name</em>, <em>port</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2120-L2130"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setThriftPort" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setThriftPort</code><span class="sig-paren">(</span><em>name</em>, <em>port</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2209-L2219"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setThriftPort" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the <em>Thrift</em> port number for the P4 switch.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2017,7 +2023,7 @@ since P4 switches’ DPIDs are determined by their IDs.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.setTopologyFile">
-<code class="descname">setTopologyFile</code><span class="sig-paren">(</span><em>topoFile</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1002-L1012"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setTopologyFile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setTopologyFile</code><span class="sig-paren">(</span><em>topoFile</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1037-L1047"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.setTopologyFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the file where the topology will be saved for subsequent
 queries in the exercises.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -2036,13 +2042,25 @@ queries in the exercises.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.startNetwork">
-<code class="descname">startNetwork</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1056-L1107"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.startNetwork" title="Permalink to this definition">¶</a></dt>
+<code class="descname">startNetwork</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1091-L1140"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.startNetwork" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts and configures the network.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.stopNetwork">
+<code class="descname">stopNetwork</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1157-L1163"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.stopNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the network.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.network_API.NetworkAPI.stop_exec_scripts">
+<code class="descname">stop_exec_scripts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1152-L1155"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.stop_exec_scripts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops all exec scripts.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.switches">
-<code class="descname">switches</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1989-L2002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.switches" title="Permalink to this definition">¶</a></dt>
+<code class="descname">switches</code><span class="sig-paren">(</span><em>sort=True</em>, <em>withInfo=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L2077-L2090"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.switches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns switches.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2066,7 +2084,7 @@ queries in the exercises.</p>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.updateLink">
-<code class="descname">updateLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>key=None</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1254-L1290"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.updateLink" title="Permalink to this definition">¶</a></dt>
+<code class="descname">updateLink</code><span class="sig-paren">(</span><em>node1</em>, <em>node2</em>, <em>key=None</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1329-L1365"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.updateLink" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates link metadata dictionary. In fact, delete the node
 and create a new one with the updated information.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -2098,7 +2116,7 @@ link two same nodes (optional)</li>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.network_API.NetworkAPI.updateNode">
-<code class="descname">updateNode</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1609-L1635"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.updateNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">updateNode</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/network_API.py#L1689-L1715"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.network_API.NetworkAPI.updateNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates node metadata dictionary. In fact, it deletes the node
 and creates a new one with the updated information.</p>
 <table class="docutils field-list" frame="void" rules="none">
