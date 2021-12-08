@@ -6,6 +6,7 @@ import queue
 import pickle
 import socket
 import signal
+import shlex
 import shutil as sh
 import threading as th
 import subprocess as sp
@@ -36,6 +37,7 @@ class Task:
         args (tuple or list)   : positional arguments for the passed function
         kwargs (dict)          : key-word arguments for the passed function
     """
+
     def __init__(self, exe, start=0, duration=0, args=(), kwargs={}):
         # Sanity checks
         if isinstance(exe, str):
@@ -47,11 +49,13 @@ class Task:
             # exe is a WrapFunc object
             self.exe = WrapFunc(exe)
         else:
-            raise TypeError('cannot execute an object of type {}!'.format(type(exe)))
+            raise TypeError(
+                'cannot execute an object of type {}!'.format(type(exe)))
 
         assert isinstance(exe, str) or isinstance(exe, types.FunctionType)
         assert isinstance(start, int) or isinstance(start, float)
-        assert (isinstance(duration, int) or isinstance(duration, float)) and duration >= 0
+        assert (isinstance(duration, int) or isinstance(
+            duration, float)) and duration >= 0
 
         # Other task parameters
         self.startTime = start
@@ -70,14 +74,14 @@ class Task:
     def __repr__(self):
         return 'Task({}, {})'.format(self.exe,
                                      {'start': self.startTime,
-                                     'duration': self.duration,
-                                     'args': self.args,
-                                     'kwargs': self.kwargs})
+                                      'duration': self.duration,
+                                      'args': self.args,
+                                      'kwargs': self.kwargs})
 
     @property
     def pid(self):
         """Returns the PID of the task.
-        
+
         Returns:
             int: PID of the running task.
 
@@ -92,7 +96,7 @@ class Task:
     @property
     def exitcode(self):
         """Returns the exit code of the task.
-        
+
         Returns:
             int: exit code of the task.
 
@@ -110,7 +114,7 @@ class Task:
     def setComm(self, q):
         """Set communication queue for the Task. The task
         will communicate its state putting items in the queue.
-        
+
         Args:
             id (int)            : task id used to communicate
             q (queue.Queue)     : communication queue
@@ -150,8 +154,11 @@ class Task:
         else:
             self._stop_sp()
         # Log
-        self._send_msg('\n{}: task with PID {} stopped!\n'.format(time.ctime(), self.pid))
-    
+        self._send_msg(
+            '\n{}: task with PID {} stopped!\n'.format(
+                time.ctime(),
+                self.pid))
+
     def join(self, timeout=None):
         """Joins the subprocess."""
         if self.type == ProcessType.MULTIPROC:
@@ -161,7 +168,7 @@ class Task:
 
     def is_alive(self):
         """Returns whether the process is alive.
-        
+
         Returns:
             bool: **True** if the process is alive, **False** otherwise.
         """
@@ -176,7 +183,7 @@ class Task:
     def _send_msg(self, msg, quiet=True):
         """Enqueues a message in self.queue. In order to work,
         :py:meth:`Task.setComm()` must have been called previously.
-        
+
         Args:
             msg (str)   : message to send to the logger
             quiet (bool): do not raise exception if :py:meth:`Task.setComm()`
@@ -190,18 +197,21 @@ class Task:
 
     def _schedule(self, cond=None):
         """Starts the execution of the task and stops it if duration expires.
-        
+
         Args:
             cond (threading.Condition): condition to notify when this function
                                         is completed
         """
         # Print a warning if sleep time is negatative.
         if time.time() > self.startTime:
-            # log it also 
-            self._send_msg("Schedule time wait: {}".format(self.startTime - time.time()))            
-            self._send_msg("Warning: Invalid start time in the past. This event won't be scheduled. Consider rerunning the experiment with more time margin")
+            # log it also
+            self._send_msg("Schedule time wait: {}".format(
+                self.startTime - time.time()))
+            self._send_msg(
+                "Warning: Invalid start time in the past. This event won't be scheduled. Consider rerunning the experiment with more time margin")
         else:
-            self._send_msg("Schedule time wait: {}".format(self.startTime - time.time()))
+            self._send_msg("Schedule time wait: {}".format(
+                self.startTime - time.time()))
 
         # Wait for starting time
         time.sleep(max(0, self.startTime - time.time()))
@@ -221,9 +231,10 @@ class Task:
                 # Notify
                 cond.notify()
         # Log
-        self._send_msg('\n{}: task with PID {} exited with code {}.\n'.format(time.ctime(), 
-                                                                              self.pid,
-                                                                              self.exitcode))
+        self._send_msg(
+            '\n{}: task with PID {} exited with code {}.\n'.format(
+                time.ctime(),
+                self.pid, self.exitcode))
 
     def _start_mp(self):
         """Starts multiprocess."""
@@ -249,7 +260,7 @@ class Task:
                 pass
             # Join process
             self.proc.join()
-    
+
     def _join_mp(self, timeout=None):
         """Joins multiprocess."""
         self.proc.join(timeout)
@@ -260,7 +271,7 @@ class Task:
 
     def _start_sp(self):
         """Starts subprocess."""
-        self.proc = sp.Popen(self.exe.split(),
+        self.proc = sp.Popen(shlex.split(self.exe),
                              stdout=sp.DEVNULL,
                              stderr=sp.DEVNULL)
 
@@ -291,10 +302,11 @@ class Task:
 
 class TaskClient:
     """Task scheduler client which communicates with servers.
-    
+
     Args:
         unix_socket_file (str): path to the file used by the Unix socket
     """
+
     def __init__(self, unix_socket_file):
         # Sanity check
         assert isinstance(unix_socket_file, str)
@@ -330,7 +342,7 @@ class TaskClient:
         # Send data
         s.sendall(bin_data)
         # Close socket
-        s.close()        
+        s.close()
 
 
 class TaskServer:
@@ -372,7 +384,7 @@ class TaskServer:
 
         # List of scheduled tasks
         self.sched_tasks = []
-        # Scheduling completed 
+        # Scheduling completed
         self.sched_completed_cond = th.Condition()
 
         # Start server
@@ -380,9 +392,12 @@ class TaskServer:
 
     def _start(self):
         """Starts TaskServer."""
-        self.server_join_loop = th.Thread(target=self._server_join_loop, daemon=True)
-        self.server_start_loop = th.Thread(target=self._server_start_loop, daemon=True)
-        self.scheduler_join_loop = th.Thread(target=self._scheduler_join_loop, daemon=True)
+        self.server_join_loop = th.Thread(
+            target=self._server_join_loop, daemon=True)
+        self.server_start_loop = th.Thread(
+            target=self._server_start_loop, daemon=True)
+        self.scheduler_join_loop = th.Thread(
+            target=self._scheduler_join_loop, daemon=True)
         self.server_join_loop.start()
         self.scheduler_join_loop.start()
         self.server_start_loop.start()
@@ -408,7 +423,10 @@ class TaskServer:
             with self.conn_close_cond:
                 self.conn_threads.append(thread)
             # Log
-            self.logs.put('\n{}: new connection ({}) opened!\n'.format(time.ctime(), thread.ident))
+            self.logs.put(
+                '\n{}: new connection ({}) opened!\n'.format(
+                    time.ctime(),
+                    thread.ident))
 
     def _server_join_loop(self):
         """Joins completed threads."""
@@ -427,7 +445,10 @@ class TaskServer:
                         # Add to the list of completed threads
                         completed_threads.append(thread)
                         # Log
-                        self.logs.put('\n{}: connection {} closed!\n'.format(time.ctime(), thread.ident))
+                        self.logs.put(
+                            '\n{}: connection {} closed!\n'.format(
+                                time.ctime(),
+                                thread.ident))
                 # Iterate over completed threads
                 for thread in completed_threads:
                     # Remove joined thread
@@ -471,21 +492,24 @@ class TaskServer:
                         with self.sched_completed_cond:
                             self.sched_tasks.append(task)
                         # Log
-                        self.logs.put('\n{}: task received!\n'
-                                      '{}\n'
-                                      'Scheduler {} started!\n'.format(time.ctime(),
-                                                                       task,
-                                                                       task.thread.ident))
+                        self.logs.put(
+                            '\n{}: task received!\n'
+                            '{}\n'
+                            'Scheduler {} started!\n'.format(
+                                time.ctime(),
+                                task, task.thread.ident))
                     else:
                         # Log
-                        self.logs.put('\n{}: malformed task received!\n'.format(time.ctime()))
+                        self.logs.put(
+                            '\n{}: malformed task received!\n'.format(
+                                time.ctime()))
             else:
                 self.logs.put('\n{}: malformed data received!\n')
         finally:
             with self.conn_close_cond:
                 # Notify that the connection closed
                 self.conn_close_cond.notify()
-            
+
     def _scheduler_join_loop(self):
         """Joins completed scheduling threads."""
         with self.sched_completed_cond:
@@ -503,7 +527,10 @@ class TaskServer:
                         # Add to the list of completed threads
                         completed_tasks.append(task)
                         # Log
-                        self.logs.put('\n{}: scheduler {} closed!\n'.format(time.ctime(), task.thread.ident))
+                        self.logs.put(
+                            '\n{}: scheduler {} closed!\n'.format(
+                                time.ctime(),
+                                task.thread.ident))
                 # Iterate over completed threads
                 for task in completed_tasks:
                     # Remove joined thread
