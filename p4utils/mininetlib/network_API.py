@@ -1159,12 +1159,12 @@ class NetworkAPI(Topo):
         # Stop right after the CLI is exited
         info('Stopping network...\n')
         self.stop_exec_scripts()
-        self.net.stop()
+        if self.net:
+            self.net.stop()
         output('Network stopped!\n')
 
 
 # Links
-
 
     def addLink(self, node1, node2, port1=None, port2=None,
                 key=None, **opts):
