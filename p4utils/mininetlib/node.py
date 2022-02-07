@@ -51,9 +51,11 @@ class P4Host(Host):
             # and, if necessary, create an empty log dir
             if not os.path.isdir(self.log_dir):
                 if os.path.exists(self.log_dir):
-                    raise NotADirectoryError("'{}' exists and is not a directory.".format(self.log_dir))
+                    raise NotADirectoryError(
+                        "'{}' exists and is not a directory.".format(
+                            self.log_dir))
                 else:
-                    os.mkdir(self.log_dir)     
+                    os.mkdir(self.log_dir)
 
     def config(self, **params):
         """Configure host."""
@@ -61,7 +63,8 @@ class P4Host(Host):
         r = super().config(**params)
 
         for off in ['rx', 'tx', 'sg']:
-            cmd = '/sbin/ethtool --offload {} {} off'.format(self.defaultIntf().name, off)
+            cmd = '/sbin/ethtool --offload {} {} off'.format(
+                self.defaultIntf().name, off)
             self.cmd(cmd)
 
         # disable IPv6
@@ -80,7 +83,7 @@ class P4Host(Host):
                self.defaultIntf().name,
                self.defaultIntf().IP(),
                self.defaultIntf().MAC()
-        ))
+               ))
         if sw_addr is not None or sw_mac is not None:
             output('Default route to switch: {} ({})\n'.format(sw_addr, sw_mac))
         output('**********\n')
@@ -91,7 +94,7 @@ class P4Switch(Switch):
 
     def __init__(self, name,
                  device_id,
-                 sw_bin='simple_switch',  
+                 sw_bin='simple_switch',
                  json_path=None,
                  thrift_port=None,
                  pcap_dump=False,
@@ -107,11 +110,11 @@ class P4Switch(Switch):
             raise TypeError('device_id is not an integer.')
 
         kwargs.update(dpid=dpidToStr(self.device_id))
-        
+
         super().__init__(name, **kwargs)
 
         self.set_binary(sw_bin)
-        self.set_json(json_path)        
+        self.set_json(json_path)
         self.pcap_dir = pcap_dir
         self.pcap_dump = pcap_dump
         self.enable_debugger = enable_debugger
@@ -126,7 +129,9 @@ class P4Switch(Switch):
             # and, if necessary, create an empty log dir
             if not os.path.isdir(self.log_dir):
                 if os.path.exists(self.log_dir):
-                    raise NotADirectoryError("'{}' exists and is not a directory.".format(self.log_dir))
+                    raise NotADirectoryError(
+                        "'{}' exists and is not a directory.".format(
+                            self.log_dir))
                 else:
                     os.mkdir(self.log_dir)
 
@@ -135,12 +140,16 @@ class P4Switch(Switch):
             # and, if necessary, create an empty pcap dir
             if not os.path.isdir(self.pcap_dir):
                 if os.path.exists(self.pcap_dir):
-                    raise NotADirectoryError("'{}' exists and is not a directory.".format(self.pcap_dir))
+                    raise NotADirectoryError(
+                        "'{}' exists and is not a directory.".format(
+                            self.pcap_dir))
                 else:
                     os.mkdir(self.pcap_dir)
 
         if self.thrift_listening():
-            raise ConnectionRefusedError('{} cannot bind port {} because it is bound by another process.'.format(self.name, self.thrift_port))
+            raise ConnectionRefusedError(
+                '{} cannot bind port {} because it is bound by another process.'.
+                format(self.name, self.thrift_port))
 
     def set_binary(self, sw_bin):
         """Sets switch default binary"""
@@ -203,21 +212,28 @@ class P4Switch(Switch):
         self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
             if self.log_enabled:
-                self.cmd(cmd + ' > ' + self.log_dir + '/p4s.{}.log'.format(self.name) + ' 2>&1 & echo $! >> ' + f.name)
+                self.cmd(cmd + ' > ' + self.log_dir + '/p4s.{}.log'.format(
+                    self.name) + ' 2>&1 & echo $! >> ' + f.name)
             else:
                 self.cmd(cmd + '> /dev/null 2>&1 & echo $! >> ' + f.name)
             self.simple_switch_pid = int(f.read())
-        debug('P4 switch {} PID is {}.\n'.format(self.name, self.simple_switch_pid))
-        if not wait_condition(self.switch_status, True, timeout=SWITCH_START_TIMEOUT):
-            raise ChildProcessError('P4 switch {} did not start correctly. Check the switch log file.'.format(self.name))
+        debug('P4 switch {} PID is {}.\n'.format(
+            self.name, self.simple_switch_pid))
+        if not wait_condition(self.switch_status, True,
+                              timeout=SWITCH_START_TIMEOUT):
+            raise ChildProcessError(
+                'P4 switch {} did not start correctly. Check the switch log file.'.format(self.name))
         info('P4 switch {} has been started.\n'.format(self.name))
 
     def stop_p4switch(self):
         """Stops the simple switch binary without deleting the interfaces."""
         info('Stopping P4 switch {}.\n'.format(self.name))
         os.kill(self.simple_switch_pid, signal.SIGKILL)
-        if not wait_condition(self.switch_started, False, timeout=SWITCH_STOP_TIMEOUT):
-            raise ChildProcessError('P4 switch {} did not stop after requesting it.'.format(self.name))
+        if not wait_condition(self.switch_started, False,
+                              timeout=SWITCH_STOP_TIMEOUT):
+            raise ChildProcessError(
+                'P4 switch {} did not stop after requesting it.'.format(
+                    self.name))
 
     def stop(self, deleteIntfs=True):
         """Terminates the P4 switch node."""
@@ -247,7 +263,9 @@ class P4RuntimeSwitch(P4Switch):
 
         self.grpc_port = grpc_port
         if self.grpc_listening():
-            raise ConnectionRefusedError('{} cannot bind port {} because it is bound by another process.'.format(self.name, self.grpc_port))
+            raise ConnectionRefusedError(
+                '{} cannot bind port {} because it is bound by another process.'.
+                format(self.name, self.grpc_port))
 
         super().__init__(*args, sw_bin=sw_bin, **kwargs)
 
@@ -271,9 +289,10 @@ class P4RuntimeSwitch(P4Switch):
         super().describe()
         output('{} -> gRPC port: {}\n'.format(self.name, self.grpc_port))
 
+
 class FRRouter(Node):
     """FRRouter built as Mininet node.
-    
+
     Args:
         name (str)    : name of the router
         bin_dir (str) : directory that contains the daemons binaries
@@ -301,7 +320,7 @@ class FRRouter(Node):
 
     Warning:
         Only the following daemons and protocols are enabled by default:
-        
+
         - ``zebra``
         - ``ospfd``
         - ``bgpd``
@@ -350,7 +369,9 @@ class FRRouter(Node):
         # if not, create a new one
         if not os.path.isdir(self.conf_dir):
             if os.path.exists(self.conf_dir):
-                raise NotADirectoryError("'{}' exists and is not a directory.".format(self.conf_dir))
+                raise NotADirectoryError(
+                    "'{}' exists and is not a directory.".format(
+                        self.conf_dir))
             else:
                 os.mkdir(self.conf_dir)
 
@@ -358,9 +379,12 @@ class FRRouter(Node):
             # Make sure that the provided ffr conf is pointing to a file
             if not os.path.isfile(self.int_conf):
                 if os.path.exists(self.int_conf):
-                    raise IsADirectoryError("'{}' exists and is a directory.".format(self.int_conf))
+                    raise IsADirectoryError(
+                        "'{}' exists and is a directory.".format(
+                            self.int_conf))
                 else:
-                    raise FileNotFoundError("'{}' does not exist.".format(self.int_conf))  
+                    raise FileNotFoundError(
+                        "'{}' does not exist.".format(self.int_conf))
 
         # Default daemons
         kwargs.setdefault('zebra', True)
@@ -392,7 +416,9 @@ class FRRouter(Node):
 
         # Check binaries
         if not os.path.isfile(self.bin_dir + '/' + 'zebra'):
-            raise FileNotFoundError('binary path {} does not contain daemons!'.format(self.bin_dir))
+            raise FileNotFoundError(
+                'binary path {} does not contain daemons!'.format(
+                    self.bin_dir))
 
         if len(self.daemons.keys()) == 0:
             warning('Nothing to start in router {}\n'.format(self.name))
@@ -401,34 +427,27 @@ class FRRouter(Node):
         if self.int_conf is not None:
             for daemon in self.daemons.keys():
                 if daemon == 'zebra':
-                    self.start_daemon(daemon, '-d',
-                                      u='root',
-                                      g='root',
-                                      N=self.name,
-                                      M='fpm',
-                                      i='/tmp/{}-{}.pid'.format(self.name, daemon),
-                                      log='file:/tmp/{}-{}.log'.format(self.name, daemon))
+                    self.start_daemon(
+                        daemon, '-d', u='root', g='root', N=self.name, M='fpm',
+                        i='/tmp/{}-{}.pid'.format(self.name, daemon),
+                        log='file:/tmp/{}-{}.log'.format(self.name, daemon))
                 else:
-                    self.start_daemon(daemon, '-d',
-                                      u='root',
-                                      g='root',
-                                      N=self.name,
-                                      i='/tmp/{}-{}.pid'.format(self.name, daemon),
-                                      log='file:/tmp/{}-{}.log'.format(self.name, daemon))
+                    self.start_daemon(
+                        daemon, '-d', u='root', g='root', N=self.name,
+                        i='/tmp/{}-{}.pid'.format(self.name, daemon),
+                        log='file:/tmp/{}-{}.log'.format(self.name, daemon))
             # Integrated configuration
             self.cmd('vtysh -N "{}" -f "{}"'.format(self.name, self.int_conf))
         # Per daemon configuration
         else:
             for daemon in self.daemons.keys():
                 if daemon == 'zebra':
-                    self.start_daemon(daemon, '-d',
-                                      f=os.path.join(self.conf_dir, self.name, daemon)+'.conf',
-                                      u='root',
-                                      g='root',
-                                      N=self.name,
-                                      M='fpm',
-                                      i='/tmp/{}-{}.pid'.format(self.name, daemon),
-                                      log='file:/tmp/{}-{}.log'.format(self.name, daemon))
+                    self.start_daemon(
+                        daemon, '-d', f=os.path.join(
+                            self.conf_dir, self.name, daemon) + '.conf',
+                        u='root', g='root', N=self.name, M='fpm',
+                        i='/tmp/{}-{}.pid'.format(self.name, daemon),
+                        log='file:/tmp/{}-{}.log'.format(self.name, daemon))
                 else:
                     self.start_daemon(daemon, '-d',
                                       f=os.path.join(self.conf_dir, self.name, daemon)+'.conf',
@@ -444,9 +463,11 @@ class FRRouter(Node):
             # Kill daemon
             os.kill(value['pid'], signal.SIGKILL)
             # Remove pid, out and log files
-            os.system('rm -f "/tmp/{name}-{daemon}.pid" '
-                      '"/tmp/{name}-{daemon}.out" '
-                      '"/tmp/{name}-{daemon}.log"'.format(name=self.name, daemon=daemon))
+            os.system(
+                'rm -f "/tmp/{name}-{daemon}.pid" '
+                '"/tmp/{name}-{daemon}.out" '
+                '"/tmp/{name}-{daemon}.log"'.format(
+                    name=self.name, daemon=daemon))
         # Remove socket directory
         os.system('rm -rf /var/run/{}'.format(self.name))
         super().stop()

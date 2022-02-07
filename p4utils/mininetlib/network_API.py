@@ -1166,6 +1166,7 @@ class NetworkAPI(Topo):
 
 # Links
 
+
     def addLink(self, node1, node2, port1=None, port2=None,
                 key=None, **opts):
         """Adds link between two nodes.
