@@ -39,7 +39,7 @@ setup(
         'ipaddress',
         'networkx',
         'p4runtime',
-        'protobuf >= 3.6.1',
+        'protobuf >= 3.15.1',
         'psutil',
         'scapy == 2.4.4',
         'setuptools',
