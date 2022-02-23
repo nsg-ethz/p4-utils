@@ -19,6 +19,7 @@ This module is an extension of `mininet.node`__ with customized nodes.
 """
 
 import os
+import json
 import signal
 import tempfile
 from psutil import pid_exists
@@ -58,7 +59,7 @@ class P4Host(Host):
                     os.mkdir(self.log_dir)
 
     def config(self, **params):
-        """Configure host."""
+        """Configures host."""
 
         r = super().config(**params)
 
@@ -75,7 +76,7 @@ class P4Host(Host):
         return r
 
     def describe(self, sw_addr=None, sw_mac=None):
-        """Describe host."""
+        """Describes host."""
 
         output('**********\n')
         output('Network configuration for: {}\n'.format(self.name))
@@ -90,7 +91,20 @@ class P4Host(Host):
 
 
 class P4Switch(Switch):
-    """P4 virtual switch"""
+    """P4 virtual switch.
+
+    Args:
+        name (str)            : name of the switch
+        device_id (int)       : switch unique id
+        sw_bin (str)          : switch binary to execute
+        json_path (str)       : path to the P4 compiled JSON configuration
+        thrift_port (int)     : *Thrift* server's port
+        pcap_dump (bool)      : whether to save ``.pcap`` logs to disk
+        pcap_dir (str)        : ``.pcap`` files path
+        log_enabled (bool)    : whether to save logs to disk
+        log_dir (srt)         : log path
+        enable_debugger (bool): whether to enable debugger
+    """
 
     def __init__(self, name,
                  device_id,
@@ -122,7 +136,7 @@ class P4Switch(Switch):
         self.log_dir = log_dir
         self.thrift_port = thrift_port
         self.nanomsg = 'ipc:///tmp/bm-{}-log.ipc'.format(self.device_id)
-        self.simple_switch_pid = None
+        self.switch_pid = None
 
         if self.log_enabled:
             # Make sure that the provided log path is not pointing to a file
@@ -165,9 +179,12 @@ class P4Switch(Switch):
         else:
             self.json_path = json_path
 
-    def switch_started(self):
-        """Checks if the switch process has started."""
-        return pid_exists(self.simple_switch_pid)
+    def switch_running(self):
+        """Checks if the switch process is running."""
+        if self.switch_pid is not None:
+            return pid_exists(self.switch_pid)
+        else:
+            return False
 
     def thrift_listening(self):
         """Checks if a thrift process listens on the thrift port."""
@@ -175,7 +192,7 @@ class P4Switch(Switch):
 
     def switch_status(self):
         """Checks if all the switch processes have started correctly."""
-        return self.switch_started() and self.thrift_listening()
+        return self.switch_running() and self.thrift_listening()
 
     def add_arguments(self):
         """Adds arguments to the simple switch process"""
@@ -209,44 +226,34 @@ class P4Switch(Switch):
         cmd = ' '.join(self.add_arguments())
         info(cmd + "\n")
 
-        self.simple_switch_pid = None
         with tempfile.NamedTemporaryFile() as f:
             if self.log_enabled:
                 self.cmd(cmd + ' > ' + self.log_dir + '/p4s.{}.log'.format(
                     self.name) + ' 2>&1 & echo $! >> ' + f.name)
             else:
                 self.cmd(cmd + '> /dev/null 2>&1 & echo $! >> ' + f.name)
-            self.simple_switch_pid = int(f.read())
-        debug('P4 switch {} PID is {}.\n'.format(
-            self.name, self.simple_switch_pid))
+            self.switch_pid = int(f.read())
+
+        debug('P4 switch {} PID is {}.\n'.format(self.name, self.switch_pid))
         if not wait_condition(self.switch_status, True,
                               timeout=SWITCH_START_TIMEOUT):
             raise ChildProcessError(
                 'P4 switch {} did not start correctly. Check the switch log file.'.format(self.name))
         info('P4 switch {} has been started.\n'.format(self.name))
 
-    def stop_p4switch(self):
-        """Stops the simple switch binary without deleting the interfaces."""
-        info('Stopping P4 switch {}.\n'.format(self.name))
-        os.kill(self.simple_switch_pid, signal.SIGKILL)
-        if not wait_condition(self.switch_started, False,
-                              timeout=SWITCH_STOP_TIMEOUT):
-            raise ChildProcessError(
-                'P4 switch {} did not stop after requesting it.'.format(
-                    self.name))
-
     def stop(self, deleteIntfs=True):
-        """Terminates the P4 switch node."""
-        os.kill(self.simple_switch_pid, signal.SIGKILL)
+        """Stops the P4 switch."""
+        if not deleteIntfs:
+            info('Stopping P4 switch {}.\n'.format(self.name))
+        if self.switch_running():
+            os.kill(self.switch_pid, signal.SIGKILL)
+            if not wait_condition(self.switch_running, False,
+                                  timeout=SWITCH_STOP_TIMEOUT):
+                raise ChildProcessError(
+                    'P4 switch {} did not stop after requesting it.'.format(
+                        self.name))
+            self.switch_pid = None
         super().stop(deleteIntfs)
-
-    def attach(self, intf):
-        """Connects a data port."""
-        assert 0
-
-    def detach(self, intf):
-        """"Disconnects a data port."""
-        assert 0
 
     def describe(self):
         """Describes P4Switch."""
@@ -254,7 +261,21 @@ class P4Switch(Switch):
 
 
 class P4RuntimeSwitch(P4Switch):
-    """BMv2 switch with gRPC support"""
+    """BMv2 switch with gRPC support.
+
+    Args:
+        name (str)            : name of the switch
+        device_id (int)       : switch unique id
+        sw_bin (str)          : switch binary to execute
+        json_path (str)       : path to the P4 compiled JSON configuration
+        thrift_port (int)     : *Thrift* server's port
+        grpc_port (int)       : *P4Runtime* gRPC server's port
+        pcap_dump (bool)      : whether to save ``.pcap`` logs to disk
+        pcap_dir (str)        : ``.pcap`` files path
+        log_enabled (bool)    : whether to save logs to disk
+        log_dir (srt)         : log path
+        enable_debugger (bool): whether to enable debugger
+    """
 
     def __init__(self, *args,
                  sw_bin='simple_switch_grpc',
@@ -457,8 +478,8 @@ class FRRouter(Node):
                                       i='/tmp/{}-{}.pid'.format(self.name, daemon),
                                       log='file:/tmp/{}-{}.log'.format(self.name, daemon))
 
-    def stop(self):
-        """Terminates FRRouter."""
+    def stop(self, deleteIntfs=False):
+        """Stops FRRouter."""
         for daemon, value in self.daemons.items():
             # Kill daemon
             os.kill(value['pid'], signal.SIGKILL)
@@ -470,7 +491,7 @@ class FRRouter(Node):
                     name=self.name, daemon=daemon))
         # Remove socket directory
         os.system('rm -rf /var/run/{}'.format(self.name))
-        super().stop()
+        super().stop(deleteIntfs)
 
     def start_daemon(self, daemon, *args, **kwargs):
         """Starts a daemon on the router."""
@@ -504,3 +525,200 @@ class FRRouter(Node):
         # Retrieve PID
         with open(pid_file, 'r') as f:
             self.daemons[daemon].update(pid=int(f.read()))
+
+
+class Tofino(Switch):
+    """Tofino-model switch.
+
+    Args:
+        name (str)            : name of the switch
+        device_id (int)       : switch unique id
+        p4_src (str)          : P4 source
+        sde (str)             : Tofino SDE path (``$SDE``)
+        sde_install (str)     : Tofino SDE install path (``$SDE_INSTALL``)
+        cli_port (int)        : switch client port
+        dr_port_base (int)    : port base for driver connection
+        log_dir (srt)         : log path
+    """
+
+    def __init__(self, name,
+                 device_id,
+                 p4_src,
+                 sde,
+                 sde_install,
+                 cli_port=8000,
+                 dr_port_base=8001,  # It uses ports from dr_port_base to dr_port_base+3
+                 log_dir='/tmp',
+                 **kwargs):
+
+        if isinstance(device_id, int):
+            self.device_id = device_id
+        else:
+            raise TypeError('device_id is not an integer.')
+
+        kwargs.update(dpid=dpidToStr(self.device_id),
+                      inNamespace=True)
+
+        super().__init__(name, **kwargs)
+
+        if not self.inNamespace:
+            raise Exception('tofino-model cannot run in main namespace.')
+
+        self.p4_name, _ = os.path.splitext(os.path.basename(p4_src))
+        self.sde = os.path.realpath(sde)
+        self.sde_install = os.path.realpath(sde_install)
+        self.cli_port = cli_port
+        self.dr_port_base = dr_port_base
+        self.log_dir = os.path.realpath(log_dir)
+        self.ports_file = '/tmp/ports_{}.json'.format(self.name)
+
+        self.switch_pid = None
+        self.driver_pid = None
+
+        # Make sure that the provided log path is not pointing to a file
+        # and, if necessary, create an empty log dir
+        if not os.path.isdir(self.log_dir):
+            if os.path.exists(self.log_dir):
+                raise NotADirectoryError(
+                    "'{}' exists and is not a directory.".format(
+                        self.log_dir))
+            else:
+                os.mkdir(self.log_dir)
+
+        if not os.path.isdir(os.path.join(self.log_dir, self.name)):
+            if os.path.exists(os.path.join(self.log_dir, self.name)):
+                raise NotADirectoryError(
+                    "'{}' exists and is not a directory.".format(
+                        os.path.join(self.log_dir, self.name)))
+            else:
+                os.mkdir(os.path.join(self.log_dir, self.name))
+
+    def switch_running(self):
+        """Checks if the switch processes have started."""
+        return self.bin_running() and self.driver_running()
+
+    def driver_running(self):
+        """Checks if the switch driver process has started."""
+        if self.driver_pid is not None:
+            return pid_exists(self.driver_pid)
+        else:
+            return False
+
+    def bin_running(self):
+        """Checks if the switch binary process has started."""
+        if self.switch_pid is not None:
+            return pid_exists(self.switch_pid)
+        else:
+            return False
+
+    def add_ports(self):
+        """Adds ports to the switch ports configuration file."""
+        # Configure switch ports
+        ports_conf = {
+            'PortToIf': []
+        }
+        for port, intf in list(self.intfs.items()):
+            if not intf.IP():
+                ports_conf['PortToIf'].append({
+                    'device_port': port,
+                    'if': intf.name
+                })
+        with open(self.ports_file, 'w') as f:
+            json.dump(ports_conf, f)
+
+    def add_tofino_args(self):
+        """Adds arguments for tofino-model."""
+        args = [os.path.join(self.sde, 'run_tofino_model.sh')]
+        # run_tofino_model.sh params
+        args.append('-p {}'.format(self.p4_name))
+        args.append('-f {}'.format(self.ports_file))
+        args.append('--')
+        # tofino-model params
+        args.append('--cli-port {}'.format(self.cli_port))
+        args.append('-t {}'.format(self.dr_port_base))
+        return args
+
+    def add_driver_args(self):
+        """Adds arguments for bf_switchd."""
+        args = [os.path.join(self.sde, 'run_switchd.sh')]
+        # run_switchd.sh params
+        args.append('-p {}'.format(self.p4_name))
+        # bf_switchd params
+        args.append('--')
+        args.append('--background')
+        args.append('--tcp-port-base {}'.format(self.dr_port_base))
+        return args
+
+    def start(self, controllers=None):
+        """Starts a new P4 switch."""
+        info('Starting P4 switch {}.\n'.format(self.name))
+
+        # Set environmental variables
+        self.cmd('export SDE={}'.format(self.sde))
+        self.cmd('export SDE_INSTALL={}'.format(self.sde_install))
+
+        # Change directory
+        self.cmd('cd {}'.format(os.path.join(self.log_dir, self.name)))
+
+        # Add ports to switch
+        self.add_ports()
+
+        # Start tofino-model
+        cmd = ' '.join(self.add_tofino_args())
+        info(cmd + "\n")
+
+        with tempfile.NamedTemporaryFile() as f:
+            self.cmd(cmd + ' > tofino.log 2>&1 & echo $! >> ' + f.name)
+            self.switch_pid = int(f.read())
+
+        debug('P4 switch {} PID is {}.\n'.format(self.name, self.switch_pid))
+        if not wait_condition(self.bin_running, True,
+                              timeout=SWITCH_START_TIMEOUT):
+            raise ChildProcessError(
+                'Tofino switch {} did not start correctly. Check the switch log file.'.format(self.name))
+
+        # Start switch driver
+        cmd = ' '.join(self.add_driver_args())
+        info(cmd + "\n")
+
+        with tempfile.NamedTemporaryFile() as f:
+            self.cmd(cmd + ' > driver.log 2>&1 & echo $! >> ' + f.name)
+            self.driver_pid = int(f.read())
+
+        debug('P4 switch {} driver PID is {}.\n'.format(
+            self.name, self.driver_pid))
+        if not wait_condition(self.driver_running, True,
+                              timeout=SWITCH_START_TIMEOUT):
+            raise ChildProcessError(
+                'Tofino switch {} driver did not start correctly. Check the switch log file.'.format(self.name))
+
+        info('P4 switch {} has been started.\n'.format(self.name))
+
+        # Reset directory
+        self.cmd('cd {}'.format(os.getcwd()))
+
+    def stop(self, deleteIntfs=True):
+        """Stops the P4 switch."""
+        if not deleteIntfs:
+            info('Stopping P4 switch {}.\n'.format(self.name))
+        if self.bin_running():
+            kill_proc_tree(self.switch_pid)
+            self.switch_pid = None
+        if self.driver_running():
+            kill_proc_tree(self.driver_pid)
+            self.driver_pid = None
+        super().stop(deleteIntfs)
+
+    def config(self, **params):
+        """Configures Tofino."""
+
+        r = super().config(**params)
+
+        # Disable IPv6 on loopback interface
+        self.cmd('sysctl -w net.ipv6.conf.lo.disable_ipv6=1')
+
+        return r
+
+    def describe(self):
+        """Describes P4Switch."""
+        pass

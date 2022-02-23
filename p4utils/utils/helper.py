@@ -12,6 +12,7 @@ import time
 import types
 import random
 import psutil
+import signal
 import hashlib
 import importlib
 from networkx.readwrite.json_graph import node_link_graph
@@ -19,7 +20,7 @@ from networkx.readwrite.json_graph import node_link_graph
 from p4utils.utils.topology import NetworkGraph
 from p4utils.mininetlib.log import info, output, error, warning, debug
 
-_prefixLenMatchRegex = re.compile("netmask (\d+\.\d+\.\d+\.\d+)")
+_prefixLenMatchRegex = re.compile('netmask (\d+\.\d+\.\d+\.\d+)')
 
 
 def wait_condition(func, value, args=[], kwargs={}, timeout=0):
@@ -233,9 +234,9 @@ def ip_address_to_mac(ip):
         str: MAC address obtained from the IPv4 value.
     """
     if "/" in ip:
-        ip = ip.split("/")[0]
+        ip = ip.split('/')[0]
 
-    split_ip = list(map(int, ip.split(".")))
+    split_ip = list(map(int, ip.split('.')))
     mac_address = '00:%02x' + ':%02x:%02x:%02x:%02x' % tuple(split_ip)
     return mac_address
 
@@ -311,11 +312,11 @@ def load_custom_object(obj):
         is optional and has to be used if the module is not present in ``sys.path``.
     """
 
-    file_path = obj.get("file_path", ".")
+    file_path = obj.get('file_path', '.')
     sys.path.insert(0, file_path)
 
-    module_name = obj["module_name"]
-    object_name = obj["object_name"]
+    module_name = obj['module_name']
+    object_name = obj['object_name']
 
     module = importlib.import_module(module_name)
     return getattr(module, object_name)
@@ -334,25 +335,26 @@ def old_run_command(command):
     return os.WEXITSTATUS(os.system(command))
 
 
-def run_command(command, outputfile=None):
+def run_command(command, out_file=None):
     """Execute command in the main namespace.
 
     Args:
-        command (str): command to execute
+        command (str) : command to execute
+        out_file (str): where to redirect *stdout* and *stderr*
 
     Returns:
-        int: returns parent pid
+        int: returns parent pid.
     """
     if isinstance(command, str):
         debug(command+'\n')
         command = command.split()
     else:
-        debug(" ".join(command) + "\n")
+        debug(' '.join(command) + '\n')
 
-    if not outputfile:
+    if not out_file:
         of = subprocess.DEVNULL
     else:
-        of = open(outputfile, "w")
+        of = open(out_file, 'w')
 
     proc = subprocess.Popen(command, stdout=of, stderr=of)
     return proc.pid
@@ -459,6 +461,35 @@ def parse_task_line(line, def_mod='p4utils.utils.traffic_utils'):
         pass
 
     return args, kwargs
+
+
+def kill_proc_tree(pid, sig=signal.SIGKILL, include_parent=True,
+                   timeout=None, on_terminate=None):
+    """Kills a process tree (including children).
+
+    Args:
+        pid (int)                        : PID of the parent process
+        sig (int)                        : signal used to kill the tree
+        include_parent (bool)            : whether to kill the parent process or not
+        timeout (int or float)           : time to wait for a process to terminate
+        on_terminate (types.FunctionType): callback function executed as soon as a child terminates.
+
+    Returns:
+        tuple: ``(gone, still_alive)``.
+    """
+    assert pid != os.getpid(), "won't kill myself"
+    parent = psutil.Process(pid)
+    children = parent.children(recursive=True)
+    if include_parent:
+        children.append(parent)
+    for p in children:
+        try:
+            p.send_signal(sig)
+        except psutil.NoSuchProcess:
+            pass
+    gone, alive = psutil.wait_procs(children, timeout=timeout,
+                                    callback=on_terminate)
+    return (gone, alive)
 
 
 class WrapFunc:

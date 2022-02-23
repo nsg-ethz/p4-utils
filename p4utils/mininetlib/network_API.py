@@ -10,7 +10,6 @@ instantiate and start the network.
 
 import os
 import time
-import psutil
 from ipaddress import ip_interface, IPv4Network
 from networkx import Graph, MultiGraph
 from networkx.readwrite.json_graph import node_link_data
@@ -113,8 +112,8 @@ class NetworkAPI(Topo):
         cleanup()
         bridges = sh("brctl show | awk 'FNR > 1 {print $1}'").splitlines()
         for bridge in bridges:
-            sh("ifconfig {} down".format(bridge))
-            sh("brctl delbr {}".format(bridge))
+            sh('ifconfig {} down'.format(bridge))
+            sh('brctl delbr {}'.format(bridge))
 
     def is_multigraph(self):
         """Check whether the graph is a multigraph, i.e. it has multiple parallel
@@ -223,7 +222,7 @@ class NetworkAPI(Topo):
         with open(self.topoFile, 'w') as f:
             json.dump(graph_dict, f, default=default)
         # save a global copy in tmp
-        with open("/tmp/topology.json", 'w') as f:
+        with open('/tmp/topology.json', 'w') as f:
             json.dump(graph_dict, f, default=default)
 
     def compile(self):
@@ -239,14 +238,16 @@ class NetworkAPI(Topo):
                     compiler = get_by_attr(
                         'p4_src', os.path.realpath(p4_src),
                         self.compilers)
-                # Retrieve json_path
-                self.updateNode(p4switch, json_path=compiler.get_json_out())
-                # Try to retrieve p4 runtime info file path
-                try:
+                if not self.isTofino(p4switch):
+                    # Retrieve json_path
                     self.updateNode(
-                        p4switch, p4rt_path=compiler.get_p4rt_out())
-                except P4InfoDisabled:
-                    pass
+                        p4switch, json_path=compiler.get_json_out())
+                    # Try to retrieve p4 runtime info file path
+                    try:
+                        self.updateNode(
+                            p4switch, p4rt_path=compiler.get_p4rt_out())
+                    except P4InfoDisabled:
+                        pass
 
     def program_switches(self):
         """If any command files were provided for the switches, this method will start up the
@@ -362,7 +363,7 @@ class NetworkAPI(Topo):
             self.scripts_pids.append(
                 run_command(
                     script['cmd'],
-                    script["out_file"]))
+                    script['out_file']))
 
     def start_scheduler(self, node):
         """Starts the task scheduler on node if enabled.
@@ -453,7 +454,7 @@ class NetworkAPI(Topo):
                 switch.describe()
         for host in self.net.hosts:
             host.describe()
-        info("Starting mininet CLI...\n")
+        info('Starting mininet CLI...\n')
         # Generate a message that will be printed by the Mininet CLI to make
         # interacting with the simple switch a little easier.
         output('\n')
@@ -1019,9 +1020,10 @@ class NetworkAPI(Topo):
         the network boot.
 
         Args:
-            cmd (str)    : command to execute
-            reboot (bool): rerun the script every time
-                           all the P4 switches are rebooted.
+            cmd (str)     : command to execute
+            out_file (str): where to redirect *stdout* and *stderr*
+            reboot (bool) : rerun the script every time
+                            all the P4 switches are rebooted.
         """
         self.scripts.append(
             {'cmd': cmd, 'reboot_run': reboot, 'out_file': out_file})
@@ -1139,20 +1141,10 @@ class NetworkAPI(Topo):
             # Stop right after the CLI is exited
             self.stopNetwork()
 
-    def kill_process(self, proc_pid):
-        """Kills process and all its childs."""
-        try:
-            process = psutil.Process(proc_pid)
-            for proc in process.children(recursive=True):
-                proc.kill()
-            process.kill()
-        except:
-            pass
-
     def stop_exec_scripts(self):
         """Stops all exec scripts."""
         for pid in self.scripts_pids:
-            self.kill_process(pid)
+            kill_proc_tree(pid)
 
     def stopNetwork(self):
         """Stops the network."""
@@ -2417,7 +2409,7 @@ class NetworkAPI(Topo):
             name (str): node name
 
         Returns:
-            bool: **True** if node is a P4 switch, else **False**.
+            bool: **True** if node is a P4Runtime switch, else **False**.
         """
         return self.g.node[name].get('isP4RuntimeSwitch', False)
 
@@ -2448,7 +2440,37 @@ class NetworkAPI(Topo):
         else:
             raise Exception('"{}" is not a P4 runtime switch.'.format(name))
 
+# Tofino switches
+    def addTofino(self, name, **opts):
+        """Adds Tofino switch node to Mininet topology.
+
+        Args:
+            name (str): P4Runtime switch name
+            **opts    : switch options
+
+        Returns:
+            str: Tofino switch name.
+
+        Warning:
+            If a node with the same name is already present,
+            this method will overwrite it.
+        """
+        opts.setdefault('cls', Tofino)
+        opts.update(isTofino=True)
+        return self.addP4Switch(name, **opts)
+
+    def isTofino(self, name):
+        """Checks if node is a Tofino switch.
+
+        Args:
+            name (str): node name
+
+        Returns:
+            bool: **True** if node is a Tofino switch, else **False**.
+        """
+        return self.g.node[name].get('isTofino', False)
 # Routers
+
     def addRouter(self, name, **opts):
         """Adds a router node to the network.
 

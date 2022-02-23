@@ -3,6 +3,7 @@
 This module is an extension of `mininet.net`__ that allows also router nodes.
 """
 
+import os
 from itertools import groupby
 from mininet.net import Mininet
 from mininet.node import Controller
@@ -18,6 +19,7 @@ class P4Mininet(Mininet):
         """Adds p4switches."""
         self.router = router
         self.p4switches = []
+        self.tofinos = []
         self.routers = []
         super().__init__(*args, **kwargs)
 
@@ -29,10 +31,17 @@ class P4Mininet(Mininet):
             name = switch.name
             if self.topo.isP4Switch(name):
                 self.p4switches.append(switch)
+            if self.topo.isTofino(name):
+                self.tofinos.append(switch)
+
+        info( '*** Configuring Tofinos switches\n' )
+        self.configTofinos()
+        # Increase number of HugePages according to number of Tofinos
+        info( '\n' )
+        debug( os.popen('sudo sysctl -w vm.nr_hugepages={}'.format(128*len(self.tofinos)) + '\n' ).read())
 
     def addRouter(self, name, cls=None, **params):
-        """
-        Add a router to the network.
+        """Adds a router to the network.
 
         Arguments:
             name (string): name of the router to add
@@ -49,6 +58,17 @@ class P4Mininet(Mininet):
         self.routers.append(r)
         self.nameToNode[name] = r
         return r                
+
+    def configTofinos( self ):
+        """Configure a set of Tofinos."""
+        for tofino in self.tofinos:
+            info( tofino.name + ' ' )
+            # Configure loopback interface
+            tofino.configDefault( mac=None,
+                                  ip=None,
+                                  defaultRoute=None,
+                                  lo='up' )
+        info( '\n' )
 
     def buildFromTopo( self, topo=None ):
         """
@@ -180,6 +200,11 @@ class P4Mininet(Mininet):
             if switch not in stopped:
                 switch.stop()
             switch.terminate()
+
+        # Set number of HugePages to 0
+        info( '\n' )
+        debug( os.popen('sudo sysctl -w vm.nr_hugepages=0').read() + '\n' )
+
         info( '\n' )
         info( '*** Stopping %i hosts\n' % len( self.hosts ) )
         for host in self.hosts:

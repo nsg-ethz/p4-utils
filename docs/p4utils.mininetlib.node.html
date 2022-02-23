@@ -105,7 +105,7 @@
 <p>This module is an extension of <a class="reference external" href="https://github.com/mininet/mininet/blob/master/mininet/node.py">mininet.node</a> with customized nodes.</p>
 <dl class="class">
 <dt id="p4utils.mininetlib.node.FRRouter">
-<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">FRRouter</code><span class="sig-paren">(</span><em>name</em>, <em>bin_dir='/usr/local/sbin'</em>, <em>int_conf=None</em>, <em>conf_dir='./routers'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L274-L485"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">FRRouter</code><span class="sig-paren">(</span><em>name</em>, <em>bin_dir='/usr/local/sbin'</em>, <em>int_conf=None</em>, <em>conf_dir='./routers'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L297-L508"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.node.Node</span></code></p>
 <p>FRRouter built as Mininet node.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -165,69 +165,90 @@ folder which contains the configuration files is then <code class="docutils lite
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.FRRouter.start">
-<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L377-L439"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter.start" title="Permalink to this definition">¶</a></dt>
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L400-L462"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the FRRouter node.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.FRRouter.start_daemon">
-<code class="descname">start_daemon</code><span class="sig-paren">(</span><em>daemon</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L454-L485"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter.start_daemon" title="Permalink to this definition">¶</a></dt>
+<code class="descname">start_daemon</code><span class="sig-paren">(</span><em>daemon</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L477-L508"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter.start_daemon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts a daemon on the router.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.FRRouter.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L441-L452"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter.stop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Terminates FRRouter.</p>
+<code class="descname">stop</code><span class="sig-paren">(</span><em>deleteIntfs=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L464-L475"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.FRRouter.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops FRRouter.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="p4utils.mininetlib.node.P4Host">
-<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">P4Host</code><span class="sig-paren">(</span><em>*args</em>, <em>log_enabled=False</em>, <em>log_dir='/tmp'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L36-L86"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Host" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">P4Host</code><span class="sig-paren">(</span><em>*args</em>, <em>log_enabled=False</em>, <em>log_dir='/tmp'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L37-L87"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Host" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.node.Host</span></code></p>
 <p>Virtual hosts with custom configuration to work with P4 switches.</p>
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4Host.config">
-<code class="descname">config</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L58-L72"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Host.config" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configure host.</p>
+<code class="descname">config</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L59-L73"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Host.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures host.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4Host.describe">
-<code class="descname">describe</code><span class="sig-paren">(</span><em>sw_addr=None</em>, <em>sw_mac=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L74-L86"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Host.describe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Describe host.</p>
+<code class="descname">describe</code><span class="sig-paren">(</span><em>sw_addr=None</em>, <em>sw_mac=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L75-L87"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Host.describe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes host.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="p4utils.mininetlib.node.P4RuntimeSwitch">
-<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">P4RuntimeSwitch</code><span class="sig-paren">(</span><em>*args</em>, <em>sw_bin='simple_switch_grpc'</em>, <em>grpc_port=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L240-L272"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">P4RuntimeSwitch</code><span class="sig-paren">(</span><em>*args</em>, <em>sw_bin='simple_switch_grpc'</em>, <em>grpc_port=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L248-L294"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#p4utils.mininetlib.node.P4Switch" title="p4utils.mininetlib.node.P4Switch"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.node.P4Switch</span></code></a></p>
-<p>BMv2 switch with gRPC support</p>
+<p>BMv2 switch with gRPC support.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the switch</li>
+<li><strong>device_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – switch unique id</li>
+<li><strong>sw_bin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – switch binary to execute</li>
+<li><strong>json_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path to the P4 compiled JSON configuration</li>
+<li><strong>thrift_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – <em>Thrift</em> server’s port</li>
+<li><strong>grpc_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – <em>P4Runtime</em> gRPC server’s port</li>
+<li><strong>pcap_dump</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether to save <code class="docutils literal"><span class="pre">.pcap</span></code> logs to disk</li>
+<li><strong>pcap_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <code class="docutils literal"><span class="pre">.pcap</span></code> files path</li>
+<li><strong>log_enabled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether to save logs to disk</li>
+<li><strong>log_dir</strong> (<em>srt</em>) – log path</li>
+<li><strong>enable_debugger</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether to enable debugger</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4RuntimeSwitch.add_arguments">
-<code class="descname">add_arguments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L262-L267"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.add_arguments" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_arguments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L284-L289"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.add_arguments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds arguments to the simple switch process</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4RuntimeSwitch.describe">
-<code class="descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L269-L272"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.describe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L291-L294"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes P4RuntimeSwitch.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4RuntimeSwitch.grpc_listening">
-<code class="descname">grpc_listening</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L254-L256"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.grpc_listening" title="Permalink to this definition">¶</a></dt>
+<code class="descname">grpc_listening</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L276-L278"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.grpc_listening" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a grpc process listens on the grpc port.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4RuntimeSwitch.switch_status">
-<code class="descname">switch_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L258-L260"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.switch_status" title="Permalink to this definition">¶</a></dt>
+<code class="descname">switch_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L280-L282"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4RuntimeSwitch.switch_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if all the switch processes have started correctly.</p>
 </dd></dl>
 
@@ -235,79 +256,166 @@ folder which contains the configuration files is then <code class="docutils lite
 
 <dl class="class">
 <dt id="p4utils.mininetlib.node.P4Switch">
-<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">P4Switch</code><span class="sig-paren">(</span><em>name</em>, <em>device_id</em>, <em>sw_bin='simple_switch'</em>, <em>json_path=None</em>, <em>thrift_port=None</em>, <em>pcap_dump=False</em>, <em>pcap_dir=None</em>, <em>log_enabled=False</em>, <em>log_dir='/tmp'</em>, <em>enable_debugger=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L89-L237"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">P4Switch</code><span class="sig-paren">(</span><em>name</em>, <em>device_id</em>, <em>sw_bin='simple_switch'</em>, <em>json_path=None</em>, <em>thrift_port=None</em>, <em>pcap_dump=False</em>, <em>pcap_dir=None</em>, <em>log_enabled=False</em>, <em>log_dir='/tmp'</em>, <em>enable_debugger=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L90-L245"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.node.Switch</span></code></p>
-<p>P4 virtual switch</p>
+<p>P4 virtual switch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the switch</li>
+<li><strong>device_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – switch unique id</li>
+<li><strong>sw_bin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – switch binary to execute</li>
+<li><strong>json_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path to the P4 compiled JSON configuration</li>
+<li><strong>thrift_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – <em>Thrift</em> server’s port</li>
+<li><strong>pcap_dump</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether to save <code class="docutils literal"><span class="pre">.pcap</span></code> logs to disk</li>
+<li><strong>pcap_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <code class="docutils literal"><span class="pre">.pcap</span></code> files path</li>
+<li><strong>log_enabled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether to save logs to disk</li>
+<li><strong>log_dir</strong> (<em>srt</em>) – log path</li>
+<li><strong>enable_debugger</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether to enable debugger</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4Switch.add_arguments">
-<code class="descname">add_arguments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L171-L195"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.add_arguments" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_arguments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L188-L212"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.add_arguments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds arguments to the simple switch process</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="p4utils.mininetlib.node.P4Switch.attach">
-<code class="descname">attach</code><span class="sig-paren">(</span><em>intf</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L227-L229"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.attach" title="Permalink to this definition">¶</a></dt>
-<dd><p>Connects a data port.</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="p4utils.mininetlib.node.P4Switch.describe">
-<code class="descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L235-L237"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.describe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L243-L245"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes P4Switch.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="p4utils.mininetlib.node.P4Switch.detach">
-<code class="descname">detach</code><span class="sig-paren">(</span><em>intf</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L231-L233"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.detach" title="Permalink to this definition">¶</a></dt>
-<dd><p>“Disconnects a data port.</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="p4utils.mininetlib.node.P4Switch.set_binary">
-<code class="descname">set_binary</code><span class="sig-paren">(</span><em>sw_bin</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L145-L149"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.set_binary" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_binary</code><span class="sig-paren">(</span><em>sw_bin</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L159-L163"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.set_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets switch default binary</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4Switch.set_json">
-<code class="descname">set_json</code><span class="sig-paren">(</span><em>json_path</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L151-L157"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.set_json" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_json</code><span class="sig-paren">(</span><em>json_path</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L165-L171"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.set_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the compiled P4 JSON file.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4Switch.start">
-<code class="descname">start</code><span class="sig-paren">(</span><em>controllers=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L197-L213"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.start" title="Permalink to this definition">¶</a></dt>
+<code class="descname">start</code><span class="sig-paren">(</span><em>controllers=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L214-L230"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts a new P4 switch.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4Switch.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><em>deleteIntfs=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L222-L225"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.stop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Terminates the P4 switch node.</p>
+<code class="descname">stop</code><span class="sig-paren">(</span><em>deleteIntfs=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L232-L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the P4 switch.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="p4utils.mininetlib.node.P4Switch.stop_p4switch">
-<code class="descname">stop_p4switch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L215-L220"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.stop_p4switch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stops the simple switch binary without deleting the interfaces.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="p4utils.mininetlib.node.P4Switch.switch_started">
-<code class="descname">switch_started</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L159-L161"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.switch_started" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if the switch process has started.</p>
+<dt id="p4utils.mininetlib.node.P4Switch.switch_running">
+<code class="descname">switch_running</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L173-L178"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.switch_running" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the switch process is running.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4Switch.switch_status">
-<code class="descname">switch_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L167-L169"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.switch_status" title="Permalink to this definition">¶</a></dt>
+<code class="descname">switch_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L184-L186"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.switch_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if all the switch processes have started correctly.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.node.P4Switch.thrift_listening">
-<code class="descname">thrift_listening</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L163-L165"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.thrift_listening" title="Permalink to this definition">¶</a></dt>
+<code class="descname">thrift_listening</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L180-L182"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.P4Switch.thrift_listening" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a thrift process listens on the thrift port.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="p4utils.mininetlib.node.Tofino">
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.node.</code><code class="descname">Tofino</code><span class="sig-paren">(</span><em>name</em>, <em>device_id</em>, <em>p4_src</em>, <em>sde</em>, <em>sde_install</em>, <em>cli_port=8000</em>, <em>dr_port_base=8001</em>, <em>log_dir='/tmp'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L511-L696"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.node.Switch</span></code></p>
+<p>Tofino-model switch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the switch</li>
+<li><strong>device_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – switch unique id</li>
+<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – P4 source</li>
+<li><strong>sde</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tofino SDE path (<code class="docutils literal"><span class="pre">$SDE</span></code>)</li>
+<li><strong>sde_install</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tofino SDE install path (<code class="docutils literal"><span class="pre">$SDE_INSTALL</span></code>)</li>
+<li><strong>cli_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – switch client port</li>
+<li><strong>dr_port_base</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – port base for driver connection</li>
+<li><strong>log_dir</strong> (<em>srt</em>) – log path</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="p4utils.mininetlib.node.Tofino.add_driver_args">
+<code class="descname">add_driver_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L618-L627"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.add_driver_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds arguments for bf_switchd.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.Tofino.add_ports">
+<code class="descname">add_ports</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L591-L604"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.add_ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds ports to the switch ports configuration file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.Tofino.add_tofino_args">
+<code class="descname">add_tofino_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L606-L616"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.add_tofino_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds arguments for tofino-model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.Tofino.bin_running">
+<code class="descname">bin_running</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L584-L589"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.bin_running" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the switch binary process has started.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.Tofino.config">
+<code class="descname">config</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L684-L692"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures Tofino.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.Tofino.describe">
+<code class="descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L694-L696"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.describe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes P4Switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.Tofino.driver_running">
+<code class="descname">driver_running</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L577-L582"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.driver_running" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the switch driver process has started.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.Tofino.start">
+<code class="descname">start</code><span class="sig-paren">(</span><em>controllers=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L629-L670"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts a new P4 switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.Tofino.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><em>deleteIntfs=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L672-L682"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the P4 switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="p4utils.mininetlib.node.Tofino.switch_running">
+<code class="descname">switch_running</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/node.py#L573-L575"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.node.Tofino.switch_running" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the switch processes have started.</p>
 </dd></dl>
 
 </dd></dl>
