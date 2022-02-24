@@ -160,6 +160,7 @@ class BF_P4C:
     Args:
         p4_src (str)     : path of the source P4 file to compile
         build_dir (str)  : directory where the Tofino's configuration is built
+        build_script (str)  : directory where the Tofino's build script can be found
         sde (str)        : Tofino SDE path ($SDE)
         sde_install (str): Tofino SDE install path ($SDE_INSTALL)
     """
@@ -168,10 +169,20 @@ class BF_P4C:
                  sde,
                  sde_install,
                  build_dir=None,
+                 build_script="~/tools/p4_build.sh",
                  **kwargs):
 
         self.sde = os.path.realpath(sde)
         self.sde_install = os.path.realpath(sde_install)
+
+        # check if the build script exists if not falls back to 
+        # cmake
+        self.build_script = None
+        if build_script:
+            home = os.path.expanduser("~")
+            build_script = build_script.replace("~", home)
+            if os.path.isfile(build_script):
+                self.build_script = build_script
 
         # Check whether the p4file is valid
         if p4_src is not None:
@@ -210,11 +221,17 @@ class BF_P4C:
         # Set environmental variables
         cmd = 'export SDE={} && '.format(self.sde)
         cmd += 'export SDE_INSTALL={} && '.format(self.sde_install)
-        cmd += 'cd {}; '.format(self.build_dir)
-        cmd += 'cmake $SDE/p4studio/ -DCMAKE_INSTALL_PREFIX=$SDE/install ' + \
-               '-DCMAKE_MODULE_PATH=$SDE/cmake  -DP4_NAME={} '.format(self.p4_name) + \
-               '-DP4_PATH={} && '.format(self.p4_src)
-        cmd += 'make {} && make install'.format(self.p4_name)
+        
+        # manual cmake
+        if not self.build_script:
+            cmd += 'cd {}; '.format(self.build_dir)
+            cmd += 'cmake $SDE/p4studio/ -DCMAKE_INSTALL_PREFIX=$SDE/install ' + \
+                '-DCMAKE_MODULE_PATH=$SDE/cmake  -DP4_NAME={} '.format(self.p4_name) + \
+                '-DP4_PATH={} && '.format(self.p4_src)
+            cmd += 'make {} && make install'.format(self.p4_name)
+        # if we use the p4_build script
+        else:
+            cmd += '{} --with-tofino {}'.format(self.build_script, self.p4_src)
 
         debug(cmd + '\n')
 
