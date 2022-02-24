@@ -1,0 +1,31 @@
+digraph Ingress {
+subgraph cluster {
+graph [
+label="", labeljust=r, style=bold];
+0[label=__START__, margin="", shape=rectangle, style=solid];
+1[label=__EXIT__, margin="", shape=rectangle, style=solid];
+2[label="hdr.ipv4.isValid();", margin="", shape=rectangle, style=solid];
+3[label="hdr.tcp.isValid();", margin="", shape=rectangle, style=solid];
+4[label=tbl_heavy_hitter200, margin="", shape=ellipse, style=solid];
+5[label=tbl_heavy_hitter213, margin="", shape=ellipse, style=solid];
+6[label="counter/counter_1 > 1000;", margin="", shape=rectangle, style=solid];
+7[label="counter_0/counter_2 > 1000;", margin="", shape=rectangle, style=solid];
+8[label=tbl_drop, margin="", shape=ellipse, style=solid];
+9[label="Ingress.ipv4_lpm", margin="", shape=ellipse, style=solid];
+10[label=tbl_drop_0, margin="", shape=ellipse, style=solid];
+0 -> 2[label=""];
+2 -> 3[label=TRUE];
+2 -> 10[label=FALSE];
+3 -> 4[label=TRUE];
+3 -> 9[label=FALSE];
+4 -> 5[label=""];
+5 -> 6[label=""];
+6 -> 7[label=TRUE];
+6 -> 9[label=FALSE];
+7 -> 8[label=TRUE];
+7 -> 9[label=FALSE];
+8 -> 9[label=""];
+9 -> 1[label=""];
+10 -> 1[label=""];
+}
+}

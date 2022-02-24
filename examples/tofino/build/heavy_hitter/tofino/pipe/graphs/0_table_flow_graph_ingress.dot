@@ -1,0 +1,55 @@
+digraph ingress {
+cond_5 [ shape=record, style="filled", fillcolor=cornsilk, label="hdr.ipv4.$valid == 1\l\l
+ "];
+cond_6 [ shape=record, style="filled", fillcolor=cornsilk, label="hdr.tcp.$valid == 1\l\l
+ "];
+tbl_drop_0 [ shape=record, style="filled", fillcolor=cornsilk, label="tbl_drop_0\l\l
+W:\l
+ ig_intr_md_for_dprsr.drop_ctl\l
+ "];
+tbl_heavy_hitter200 [ shape=record, style="filled", fillcolor=cornsilk, label="tbl_heavy_hitter200\l\l
+W:\l
+ output_hash_0\l
+ counter\l
+ "];
+ipv4_lpm_0 [ shape=record, style="filled", fillcolor=cornsilk, label="ipv4_lpm_0\l\l
+M:\l
+ hdr.ipv4.dstAddr\l
+\lR:\l
+ hdr.ethernet.dst_addr\l
+ hdr.ipv4.ttl\l
+\lW:\l
+ hdr.ethernet.src_addr\l
+ hdr.ethernet.dst_addr\l
+ ig_intr_md_for_tm.ucast_egress_port\l
+ hdr.ipv4.ttl\l
+ ig_intr_md_for_dprsr.drop_ctl\l
+ "];
+tbl_heavy_hitter213 [ shape=record, style="filled", fillcolor=cornsilk, label="tbl_heavy_hitter213\l\l
+W:\l
+ counter_0\l
+ "];
+cond_7 [ shape=record, style="filled", fillcolor=cornsilk, label="counter > 1000\l\l
+ "];
+cond_8 [ shape=record, style="filled", fillcolor=cornsilk, label="counter_0 > 1000\l\l
+ "];
+tbl_drop [ shape=record, style="filled", fillcolor=cornsilk, label="tbl_drop\l\l
+W:\l
+ ig_intr_md_for_dprsr.drop_ctl\l
+ "];
+    PARSER -> cond_5
+    cond_5 -> cond_6
+    PARSER -> cond_5
+    cond_5 -> tbl_drop_0
+    cond_6 -> tbl_heavy_hitter200
+    cond_6 -> ipv4_lpm_0
+    tbl_heavy_hitter200 -> tbl_heavy_hitter213
+    tbl_heavy_hitter213 -> cond_7
+    cond_7 -> cond_8
+    cond_7 -> ipv4_lpm_0
+    cond_8 -> tbl_drop
+    cond_8 -> ipv4_lpm_0
+    tbl_drop -> ipv4_lpm_0
+    ipv4_lpm_0 -> DEPARSER
+    tbl_drop_0 -> DEPARSER
+}

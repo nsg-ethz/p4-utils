@@ -1,0 +1,10 @@
+/home/nsg/p4-tools/p4-utils/examples/tofino/build/CMakeFiles/install/strip.dir
+/home/nsg/p4-tools/p4-utils/examples/tofino/build/CMakeFiles/install/local.dir
+/home/nsg/p4-tools/p4-utils/examples/tofino/build/CMakeFiles/install.dir
+/home/nsg/p4-tools/p4-utils/examples/tofino/build/CMakeFiles/list_install_components.dir
+/home/nsg/p4-tools/p4-utils/examples/tofino/build/CMakeFiles/driver.dir
+/home/nsg/p4-tools/p4-utils/examples/tofino/build/CMakeFiles/edit_cache.dir
+/home/nsg/p4-tools/p4-utils/examples/tofino/build/CMakeFiles/heavy_hitter.dir
+/home/nsg/p4-tools/p4-utils/examples/tofino/build/CMakeFiles/heavy_hitter-tofino.dir
+/home/nsg/p4-tools/p4-utils/examples/tofino/build/CMakeFiles/bf-p4c.dir
+/home/nsg/p4-tools/p4-utils/examples/tofino/build/CMakeFiles/rebuild_cache.dir
