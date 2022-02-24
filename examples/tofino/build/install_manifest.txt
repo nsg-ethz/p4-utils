@@ -1,6 +1,0 @@
-/home/nsg/bf-sde-9.7.0/install/share/p4/targets/tofino/heavy_hitter.conf
-/home/nsg/bf-sde-9.7.0/install/share/tofinopd/heavy_hitter/bf-rt.json
-/home/nsg/bf-sde-9.7.0/install/share/tofinopd/heavy_hitter/pipe/context.json
-/home/nsg/bf-sde-9.7.0/install/share/tofinopd/heavy_hitter/pipe/tofino.bin
-/home/nsg/bf-sde-9.7.0/install/share/tofinopd/heavy_hitter/events.json
-/home/nsg/bf-sde-9.7.0/install/share/tofinopd/heavy_hitter/source.json

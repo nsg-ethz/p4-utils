@@ -1,3 +1,0 @@
-# Hashes of file build rules.
-228bdeb721e1f4cc90d93fc97bbbfd58 CMakeFiles/heavy_hitter-tofino
-92b83cac34b9d792d3871e2f488b0d51 heavy_hitter/tofino/bf-rt.json

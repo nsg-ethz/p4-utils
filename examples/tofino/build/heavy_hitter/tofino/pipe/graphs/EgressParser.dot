@@ -1,6 +1,0 @@
-digraph EgressParser{
-start [shape=rectangle,label="start"]
-accept [shape=rectangle,label="accept"]
-reject [shape=rectangle,label="reject"]
-start -> accept [label="always"]
-}

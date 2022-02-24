@@ -1,3 +1,0 @@
-digraph egress {
-0 [label="$root" shape=box color="black"];
-}
