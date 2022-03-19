@@ -513,7 +513,7 @@ function do_ptf {
 function do_mininet {
     # Clone source
     cd $HOME
-    git clone git://github.com/mininet/mininet mininet
+    git clone https://github.com/mininet/mininet mininet
     cd mininet
 
     # Build mininet
