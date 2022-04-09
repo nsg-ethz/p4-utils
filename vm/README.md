@@ -13,7 +13,7 @@ operating systems:
 
 You can choose to download and use one of our 
 [preconfigured VMs](https://nsg-ethz.github.io/p4-utils/installation.html#use-our-preconfigured-vm)
-or to [build it by yourself](#build-your-own-vm).
+or to [build it yourself](#build-your-own-vm).
 
 > **Important**  
 > Whether you are building your own VM or you are using the preconfigured images, you still
