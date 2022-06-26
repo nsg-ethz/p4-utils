@@ -334,7 +334,12 @@ class SwitchInfo():
                     table.key += [(field_name, match_type, bitwidth)]
 
                     self.tables[j_table["name"]] = table
-
+                
+                # table's action has no match key
+                if len(j_table["key"]) == 0:
+                    if j_table["name"].startswith(j_pipeline["source_info"]["source_fragment"]+"."):
+                        self.tables[j_table["name"]] = table
+                        
         for j_meter in get_json_key("meter_arrays"):
             meter_array = MeterArray(j_meter["name"], j_meter["id"])
             if "is_direct" in j_meter and j_meter["is_direct"]:
