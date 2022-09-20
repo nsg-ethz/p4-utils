@@ -203,7 +203,7 @@ class P4CLI(CLI):
         else:
             cmd_path = get_node_attr(p4switch, "cli_input")
             # check if the file exists
-            if not os.path.exists(cmd_path):
+            if cmd_path and not os.path.exists(cmd_path):
                 error(
                     'File Error: command file {} does not exist\n'.format(
                         cmd_path))
