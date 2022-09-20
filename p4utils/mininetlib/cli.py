@@ -100,12 +100,13 @@ class P4CLI(CLI):
         if p4switch is None:
             error('usage: p4switch_stop <p4switch name>\n')
             return False
-        
+
         # Check if switch is running
         if not p4switch.switch_running():
-            error('P4 Switch already stopped, start it first: p4switch_start {} \n'.format(switch_name))
+            error('P4 Switch already stopped, start it first: p4switch_start {} \n'.format(
+                switch_name))
             return False
-        
+
         p4switch.stop(deleteIntfs=False)
 
     @exception_handler
@@ -141,7 +142,8 @@ class P4CLI(CLI):
 
         # Check if switch is running
         if p4switch.switch_running():
-            error('P4 Switch already running, stop it first: p4switch_stop {} \n'.format(switch_name))
+            error('P4 Switch already running, stop it first: p4switch_stop {} \n'.format(
+                switch_name))
             return False
 
         # Check if new P4 source file has been provided
@@ -181,7 +183,6 @@ class P4CLI(CLI):
 
         # Start switch
         p4switch.start()
-
         cmd_path = None
         # Check if new cmd file has been provided
         if '--cmds' in args:
@@ -198,6 +199,16 @@ class P4CLI(CLI):
                     'File Error: command file {} is not a file\n'.format(
                         cmd_path))
                 return False
+        # try to use the default one
+        else:
+            cmd_path = get_node_attr(p4switch, "cli_input")
+            # check if the file exists
+            if not os.path.exists(cmd_path):
+                error(
+                    'File Error: command file {} does not exist\n'.format(
+                        cmd_path))
+                return False
+
         if cmd_path is not None:
             client = get_by_attr('sw_name', switch_name,
                                  self.net_api.sw_clients)
@@ -222,6 +233,7 @@ class P4CLI(CLI):
                     return False
             else:
                 error('No client module provided!\n')
+                print("hi")
                 return False
 
     @exception_handler
@@ -303,7 +315,7 @@ class P4CLI(CLI):
             mininet> printSwitches
         """
         for sw in self.mn.p4switches:
-            output(sw.name+'\n')
+            output(sw.name + '\n')
 
     @exception_handler
     def do_pingset(self, line=""):
@@ -368,14 +380,14 @@ class P4CLI(CLI):
                             self.net_api.enableScheduler(node, path=args[1])
                             self.net_api.start_scheduler(node)
                         except Exception as e:
-                            error(e+'\n')
+                            error(e + '\n')
                             return False
                     else:
                         try:
                             self.net_api.enableScheduler(node)
                             self.net_api.start_scheduler(node)
                         except Exception as e:
-                            error(e+'\n')
+                            error(e + '\n')
                             return False
                 else:
                     error(
