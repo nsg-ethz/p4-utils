@@ -203,7 +203,7 @@ class NetworkAPI(Topo):
                 if ip1 is not None:
                     subnet1 = _prefixLenMatchRegex.findall(intf1.ifconfig())[0]
                     ip1 = ip_interface(ip1+'/'+subnet1).with_prefixlen
-                edge.update(ip1=ip1, addr1=addr1)
+                    edge.update(ip1=ip1, addr1=addr1)
 
                 port2 = edge['port2']
                 intf2 = self.net[node2].intfs[port2]
@@ -211,7 +211,7 @@ class NetworkAPI(Topo):
                 if ip2 is not None:
                     subnet2 = _prefixLenMatchRegex.findall(intf2.ifconfig())[0]
                     ip2 = ip_interface(ip2+'/'+subnet2).with_prefixlen
-                edge.update(ip2=ip2, addr2=addr2)
+                    edge.update(ip2=ip2, addr2=addr2)
 
             # Remove sw-cpu if present
             if 'sw-cpu' in graph:
