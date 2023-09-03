@@ -30,8 +30,8 @@ from p4utils.utils.helper import *
 from p4utils.mininetlib.log import debug, info, output, warning, error, critical
 
 
-SWITCH_START_TIMEOUT = 10
-SWITCH_STOP_TIMEOUT = 10
+SWITCH_START_TIMEOUT = 30
+SWITCH_STOP_TIMEOUT = 30
 
 
 class P4Host(Host):
