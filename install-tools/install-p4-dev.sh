@@ -181,7 +181,7 @@ function do_sysrepo_libyang_deps {
 
 # Install PI dependencies
 function do_PI_deps {
-    sudo apt-get install -y --no-install-recommends 
+    sudo apt-get install -y --no-install-recommends \
     libboost-system-dev \
     libboost-thread-dev \
     libjudy-dev \
