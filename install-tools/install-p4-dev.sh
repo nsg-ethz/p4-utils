@@ -510,7 +510,8 @@ function do_ptf {
     git pull origin main
 
     # Build ptf
-    sudo python3 setup.py install
+    sudo pip install .
+    #sudo python3 setup.py install
 }
 
 # Install mininet
