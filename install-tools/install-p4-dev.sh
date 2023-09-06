@@ -29,6 +29,10 @@ PROTOBUF_COMMIT="v${PROTOBUF_VER}"
 GRPC_COMMIT="tags/v${GRPC_VER}"
 LIBYANG_COMMIT="v${LIBYANG_VER}"
 
+# p4-utils branch 
+# TODO: improve this in the future
+P4_UTILS_BRANCH="update-p4-tools"
+
 # Print commands and exit on errors
 set -xe
 
@@ -124,12 +128,12 @@ sudo dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
 rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
 
 # Configure tmux
-wget -O ~/.tmux.conf https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/conf_files/tmux.conf
+wget -O ~/.tmux.conf https://raw.githubusercontent.com/nsg-ethz/p4-utils/${P4_UTILS_BRANCH}/install-tools/conf_files/tmux.conf
 
 # Fix site-packages issue 
 # Modified file from 
 # https://github.com/jafingerhut/p4-guide/blob/4111c7fa0a26ccdc40d3200040c767e9bba478ea/bin/install-p4dev-v4.sh#L244
-PY3LOCALPATH=`curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/scripts/py3localpath.py | python3`
+PY3LOCALPATH=`curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/${P4_UTILS_BRANCH}/install-tools/scripts/py3localpath.py | python3`
 function site_packages_fix {
     local SRC_DIR
     local DST_DIR
@@ -151,7 +155,7 @@ function site_packages_fix {
 
 # Fix google module issue which creates problems with sphinx
 function google_module_fix {
-    curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/scripts/protoinitfix.py | sudo python3
+    curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/${P4_UTILS_BRANCH}/install-tools/scripts/protoinitfix.py | sudo python3
 }
 
 ## Module-specific dependencies
@@ -177,7 +181,7 @@ function do_sysrepo_libyang_deps {
 
 # Install PI dependencies
 function do_PI_deps {
-    sudo apt-get install -y --no-install-recommends I am running a few minutes late; my previous meeting is running over.
+    sudo apt-get install -y --no-install-recommends 
     libboost-system-dev \
     libboost-thread-dev \
     libjudy-dev \
