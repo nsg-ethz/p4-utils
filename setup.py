@@ -39,9 +39,9 @@ setup(
         'ipaddress',
         'networkx',
         'p4runtime',
-        'protobuf >= 3.20.3',
+        'protobuf == 3.20.3',
         'psutil',
-        'scapy >= 2.5',
+        'scapy >= 2.5.0',
         'setuptools',
     ],
     extras_require={}
