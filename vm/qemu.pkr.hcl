@@ -93,7 +93,7 @@ build {
       "      dhcp4: yes",
       "EOF'",
       "sudo apt-get install -y git curl",
-      "curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/master/install-tools/install-p4-dev.sh | bash"
+      "curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/update-p4-tools/install-tools/install-p4-dev.sh | bash"
     ]
   }
 }
