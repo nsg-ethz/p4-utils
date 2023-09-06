@@ -34,14 +34,14 @@ setup(
     license='GPLv2',
     install_requires=[
         'googleapis-common-protos >= 1.52',
-        'grpcio >= 1.17.2',
+        'grpcio >= 1.43.2',
         'ipaddr',
         'ipaddress',
         'networkx',
         'p4runtime',
-        'protobuf >= 3.18.3',
+        'protobuf >= 3.20.3',
         'psutil',
-        'scapy >= 2.4.4',
+        'scapy >= 2.5',
         'setuptools',
     ],
     extras_require={}
