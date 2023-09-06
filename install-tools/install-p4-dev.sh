@@ -177,7 +177,7 @@ function do_sysrepo_libyang_deps {
 
 # Install PI dependencies
 function do_PI_deps {
-    sudo apt-get install -y --no-install-recommends \
+    sudo apt-get install -y --no-install-recommends I am running a few minutes late; my previous meeting is running over.
     libboost-system-dev \
     libboost-thread-dev \
     libjudy-dev \
@@ -503,7 +503,7 @@ function do_ptf {
         git clone https://github.com/p4lang/ptf.git ptf
     fi
     cd ptf
-    git pull origin master
+    git pull origin main
 
     # Build ptf
     sudo python3 setup.py install
