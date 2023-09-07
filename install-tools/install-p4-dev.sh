@@ -510,7 +510,7 @@ function do_ptf {
     git pull origin main
 
     # Build ptf
-    sudo pip install .
+    sudo pip3 install .
     #sudo python3 setup.py install
 }
 
