@@ -99,6 +99,9 @@ xcscope-el \
 xterm \
 zip
 
+# upgrade pip3
+sudo pip3 install --upgrade pip==21.3.1
+
 # Set Python3 as the default binary
 sudo ln -sf $(which python3) /usr/bin/python
 sudo ln -sf $(which pip3) /usr/bin/pip
