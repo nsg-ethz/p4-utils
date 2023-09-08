@@ -2211,6 +2211,17 @@ class NetworkAPI(Topo):
         else:
             raise Exception('"{}" is not a P4 switch.'.format(name))
 
+    def setPriorityQueueNum(self, name, queue_num):
+        """Sets the *queue_num* for the ports of the P4 switch.
+        Args:
+            name (str): P4 switch name
+            queue_num (int): Number of priority queues for each port
+        """
+        if self.isP4Switch(name):
+            self.updateNode(name, priority_queues_num=queue_num)
+        else:
+            raise Exception('"{}" is not a P4 switch.'.format(name))
+
     def enableDebugger(self, name):
         """Enables debugger for the P4 switch.
 

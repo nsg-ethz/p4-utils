@@ -439,6 +439,7 @@ class AppRunner(NetworkAPI):
                         "sw_bin": <switch binary> (string) (*),
                         "thrift_port": <thrift port> (int) (*),
                         "grpc_port": <grpc port> (int) (*)
+                        "priority_queues_num": <queues num> (int) (*)
                     },
                     ...
                 }

@@ -116,6 +116,7 @@ class P4Switch(Switch):
                  log_enabled=False,
                  log_dir='/tmp',
                  enable_debugger=False,
+                 priority_queues_num=1,
                  **kwargs):
 
         if isinstance(device_id, int):
@@ -129,6 +130,7 @@ class P4Switch(Switch):
 
         self.set_binary(sw_bin)
         self.set_json(json_path)
+        self.priority_queues_num = priority_queues_num
         self.pcap_dir = pcap_dir
         self.pcap_dump = pcap_dump
         self.enable_debugger = enable_debugger
@@ -219,11 +221,27 @@ class P4Switch(Switch):
         if self.log_enabled:
             args.append('--log-console')
         return args
+    
+    def add_target_arguments(self):
+        """Adds switch target options"""
+        args = []
+        if self.priority_queues_num and int(self.priority_queues_num) > 1:
+            args.extend(['--priority-queues', str(self.priority_queues_num)])
+        return args
 
     def start(self, controllers=None):
         """Starts a new P4 switch."""
         info('Starting P4 switch {}.\n'.format(self.name))
+        # general switch arguments
         cmd = ' '.join(self.add_arguments())
+        # add target specific arguments
+        # adds separator
+        _target_arguments = self.add_target_arguments()
+        if _target_arguments:
+            cmd += " -- "
+            cmd += ' '.join(self.add_target_arguments())
+        #cmd = cmd + "--priority-queues 8"
+
         info(cmd + "\n")
 
         with tempfile.NamedTemporaryFile() as f:
@@ -298,11 +316,11 @@ class P4RuntimeSwitch(P4Switch):
         """Checks if all the switch processes have started correctly."""
         return super().switch_status() and self.grpc_listening()
 
-    def add_arguments(self):
+    def add_target_arguments(self):
         """Adds arguments to the simple switch process"""
-        args = super().add_arguments()
+        args = super().add_target_arguments()
         if self.grpc_port:
-            args.append('-- --grpc-server-addr 0.0.0.0:' + str(self.grpc_port))
+            args.append('--grpc-server-addr 0.0.0.0:' + str(self.grpc_port))
         return args
 
     def describe(self):
