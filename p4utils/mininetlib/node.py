@@ -249,7 +249,7 @@ class P4Switch(Switch):
                 self.cmd(cmd + ' > ' + self.log_dir + '/p4s.{}.log'.format(
                     self.name) + ' 2>&1 & echo $! >> ' + f.name)
             else:
-                self.cmd(cmd + '> /dev/null 2>&1 & echo $! >> ' + f.name)
+                self.cmd(cmd + ' > /dev/null 2>&1 & echo $! >> ' + f.name)
             self.switch_pid = int(f.read())
 
         debug('P4 switch {} PID is {}.\n'.format(self.name, self.switch_pid))
