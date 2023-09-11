@@ -121,7 +121,7 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
         if egress_port and priority:
             priority = self.parse_int(priority, "priority")
             egress_port = self.parse_int(egress_port, "egress_port")
-            self.sswitch_client.set_egress_priority_queue_depth(port, priority, depth)
+            self.sswitch_client.set_egress_priority_queue_depth(egress_port, priority, depth)
         elif egress_port:
             egress_port = self.parse_int(egress_port, "egress_port")
             self.sswitch_client.set_egress_queue_depth(egress_port, depth)
@@ -144,7 +144,7 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
         if egress_port and priority:
             priority = self.parse_int(priority, "priority")
             egress_port = self.parse_int(egress_port, "egress_port")
-            self.sswitch_client.set_egress_priority_queue_rate(port, priority, rate)
+            self.sswitch_client.set_egress_priority_queue_rate(egress_port, priority, rate)
         elif egress_port:
             egress_port = self.parse_int(egress_port, "egress_port")
             self.sswitch_client.set_egress_queue_rate(egress_port, rate)
