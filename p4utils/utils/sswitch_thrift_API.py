@@ -106,34 +106,46 @@ class SimpleSwitchThriftAPI(thrift_API.ThriftAPI):
             raise thrift_API.UIn_Error("Bad format for {}, expected integer".format(name))
 
     @handle_bad_input
-    def set_queue_depth(self, queue_depth, egress_port=None):
+    def set_queue_depth(self, queue_depth, egress_port=None, priority=None):
         """Sets depth of one / all egress queue(s).
 
         Args: 
             queue_depth (int): number of packets
             egress_port (int): optional *egress port*, otherwise all ports
                                are considered
+            priority    (int): optional *priority*. Setting the depth of
+                               a specific priority queue if enabled
         """
 
         depth = self.parse_int(queue_depth, "queue_depth")
-        if egress_port:
+        if egress_port and priority:
+            priority = self.parse_int(priority, "priority")
+            egress_port = self.parse_int(egress_port, "egress_port")
+            self.sswitch_client.set_egress_priority_queue_depth(port, priority, depth)
+        elif egress_port:
             egress_port = self.parse_int(egress_port, "egress_port")
             self.sswitch_client.set_egress_queue_depth(egress_port, depth)
         else:
             self.sswitch_client.set_all_egress_queue_depths(depth)
 
     @handle_bad_input
-    def set_queue_rate(self, rate, egress_port=None):
+    def set_queue_rate(self, rate, egress_port=None, priority=None):
         """Sets rate of one / all egress queue(s).
         
         Args:
             rate (int)       : rate (packets per seconds)
             egress_port (int): optional *egress port*, otherwise all ports
                                are considered
+            priority    (int): optional *priority*. Setting the depth of
+                               a specific priority queue if enabled                               
         """
 
         rate = self.parse_int(rate, "rate_pps")
-        if egress_port:
+        if egress_port and priority:
+            priority = self.parse_int(priority, "priority")
+            egress_port = self.parse_int(egress_port, "egress_port")
+            self.sswitch_client.set_egress_priority_queue_rate(port, priority, rate)
+        elif egress_port:
             egress_port = self.parse_int(egress_port, "egress_port")
             self.sswitch_client.set_egress_queue_rate(egress_port, rate)
         else:
