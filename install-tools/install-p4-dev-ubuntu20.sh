@@ -171,7 +171,7 @@ function do_global_setup {
     tshark
 
     # Install iperf3 (last version)
-    sudo apt-get install iperf3
+    sudo apt-get -y --no-install-recommends install iperf3
     #cd /tmp
     #sudo apt-get remove  -y --no-install-recommends iperf3 libiperf0
     #wget https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
@@ -189,7 +189,7 @@ function do_protobuf {
     sudo apt-get purge -y python3-protobuf || echo "Failed removing protobuf"
 
     # install python
-    sudo pip install protobuf=={$PROTOBUF_VER}
+    sudo pip install protobuf==${PROTOBUF_VER}
 
     cd ${BUILD_DIR}
 
@@ -233,11 +233,12 @@ function do_grpc {
     # Build grpc
     export LDFLAGS="-Wl,-s"
 
-    make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
-    make clean
-
+    mkdir -p cmake/build
+    cd cmake/build
+    cmake ../..
+    make
+    sudo make install 
+    
     unset LDFLAGS
 
     echo "grpc installed"
@@ -537,6 +538,49 @@ function do_mininet_no_python2 {
 
     echo "mininet installed"
 }
+
+# Install libyang necessary for FRRouting
+function do_libyang {
+    # Install dependencies
+    do_sysrepo_libyang_deps
+
+    # Clone source libyang
+    cd ${BUILD_DIR}
+    if [ ! -d libyang ]; then
+        git clone https://github.com/CESNET/libyang.git libyang
+    fi
+    cd libyang
+    git checkout ${LIBYANG_COMMIT}
+
+    # Build libyang
+    if [ ! -d build ]; then
+        mkdir build
+    else
+        rm -R build
+        mkdir build
+    fi
+    cd build
+    cmake -DENABLE_LYD_PRIV=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+        -D CMAKE_BUILD_TYPE:String="Release" ..
+    make -j${NUM_CORES}
+    sudo make install
+    sudo ldconfig
+}
+
+
+# Install FRRouting dependencies
+function do_frrouting_deps {
+    # Install dependencies
+    do_libyang
+
+    sudo apt-get install -y \
+    git autoconf automake libtool make libreadline-dev texinfo \
+    pkg-config libpam0g-dev libjson-c-dev bison flex python3-pytest \
+    libc-ares-dev python3-dev libsystemd-dev python-ipaddress python3-sphinx \
+    install-info build-essential libsystemd-dev libsnmp-dev perl libcap-dev \
+    libelf-dev
+}
+
 
 # Install FRRouting
 function do_frrouting {
