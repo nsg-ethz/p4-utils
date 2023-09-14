@@ -238,9 +238,9 @@ function do_grpc {
     cmake ../..
     make
     sudo make install 
-    
-    unset LDFLAGS
+    sudo ldconfig
 
+    unset LDFLAGS
     echo "grpc installed"
 }
 
