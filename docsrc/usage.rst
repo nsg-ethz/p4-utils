@@ -353,7 +353,7 @@ If you use the namings ``h<ID>`` for hosts and ``s<ID>`` for switches (e.g ``h1`
   of the gateway switch ID (i.e. its binary representation) and ``z`` is the host ID.
 - **Switch ports directly connected to a host**: ``10.x.y.254/24``, where ``x`` and ``y`` are 
   respectively the upper and the lower bytes of the gateway switch ID (i.e. its binary representation).
-- **Switch to Switch interfaces**: ``20.sw1.sw2.<1,2>/24``, where ``sw1`` is the ID of the first switch 
+- **Switch to Switch interfaces**: ``20.sw1.sw2.< 1,2>/24``, where ``sw1`` is the ID of the first switch 
   (following the order in the link definition), ``sw2`` is the ID of the second switch.
   The last byte is ``1`` for ``sw1``'s interface and ``2`` for ``sw2``'s interface.
 

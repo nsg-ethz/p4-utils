@@ -1225,7 +1225,7 @@ control MyEgress(inout headers hdr,
             // because we recirculate the packet afterwards.
             standard_metadata.egress_spec = 1;
             // Recirculate all the metadata fields
-            recirculate({});
+            recirculate(0);
         }
     }
 }

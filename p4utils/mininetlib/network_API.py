@@ -194,11 +194,12 @@ class NetworkAPI(Topo):
                 if 'sw_ip2' in edge.keys():
                     edge['ip2'] = edge['sw_ip2']
                     del edge['sw_ip2']
-
+                    
                 # Get addresses from the network
                 # This gathers also routers interfaces IPs!
                 port1 = edge['port1']
                 intf1 = self.net[node1].intfs[port1]
+                #import ipdb; ipdb.set_trace()
                 ip1, addr1 = intf1.updateAddr()
                 if ip1 is not None:
                     subnet1 = _prefixLenMatchRegex.findall(intf1.ifconfig())[0]
@@ -212,6 +213,7 @@ class NetworkAPI(Topo):
                     subnet2 = _prefixLenMatchRegex.findall(intf2.ifconfig())[0]
                     ip2 = ip_interface(ip2+'/'+subnet2).with_prefixlen
                 edge.update(ip2=ip2, addr2=addr2)
+                #import ipdb; ipdb.set_trace()
 
             # Remove sw-cpu if present
             if 'sw-cpu' in graph:
