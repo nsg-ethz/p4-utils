@@ -1,16 +1,44 @@
 #!/bin/bash
 
+# Author: Edgar Costa Molero
+# Email: cedgar@ethz.ch
+
+# This scripts installs all the required software to learn and prototype P4
+# programs using the p4lang software suite. 
+
+# Furthermore, we install p4-utils and p4-learning and ffr routers.
+
+# This install script has only been tested with the following systems:
+# Ubuntu 20.04
+# Ubuntu 22.04
+
 # Configuration variables
+# Currently loaded linux kernel
 KERNEL=$(uname -r)
+# non interactive install
 DEBIAN_FRONTEND=noninteractive sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+# username
 USER_NAME=$(whoami)
+# building directory
 BUILD_DIR=~/p4-tools
+# number of cores
 NUM_CORES=`grep -c ^processor /proc/cpuinfo`
 DEBUG_FLAGS=true
 P4_RUNTIME=true
 SYSREPO=false   # Sysrepo prevents simple_switch_grpc from starting correctly
 FRROUTING=true
 DOCUMENTATION=true
+
+### Checks
+
+os_message() {
+    1>&2 echo "Found ID ${ID} and VERSION_ID ${VERSION_ID} in /etc/os-release"
+    1>&2 echo "This script only supports these:"
+    1>&2 echo "    ID ubuntu, VERSION_ID in 20.04 22.04"
+    1>&2 echo ""
+    1>&2 echo "Proceed installing at your own risk."
+}
+
 
 # Software versions
 
@@ -175,9 +203,11 @@ function do_protobuf_deps {
 function do_sysrepo_libyang_deps {
     # Dependencies in : https://github.com/p4lang/PI/blob/master/proto/README.md
     sudo apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    libpcre3-dev \
     libavl-dev \
     libev-dev \
-    libpcre3-dev \
     libprotobuf-c-dev \
     protobuf-c-compiler
 }
@@ -402,15 +432,15 @@ function do_PI {
     ./autogen.sh
     if [ "$DEBUG_FLAGS" = true ]; then
         if [ "$SYSREPO" = true ]; then
-            ./configure --with-proto --with-sysrepo "CXXFLAGS=-O0 -g"
+            ./configure --with-proto --with-sysrepo --without-internal-rpc --without-cli --without-bmv2 "CXXFLAGS=-O0 -g"
         else
-            ./configure --with-proto "CXXFLAGS=-O0 -g"
+            ./configure --with-proto --without-internal-rpc --without-cli --without-bmv2 "CXXFLAGS=-O0 -g"
         fi
     else
         if [ "$SYSREPO" = true ]; then
-            ./configure --with-proto --with-sysrepo
+            ./configure --with-proto --with-sysrepo --without-internal-rpc --without-cli --without-bmv2
         else
-            ./configure --with-proto
+            ./configure --with-proto --without-internal-rpc --without-cli --without-bmv2
         fi
     fi
     make -j${NUM_CORES}
@@ -577,6 +607,10 @@ function do_sphinx {
     sudo pip3 install sphinx-rtd-theme
 }
 
+##########
+# Install 
+##########
+
 # p4c depends on protobuf to compile p4runtime info files.
 do_protobuf
 if [ "$P4_RUNTIME" = true ]; then
@@ -603,6 +637,8 @@ fi
 
 do_p4-utils
 do_p4-learning
+
+# last fixes
 site_packages_fix
 google_module_fix
 
