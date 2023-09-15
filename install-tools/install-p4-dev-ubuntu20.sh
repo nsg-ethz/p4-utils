@@ -93,6 +93,15 @@ function do_init_checks {
         do_os_message
         exit 1
     fi
+
+    # check there is enough disk space
+    if [ $(df --output=size -BG / | tail -1 | tr -d 'G ') -ge 35 ]; 
+    then 
+        echo "You have at least 35G of total disk space."; 
+    else
+        echo "You have less than 35G of total disk space."; 
+        exit 1
+    fi
 }
 
 function do_global_setup {
@@ -306,26 +315,27 @@ function do_bmv2 {
     sudo ldconfig
 
     # Build simple_switch_grpc
-    if [ "$P4_RUNTIME" = true ]; then
-        cd targets/simple_switch_grpc
-        ./autogen.sh
-        if [ "$DEBUG_FLAGS" = true ]; then
-            if [ "$SYSREPO" = true ]; then
-                ./configure --with-sysrepo --with-thrift "CXXFLAGS=-O0 -g"
-            else
-                ./configure --with-thrift "CXXFLAGS=-O0 -g"
-            fi
-        else
-            if [ "$SYSREPO" = true ]; then
-                ./configure --with-sysrepo --with-thrift
-            else
-                ./configure --with-thrift
-            fi
-        fi
-        make -j${NUM_CORES}
-        sudo make install
-        sudo ldconfig
-    fi
+    # Not needed anymore
+    #if [ "$P4_RUNTIME" = true ]; then
+    #    cd targets/simple_switch_grpc
+    #    ./autogen.sh
+    #    if [ "$DEBUG_FLAGS" = true ]; then
+    #        if [ "$SYSREPO" = true ]; then
+    #            ./configure --with-sysrepo --with-thrift "CXXFLAGS=-O0 -g"
+    #        else
+    #            ./configure --with-thrift "CXXFLAGS=-O0 -g"
+    #        fi
+    #    else
+    #        if [ "$SYSREPO" = true ]; then
+    #            ./configure --with-sysrepo --with-thrift
+    #        else
+    #            ./configure --with-thrift
+    #        fi
+    #    fi
+    #    make -j${NUM_CORES}
+    #    sudo make install
+    #    sudo ldconfig
+    #fi
 }
 # Install sysrepo dependencies
 function do_sysrepo_libyang_deps {
