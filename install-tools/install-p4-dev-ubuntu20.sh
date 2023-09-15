@@ -74,9 +74,6 @@ function do_init_checks {
     if [ "${ID}" = "ubuntu" ]
     then
         case "${VERSION_ID}" in
-        18.04)
-            supported_distribution=1
-            ;;
         20.04)
             supported_distribution=1
             ;;
@@ -94,7 +91,7 @@ function do_init_checks {
         exit 1
     fi
 
-    # check there is enough disk space
+    # check there is enough disk space (for now we check 35G)
     if [ $(df --output=size -BG / | tail -1 | tr -d 'G ') -ge 35 ]; 
     then 
         echo "You have at least 35G of total disk space."; 
