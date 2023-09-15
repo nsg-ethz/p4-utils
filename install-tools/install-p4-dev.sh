@@ -331,6 +331,7 @@ function do_grpc {
 }
 
 # Install sysrepo (tentative gNMI support with sysrepo)
+# Warning: In theory not used since grpc crashes
 function do_sysrepo_libyang {
     # Install dependencies
     do_sysrepo_libyang_deps
@@ -347,7 +348,7 @@ function do_sysrepo_libyang {
     if [ ! -d build ]; then
         mkdir build
     else
-        rm -R build
+        sudo rm -R build
         mkdir build
     fi
     cd build

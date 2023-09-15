@@ -45,14 +45,12 @@ PROTOBUF_COMMIT="v${PROTOBUF_VER}"
 GRPC_VER="1.43.2"
 GRPC_COMMIT="tags/v${GRPC_VER}"
 
-LIBYANG_VER="1.0.225"
-LIBYANG_COMMIT="v${LIBYANG_VER}"
-
 PI_COMMIT="6d0f3d6c08d595f65c7d96fd852d9e0c308a6f30"    # Aug 21 2023
 BMV2_COMMIT="d064664b58b8919782a4c60a3b9dbe62a835ac74"  # Sep 8 2023
 P4C_COMMIT="66eefdea4c00e3fbcc4723bd9c8a8164e7288724"   # Sep 13 2023
 
-FRROUTING_COMMIT="18f209926fb659790926b82dd4e30727311d22aa" # Mar 25 2021
+#FRROUTING_COMMIT="18f209926fb659790926b82dd4e30727311d22aa" # Mar 25 2021
+FRROUTING_COMMIT="frr-8.5" # Mar 25 2021
 
 
 function do_os_message() {
@@ -336,6 +334,7 @@ function do_sysrepo_libyang_deps {
     build-essential \
     cmake \
     libpcre3-dev \
+    libpcre2-dev \
     libavl-dev \
     libev-dev \
     libprotobuf-c-dev \
@@ -344,6 +343,7 @@ function do_sysrepo_libyang_deps {
 
 
 # Install sysrepo (tentative gNMI support with sysrepo)
+# Warning: In theory not used since grpc crashes
 function do_sysrepo_libyang {
     # Install dependencies
     do_sysrepo_libyang_deps
@@ -486,7 +486,7 @@ function do_p4c {
     sudo ldconfig
     cd ..
 
-    # TODO check if this can be done
+    # clean since it uses 7GB
     rm -rf build/
 
     echo "p4c installed"
@@ -540,6 +540,7 @@ function do_mininet_no_python2 {
 }
 
 # Install libyang necessary for FRRouting
+# for ubuntu 20.04 :http://docs.frrouting.org/projects/dev-guide/en/latest/building-frr-for-ubuntu2004.html
 function do_libyang {
     # Install dependencies
     do_sysrepo_libyang_deps
@@ -549,6 +550,10 @@ function do_libyang {
     if [ ! -d libyang ]; then
         git clone https://github.com/CESNET/libyang.git libyang
     fi
+
+    LIBYANG_VER="2.0.0"
+    LIBYANG_COMMIT="v${LIBYANG_VER}"
+
     cd libyang
     git checkout ${LIBYANG_COMMIT}
 
@@ -556,11 +561,11 @@ function do_libyang {
     if [ ! -d build ]; then
         mkdir build
     else
-        rm -R build
+        sudo rm -R build
         mkdir build
     fi
     cd build
-    cmake -DENABLE_LYD_PRIV=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr \
         -D CMAKE_BUILD_TYPE:String="Release" ..
     make -j${NUM_CORES}
     sudo make install
@@ -575,14 +580,15 @@ function do_frrouting_deps {
 
     sudo apt-get install -y \
     git autoconf automake libtool make libreadline-dev texinfo \
-    pkg-config libpam0g-dev libjson-c-dev bison flex python3-pytest \
-    libc-ares-dev python3-dev libsystemd-dev python-ipaddress python3-sphinx \
-    install-info build-essential libsystemd-dev libsnmp-dev perl libcap-dev \
-    libelf-dev
+    pkg-config libpam0g-dev libjson-c-dev bison flex \
+    libc-ares-dev python3-dev python3-sphinx \
+    install-info build-essential libsnmp-dev perl \
+    libcap-dev libelf-dev libunwind-dev
 }
 
 
 # Install FRRouting
+# for ubuntu 20.04 :http://docs.frrouting.org/projects/dev-guide/en/latest/building-frr-for-ubuntu2004.html
 function do_frrouting {
     # Install dependencies
     do_frrouting_deps
