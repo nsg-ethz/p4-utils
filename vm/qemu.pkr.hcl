@@ -80,8 +80,8 @@ build {
   ]
   provisioner "shell" {
     inline = [
-      "echo ${var.password} | sudo -S bash -c \"echo '${var.username} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet\"",
-      "echo ${var.password} | sudo -S sudo chmod 440 /etc/sudoers.d/99_advnet",
+      "echo ${var.password} | sudo -S bash -c \"echo '${var.username} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_vm\"",
+      "echo ${var.password} | sudo -S sudo chmod 440 /etc/sudoers.d/99_vm",
       "sudo bash -c 'cat << EOF > /etc/netplan/01-netcfg.yaml",
       "network:",
       "  version: 2",
