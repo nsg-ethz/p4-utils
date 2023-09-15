@@ -197,23 +197,28 @@ class NetworkAPI(Topo):
                     
                 # Get addresses from the network
                 # This gathers also routers interfaces IPs!
+                # virtual switch ips start with 20.x.x.x for the sake of it
+                # we will consider those Ips as reserved and not update them
+                # we need to check if they are P4 switches and not remove the IP.
                 port1 = edge['port1']
                 intf1 = self.net[node1].intfs[port1]
-                #import ipdb; ipdb.set_trace()
                 ip1, addr1 = intf1.updateAddr()
+                #import ipdb; ipdb.set_trace()
                 if ip1 is not None:
                     subnet1 = _prefixLenMatchRegex.findall(intf1.ifconfig())[0]
                     ip1 = ip_interface(ip1+'/'+subnet1).with_prefixlen
-                edge.update(ip1=ip1, addr1=addr1)
+                    # possible bug: I moved this here so switches do not lose the virtual ip
+                    edge.update(ip1=ip1, addr1=addr1)
 
                 port2 = edge['port2']
                 intf2 = self.net[node2].intfs[port2]
                 ip2, addr2 = intf2.updateAddr()
+                #import ipdb; ipdb.set_trace()
                 if ip2 is not None:
                     subnet2 = _prefixLenMatchRegex.findall(intf2.ifconfig())[0]
                     ip2 = ip_interface(ip2+'/'+subnet2).with_prefixlen
-                edge.update(ip2=ip2, addr2=addr2)
-                #import ipdb; ipdb.set_trace()
+                    # possible bug: I moved this here so switches do not lose the virtual ip
+                    edge.update(ip2=ip2, addr2=addr2)
 
             # Remove sw-cpu if present
             if 'sw-cpu' in graph:
