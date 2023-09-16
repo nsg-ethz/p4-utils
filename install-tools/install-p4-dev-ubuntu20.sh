@@ -625,6 +625,9 @@ function do_p4-utils {
     fi
     cd p4-utils
 
+    # TODO: should be removed
+    git checkout ${P4_UTILS_BRANCH}
+
     # Build p4-utils    
     sudo ./install.sh
 }
@@ -636,6 +639,11 @@ function do_p4-learning {
     if [ ! -d p4-learning ]; then
         git clone https://github.com/nsg-ethz/p4-learning.git p4-learning
     fi
+
+    cd p4-learning
+
+    # TODO: should be removed
+    git checkout ${P4_UTILS_BRANCH}
 }
 
 # Install Sphinx and ReadtheDocs
