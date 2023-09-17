@@ -1,5 +1,10 @@
 # P4-Utils Virtual Machine
 
+> **Important**  
+> In this section we explain how to build a VM with all the needed tools from scratch.
+> However, since some part of the installation depends on Packer, and this tool sometimes gives problems
+> we recommend to simply use the install script provided [here](../install-tools) and run it in a clean Ubuntu machine or VM.
+
 Although P4-Utils can be installed directly on your system, running P4-Utils in a completely separated
 environment can be beneficial: in this way, installation and execution errors, that may arise, will not
 affect the whole system. For this reason, **we recommend using one of the VM methods that we provide**.

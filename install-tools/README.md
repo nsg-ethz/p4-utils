@@ -6,8 +6,8 @@ dependencies that are needed by P4-Utils. For this reason, we provide a
 that automatically goes through every step.
 
 > **Warning!**  
-> The script has been tested with **Ubuntu 18.04.4** and the compiler
-> **GCC 7.5**. Errors have been reported with newer versions.
+> The script has been tested with **Ubuntu 20.04.6** and **Ubuntu 22.04.3**. 
+> To install for **Ubuntu 18.04** refer to [this older script](./old_installs/install-p4-dev.sh).
 
 With the following installation methods, you will download and install *Mininet*
 and the P4-Tools suite (P4-Utils, P4-Learning and their dependencies) in your 

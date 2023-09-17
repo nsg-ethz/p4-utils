@@ -29,9 +29,32 @@ SYSREPO=false   # Sysrepo prevents simple_switch_grpc from starting correctly
 FRROUTING=true
 DOCUMENTATION=true
 
-### Checks
+# p4-utils branch 
+# TODO: improve this in the future
+P4_UTILS_BRANCH="update-p4-tools"
 
-os_message() {
+# Software versions
+
+# PI dependencies from https://github.com/p4lang/PI#dependencies
+
+# protobuf
+PROTOBUF_VER="3.20.3"
+PROTOBUF_COMMIT="v${PROTOBUF_VER}"
+
+# from https://github.com/p4lang/PI#dependencies
+# changed it from 1.43.2 since pip does not have it and my source build fails
+GRPC_VER="1.44.0"
+GRPC_COMMIT="tags/v${GRPC_VER}"
+
+PI_COMMIT="6d0f3d6c08d595f65c7d96fd852d9e0c308a6f30"    # Aug 21 2023
+BMV2_COMMIT="d064664b58b8919782a4c60a3b9dbe62a835ac74"  # Sep 8 2023
+P4C_COMMIT="66eefdea4c00e3fbcc4723bd9c8a8164e7288724"   # Sep 13 2023
+
+#FRROUTING_COMMIT="18f209926fb659790926b82dd4e30727311d22aa" # Mar 25 2021
+FRROUTING_COMMIT="frr-8.5" # Mar 25 2021
+
+
+function do_os_message() {
     1>&2 echo "Found ID ${ID} and VERSION_ID ${VERSION_ID} in /etc/os-release"
     1>&2 echo "This script only supports these:"
     1>&2 echo "    ID ubuntu, VERSION_ID in 20.04 22.04"
@@ -39,131 +62,193 @@ os_message() {
     1>&2 echo "Proceed installing at your own risk."
 }
 
+function do_init_checks {
+    if [ ! -r /etc/os-release ]
+    then
+        1>&2 echo "No file /etc/os-release.  Cannot determine what OS this is."
+        do_os_message
+        exit 1
+    fi
+    source /etc/os-release
 
-# Software versions
+    supported_distribution=0
+    if [ "${ID}" = "ubuntu" ]
+    then
+        case "${VERSION_ID}" in
+        20.04)
+            supported_distribution=1
+            ;;
+        22.04)
+            supported_distribution=1
+            ;;
+        esac
+    fi
 
-# Newer versions of protobuf and grpc can be used but the
-# testing and development has been done with protobuf 3.6.1
-# and grpc 1.17.2.
-PROTOBUF_VER="3.6.1"
-GRPC_VER="1.17.2"
+    if [ ${supported_distribution} -eq 1 ]
+    then
+        echo "Found supported ID ${ID} and VERSION_ID ${VERSION_ID} in /etc/os-release"
+    else
+        do_os_message
+        exit 1
+    fi
 
-LIBYANG_VER="1.0.225"
-PI_COMMIT="c65fe2ef3e56395efe2a918cf004de1e62430713"    # Feb 4 2021
-BMV2_COMMIT="62a013a15ed2c42b1063c26331d73c2560d1e4d0"  # Feb 11 2021
-P4C_COMMIT="451b208a5f1a54d9b5ac7975e496ca0a5dee6deb"   # Feb 23 2021
-FRROUTING_COMMIT="18f209926fb659790926b82dd4e30727311d22aa" # Mar 25 2021
-PROTOBUF_COMMIT="v${PROTOBUF_VER}"
-GRPC_COMMIT="tags/v${GRPC_VER}"
-LIBYANG_COMMIT="v${LIBYANG_VER}"
+    # check there is enough disk space (for now we check 35G)
+    if [ $(df --output=size -BG / | tail -1 | tr -d 'G ') -ge 35 ]; 
+    then 
+        echo "You have at least 35G of total disk space."; 
+    else
+        echo "You have less than 35G of total disk space."; 
+        exit 1
+    fi
+}
 
-# p4-utils branch 
-# TODO: improve this in the future
-P4_UTILS_BRANCH="update-p4-tools"
+function do_global_setup {
+    # Install shared dependencies
+    sudo apt-get install -y --no-install-recommends \
+    arping \
+    autoconf \
+    automake \
+    bash-completion \
+    bridge-utils \
+    build-essential \
+    ca-certificates \
+    cmake \
+    cpp \
+    curl \
+    emacs \
+    gawk \
+    git \
+    git-review \
+    g++ \
+    htop \
+    libboost-dev \
+    libboost-filesystem-dev \
+    libboost-program-options-dev \
+    libboost-test-dev \
+    libc6-dev \
+    libevent-dev \
+    libgc1c2 \
+    libgflags-dev \
+    libgmpxx4ldbl \
+    libgmp10 \
+    libgmp-dev \
+    libffi-dev \
+    libtool \
+    libpcap-dev \
+    linux-headers-$KERNEL \
+    make \
+    nano \
+    pkg-config \
+    python3 \
+    python3-dev \
+    python3-pip \
+    python3-setuptools \
+    tmux \
+    traceroute \
+    vim \
+    wget \
+    xcscope-el \
+    xterm \
+    zip \
+    unzip
 
-# Print commands and exit on errors
-set -xe
+    # upgrade pip3
+    sudo pip3 install --upgrade pip==21.3.1
 
-# Make the system passwordless
-if [ ! -f /etc/sudoers.d/99_advnet ]; then
-    sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_advnet"
-    sudo chmod 440 /etc/sudoers.d/99_advnet
-fi
+    # Set Python3 as the default binary
+    sudo ln -sf $(which python3) /usr/bin/python
+    sudo ln -sf $(which pip3) /usr/bin/pip
 
-# Create BUILD_DIR
-mkdir -p ${BUILD_DIR}
+    # Install shared dependencies (pip3)
+    sudo pip3 install \
+    cffi \
+    ipaddress \
+    ipdb \
+    ipython \
+    pypcap
 
-# Set locale
-sudo locale-gen en_US.UTF-8
+    # Install wireshark
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
+    echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
+    sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common
+    sudo apt-get -y --no-install-recommends install \
+    tcpdump \
+    tshark
 
-# Update packages list
-sudo apt-get update
+    # Install iperf3 (last version)
+    sudo apt-get -y --no-install-recommends install iperf3
+    #cd /tmp
+    #sudo apt-get remove  -y --no-install-recommends iperf3 libiperf0
+    #wget https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
+    #wget https://iperf.fr/download/ubuntu/iperf3_3.1.3-1_amd64.deb
+    #sudo dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
+    #rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
 
-# Install shared dependencies
-sudo apt-get install -y --no-install-recommends \
-arping \
-autoconf \
-automake \
-bash-completion \
-bridge-utils \
-build-essential \
-ca-certificates \
-cmake \
-cpp \
-curl \
-emacs \
-gawk \
-git \
-git-review \
-g++ \
-htop \
-libboost-dev \
-libboost-filesystem-dev \
-libboost-program-options-dev \
-libboost-test-dev \
-libc6-dev \
-libevent-dev \
-libgc1c2 \
-libgflags-dev \
-libgmpxx4ldbl \
-libgmp10 \
-libgmp-dev \
-libffi-dev \
-libtool \
-libpcap-dev \
-linux-headers-$KERNEL \
-make \
-nano \
-pkg-config \
-python3 \
-python3-dev \
-python3-pip \
-python3-setuptools \
-tmux \
-traceroute \
-vim \
-wget \
-xcscope-el \
-xterm \
-zip
+    # Configure tmux
+    wget -O ~/.tmux.conf https://raw.githubusercontent.com/nsg-ethz/p4-utils/${P4_UTILS_BRANCH}/install-tools/conf_files/tmux.conf
+}
 
-# upgrade pip3
-sudo pip3 install --upgrade pip==21.3.1
+#### PROTOBUF FUNCTIONS
+function do_protobuf {
+    echo "Uninstalling Ubuntu python3-protobuf if present"
+    sudo apt-get purge -y python3-protobuf || echo "Failed removing protobuf"
 
-# Set Python3 as the default binary
-sudo ln -sf $(which python3) /usr/bin/python
-sudo ln -sf $(which pip3) /usr/bin/pip
+    # install python
+    sudo pip install protobuf==${PROTOBUF_VER}
 
-# Install shared dependencies (pip3)
-sudo pip3 install \
-cffi \
-ipaddress \
-ipdb \
-ipython \
-pypcap
+    cd ${BUILD_DIR}
 
-# Install wireshark
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y install wireshark
-echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
-sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common
-sudo apt-get -y --no-install-recommends install \
-tcpdump \
-tshark
+    # install from source
+    # Clone source
+    if [ ! -d protobuf ]; then
+        git clone https://github.com/protocolbuffers/protobuf protobuf
+    fi
+    
+    cd protobuf
+    git checkout ${PROTOBUF_COMMIT}
+    git submodule update --init --recursive
 
-# Install iperf3 (last version)
-cd /tmp
-sudo apt-get remove  -y --no-install-recommends iperf3 libiperf0
-wget https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
-wget https://iperf.fr/download/ubuntu/iperf3_3.1.3-1_amd64.deb
-sudo dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
-rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
+    # Build protobuf C++
+    export CFLAGS="-Os"
+    export CXXFLAGS="-Os"
+    export LDFLAGS="-Wl,-s"
+    
+    ./autogen.sh
+    ./configure --prefix=/usr
+    make -j${NUM_CORES}
+    sudo make install
+    sudo ldconfig
+    make clean
 
-# Configure tmux
-wget -O ~/.tmux.conf https://raw.githubusercontent.com/nsg-ethz/p4-utils/${P4_UTILS_BRANCH}/install-tools/conf_files/tmux.conf
+    unset CFLAGS CXXFLAGS LDFLAGS
 
-# Fix site-packages issue 
-# Modified file from 
-# https://github.com/jafingerhut/p4-guide/blob/4111c7fa0a26ccdc40d3200040c767e9bba478ea/bin/install-p4dev-v4.sh#L244
+    echo "end install protobuf:"
+}
+
+function do_grpc {
+    # Clone source
+    cd ${BUILD_DIR}
+    if [ ! -d grpc ]; then
+      git clone https://github.com/grpc/grpc.git grpc
+    fi
+    cd grpc
+    git checkout ${GRPC_COMMIT}
+    git submodule update --init --recursive
+
+    # Build grpc
+    export LDFLAGS="-Wl,-s"
+
+    mkdir -p cmake/build
+    cd cmake/build
+    cmake ../..
+    make
+    sudo make install 
+    sudo ldconfig
+
+    unset LDFLAGS
+    echo "grpc installed"
+}
+
 PY3LOCALPATH=`curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/${P4_UTILS_BRANCH}/install-tools/scripts/py3localpath.py | python3`
 function site_packages_fix {
     local SRC_DIR
@@ -184,69 +269,6 @@ function site_packages_fix {
     echo "Done!"
 }
 
-# Fix google module issue which creates problems with sphinx
-function google_module_fix {
-    curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/${P4_UTILS_BRANCH}/install-tools/scripts/protoinitfix.py | sudo python3
-}
-
-## Module-specific dependencies
-# Install protobuf dependencies
-function do_protobuf_deps {
-    sudo apt-get install -y --no-install-recommends \
-    unzip
-}
-
-# Install gprcio dependencies
-# grpc depends only on shared deps
-
-# Install sysrepo dependencies
-function do_sysrepo_libyang_deps {
-    # Dependencies in : https://github.com/p4lang/PI/blob/master/proto/README.md
-    sudo apt-get install -y --no-install-recommends \
-    build-essential \
-    cmake \
-    libpcre3-dev \
-    libavl-dev \
-    libev-dev \
-    libprotobuf-c-dev \
-    protobuf-c-compiler
-}
-
-# Install PI dependencies
-function do_PI_deps {
-    sudo apt-get install -y --no-install-recommends \
-    libboost-system-dev \
-    libboost-thread-dev \
-    libjudy-dev \
-    libreadline-dev \
-    libtool-bin \
-    valgrind
-}
-
-# Install p4c dependencies
-function do_p4c_deps {
-    sudo apt-get install -y --no-install-recommends \
-    bison \
-    clang \
-    flex \
-    iptables \
-    libboost-graph-dev \
-    libboost-iostreams-dev \
-    libelf-dev \
-    libfl-dev \
-    libgc-dev \
-    llvm \
-    net-tools \
-    zlib1g-dev
-
-    sudo pip3 install \
-    ipaddr \
-    pyroute2 \
-    ply \
-    scapy
-}
-
-# Install behavioral model dependencies
 function do_bmv2_deps {
     # Clone source
     cd ${BUILD_DIR}
@@ -258,196 +280,6 @@ function do_bmv2_deps {
 
     # Install dependencies
     ./install_deps.sh
-}
-
-## Modules
-# Install protobuf from source
-function do_protobuf {
-    # Install dependencies
-    do_protobuf_deps
-
-    # Clone source
-    cd ${BUILD_DIR}
-    if [ ! -d protobuf ]; then
-        git clone https://github.com/protocolbuffers/protobuf protobuf
-    fi
-    cd protobuf
-    git checkout ${PROTOBUF_COMMIT}
-    git submodule update --init --recursive
-
-    # Build protobuf C++
-    export CFLAGS="-Os"
-    export CXXFLAGS="-Os"
-    export LDFLAGS="-Wl,-s"
-
-    ./autogen.sh
-    ./configure --prefix=/usr
-    make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
-    make clean
-
-    unset CFLAGS CXXFLAGS LDFLAGS
-
-    # Install protobuf Python
-
-    # Google protobuf module is installed as p4-utils 
-    # requirement. We do not use the following source 
-    # compiled method because it creates problems with
-    # other Python libraries.
-
-    # cd python
-    # sudo python3 setup.py install --cpp_implementation
-}
-
-# Install grpc (needed for PI)
-function do_grpc {
-    # Clone source
-    cd ${BUILD_DIR}
-    if [ ! -d grpc ]; then
-      git clone https://github.com/grpc/grpc.git grpc
-    fi
-    cd grpc
-    git checkout ${GRPC_COMMIT}
-    git submodule update --init --recursive
-
-    # Build grpc
-    export LDFLAGS="-Wl,-s"
-
-    make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
-    make clean
-
-    unset LDFLAGS
-
-    # Install gprcio Python
-
-    # Do not install grpcio here and postpone it to
-    # the installation of p4-utils.
-
-    # sudo pip3 install -r requirements.txt
-    # sudo pip3 install .
-}
-
-# Install sysrepo (tentative gNMI support with sysrepo)
-# Warning: In theory not used since grpc crashes
-function do_sysrepo_libyang {
-    # Install dependencies
-    do_sysrepo_libyang_deps
-
-    # Clone source libyang
-    cd ${BUILD_DIR}
-    if [ ! -d libyang ]; then
-        git clone https://github.com/CESNET/libyang.git libyang
-    fi
-    cd libyang
-    git checkout v0.16-r1
-
-    # Build libyang
-    if [ ! -d build ]; then
-        mkdir build
-    else
-        sudo rm -R build
-        mkdir build
-    fi
-    cd build
-    cmake ..
-    make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
-
-    # Clone source sysrepo
-    cd ${BUILD_DIR}
-    if [ ! -d sysrepo ]; then
-        git clone https://github.com/sysrepo/sysrepo.git sysrepo
-    fi
-    cd sysrepo
-    git checkout v0.7.5
-
-    # Build sysrepo
-    mkdir build
-    cd build
-    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=Off -DCALL_TARGET_BINS_DIRECTLY=Off ..
-    make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
-}
-
-# Install libyang necessary for FRRouting
-function do_libyang {
-    # Install dependencies
-    do_sysrepo_libyang_deps
-
-    # Clone source libyang
-    cd ${BUILD_DIR}
-    if [ ! -d libyang ]; then
-        git clone https://github.com/CESNET/libyang.git libyang
-    fi
-    cd libyang
-    git checkout ${LIBYANG_COMMIT}
-
-    # Build libyang
-    if [ ! -d build ]; then
-        mkdir build
-    else
-        rm -R build
-        mkdir build
-    fi
-    cd build
-    cmake -DENABLE_LYD_PRIV=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-        -D CMAKE_BUILD_TYPE:String="Release" ..
-    make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
-}
-
-# Install FRRouting dependencies
-function do_frrouting_deps {
-    # Install dependencies
-    do_libyang
-
-    sudo apt-get install -y \
-    git autoconf automake libtool make libreadline-dev texinfo \
-    pkg-config libpam0g-dev libjson-c-dev bison flex python3-pytest \
-    libc-ares-dev python3-dev libsystemd-dev python-ipaddress python3-sphinx \
-    install-info build-essential libsystemd-dev libsnmp-dev perl libcap-dev \
-    libelf-dev
-}
-
-# Install PI
-function do_PI {
-    # Install dependencies
-    do_PI_deps
-
-    # Clone source
-    cd ${BUILD_DIR}
-    if [ ! -d PI ]; then
-        git clone https://github.com/p4lang/PI.git PI
-    fi
-    cd PI
-    git checkout ${PI_COMMIT}
-    git submodule update --init --recursive
-
-    # Build PI
-    ./autogen.sh
-    if [ "$DEBUG_FLAGS" = true ]; then
-        if [ "$SYSREPO" = true ]; then
-            ./configure --with-proto --with-sysrepo --without-internal-rpc --without-cli --without-bmv2 "CXXFLAGS=-O0 -g"
-        else
-            ./configure --with-proto --without-internal-rpc --without-cli --without-bmv2 "CXXFLAGS=-O0 -g"
-        fi
-    else
-        if [ "$SYSREPO" = true ]; then
-            ./configure --with-proto --with-sysrepo --without-internal-rpc --without-cli --without-bmv2
-        else
-            ./configure --with-proto --without-internal-rpc --without-cli --without-bmv2
-        fi
-    fi
-    make -j${NUM_CORES}
-    sudo make install
-    sudo ldconfig
-    make clean
 }
 
 # Install behavioral model
@@ -481,26 +313,157 @@ function do_bmv2 {
     sudo ldconfig
 
     # Build simple_switch_grpc
-    if [ "$P4_RUNTIME" = true ]; then
-        cd targets/simple_switch_grpc
-        ./autogen.sh
-        if [ "$DEBUG_FLAGS" = true ]; then
-            if [ "$SYSREPO" = true ]; then
-                ./configure --with-sysrepo --with-thrift "CXXFLAGS=-O0 -g"
-            else
-                ./configure --with-thrift "CXXFLAGS=-O0 -g"
-            fi
-        else
-            if [ "$SYSREPO" = true ]; then
-                ./configure --with-sysrepo --with-thrift
-            else
-                ./configure --with-thrift
-            fi
-        fi
-        make -j${NUM_CORES}
-        sudo make install
-        sudo ldconfig
+    # Not needed anymore
+    #if [ "$P4_RUNTIME" = true ]; then
+    #    cd targets/simple_switch_grpc
+    #    ./autogen.sh
+    #    if [ "$DEBUG_FLAGS" = true ]; then
+    #        if [ "$SYSREPO" = true ]; then
+    #            ./configure --with-sysrepo --with-thrift "CXXFLAGS=-O0 -g"
+    #        else
+    #            ./configure --with-thrift "CXXFLAGS=-O0 -g"
+    #        fi
+    #    else
+    #        if [ "$SYSREPO" = true ]; then
+    #            ./configure --with-sysrepo --with-thrift
+    #        else
+    #            ./configure --with-thrift
+    #        fi
+    #    fi
+    #    make -j${NUM_CORES}
+    #    sudo make install
+    #    sudo ldconfig
+    #fi
+}
+# Install sysrepo dependencies
+function do_sysrepo_libyang_deps {
+    # Dependencies in : https://github.com/p4lang/PI/blob/master/proto/README.md
+    sudo apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    libpcre3-dev \
+    libpcre2-dev \
+    libavl-dev \
+    libev-dev \
+    libprotobuf-c-dev \
+    protobuf-c-compiler
+}
+
+
+# Install sysrepo (tentative gNMI support with sysrepo)
+# Warning: In theory not used since grpc crashes
+function do_sysrepo_libyang {
+    # Install dependencies
+    do_sysrepo_libyang_deps
+
+    # Clone source libyang
+    cd ${BUILD_DIR}
+    if [ ! -d libyang ]; then
+        git clone https://github.com/CESNET/libyang.git libyang
     fi
+    cd libyang
+    git checkout v0.16-r1
+
+    # Build libyang
+    if [ ! -d build ]; then
+        mkdir build
+    else
+        rm -R build
+        mkdir build
+    fi
+    cd build
+    cmake ..
+    make -j${NUM_CORES}
+    sudo make install
+    sudo ldconfig
+
+    # Clone source sysrepo
+    cd ${BUILD_DIR}
+    if [ ! -d sysrepo ]; then
+        git clone https://github.com/sysrepo/sysrepo.git sysrepo
+    fi
+    cd sysrepo
+    git checkout v0.7.5
+
+    # Build sysrepo
+    mkdir build
+    cd build
+    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=Off -DCALL_TARGET_BINS_DIRECTLY=Off ..
+    make -j${NUM_CORES}
+    sudo make install
+    sudo ldconfig
+}
+
+# Install PI dependencies
+function do_PI_deps {
+    sudo apt-get install -y --no-install-recommends \
+    libboost-system-dev \
+    libboost-thread-dev \
+    libjudy-dev \
+    libreadline-dev \
+    libtool-bin \
+    valgrind
+}
+
+function do_PI {
+    # Install dependencies
+    do_PI_deps
+
+    # Clone source
+    cd ${BUILD_DIR}
+    if [ ! -d PI ]; then
+        git clone https://github.com/p4lang/PI.git PI
+    fi
+    cd PI
+    git checkout ${PI_COMMIT}
+    git submodule update --init --recursive
+
+    # Build PI
+    ./autogen.sh
+    if [ "$DEBUG_FLAGS" = true ]; then
+        if [ "$SYSREPO" = true ]; then
+            ./configure --with-proto --with-sysrepo --without-internal-rpc --without-cli --without-bmv2 "CXXFLAGS=-O0 -g"
+        else
+            ./configure --with-proto --without-internal-rpc --without-cli --without-bmv2 "CXXFLAGS=-O0 -g"
+        fi
+    else
+        if [ "$SYSREPO" = true ]; then
+            ./configure --with-proto --with-sysrepo --without-internal-rpc --without-cli --without-bmv2
+        else
+            ./configure --with-proto --without-internal-rpc --without-cli --without-bmv2
+        fi
+    fi
+    make -j${NUM_CORES}
+    sudo make install
+    sudo ldconfig
+    make clean
+
+    echo "PI Installed"
+}
+
+# Install p4c dependencies
+function do_p4c_deps {
+    sudo apt-get install -y --no-install-recommends \
+    bison \
+    clang \
+    flex \
+    iptables \
+    libboost-graph-dev \
+    libboost-iostreams-dev \
+    libelf-dev \
+    libfl-dev \
+    libgc-dev \
+    llvm \
+    net-tools \
+    zlib1g-dev \
+    lld \
+    pkg-config \
+    ccache
+
+    sudo pip install scapy==2.5.0
+    sudo pip install ply
+    sudo pip install pyroute2
+    #sudo pip install ptf
 }
 
 # Install p4c
@@ -530,7 +493,11 @@ function do_p4c {
     sudo make install
     sudo ldconfig
     cd ..
+
+    # clean since it uses 7GB
     rm -rf build/
+
+    echo "p4c installed"
 }
 
 # Install ptf
@@ -559,7 +526,77 @@ function do_mininet {
     sudo PYTHON=python3 ./util/install.sh -nwv
 }
 
+# Install mininet
+function do_mininet_no_python2 {
+    # mininet installing process forces python2 to be installed
+    # we want to avoid this in ubuntu 20+
+    # This patch helps us doing so
+    # from https://github.com/jafingerhut/p4-guide/blob/d36766f2c50a2159e43dd843085fbbe416d23b33/bin/install-p4dev-v6.sh#L868
+    MININET_COMMIT="5b1b376336e1c6330308e64ba41baac6976b6874"  # 2023-May-28
+    git clone https://github.com/mininet/mininet mininet
+    cd mininet
+    git checkout ${MININET_COMMIT}
+
+    # patching mininet
+    wget -O mininet.patch https://raw.githubusercontent.com/nsg-ethz/p4-utils/${P4_UTILS_BRANCH}/install-tools/conf_files/mininet.patch
+    patch -p1 < "mininet.patch"
+
+    # Build mininet
+    sudo PYTHON=python3 ./util/install.sh -nwv
+
+    echo "mininet installed"
+}
+
+# Install libyang necessary for FRRouting
+# for ubuntu 20.04 :http://docs.frrouting.org/projects/dev-guide/en/latest/building-frr-for-ubuntu2004.html
+function do_libyang {
+    # Install dependencies
+    do_sysrepo_libyang_deps
+
+    # Clone source libyang
+    cd ${BUILD_DIR}
+    if [ ! -d libyang ]; then
+        git clone https://github.com/CESNET/libyang.git libyang
+    fi
+
+    LIBYANG_VER="2.0.0"
+    LIBYANG_COMMIT="v${LIBYANG_VER}"
+
+    cd libyang
+    git checkout ${LIBYANG_COMMIT}
+
+    # Build libyang
+    if [ ! -d build ]; then
+        mkdir build
+    else
+        sudo rm -R build
+        mkdir build
+    fi
+    cd build
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+        -D CMAKE_BUILD_TYPE:String="Release" ..
+    make -j${NUM_CORES}
+    sudo make install
+    sudo ldconfig
+}
+
+
+# Install FRRouting dependencies
+function do_frrouting_deps {
+    # Install dependencies
+    do_libyang
+
+    sudo apt-get install -y \
+    git autoconf automake libtool make libreadline-dev texinfo \
+    pkg-config libpam0g-dev libjson-c-dev bison flex \
+    libc-ares-dev python3-dev python3-sphinx \
+    install-info build-essential libsnmp-dev perl \
+    libcap-dev libelf-dev libunwind-dev
+}
+
+
 # Install FRRouting
+# for ubuntu 20.04 :http://docs.frrouting.org/projects/dev-guide/en/latest/building-frr-for-ubuntu2004.html
 function do_frrouting {
     # Install dependencies
     do_frrouting_deps
@@ -589,6 +626,9 @@ function do_p4-utils {
     fi
     cd p4-utils
 
+    # TODO: should be removed
+    git checkout ${P4_UTILS_BRANCH}
+
     # Build p4-utils    
     sudo ./install.sh
 }
@@ -600,6 +640,11 @@ function do_p4-learning {
     if [ ! -d p4-learning ]; then
         git clone https://github.com/nsg-ethz/p4-learning.git p4-learning
     fi
+
+    cd p4-learning
+
+    # TODO: should be removed
+    git checkout ${P4_UTILS_BRANCH}
 }
 
 # Install Sphinx and ReadtheDocs
@@ -608,12 +653,46 @@ function do_sphinx {
     sudo pip3 install sphinx-rtd-theme
 }
 
-##########
-# Install 
-##########
+function google_module_fix {
+    curl -sSL https://raw.githubusercontent.com/nsg-ethz/p4-utils/${P4_UTILS_BRANCH}/install-tools/scripts/protoinitfix.py | sudo python3
+}
 
-# p4c depends on protobuf to compile p4runtime info files.
+###### MAIN ######
+
+do_init_checks
+
+# Print commands and exit on errors
+set -xe
+
+echo "------------------------------------------------------------"
+echo "Time and disk space used before installation begins:"
+set -x
+date
+df -h .
+df -BM .
+
+# Make the system passwordless
+if [ ! -f /etc/sudoers.d/99_vm ]; then
+    sudo bash -c "echo '${USER_NAME} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_vm"
+    sudo chmod 440 /etc/sudoers.d/99_vm
+fi
+
+# Create BUILD_DIR
+mkdir -p ${BUILD_DIR}
+
+# Set locale
+sudo locale-gen en_US.UTF-8
+
+# Update packages list
+sudo apt-get update
+
+# initial ubuntu packages and global installs
+do_global_setup 
+
+# Install P4 tools
 do_protobuf
+
+# runtime install
 if [ "$P4_RUNTIME" = true ]; then
     do_grpc
     do_bmv2_deps
@@ -622,29 +701,35 @@ if [ "$P4_RUNTIME" = true ]; then
     fi
     do_PI
 fi
+
+# python site packages fix
+site_packages_fix
+
 do_bmv2
 do_p4c
 do_ptf
-do_mininet
+do_mininet_no_python2
 
-# Mininet installs Python2 which becomes the system default binary.
-# This sets again Python3 as the system default binary.
-sudo ln -sf $(which python3) /usr/bin/python
-sudo ln -sf $(which pip3) /usr/bin/pip
+#
+## Mininet installs Python2 which becomes the system default binary.
+## This sets again Python3 as the system default binary.
+#sudo ln -sf $(which python3) /usr/bin/python
+#sudo ln -sf $(which pip3) /usr/bin/pip
 
+#
 if [ "$FRROUTING" = true ]; then
     do_frrouting
 fi
-
+#
 do_p4-utils
 do_p4-learning
-
-# last fixes
+#
+## last fixes
 site_packages_fix
 google_module_fix
-
+#
 if [ "$DOCUMENTATION" = true ]; then
     do_sphinx
 fi
-
-echo "Installation complete!"
+#
+#echo "Installation complete!"
