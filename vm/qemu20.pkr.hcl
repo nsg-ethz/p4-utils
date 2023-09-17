@@ -56,10 +56,9 @@ source "qemu" "ubuntu20046_qemu" {
   ssh_username      = var.username
   ssh_password      = var.password
   ssh_timeout       = "1h"
-  ip_wait_timeout = "10m"
   shutdown_command  = "echo ${var.password} | sudo -S shutdown -P now"
   format            = "qcow2"
-  boot_wait         = "120s"
+  boot_wait         = "180s"
   boot_command      = [
     "<esc><wait>",
     "<esc><wait>",
