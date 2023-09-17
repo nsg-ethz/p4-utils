@@ -58,7 +58,7 @@ source "qemu" "ubuntu20046_qemu" {
   ssh_timeout       = "1h"
   shutdown_command  = "echo ${var.password} | sudo -S shutdown -P now"
   format            = "qcow2"
-  boot_wait         = "180s"
+  boot_wait         = "20s"
   boot_command      = [
     "<esc><wait>",
     "<esc><wait>",

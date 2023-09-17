@@ -10,4 +10,4 @@ done
 
 packer init "$SCRIPT_DIR/qemu20.pkr.hcl"
 packer validate "$SCRIPT_DIR/qemu20.pkr.hcl"
-packer build $OPTS "$SCRIPT_DIR/qemu20.pkr.hcl"
+packer build -debug $OPTS "$SCRIPT_DIR/qemu20.pkr.hcl"
