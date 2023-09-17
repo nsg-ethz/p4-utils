@@ -30,8 +30,7 @@ FRROUTING=true
 DOCUMENTATION=true
 
 # p4-utils branch 
-# TODO: improve this in the future
-P4_UTILS_BRANCH="update-p4-tools"
+P4_UTILS_BRANCH="master"
 
 # Software versions
 

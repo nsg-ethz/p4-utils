@@ -9,8 +9,7 @@
 # Furthermore, we install p4-utils and p4-learning and ffr routers.
 
 # This install script has only been tested with the following systems:
-# Ubuntu 20.04
-# Ubuntu 22.04
+# Ubuntu 18.04
 
 # Configuration variables
 # Currently loaded linux kernel
@@ -59,7 +58,7 @@ LIBYANG_COMMIT="v${LIBYANG_VER}"
 
 # p4-utils branch 
 # TODO: improve this in the future
-P4_UTILS_BRANCH="update-p4-tools"
+P4_UTILS_BRANCH="master"
 
 # Print commands and exit on errors
 set -xe
