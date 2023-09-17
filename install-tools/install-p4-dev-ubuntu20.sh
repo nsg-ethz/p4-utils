@@ -42,7 +42,8 @@ PROTOBUF_VER="3.20.3"
 PROTOBUF_COMMIT="v${PROTOBUF_VER}"
 
 # from https://github.com/p4lang/PI#dependencies
-GRPC_VER="1.43.2"
+# changed it from 1.43.2 since pip does not have it and my source build fails
+GRPC_VER="1.44.0"
 GRPC_COMMIT="tags/v${GRPC_VER}"
 
 PI_COMMIT="6d0f3d6c08d595f65c7d96fd852d9e0c308a6f30"    # Aug 21 2023
