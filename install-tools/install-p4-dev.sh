@@ -3,7 +3,7 @@
 # Author: Edgar Costa Molero
 # Email: cedgar@ethz.ch
 
-# This scripts installs all the required software to learn and prototype P4
+/home/ubuntu20/p4-tools/p4-utils# This scripts installs all the required software to learn and prototype P4
 # programs using the p4lang software suite. 
 
 # Furthermore, we install p4-utils and p4-learning and ffr routers.
@@ -527,6 +527,9 @@ function do_mininet {
 
 # Install mininet
 function do_mininet_no_python2 {
+    # Clone source
+    cd $HOME
+    
     # mininet installing process forces python2 to be installed
     # we want to avoid this in ubuntu 20+
     # This patch helps us doing so
