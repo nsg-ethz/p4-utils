@@ -334,6 +334,32 @@ function do_bmv2 {
     #    sudo ldconfig
     #fi
 }
+
+# not used in the install
+function do_bmv2_opt {
+    # Install dependencies
+    if [ "$P4_RUNTIME" = false ]; then
+        do_bmv2_deps
+    fi
+
+    # Clone source
+    cd ${BUILD_DIR}
+    if [ ! -d bmv2 ]; then
+        git clone https://github.com/p4lang/behavioral-model.git bmv2-opt
+    fi
+    cd bmv2
+    git checkout ${BMV2_COMMIT}
+
+    # Build behavioral-model
+    ./autogen.sh
+    # with nanomsg for digests
+    ./configure --disable-elogger --disable-logging-macros 'CFLAGS=-g -O2' 'CXXFLAGS=-g -O2'
+    make -j${NUM_CORES}
+    sudo make install
+    sudo ldconfig
+}
+
+
 # Install sysrepo dependencies
 function do_sysrepo_libyang_deps {
     # Dependencies in : https://github.com/p4lang/PI/blob/master/proto/README.md
@@ -529,7 +555,7 @@ function do_mininet {
 function do_mininet_no_python2 {
     # Clone source
     cd $HOME
-    
+
     # mininet installing process forces python2 to be installed
     # we want to avoid this in ubuntu 20+
     # This patch helps us doing so
