@@ -96,17 +96,19 @@ Use our preconfigured VM
 
 To download our preconfiugred VMs, please click on the folllwing links:
 
+- __ https://polybox.ethz.ch/index.php/s/QlrfHm7uYw6vISe
+
+  `QEMU VM (Ubuntu 20)`__
+
+- __ https://polybox.ethz.ch/index.php/s/9orcmetpNxOAhlI
+
+  `Deprecated: QEMU VM (UBuntu 18.04)`__
+
 - __ #
 
   `VirtualBox VM (unavailable)`__
 
-- __ https://polybox.ethz.ch/index.php/s/QlrfHm7uYw6vISe
 
-  `QEMU VM (Ubuntu 20/compressed)`__
-
-- __ https://polybox.ethz.ch/index.php/s/9orcmetpNxOAhlI
-
-  `QEMU VM (old ubuntu 18 vm)`__
 
 Manual Installation
 -------------------
