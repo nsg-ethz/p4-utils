@@ -58,7 +58,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'P4-Utils'
-copyright = '2021, Networked Systems Group (NSG@ETH)'
+copyright = '2023, Networked Systems Group (NSG@ETH)'
 author = 'Networked Systems Group (NSG@ETH)'
 
 # The version info for the project you're documenting, acts as replacement for
