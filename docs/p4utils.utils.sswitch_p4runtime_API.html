@@ -8,22 +8,11 @@
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  false,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,14 +25,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> P4-Utils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            P4-Utils
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -88,10 +81,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
-          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
-      <li>p4utils.utils.sswitch_p4runtime_API module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="p4utils.html">P4-Utils API reference</a></li>
+          <li class="breadcrumb-item"><a href="p4utils.utils.html">p4utils.utils package</a></li>
+      <li class="breadcrumb-item active">p4utils.utils.sswitch_p4runtime_API module</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/p4utils.utils.sswitch_p4runtime_API.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -106,12 +99,12 @@
 <p>This module provides a <em>P4Runtime API</em> for the <em>Simple Switch</em> target. It builds
 on the generic <a class="reference external" href="p4utils.utils.p4runtime_API.html">P4Runtime API</a>. The methods listed here were designed to be as
 close as possible (in the naming and in the signature) to those used in the
-<a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">ThriftAPI</span></code></a>, so that passing to one method to the
+<a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThriftAPI</span></code></a>, so that passing to one method to the
 other is easier for the user.</p>
 <dl class="class">
 <dt id="p4utils.utils.sswitch_p4runtime_API.CounterType">
 <em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">CounterType</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L21-L29"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.CounterType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Counter type according to <em>P4 Runtime Specification</em>. See <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/57bb925a30df02b5c492c2a16c29b0014b98fa7a/proto/p4/config/v1/p4info.proto#L278">here</a> for details.</p>
 <dl class="attribute">
 <dt id="p4utils.utils.sswitch_p4runtime_API.CounterType.both">
@@ -138,7 +131,7 @@ other is easier for the user.</p>
 <dl class="class">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI">
 <em class="property">class </em><code class="descclassname">p4utils.utils.sswitch_p4runtime_API.</code><code class="descname">SimpleSwitchP4RuntimeAPI</code><span class="sig-paren">(</span><em>device_id</em>, <em>grpc_port</em>, <em>grpc_ip='0.0.0.0'</em>, <em>p4rt_path=None</em>, <em>json_path=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L47-L1361"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>For a better documentation of the primitives and the assumptions used,
 please take a look at:</p>
 <ul class="simple">
@@ -150,15 +143,15 @@ please take a look at:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>device_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – switch <em>id</em></li>
-<li><strong>grpc_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the port the switch gRPC server is listening on</li>
-<li><strong>grpc_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the IP the switch gRPC server is listening on</li>
-<li><strong>p4rt_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path to the P4Runtime Info file</li>
-<li><strong>json_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path to the P4 JSON compiled file</li>
+<li><strong>device_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – switch <em>id</em></li>
+<li><strong>grpc_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the port the switch gRPC server is listening on</li>
+<li><strong>grpc_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the IP the switch gRPC server is listening on</li>
+<li><strong>p4rt_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – path to the P4Runtime Info file</li>
+<li><strong>json_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – path to the P4 JSON compiled file</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.10)"><code class="xref py py-exc docutils literal"><span class="pre">FileNotFoundError</span></code></a> – if <code class="docutils literal"><span class="pre">p4rt_path</span></code> or <code class="docutils literal"><span class="pre">json_path</span></code> are not specified, or invalid and
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.12)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a> – if <code class="docutils literal notranslate"><span class="pre">p4rt_path</span></code> or <code class="docutils literal notranslate"><span class="pre">json_path</span></code> are not specified, or invalid and
 the client cannot retrieve the relevant informations from the
 P4Runtime server.</p>
 </td>
@@ -168,13 +161,29 @@ P4Runtime server.</p>
 <dl class="attribute">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.client">
 <code class="descname">client</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.client" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient" title="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient"><code class="xref py py-class docutils literal"><span class="pre">P4RuntimeClient</span></code></a> – P4Runtime client instance.</p>
+<dd><p>P4Runtime client instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="p4utils.utils.p4runtime_API.p4runtime.html#p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient" title="p4utils.utils.p4runtime_API.p4runtime.P4RuntimeClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">P4RuntimeClient</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.context">
 <code class="descname">context</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.context" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="p4utils.utils.p4runtime_API.context.html#p4utils.utils.p4runtime_API.context.Context" title="p4utils.utils.p4runtime_API.context.Context"><code class="xref py py-class docutils literal"><span class="pre">Context</span></code></a> – P4Runtime context containing the information about all the P4 objects.</p>
+<dd><p>P4Runtime context containing the information about all the P4 objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="p4utils.utils.p4runtime_API.context.html#p4utils.utils.p4runtime_API.context.Context" title="p4utils.utils.p4runtime_API.context.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">Context</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -186,20 +195,20 @@ P4Runtime server.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the counter</li>
-<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – index of the counter to read (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the counter</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – index of the counter to read (first element is at <code class="docutils literal notranslate"><span class="pre">0</span></code>)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p><code class="docutils literal"><span class="pre">(byte_count,</span> <span class="pre">packet_count)</span></code> where:</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p><code class="docutils literal notranslate"><span class="pre">(byte_count,</span> <span class="pre">packet_count)</span></code> where:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">byte_count</span></code> is the number of bytes counted;</li>
-<li><code class="docutils literal"><span class="pre">packet_count</span></code> is the number of bytes counted.</li>
+<li><code class="docutils literal notranslate"><span class="pre">byte_count</span></code> is the number of bytes counted;</li>
+<li><code class="docutils literal notranslate"><span class="pre">packet_count</span></code> is the number of bytes counted.</li>
 </ul>
 </p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
 </td>
 </tr>
 </tbody>
@@ -220,11 +229,11 @@ to use only the correct value (see <a class="reference external" href="https://p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the counter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the counter</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -239,26 +248,26 @@ to use only the correct value (see <a class="reference external" href="https://p
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the counter</li>
-<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – index of the counter to write (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
-<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of packets to write (default: <code class="docutils literal"><span class="pre">0</span></code>)</li>
-<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of bytes to write (default: <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the counter</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – index of the counter to write (first element is at <code class="docutils literal notranslate"><span class="pre">0</span></code>)</li>
+<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of packets to write (default: <code class="docutils literal notranslate"><span class="pre">0</span></code>)</li>
+<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of bytes to write (default: <code class="docutils literal notranslate"><span class="pre">0</span></code>)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
 <p>There are three types of counters:</p>
 <ul class="simple">
-<li><strong>BYTES</strong>, only the field <code class="docutils literal"><span class="pre">byts</span></code> is written and the value of <code class="docutils literal"><span class="pre">pkts</span></code> is ignored.</li>
-<li><strong>PACKETS</strong>, only the field <code class="docutils literal"><span class="pre">pkts</span></code> is written and the value of <code class="docutils literal"><span class="pre">byts</span></code> is ignored.</li>
-<li><strong>PACKETS_AND_BYTES</strong>, both <code class="docutils literal"><span class="pre">byts</span></code> and <code class="docutils literal"><span class="pre">pkts</span></code> are written.</li>
+<li><strong>BYTES</strong>, only the field <code class="docutils literal notranslate"><span class="pre">byts</span></code> is written and the value of <code class="docutils literal notranslate"><span class="pre">pkts</span></code> is ignored.</li>
+<li><strong>PACKETS</strong>, only the field <code class="docutils literal notranslate"><span class="pre">pkts</span></code> is written and the value of <code class="docutils literal notranslate"><span class="pre">byts</span></code> is ignored.</li>
+<li><strong>PACKETS_AND_BYTES</strong>, both <code class="docutils literal notranslate"><span class="pre">byts</span></code> and <code class="docutils literal notranslate"><span class="pre">pkts</span></code> are written.</li>
 </ul>
 </dd></dl>
 
@@ -271,32 +280,32 @@ to use only the correct value (see <a class="reference external" href="https://p
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – clone session <em>id</em></li>
-<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of port numbers to add to the clone session
-(each port number is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of instances of the corresponding ports
-(each instance is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>cos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Class of Service (see <a class="reference external" href="https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress">here</a>)</li>
-<li><strong>packet_lentgth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximal packet length in bytes (after which, packets are truncated)</li>
+<li><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – clone session <em>id</em></li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of port numbers to add to the clone session
+(each port number is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</li>
+<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of instances of the corresponding ports
+(each instance is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</li>
+<li><strong>cos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Class of Service (see <a class="reference external" href="https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress">here</a>)</li>
+<li><strong>packet_lentgth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – maximal packet length in bytes (after which, packets are truncated)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>A replica is logically a tuple <code class="docutils literal"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
+<p>A replica is logically a tuple <code class="docutils literal notranslate"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
 within the same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
-specified, then the instance number is set to <code class="docutils literal"><span class="pre">0</span></code> for all the replicas by default.</p>
+specified, then the instance number is set to <code class="docutils literal notranslate"><span class="pre">0</span></code> for all the replicas by default.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">By default, <code class="docutils literal"><span class="pre">packet_length</span></code> is set to <code class="docutils literal"><span class="pre">0</span></code> i.e. no truncation happens and
-<code class="docutils literal"><span class="pre">cos</span></code> is set to <code class="docutils literal"><span class="pre">0</span></code> (normal packet classification). If <code class="docutils literal"><span class="pre">ports</span></code> is
+<p class="last">By default, <code class="docutils literal notranslate"><span class="pre">packet_length</span></code> is set to <code class="docutils literal notranslate"><span class="pre">0</span></code> i.e. no truncation happens and
+<code class="docutils literal notranslate"><span class="pre">cos</span></code> is set to <code class="docutils literal notranslate"><span class="pre">0</span></code> (normal packet classification). If <code class="docutils literal notranslate"><span class="pre">ports</span></code> is
 an empty list, then the packets are not cloned to any port.</p>
 </div>
 </dd></dl>
@@ -309,11 +318,11 @@ an empty list, then the packets are not cloned to any port.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – clone session <em>id</em></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – clone session <em>id</em></td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -327,19 +336,19 @@ an empty list, then the packets are not cloned to any port.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – clone session id</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – clone session id</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">(ports,</span> <span class="pre">instances)</span></code> where:<ul class="simple">
-<li><code class="docutils literal"><span class="pre">ports</span></code> is a list of port numbers of the clone session;</li>
-<li><code class="docutils literal"><span class="pre">instances</span></code> is a list of instances of the corresponding ports.</li>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">(ports,</span> <span class="pre">instances)</span></code> where:<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">ports</span></code> is a list of port numbers of the clone session;</li>
+<li><code class="docutils literal notranslate"><span class="pre">instances</span></code> is a list of instances of the corresponding ports.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></td>
 </tr>
 </tbody>
 </table>
-<p>A replica is logically a tuple <code class="docutils literal"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
+<p>A replica is logically a tuple <code class="docutils literal notranslate"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
 within the same multicast group.</p>
 </dd></dl>
 
@@ -352,32 +361,32 @@ within the same multicast group.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – clone session <em>id</em></li>
-<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of port numbers to add to the clone session
-(each port number is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of instances of the corresponding ports
-(each instance is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>cos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Class of Service (see <a class="reference external" href="https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress">here</a>)</li>
-<li><strong>packet_lentgth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximal packet length in bytes (after which, packets are truncated)</li>
+<li><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – clone session <em>id</em></li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of port numbers to add to the clone session
+(each port number is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</li>
+<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of instances of the corresponding ports
+(each instance is <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</li>
+<li><strong>cos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Class of Service (see <a class="reference external" href="https://p4.org/p4-spec/docs/PSA-v1.1.0.html#sec-after-ingress">here</a>)</li>
+<li><strong>packet_lentgth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – maximal packet length in bytes (after which, packets are truncated)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>A replica is logically a tuple <code class="docutils literal"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
+<p>A replica is logically a tuple <code class="docutils literal notranslate"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
 within the same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
-specified, then the instance number is set to <code class="docutils literal"><span class="pre">0</span></code> for all the replicas by default.</p>
+specified, then the instance number is set to <code class="docutils literal notranslate"><span class="pre">0</span></code> for all the replicas by default.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">By default, the <code class="docutils literal"><span class="pre">packet_length</span></code> is set to <code class="docutils literal"><span class="pre">0</span></code> i.e. no truncation happens and
-<code class="docutils literal"><span class="pre">cos</span></code> is set to <code class="docutils literal"><span class="pre">0</span></code> (normal packet classification). If <code class="docutils literal"><span class="pre">ports</span></code> is an empty
+<p class="last">By default, the <code class="docutils literal notranslate"><span class="pre">packet_length</span></code> is set to <code class="docutils literal notranslate"><span class="pre">0</span></code> i.e. no truncation happens and
+<code class="docutils literal notranslate"><span class="pre">cos</span></code> is set to <code class="docutils literal notranslate"><span class="pre">0</span></code> (normal packet classification). If <code class="docutils literal notranslate"><span class="pre">ports</span></code> is an empty
 list, then the packets are not cloned to any port.</p>
 </div>
 </dd></dl>
@@ -391,12 +400,12 @@ list, then the packets are not cloned to any port.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
+<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
 generated by the compiler)</li>
-<li><strong>max_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum server buffering delay in nanoseconds for an outstanding digest message</li>
-<li><strong>max_list_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum digest list size (in number of digest messages) sent by the server
-to the client as a single <code class="docutils literal"><span class="pre">DigestList</span></code> Protobuf message</li>
-<li><strong>ack_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the timeout in nanoseconds that a server must wait for a digest list acknowledgement
+<li><strong>max_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the maximum server buffering delay in nanoseconds for an outstanding digest message</li>
+<li><strong>max_list_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the maximum digest list size (in number of digest messages) sent by the server
+to the client as a single <code class="docutils literal notranslate"><span class="pre">DigestList</span></code> Protobuf message</li>
+<li><strong>ack_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the timeout in nanoseconds that a server must wait for a digest list acknowledgement
 from the client before new digest messages can be generated for the same learned data</li>
 </ul>
 </td>
@@ -404,23 +413,23 @@ from the client before new digest messages can be generated for the same learned
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>By default, <code class="docutils literal"><span class="pre">max_timeout_ns</span></code> is set to <code class="docutils literal"><span class="pre">0</span></code>, i.e. the server should generate a <code class="docutils literal"><span class="pre">DigestList</span></code>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">max_timeout_ns</span></code> is set to <code class="docutils literal notranslate"><span class="pre">0</span></code>, i.e. the server should generate a <code class="docutils literal notranslate"><span class="pre">DigestList</span></code>
 message for every digest message generated by the data plane.</p>
-<p>By default, <code class="docutils literal"><span class="pre">max_list_size</span></code> is set to <code class="docutils literal"><span class="pre">1</span></code>, i.e. the server should generate a <code class="docutils literal"><span class="pre">DigestList</span></code>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">max_list_size</span></code> is set to <code class="docutils literal notranslate"><span class="pre">1</span></code>, i.e. the server should generate a <code class="docutils literal notranslate"><span class="pre">DigestList</span></code>
 message for every digest message generated by the data plane.</p>
-<p>By default, <code class="docutils literal"><span class="pre">ack_timeout_ns</span></code> is set to <code class="docutils literal"><span class="pre">0</span></code>, i.e. the cache of digests not yet acknowledged must
+<p>By default, <code class="docutils literal notranslate"><span class="pre">ack_timeout_ns</span></code> is set to <code class="docutils literal notranslate"><span class="pre">0</span></code>, i.e. the cache of digests not yet acknowledged must
 always be an empty set.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
-<code class="docutils literal"><span class="pre">digest&lt;named_struct_type&gt;(1,</span> <span class="pre">{struct_field_1,</span> <span class="pre">struct_field_2,</span> <span class="pre">...})</span></code> where <code class="docutils literal"><span class="pre">named_struct_type</span></code> must
+<code class="docutils literal notranslate"><span class="pre">digest&lt;named_struct_type&gt;(1,</span> <span class="pre">{struct_field_1,</span> <span class="pre">struct_field_2,</span> <span class="pre">...})</span></code> where <code class="docutils literal notranslate"><span class="pre">named_struct_type</span></code> must
 be explicited and previously defined. The name of the digest for the configuration’s sake
-is the name of the struct type (i.e. <code class="docutils literal"><span class="pre">named_struct_type</span></code>).</p>
+is the name of the struct type (i.e. <code class="docutils literal notranslate"><span class="pre">named_struct_type</span></code>).</p>
 </div>
 </dd></dl>
 
@@ -432,28 +441,28 @@ is the name of the struct type (i.e. <code class="docutils literal"><span class=
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
 generated by the compiler)</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">(max_timeout_ns,</span> <span class="pre">max_list_size,</span> <span class="pre">ack_timeout_ns)</span></code> where:<ul class="simple">
-<li><code class="docutils literal"><span class="pre">max_timeout_ns</span></code> is the maximum server buffering delay in nanoseconds for an outstanding digest message;</li>
-<li><code class="docutils literal"><span class="pre">max_list_size</span></code> is the maximum digest list size (in number of digest messages) sent by the server
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">(max_timeout_ns,</span> <span class="pre">max_list_size,</span> <span class="pre">ack_timeout_ns)</span></code> where:<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">max_timeout_ns</span></code> is the maximum server buffering delay in nanoseconds for an outstanding digest message;</li>
+<li><code class="docutils literal notranslate"><span class="pre">max_list_size</span></code> is the maximum digest list size (in number of digest messages) sent by the server
 to the client as a single DigestList Protobuf message;</li>
-<li><code class="docutils literal"><span class="pre">ack_timeout_ns</span></code> is the timeout in nanoseconds that a server must wait for a digest list acknowledgement
+<li><code class="docutils literal notranslate"><span class="pre">ack_timeout_ns</span></code> is the timeout in nanoseconds that a server must wait for a digest list acknowledgement
 from the client before new digest messages can be generated for the same learned data.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
-<code class="docutils literal"><span class="pre">digest&lt;named_struct_type&gt;(1,</span> <span class="pre">{struct_field_1,</span> <span class="pre">struct_field_2,</span> <span class="pre">...})</span></code> where <code class="docutils literal"><span class="pre">named_struct_type</span></code> must
+<code class="docutils literal notranslate"><span class="pre">digest&lt;named_struct_type&gt;(1,</span> <span class="pre">{struct_field_1,</span> <span class="pre">struct_field_2,</span> <span class="pre">...})</span></code> where <code class="docutils literal notranslate"><span class="pre">named_struct_type</span></code> must
 be explicited and previously defined. The name of the digest for the configuration’s sake
-is the name of the struct type (i.e. <code class="docutils literal"><span class="pre">named_struct_type</span></code>).</p>
+is the name of the struct type (i.e. <code class="docutils literal notranslate"><span class="pre">named_struct_type</span></code>).</p>
 </div>
 </dd></dl>
 
@@ -466,12 +475,12 @@ is the name of the struct type (i.e. <code class="docutils literal"><span class=
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
+<li><strong>digest_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the digest (the name is shown in the P4 runtime information file
 generated by the compiler)</li>
-<li><strong>max_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum server buffering delay in nanoseconds for an outstanding digest message</li>
-<li><strong>max_list_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum digest list size (in number of digest messages) sent by the server
-to the client as a single <code class="docutils literal"><span class="pre">DigestList</span></code> Protobuf message</li>
-<li><strong>ack_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the timeout in nanoseconds that a server must wait for a digest list acknowledgement
+<li><strong>max_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the maximum server buffering delay in nanoseconds for an outstanding digest message</li>
+<li><strong>max_list_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the maximum digest list size (in number of digest messages) sent by the server
+to the client as a single <code class="docutils literal notranslate"><span class="pre">DigestList</span></code> Protobuf message</li>
+<li><strong>ack_timeout_ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the timeout in nanoseconds that a server must wait for a digest list acknowledgement
 from the client before new digest messages can be generated for the same learned data</li>
 </ul>
 </td>
@@ -479,23 +488,23 @@ from the client before new digest messages can be generated for the same learned
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>By default, <code class="docutils literal"><span class="pre">max_timeout_ns</span></code> is set to <code class="docutils literal"><span class="pre">0</span></code>, i.e. the server should generate a <code class="docutils literal"><span class="pre">DigestList</span></code>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">max_timeout_ns</span></code> is set to <code class="docutils literal notranslate"><span class="pre">0</span></code>, i.e. the server should generate a <code class="docutils literal notranslate"><span class="pre">DigestList</span></code>
 message for every digest message generated by the data plane.</p>
-<p>By default, <code class="docutils literal"><span class="pre">max_list_size</span></code> is set to <code class="docutils literal"><span class="pre">1</span></code>, i.e. the server should generate a <code class="docutils literal"><span class="pre">DigestList</span></code>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">max_list_size</span></code> is set to <code class="docutils literal notranslate"><span class="pre">1</span></code>, i.e. the server should generate a <code class="docutils literal notranslate"><span class="pre">DigestList</span></code>
 message for every digest message generated by the data plane.</p>
-<p>By default, <code class="docutils literal"><span class="pre">ack_timeout_ns</span></code> is set to <code class="docutils literal"><span class="pre">0</span></code>, i.e. the cache of digests not yet acknowledged must
+<p>By default, <code class="docutils literal notranslate"><span class="pre">ack_timeout_ns</span></code> is set to <code class="docutils literal notranslate"><span class="pre">0</span></code>, i.e. the cache of digests not yet acknowledged must
 always be an empty set.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">P4Runtime only supports named digests, i.e. those declared in P4 with the following syntax:
-<code class="docutils literal"><span class="pre">digest&lt;named_struct_type&gt;(1,</span> <span class="pre">{struct_field_1,</span> <span class="pre">struct_field_2,</span> <span class="pre">...})</span></code> where <code class="docutils literal"><span class="pre">named_struct_type</span></code> must
+<code class="docutils literal notranslate"><span class="pre">digest&lt;named_struct_type&gt;(1,</span> <span class="pre">{struct_field_1,</span> <span class="pre">struct_field_2,</span> <span class="pre">...})</span></code> where <code class="docutils literal notranslate"><span class="pre">named_struct_type</span></code> must
 be explicited and previously defined. The name of the digest for the configuration’s sake
-is the name of the struct type (i.e. <code class="docutils literal"><span class="pre">named_struct_type</span></code>).</p>
+is the name of the struct type (i.e. <code class="docutils literal notranslate"><span class="pre">named_struct_type</span></code>).</p>
 </div>
 </dd></dl>
 
@@ -508,23 +517,23 @@ is the name of the struct type (i.e. <code class="docutils literal"><span class=
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct counter</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) used
+<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the direct counter</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) used
 to identify the entry</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match (used to identify the table
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – priority in ternary match (used to identify the table
 entry to which the direct counter is attached)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p><code class="docutils literal"><span class="pre">(byte_count,</span> <span class="pre">packet_count)</span></code> where:</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p><code class="docutils literal notranslate"><span class="pre">(byte_count,</span> <span class="pre">packet_count)</span></code> where:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">byte_count</span></code> is the number of bytes counted;</li>
-<li><code class="docutils literal"><span class="pre">packet_count</span></code> is the number of packets counted.</li>
+<li><code class="docutils literal notranslate"><span class="pre">byte_count</span></code> is the number of bytes counted;</li>
+<li><code class="docutils literal notranslate"><span class="pre">packet_count</span></code> is the number of packets counted.</li>
 </ul>
 </p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
 </td>
 </tr>
 </tbody>
@@ -545,11 +554,11 @@ to use only the correct value (see <a class="reference external" href="https://p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct counter</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the direct counter</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -564,20 +573,20 @@ to use only the correct value (see <a class="reference external" href="https://p
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct counter</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) used
+<li><strong>direct_counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the direct counter</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) used
 to identify the entry</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match (used to identify the table
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – priority in ternary match (used to identify the table
 entry to which the direct counter is attached)</li>
-<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of packets to write (default: 0)</li>
-<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of bytes to write (default: 0)</li>
+<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of packets to write (default: 0)</li>
+<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of bytes to write (default: 0)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -586,9 +595,9 @@ entry to which the direct counter is attached)</li>
 <p class="first admonition-title">Note</p>
 <p>There are three types of counters:</p>
 <ul class="last simple">
-<li><strong>BYTES</strong>, only the field <code class="docutils literal"><span class="pre">byts</span></code> is written and the value of <code class="docutils literal"><span class="pre">pkts</span></code> is ignored.</li>
-<li><strong>PACKETS</strong>, only the field <code class="docutils literal"><span class="pre">pkts</span></code> is written and the value of <code class="docutils literal"><span class="pre">byts</span></code> is ignored.</li>
-<li><strong>PACKETS_AND_BYTES</strong>, both <code class="docutils literal"><span class="pre">byts</span></code> and <code class="docutils literal"><span class="pre">pkts</span></code> are written.</li>
+<li><strong>BYTES</strong>, only the field <code class="docutils literal notranslate"><span class="pre">byts</span></code> is written and the value of <code class="docutils literal notranslate"><span class="pre">pkts</span></code> is ignored.</li>
+<li><strong>PACKETS</strong>, only the field <code class="docutils literal notranslate"><span class="pre">pkts</span></code> is written and the value of <code class="docutils literal notranslate"><span class="pre">byts</span></code> is ignored.</li>
+<li><strong>PACKETS_AND_BYTES</strong>, both <code class="docutils literal notranslate"><span class="pre">byts</span></code> and <code class="docutils literal notranslate"><span class="pre">pkts</span></code> are written.</li>
 </ul>
 </div>
 </dd></dl>
@@ -602,22 +611,22 @@ entry to which the direct counter is attached)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct meter</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code></li>
+<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the direct meter</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – <code class="docutils literal notranslate"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code></li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal"><span class="pre">cir</span></code> and <code class="docutils literal"><span class="pre">pir</span></code> use units/second, <code class="docutils literal"><span class="pre">cbursts</span></code> and <code class="docutils literal"><span class="pre">pburst</span></code> use units
+<p class="last"><code class="docutils literal notranslate"><span class="pre">cir</span></code> and <code class="docutils literal notranslate"><span class="pre">pir</span></code> use units/second, <code class="docutils literal notranslate"><span class="pre">cbursts</span></code> and <code class="docutils literal notranslate"><span class="pre">pburst</span></code> use units
 where units is bytes or packets, depending on the meter type.</p>
 </div>
 </dd></dl>
@@ -631,24 +640,24 @@ where units is bytes or packets, depending on the meter type.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct meter</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)
+<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the direct meter</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)
 used to identify the entry</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match (used to identify the table</li>
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – priority in ternary match (used to identify the table</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> if meter is configured, <strong>None</strong> otherwise</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> if meter is configured, <strong>None</strong> otherwise</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal"><span class="pre">cir</span></code> and <code class="docutils literal"><span class="pre">pir</span></code> use units/second, <code class="docutils literal"><span class="pre">cbursts</span></code> and <code class="docutils literal"><span class="pre">pburst</span></code> use units
+<p class="last"><code class="docutils literal notranslate"><span class="pre">cir</span></code> and <code class="docutils literal notranslate"><span class="pre">pir</span></code> use units/second, <code class="docutils literal notranslate"><span class="pre">cbursts</span></code> and <code class="docutils literal notranslate"><span class="pre">pburst</span></code> use units
 where units is bytes or packets, depending on the meter type.</p>
 </div>
 </dd></dl>
@@ -662,12 +671,12 @@ where units is bytes or packets, depending on the meter type.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the direct meter</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)
+<li><strong>direct_meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the direct meter</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)
 used to identify the entry</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match (used to identify the table
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – priority in ternary match (used to identify the table
 entry to which the direct meter is attached)</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (default: None, i.e.
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – <code class="docutils literal notranslate"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (default: None, i.e.
 all packets are marked as green)</li>
 </ul>
 </td>
@@ -675,14 +684,14 @@ all packets are marked as green)</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal"><span class="pre">cir</span></code> and <code class="docutils literal"><span class="pre">pir</span></code> use units/second, <code class="docutils literal"><span class="pre">cbursts</span></code> and <code class="docutils literal"><span class="pre">pburst</span></code> use units
+<p class="last"><code class="docutils literal notranslate"><span class="pre">cir</span></code> and <code class="docutils literal notranslate"><span class="pre">pir</span></code> use units/second, <code class="docutils literal notranslate"><span class="pre">cbursts</span></code> and <code class="docutils literal notranslate"><span class="pre">pburst</span></code> use units
 where units is bytes or packets, depending on the meter type.</p>
 </div>
 </dd></dl>
@@ -690,21 +699,21 @@ where units is bytes or packets, depending on the meter type.</p>
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list">
 <code class="descname">get_digest_list</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L162-L178"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.get_digest_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieves <code class="docutils literal"><span class="pre">DigestList</span></code> and send back acknowledgment.</p>
+<dd><p>Retrieves <code class="docutils literal notranslate"><span class="pre">DigestList</span></code> and send back acknowledgment.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – time to wait for packet</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – time to wait for packet</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">DigestList</span></code> Protobuf Message or <strong>None</strong> if the timeout has expired and
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">DigestList</span></code> Protobuf Message or <strong>None</strong> if the timeout has expired and
 no packet has been received.</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">See <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543">here</a> for further details. If <code class="docutils literal"><span class="pre">timeout</span></code> is set to <strong>None</strong>, the
+<p class="last">See <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/45d1c7ce2aad5dae819e8bba2cd72640af189cfe/proto/p4/v1/p4runtime.proto#L543">here</a> for further details. If <code class="docutils literal notranslate"><span class="pre">timeout</span></code> is set to <strong>None</strong>, the
 function will wait indefinitely.</p>
 </div>
 </dd></dl>
@@ -717,25 +726,25 @@ function will wait indefinitely.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – multicast group <em>id</em></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – multicast group <em>id</em></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">(ports,</span> <span class="pre">instances)</span></code> where:<ul class="simple">
-<li><code class="docutils literal"><span class="pre">ports</span></code> is a list of port numbers of the multicast group;</li>
-<li><code class="docutils literal"><span class="pre">instances</span></code> is list of instances of the corresponding ports.</li>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">(ports,</span> <span class="pre">instances)</span></code> where:<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">ports</span></code> is a list of port numbers of the multicast group;</li>
+<li><code class="docutils literal notranslate"><span class="pre">instances</span></code> is list of instances of the corresponding ports.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></td>
 </tr>
 </tbody>
 </table>
-<p>A replica is logically a tuple <code class="docutils literal"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
+<p>A replica is logically a tuple <code class="docutils literal notranslate"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
 within the same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
-specified, then the instance number is set to <code class="docutils literal"><span class="pre">0</span></code> for all the replicas by default.</p>
+specified, then the instance number is set to <code class="docutils literal notranslate"><span class="pre">0</span></code> for all the replicas by default.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal"><span class="pre">mgrp</span></code> must be greater than <code class="docutils literal"><span class="pre">0</span></code>.</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">mgrp</span></code> must be greater than <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
 </div>
 </dd></dl>
 
@@ -748,29 +757,29 @@ specified, then the instance number is set to <code class="docutils literal"><sp
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – multicast group <em>id</em></li>
-<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of port numbers to add to the multicast group
-(each port number is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of instances of the corresponding ports
-(each instance is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
+<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – multicast group <em>id</em></li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of port numbers to add to the multicast group
+(each port number is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</li>
+<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of instances of the corresponding ports
+(each instance is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>A replica is logically a tuple <code class="docutils literal"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
+<p>A replica is logically a tuple <code class="docutils literal notranslate"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
 within the same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
-specified, then the instance number is set to <code class="docutils literal"><span class="pre">0</span></code> for all the replicas by default.</p>
+specified, then the instance number is set to <code class="docutils literal notranslate"><span class="pre">0</span></code> for all the replicas by default.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal"><span class="pre">mgrp</span></code> must be larger than <code class="docutils literal"><span class="pre">0</span></code>. If <code class="docutils literal"><span class="pre">ports</span></code> is an empty list,
+<p class="last"><code class="docutils literal notranslate"><span class="pre">mgrp</span></code> must be larger than <code class="docutils literal notranslate"><span class="pre">0</span></code>. If <code class="docutils literal notranslate"><span class="pre">ports</span></code> is an empty list,
 then the packets are not multicasted to any port.</p>
 </div>
 </dd></dl>
@@ -783,17 +792,17 @@ then the packets are not multicasted to any port.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – multicast group <em>id</em></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – multicast group <em>id</em></td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal"><span class="pre">mgrp</span></code> must be larger than <code class="docutils literal"><span class="pre">0</span></code>.</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">mgrp</span></code> must be larger than <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
 </div>
 </dd></dl>
 
@@ -806,29 +815,29 @@ then the packets are not multicasted to any port.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – multicast group <em>id</em></li>
-<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of port numbers to add to the multicast group
-(each port number is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
-<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of instances of the corresponding ports
-(each instance is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>)</li>
+<li><strong>mgrp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – multicast group <em>id</em></li>
+<li><strong>ports</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of port numbers to add to the multicast group
+(each port number is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</li>
+<li><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of instances of the corresponding ports
+(each instance is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>A replica is logically a tuple <code class="docutils literal"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
+<p>A replica is logically a tuple <code class="docutils literal notranslate"><span class="pre">(port,</span> <span class="pre">instance)</span></code> which has to be unique
 within the same multicast group. Instances can be explicitly assigned to ports by
 passing the list instances to this function. If the list instances is not
-specified, then the instance number is set to <code class="docutils literal"><span class="pre">0</span></code> for all the replicas by default.</p>
+specified, then the instance number is set to <code class="docutils literal notranslate"><span class="pre">0</span></code> for all the replicas by default.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal"><span class="pre">mgrp</span></code> must be larger than <code class="docutils literal"><span class="pre">0</span></code>. If <code class="docutils literal"><span class="pre">ports</span></code> is an empty list,
+<p class="last"><code class="docutils literal notranslate"><span class="pre">mgrp</span></code> must be larger than <code class="docutils literal notranslate"><span class="pre">0</span></code>. If <code class="docutils literal notranslate"><span class="pre">ports</span></code> is an empty list,
 then the packets are not multicasted to any port.</p>
 </div>
 </dd></dl>
@@ -842,22 +851,22 @@ then the packets are not multicasted to any port.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the meter</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code></li>
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the meter</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – <code class="docutils literal notranslate"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code></li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal"><span class="pre">cir</span></code> and <code class="docutils literal"><span class="pre">pir</span></code> use units/second, <code class="docutils literal"><span class="pre">cbursts</span></code> and <code class="docutils literal"><span class="pre">pburst</span></code> use units
+<p class="last"><code class="docutils literal notranslate"><span class="pre">cir</span></code> and <code class="docutils literal notranslate"><span class="pre">pir</span></code> use units/second, <code class="docutils literal notranslate"><span class="pre">cbursts</span></code> and <code class="docutils literal notranslate"><span class="pre">pburst</span></code> use units
 where units is bytes or packets, depending on the meter type.</p>
 </div>
 </dd></dl>
@@ -871,22 +880,22 @@ where units is bytes or packets, depending on the meter type.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the meter</li>
-<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – index of the meter to read (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the meter</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – index of the meter to read (first element is at <code class="docutils literal notranslate"><span class="pre">0</span></code>)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> if meter is configured, <strong>None</strong> otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> if meter is configured, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal"><span class="pre">cir</span></code> and <code class="docutils literal"><span class="pre">pir</span></code> use units/second, <code class="docutils literal"><span class="pre">cbursts</span></code> and <code class="docutils literal"><span class="pre">pburst</span></code> use units
+<p class="last"><code class="docutils literal notranslate"><span class="pre">cir</span></code> and <code class="docutils literal notranslate"><span class="pre">pir</span></code> use units/second, <code class="docutils literal notranslate"><span class="pre">cbursts</span></code> and <code class="docutils literal notranslate"><span class="pre">pburst</span></code> use units
 where units is bytes or packets, depending on the meter type.</p>
 </div>
 </dd></dl>
@@ -900,24 +909,24 @@ where units is bytes or packets, depending on the meter type.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the meter</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (default: <strong>None</strong>, i.e.
+<li><strong>meter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the meter</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – <code class="docutils literal notranslate"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (default: <strong>None</strong>, i.e.
 all packets are marked as <strong>GREEN</strong>)</li>
-<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – index of the meter to set (first element is at <code class="docutils literal"><span class="pre">0</span></code>)</li>
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – index of the meter to set (first element is at <code class="docutils literal notranslate"><span class="pre">0</span></code>)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal"><span class="pre">cir</span></code> and <code class="docutils literal"><span class="pre">pir</span></code> use units/second, <code class="docutils literal"><span class="pre">cbursts</span></code> and <code class="docutils literal"><span class="pre">pburst</span></code> use units
+<p class="last"><code class="docutils literal notranslate"><span class="pre">cir</span></code> and <code class="docutils literal notranslate"><span class="pre">pir</span></code> use units/second, <code class="docutils literal notranslate"><span class="pre">cbursts</span></code> and <code class="docutils literal notranslate"><span class="pre">pburst</span></code> use units
 where units is bytes or packets, depending on the meter type.</p>
 </div>
 </dd></dl>
@@ -935,10 +944,10 @@ where units is bytes or packets, depending on the meter type.</p>
 <dl class="method">
 <dt id="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state">
 <code class="descname">reset_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/sswitch_p4runtime_API.py#L119-L156"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI.reset_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resets the gRPC server of switch by establishing a new <code class="docutils literal"><span class="pre">ForwardingPipelineConfig</span></code>.</p>
+<dd><p>Resets the gRPC server of switch by establishing a new <code class="docutils literal notranslate"><span class="pre">ForwardingPipelineConfig</span></code>.</p>
 <p>For further details about this method, please check <a class="reference external" href="https://github.com/p4lang/p4runtime/blob/e9c0d196c4c2acd6f1bd3439f5b30b423ef90c95/proto/p4/v1/p4runtime.proto#L668">this</a>. Indeed,
-this method sends to the server a <code class="docutils literal"><span class="pre">SetForwardingPipelineConfigRequest</span></code> with
-action <code class="docutils literal"><span class="pre">VERIFY_AND_COMMIT</span></code>.</p>
+this method sends to the server a <code class="docutils literal notranslate"><span class="pre">SetForwardingPipelineConfigRequest</span></code> with
+action <code class="docutils literal notranslate"><span class="pre">VERIFY_AND_COMMIT</span></code>.</p>
 <p>This method is buggy, please read the following warnings.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -949,13 +958,13 @@ server.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
-<li>It is recommended to use <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.reset_state" title="p4utils.utils.thrift_API.ThriftAPI.reset_state"><code class="xref py py-meth docutils literal"><span class="pre">p4utils.utils.thrift_API.ThriftAPI.reset_state()</span></code></a>
+<li>It is recommended to use <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI.reset_state" title="p4utils.utils.thrift_API.ThriftAPI.reset_state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">p4utils.utils.thrift_API.ThriftAPI.reset_state()</span></code></a>
 to reset the forwarding states. Moreover, if you only use
-the <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">ThriftAPI</span></code></a> to reset the switch,
+the <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThriftAPI</span></code></a> to reset the switch,
 the gRPC server will not be reset.</li>
 <li>To do things properly, both methods need to be called
-(the one from <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal"><span class="pre">ThriftAPI</span></code></a> and the one from
-<a class="reference internal" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI"><code class="xref py py-class docutils literal"><span class="pre">SimpleSwitchP4RuntimeAPI</span></code></a>).</li>
+(the one from <a class="reference internal" href="p4utils.utils.thrift_API.html#p4utils.utils.thrift_API.ThriftAPI" title="p4utils.utils.thrift_API.ThriftAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThriftAPI</span></code></a> and the one from
+<a class="reference internal" href="#p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI" title="p4utils.utils.sswitch_p4runtime_API.SimpleSwitchP4RuntimeAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleSwitchP4RuntimeAPI</span></code></a>).</li>
 </ul>
 </div>
 </dd></dl>
@@ -969,17 +978,17 @@ the gRPC server will not be reset.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</li>
-<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – action to execute on hit</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
-<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – parameters passed to action (each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (if <strong>None</strong>, the meter
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – action to execute on hit</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – parameters passed to action (each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</li>
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – priority in ternary match</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – <code class="docutils literal notranslate"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (if <strong>None</strong>, the meter
 is set to its default behavior, i.e. marks
 all packets as <strong>GREEN</strong>)</li>
-<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of packets to write (if <strong>None</strong>, the count
+<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of packets to write (if <strong>None</strong>, the count
 is not changed)</li>
-<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of bytes to write (if <strong>None</strong>, the count
+<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of bytes to write (if <strong>None</strong>, the count
 is not changed)</li>
 </ul>
 </td>
@@ -987,39 +996,39 @@ is not changed)</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
 <p>There are different kinds of matches:</p>
 <ul class="simple">
-<li>For <em>exact</em> match: <code class="docutils literal"><span class="pre">&lt;value&gt;</span></code></li>
-<li>For <em>ternary</em> match: <code class="docutils literal"><span class="pre">&lt;value&gt;&amp;&amp;&amp;&lt;mask&gt;</span></code></li>
-<li>For <em>LPM</em> match: <code class="docutils literal"><span class="pre">&lt;value&gt;/&lt;mask&gt;</span></code></li>
-<li>For <em>range</em> match: <code class="docutils literal"><span class="pre">&lt;start&gt;..&lt;end&gt;</span></code></li>
+<li>For <em>exact</em> match: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code></li>
+<li>For <em>ternary</em> match: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;&amp;&amp;&amp;&lt;mask&gt;</span></code></li>
+<li>For <em>LPM</em> match: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;/&lt;mask&gt;</span></code></li>
+<li>For <em>range</em> match: <code class="docutils literal notranslate"><span class="pre">&lt;start&gt;..&lt;end&gt;</span></code></li>
 </ul>
 <p>There are three types of <em>counters</em>:</p>
 <ul class="simple">
-<li><strong>BYTES</strong>, only the field <code class="docutils literal"><span class="pre">byts</span></code> is written and the value of <code class="docutils literal"><span class="pre">pkts</span></code> is ignored.</li>
-<li><strong>PACKETS</strong>, only the field <code class="docutils literal"><span class="pre">pkts</span></code> is written and the value of <code class="docutils literal"><span class="pre">byts</span></code> is ignored.</li>
-<li><strong>PACKETS_AND_BYTES</strong>, both <code class="docutils literal"><span class="pre">byts</span></code> and <code class="docutils literal"><span class="pre">pkts</span></code> are written.</li>
+<li><strong>BYTES</strong>, only the field <code class="docutils literal notranslate"><span class="pre">byts</span></code> is written and the value of <code class="docutils literal notranslate"><span class="pre">pkts</span></code> is ignored.</li>
+<li><strong>PACKETS</strong>, only the field <code class="docutils literal notranslate"><span class="pre">pkts</span></code> is written and the value of <code class="docutils literal notranslate"><span class="pre">byts</span></code> is ignored.</li>
+<li><strong>PACKETS_AND_BYTES</strong>, both <code class="docutils literal notranslate"><span class="pre">byts</span></code> and <code class="docutils literal notranslate"><span class="pre">pkts</span></code> are written.</li>
 </ul>
 <p>There are two types of <em>meters</em>:</p>
 <ul class="simple">
-<li><strong>BYTES</strong>, <code class="docutils literal"><span class="pre">rates</span></code> must be expressed in number of bytes per second.</li>
-<li><strong>PACKETS</strong>, <code class="docutils literal"><span class="pre">rates</span></code> must be expressed in number of packets per second.</li>
+<li><strong>BYTES</strong>, <code class="docutils literal notranslate"><span class="pre">rates</span></code> must be expressed in number of bytes per second.</li>
+<li><strong>PACKETS</strong>, <code class="docutils literal notranslate"><span class="pre">rates</span></code> must be expressed in number of packets per second.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
-<li>The <code class="docutils literal"><span class="pre">rates</span></code> field only applies if there is a direct meter attached
+<li>The <code class="docutils literal notranslate"><span class="pre">rates</span></code> field only applies if there is a direct meter attached
 to the table.</li>
-<li>The <code class="docutils literal"><span class="pre">pkts</span></code> and <code class="docutils literal"><span class="pre">byts</span></code> fields only apply if there is a direct counter
+<li>The <code class="docutils literal notranslate"><span class="pre">pkts</span></code> and <code class="docutils literal notranslate"><span class="pre">byts</span></code> fields only apply if there is a direct counter
 attached to the table.</li>
-<li>The <code class="docutils literal"><span class="pre">prio</span></code> field must be set to a non-zero value if the match key includes
+<li>The <code class="docutils literal notranslate"><span class="pre">prio</span></code> field must be set to a non-zero value if the match key includes
 a ternary match or to zero otherwise.</li>
-<li>A higher <code class="docutils literal"><span class="pre">prio</span></code> number indicates that the entry must be given higher
+<li>A higher <code class="docutils literal notranslate"><span class="pre">prio</span></code> number indicates that the entry must be given higher
 priority when performing a table lookup (see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry">here</a> for details).</li>
 </ul>
 </div>
@@ -1034,11 +1043,11 @@ but not the default entry.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the table</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -1053,16 +1062,16 @@ but not the default entry.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match</li>
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the table</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</li>
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – priority in ternary match</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -1078,17 +1087,17 @@ but not the default entry.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</li>
-<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – action to execute on hit</li>
-<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
-<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – parameters passed to action (each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
-<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – priority in ternary match</li>
-<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – <code class="docutils literal"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (if <strong>None</strong>, the meter
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – action to execute on hit</li>
+<li><strong>match_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – values to match (each value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – parameters passed to action (each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</li>
+<li><strong>prio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – priority in ternary match</li>
+<li><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – <code class="docutils literal notranslate"><span class="pre">[(cir,</span> <span class="pre">cburst),</span> <span class="pre">(pir,</span> <span class="pre">pburst)]</span></code> (if <strong>None</strong>, the meter
 is set to its default behavior, i.e. marks
 all packets as <strong>GREEN</strong>)</li>
-<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of packets to write (if <strong>None</strong>, the count
+<li><strong>pkts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of packets to write (if <strong>None</strong>, the count
 is not changed)</li>
-<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – number of bytes to write (if <strong>None</strong>, the count
+<li><strong>byts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of bytes to write (if <strong>None</strong>, the count
 is not changed)</li>
 </ul>
 </td>
@@ -1096,34 +1105,34 @@ is not changed)</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
 </table>
 <p>There are three types of <em>counters</em>:</p>
 <ul class="simple">
-<li><strong>BYTES</strong>, only the field <code class="docutils literal"><span class="pre">byts</span></code> is written and the value of <code class="docutils literal"><span class="pre">pkts</span></code> is ignored.</li>
-<li><strong>PACKETS</strong>, only the field <code class="docutils literal"><span class="pre">pkts</span></code> is written and the value of <code class="docutils literal"><span class="pre">byts</span></code> is ignored.</li>
-<li><strong>PACKETS_AND_BYTES</strong>, both <code class="docutils literal"><span class="pre">byts</span></code> and <code class="docutils literal"><span class="pre">pkts</span></code> are written.</li>
+<li><strong>BYTES</strong>, only the field <code class="docutils literal notranslate"><span class="pre">byts</span></code> is written and the value of <code class="docutils literal notranslate"><span class="pre">pkts</span></code> is ignored.</li>
+<li><strong>PACKETS</strong>, only the field <code class="docutils literal notranslate"><span class="pre">pkts</span></code> is written and the value of <code class="docutils literal notranslate"><span class="pre">byts</span></code> is ignored.</li>
+<li><strong>PACKETS_AND_BYTES</strong>, both <code class="docutils literal notranslate"><span class="pre">byts</span></code> and <code class="docutils literal notranslate"><span class="pre">pkts</span></code> are written.</li>
 </ul>
 <p>There are two types of <em>meters</em>:</p>
 <ul class="simple">
-<li><strong>BYTES</strong>, <code class="docutils literal"><span class="pre">rates</span></code> must be expressed in number of bytes per second.</li>
-<li><strong>PACKETS</strong>, <code class="docutils literal"><span class="pre">rates</span></code> must be expressed in number of packets per second.</li>
+<li><strong>BYTES</strong>, <code class="docutils literal notranslate"><span class="pre">rates</span></code> must be expressed in number of bytes per second.</li>
+<li><strong>PACKETS</strong>, <code class="docutils literal notranslate"><span class="pre">rates</span></code> must be expressed in number of packets per second.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
-<li>The <code class="docutils literal"><span class="pre">rates</span></code> field only applies if there is a direct meter attached
+<li>The <code class="docutils literal notranslate"><span class="pre">rates</span></code> field only applies if there is a direct meter attached
 to the table.</li>
-<li>The <code class="docutils literal"><span class="pre">pkts</span></code> and <code class="docutils literal"><span class="pre">byts</span></code> fields only apply if there is a direct counter
+<li>The <code class="docutils literal notranslate"><span class="pre">pkts</span></code> and <code class="docutils literal notranslate"><span class="pre">byts</span></code> fields only apply if there is a direct counter
 attached to the table.</li>
 <li>When modifying the default entry, the configurations for its direct
 resources will be reset to their defaults, according to <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-direct-resources">this</a>.</li>
-<li>The <code class="docutils literal"><span class="pre">prio</span></code> field must be set to a non-zero value if the match key includes
+<li>The <code class="docutils literal notranslate"><span class="pre">prio</span></code> field must be set to a non-zero value if the match key includes
 a ternary match or to zero otherwise.</li>
-<li>A higher <code class="docutils literal"><span class="pre">prio</span></code> number indicates that the entry must be given higher
+<li>A higher <code class="docutils literal notranslate"><span class="pre">prio</span></code> number indicates that the entry must be given higher
 priority when performing a table lookup (see <a class="reference external" href="https://p4.org/p4runtime/spec/v1.3.0/P4Runtime-Spec.html#sec-table-entry">here</a> for details).</li>
 </ul>
 </div>
@@ -1137,11 +1146,11 @@ priority when performing a table lookup (see <a class="reference external" href=
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the table</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -1161,17 +1170,17 @@ its direct resources will be reset to their defaults (see <a class="reference ex
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – name of the table</li>
-<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – action to execute on hit</li>
-<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – parameters passed to action
-(each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>)</li>
+<li><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the table</li>
+<li><strong>action_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – action to execute on hit</li>
+<li><strong>action_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – parameters passed to action
+(each parameter is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>True</strong> in case of success, <strong>None</strong> otherwise.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -1204,7 +1213,7 @@ direct resources are not reset when modifying a table entry.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<a class="reference external" href="https://docs.python.org/3/library/types.html#types.FunctionType" title="(in Python v3.10)"><em>types.FunctionType</em></a>) – function or method to handle</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<em>types.FunctionType</em>) – function or method to handle</td>
 </tr>
 </tbody>
 </table>

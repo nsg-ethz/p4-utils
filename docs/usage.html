@@ -8,22 +8,11 @@
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  false,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,14 +25,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> P4-Utils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            P4-Utils
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -93,8 +86,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Usage</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/usage.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -114,7 +107,7 @@ example. We will go through the configuration files that allow the user to defin
 use such a topology.</p>
 <img alt="_images/l2_topology.png" class="align-center" src="_images/l2_topology.png" />
 <p>As we can see in the figure above, we have four hosts connected to a switch. All the
-switches are placed in the same subnetwork <code class="docutils literal"><span class="pre">10.0.0.0/16</span></code>. We have to create the
+switches are placed in the same subnetwork <code class="docutils literal notranslate"><span class="pre">10.0.0.0/16</span></code>. We have to create the
 network and establish connectivity among the hosts via L2 forwarding.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
@@ -127,34 +120,34 @@ with P4.</p>
 <p>To create a network we can use two different methods:</p>
 <ul class="simple">
 <li>the <a class="reference external" href="#python">Python method</a> relies on writing a network defining script
-that makes use of <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">NetworkAPI</span></code></a>,</li>
+that makes use of <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkAPI</span></code></a>,</li>
 <li>the <a class="reference external" href="#json">JSON method</a>, on the other hand, relies on writing a JSON network
 definition file using the specifications of the parser
-<a class="reference internal" href="p4utils.p4run.html#p4utils.p4run.AppRunner" title="p4utils.p4run.AppRunner"><code class="xref py py-class docutils literal"><span class="pre">AppRunner</span></code></a>.</li>
+<a class="reference internal" href="p4utils.p4run.html#p4utils.p4run.AppRunner" title="p4utils.p4run.AppRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppRunner</span></code></a>.</li>
 </ul>
 <div class="section" id="python">
 <h3>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
 <p>The Python method is a newly introduced feature that allows to programmatically
 specify which elements are present in the network and how they are connected.
-It is based on the <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">NetworkAPI</span></code></a>, an API that
+It is based on the <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkAPI</span></code></a>, an API that
 has a lot of methods to precisely define the network structure.</p>
-<p>Let us create a file called <code class="docutils literal"><span class="pre">network.py</span></code>. In order to define the network, we first
-need to import the required module and create a <code class="docutils literal"><span class="pre">NetworkAPI</span></code> object:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">p4utils.mininetlib.network_API</span> <span class="kn">import</span> <span class="n">NetworkAPI</span>
+<p>Let us create a file called <code class="docutils literal notranslate"><span class="pre">network.py</span></code>. In order to define the network, we first
+need to import the required module and create a <code class="docutils literal notranslate"><span class="pre">NetworkAPI</span></code> object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">p4utils.mininetlib.network_API</span> <span class="kn">import</span> <span class="n">NetworkAPI</span>
 
 <span class="n">net</span> <span class="o">=</span> <span class="n">NetworkAPI</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>We can also set the level of details for the log shown during the execution of
 the script:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="s1">&#39;info&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="s1">&#39;info&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Other important options are those involving ARP tables of hosts. One can choose
 to disable static ARP entries for hosts within the same subnetwork and their
 gateways by using the methods
-<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.disableArpTables" title="p4utils.mininetlib.network_API.NetworkAPI.disableArpTables"><code class="xref py py-meth docutils literal"><span class="pre">disableArpTables()</span></code></a> and
-<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.disableGwArp" title="p4utils.mininetlib.network_API.NetworkAPI.disableGwArp"><code class="xref py py-meth docutils literal"><span class="pre">disableGwArp()</span></code></a>. These
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.disableArpTables" title="p4utils.mininetlib.network_API.NetworkAPI.disableArpTables"><code class="xref py py-meth docutils literal notranslate"><span class="pre">disableArpTables()</span></code></a> and
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.disableGwArp" title="p4utils.mininetlib.network_API.NetworkAPI.disableGwArp"><code class="xref py py-meth docutils literal notranslate"><span class="pre">disableGwArp()</span></code></a>. These
 options do not apply to our simple example.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
@@ -164,36 +157,36 @@ account when operating the network.</p>
 </div>
 <p>Possible <strong>logLevel</strong> values are the follwing (in decreasing order of detail):</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">debug</span></code></li>
-<li><code class="docutils literal"><span class="pre">info</span></code></li>
-<li><code class="docutils literal"><span class="pre">output</span></code></li>
-<li><code class="docutils literal"><span class="pre">warning</span></code></li>
-<li><code class="docutils literal"><span class="pre">error</span></code></li>
-<li><code class="docutils literal"><span class="pre">critical</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">debug</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">info</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">output</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">warning</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">error</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">critical</span></code></li>
 </ul>
 <p>Now we are ready to define our topology. We start by adding the nodes:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">addP4Switch</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">addP4Switch</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">)</span>
 <span class="n">net</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">)</span>
 <span class="n">net</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span>
 <span class="n">net</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="s1">&#39;h3&#39;</span><span class="p">)</span>
 <span class="n">net</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="s1">&#39;h4&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>As one may notice, we added P4 switch called <code class="docutils literal"><span class="pre">s1</span></code> and four hosts named <code class="docutils literal"><span class="pre">h1</span></code>,
-<code class="docutils literal"><span class="pre">h2</span></code>, <code class="docutils literal"><span class="pre">h3</span></code>, <code class="docutils literal"><span class="pre">h4</span></code>.</p>
+<p>As one may notice, we added P4 switch called <code class="docutils literal notranslate"><span class="pre">s1</span></code> and four hosts named <code class="docutils literal notranslate"><span class="pre">h1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">h2</span></code>, <code class="docutils literal notranslate"><span class="pre">h3</span></code>, <code class="docutils literal notranslate"><span class="pre">h4</span></code>.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">When adding nodes, make sure that they all have <strong>unique</strong> names.</p>
 </div>
 <p>For what concerns the P4 switch, we need to configure it with a P4 program. Let us
-assume that we have a P4 program called <code class="docutils literal"><span class="pre">l2_forwarding.p4</span></code> in the same folder of
-the Python script. We use the following line to add it to <code class="docutils literal"><span class="pre">s1</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setP4Source</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span><span class="s1">&#39;l2_forwarding.p4&#39;</span><span class="p">)</span>
+assume that we have a P4 program called <code class="docutils literal notranslate"><span class="pre">l2_forwarding.p4</span></code> in the same folder of
+the Python script. We use the following line to add it to <code class="docutils literal notranslate"><span class="pre">s1</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setP4Source</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span><span class="s1">&#39;l2_forwarding.p4&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This file will be compiled and then passed to the switch.</p>
 <p>Now we are ready to set up the links:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">addLink</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;h1&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">addLink</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;h1&#39;</span><span class="p">)</span>
 <span class="n">net</span><span class="o">.</span><span class="n">addLink</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;h2&#39;</span><span class="p">)</span>
 <span class="n">net</span><span class="o">.</span><span class="n">addLink</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;h3&#39;</span><span class="p">)</span>
 <span class="n">net</span><span class="o">.</span><span class="n">addLink</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;h4&#39;</span><span class="p">)</span>
@@ -202,12 +195,12 @@ the Python script. We use the following line to add it to <code class="docutils 
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Links must be added after the nodes because, when the method
-<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.addLink" title="p4utils.mininetlib.network_API.NetworkAPI.addLink"><code class="xref py py-meth docutils literal"><span class="pre">addLink()</span></code></a> is called,
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.addLink" title="p4utils.mininetlib.network_API.NetworkAPI.addLink"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addLink()</span></code></a> is called,
 the program checks if the connected nodes actually exist in the network.</p>
 </div>
 <p>It may be useful to specify also the port numbers of the nodes that are connected through
 a link. This makes the switch configuration easier because port numbers are given.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setIntfPort</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;h1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Set the number of the port on s1 facing h1</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setIntfPort</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;h1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Set the number of the port on s1 facing h1</span>
 <span class="n">net</span><span class="o">.</span><span class="n">setIntfPort</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">,</span> <span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Set the number of the port on h1 facing s1</span>
 <span class="n">net</span><span class="o">.</span><span class="n">setIntfPort</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;h2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># Set the number of the port on s1 facing h2</span>
 <span class="n">net</span><span class="o">.</span><span class="n">setIntfPort</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">,</span> <span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Set the number of the port on h2 facing s1</span>
@@ -222,33 +215,33 @@ a link. This makes the switch configuration easier because port numbers are give
 <p class="last">In case you do not specify port numbers, an automatic assignment will be performed. The
 automatic assignment is <strong>consistent</strong> among different executions of the network script.</p>
 </div>
-<p>If we want to limit the bandwidth of the link between <code class="docutils literal"><span class="pre">s1</span></code> and <code class="docutils literal"><span class="pre">h1</span></code> to 5 Mbps, we can
+<p>If we want to limit the bandwidth of the link between <code class="docutils literal notranslate"><span class="pre">s1</span></code> and <code class="docutils literal notranslate"><span class="pre">h1</span></code> to 5 Mbps, we can
 use the following method:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setBw</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span><span class="s1">&#39;h1&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setBw</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span><span class="s1">&#39;h1&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If we want to set 5 Mbps as the maximum bandwidth for all the links at once, we can use:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setBwAll</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setBwAll</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Now that we have defined the topology, we need to assign IPs and MACs to the nodes. We have
 three ways of doing this:</p>
 <ul>
-<li><p class="first">If nothing is specified, all the nodes are placed in the network <code class="docutils literal"><span class="pre">10.0.0.0/8</span></code> and
+<li><p class="first">If nothing is specified, all the nodes are placed in the network <code class="docutils literal notranslate"><span class="pre">10.0.0.0/8</span></code> and
 the MACs are random.</p>
 </li>
 <li><p class="first">One can also manually specify MACs and IPs for every interface in the network by using
 the following methods:</p>
 <ul>
-<li><p class="first"><a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.setIntfIp" title="p4utils.mininetlib.network_API.NetworkAPI.setIntfIp"><code class="xref py py-meth docutils literal"><span class="pre">setIntfIp()</span></code></a> sets the IP address
+<li><p class="first"><a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.setIntfIp" title="p4utils.mininetlib.network_API.NetworkAPI.setIntfIp"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setIntfIp()</span></code></a> sets the IP address
 of the interface:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setIntfIp</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">,</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span><span class="s1">&#39;10.0.0.1/24&#39;</span><span class="p">)</span> <span class="c1"># The interface of h1 facing s1 has IP 10.0.0.1/24</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setIntfIp</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">,</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span><span class="s1">&#39;10.0.0.1/24&#39;</span><span class="p">)</span> <span class="c1"># The interface of h1 facing s1 has IP 10.0.0.1/24</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.setIntfMac" title="p4utils.mininetlib.network_API.NetworkAPI.setIntfMac"><code class="xref py py-meth docutils literal"><span class="pre">setIntfMac()</span></code></a> sets the MAC address
+<li><p class="first"><a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.setIntfMac" title="p4utils.mininetlib.network_API.NetworkAPI.setIntfMac"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setIntfMac()</span></code></a> sets the MAC address
 of the interface:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setIntfIp</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">,</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span><span class="s1">&#39;00:00:00:00:00:01&#39;</span><span class="p">)</span> <span class="c1"># The interface of h1 facing s1 has MAC 00:00:00:00:00:01</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setIntfIp</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">,</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span><span class="s1">&#39;00:00:00:00:00:01&#39;</span><span class="p">)</span> <span class="c1"># The interface of h1 facing s1 has MAC 00:00:00:00:00:01</span>
 </pre></div>
 </div>
 </li>
@@ -257,17 +250,17 @@ of the interface:</p>
 <li><p>We can use predefined <a class="reference external" href="#automated-assignment-strategies">automated assignment strategies</a>.</p>
 <ul>
 <li><p class="first"><strong>l2</strong> strategy can be selected by specifying:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">l2</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">l2</span><span class="p">()</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first"><strong>mixed</strong> strategy can be selected by specifying:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">mixed</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">mixed</span><span class="p">()</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first"><strong>l3</strong> strategy can be selected by specifying:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">l3</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">l3</span><span class="p">()</span>
 </pre></div>
 </div>
 </li>
@@ -275,41 +268,41 @@ of the interface:</p>
 <p>In our case, since the hosts are in the same network, we can use the <strong>l2</strong> strategy.</p>
 </li>
 </ul>
-<p>Now, we can set up nodes generic options. For example, we can enable <code class="docutils literal"><span class="pre">.pcap</span></code> files
+<p>Now, we can set up nodes generic options. For example, we can enable <code class="docutils literal notranslate"><span class="pre">.pcap</span></code> files
 dumping on disk and logging for all the P4 switches:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">enablePcapDumpAll</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">enablePcapDumpAll</span><span class="p">()</span>
 <span class="n">net</span><span class="o">.</span><span class="n">enableLogAll</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">One can also specify only some switches using the methods
-<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.enablePcapDump" title="p4utils.mininetlib.network_API.NetworkAPI.enablePcapDump"><code class="xref py py-meth docutils literal"><span class="pre">enablePcapDump()</span></code></a> and
-<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.enableLog" title="p4utils.mininetlib.network_API.NetworkAPI.enableLog"><code class="xref py py-meth docutils literal"><span class="pre">enableLog()</span></code></a>.</p>
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.enablePcapDump" title="p4utils.mininetlib.network_API.NetworkAPI.enablePcapDump"><code class="xref py py-meth docutils literal notranslate"><span class="pre">enablePcapDump()</span></code></a> and
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.enableLog" title="p4utils.mininetlib.network_API.NetworkAPI.enableLog"><code class="xref py py-meth docutils literal notranslate"><span class="pre">enableLog()</span></code></a>.</p>
 </div>
 <p>Finally, we can enable the network client and start the network:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">enableCli</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">enableCli</span><span class="p">()</span>
 <span class="n">net</span><span class="o">.</span><span class="n">startNetwork</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>To execute the network, we can simply run our Python script with super user rights:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">python3</span> <span class="n">network</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">python3</span> <span class="n">network</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
 <p class="last">This guide is just a basic overview of the most useful network configuration options.
-Please check out the documentation of <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">NetworkAPI</span></code></a>
+Please check out the documentation of <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkAPI</span></code></a>
 to learn more advanced techniques involving also routers.</p>
 </div>
 </div>
 <div class="section" id="json">
 <h3>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h3>
 <p>The JSON method is the legacy method for defining a network topology. It is based
-on the <a class="reference internal" href="p4utils.p4run.html#p4utils.p4run.AppRunner" title="p4utils.p4run.AppRunner"><code class="xref py py-class docutils literal"><span class="pre">AppRunner</span></code></a>, a parser that reads the JSON files
+on the <a class="reference internal" href="p4utils.p4run.html#p4utils.p4run.AppRunner" title="p4utils.p4run.AppRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppRunner</span></code></a>, a parser that reads the JSON files
 and creates a network accordingly. Let us take a look at the JSON file that defines
 the example network:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;p4_src&quot;</span><span class="p">:</span> <span class="s2">&quot;l2_forwarding.p4&quot;</span><span class="p">,</span>
   <span class="s2">&quot;cli&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
   <span class="s2">&quot;pcap_dump&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
@@ -342,59 +335,59 @@ the example network:</p>
 </div>
 <p>The JSON structure is very simple and intuitive. We have that:</p>
 <ul>
-<li><p class="first">The field <code class="docutils literal"><span class="pre">p4_src</span></code> indicates the default P4 program that has to be passed
+<li><p class="first">The field <code class="docutils literal notranslate"><span class="pre">p4_src</span></code> indicates the default P4 program that has to be passed
 to the switches. In the example, we assume that we have a P4 file called
-<code class="docutils literal"><span class="pre">l2_forwarding.p4</span></code> in the same folder of the JSON file.</p>
+<code class="docutils literal notranslate"><span class="pre">l2_forwarding.p4</span></code> in the same folder of the JSON file.</p>
 </li>
-<li><p class="first">The field <code class="docutils literal"><span class="pre">cli</span></code> specifies whether we want to activate the network client after
+<li><p class="first">The field <code class="docutils literal notranslate"><span class="pre">cli</span></code> specifies whether we want to activate the network client after
 the network starts.</p>
 </li>
-<li><p class="first">The field <code class="docutils literal"><span class="pre">pcap_dump</span></code> indicates whether we want to activate the packet sniffing
+<li><p class="first">The field <code class="docutils literal notranslate"><span class="pre">pcap_dump</span></code> indicates whether we want to activate the packet sniffing
 on the interfaces of the switches or not. The sniffed packets are then saved
-in <code class="docutils literal"><span class="pre">.pcap</span></code> files.</p>
+in <code class="docutils literal notranslate"><span class="pre">.pcap</span></code> files.</p>
 </li>
-<li><p class="first">The field <code class="docutils literal"><span class="pre">enable_log</span></code> enables or disables the log for switches.</p>
+<li><p class="first">The field <code class="docutils literal notranslate"><span class="pre">enable_log</span></code> enables or disables the log for switches.</p>
 </li>
-<li><p class="first">The <code class="docutils literal"><span class="pre">topology</span></code> field gathers some topology specific instructions:</p>
+<li><p class="first">The <code class="docutils literal notranslate"><span class="pre">topology</span></code> field gathers some topology specific instructions:</p>
 <ul>
-<li><p><code class="docutils literal"><span class="pre">assignment_strategy</span></code> allows the user to specify an <a class="reference external" href="#automated-assignment-strategies">automated strategy</a> for
-assigning addresses to the interfaces. Possible values are <code class="docutils literal"><span class="pre">l2</span></code>, <code class="docutils literal"><span class="pre">mixed</span></code> and <code class="docutils literal"><span class="pre">l3</span></code>.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">assignment_strategy</span></code> allows the user to specify an <a class="reference external" href="#automated-assignment-strategies">automated strategy</a> for
+assigning addresses to the interfaces. Possible values are <code class="docutils literal notranslate"><span class="pre">l2</span></code>, <code class="docutils literal notranslate"><span class="pre">mixed</span></code> and <code class="docutils literal notranslate"><span class="pre">l3</span></code>.</p>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">default</span></code> is a collection of default settings that apply to every link.
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">default</span></code> is a collection of default settings that apply to every link.
 For instance, in the JSON example, we force the bandwidth of every link to be 10 Mbps.
-Every parameter passed to the constructor of <code class="xref py py-class docutils literal"><span class="pre">mininet.link.Link</span></code> can be specified
+Every parameter passed to the constructor of <code class="xref py py-class docutils literal notranslate"><span class="pre">mininet.link.Link</span></code> can be specified
 here to set it as default for all the links.</p>
 <p>In addition, two more options can be put here to disable ARP static entries in
 hosts (which are enabled by default):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;auto_arp_tables&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;auto_arp_tables&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
 <span class="s2">&quot;auto_gw_arp&quot;</span><span class="p">:</span> <span class="n">false</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">links</span></code> is simply a list of all the links that are present in the topology. You
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">links</span></code> is simply a list of all the links that are present in the topology. You
 can also specify custom options for a link. Every parameter passed to the constructor
-of <code class="xref py py-class docutils literal"><span class="pre">mininet.link.Link</span></code> can be used as option here, by putting it in a dictionary
+of <code class="xref py py-class docutils literal notranslate"><span class="pre">mininet.link.Link</span></code> can be used as option here, by putting it in a dictionary
 after the name of the connected nodes.</p>
 <p>For example, the following will set the addresses of the link and limit its bandwidth to 5 Mbps
 (as opposite to the default value of 10 Mbps):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;h1&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;bw&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;addr1&quot;</span><span class="p">:</span> <span class="s2">&quot;00:00:00:00:00:01&quot;</span><span class="p">,</span> <span class="s2">&quot;addr2&quot;</span><span class="p">:</span> <span class="s2">&quot;00:01:00:00:00:01&quot;</span><span class="p">,</span> <span class="s2">&quot;params1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ip&quot;</span><span class="p">:</span><span class="s2">&quot;10.0.0.1/24&quot;</span><span class="p">}}]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;h1&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;bw&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;addr1&quot;</span><span class="p">:</span> <span class="s2">&quot;00:00:00:00:00:01&quot;</span><span class="p">,</span> <span class="s2">&quot;addr2&quot;</span><span class="p">:</span> <span class="s2">&quot;00:01:00:00:00:01&quot;</span><span class="p">,</span> <span class="s2">&quot;params1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ip&quot;</span><span class="p">:</span><span class="s2">&quot;10.0.0.1/24&quot;</span><span class="p">}}]</span>
 </pre></div>
 </div>
-<p>Parameters containing <code class="docutils literal"><span class="pre">1</span></code> refer to the interface of the first node (i.e. <code class="docutils literal"><span class="pre">h1</span></code>),
-whereas those containing <code class="docutils literal"><span class="pre">2</span></code> refer to the interface on the second node (i.e. <code class="docutils literal"><span class="pre">s1</span></code>).
+<p>Parameters containing <code class="docutils literal notranslate"><span class="pre">1</span></code> refer to the interface of the first node (i.e. <code class="docutils literal notranslate"><span class="pre">h1</span></code>),
+whereas those containing <code class="docutils literal notranslate"><span class="pre">2</span></code> refer to the interface on the second node (i.e. <code class="docutils literal notranslate"><span class="pre">s1</span></code>).
 Parameters that do not contain numbers apply to the whole link (i.e. to both interfaces).</p>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">hosts</span></code> is a dictionary of hosts. Each host has its own dictionary to pass options.
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">hosts</span></code> is a dictionary of hosts. Each host has its own dictionary to pass options.
 If no custom options are passed, then the host dictionary must be left empty.</p>
-<p>For example, the following will set <code class="docutils literal"><span class="pre">10.0.0.254</span></code> as the default gateway for <code class="docutils literal"><span class="pre">h1</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;h1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;defaultRoute&quot;</span><span class="p">:</span> <span class="s2">&quot;via 10.0.0.254&quot;</span><span class="p">}</span>
+<p>For example, the following will set <code class="docutils literal notranslate"><span class="pre">10.0.0.254</span></code> as the default gateway for <code class="docutils literal notranslate"><span class="pre">h1</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;h1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;defaultRoute&quot;</span><span class="p">:</span> <span class="s2">&quot;via 10.0.0.254&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">switches</span></code> is a dictionary of switches. Each switch has its own dictionary to pass options.
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">switches</span></code> is a dictionary of switches. Each switch has its own dictionary to pass options.
 If no custom options are passed, then the switch dictionary must be left empty.</p>
-<p>For example, the following will set a custom P4 program for switch <code class="docutils literal"><span class="pre">s1</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;p4_src&quot;</span><span class="p">:</span> <span class="s2">&quot;custom.p4&quot;</span><span class="p">}</span>
+<p>For example, the following will set a custom P4 program for switch <code class="docutils literal notranslate"><span class="pre">s1</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;p4_src&quot;</span><span class="p">:</span> <span class="s2">&quot;custom.p4&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </li>
@@ -402,18 +395,18 @@ If no custom options are passed, then the switch dictionary must be left empty.<
 </li>
 </ul>
 <p>To run the network, we simply execute the following command with super user rights:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">p4run</span> <span class="o">--</span><span class="n">config</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">JSON</span> <span class="n">configuration</span> <span class="n">file</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">p4run</span> <span class="o">--</span><span class="n">config</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">JSON</span> <span class="n">configuration</span> <span class="n">file</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>In case the JSON configuration file is called <code class="docutils literal"><span class="pre">p4app.json</span></code>, we can run the network with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">p4run</span>
+<p>In case the JSON configuration file is called <code class="docutils literal notranslate"><span class="pre">p4app.json</span></code>, we can run the network with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">p4run</span>
 </pre></div>
 </div>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
 <p class="last">This explaination is only a brief overview of the most common options available with
 the JSON network configuration file. Please check out the documentation of the module
-<a class="reference internal" href="p4utils.p4run.html#module-p4utils.p4run" title="p4utils.p4run"><code class="xref py py-mod docutils literal"><span class="pre">p4run</span></code></a> to discover more advanced techniques involving also routers.</p>
+<a class="reference internal" href="p4utils.p4run.html#module-p4utils.p4run" title="p4utils.p4run"><code class="xref py py-mod docutils literal notranslate"><span class="pre">p4run</span></code></a> to discover more advanced techniques involving also routers.</p>
 </div>
 </div>
 </div>
@@ -433,12 +426,12 @@ and are very useful in most cases.</p>
 </div>
 <div class="section" id="l2">
 <h3>l2<a class="headerlink" href="#l2" title="Permalink to this headline">¶</a></h3>
-<p>The <strong>l2</strong> strategy places all the devices inside the same IPv4 network (<code class="docutils literal"><span class="pre">10.0.0.0/16</span></code>). It
-is implemented by <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.l2" title="p4utils.mininetlib.network_API.NetworkAPI.l2"><code class="xref py py-meth docutils literal"><span class="pre">l2()</span></code></a>.</p>
-<p>If you use the namings <code class="docutils literal"><span class="pre">h&lt;ID&gt;</span></code> for hosts and <code class="docutils literal"><span class="pre">s&lt;ID&gt;</span></code> for switches (e.g <code class="docutils literal"><span class="pre">h1</span></code>, <code class="docutils literal"><span class="pre">h2</span></code>, <code class="docutils literal"><span class="pre">s1</span></code>,
-<code class="docutils literal"><span class="pre">s2</span></code>…), the IP assignment will go as follows:</p>
+<p>The <strong>l2</strong> strategy places all the devices inside the same IPv4 network (<code class="docutils literal notranslate"><span class="pre">10.0.0.0/16</span></code>). It
+is implemented by <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.l2" title="p4utils.mininetlib.network_API.NetworkAPI.l2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">l2()</span></code></a>.</p>
+<p>If you use the namings <code class="docutils literal notranslate"><span class="pre">h&lt;ID&gt;</span></code> for hosts and <code class="docutils literal notranslate"><span class="pre">s&lt;ID&gt;</span></code> for switches (e.g <code class="docutils literal notranslate"><span class="pre">h1</span></code>, <code class="docutils literal notranslate"><span class="pre">h2</span></code>, <code class="docutils literal notranslate"><span class="pre">s1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">s2</span></code>…), the IP assignment will go as follows:</p>
 <ul class="simple">
-<li><strong>Host IPs</strong>: <code class="docutils literal"><span class="pre">10.0.x.y/16</span></code>, where <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> are respectively the upper and the lower bytes
+<li><strong>Host IPs</strong>: <code class="docutils literal notranslate"><span class="pre">10.0.x.y/16</span></code>, where <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are respectively the upper and the lower bytes
 of the host ID (i.e. its binary representation).</li>
 </ul>
 </div>
@@ -446,48 +439,48 @@ of the host ID (i.e. its binary representation).</li>
 <h3>mixed<a class="headerlink" href="#mixed" title="Permalink to this headline">¶</a></h3>
 <p>The <strong>mixed</strong> strategy places the hosts connected to the same switch in the same subnetwork
 and different switches (even those linked together) in different ones. It is implemented
-by <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.mixed" title="p4utils.mininetlib.network_API.NetworkAPI.mixed"><code class="xref py py-meth docutils literal"><span class="pre">mixed()</span></code></a>.</p>
-<p>If you use the namings <code class="docutils literal"><span class="pre">h&lt;ID&gt;</span></code> for hosts and <code class="docutils literal"><span class="pre">s&lt;ID&gt;</span></code> for switches (e.g <code class="docutils literal"><span class="pre">h1</span></code>, <code class="docutils literal"><span class="pre">h2</span></code>, <code class="docutils literal"><span class="pre">s1</span></code>,
-<code class="docutils literal"><span class="pre">s2</span></code>…), the IP assignment will go as follows:</p>
+by <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.mixed" title="p4utils.mininetlib.network_API.NetworkAPI.mixed"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mixed()</span></code></a>.</p>
+<p>If you use the namings <code class="docutils literal notranslate"><span class="pre">h&lt;ID&gt;</span></code> for hosts and <code class="docutils literal notranslate"><span class="pre">s&lt;ID&gt;</span></code> for switches (e.g <code class="docutils literal notranslate"><span class="pre">h1</span></code>, <code class="docutils literal notranslate"><span class="pre">h2</span></code>, <code class="docutils literal notranslate"><span class="pre">s1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">s2</span></code>…), the IP assignment will go as follows:</p>
 <ul class="simple">
-<li><strong>Host IPs</strong>: <code class="docutils literal"><span class="pre">10.x.y.z/24</span></code>, where <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> are respectively the upper and the lower bytes
-of the gateway switch ID (i.e. its binary representation) and <code class="docutils literal"><span class="pre">z</span></code> is the host ID.</li>
-<li><strong>Switch ports directly connected to a host</strong>: <code class="docutils literal"><span class="pre">10.x.y.254/24</span></code>, where <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> are
+<li><strong>Host IPs</strong>: <code class="docutils literal notranslate"><span class="pre">10.x.y.z/24</span></code>, where <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are respectively the upper and the lower bytes
+of the gateway switch ID (i.e. its binary representation) and <code class="docutils literal notranslate"><span class="pre">z</span></code> is the host ID.</li>
+<li><strong>Switch ports directly connected to a host</strong>: <code class="docutils literal notranslate"><span class="pre">10.x.y.254/24</span></code>, where <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are
 respectively the upper and the lower bytes of the gateway switch ID (i.e. its binary representation).</li>
-<li><strong>Switch to Switch interfaces</strong>: <code class="docutils literal"><span class="pre">20.sw1.sw2.&lt;1,2&gt;/24</span></code>, where <code class="docutils literal"><span class="pre">sw1</span></code> is the ID of the first switch
-(following the order in the link definition), <code class="docutils literal"><span class="pre">sw2</span></code> is the ID of the second switch.
-The last byte is <code class="docutils literal"><span class="pre">1</span></code> for <code class="docutils literal"><span class="pre">sw1</span></code>’s interface and <code class="docutils literal"><span class="pre">2</span></code> for <code class="docutils literal"><span class="pre">sw2</span></code>’s interface.</li>
+<li><strong>Switch to Switch interfaces</strong>: <code class="docutils literal notranslate"><span class="pre">20.sw1.sw2.&lt;</span> <span class="pre">1,2&gt;/24</span></code>, where <code class="docutils literal notranslate"><span class="pre">sw1</span></code> is the ID of the first switch
+(following the order in the link definition), <code class="docutils literal notranslate"><span class="pre">sw2</span></code> is the ID of the second switch.
+The last byte is <code class="docutils literal notranslate"><span class="pre">1</span></code> for <code class="docutils literal notranslate"><span class="pre">sw1</span></code>’s interface and <code class="docutils literal notranslate"><span class="pre">2</span></code> for <code class="docutils literal notranslate"><span class="pre">sw2</span></code>’s interface.</li>
 </ul>
 </div>
 <div class="section" id="l3">
 <h3>l3<a class="headerlink" href="#l3" title="Permalink to this headline">¶</a></h3>
 <p>The <strong>l3</strong> strategy places each host in a different subnetwork that is shared with the
 IP address of the switch port it is connected to. It is implemented by
-<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.l3" title="p4utils.mininetlib.network_API.NetworkAPI.l3"><code class="xref py py-meth docutils literal"><span class="pre">l3()</span></code></a>.</p>
-<p>If you use the namings <code class="docutils literal"><span class="pre">h&lt;ID&gt;</span></code> for hosts and <code class="docutils literal"><span class="pre">s&lt;ID&gt;</span></code> for switches (e.g <code class="docutils literal"><span class="pre">h1</span></code>, <code class="docutils literal"><span class="pre">h2</span></code>, <code class="docutils literal"><span class="pre">s1</span></code>,
-<code class="docutils literal"><span class="pre">s2</span></code>…), the IP assignment will go as follows:</p>
+<a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI.l3" title="p4utils.mininetlib.network_API.NetworkAPI.l3"><code class="xref py py-meth docutils literal notranslate"><span class="pre">l3()</span></code></a>.</p>
+<p>If you use the namings <code class="docutils literal notranslate"><span class="pre">h&lt;ID&gt;</span></code> for hosts and <code class="docutils literal notranslate"><span class="pre">s&lt;ID&gt;</span></code> for switches (e.g <code class="docutils literal notranslate"><span class="pre">h1</span></code>, <code class="docutils literal notranslate"><span class="pre">h2</span></code>, <code class="docutils literal notranslate"><span class="pre">s1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">s2</span></code>…), the IP assignment will go as follows:</p>
 <ul class="simple">
-<li><strong>Host IPs</strong>: <code class="docutils literal"><span class="pre">10.x.y.2/24</span></code>, where <code class="docutils literal"><span class="pre">x</span></code> is the ID of the gateway switch, and <code class="docutils literal"><span class="pre">y</span></code> is the host ID.</li>
-<li><strong>Switch ports directly connected to a host</strong>: <code class="docutils literal"><span class="pre">10.x.y.1/24</span></code>, where <code class="docutils literal"><span class="pre">x</span></code> is the ID of the gateway
-switch, and <code class="docutils literal"><span class="pre">y</span></code> is the host ID.</li>
-<li><strong>Switch to Switch interfaces</strong>: <code class="docutils literal"><span class="pre">20.sw1.sw2.&lt;1,2&gt;/24</span></code>, where <code class="docutils literal"><span class="pre">sw1</span></code> is the ID of the first switch
-(following the order in the link definition), <code class="docutils literal"><span class="pre">sw2</span></code> is the ID of the second switch.
-The last byte is <code class="docutils literal"><span class="pre">1</span></code> for <code class="docutils literal"><span class="pre">sw1</span></code>’s interface and <code class="docutils literal"><span class="pre">2</span></code> for <code class="docutils literal"><span class="pre">sw2</span></code>’s interface.</li>
+<li><strong>Host IPs</strong>: <code class="docutils literal notranslate"><span class="pre">10.x.y.2/24</span></code>, where <code class="docutils literal notranslate"><span class="pre">x</span></code> is the ID of the gateway switch, and <code class="docutils literal notranslate"><span class="pre">y</span></code> is the host ID.</li>
+<li><strong>Switch ports directly connected to a host</strong>: <code class="docutils literal notranslate"><span class="pre">10.x.y.1/24</span></code>, where <code class="docutils literal notranslate"><span class="pre">x</span></code> is the ID of the gateway
+switch, and <code class="docutils literal notranslate"><span class="pre">y</span></code> is the host ID.</li>
+<li><strong>Switch to Switch interfaces</strong>: <code class="docutils literal notranslate"><span class="pre">20.sw1.sw2.&lt;1,2&gt;/24</span></code>, where <code class="docutils literal notranslate"><span class="pre">sw1</span></code> is the ID of the first switch
+(following the order in the link definition), <code class="docutils literal notranslate"><span class="pre">sw2</span></code> is the ID of the second switch.
+The last byte is <code class="docutils literal notranslate"><span class="pre">1</span></code> for <code class="docutils literal notranslate"><span class="pre">sw1</span></code>’s interface and <code class="docutils literal notranslate"><span class="pre">2</span></code> for <code class="docutils literal notranslate"><span class="pre">sw2</span></code>’s interface.</li>
 </ul>
 </div>
 </div>
 <div class="section" id="network-client">
 <h2>Network Client<a class="headerlink" href="#network-client" title="Permalink to this headline">¶</a></h2>
-<p>The network client is implemented by <a class="reference internal" href="p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI" title="p4utils.mininetlib.cli.P4CLI"><code class="xref py py-class docutils literal"><span class="pre">p4utils.mininetlib.cli.P4CLI</span></code></a>. You can
+<p>The network client is implemented by <a class="reference internal" href="p4utils.mininetlib.cli.html#p4utils.mininetlib.cli.P4CLI" title="p4utils.mininetlib.cli.P4CLI"><code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.mininetlib.cli.P4CLI</span></code></a>. You can
 check out the available commands in the documentation. If enabled, it starts
 right after the network.</p>
 <p>For example, if you want to rapidly check the connectivity among all the hosts,
 you can use the following command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">pingall</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">pingall</span>
 </pre></div>
 </div>
 <p>You can always get a summary of the commands by doing as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>mininet&gt; ?
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mininet&gt; ?
 </pre></div>
 </div>
 </div>
@@ -500,61 +493,61 @@ client. The first method will be covered in the <a class="reference external" hr
 second is explained below.</p>
 <div class="section" id="thrift-client">
 <h3>Thrift Client<a class="headerlink" href="#thrift-client" title="Permalink to this headline">¶</a></h3>
-<p>To start the <em>Thrift</em> client and connect to <code class="docutils literal"><span class="pre">s1</span></code>, we need to know the IP and the port of
-its <em>Thrift</em> server. In our case, the IP is <code class="docutils literal"><span class="pre">127.0.0.1</span></code> and the port is <code class="docutils literal"><span class="pre">9090</span></code>.</p>
+<p>To start the <em>Thrift</em> client and connect to <code class="docutils literal notranslate"><span class="pre">s1</span></code>, we need to know the IP and the port of
+its <em>Thrift</em> server. In our case, the IP is <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and the port is <code class="docutils literal notranslate"><span class="pre">9090</span></code>.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The <em>Thrift</em> port number can be explicitly assigned in the network configuration.
 If it is not specified for any P4 switch in the network, then the alphabetic order
-is used for the assignment and the first P4 switch will get <code class="docutils literal"><span class="pre">9090</span></code>.</p>
+is used for the assignment and the first P4 switch will get <code class="docutils literal notranslate"><span class="pre">9090</span></code>.</p>
 </div>
 <p>After the network starts, we can execute the following command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simple_switch_CLI</span> <span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">port</span> <span class="mi">9090</span> <span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">ip</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">simple_switch_CLI</span> <span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">port</span> <span class="mi">9090</span> <span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">ip</span> <span class="mf">127.0.0.1</span>
 </pre></div>
 </div>
-<p>In general the following options can be passed to <code class="docutils literal"><span class="pre">simple_switch_CLI</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simple_switch_CLI</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">port</span> <span class="n">THRIFT_PORT</span><span class="p">]</span>
+<p>In general the following options can be passed to <code class="docutils literal notranslate"><span class="pre">simple_switch_CLI</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">simple_switch_CLI</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">port</span> <span class="n">THRIFT_PORT</span><span class="p">]</span>
                        <span class="p">[</span><span class="o">--</span><span class="n">thrift</span><span class="o">-</span><span class="n">ip</span> <span class="n">THRIFT_IP</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">json</span> <span class="n">JSON</span><span class="p">]</span>
                        <span class="p">[</span><span class="o">--</span><span class="n">pre</span> <span class="p">{</span><span class="kc">None</span><span class="p">,</span><span class="n">SimplePre</span><span class="p">,</span><span class="n">SimplePreLAG</span><span class="p">}]</span>
 </pre></div>
 </div>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
-<p class="last">If they are not specified, the <code class="docutils literal"><span class="pre">simple_switch_CLI</span></code> command assumes that the IP is
-<code class="docutils literal"><span class="pre">127.0.0.1</span></code> and the port is <code class="docutils literal"><span class="pre">9090</span></code>. P4-Utils always assigns the IP <code class="docutils literal"><span class="pre">127.0.0.1</span></code>
+<p class="last">If they are not specified, the <code class="docutils literal notranslate"><span class="pre">simple_switch_CLI</span></code> command assumes that the IP is
+<code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and the port is <code class="docutils literal notranslate"><span class="pre">9090</span></code>. P4-Utils always assigns the IP <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code>
 to all the <em>Thrift</em> servers, so the only thing that changes from one switch to the
 other is the port the server is listening on.</p>
 </div>
 <p>One can retrieve a list of all the available commands, by typing the following:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>RuntimeCmd: ?
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>RuntimeCmd: ?
 </pre></div>
 </div>
 <p>Also, to check the syntax of a command, one can use the follwing:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">help</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">help</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>If we want to populate the forwarding table of the <code class="docutils literal"><span class="pre">s1</span></code> switch of the example, we run:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">=&gt;</span> <span class="mi">1</span>
+<p>If we want to populate the forwarding table of the <code class="docutils literal notranslate"><span class="pre">s1</span></code> switch of the example, we run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">=&gt;</span> <span class="mi">1</span>
 <span class="n">Adding</span> <span class="n">entry</span> <span class="n">to</span> <span class="n">exact</span> <span class="n">match</span> <span class="n">table</span> <span class="n">dmac</span>
-<span class="n">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span>
+<span class="k">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span>
 <span class="n">action</span><span class="p">:</span>              <span class="n">forward</span>
 <span class="n">runtime</span> <span class="n">data</span><span class="p">:</span>        <span class="mi">00</span><span class="p">:</span><span class="mi">01</span>
 <span class="n">Entry</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="k">with</span> <span class="n">handle</span> <span class="mi">0</span>
 <span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span> <span class="o">=&gt;</span> <span class="mi">2</span>
 <span class="n">Adding</span> <span class="n">entry</span> <span class="n">to</span> <span class="n">exact</span> <span class="n">match</span> <span class="n">table</span> <span class="n">dmac</span>
-<span class="n">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span>
+<span class="k">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span>
 <span class="n">action</span><span class="p">:</span>              <span class="n">forward</span>
 <span class="n">runtime</span> <span class="n">data</span><span class="p">:</span>        <span class="mi">00</span><span class="p">:</span><span class="mi">02</span>
 <span class="n">Entry</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="k">with</span> <span class="n">handle</span> <span class="mi">1</span>
 <span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">03</span> <span class="o">=&gt;</span> <span class="mi">3</span>
 <span class="n">Adding</span> <span class="n">entry</span> <span class="n">to</span> <span class="n">exact</span> <span class="n">match</span> <span class="n">table</span> <span class="n">dmac</span>
-<span class="n">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">03</span>
+<span class="k">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">03</span>
 <span class="n">action</span><span class="p">:</span>              <span class="n">forward</span>
 <span class="n">runtime</span> <span class="n">data</span><span class="p">:</span>        <span class="mi">00</span><span class="p">:</span><span class="mi">03</span>
 <span class="n">Entry</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="k">with</span> <span class="n">handle</span> <span class="mi">2</span>
 <span class="n">RuntimeCmd</span><span class="p">:</span> <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span> <span class="o">=&gt;</span> <span class="mi">4</span>
 <span class="n">Adding</span> <span class="n">entry</span> <span class="n">to</span> <span class="n">exact</span> <span class="n">match</span> <span class="n">table</span> <span class="n">dmac</span>
-<span class="n">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span>
+<span class="k">match</span> <span class="n">key</span><span class="p">:</span>           <span class="n">EXACT</span><span class="o">-</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span>
 <span class="n">action</span><span class="p">:</span>              <span class="n">forward</span>
 <span class="n">runtime</span> <span class="n">data</span><span class="p">:</span>        <span class="mi">00</span><span class="p">:</span><span class="mi">04</span>
 <span class="n">Entry</span> <span class="n">has</span> <span class="n">been</span> <span class="n">added</span> <span class="k">with</span> <span class="n">handle</span> <span class="mi">3</span>
@@ -564,12 +557,12 @@ other is the port the server is listening on.</p>
 <div class="section" id="command-files">
 <h3>Command Files<a class="headerlink" href="#command-files" title="Permalink to this headline">¶</a></h3>
 <p>Instead of typing each command individually for every switch, one can put them all
-(a command per line) in a <code class="docutils literal"><span class="pre">.txt</span></code> file and pass it to P4-Utils that will execute
-it using the <code class="docutils literal"><span class="pre">simple_switch_CLI</span></code>. The syntax of these files is the same used by the
+(a command per line) in a <code class="docutils literal notranslate"><span class="pre">.txt</span></code> file and pass it to P4-Utils that will execute
+it using the <code class="docutils literal notranslate"><span class="pre">simple_switch_CLI</span></code>. The syntax of these files is the same used by the
 client.</p>
-<p>For example, the commands typed in the <code class="docutils literal"><span class="pre">s1</span></code> client can be put in a file called
-<code class="docutils literal"><span class="pre">s1-commands.txt</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">=&gt;</span> <span class="mi">1</span>
+<p>For example, the commands typed in the <code class="docutils literal notranslate"><span class="pre">s1</span></code> client can be put in a file called
+<code class="docutils literal notranslate"><span class="pre">s1-commands.txt</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">=&gt;</span> <span class="mi">1</span>
 <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span> <span class="o">=&gt;</span> <span class="mi">2</span>
 <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">03</span> <span class="o">=&gt;</span> <span class="mi">3</span>
 <span class="n">table_add</span> <span class="n">dmac</span> <span class="n">forward</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">0</span><span class="n">a</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">04</span> <span class="o">=&gt;</span> <span class="mi">4</span>
@@ -578,12 +571,12 @@ client.</p>
 <p>Then this can be passed to P4-Utils by putting this line in the Python network
 configuration script (assuming that the script is in the same folder
 of the commands file):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setP4CliInput</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;s1-commands.txt&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">setP4CliInput</span><span class="p">(</span><span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;s1-commands.txt&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If you are using the JSON network configuration file, you can specify the <em>Thrift</em>
-command file by modifying the switch <code class="docutils literal"><span class="pre">s1</span></code> in the <code class="docutils literal"><span class="pre">topology</span></code> field:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;cli_input&quot;</span><span class="p">:</span> <span class="s2">&quot;s1-commands.txt&quot;</span><span class="p">}</span>
+command file by modifying the switch <code class="docutils literal notranslate"><span class="pre">s1</span></code> in the <code class="docutils literal notranslate"><span class="pre">topology</span></code> field:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;cli_input&quot;</span><span class="p">:</span> <span class="s2">&quot;s1-commands.txt&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>In this way, the switch is configured automatically after the network starts.</p>

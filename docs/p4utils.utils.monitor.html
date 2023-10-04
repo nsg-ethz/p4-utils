@@ -8,22 +8,11 @@
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  false,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,14 +25,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> P4-Utils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            P4-Utils
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -88,10 +81,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
-          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
-      <li>p4utils.utils.monitor module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="p4utils.html">P4-Utils API reference</a></li>
+          <li class="breadcrumb-item"><a href="p4utils.utils.html">p4utils.utils package</a></li>
+      <li class="breadcrumb-item active">p4utils.utils.monitor module</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/p4utils.utils.monitor.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -106,7 +99,7 @@
 <dl class="class">
 <dt id="p4utils.utils.monitor.Monitor">
 <em class="property">class </em><code class="descclassname">p4utils.utils.monitor.</code><code class="descname">Monitor</code><span class="sig-paren">(</span><em>csv_file</em>, <em>i</em>, <em>t=0.5</em>, <em>d=60</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/monitor.py#L6-L52"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.monitor.Monitor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Monitor the interface bandwidth and dump a .csv file with
 the rates in Mbps.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -114,10 +107,10 @@ the rates in Mbps.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>csv_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.10)"><em>string</em></a>) – path to the output file</li>
-<li><strong>i</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.10)"><em>string</em></a>) – name of the interface to monitor</li>
-<li><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – interval between data points</li>
-<li><strong>d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – monitoring duration</li>
+<li><strong>csv_file</strong> (<em>string</em>) – path to the output file</li>
+<li><strong>i</strong> (<em>string</em>) – name of the interface to monitor</li>
+<li><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – interval between data points</li>
+<li><strong>d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – monitoring duration</li>
 </ul>
 </td>
 </tr>

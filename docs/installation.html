@@ -8,22 +8,11 @@
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  false,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,14 +25,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> P4-Utils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            P4-Utils
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -89,8 +82,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Installation</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/installation.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -143,19 +136,19 @@ need to install one of the above virtualizer according to your VM choice.</p>
 <p class="last">Packer is a handy framework designed to automatically build custom VM images.</p>
 </div>
 <p>Clone the P4-Utils repository:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
 </pre></div>
 </div>
 <p>Go to the Packer configurations folder:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">vm</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">vm</span>
 </pre></div>
 </div>
 <p>If you want to build the <em>VirtualBox VM</em>, execute:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="n">virtualbox</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">--</span><span class="n">cpus</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">disk_size</span> <span class="mi">25000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">memory</span> <span class="mi">4000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vm_name</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">username</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">password</span> <span class="n">p4</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="n">virtualbox</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">--</span><span class="n">cpus</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">disk_size</span> <span class="mi">25000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">memory</span> <span class="mi">4000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vm_name</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">username</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">password</span> <span class="n">p4</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>On the other hand, if you prefer the <em>QEMU VM</em>, run:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="n">qemu</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">--</span><span class="n">cpus</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">disk_size</span> <span class="mi">25000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">memory</span> <span class="mi">4000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vm_name</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">username</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">password</span> <span class="n">p4</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="n">qemu</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">--</span><span class="n">cpus</span> <span class="mi">4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">disk_size</span> <span class="mi">25000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">memory</span> <span class="mi">4000</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vm_name</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">username</span> <span class="n">p4</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">password</span> <span class="n">p4</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="admonition important">
@@ -164,20 +157,20 @@ need to install one of the above virtualizer according to your VM choice.</p>
 they will be used to build your VM. However, please pass to the scripts the parameters
 that best fit your needs. In particular, we have that:</p>
 <ul class="last simple">
-<li><code class="docutils literal"><span class="pre">--cpus</span></code> specifies the <strong>number of cores</strong> to use,</li>
-<li><code class="docutils literal"><span class="pre">--disk_size</span></code> is the <strong>size of the disk</strong> reserved by the VM in MBytes,</li>
-<li><code class="docutils literal"><span class="pre">--memory</span></code> is the amount of <strong>RAM</strong> to assign to the VM in MBytes,</li>
-<li><code class="docutils literal"><span class="pre">--vm_name</span></code> is the <strong>name of the VM</strong>,</li>
-<li><code class="docutils literal"><span class="pre">--username</span></code> is the <strong>login username</strong>,</li>
-<li><code class="docutils literal"><span class="pre">--password</span></code> is the <strong>login password</strong>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--cpus</span></code> specifies the <strong>number of cores</strong> to use,</li>
+<li><code class="docutils literal notranslate"><span class="pre">--disk_size</span></code> is the <strong>size of the disk</strong> reserved by the VM in MBytes,</li>
+<li><code class="docutils literal notranslate"><span class="pre">--memory</span></code> is the amount of <strong>RAM</strong> to assign to the VM in MBytes,</li>
+<li><code class="docutils literal notranslate"><span class="pre">--vm_name</span></code> is the <strong>name of the VM</strong>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">--username</span></code> is the <strong>login username</strong>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">--password</span></code> is the <strong>login password</strong>.</li>
 </ul>
 </div>
 <p>The building process will generate the following files:</p>
 <ul class="simple">
-<li>If you chose the QEMU VM, in <code class="docutils literal"><span class="pre">p4-utils/vm/output-ubuntu18044_qemu</span></code> you will find
-a <code class="docutils literal"><span class="pre">.qcow2</span></code> file to use to set up your VM.</li>
-<li>If you chose the VirtualBox VM, in <code class="docutils literal"><span class="pre">p4-utils/vm/output-ubuntu18044_vb</span></code> you will
-find an <code class="docutils literal"><span class="pre">.ova</span></code> file to import in the VirtualBox VM manager.</li>
+<li>If you chose the QEMU VM, in <code class="docutils literal notranslate"><span class="pre">p4-utils/vm/output-ubuntu18044_qemu</span></code> you will find
+a <code class="docutils literal notranslate"><span class="pre">.qcow2</span></code> file to use to set up your VM.</li>
+<li>If you chose the VirtualBox VM, in <code class="docutils literal notranslate"><span class="pre">p4-utils/vm/output-ubuntu18044_vb</span></code> you will
+find an <code class="docutils literal notranslate"><span class="pre">.ova</span></code> file to import in the VirtualBox VM manager.</li>
 </ul>
 </div>
 <div class="section" id="use-our-preconfigured-vm">
@@ -185,7 +178,8 @@ find an <code class="docutils literal"><span class="pre">.ova</span></code> file
 <p>To download our preconfiugred VMs, please click on the folllwing links:</p>
 <ul class="simple">
 <li><a class="reference external" href="#">VirtualBox VM (unavailable)</a></li>
-<li><a class="reference external" href="https://polybox.ethz.ch/index.php/s/9orcmetpNxOAhlI">QEMU VM</a></li>
+<li><a class="reference external" href="https://polybox.ethz.ch/index.php/s/QlrfHm7uYw6vISe">QEMU VM (Ubuntu 20/compressed)</a></li>
+<li><a class="reference external" href="https://polybox.ethz.ch/index.php/s/9orcmetpNxOAhlI">QEMU VM (old ubuntu 18 vm)</a></li>
 </ul>
 </div>
 </div>
@@ -193,13 +187,13 @@ find an <code class="docutils literal"><span class="pre">.ova</span></code> file
 <h2>Manual Installation<a class="headerlink" href="#manual-installation" title="Permalink to this headline">¶</a></h2>
 <p>If you have already installed all the <a class="reference external" href="#prerequisites">requirements</a>, you can simply
 install P4-Utils using the following commands:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
 <span class="n">cd</span> <span class="n">p4</span><span class="o">-</span><span class="n">utils</span>
 <span class="n">sudo</span> <span class="o">./</span><span class="n">install</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 <p>You can also uninstall it by running the command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">./</span><span class="n">uninstall</span><span class="o">.</span><span class="n">sh</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">./</span><span class="n">uninstall</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 <div class="section" id="prerequisites">
@@ -210,8 +204,8 @@ install P4-Utils using the following commands:</p>
 for a P4Runtime server. <strong>It is required only for topologies with
 P4Runtime switches.</strong></li>
 <li><a class="reference external" href="https://github.com/p4lang/behavioral-model">BEHAVIORAL MODEL (bmv2)</a> contains the software implementation several
-variations of the behavioral model (e.g. <code class="docutils literal"><span class="pre">simple_switch</span></code> and
-<code class="docutils literal"><span class="pre">simple_switch_grpc</span></code>).</li>
+variations of the behavioral model (e.g. <code class="docutils literal notranslate"><span class="pre">simple_switch</span></code> and
+<code class="docutils literal notranslate"><span class="pre">simple_switch_grpc</span></code>).</li>
 <li><a class="reference external" href="https://github.com/p4lang/p4c">p4c</a> is a reference compiler for the P4 programming language that
 supports both <strong>P4_14</strong> and <strong>P4_16</strong>.</li>
 <li><a class="reference external" href="https://github.com/mininet/mininet">Mininet</a> allows to create a realistic virtual network, running real
@@ -227,8 +221,8 @@ dependencies that are needed by P4-Utils. For this reason, we provide a <a class
 script</a> that automatically goes through every step.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">The script has been tested with <strong>Ubuntu 18.04.4</strong> and the compiler
-<strong>GCC 7.5</strong>. Errors have been reported with newer versions.</p>
+<p class="last">The script has been tested with <strong>Ubuntu 20.04 and Ubuntu 22.04</strong> and the compiler
+<strong>GCC 9.4</strong>.</p>
 </div>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
@@ -240,7 +234,7 @@ user’s home directory.</p>
 <h4>One-Step Automated Install<a class="headerlink" href="#one-step-automated-install" title="Permalink to this headline">¶</a></h4>
 <p>To get started quickly and conveniently, you may want to install the P4-Tools suite
 using the following command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">sSL</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span> <span class="o">|</span> <span class="n">bash</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">sSL</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span> <span class="o">|</span> <span class="n">bash</span>
 </pre></div>
 </div>
 </div>
@@ -249,7 +243,7 @@ using the following command:</p>
 <p>The main drawback of piping to <cite>bash</cite> is that you cannot review the code
 that is going to run on your system. Therefore, we provide this alternative
 methods that allows you to inspect the intallation script:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">-</span><span class="n">O</span> <span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">-</span><span class="n">O</span> <span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nsg</span><span class="o">-</span><span class="n">ethz</span><span class="o">/</span><span class="n">p4</span><span class="o">-</span><span class="n">utils</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span>
 <span class="n">bash</span> <span class="n">install</span><span class="o">-</span><span class="n">p4</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>

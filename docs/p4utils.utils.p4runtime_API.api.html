@@ -8,22 +8,11 @@
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  false,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,14 +25,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> P4-Utils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            P4-Utils
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -88,11 +81,11 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
-          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
-          <li><a href="p4utils.utils.p4runtime_API.html">p4utils.utils.p4runtime_API package</a> &raquo;</li>
-      <li>p4utils.utils.p4runtime_API.api module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="p4utils.html">P4-Utils API reference</a></li>
+          <li class="breadcrumb-item"><a href="p4utils.utils.html">p4utils.utils package</a></li>
+          <li class="breadcrumb-item"><a href="p4utils.utils.p4runtime_API.html">p4utils.utils.p4runtime_API package</a></li>
+      <li class="breadcrumb-item active">p4utils.utils.p4runtime_API.api module</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/p4utils.utils.p4runtime_API.api.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -118,12 +111,12 @@ the Capabilities RPC.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.Action">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">Action</code><span class="sig-paren">(</span><em>context</em>, <em>action_name=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L542-L627"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Action" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Action parameters for P4 actions.</p>
 <p><strong>Usage</strong></p>
 <ul class="simple">
-<li>Set a param value with <code class="docutils literal"><span class="pre">&lt;self&gt;['&lt;param_name&gt;']</span> <span class="pre">=</span> <span class="pre">'&lt;value&gt;'</span></code>.</li>
-<li>You may also use <code class="docutils literal"><span class="pre">&lt;self&gt;.set(&lt;param_name&gt;='&lt;value&gt;')</span></code>.</li>
+<li>Set a param value with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;['&lt;param_name&gt;']</span> <span class="pre">=</span> <span class="pre">'&lt;value&gt;'</span></code>.</li>
+<li>You may also use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.set(&lt;param_name&gt;='&lt;value&gt;')</span></code>.</li>
 </ul>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.Action.msg">
@@ -140,19 +133,19 @@ the Capabilities RPC.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.ActionProfileGroup">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">ActionProfileGroup</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>action_profile_name=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L910-L997"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.ActionProfileGroup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
 <p>An action profile group.</p>
 <p><strong>Usage</strong></p>
 <ul class="simple">
-<li>Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for the action profile.</li>
-<li>Set the group id with <code class="docutils literal"><span class="pre">&lt;self&gt;.group_id</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. Default is <code class="docutils literal"><span class="pre">0</span></code>.</li>
-<li>Set the max size with <code class="docutils literal"><span class="pre">&lt;self&gt;.max_size</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. Default is <code class="docutils literal"><span class="pre">0</span></code>.</li>
-<li>Add members to the group with <code class="docutils literal"><span class="pre">&lt;self&gt;.add(&lt;member_id&gt;,</span> <span class="pre">weight=&lt;weight&gt;,</span> <span class="pre">watch=&lt;watch&gt;)</span></code>.
-<code class="docutils literal"><span class="pre">weight</span></code> and <code class="docutils literal"><span class="pre">watch</span></code> are optional (default to <code class="docutils literal"><span class="pre">1</span></code> and <code class="docutils literal"><span class="pre">0</span></code> respectively).</li>
+<li>Use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for the action profile.</li>
+<li>Set the group id with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.group_id</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</li>
+<li>Set the max size with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.max_size</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</li>
+<li>Add members to the group with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.add(&lt;member_id&gt;,</span> <span class="pre">weight=&lt;weight&gt;,</span> <span class="pre">watch=&lt;watch&gt;)</span></code>.
+<code class="docutils literal notranslate"><span class="pre">weight</span></code> and <code class="docutils literal notranslate"><span class="pre">watch</span></code> are optional (default to <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">0</span></code> respectively).</li>
 </ul>
 <p class="rubric">Example</p>
 <p>Typical usage to insert an action profile group:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">action_profile_group</span><span class="p">[</span><span class="s1">&#39;&lt;action_profile_name&gt;&#39;</span><span class="p">](</span><span class="n">group_id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">action_profile_group</span><span class="p">[</span><span class="s1">&#39;&lt;action_profile_name&gt;&#39;</span><span class="p">](</span><span class="n">group_id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">g</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">&lt;</span><span class="n">member</span> <span class="nb">id</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">)</span>
 <span class="n">g</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">&lt;</span><span class="n">member</span> <span class="nb">id</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">)</span>
 <span class="c1"># OR g.add(&lt;member id 1&gt;).add(&lt;member id 2&gt;)</span>
@@ -175,7 +168,7 @@ the Capabilities RPC.</p>
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L990-L997"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.ActionProfileGroup.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
 the appropriate fields unset). If function is <strong>None</strong>, returns an iterator.
-Iterate over it to get all the members (as <code class="docutils literal"><span class="pre">ActionProfileGroup</span></code> instances)
+Iterate over it to get all the members (as <code class="docutils literal notranslate"><span class="pre">ActionProfileGroup</span></code> instances)
 returned by the server. Otherwise, function is applied to all the groups
 returned by the server.</p>
 </dd></dl>
@@ -185,18 +178,18 @@ returned by the server.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.ActionProfileMember">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">ActionProfileMember</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>action_profile_name=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L765-L851"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.ActionProfileMember" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
 <p>An action profile member.</p>
 <p><strong>Usage</strong></p>
 <ul class="simple">
-<li>Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for the action profile.</li>
-<li>Set the <em>member id</em> with <code class="docutils literal"><span class="pre">&lt;self&gt;.member_id</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</li>
-<li>To set the action specification <code class="docutils literal"><span class="pre">&lt;self&gt;.action</span> <span class="pre">=</span> <span class="pre">&lt;instance</span> <span class="pre">of</span> <span class="pre">type</span> <span class="pre">Action&gt;</span></code>.</li>
-<li>To set the value of action parameters, use <code class="docutils literal"><span class="pre">&lt;self&gt;.action['&lt;param</span> <span class="pre">name&gt;']</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</li>
+<li>Use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for the action profile.</li>
+<li>Set the <em>member id</em> with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.member_id</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</li>
+<li>To set the action specification <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.action</span> <span class="pre">=</span> <span class="pre">&lt;instance</span> <span class="pre">of</span> <span class="pre">type</span> <span class="pre">Action&gt;</span></code>.</li>
+<li>To set the value of action parameters, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.action['&lt;param</span> <span class="pre">name&gt;']</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</li>
 </ul>
 <p class="rubric">Example</p>
 <p>Typical usage to insert an action profile member:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">action_profile_member</span><span class="p">[</span><span class="s1">&#39;&lt;action_profile_name&gt;&#39;</span><span class="p">](</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;&lt;action_name&gt;&#39;</span><span class="p">,</span> <span class="n">member_id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">action_profile_member</span><span class="p">[</span><span class="s1">&#39;&lt;action_profile_name&gt;&#39;</span><span class="p">](</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;&lt;action_name&gt;&#39;</span><span class="p">,</span> <span class="n">member_id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">m</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;&lt;p1&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
 <span class="o">...</span>
 <span class="n">m</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;&lt;pM&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
@@ -209,7 +202,7 @@ returned by the server.</p>
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L844-L851"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.ActionProfileMember.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
 the appropriate fields unset). If function is <strong>None</strong>, returns an iterator.
-Iterate over it to get all the members (as <code class="docutils literal"><span class="pre">ActionProfileMember</span></code> instances)
+Iterate over it to get all the members (as <code class="docutils literal notranslate"><span class="pre">ActionProfileMember</span></code> instances)
 returned by the server. Otherwise, function is applied to all the members
 returned by the server.</p>
 </dd></dl>
@@ -219,21 +212,21 @@ returned by the server.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.CloneSessionEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">CloneSessionEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>session_id=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L2193-L2272"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CloneSessionEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._EntityBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.api._EntityBase</span></code></p>
 <p>Clone session entry.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – clone session id</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – clone session id</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Usage</strong></p>
 <ul class="simple">
-<li>Add replicas with <code class="docutils literal"><span class="pre">&lt;self&gt;.add(&lt;eg_port_1&gt;,</span> <span class="pre">&lt;instance_1&gt;).add(&lt;eg_port_2&gt;,</span> <span class="pre">&lt;instance_2&gt;)...</span></code></li>
-<li>Access class of service with <code class="docutils literal"><span class="pre">&lt;self&gt;.cos</span></code>.</li>
-<li>Access truncation length with <code class="docutils literal"><span class="pre">&lt;self&gt;.packet_length_bytes</span></code>.</li>
+<li>Add replicas with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.add(&lt;eg_port_1&gt;,</span> <span class="pre">&lt;instance_1&gt;).add(&lt;eg_port_2&gt;,</span> <span class="pre">&lt;instance_2&gt;)...</span></code></li>
+<li>Access class of service with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.cos</span></code>.</li>
+<li>Access truncation length with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.packet_length_bytes</span></code>.</li>
 </ul>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.CloneSessionEntry.add">
@@ -244,11 +237,11 @@ returned by the server.</p>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.CloneSessionEntry.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L2246-L2256"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CloneSessionEntry.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a P4Runtime Read RPC to read a single <code class="docutils literal"><span class="pre">CloneSessionEntry</span></code>
+<dd><p>Generate a P4Runtime Read RPC to read a single <code class="docutils literal notranslate"><span class="pre">CloneSessionEntry</span></code>
 (wildcard reads not supported). If function is <strong>None</strong>, return a
-<code class="docutils literal"><span class="pre">CloneSessionEntry</span></code> instance (or <strong>None</strong> if the provided group id does
+<code class="docutils literal notranslate"><span class="pre">CloneSessionEntry</span></code> instance (or <strong>None</strong> if the provided group id does
 not exist). If function is not <strong>None</strong>, function is applied to the
-<code class="docutils literal"><span class="pre">CloneSessionEntry</span></code> instance (if any).</p>
+<code class="docutils literal notranslate"><span class="pre">CloneSessionEntry</span></code> instance (if any).</p>
 </dd></dl>
 
 </dd></dl>
@@ -256,33 +249,33 @@ not exist). If function is not <strong>None</strong>, function is applied to the
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.CounterEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">CounterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>counter_name=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1703-L1760"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CounterEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._CounterEntryBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.api._CounterEntryBase</span></code></p>
 <p>An entry for a P4 counter.</p>
 <p><strong>Usage</strong></p>
 <ul class="simple">
-<li>Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this counter.</li>
-<li>Set the index with <code class="docutils literal"><span class="pre">&lt;self&gt;.index</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. To reset it
+<li>Use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this counter.</li>
+<li>Set the index with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.index</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. To reset it
 (e.g. for wildcard read), set it to <strong>None</strong>.</li>
-<li>Access byte count and packet count with <code class="docutils literal"><span class="pre">&lt;self&gt;.byte_count</span></code> /
-<code class="docutils literal"><span class="pre">&lt;self&gt;.packet_count</span></code>.</li>
-<li>To read from the counter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.read()</span></code>.</li>
-<li>To write to the counter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.modify()</span></code>.</li>
+<li>Access byte count and packet count with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.byte_count</span></code> /
+<code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.packet_count</span></code>.</li>
+<li>To read from the counter, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.read()</span></code>.</li>
+<li>To write to the counter, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.modify()</span></code>.</li>
 </ul>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.CounterEntry.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1743-L1760"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.CounterEntry.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
 the index unset). If function is <strong>None</strong>, returns an iterator.
-Iterate over it to get all the counter entries (<code class="docutils literal"><span class="pre">CounterEntry</span></code> instances)
+Iterate over it to get all the counter entries (<code class="docutils literal notranslate"><span class="pre">CounterEntry</span></code> instances)
 returned by the server. Otherwise, function is applied to all the counter
 entries returned by the server.</p>
 <p class="rubric">Example</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The above code is equivalent to the following one-liner:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -292,21 +285,21 @@ entries returned by the server.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.DigestEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">DigestEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>digest_name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L2275-L2342"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DigestEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
 <p>A P4Runtime digest entry.</p>
 <p>It is used to configure how the device must generate digest messages.</p>
 <p><strong>Usage</strong></p>
 <ul class="simple">
 <li>The maximum server buffering delay in nanoseconds for an outstanding digest message
-can be set using <code class="docutils literal"><span class="pre">&lt;self&gt;.max_timeout_ns</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. By default, this is set to <code class="docutils literal"><span class="pre">0</span></code>, i.e. the server
-should generate a <code class="docutils literal"><span class="pre">DigestList</span></code> message for every digest message generated by the data plane.</li>
+can be set using <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.max_timeout_ns</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. By default, this is set to <code class="docutils literal notranslate"><span class="pre">0</span></code>, i.e. the server
+should generate a <code class="docutils literal notranslate"><span class="pre">DigestList</span></code> message for every digest message generated by the data plane.</li>
 <li>The maximum digest list size — in number of digest messages — sent by the server to the client as a
-single <code class="docutils literal"><span class="pre">DigestList</span></code> message can be set using <code class="docutils literal"><span class="pre">&lt;self&gt;.max_list_size</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. By default, this
-is set to <code class="docutils literal"><span class="pre">1</span></code>, i.e. the server should generate a <code class="docutils literal"><span class="pre">DigestList</span></code> message for every digest message generated
+single <code class="docutils literal notranslate"><span class="pre">DigestList</span></code> message can be set using <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.max_list_size</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. By default, this
+is set to <code class="docutils literal notranslate"><span class="pre">1</span></code>, i.e. the server should generate a <code class="docutils literal notranslate"><span class="pre">DigestList</span></code> message for every digest message generated
 by the data plane.</li>
 <li>The timeout in nanoseconds that a server must wait for a digest list acknowledgement from the
 client before new digest messages can be generated for the same learned data can be set using
-<code class="docutils literal"><span class="pre">&lt;self&gt;.ack_timeout_ns</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. By default, this is set to <code class="docutils literal"><span class="pre">0</span></code>, i.e. the cache of digests not
+<code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.ack_timeout_ns</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. By default, this is set to <code class="docutils literal notranslate"><span class="pre">0</span></code>, i.e. the cache of digests not
 yet acknowledged must always be an empty set.</li>
 </ul>
 <dl class="method">
@@ -322,37 +315,37 @@ otherwise the function is applied to every entry in the iterator.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.DirectCounterEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">DirectCounterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>direct_counter_name=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1763-L1850"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectCounterEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._CounterEntryBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.api._CounterEntryBase</span></code></p>
 <p>An entry for a P4 direct counter.</p>
 <p><strong>Usage</strong></p>
 <ul class="simple">
-<li>Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this direct counter.</li>
-<li>Set the table_entry with <code class="docutils literal"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">&lt;TableEntry</span> <span class="pre">instance&gt;</span></code>.
+<li>Use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this direct counter.</li>
+<li>Set the table_entry with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">&lt;TableEntry</span> <span class="pre">instance&gt;</span></code>.
 To reset it (e.g. for wildcard read), set it to <strong>None</strong>. It is the same as:
-<code class="docutils literal"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">TableEntry({})</span></code>.</li>
-<li>Access byte count and packet count with <code class="docutils literal"><span class="pre">&lt;self&gt;.byte_count</span></code> / <code class="docutils literal"><span class="pre">&lt;self&gt;.packet_count</span></code>.</li>
-<li>To read from the counter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.read</span></code></li>
-<li>To write to the counter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.modify</span></code></li>
+<code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">TableEntry({})</span></code>.</li>
+<li>Access byte count and packet count with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.byte_count</span></code> / <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.packet_count</span></code>.</li>
+<li>To read from the counter, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.read</span></code></li>
+<li>To write to the counter, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.modify</span></code></li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The <a class="reference internal" href="#p4utils.utils.p4runtime_API.api.TableEntry" title="p4utils.utils.p4runtime_API.api.TableEntry"><code class="xref py py-class docutils literal"><span class="pre">TableEntry</span></code></a> instance must be for the table to which the direct counter is attached.</p>
+<p class="last">The <a class="reference internal" href="#p4utils.utils.p4runtime_API.api.TableEntry" title="p4utils.utils.p4runtime_API.api.TableEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TableEntry</span></code></a> instance must be for the table to which the direct counter is attached.</p>
 </div>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.DirectCounterEntry.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1833-L1850"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectCounterEntry.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
 the index unset). If function is <strong>None</strong>, returns an iterator.
-Iterate over it to get all the direct counter entries (<code class="docutils literal"><span class="pre">DirectCounterEntry</span></code>
+Iterate over it to get all the direct counter entries (<code class="docutils literal notranslate"><span class="pre">DirectCounterEntry</span></code>
 instances) returned by the server. Otherwise, function is applied to
 all the direct counter entries returned by the server.</p>
 <p class="rubric">Example</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The above code is equivalent to the following one-liner:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -362,50 +355,50 @@ all the direct counter entries returned by the server.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.DirectMeterEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">DirectMeterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>direct_meter_name=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1978-L2070"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectMeterEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._MeterEntryBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.api._MeterEntryBase</span></code></p>
 <p>An entry for a P4 direct meter.</p>
 <p><strong>Usage</strong></p>
 <ul>
-<li><p class="first">Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this direct meter.</p>
+<li><p class="first">Use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this direct meter.</p>
 </li>
-<li><p class="first">Set the table_entry with <code class="docutils literal"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">&lt;TableEntry</span> <span class="pre">instance&gt;</span></code>.
+<li><p class="first">Set the table_entry with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">&lt;TableEntry</span> <span class="pre">instance&gt;</span></code>.
 To reset it (e.g. for wildcard read), set it to <strong>None</strong>. It is the same as:
-<code class="docutils literal"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">TableEntry({})</span></code></p>
+<code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.table_entry</span> <span class="pre">=</span> <span class="pre">TableEntry({})</span></code></p>
 </li>
 <li><p class="first">Access meter rates and burst sizes with:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">&lt;self&gt;.cir</span></code></li>
-<li><code class="docutils literal"><span class="pre">&lt;self&gt;.cburst</span></code></li>
-<li><code class="docutils literal"><span class="pre">&lt;self&gt;.pir</span></code></li>
-<li><code class="docutils literal"><span class="pre">&lt;self&gt;.pburst</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.cir</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.cburst</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.pir</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.pburst</span></code></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">To read from the meter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.read</span></code>.</p>
+<li><p class="first">To read from the meter, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.read</span></code>.</p>
 </li>
-<li><p class="first">To write to the meter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.modify</span></code>.</p>
+<li><p class="first">To write to the meter, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.modify</span></code>.</p>
 </li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The <a class="reference internal" href="#p4utils.utils.p4runtime_API.api.TableEntry" title="p4utils.utils.p4runtime_API.api.TableEntry"><code class="xref py py-class docutils literal"><span class="pre">TableEntry</span></code></a> instance must be for the table to which the direct meter is attached.</p>
+<p class="last">The <a class="reference internal" href="#p4utils.utils.p4runtime_API.api.TableEntry" title="p4utils.utils.p4runtime_API.api.TableEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">TableEntry</span></code></a> instance must be for the table to which the direct meter is attached.</p>
 </div>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.DirectMeterEntry.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L2053-L2070"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.DirectMeterEntry.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
 the index unset). If function is <strong>None</strong>, returns an iterator.
-Iterate over it to get all the direct meter entries (<code class="docutils literal"><span class="pre">DirectMeterEntry</span></code>
+Iterate over it to get all the direct meter entries (<code class="docutils literal notranslate"><span class="pre">DirectMeterEntry</span></code>
 instances) returned by the server. Otherwise, function is applied to
 all the direct meter entries returned by the server.</p>
 <p class="rubric">Example</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The above code is equivalent to the following one-liner:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -415,7 +408,7 @@ all the direct meter entries returned by the server.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.FwdPipeConfig">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">FwdPipeConfig</code><span class="sig-paren">(</span><em>p4info</em>, <em>bin</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.FwdPipeConfig" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
 <dl class="attribute">
 <dt id="p4utils.utils.p4runtime_API.api.FwdPipeConfig.bin">
 <code class="descname">bin</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.FwdPipeConfig.bin" title="Permalink to this definition">¶</a></dt>
@@ -433,16 +426,16 @@ all the direct meter entries returned by the server.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.GroupMember">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">GroupMember</code><span class="sig-paren">(</span><em>member_id=None</em>, <em>weight=1</em>, <em>watch=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L854-L907"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.GroupMember" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
-<p>A member in an <a class="reference internal" href="#p4utils.utils.p4runtime_API.api.ActionProfileGroup" title="p4utils.utils.p4runtime_API.api.ActionProfileGroup"><code class="xref py py-class docutils literal"><span class="pre">ActionProfileGroup</span></code></a>.</p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A member in an <a class="reference internal" href="#p4utils.utils.p4runtime_API.api.ActionProfileGroup" title="p4utils.utils.p4runtime_API.api.ActionProfileGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionProfileGroup</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>member_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – member id (required)</li>
-<li><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – member weigth</li>
-<li><strong>watch</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – member watch</li>
+<li><strong>member_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – member id (required)</li>
+<li><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – member weigth</li>
+<li><strong>watch</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – member watch</li>
 </ul>
 </td>
 </tr>
@@ -453,22 +446,22 @@ all the direct meter entries returned by the server.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.MatchKey">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">MatchKey</code><span class="sig-paren">(</span><em>table_name</em>, <em>match_fields</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L299-L539"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MatchKey" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Match key fields for P4 table.</p>
 <p><strong>Usage</strong></p>
-<p>Set a field value with <code class="docutils literal"><span class="pre">&lt;self&gt;['&lt;field_name&gt;']</span> <span class="pre">=</span> <span class="pre">'...'</span></code>:</p>
+<p>Set a field value with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;['&lt;field_name&gt;']</span> <span class="pre">=</span> <span class="pre">'...'</span></code>:</p>
 <ul class="simple">
-<li>For <em>exact</em> match: <code class="docutils literal"><span class="pre">&lt;self&gt;['&lt;f&gt;']</span> <span class="pre">=</span> <span class="pre">'&lt;value&gt;'</span></code>.</li>
-<li>For <em>ternary</em> match: <code class="docutils literal"><span class="pre">&lt;self&gt;['&lt;f&gt;']</span> <span class="pre">=</span> <span class="pre">'&lt;value&gt;&amp;&amp;&amp;&lt;mask&gt;'</span></code>.</li>
-<li>For <em>LPM</em> match: <code class="docutils literal"><span class="pre">&lt;self&gt;['&lt;f&gt;']</span> <span class="pre">=</span> <span class="pre">'&lt;value&gt;/&lt;mask&gt;'</span></code>.</li>
-<li>For <em>range</em> match: <code class="docutils literal"><span class="pre">&lt;self&gt;['&lt;f&gt;']</span> <span class="pre">=</span> <span class="pre">'&lt;start&gt;..&lt;end&gt;'</span></code>.</li>
+<li>For <em>exact</em> match: <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;['&lt;f&gt;']</span> <span class="pre">=</span> <span class="pre">'&lt;value&gt;'</span></code>.</li>
+<li>For <em>ternary</em> match: <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;['&lt;f&gt;']</span> <span class="pre">=</span> <span class="pre">'&lt;value&gt;&amp;&amp;&amp;&lt;mask&gt;'</span></code>.</li>
+<li>For <em>LPM</em> match: <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;['&lt;f&gt;']</span> <span class="pre">=</span> <span class="pre">'&lt;value&gt;/&lt;mask&gt;'</span></code>.</li>
+<li>For <em>range</em> match: <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;['&lt;f&gt;']</span> <span class="pre">=</span> <span class="pre">'&lt;start&gt;..&lt;end&gt;'</span></code>.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If it’s inconvenient to use the whole field name, you can use a unique suffix.</p>
 </div>
 <p class="rubric">Example</p>
-<p>You may also use <code class="docutils literal"><span class="pre">&lt;self&gt;.set(&lt;f&gt;='&lt;value&gt;')</span></code> but <code class="docutils literal"><span class="pre">&lt;f&gt;</span></code> must not include a <code class="docutils literal"><span class="pre">.</span></code> in this case.</p>
+<p>You may also use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.set(&lt;f&gt;='&lt;value&gt;')</span></code> but <code class="docutils literal notranslate"><span class="pre">&lt;f&gt;</span></code> must not include a <code class="docutils literal notranslate"><span class="pre">.</span></code> in this case.</p>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.MatchKey.clear">
 <code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L535-L536"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MatchKey.clear" title="Permalink to this definition">¶</a></dt>
@@ -484,28 +477,28 @@ all the direct meter entries returned by the server.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.MeterEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">MeterEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>meter_name=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1914-L1975"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MeterEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._MeterEntryBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.api._MeterEntryBase</span></code></p>
 <p>An entry for a P4 meter.</p>
 <p><strong>Usage</strong></p>
 <ul>
-<li><p class="first">Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this meter.</p>
+<li><p class="first">Use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this meter.</p>
 </li>
-<li><p class="first">Set the index with <code class="docutils literal"><span class="pre">&lt;self&gt;.index</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. To reset it (e.g.
+<li><p class="first">Set the index with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.index</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>. To reset it (e.g.
 for wildcard read), set it to <strong>None</strong>.</p>
 </li>
 <li><p class="first">Access meter rates and burst sizes with:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">&lt;self&gt;.cir</span></code></li>
-<li><code class="docutils literal"><span class="pre">&lt;self&gt;.cburst</span></code></li>
-<li><code class="docutils literal"><span class="pre">&lt;self&gt;.pir</span></code></li>
-<li><code class="docutils literal"><span class="pre">&lt;self&gt;.pburst</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.cir</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.cburst</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.pir</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.pburst</span></code></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">To read from the meter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.read</span></code>.</p>
+<li><p class="first">To read from the meter, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.read</span></code>.</p>
 </li>
-<li><p class="first">To write to the meter, use <code class="docutils literal"><span class="pre">&lt;self&gt;.modify</span></code>.</p>
+<li><p class="first">To write to the meter, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.modify</span></code>.</p>
 </li>
 </ul>
 <dl class="method">
@@ -513,16 +506,16 @@ for wildcard read), set it to <strong>None</strong>.</p>
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1958-L1975"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MeterEntry.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
 the index unset). If function is <strong>None</strong>, returns an iterator.
-Iterate over it to get all the meter entries (<code class="docutils literal"><span class="pre">MeterEntry</span></code> instances)
+Iterate over it to get all the meter entries (<code class="docutils literal notranslate"><span class="pre">MeterEntry</span></code> instances)
 returned by the server. Otherwise, function is applied to all the
 meter entries returned by the server.</p>
 <p class="rubric">Example</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The above code is equivalent to the following one-liner:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -532,18 +525,18 @@ meter entries returned by the server.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.MulticastGroupEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">MulticastGroupEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>group_id=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L2121-L2190"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MulticastGroupEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._EntityBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.api._EntityBase</span></code></p>
 <p>Multicast group entry.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – multicast group id</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – multicast group id</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Usage</strong></p>
-<p>Add replicas with <code class="docutils literal"><span class="pre">&lt;self&gt;.add(&lt;eg_port_1&gt;,</span> <span class="pre">&lt;instance_1&gt;).add(&lt;eg_port_2&gt;,</span> <span class="pre">&lt;instance_2&gt;)...</span></code></p>
+<p>Add replicas with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.add(&lt;eg_port_1&gt;,</span> <span class="pre">&lt;instance_1&gt;).add(&lt;eg_port_2&gt;,</span> <span class="pre">&lt;instance_2&gt;)...</span></code></p>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.MulticastGroupEntry.add">
 <code class="descname">add</code><span class="sig-paren">(</span><em>egress_port=None</em>, <em>instance=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L2187-L2190"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MulticastGroupEntry.add" title="Permalink to this definition">¶</a></dt>
@@ -553,11 +546,11 @@ meter entries returned by the server.</p>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.MulticastGroupEntry.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L2162-L2172"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.MulticastGroupEntry.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a P4Runtime Read RPC to read a single <code class="docutils literal"><span class="pre">MulticastGroupEntry</span></code>
+<dd><p>Generate a P4Runtime Read RPC to read a single <code class="docutils literal notranslate"><span class="pre">MulticastGroupEntry</span></code>
 (wildcard reads not supported). If function is <strong>None</strong>, return a
-<code class="docutils literal"><span class="pre">MulticastGroupEntry</span></code> instance (or <strong>None</strong> if the provided group id
+<code class="docutils literal notranslate"><span class="pre">MulticastGroupEntry</span></code> instance (or <strong>None</strong> if the provided group id
 does not exist). If function is not <strong>None</strong>, function is applied to the
-<code class="docutils literal"><span class="pre">MulticastGroupEntry</span></code> instance (if any).</p>
+<code class="docutils literal notranslate"><span class="pre">MulticastGroupEntry</span></code> instance (if any).</p>
 </dd></dl>
 
 </dd></dl>
@@ -565,18 +558,18 @@ does not exist). If function is not <strong>None</strong>, function is applied t
 <dl class="exception">
 <dt id="p4utils.utils.p4runtime_API.api.NotSupportedYet">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">NotSupportedYet</code><span class="sig-paren">(</span><em>what</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L47-L52"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.NotSupportedYet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.Oneshot">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">Oneshot</code><span class="sig-paren">(</span><em>context</em>, <em>table_name=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1064-L1136"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Oneshot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A <em>oneshot</em> action set for P4 table.</p>
 <p><strong>Usage</strong></p>
 <ul class="simple">
-<li>To add an action to the set, use <code class="docutils literal"><span class="pre">&lt;self&gt;.add(&lt;Action</span> <span class="pre">instance&gt;)</span></code>.</li>
-<li>You can also access the set of actions with <code class="docutils literal"><span class="pre">&lt;self&gt;.actions</span></code> (which is a Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a>).</li>
+<li>To add an action to the set, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.add(&lt;Action</span> <span class="pre">instance&gt;)</span></code>.</li>
+<li>You can also access the set of actions with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.actions</span></code> (which is a Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>).</li>
 </ul>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.Oneshot.add">
@@ -594,7 +587,7 @@ does not exist). If function is not <strong>None</strong>, function is applied t
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.OneshotAction">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">OneshotAction</code><span class="sig-paren">(</span><em>action=None</em>, <em>weight=1</em>, <em>watch=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1017-L1061"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.OneshotAction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>An action in a oneshot action set.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -602,8 +595,8 @@ does not exist). If function is not <strong>None</strong>, function is applied t
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>action</strong> (<a class="reference internal" href="#p4utils.utils.p4runtime_API.api.Action" title="p4utils.utils.p4runtime_API.api.Action"><em>p4utils.utils.p4runtime_API.api.Action</em></a>) – action instance (required)</li>
-<li><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – action weight</li>
-<li><strong>watch</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – action watch</li>
+<li><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – action weight</li>
+<li><strong>watch</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – action watch</li>
 </ul>
 </td>
 </tr>
@@ -619,14 +612,14 @@ does not exist). If function is not <strong>None</strong>, function is applied t
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.P4Object">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">P4Object</code><span class="sig-paren">(</span><em>obj_type</em>, <em>obj</em>, <em>context</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L194-L248"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.P4Object" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A wrapper around the P4Info Protobuf message for P4 objects.</p>
 <p><strong>Usage</strong></p>
 <ul class="simple">
-<li>You can access any field from the message with <code class="docutils literal"><span class="pre">&lt;self&gt;.&lt;field</span> <span class="pre">name&gt;</span></code>.</li>
-<li>You can access the <em>name</em> directly with <code class="docutils literal"><span class="pre">&lt;self&gt;.name</span></code>.</li>
-<li>You can access the <em>id</em> directly with <code class="docutils literal"><span class="pre">&lt;self&gt;.id</span></code>.</li>
-<li>If you need the underlying Protobuf message, you can access it with <code class="docutils literal"><span class="pre">msg()</span></code>.</li>
+<li>You can access any field from the message with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.&lt;field</span> <span class="pre">name&gt;</span></code>.</li>
+<li>You can access the <em>name</em> directly with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.name</span></code>.</li>
+<li>You can access the <em>id</em> directly with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.id</span></code>.</li>
+<li>If you need the underlying Protobuf message, you can access it with <code class="docutils literal notranslate"><span class="pre">msg()</span></code>.</li>
 </ul>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.P4Object.actions">
@@ -650,13 +643,13 @@ does not exist). If function is not <strong>None</strong>, function is applied t
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.P4Objects">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">P4Objects</code><span class="sig-paren">(</span><em>obj_type</em>, <em>context</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L251-L296"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.P4Objects" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>All the P4 objects in the P4 program.</p>
 <p><strong>Usage</strong></p>
-<p>To access a specific object, use <code class="docutils literal"><span class="pre">&lt;self&gt;['&lt;name&gt;']</span></code>.</p>
+<p>To access a specific object, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;['&lt;name&gt;']</span></code>.</p>
 <p class="rubric">Example</p>
 <p>You can use this class to iterate over all P4 object instances:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -665,16 +658,16 @@ does not exist). If function is not <strong>None</strong>, function is applied t
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.Replica">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">Replica</code><span class="sig-paren">(</span><em>egress_port=None</em>, <em>instance=0</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L2073-L2118"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Replica" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
-<p>A replica is the pair <code class="docutils literal"><span class="pre">(&lt;port</span> <span class="pre">number&gt;,</span> <span class="pre">&lt;instance</span> <span class="pre">id&gt;)</span></code>.
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A replica is the pair <code class="docutils literal notranslate"><span class="pre">(&lt;port</span> <span class="pre">number&gt;,</span> <span class="pre">&lt;instance</span> <span class="pre">id&gt;)</span></code>.
 It is used for multicast and clone session programming.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>egress_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – outboud packets port</li>
-<li><strong>instance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – instance of the packet replication</li>
+<li><strong>egress_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – outboud packets port</li>
+<li><strong>instance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – instance of the packet replication</li>
 </ul>
 </td>
 </tr>
@@ -685,48 +678,48 @@ It is used for multicast and clone session programming.</p>
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.api.TableEntry">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">TableEntry</code><span class="sig-paren">(</span><em>client</em>, <em>context</em>, <em>table_name=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1267-L1638"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.api._P4EntityBase</span></code></p>
 <p>An entry for a P4 table.</p>
 <p><strong>Usage</strong></p>
 <ul>
-<li><p class="first">Use <code class="docutils literal"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this table.</p>
+<li><p class="first">Use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.info</span></code> to display the P4Info entry for this table.</p>
 </li>
-<li><p class="first">To set the <em>match key</em>, use <code class="docutils literal"><span class="pre">&lt;self&gt;.match['&lt;field</span> <span class="pre">name&gt;']</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
+<li><p class="first">To set the <em>match key</em>, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.match['&lt;field</span> <span class="pre">name&gt;']</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
 </li>
-<li><p class="first">To set the <em>action specification</em> (this is a direct table): <code class="docutils literal"><span class="pre">&lt;self&gt;.action</span> <span class="pre">=</span> <span class="pre">&lt;instance</span> <span class="pre">of</span> <span class="pre">type</span> <span class="pre">Action&gt;</span></code>.</p>
+<li><p class="first">To set the <em>action specification</em> (this is a direct table): <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.action</span> <span class="pre">=</span> <span class="pre">&lt;instance</span> <span class="pre">of</span> <span class="pre">type</span> <span class="pre">Action&gt;</span></code>.</p>
 </li>
-<li><p class="first">To set the value of <em>action parameters</em>, use <code class="docutils literal"><span class="pre">&lt;self&gt;.action['&lt;param</span> <span class="pre">name&gt;']</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
+<li><p class="first">To set the value of <em>action parameters</em>, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.action['&lt;param</span> <span class="pre">name&gt;']</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
 </li>
-<li><p class="first">To set the <em>priority</em>, use <code class="docutils literal"><span class="pre">&lt;self&gt;.priority</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
+<li><p class="first">To set the <em>priority</em>, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.priority</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
 </li>
-<li><p class="first">To mark the entry as <em>default</em>, use <code class="docutils literal"><span class="pre">&lt;self&gt;.is_default</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
+<li><p class="first">To mark the entry as <em>default</em>, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.is_default</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
 </li>
 <li><p class="first">If a <em>direct counter</em> is set to this table, then:</p>
 <blockquote>
 <div><ul class="simple">
-<li>To set the counter spec, use <code class="docutils literal"><span class="pre">&lt;self&gt;.counter_data.byte_count</span></code> and/or <code class="docutils literal"><span class="pre">&lt;self&gt;.counter_data.packet_count</span></code>.</li>
-<li>To unset it, use <code class="docutils literal"><span class="pre">&lt;self&gt;.counter_data</span> <span class="pre">=</span> <span class="pre">None</span></code> or <code class="docutils literal"><span class="pre">&lt;self&gt;.clear_counter_data()</span></code>.</li>
+<li>To set the counter spec, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.counter_data.byte_count</span></code> and/or <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.counter_data.packet_count</span></code>.</li>
+<li>To unset it, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.counter_data</span> <span class="pre">=</span> <span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.clear_counter_data()</span></code>.</li>
 </ul>
 </div></blockquote>
 </li>
 <li><p class="first">If a <em>direct meter</em> is set to this table, then:</p>
 <blockquote>
 <div><ul class="simple">
-<li>To access the meter config, use <code class="docutils literal"><span class="pre">&lt;self&gt;.meter_config.&lt;cir|cburst|pir|pburst&gt;</span></code>.</li>
-<li>To unset it, use <code class="docutils literal"><span class="pre">&lt;self&gt;.meter_config</span> <span class="pre">=</span> <span class="pre">None</span></code> or <code class="docutils literal"><span class="pre">&lt;self&gt;.clear_meter_config()</span></code>.</li>
+<li>To access the meter config, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.meter_config.&lt;cir|cburst|pir|pburst&gt;</span></code>.</li>
+<li>To unset it, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.meter_config</span> <span class="pre">=</span> <span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.clear_meter_config()</span></code>.</li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">Access the <em>member_id</em> with <code class="docutils literal"><span class="pre">&lt;self&gt;.member_id</span></code>.</p>
+<li><p class="first">Access the <em>member_id</em> with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.member_id</span></code>.</p>
 </li>
-<li><p class="first">Access the <em>group_id</em> with <code class="docutils literal"><span class="pre">&lt;self&gt;.group_id</span></code>.</p>
+<li><p class="first">Access the <em>group_id</em> with <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.group_id</span></code>.</p>
 </li>
-<li><p class="first">To add <em>metadata</em> to the entry, use <code class="docutils literal"><span class="pre">&lt;self&gt;.metadata</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
+<li><p class="first">To add <em>metadata</em> to the entry, use <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.metadata</span> <span class="pre">=</span> <span class="pre">&lt;expr&gt;</span></code>.</p>
 </li>
 </ul>
 <p class="rubric">Example</p>
 <p>Typical usage to insert a table entry:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">](</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;&lt;action_name&gt;&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">](</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;&lt;action_name&gt;&#39;</span><span class="p">)</span>
 <span class="n">t</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;&lt;f1&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
 <span class="o">...</span>
 <span class="n">t</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;&lt;fN&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
@@ -739,7 +732,7 @@ It is used for multicast and clone session programming.</p>
 </pre></div>
 </div>
 <p>Typical usage to set the default entry:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">](</span><span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">](</span><span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">t</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;&lt;p1&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
 <span class="o">...</span>
 <span class="n">t</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;&lt;pM&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
@@ -748,7 +741,7 @@ It is used for multicast and clone session programming.</p>
 </pre></div>
 </div>
 <p>Typical usage to insert a table entry if you know the <em>member_id</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">]</span>
 <span class="n">t</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;&lt;f1&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
 <span class="o">...</span>
 <span class="n">t</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;&lt;fN&gt;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
@@ -759,25 +752,25 @@ It is used for multicast and clone session programming.</p>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.TableEntry.clear_action">
 <code class="descname">clear_action</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1623-L1626"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.clear_action" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clears the action spec for the <code class="docutils literal"><span class="pre">TableEntry</span></code>.</p>
+<dd><p>Clears the action spec for the <code class="docutils literal notranslate"><span class="pre">TableEntry</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.TableEntry.clear_counter_data">
 <code class="descname">clear_counter_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1632-L1634"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.clear_counter_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clear all counter data, same as <code class="docutils literal"><span class="pre">&lt;self&gt;.counter_data</span> <span class="pre">=</span> <span class="pre">None</span></code>.</p>
+<dd><p>Clear all counter data, same as <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.counter_data</span> <span class="pre">=</span> <span class="pre">None</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.TableEntry.clear_match">
 <code class="descname">clear_match</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1628-L1630"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.clear_match" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clears the match spec for the <code class="docutils literal"><span class="pre">TableEntry</span></code>.</p>
+<dd><p>Clears the match spec for the <code class="docutils literal notranslate"><span class="pre">TableEntry</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.api.TableEntry.clear_meter_config">
 <code class="descname">clear_meter_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1636-L1638"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.clear_meter_config" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clear the meter config, same as <code class="docutils literal"><span class="pre">&lt;self&gt;.meter_config</span> <span class="pre">=</span> <span class="pre">None</span></code>.</p>
+<dd><p>Clear the meter config, same as <code class="docutils literal notranslate"><span class="pre">&lt;self&gt;.meter_config</span> <span class="pre">=</span> <span class="pre">None</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -785,20 +778,20 @@ It is used for multicast and clone session programming.</p>
 <code class="descname">read</code><span class="sig-paren">(</span><em>function=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L1569-L1590"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.TableEntry.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a P4Runtime Read RPC. Supports wildcard reads (just leave
 the appropriate fields unset). If function is <strong>None</strong>, returns an iterator.
-Iterate over it to get all the table entries (<code class="docutils literal"><span class="pre">TableEntry</span></code> instances)
+Iterate over it to get all the table entries (<code class="docutils literal notranslate"><span class="pre">TableEntry</span></code> instances)
 returned by the server. Otherwise, function is applied to all the table
 entries returned by the server.</p>
 <p class="rubric">Example</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">te</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">te</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">te</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The above code is equivalent to the following one-liner:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">te</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">te</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;.</span><span class="n">read</span><span class="p">(</span><span class="k">lambda</span> <span class="n">te</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">te</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>To delete all the entries from a table, simply use:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">delete</span><span class="p">())</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;&lt;table_name&gt;&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">delete</span><span class="p">())</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -808,13 +801,13 @@ entries returned by the server.</p>
 <dl class="exception">
 <dt id="p4utils.utils.p4runtime_API.api.UserUsageError">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">UserUsageError</code><span class="sig-paren">(</span><em>usage</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L39-L44"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.UserUsageError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
 </dd></dl>
 
 <dl class="function">
 <dt id="p4utils.utils.p4runtime_API.api.Write">
 <code class="descclassname">p4utils.utils.p4runtime_API.api.</code><code class="descname">Write</code><span class="sig-paren">(</span><em>input_</em>, <em>client</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/api.py#L2345-L2357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.api.Write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads a <code class="docutils literal"><span class="pre">WriteRequest</span></code> from a file (text format) and sends it to the server.
+<dd><p>Reads a <code class="docutils literal notranslate"><span class="pre">WriteRequest</span></code> from a file (text format) and sends it to the server.
 It rewrites the device id and election id appropriately.</p>
 </dd></dl>
 

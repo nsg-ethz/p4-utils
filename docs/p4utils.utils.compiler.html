@@ -8,22 +8,11 @@
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  false,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,14 +25,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> P4-Utils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            P4-Utils
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -88,10 +81,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
-          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
-      <li>p4utils.utils.compiler module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="p4utils.html">P4-Utils API reference</a></li>
+          <li class="breadcrumb-item"><a href="p4utils.utils.html">p4utils.utils package</a></li>
+      <li class="breadcrumb-item active">p4utils.utils.compiler module</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/p4utils.utils.compiler.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -105,8 +98,8 @@
 <span id="p4utils-utils-compiler-module"></span><h1>p4utils.utils.compiler module<a class="headerlink" href="#module-p4utils.utils.compiler" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="p4utils.utils.compiler.BF_P4C">
-<em class="property">class </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">BF_P4C</code><span class="sig-paren">(</span><em>p4_src</em>, <em>sde</em>, <em>sde_install</em>, <em>build_dir=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L156-L264"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.BF_P4C" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<em class="property">class </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">BF_P4C</code><span class="sig-paren">(</span><em>p4_src</em>, <em>sde</em>, <em>sde_install</em>, <em>build_dir=None</em>, <em>build_script='~/tools/p4_build.sh'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L156-L281"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.BF_P4C" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>This compiler reads the P4 program and generates
 the configuration files used by Tofinos.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -114,10 +107,11 @@ the configuration files used by Tofinos.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path of the source P4 file to compile</li>
-<li><strong>build_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – directory where the Tofino’s configuration is built</li>
-<li><strong>sde</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tofino SDE path ($SDE)</li>
-<li><strong>sde_install</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tofino SDE install path ($SDE_INSTALL)</li>
+<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – path of the source P4 file to compile</li>
+<li><strong>build_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – directory where the Tofino’s configuration is built</li>
+<li><strong>build_script</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – directory where the Tofino’s build script can be found</li>
+<li><strong>sde</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Tofino SDE path ($SDE)</li>
+<li><strong>sde_install</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Tofino SDE install path ($SDE_INSTALL)</li>
 </ul>
 </td>
 </tr>
@@ -125,25 +119,25 @@ the configuration files used by Tofinos.</p>
 </table>
 <dl class="method">
 <dt id="p4utils.utils.compiler.BF_P4C.clean">
-<code class="descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L251-L254"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.BF_P4C.clean" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L268-L271"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.BF_P4C.clean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes output files and set compiler as uncompiled.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.compiler.BF_P4C.compile">
-<code class="descname">compile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L204-L242"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.BF_P4C.compile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L215-L259"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.BF_P4C.compile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compiles the P4 file and generates the configuration files.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.compiler.BF_P4C.get_p4name">
-<code class="descname">get_p4name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L244-L249"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.BF_P4C.get_p4name" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_p4name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L261-L266"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.BF_P4C.get_p4name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the JSON configuration filepath.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.compiler.BF_P4C.new_source">
-<code class="descname">new_source</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L256-L264"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.BF_P4C.new_source" title="Permalink to this definition">¶</a></dt>
+<code class="descname">new_source</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L273-L281"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.BF_P4C.new_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether a new source was provided to the
 compiler.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -153,7 +147,7 @@ compiler.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if the source P4 file has changed since
 the last time it was compiled, <strong>False</strong> otherwise.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -164,19 +158,19 @@ the last time it was compiled, <strong>False</strong> otherwise.</td>
 <dl class="exception">
 <dt id="p4utils.utils.compiler.CompilationError">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">CompilationError</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L10-L11"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.CompilationError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="p4utils.utils.compiler.NotCompiledError">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">NotCompiledError</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L14-L15"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.NotCompiledError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="p4utils.utils.compiler.P4C">
 <em class="property">class </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">P4C</code><span class="sig-paren">(</span><em>p4_src</em>, <em>p4c_bin=None</em>, <em>outdir=None</em>, <em>opts='--target bmv2 --arch v1model --std p4-16'</em>, <em>p4rt=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L22-L153"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4C" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>This compiler reads the P4 program and generates
 the configuration files used by switches.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -184,13 +178,13 @@ the configuration files used by switches.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path of the source P4 file to compile</li>
-<li><strong>p4c_bin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path to the compiler binary</li>
-<li><strong>outdir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – directory containing all the output files. If set to <strong>None</strong>,
-then every output is stored in the directory of <code class="docutils literal"><span class="pre">p4_src</span></code></li>
-<li><strong>opts</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <code class="docutils literal"><span class="pre">p4c</span></code> compilation options</li>
-<li><strong>p4rt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – generate the P4Info file used to establish P4Runtime connection
-to <code class="docutils literal"><span class="pre">simple_switch_grpc</span></code></li>
+<li><strong>p4_src</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – path of the source P4 file to compile</li>
+<li><strong>p4c_bin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – path to the compiler binary</li>
+<li><strong>outdir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – directory containing all the output files. If set to <strong>None</strong>,
+then every output is stored in the directory of <code class="docutils literal notranslate"><span class="pre">p4_src</span></code></li>
+<li><strong>opts</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – <code class="docutils literal notranslate"><span class="pre">p4c</span></code> compilation options</li>
+<li><strong>p4rt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – generate the P4Info file used to establish P4Runtime connection
+to <code class="docutils literal notranslate"><span class="pre">simple_switch_grpc</span></code></li>
 </ul>
 </td>
 </tr>
@@ -232,7 +226,7 @@ compiler.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>True</strong> if the source P4 file has changed since
 the last time it was compiled, <strong>False</strong> otherwise.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -254,7 +248,7 @@ the last time it was compiled, <strong>False</strong> otherwise.</td>
 <dl class="exception">
 <dt id="p4utils.utils.compiler.P4InfoDisabled">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.compiler.</code><code class="descname">P4InfoDisabled</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/compiler.py#L18-L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.compiler.P4InfoDisabled" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 </dd></dl>
 
 </div>

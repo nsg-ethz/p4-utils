@@ -8,22 +8,11 @@
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  false,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,14 +25,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> P4-Utils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            P4-Utils
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -87,10 +80,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
-          <li><a href="p4utils.mininetlib.html">p4utils.mininetlib package</a> &raquo;</li>
-      <li>p4utils.mininetlib.cli module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="p4utils.html">P4-Utils API reference</a></li>
+          <li class="breadcrumb-item"><a href="p4utils.mininetlib.html">p4utils.mininetlib package</a></li>
+      <li class="breadcrumb-item active">p4utils.mininetlib.cli module</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/p4utils.mininetlib.cli.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -103,86 +96,94 @@
   <div class="section" id="module-p4utils.mininetlib.cli">
 <span id="p4utils-mininetlib-cli-module"></span><h1>p4utils.mininetlib.cli module<a class="headerlink" href="#module-p4utils.mininetlib.cli" title="Permalink to this headline">¶</a></h1>
 <p>This module is an extension of <a class="reference external" href="https://github.com/mininet/mininet/blob/master/mininet/cli.py">mininet.cli</a>. It provides a CLI interface that the user can enable
-using the <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">NetworkAPI</span></code></a> or the JSON network configuration file.
+using the <a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkAPI</span></code></a> or the JSON network configuration file.
 If enabled, the CLI starts right after the network boot and provides useful commands.</p>
 <dl class="class">
 <dt id="p4utils.mininetlib.cli.P4CLI">
-<em class="property">class </em><code class="descclassname">p4utils.mininetlib.cli.</code><code class="descname">P4CLI</code><span class="sig-paren">(</span><em>network_api</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L32-L386"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">mininet.cli.CLI</span></code></p>
+<em class="property">class </em><code class="descclassname">p4utils.mininetlib.cli.</code><code class="descname">P4CLI</code><span class="sig-paren">(</span><em>network_api</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L32-L398"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">mininet.cli.CLI</span></code></p>
 <p>Client class to interact with the network once it has been created.</p>
 <dl class="attribute">
 <dt id="p4utils.mininetlib.cli.P4CLI.network_api">
 <code class="descname">network_api</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.network_api" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal"><span class="pre">NetworkAPI</span></code></a> – instance of the network orchestrator.</p>
+<dd><p>instance of the network orchestrator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="p4utils.mininetlib.network_API.html#p4utils.mininetlib.network_API.NetworkAPI" title="p4utils.mininetlib.network_API.NetworkAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkAPI</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.cli.P4CLI.do_enable_scheduler">
-<code class="descname">do_enable_scheduler</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L346-L386"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_enable_scheduler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enables the <a class="reference internal" href="p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.TaskServer" title="p4utils.utils.task_scheduler.TaskServer"><code class="xref py py-class docutils literal"><span class="pre">TaskServer</span></code></a> on a node.</p>
+<code class="descname">do_enable_scheduler</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L358-L398"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_enable_scheduler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables the <a class="reference internal" href="p4utils.utils.task_scheduler.html#p4utils.utils.task_scheduler.TaskServer" title="p4utils.utils.task_scheduler.TaskServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskServer</span></code></a> on a node.</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">enable_scheduler</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">path</span> <span class="o">&lt;</span><span class="nb">dir</span><span class="o">&gt;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">enable_scheduler</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">path</span> <span class="o">&lt;</span><span class="nb">dir</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The directory where the socket file will be placed can be specified
-using <code class="docutils literal"><span class="pre">--path</span> <span class="pre">&lt;dir&gt;</span></code>.</p>
+using <code class="docutils literal notranslate"><span class="pre">--path</span> <span class="pre">&lt;dir&gt;</span></code>.</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.cli.P4CLI.do_p4switch_reboot">
-<code class="descname">do_p4switch_reboot</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L227-L248"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_p4switch_reboot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_p4switch_reboot</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L239-L260"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_p4switch_reboot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reboots a P4 switch.</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">p4switch_reboot</span> <span class="o">&lt;</span><span class="n">p4switch</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">p4src</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cmds</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">p4switch_reboot</span> <span class="o">&lt;</span><span class="n">p4switch</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">p4src</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cmds</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>This command also allows to specify new configuration files for the switch:</p>
 <ul class="last simple">
-<li><code class="docutils literal"><span class="pre">--p4src</span></code> provides a new P4 source,</li>
-<li><code class="docutils literal"><span class="pre">--cmds</span></code> provides a new command file.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--p4src</span></code> provides a new P4 source,</li>
+<li><code class="docutils literal notranslate"><span class="pre">--cmds</span></code> provides a new command file.</li>
 </ul>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.cli.P4CLI.do_p4switch_start">
-<code class="descname">do_p4switch_start</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L111-L225"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_p4switch_start" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_p4switch_start</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L112-L237"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_p4switch_start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts a P4 switch.</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">p4switch_start</span> <span class="o">&lt;</span><span class="n">p4switch</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">p4src</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cmds</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">p4switch_start</span> <span class="o">&lt;</span><span class="n">p4switch</span> <span class="n">name</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">--</span><span class="n">p4src</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cmds</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>This command also allows to specify new configuration files for the switch:</p>
 <ul class="last simple">
-<li><code class="docutils literal"><span class="pre">--p4src</span></code> provides a new P4 source,</li>
-<li><code class="docutils literal"><span class="pre">--cmds</span></code> provides a new command file.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--p4src</span></code> provides a new P4 source,</li>
+<li><code class="docutils literal notranslate"><span class="pre">--cmds</span></code> provides a new command file.</li>
 </ul>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.cli.P4CLI.do_p4switch_stop">
-<code class="descname">do_p4switch_stop</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L81-L109"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_p4switch_stop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_p4switch_stop</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L81-L110"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_p4switch_stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops execution of the specified P4 switch.</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">p4switch_stop</span> <span class="o">&lt;</span><span class="n">p4switch</span> <span class="n">name</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">p4switch_stop</span> <span class="o">&lt;</span><span class="n">p4switch</span> <span class="n">name</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.cli.P4CLI.do_p4switches_reboot">
-<code class="descname">do_p4switches_reboot</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L250-L282"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_p4switches_reboot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_p4switches_reboot</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L262-L294"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_p4switches_reboot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reboots all P4 switches with new program.</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">p4switches_reboot</span> <span class="p">[</span><span class="o">--</span><span class="n">p4src</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cmds</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">p4switches_reboot</span> <span class="p">[</span><span class="o">--</span><span class="n">p4src</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cmds</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -190,55 +191,55 @@ using <code class="docutils literal"><span class="pre">--path</span> <span class
 <p>This command also allows to specify the same
 new configuration files for all the switches:</p>
 <ul class="last simple">
-<li><code class="docutils literal"><span class="pre">--p4src</span></code> provides a new P4 source,</li>
-<li><code class="docutils literal"><span class="pre">--cmds</span></code> provides a new command file.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--p4src</span></code> provides a new P4 source,</li>
+<li><code class="docutils literal notranslate"><span class="pre">--cmds</span></code> provides a new command file.</li>
 </ul>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.cli.P4CLI.do_pingset">
-<code class="descname">do_pingset</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L308-L318"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_pingset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_pingset</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L320-L330"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_pingset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pings between the hosts in the set.</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">pingset</span> <span class="o">&lt;</span><span class="n">host1</span><span class="o">&gt;</span> <span class="o">...</span> <span class="o">&lt;</span><span class="n">hostN</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">pingset</span> <span class="o">&lt;</span><span class="n">host1</span><span class="o">&gt;</span> <span class="o">...</span> <span class="o">&lt;</span><span class="n">hostN</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.cli.P4CLI.do_printSwitches">
-<code class="descname">do_printSwitches</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L297-L306"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_printSwitches" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_printSwitches</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L309-L318"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_printSwitches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints the names of all switches.</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">printSwitches</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">printSwitches</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.cli.P4CLI.do_task">
-<code class="descname">do_task</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L320-L344"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_task" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_task</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L332-L356"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes a task on the given host.</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">task</span> <span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">start</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">duration</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">exe</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">arg1</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">...</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">argN</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">mod</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--&lt;</span><span class="n">key1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">kwarg1</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">...</span> <span class="p">[</span><span class="o">--&lt;</span><span class="n">keyM</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">kwargM</span><span class="o">&gt;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">task</span> <span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">start</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">duration</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">exe</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">arg1</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">...</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">argN</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">mod</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--&lt;</span><span class="n">key1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">kwarg1</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">...</span> <span class="p">[</span><span class="o">--&lt;</span><span class="n">keyM</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">kwargM</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The starting delay (specified with <code class="docutils literal"><span class="pre">&lt;start&gt;</span></code>) is taken with
+<p class="last">The starting delay (specified with <code class="docutils literal notranslate"><span class="pre">&lt;start&gt;</span></code>) is taken with
 respect to the current time. The deafult module in which functions
-are looked up is <a class="reference internal" href="p4utils.utils.traffic_utils.html#module-p4utils.utils.traffic_utils" title="p4utils.utils.traffic_utils"><code class="xref py py-mod docutils literal"><span class="pre">p4utils.utils.traffic_utils</span></code></a>. A different
-module can be specified in the command with <code class="docutils literal"><span class="pre">--mod</span> <span class="pre">&lt;module&gt;</span></code>.</p>
+are looked up is <a class="reference internal" href="p4utils.utils.traffic_utils.html#module-p4utils.utils.traffic_utils" title="p4utils.utils.traffic_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">p4utils.utils.traffic_utils</span></code></a>. A different
+module can be specified in the command with <code class="docutils literal notranslate"><span class="pre">--mod</span> <span class="pre">&lt;module&gt;</span></code>.</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="p4utils.mininetlib.cli.P4CLI.do_test_p4">
-<code class="descname">do_test_p4</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L284-L295"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_test_p4" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_test_p4</code><span class="sig-paren">(</span><em>line=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/mininetlib/cli.py#L296-L307"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.mininetlib.cli.P4CLI.do_test_p4" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests start stop functionalities.</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">test_p4</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">test_p4</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -251,7 +252,7 @@ module can be specified in the command with <code class="docutils literal"><span
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – node name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – node name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">requested node or <strong>None</strong> if no such object was found.</td>
 </tr>
@@ -269,7 +270,7 @@ module can be specified in the command with <code class="docutils literal"><span
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.10)"><em>string</em></a>) – P4 switch name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_name</strong> (<em>string</em>) – P4 switch name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">requested node or <strong>None</strong> if no such object was found.</td>
 </tr>

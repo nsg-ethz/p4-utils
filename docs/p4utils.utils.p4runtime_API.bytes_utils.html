@@ -8,22 +8,11 @@
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  false,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,14 +25,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> P4-Utils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            P4-Utils
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -88,11 +81,11 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
-          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
-          <li><a href="p4utils.utils.p4runtime_API.html">p4utils.utils.p4runtime_API package</a> &raquo;</li>
-      <li>p4utils.utils.p4runtime_API.bytes_utils module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="p4utils.html">P4-Utils API reference</a></li>
+          <li class="breadcrumb-item"><a href="p4utils.utils.html">p4utils.utils package</a></li>
+          <li class="breadcrumb-item"><a href="p4utils.utils.p4runtime_API.html">p4utils.utils.p4runtime_API package</a></li>
+      <li class="breadcrumb-item active">p4utils.utils.p4runtime_API.bytes_utils module</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/p4utils.utils.p4runtime_API.bytes_utils.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -107,25 +100,25 @@
 <dl class="exception">
 <dt id="p4utils.utils.p4runtime_API.bytes_utils.UserBadIPv4Error">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">UserBadIPv4Error</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/bytes_utils.py#L21-L29"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.UserBadIPv4Error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="p4utils.utils.p4runtime_API.bytes_utils.UserBadIPv6Error">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">UserBadIPv6Error</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/bytes_utils.py#L32-L40"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.UserBadIPv6Error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="p4utils.utils.p4runtime_API.bytes_utils.UserBadMacError">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">UserBadMacError</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/bytes_utils.py#L43-L51"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.UserBadMacError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="p4utils.utils.p4runtime_API.bytes_utils.UserBadValueError">
 <em class="property">exception </em><code class="descclassname">p4utils.utils.p4runtime_API.bytes_utils.</code><code class="descname">UserBadValueError</code><span class="sig-paren">(</span><em>info=''</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/bytes_utils.py#L54-L62"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.bytes_utils.UserBadValueError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="p4utils.utils.p4runtime_API.utils.html#p4utils.utils.p4runtime_API.utils.UserError" title="p4utils.utils.p4runtime_API.utils.UserError"><code class="xref py py-class docutils literal notranslate"><span class="pre">p4utils.utils.p4runtime_API.utils.UserError</span></code></a></p>
 </dd></dl>
 
 <dl class="function">

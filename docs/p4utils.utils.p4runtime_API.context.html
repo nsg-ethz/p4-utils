@@ -8,22 +8,11 @@
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-      <script>
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  false,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,14 +25,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> P4-Utils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            P4-Utils
           </a>
               <div class="version">
                 1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -88,11 +81,11 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="p4utils.html">P4-Utils API reference</a> &raquo;</li>
-          <li><a href="p4utils.utils.html">p4utils.utils package</a> &raquo;</li>
-          <li><a href="p4utils.utils.p4runtime_API.html">p4utils.utils.p4runtime_API package</a> &raquo;</li>
-      <li>p4utils.utils.p4runtime_API.context module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="p4utils.html">P4-Utils API reference</a></li>
+          <li class="breadcrumb-item"><a href="p4utils.utils.html">p4utils.utils package</a></li>
+          <li class="breadcrumb-item"><a href="p4utils.utils.p4runtime_API.html">p4utils.utils.p4runtime_API package</a></li>
+      <li class="breadcrumb-item active">p4utils.utils.p4runtime_API.context module</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nsg-ethz/p4-utils/blob/master/docs/source/p4utils.utils.p4runtime_API.context.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -107,110 +100,110 @@
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.context.Context">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.context.</code><code class="descname">Context</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L61-L163"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_action">
-<code class="descname">get_action</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_action</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_action_id">
-<code class="descname">get_action_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_action_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_action_profile">
-<code class="descname">get_action_profile</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_profile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_action_profile</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_profile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_action_profile_id">
-<code class="descname">get_action_profile_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_profile_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_action_profile_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_profile_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_action_profiles">
-<code class="descname">get_action_profiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_profiles" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_action_profiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_action_profiles" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_actions">
-<code class="descname">get_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_actions" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_actions" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_counter">
-<code class="descname">get_counter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_counter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_counter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_counter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_counter_id">
-<code class="descname">get_counter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_counter_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_counter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_counter_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_counters">
-<code class="descname">get_counters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_counters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_counters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_counters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_digest">
-<code class="descname">get_digest</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_digest" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_digest</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_digest" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_digest_id">
-<code class="descname">get_digest_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_digest_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_digest_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_digest_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_digests">
-<code class="descname">get_digests</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_digests" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_digests</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_digests" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_counter">
-<code class="descname">get_direct_counter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_counter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_direct_counter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_counter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_counter_id">
-<code class="descname">get_direct_counter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_counter_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_direct_counter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_counter_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_counters">
-<code class="descname">get_direct_counters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_counters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_direct_counters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_counters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_meter">
-<code class="descname">get_direct_meter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_meter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_direct_meter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_meter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_meter_id">
-<code class="descname">get_direct_meter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_meter_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_direct_meter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_meter_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_direct_meters">
-<code class="descname">get_direct_meters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_meters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_direct_meters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_direct_meters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_meter">
-<code class="descname">get_meter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_meter" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_meter</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_meter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_meter_id">
-<code class="descname">get_meter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_meter_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_meter_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_meter_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_meters">
-<code class="descname">get_meters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_meters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_meters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_meters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -280,17 +273,17 @@
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_table">
-<code class="descname">get_table</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_table" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_table</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_table" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_table_id">
-<code class="descname">get_table_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_table_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_table_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_table_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="p4utils.utils.p4runtime_API.context.Context.get_tables">
-<code class="descname">get_tables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L365-L370"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_tables" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_tables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L397-L399"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.Context.get_tables" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -303,7 +296,7 @@
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.context.</code><code class="descname">P4RuntimeEntity</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L49-L58"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4RuntimeEntity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>An enumeration.</p>
 <dl class="attribute">
 <dt id="p4utils.utils.p4runtime_API.context.P4RuntimeEntity.action_profile_group">
@@ -355,7 +348,7 @@
 <dl class="class">
 <dt id="p4utils.utils.p4runtime_API.context.P4Type">
 <em class="property">class </em><code class="descclassname">p4utils.utils.p4runtime_API.context.</code><code class="descname">P4Type</code><a class="reference external" href="https://github.com/nsg-ethz/p4-utils/tree/master/p4utils/utils/p4runtime_API/context.py#L22-L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#p4utils.utils.p4runtime_API.context.P4Type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>An enumeration.</p>
 <dl class="attribute">
 <dt id="p4utils.utils.p4runtime_API.context.P4Type.action">
