@@ -97,10 +97,9 @@ Use our preconfigured VM
 To download our preconfiugred VMs, please click on the folllwing links:
 
 .. Important::
-   Use the following credentials to acces the VMs:
-   
-   - ``username:`` p4.
-   - ``password:`` p4.
+   VM credentials:
+   ``username:`` **p4**
+   ``password:`` **p4**
 
 - __ https://polybox.ethz.ch/index.php/s/QlrfHm7uYw6vISe
 
