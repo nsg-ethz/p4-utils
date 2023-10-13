@@ -97,7 +97,8 @@ Use our preconfigured VM
 To download our preconfiugred VMs, please click on the folllwing links:
 
 .. Important::
-   Use the following credentials to acces the VMs
+   Use the following credentials to acces the VMs:
+   
    - ``username:`` p4.
    - ``password:`` p4.
 
