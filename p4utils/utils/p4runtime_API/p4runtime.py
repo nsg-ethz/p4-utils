@@ -211,20 +211,16 @@ class P4RuntimeClient:
             packet (protobuf message)
         """
         start = time.time()
+        remaining = timeout
         try:
             while True:
-                if timeout is not None:
-                    remaining = timeout - (time.time() - start)
-                    if remaining < 0:
-                        break
-                else:
-                    remaining = None
+                if remaining is not None and remaining < 0:
+                    break
                 msg = self.stream_in_q.get(timeout=remaining)
-                if msg is None:
-                    return None
-                if not msg.HasField(type_):
-                    continue
-                return msg
+                if msg is None or msg.HasField(type_):
+                    return msg
+                if remaining is not None:
+                    remaining = timeout - (time.time() - start)
         except queue.Empty:  # timeout expired
             pass
         return None
