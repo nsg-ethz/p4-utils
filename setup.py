@@ -34,7 +34,7 @@ setup(
     license='GPLv2',
     install_requires=[
         'googleapis-common-protos >= 1.52',
-        'grpcio == 1.44.0',
+        'grpcio == 1.53.0',
         'ipaddr',
         'ipaddress',
         'networkx',
